@@ -51,6 +51,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8"></div>
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <div id="purchaseDetailReportGrid" class="grid"></div>
                             </div>
@@ -115,8 +126,9 @@
                             // Array Push
                             purchaseDetailReport.push({
 
-                                POId:purchaseDetailReportResults[i]["POId"],
+                                POId: purchaseDetailReportResults[i]["POId"],
                                 PONumber: purchaseDetailReportResults[i]["PO"],
+                                PONumberForCSV: "PO-" + purchaseDetailReportResults[i]["PO"],
                                 PONumberButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + purchaseDetailReportResults[i]["PO"],
                                 PODate: purchaseDetailReportResults[i]["PODate"],
                                 Item: purchaseDetailReportResults[i]["Item"],
@@ -141,15 +153,13 @@
         var purchaseDetailReportCollections;
 
         function purchaseDetailReportCSV_OnClick() {
-
-
             var CSV = '';
             var purchaseDetailReport = [];
             var fileName = 'PurchaseDetailReport.CSV';
 
             for (i = 0; i < purchaseDetailReportCollections.items.length; i++) {
                 purchaseDetailReport.push({
-                    PONumber: purchaseDetailReportCollections.items[i].PONumber,
+                    PONumber: purchaseDetailReportCollections.items[i].PONumberForCSV,
                     PODate: purchaseDetailReportCollections.items[i].PODate,
                     Item: purchaseDetailReportCollections.items[i].Item,
                     Price: purchaseDetailReportCollections.items[i].Price,
@@ -165,12 +175,32 @@
             //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
             //}
 
+            var Headers = [];
+            Headers.push({
+
+                PONumber: "PO Number",
+                PODate: "PO Date",
+                Item: "Item",
+                Price: "Price",
+                Unit: "Unit",
+                Quantity: "Quantity",
+                Amount: "Amount",
+
+            });
+
+            var header = '';
             // Rows
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+            CSV = header + '\r\n';
             for (var i = 0; i < purchaseDetailReport.length; i++) {
                 var row = '';
                 for (var a in purchaseDetailReport[i]) {
                     row += '"' + purchaseDetailReport[i][a] + '",';
                 }
+
                 row.slice(0, row.length - 1);
                 CSV += row + '\r\n';
             }
@@ -211,7 +241,18 @@
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
             purchaseDetailReportCollections = new wijmo.collections.CollectionView(getPurchaseDetailReport());
+            purchaseDetailReportCollections.canFilter = true;
 
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                purchaseDetailReportCollections.refresh();
+            });
+            purchaseDetailReportCollections.filter = function (item) {
+                return !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.PONumber.toLowerCase().indexOf(filterText) > -1)            
+
+            }
             // Flex Grid
             var purchaseDetailReportGrid = new wijmo.grid.FlexGrid('#purchaseDetailReportGrid');
             purchaseDetailReportGrid.initialize({

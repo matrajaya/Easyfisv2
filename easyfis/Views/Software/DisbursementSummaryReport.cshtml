@@ -51,6 +51,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8"></div>
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <div id="disbursementSummaryReportGrid" class="grid"></div>
                             </div>
@@ -120,12 +131,13 @@
                                 Id: disbursementSummaryReportResults[i]["Id"],
                                 Branch: disbursementSummaryReportResults[i]["Branch"],
                                 CVNumber: disbursementSummaryReportResults[i]["CVNumber"],
+                                CVNumberForCSV: "CV-"+ disbursementSummaryReportResults[i]["CVNumber"],
                                 CVNumberButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + disbursementSummaryReportResults[i]["CVNumber"],
                                 CVDate: disbursementSummaryReportResults[i]["CVDate"],
                                 Supplier: disbursementSummaryReportResults[i]["Supplier"],
                                 CheckNumber: disbursementSummaryReportResults[i]["CheckNumber"],
                                 Amount: disbursementSummaryReportResults[i]["Amount"],
-                               
+
                             });
 
                             totalAmount += disbursementSummaryReportResults[i]["Amount"];
@@ -153,7 +165,7 @@
                 disbursementSummaryReport.push({
                     Branch: disbursementSummaryReportCollection.items[i].Branch,
                     CVDate: disbursementSummaryReportCollection.items[i].CVDate,
-                    CVNumber: disbursementSummaryReportCollection.items[i].CVNumber,
+                    CVNumber: disbursementSummaryReportCollection.items[i].CVNumberForCSV,
                     Supplier: disbursementSummaryReportCollection.items[i].Supplier,
                     CheckNumber: disbursementSummaryReportCollection.items[i].CheckNumber,
                     Amount: disbursementSummaryReportCollection.items[i].Amount,
@@ -166,7 +178,25 @@
             //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
             //}
 
+            var Headers = [];
+            Headers.push({
+
+                Branch: "Branch",
+                CVDate: "CV Date",
+                CVNumber: "CV Number",
+                Supplier: "Supplier",
+                CheckNumber: "Check Number",
+                Amount: "Amount",
+
+            });
+
+            var header = '';
             // Rows
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+            CSV = header + '\r\n';
             for (var i = 0; i < disbursementSummaryReport.length; i++) {
                 var row = '';
                 for (var a in disbursementSummaryReport[i]) {
@@ -210,7 +240,19 @@
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
             disbursementSummaryReportCollection = new wijmo.collections.CollectionView(getDisbursementSummaryReport());
+            disbursementSummaryReportCollection.canFilter = true;
 
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                disbursementSummaryReportCollection.refresh();
+            });
+            disbursementSummaryReportCollection.filter = function (item) {
+                return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+
+            }
             // Flex Grid
             var disbursementSummaryReportGrid = new wijmo.grid.FlexGrid('#disbursementSummaryReportGrid');
             disbursementSummaryReportGrid.initialize({
@@ -247,10 +289,10 @@
                                 "width": "0.8*"
                             },
                             {
-                               "header": "Amount",
-                               "binding": "Amount",
-                               "allowSorting": true,
-                               "width": "0.5*"
+                                "header": "Amount",
+                                "binding": "Amount",
+                                "allowSorting": true,
+                                "width": "0.5*"
                             }
 
 

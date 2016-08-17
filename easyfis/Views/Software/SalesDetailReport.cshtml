@@ -54,6 +54,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8"></div>
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <div id="salesDetailReportGrid" class="grid"></div>
                             </div>
@@ -121,6 +132,7 @@
                                 SIId: salesDetailReportResult["SIId"],
                                 Id: salesDetailReportResult[i]["Id"],
                                 SI: salesDetailReportResult[i]["SI"],
+                                SIForCSV: "SI-" + salesDetailReportResult[i]["SI"],
                                 SIButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" +  salesDetailReportResult[i]["SI"],
                                 SIDate: salesDetailReportResult[i]["SIDate"],
                                 Item: salesDetailReportResult[i]["Item"],
@@ -154,7 +166,7 @@
 
             for (i = 0; i < salesDetailReportCollection.items.length; i++) {
                 salesDetailReport.push({
-                    SI: salesDetailReportCollection.items[i].SI,
+                    SI: salesDetailReportCollection.items[i].SIForCSV,
                     SIDate: salesDetailReportCollection.items[i].SIDate,
                     Item: salesDetailReportCollection.items[i].Item,
                     ItemInventory: salesDetailReportCollection.items[i].ItemInventory,
@@ -172,6 +184,26 @@
             //}
 
             // Rows
+            // Rows
+            var Headers = [];
+            Headers.push({
+
+                SI: "SI Number",
+                SIDate: "SI Date",
+                Item: "Item",
+                ItemInventory: "Inventory Code",
+                Price: "Price",
+                Quantity: "Quantity",
+                Unit: "Unit",
+                Amount: "Amount",
+
+            });
+
+            var header = '';
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+            CSV = header + '\r\n';
             for (var i = 0; i < salesDetailReport.length; i++) {
                 var row = '';
                 for (var a in salesDetailReport[i]) {
@@ -216,7 +248,19 @@
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
             salesDetailReportCollection = new wijmo.collections.CollectionView(getSalesDetailReport());
+            salesDetailReportCollection.canFilter = true;
 
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                salesDetailReportCollection.refresh();
+            });
+            salesDetailReportCollection.filter = function (item) {
+                return !filterText || (item.SI.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.ItemInventory.toLowerCase().indexOf(filterText) > -1)
+
+            }
             // Flex Grid
             var salesDetailReportGrid = new wijmo.grid.FlexGrid('#salesDetailReportGrid');
             salesDetailReportGrid.initialize({

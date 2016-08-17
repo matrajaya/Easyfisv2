@@ -51,6 +51,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8"></div>
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <div id="salesSummaryReportGrid" class="grid"></div>
                             </div>
@@ -114,17 +125,18 @@
                             var docLink = "/Software/SalesDetail?SalesId=" + salesSummaryReportResult[i]["Id"];
                             // Array Push
                             salesSummaryReport.push({
-                               
+
 
                                 Id: salesSummaryReportResult[i]["Id"],
                                 Branch: salesSummaryReportResult[i]["Branch"],
                                 SINumber: salesSummaryReportResult[i]["SINumber"],
+                                SINumberForCSV: "SI-" + salesSummaryReportResult[i]["SINumber"],
                                 SINumberButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + salesSummaryReportResult[i]["SINumber"],
                                 SIDate: salesSummaryReportResult[i]["SIDate"],
                                 Customer: salesSummaryReportResult[i]["Customer"],
                                 Remarks: salesSummaryReportResult[i]["Remarks"],
                                 SoldBy: salesSummaryReportResult[i]["SoldBy"],
-                                
+
                                 Amount: salesSummaryReportResult[i]["Amount"],
 
                             });
@@ -153,7 +165,7 @@
                 salesSummaryReport.push({
                     Branch: salesSummaryReportCollection.items[i].Branch,
                     SIDate: salesSummaryReportCollection.items[i].SIDate,
-                    SINumber: salesSummaryReportCollection.items[i].SINumber,
+                    SINumber: salesSummaryReportCollection.items[i].SINumberForCSV,
                     Customer: salesSummaryReportCollection.items[i].Customer,
                     SoldBy: salesSummaryReportCollection.items[i].SoldBy,
                     Remarks: salesSummaryReportCollection.items[i].Remarks,
@@ -168,6 +180,24 @@
             //}
 
             // Rows
+            var Headers = [];
+            Headers.push({
+
+                Branch: "Branch",
+                SIDate: "SI Date",
+                SINumber: "SI Number",
+                Customer: "Customer",
+                SoldBy: "Sold By",
+                Remarks: "Remarks",
+                Amount: "Amount",
+
+            });
+
+            var header = '';
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+            CSV = header + '\r\n';
             for (var i = 0; i < salesSummaryReport.length; i++) {
                 var row = '';
                 for (var a in salesSummaryReport[i]) {
@@ -212,7 +242,19 @@
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
             salesSummaryReportCollection = new wijmo.collections.CollectionView(getSalesSummaryReport());
+            salesSummaryReportCollection.canFilter = true;
 
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                salesSummaryReportCollection.refresh();
+            });
+            salesSummaryReportCollection.filter = function (item) {
+                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
+                   
+            }
             // Flex Grid
             var salesSummaryReportGrid = new wijmo.grid.FlexGrid('#salesSummaryReportGrid');
             salesSummaryReportGrid.initialize({
@@ -255,10 +297,10 @@
                                 "width": "0.5*"
                             },
                             {
-                               "header": "Amount",
-                               "binding": "Amount",
-                               "allowSorting": true,
-                               "width": "0.5*"
+                                "header": "Amount",
+                                "binding": "Amount",
+                                "allowSorting": true,
+                                "width": "0.5*"
                             }
 
 

@@ -51,6 +51,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8"></div>
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <div id="collectionDetailReportGrid" class="grid"></div>
                             </div>
@@ -117,9 +128,11 @@
                                 ORId: collectionDetailReportResult[i]["Id"],
                                 Id: collectionDetailReportResult[i]["Id"],
                                 OR: collectionDetailReportResult[i]["OR"],
+                                ORForCSV: "OR-" + collectionDetailReportResult[i]["OR"],
                                 ORButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" +  collectionDetailReportResult[i]["OR"],
                                 ORDate: collectionDetailReportResult[i]["ORDate"],
                                 SI: collectionDetailReportResult[i]["SI"],
+                                SIForCSV: "SI-" + collectionDetailReportResult[i]["SI"],
                                 Amount: collectionDetailReportResult[i]["Amount"],
                                 DepositoryBank: collectionDetailReportResult[i]["DepositoryBank"],
                                 PayType: collectionDetailReportResult[i]["PayType"],
@@ -147,10 +160,10 @@
 
             for (i = 0; i < collectionDetailReportCollection.items.length; i++) {
                 collectionDetailReport.push({
-                    OR: collectionDetailReportCollection.items[i].OR,
+                    OR: collectionDetailReportCollection.items[i].ORForCSV,
                     ORDate: collectionDetailReportCollection.items[i].ORDate,
                     PayType: collectionDetailReportCollection.items[i].PayType,
-                    SI: collectionDetailReportCollection.items[i].SI,
+                    SI: collectionDetailReportCollection.items[i].SIForCSV,
                     DepositoryBank: collectionDetailReportCollection.items[i].DepositoryBank,
                     Amount: collectionDetailReportCollection.items[i].Amount,
 
@@ -162,7 +175,24 @@
             //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
             //}
 
-            // Rows
+            //Rows
+            var Headers = [];
+            Headers.push({
+
+                OR: "OR Number",
+                ORDate: "OR Date",
+                PayType: "Pay Type",
+                SI: "SI Number",
+                DepositoryBank: "Dispository Bank",
+                Amount: "Amount",
+
+            });
+
+            var header = '';
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+            CSV = header + '\r\n';
             for (var i = 0; i < collectionDetailReport.length; i++) {
                 var row = '';
                 for (var a in collectionDetailReport[i]) {
@@ -208,7 +238,19 @@
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
             collectionDetailReportCollection = new wijmo.collections.CollectionView(getCollectionDetailReport());
+            collectionDetailReportCollection.canFilter = true;
 
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                collectionDetailReportCollection.refresh();
+            });
+            collectionDetailReportCollection.filter = function (item) {
+                return !filterText || (item.OR.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.PayType.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.DepositoryBank.toLowerCase().indexOf(filterText) > -1)
+
+            }
             // Flex Grid
             var collectionDetailReportGrid = new wijmo.grid.FlexGrid('#collectionDetailReportGrid');
             collectionDetailReportGrid.initialize({

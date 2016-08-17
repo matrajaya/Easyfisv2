@@ -51,6 +51,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8"></div>
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <div id="disbursementDetailReportGrid" class="grid"></div>
                             </div>
@@ -119,12 +130,13 @@
                                 Id: disbursementDetailReportResult[i]["Id"],
                                 Branch: disbursementDetailReportResult[i]["Branch"],
                                 CV: disbursementDetailReportResult[i]["CV"],
-                                CVButton : "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + disbursementDetailReportResult[i]["CV"],
+                                CVForCSV: "CV-" + disbursementDetailReportResult[i]["CV"],
+                                CVButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + disbursementDetailReportResult[i]["CV"],
                                 CVDate: disbursementDetailReportResult[i]["CVDate"],
                                 Account: disbursementDetailReportResult[i]["Account"],
                                 Article: disbursementDetailReportResult[i]["Article"],
                                 RR: disbursementDetailReportResult[i]["RR"],
-                                Particulars: disbursementDetailReportResult[i]["Particulars"],
+                                Particulars: disbursementDetailReportResult[i]["Particulars"] ,
                                 Amount: disbursementDetailReportResult[i]["Amount"],
 
                             });
@@ -144,21 +156,20 @@
 
         function disbursementDetailReportCSV_OnClick() {
 
-          
+
             var CSV = '';
             var disbursementDetailReport = [];
             var fileName = 'DisbursementDetailDetailReport.CSV';
 
             for (i = 0; i < disbursementDetailReportCollection.items.length; i++) {
                 disbursementDetailReport.push({
-                    CV: disbursementDetailReportCollection.items[i].CV,
+                    CV: disbursementDetailReportCollection.items[i].CVForCSV,
                     CVDate: disbursementDetailReportCollection.items[i].CVDate,
                     Account: disbursementDetailReportCollection.items[i].Account,
                     Article: disbursementDetailReportCollection.items[i].Article,
                     RR: disbursementDetailReportCollection.items[i].RR,
                     Particulars: disbursementDetailReportCollection.items[i].Particulars,
                     Amount: disbursementDetailReportCollection.items[i].Amount,
-
 
                 });
             }
@@ -168,6 +179,26 @@
             //}
 
             // Rows
+            var Headers = [];
+            Headers.push({
+
+                CVNumber: "CV Number",
+                CVDate: "CV Date",
+                Account: "Account",
+                Article: "Article",
+                RR: "RR Number",
+                Particulars: "Particulars",
+                Amount: "Amount",
+
+            });
+
+            var header = '';
+            // Rows
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+            CSV = header + '\r\n';
             for (var i = 0; i < disbursementDetailReport.length; i++) {
                 var row = '';
                 for (var a in disbursementDetailReport[i]) {
@@ -211,7 +242,19 @@
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
             disbursementDetailReportCollection = new wijmo.collections.CollectionView(getDisbursementDetailReport());
+            disbursementDetailReportCollection.canFilter = true;
 
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                disbursementDetailReportCollection.refresh();
+            });
+            disbursementDetailReportCollection.filter = function (item) {
+                return !filterText || (item.CV.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+
+            }
             // Flex Grid
             var disbursementDetailReportGrid = new wijmo.grid.FlexGrid('#disbursementDetailReportGrid');
             disbursementDetailReportGrid.initialize({
@@ -219,7 +262,7 @@
                             {
                                 "header": "CV Number  ",
                                 "binding": "CVButton",
-                                "isContentHtml":true,
+                                "isContentHtml": true,
                                 "allowSorting": true,
                                 "width": "0.5*",
                             },
@@ -254,10 +297,10 @@
                                 "width": "0.8*"
                             },
                             {
-                               "header": "Amount",
-                               "binding": "Amount",
-                               "allowSorting": true,
-                               "width": "0.5*"
+                                "header": "Amount",
+                                "binding": "Amount",
+                                "allowSorting": true,
+                                "width": "0.5*"
                             }
 
 
