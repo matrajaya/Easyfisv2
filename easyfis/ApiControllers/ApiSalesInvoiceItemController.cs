@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 
 namespace easyfis.Controllers
 {
@@ -95,6 +96,12 @@ namespace easyfis.Controllers
             return salesInvoiceItems.ToList();
         }
 
+        // current branch Id
+        public Int32 currentBranchId()
+        {
+            return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
+        }
+
         // add sales invoice item
         [Authorize]
         [HttpPost]
@@ -103,87 +110,87 @@ namespace easyfis.Controllers
         {
             try
             {
-                var kittingItem = (from d in db.MstArticles where d.Id == saleItem.ItemId select d.Kitting).SingleOrDefault();
-                if (kittingItem == 2)
+                var articleComponents = from d in db.MstArticleComponents
+                                        where d.ArticleId == saleItem.ItemId
+                                        select new Models.MstArticleComponent
+                                        {
+                                            Id = d.Id,
+                                            ArticleId = d.ArticleId,
+                                            ComponentArticleId = d.ComponentArticleId,
+                                            ComponentArticle = d.MstArticle1.Article,
+                                            Quantity = d.Quantity,
+                                            UnitId = d.MstArticle1.UnitId,
+                                            Cost = Convert.ToDecimal(d.MstArticle1.Cost),
+                                            Price = d.MstArticle1.Price,
+                                            ComponentArticleInventoryId = (from i in db.MstArticleInventories where i.BranchId == currentBranchId() && i.ArticleId == d.ComponentArticleId select i.Id).FirstOrDefault(),
+                                            Amount = d.Quantity * Convert.ToDecimal(d.MstArticle1.Cost),
+                                            Particulars = d.Particulars
+                                        };
+
+                if (articleComponents.Any())
                 {
-                    Data.TrnSalesInvoiceItem newSaleInvoiceItemPackage = new Data.TrnSalesInvoiceItem();
-
-                    newSaleInvoiceItemPackage.SIId = saleItem.SIId;
-                    newSaleInvoiceItemPackage.ItemId = saleItem.ItemId;
-                    newSaleInvoiceItemPackage.ItemInventoryId = saleItem.ItemInventoryId;
-                    newSaleInvoiceItemPackage.Particulars = saleItem.Particulars;
-                    newSaleInvoiceItemPackage.UnitId = saleItem.UnitId;
-                    newSaleInvoiceItemPackage.Quantity = saleItem.Quantity;
-                    newSaleInvoiceItemPackage.Price = saleItem.Price;
-                    newSaleInvoiceItemPackage.DiscountId = saleItem.DiscountId;
-                    newSaleInvoiceItemPackage.DiscountRate = saleItem.DiscountRate;
-                    newSaleInvoiceItemPackage.DiscountAmount = saleItem.DiscountAmount;
-                    newSaleInvoiceItemPackage.NetPrice = saleItem.NetPrice;
-                    newSaleInvoiceItemPackage.Amount = saleItem.Amount;
-                    newSaleInvoiceItemPackage.VATId = saleItem.VATId;
-                    newSaleInvoiceItemPackage.VATPercentage = saleItem.VATPercentage;
-                    newSaleInvoiceItemPackage.VATAmount = saleItem.VATAmount;
-
-                    var packageItem = from d in db.MstArticles where d.Id == saleItem.ItemId select d;
-                    newSaleInvoiceItemPackage.BaseUnitId = packageItem.First().UnitId;
-
-                    var packageConversionUnit = from d in db.MstArticleUnits where d.ArticleId == saleItem.ItemId && d.UnitId == saleItem.UnitId select d;
-                    if (packageConversionUnit.First().Multiplier > 0)
+                    var kittingItem = (from d in db.MstArticles where d.Id == saleItem.ItemId select d.Kitting).SingleOrDefault();
+                    if (kittingItem == 2)
                     {
-                        newSaleInvoiceItemPackage.BaseQuantity = saleItem.Quantity * (1 / packageConversionUnit.First().Multiplier);
-                    }
-                    else
-                    {
-                        newSaleInvoiceItemPackage.BaseQuantity = saleItem.Quantity * 1;
-                    }
+                        Data.TrnSalesInvoiceItem newSaleInvoiceItemPackage = new Data.TrnSalesInvoiceItem();
 
-                    var packageBaseQuantity = saleItem.Quantity * (1 / packageConversionUnit.First().Multiplier);
-                    if (packageBaseQuantity > 0)
-                    {
-                        newSaleInvoiceItemPackage.BasePrice = saleItem.Amount / packageBaseQuantity;
-                    }
-                    else
-                    {
-                        newSaleInvoiceItemPackage.BasePrice = saleItem.Amount;
-                    }
+                        newSaleInvoiceItemPackage.SIId = saleItem.SIId;
+                        newSaleInvoiceItemPackage.ItemId = saleItem.ItemId;
+                        newSaleInvoiceItemPackage.ItemInventoryId = saleItem.ItemInventoryId;
+                        newSaleInvoiceItemPackage.Particulars = saleItem.Particulars;
+                        newSaleInvoiceItemPackage.UnitId = saleItem.UnitId;
+                        newSaleInvoiceItemPackage.Quantity = saleItem.Quantity;
+                        newSaleInvoiceItemPackage.Price = saleItem.Price;
+                        newSaleInvoiceItemPackage.DiscountId = saleItem.DiscountId;
+                        newSaleInvoiceItemPackage.DiscountRate = saleItem.DiscountRate;
+                        newSaleInvoiceItemPackage.DiscountAmount = saleItem.DiscountAmount;
+                        newSaleInvoiceItemPackage.NetPrice = saleItem.NetPrice;
+                        newSaleInvoiceItemPackage.Amount = saleItem.Amount;
+                        newSaleInvoiceItemPackage.VATId = saleItem.VATId;
+                        newSaleInvoiceItemPackage.VATPercentage = saleItem.VATPercentage;
+                        newSaleInvoiceItemPackage.VATAmount = saleItem.VATAmount;
 
-                    db.TrnSalesInvoiceItems.InsertOnSubmit(newSaleInvoiceItemPackage);
-                    db.SubmitChanges();
+                        var packageItem = from d in db.MstArticles where d.Id == saleItem.ItemId select d;
+                        newSaleInvoiceItemPackage.BaseUnitId = packageItem.First().UnitId;
 
-                    var packageSalesInvoces = from d in db.TrnSalesInvoices where d.Id == saleItem.SIId select d;
-                    if (packageSalesInvoces.Any())
-                    {
-                        var salesInvoiceItems = from d in db.TrnSalesInvoiceItems where d.SIId == saleItem.SIId select d;
-
-                        Decimal amount = 0;
-                        if (salesInvoiceItems.Any())
+                        var packageConversionUnit = from d in db.MstArticleUnits where d.ArticleId == saleItem.ItemId && d.UnitId == saleItem.UnitId select d;
+                        if (packageConversionUnit.First().Multiplier > 0)
                         {
-                            amount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
+                            newSaleInvoiceItemPackage.BaseQuantity = saleItem.Quantity * (1 / packageConversionUnit.First().Multiplier);
+                        }
+                        else
+                        {
+                            newSaleInvoiceItemPackage.BaseQuantity = saleItem.Quantity * 1;
                         }
 
-                        var updateSalesInvoice = packageSalesInvoces.FirstOrDefault();
-                        updateSalesInvoice.Amount = amount;
+                        var packageBaseQuantity = saleItem.Quantity * (1 / packageConversionUnit.First().Multiplier);
+                        if (packageBaseQuantity > 0)
+                        {
+                            newSaleInvoiceItemPackage.BasePrice = saleItem.Amount / packageBaseQuantity;
+                        }
+                        else
+                        {
+                            newSaleInvoiceItemPackage.BasePrice = saleItem.Amount;
+                        }
+                        db.TrnSalesInvoiceItems.InsertOnSubmit(newSaleInvoiceItemPackage);
                         db.SubmitChanges();
-                    }
 
-                    var articleComponents = from d in db.MstArticleComponents
-                                            where d.ArticleId == saleItem.ItemId
-                                            select new Models.MstArticleComponent
-                                            {
-                                                Id = d.Id,
-                                                ArticleId = d.ArticleId,
-                                                ComponentArticleId = d.ComponentArticleId,
-                                                ComponentArticle = d.MstArticle1.Article,
-                                                Quantity = d.Quantity,
-                                                UnitId = d.MstArticle1.UnitId,
-                                                Cost = Convert.ToDecimal(d.MstArticle1.Cost),
-                                                Price = d.MstArticle1.Price,
-                                                Amount = d.Quantity * Convert.ToDecimal(d.MstArticle1.Cost),
-                                                Particulars = d.Particulars
-                                            };
+                        var packageSalesInvoces = from d in db.TrnSalesInvoices where d.Id == saleItem.SIId select d;
+                        if (packageSalesInvoces.Any())
+                        {
+                            var salesInvoiceItems = from d in db.TrnSalesInvoiceItems where d.SIId == saleItem.SIId select d;
 
-                    if (articleComponents.Any())
-                    {
+                            Decimal amount = 0;
+                            if (salesInvoiceItems.Any())
+                            {
+                                amount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
+                            }
+
+                            var updateSalesInvoice = packageSalesInvoces.FirstOrDefault();
+                            updateSalesInvoice.Amount = amount;
+                            db.SubmitChanges();
+                        }
+
                         foreach (var articleComponent in articleComponents)
                         {
                             Data.TrnSalesInvoiceItem newSaleInvoiceItem = new Data.TrnSalesInvoiceItem();
@@ -225,7 +232,7 @@ namespace easyfis.Controllers
 
                             newSaleInvoiceItem.SIId = saleItem.SIId;
                             newSaleInvoiceItem.ItemId = articleComponent.ComponentArticleId;
-                            newSaleInvoiceItem.ItemInventoryId = null;
+                            newSaleInvoiceItem.ItemInventoryId = articleComponent.ComponentArticleInventoryId;
                             newSaleInvoiceItem.Particulars = articleComponent.Particulars;
                             newSaleInvoiceItem.UnitId = articleComponent.UnitId;
                             newSaleInvoiceItem.Quantity = articleComponent.Quantity * saleItem.Quantity;
@@ -289,9 +296,13 @@ namespace easyfis.Controllers
                                 db.SubmitChanges();
                             }
                         }
-                    }
 
-                    return Request.CreateResponse(HttpStatusCode.OK);
+                        return Request.CreateResponse(HttpStatusCode.OK);
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.NotFound);
+                    }
                 }
                 else
                 {

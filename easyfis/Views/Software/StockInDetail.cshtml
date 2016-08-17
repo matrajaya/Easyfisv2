@@ -171,7 +171,7 @@
                         <!-- Stock In line -->
                         <ul class="nav nav-tabs" role="tablist" id="myTab">
                             <li role="presentation" class="active"><a data-toggle="tab" href="#Items" id="itemTabId">Items</a></li>
-                            <li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">inventory entries</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">Inventory Entries</a></li>
                         </ul>
                         <br />
                         <div class="tab-content">
@@ -490,7 +490,7 @@
         function getArticleItemForItemQuery() {
             var items = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticleByArticleTypeIdLocked/1',
+                url: '/api/listArticleByArticleTypeIdByInventory/1',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1947,7 +1947,7 @@
         function getArticleItemForManualCodeAndComponent() {
             articleItems = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticleByArticleTypeId/1',
+                url: '/api/listArticleByArticleTypeIdByInventory/1',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',

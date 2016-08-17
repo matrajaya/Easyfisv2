@@ -198,8 +198,6 @@ namespace easyfis.Controllers
         {
             try
             {
-                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
-
                 var lastOTNumber = from d in db.TrnStockOuts.OrderByDescending(d => d.Id) select d;
                 var OTNumberResult = "0000000001";
 
@@ -209,23 +207,23 @@ namespace easyfis.Controllers
                     OTNumberResult = zeroFill(OTNumber, 10);
                 }
 
-                var accountId = (from d in db.MstAccounts.OrderBy(d => d.Account) select d.Id).FirstOrDefault();
+                var users = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d).FirstOrDefault();
 
                 Data.TrnStockOut newStockOut = new Data.TrnStockOut();
                 newStockOut.BranchId = currentBranchId();
                 newStockOut.OTNumber = OTNumberResult;
                 newStockOut.OTDate = DateTime.Today;
-                newStockOut.AccountId = (from d in db.MstAccounts.OrderBy(d => d.Account) select d.Id).FirstOrDefault(); ;
-                newStockOut.ArticleId = (from d in db.MstArticles where d.AccountId == accountId select d.Id).FirstOrDefault();
+                newStockOut.AccountId = users.IncomeAccountId;
+                newStockOut.ArticleId = (from d in db.MstArticles where d.ArticleTypeId == 6 select d.Id).FirstOrDefault();
                 newStockOut.Particulars = "NA";
                 newStockOut.ManualOTNumber = "NA";
-                newStockOut.PreparedById = userId;
-                newStockOut.CheckedById = userId;
-                newStockOut.ApprovedById = userId;
+                newStockOut.PreparedById = users.Id;
+                newStockOut.CheckedById = users.Id;
+                newStockOut.ApprovedById = users.Id;
                 newStockOut.IsLocked = false;
-                newStockOut.CreatedById = userId;
+                newStockOut.CreatedById = users.Id;
                 newStockOut.CreatedDateTime = DateTime.Now;
-                newStockOut.UpdatedById = userId;
+                newStockOut.UpdatedById = users.Id;
                 newStockOut.UpdatedDateTime = DateTime.Now;
 
                 db.TrnStockOuts.InsertOnSubmit(newStockOut);

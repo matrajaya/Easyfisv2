@@ -17,6 +17,7 @@ namespace easyfis.Models
         public String ManualArticleCode { get; set; }
         public Int32 ComponentArticleId { get; set; }
         public String ComponentArticle { get; set; }
+        public Int32? ComponentArticleInventoryId { get; set; }
         public Decimal Quantity { get; set; }
         public Int32 UnitId { get; set; }
         public String Unit { get; set; }

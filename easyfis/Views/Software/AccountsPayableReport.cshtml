@@ -51,6 +51,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8"></div>
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <div id="accountsPayableGrid" class="grid"></div>
                             </div>
@@ -175,10 +186,11 @@
                                 Supplier: accountsPayableResults[i]["Supplier"],
                                 RRNumber: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + accountsPayableResults[i]["RRNumber"] + "</a>",
                                 RRNumberValue: accountsPayableResults[i]["RRNumber"],
-                                RRDate: accountsPayableResults[i]["RRDate"],
+                                RRNumberValueForCSV: "RR-" + accountsPayableResults[i]["RRNumber"],
+                                RRDate: accountsPayableResults[i]["RRDate"].toLocaleString(),
                                 DocumentReference: accountsPayableResults[i]["DocumentReference"],
                                 BalanceAmount: accountsPayableResults[i]["BalanceAmount"],
-                                DueDate: accountsPayableResults[i]["DueDate"],
+                                DueDate: accountsPayableResults[i]["DueDate"].toString(),
                                 NumberOfDaysFromDueDate: accountsPayableResults[i]["NumberOfDaysFromDueDate"],
                                 CurrentAmount: accountsPayableResults[i]["CurrentAmount"],
                                 Age30Amount: accountsPayableResults[i]["Age30Amount"],
@@ -206,16 +218,14 @@
         var accountsPayableCollections;
 
         function accountsPayableReportCSVOnclick() {
-            
-
             var CSV = '';
             var accountPayables = [];
             var fileName = 'AccountsPayableReport.CSV';
 
             for (i = 0; i < accountsPayableCollections.items.length; i++) {
                 accountPayables.push({
-                    RRNumber: accountsPayableCollections.items[i].RRNumberValue,
-                    AccountCode: accountsPayableCollections.items[i].AccountCode,
+                    RRNumber: accountsPayableCollections.items[i].RRNumberValueForCSV,
+                    //AccountCode: accountsPayableCollections.items[i].AccountCode,
                     Account: accountsPayableCollections.items[i].Account,
                     Supplier: accountsPayableCollections.items[i].Supplier,
                     RRDate: accountsPayableCollections.items[i].RRDate,
@@ -234,12 +244,38 @@
             //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
             //}
 
+            var Headers = [];
+            Headers.push({
+                RRNumber: "RR Number",
+                //AccountCode: "A",
+                Account: "Account",
+                Supplier: "Supplier",
+                RRDate: "RR Date",
+                DocumentReference: "Doc Reference",
+                DueDate: "Due Date",
+                BalanceAmount: "Balance",
+                CurrentAmount: "Current",
+                Age30Amount: "30 Days",
+                Age60Amount: "60 Days",
+                Age90Amount: "90 Days",
+                Age120Amount: "120 Days"
+            });
+
+            var header = '';
             // Rows
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+            console.log(header);
+
+            CSV = header + '\r\n';
             for (var i = 0; i < accountPayables.length; i++) {
                 var row = '';
                 for (var a in accountPayables[i]) {
                     row += '"' + accountPayables[i][a] + '",';
                 }
+
                 row.slice(0, row.length - 1);
                 CSV += row + '\r\n';
             }
@@ -274,7 +310,6 @@
             }
         }
 
-
         function accountsPayableReportPDFOnclick() {
             window.location.href = '/RepAccountsPayable/AccountsPayable?DateAsOf=' + getParam("DateAsOf") + '&CompanyId=' + getParam("CompanyId");
         }
@@ -291,6 +326,19 @@
             });
 
             accountsPayableCollections = new wijmo.collections.CollectionView(getAccountsPayable());
+            accountsPayableCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                accountsPayableCollections.refresh();
+            });
+            accountsPayableCollections.filter = function (item) {
+                return !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.RRNumberValue.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
+            }
 
             // Flex Grid
             accountsPayableGrid = new wijmo.grid.FlexGrid('#accountsPayableGrid');

@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using System.Diagnostics;
 
 namespace easyfis.Controllers
 {
@@ -206,8 +207,6 @@ namespace easyfis.Controllers
         {
             try
             {
-                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
-
                 var lastINNumber = from d in db.TrnStockIns.OrderByDescending(d => d.Id) select d;
                 var INNumberResult = "0000000001";
 
@@ -217,24 +216,24 @@ namespace easyfis.Controllers
                     INNumberResult = zeroFill(INNumber, 10);
                 }
 
-                var accountId = (from d in db.MstAccounts.OrderBy(d => d.Account) select d.Id).FirstOrDefault();
+                var users = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d).FirstOrDefault();
 
                 Data.TrnStockIn newStockIn = new Data.TrnStockIn();
                 newStockIn.BranchId = currentBranchId();
                 newStockIn.INNumber = INNumberResult;
                 newStockIn.INDate = DateTime.Today;
-                newStockIn.AccountId = (from d in db.MstAccounts.OrderBy(d => d.Account) select d.Id).FirstOrDefault();
-                newStockIn.ArticleId = (from d in db.MstArticles where d.AccountId == accountId select d.Id).FirstOrDefault();
+                newStockIn.AccountId = users.IncomeAccountId;
+                newStockIn.ArticleId = (from d in db.MstArticles where d.ArticleTypeId == 6 select d.Id).FirstOrDefault();
                 newStockIn.Particulars = "NA";
                 newStockIn.ManualINNumber = "NA";
                 newStockIn.IsProduced = false;
-                newStockIn.PreparedById = userId;
-                newStockIn.CheckedById = userId;
-                newStockIn.ApprovedById = userId;
+                newStockIn.PreparedById = users.Id;
+                newStockIn.CheckedById = users.Id;
+                newStockIn.ApprovedById = users.Id;
                 newStockIn.IsLocked = false;
-                newStockIn.CreatedById = userId;
+                newStockIn.CreatedById = users.Id;
                 newStockIn.CreatedDateTime = DateTime.Now;
-                newStockIn.UpdatedById = userId;
+                newStockIn.UpdatedById = users.Id;
                 newStockIn.UpdatedDateTime = DateTime.Now;
 
                 db.TrnStockIns.InsertOnSubmit(newStockIn);
@@ -242,8 +241,9 @@ namespace easyfis.Controllers
 
                 return newStockIn.Id;
             }
-            catch
+            catch(Exception e)
             {
+                Debug.WriteLine(e);
                 return 0;
             }
         }
@@ -279,7 +279,7 @@ namespace easyfis.Controllers
 
                     db.SubmitChanges();
 
-                    inventory.insertINInventory(Convert.ToInt32(id));
+                    inventory.insertINInventory(Convert.ToInt32(id), stockIn.IsProduced);
                     journal.insertINJournal(Convert.ToInt32(id));
 
                     return Request.CreateResponse(HttpStatusCode.OK);

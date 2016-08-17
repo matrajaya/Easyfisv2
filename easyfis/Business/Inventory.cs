@@ -623,7 +623,7 @@ namespace easyfis.Business
         // ==================
         // Stock in Inventory
         // ==================
-        public void insertINInventory(Int32 INId)
+        public void insertINInventory(Int32 INId, Boolean isProduce)
         {
             // Stock in header
             var stockInHeaders = from d in db.TrnStockIns
@@ -738,6 +738,61 @@ namespace easyfis.Business
                                         db.TrnInventories.InsertOnSubmit(newInventory);
                                         db.SubmitChanges();
 
+                                        var articleItem = from d in db.MstArticles where d.Id == stockInItem.ItemId select d;
+                                        if (articleItem.FirstOrDefault().Kitting == 1)
+                                        {
+                                            var articleComponents = from d in db.MstArticleComponents
+                                                                    where d.ArticleId == stockInItem.ItemId
+                                                                    select new Models.MstArticleComponent
+                                                                    {
+                                                                        Id = d.Id,
+                                                                        ArticleId = d.ArticleId,
+                                                                        ComponentArticleId = d.ComponentArticleId,
+                                                                        ComponentArticle = d.MstArticle1.Article,
+                                                                        Quantity = d.Quantity,
+                                                                        UnitId = d.MstArticle1.UnitId,
+                                                                        Cost = Convert.ToDecimal(d.MstArticle1.Cost),
+                                                                        Price = d.MstArticle1.Price,
+                                                                        ComponentArticleInventoryId = (from i in db.MstArticleInventories where i.BranchId == stockInHeader.BranchId && i.ArticleId == d.ComponentArticleId select i.Id).FirstOrDefault(),
+                                                                        Amount = d.Quantity * Convert.ToDecimal(d.MstArticle1.Cost),
+                                                                        Particulars = d.Particulars
+                                                                    };
+
+                                            if (Convert.ToBoolean(isProduce) == true)
+                                            {
+                                                foreach (var articleComponent in articleComponents)
+                                                {
+                                                    // retrieve component Artticle Inventory
+                                                    var componentArticleInventories = from d in db.MstArticleInventories
+                                                                                      where d.BranchId == stockInHeader.BranchId
+                                                                                      && d.ArticleId == articleComponent.ComponentArticleId
+                                                                                      select d;
+
+                                                    if (componentArticleInventories.Any())
+                                                    {
+                                                        Data.TrnInventory newComponentInventory = new Data.TrnInventory();
+                                                        newComponentInventory.BranchId = stockInHeader.BranchId;
+                                                        newComponentInventory.InventoryDate = Convert.ToDateTime(stockInHeader.INDate);
+                                                        newComponentInventory.ArticleId = articleComponent.ComponentArticleId;
+                                                        newComponentInventory.ArticleInventoryId = componentArticleInventories.FirstOrDefault().Id;
+                                                        newComponentInventory.RRId = null;
+                                                        newComponentInventory.SIId = null;
+                                                        newComponentInventory.INId = INId;
+                                                        newComponentInventory.OTId = null;
+                                                        newComponentInventory.STId = null;
+                                                        newComponentInventory.QuantityIn = (articleComponent.Quantity * stockInItem.Quantity) * -1;
+                                                        newComponentInventory.QuantityOut = 0;
+                                                        newComponentInventory.Quantity = (articleComponent.Quantity * stockInItem.Quantity) * -1;
+                                                        newComponentInventory.Amount = ((articleComponent.Quantity * stockInItem.Quantity) * -1) * articleComponent.Cost;
+                                                        newComponentInventory.Particulars = "Stock In";
+
+                                                        db.TrnInventories.InsertOnSubmit(newComponentInventory);
+                                                        db.SubmitChanges();
+                                                    }
+                                                }
+                                            }
+                                        }
+
                                         UpdateArticleInventory(articleInventoryId);
                                     }
                                     else
@@ -780,6 +835,61 @@ namespace easyfis.Business
 
                                         db.TrnInventories.InsertOnSubmit(newInventory);
                                         db.SubmitChanges();
+
+                                        var articleItem = from d in db.MstArticles where d.Id == stockInItem.ItemId select d;
+                                        if (articleItem.FirstOrDefault().Kitting == 1)
+                                        {
+                                            var articleComponents = from d in db.MstArticleComponents
+                                                                    where d.ArticleId == stockInItem.ItemId
+                                                                    select new Models.MstArticleComponent
+                                                                    {
+                                                                        Id = d.Id,
+                                                                        ArticleId = d.ArticleId,
+                                                                        ComponentArticleId = d.ComponentArticleId,
+                                                                        ComponentArticle = d.MstArticle1.Article,
+                                                                        Quantity = d.Quantity,
+                                                                        UnitId = d.MstArticle1.UnitId,
+                                                                        Cost = Convert.ToDecimal(d.MstArticle1.Cost),
+                                                                        Price = d.MstArticle1.Price,
+                                                                        ComponentArticleInventoryId = (from i in db.MstArticleInventories where i.BranchId == stockInHeader.BranchId && i.ArticleId == d.ComponentArticleId select i.Id).FirstOrDefault(),
+                                                                        Amount = d.Quantity * Convert.ToDecimal(d.MstArticle1.Cost),
+                                                                        Particulars = d.Particulars
+                                                                    };
+
+                                            if (Convert.ToBoolean(isProduce) == true)
+                                            {
+                                                foreach (var articleComponent in articleComponents)
+                                                {
+                                                    // retrieve component Artticle Inventory
+                                                    var componentArticleInventories = from d in db.MstArticleInventories
+                                                                                      where d.BranchId == stockInHeader.BranchId
+                                                                                      && d.ArticleId == articleComponent.ComponentArticleId
+                                                                                      select d;
+
+                                                    if (componentArticleInventories.Any())
+                                                    {
+                                                        Data.TrnInventory newComponentInventory = new Data.TrnInventory();
+                                                        newComponentInventory.BranchId = stockInHeader.BranchId;
+                                                        newComponentInventory.InventoryDate = Convert.ToDateTime(stockInHeader.INDate);
+                                                        newComponentInventory.ArticleId = articleComponent.ComponentArticleId;
+                                                        newComponentInventory.ArticleInventoryId = componentArticleInventories.FirstOrDefault().Id;
+                                                        newComponentInventory.RRId = null;
+                                                        newComponentInventory.SIId = null;
+                                                        newComponentInventory.INId = INId;
+                                                        newComponentInventory.OTId = null;
+                                                        newComponentInventory.STId = null;
+                                                        newComponentInventory.QuantityIn = (articleComponent.Quantity * stockInItem.Quantity) * -1;
+                                                        newComponentInventory.QuantityOut = 0;
+                                                        newComponentInventory.Quantity = (articleComponent.Quantity * stockInItem.Quantity) * -1;
+                                                        newComponentInventory.Amount = ((articleComponent.Quantity * stockInItem.Quantity) * -1) * articleComponent.Cost;
+                                                        newComponentInventory.Particulars = "Stock In";
+
+                                                        db.TrnInventories.InsertOnSubmit(newComponentInventory);
+                                                        db.SubmitChanges();
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
