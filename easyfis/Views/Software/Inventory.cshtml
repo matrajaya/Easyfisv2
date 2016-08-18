@@ -46,6 +46,7 @@
                                             </h4>
                                         </div>
                                         <div class="col-md-6" align="right">
+                                            <button onclick="inventoryReportInventoryCSV_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
                                             <button onclick="inventoryReportInventoryPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="/Software/InventoryReport" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
                                         </div>
@@ -146,6 +147,7 @@
                                 Branch: inventoryResults[i]["Branch"],
                                 ArticleId: inventoryResults[i]["ArticleId"],
                                 Article: "<a href='" + articleLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left;'>" + inventoryResults[i]["Article"] + "</a>",
+                                ArticleForCSV: inventoryResults[i]["Article"],
                                 InventoryCode: inventoryResults[i]["InventoryCode"],
                                 Cost: inventoryResults[i]["Cost"],
                                 UnitId: inventoryResults[i]["UnitId"],
@@ -173,6 +175,107 @@
             window.location.href = '/RepInventoryReport/InventoryReport?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&CompanyId=' + getParam("CompanyId");
         }
 
+        //CSV Inventory 
+        var inventoryCollections;
+
+        function inventoryReportInventoryCSV_OnClick() {
+
+            var CSV = '';
+            var inventories = [];
+            var fileName = 'Inventory.CSV';
+
+            for (i = 0; i < inventoryCollections.items.length; i++) {
+                inventories.push({
+                    Branch: inventoryCollections.items[i].Branch,
+                    InventoryCode: inventoryCollections.items[i].InventoryCode,
+                    ArticleForCSV: inventoryCollections.items[i].ArticleForCSV,
+                    Unit: inventoryCollections.items[i].Unit,
+                    Cost: inventoryCollections.items[i].Cost,
+                    BegQuantity: inventoryCollections.items[i].BegQuantity,
+                    InQuantity: inventoryCollections.items[i].InQuantity,
+                    OutQuantity: inventoryCollections.items[i].OutQuantity,
+                    EndQuantity: inventoryCollections.items[i].EndQuantity,
+                    TotalAmount: inventoryCollections.items[i].TotalAmount,
+                    Count: inventoryCollections.items[i].Count,
+                    QuantityVariance: inventoryCollections.items[i].QuantityVariance,
+                    VarianceAmount: inventoryCollections.items[i].VarianceAmount,
+
+                });
+            }
+
+            //for (var i = 0; i < symbols.length; i++) {
+            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
+            //}
+
+            var Headers = [];
+            Headers.push({
+                Branch: "Branch",
+                InventoryCode: "Code",
+                ArticleForCSV: "Item",
+                Unit: "Unit",
+                Cost: "Cost",
+                BegQuantity: "Beg",
+                InQuantity: "In",
+                OutQuantity: "Out",
+                EndQuantity: "End",
+                TotalAmount: "Total Amount",
+                Count: "Count",
+                QuantityVariance:"Variance",
+                VarianceAmount: "Variance Amount",
+
+
+            });
+
+            var header = '';
+            // Rows
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+
+
+            CSV = header + '\r\n';
+            for (var i = 0; i < inventories.length; i++) {
+                var row = '';
+                for (var a in inventories[i]) {
+                    row += '"' + inventories[i][a] + '",';
+                }
+
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+
+
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }
+        }
+
         $(document).ready(function () {
             $.ajax({
                 url: '/api/company/' + getParam("CompanyId"),
@@ -184,7 +287,7 @@
                 }
             });
 
-            var inventoryCollections = new wijmo.collections.CollectionView(getInventory());
+            inventoryCollections = new wijmo.collections.CollectionView(getInventory());
             inventoryCollections.canFilter = true;
 
             var filterText = '';

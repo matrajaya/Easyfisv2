@@ -45,6 +45,7 @@
                                         </h4>
                                     </div>
                                     <div class="col-md-6" align="right">
+                                        <button onclick="FinancialStatementTrialBalanceCSV_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
                                         <button onclick="FinancialStatementTrialBalancePDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                         <a href="/Software/FinancialStatements" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
                                     </div>
@@ -160,6 +161,7 @@
                                 AccountId: Results[i]["AccountId"],
                                 AccountCode: Results[i]["AccountCode"],
                                 Account: "<a href='" + accountLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left;'> " + Results[i]["AccountCode"] + " - " + Results[i]["Account"] + "</a>",
+                                AccountForCSV: Results[i]["AccountCode"] + " - " + Results[i]["Account"],
                                 DebitAmount: Results[i]["DebitAmount"],
                                 CreditAmount: Results[i]["CreditAmount"],
                                 Balance: Results[i]["DebitAmount"] - Results[i]["CreditAmount"],
@@ -183,8 +185,88 @@
             window.location.href = '/RepTrialBalance/TrialBalance?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&CompanyId=' + getParam("CompanyId");
         }
 
+        var trialBalances;
+
+        function FinancialStatementTrialBalanceCSV_OnClick() {
+
+            var CSV = '';
+            var trialBalance = [];
+            var fileName = 'TrialBalance.CSV';
+
+            for (i = 0; i < trialBalances.items.length; i++) {
+                trialBalance.push({
+                    AccountForCSV: trialBalances.items[i].AccountForCSV,
+                    DebitAmount: trialBalances.items[i].DebitAmount,
+                    CreditAmount: trialBalances.items[i].CreditAmount,
+                   
+                });
+            }
+
+            //for (var i = 0; i < symbols.length; i++) {
+            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
+            //}
+
+            var Headers = [];
+            Headers.push({
+                AccountForCSV: "Account",
+                DebitAmount: "Debit",
+                CreditAmount: "Credit",
+                
+
+            });
+
+            var header = '';
+            // Rows
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+
+
+            CSV = header + '\r\n';
+            for (var i = 0; i < trialBalance.length; i++) {
+                var row = '';
+                for (var a in trialBalance[i]) {
+                    row += '"' + trialBalance[i][a] + '",';
+                }
+
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+
+
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }
+        }
+
         $(document).ready(function () {
-            var trialBalances = new wijmo.collections.CollectionView(getTrialBalance());
+            trialBalances = new wijmo.collections.CollectionView(getTrialBalance());
             trialBalances.canFilter = true;
 
             var filterText = '';
@@ -194,7 +276,7 @@
             });
             trialBalances.filter = function (item) {
                 return !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
-                
+
             }
             // Flex Grid
             trialBalanceGrid = new wijmo.grid.FlexGrid('#trialBalanceGrid');

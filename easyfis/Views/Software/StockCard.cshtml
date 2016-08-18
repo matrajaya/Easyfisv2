@@ -45,6 +45,7 @@
                                         </h4>
                                     </div>
                                     <div class="col-md-6" align="right">
+                                        <button onclick="InventoryStockCardCSV_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
                                         <button onclick="InventoryStockCardPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                         <a href="/Software/InventoryReport" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
                                     </div>
@@ -221,9 +222,99 @@
         function InventoryStockCardPDF_OnClick() {
             window.location.href = '/RepStockCard/StockCard?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&BranchId=' + getParam("BranchId") + '&ItemId=' + getParam("ItemId");
         }
+        var stockCards;
+
+        function InventoryStockCardCSV_OnClick() {
+
+            var CSV = '';
+            var stockCard = [];
+            var fileName = 'StockCard.CSV';
+
+            for (i = 0; i < stockCards.items.length; i++) {
+                stockCard.push({
+                    InventoryDate: stockCards.items[i].InventoryDate,
+                    DocumentReferenceValue: stockCards.items[i].DocumentReferenceValue,
+                    Beg: stockCards.items[i].Beg,
+                    QuantityIn: stockCards.items[i].QuantityIn,
+                    QuantityOut: stockCards.items[i].QuantityOut,
+                    Quantity: stockCards.items[i].Quantity,
+                    Unit: stockCards.items[i].Unit,
+                    Cost: stockCards.items[i].Cost,
+                    Amount: stockCards.items[i].Amount,
+
+                });
+            }
+
+            //for (var i = 0; i < symbols.length; i++) {
+            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
+            //}
+
+            var Headers = [];
+            Headers.push({
+                InventoryDate: "Date",
+                DocumentReferenceValue: "Document",
+                Beg: "Beg",
+                QuantityIn: "In",
+                QuantityOut: "Out",
+                Quantity: "End",
+                Unit: "Unit",
+                Cost: "Cost",
+                Amount: "Amount",
+
+            });
+
+            var header = '';
+            // Rows
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+
+
+            CSV = header + '\r\n';
+            for (var i = 0; i < stockCard.length; i++) {
+                var row = '';
+                for (var a in stockCard[i]) {
+                    row += '"' + stockCard[i][a] + '",';
+                }
+
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+
+
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }
+        }
 
         $(document).ready(function () {
-            var stockCards = new wijmo.collections.CollectionView(getStockCard());
+            stockCards = new wijmo.collections.CollectionView(getStockCard());
             stockCards.canFilter = true;
 
             var filterText = '';
@@ -233,7 +324,7 @@
             });
             stockCards.filter = function (item) {
                 return !filterText || (item.DocumentReferenceValue.toLowerCase().indexOf(filterText) > -1)
-                  
+
             }
             // Flex Grid
             stockCardGrid = new wijmo.grid.FlexGrid('#stockCardGrid');
