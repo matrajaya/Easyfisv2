@@ -298,42 +298,43 @@
                 </div>
                 <div class="modal-body">
                     <center>
-                        <h4>
-                            <span id="loadingJournalGridList"></span>
-                        </h4>
+                        <span id="loadingJournalGridList"></span>
                     </center>
                     <div id="journal_Content">
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="journalGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <div class="col-md-6"></div>
-                            <div class="col-md-6" align="right">
-                                <table>
-                                    <tr>
-                                        <td align="right"> <b>Total Debit:</b> </td>
-                                        <td style="padding-left: 35px"></td>
-                                        <td> <span id="totalDebitInJournal"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"> <b>Total Credit:</b> </td>
-                                        <td style="padding-left: 35px"></td>
-                                        <td> <span id="totalCreditInJournal"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 10px"> </td>
-                                        <td style="padding: 10px"> </td>
-                                        <td style="padding: 10px"> </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"> <b>Variance: </b> </td>
-                                        <td style="padding-left: 35px"></td>
-                                        <td> <span id="variance"></span></td>
-                                    </tr>
-                                </table>
+                        <div id="journalGrid" class="grid" align="left"></div>
+                        <div class="panel panel-default">
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-6">
+                                        <table class="table table-responsive table-bordered">
+                                            <tr>
+                                                <td align="right">
+                                                    <b>Total Debit: </b>
+                                                </td>
+                                                <td style="padding-left: 10px" align="right">
+                                                    <span id="totalDebitInJournal">NA</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">
+                                                    <b>Total Credit: </b>
+                                                </td>
+                                                <td style="padding-left: 10px" align="right">
+                                                    <span id="totalCreditInJournal">NA</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">
+                                                    <b>Variance: </b>
+                                                </td>
+                                                <td style="padding-left: 10px" align="right">
+                                                    <span id="variance">NA</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -3018,7 +3019,7 @@
         function stockInJournal_OnClick() {
             journals = new wijmo.collections.CollectionView(getJournalListForStockIn());
 
-            document.getElementById("loadingJournalGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading Journal...';
+            document.getElementById("loadingJournalGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
 
             $("#loadingJournalGridList").show();
             $("#journal_Content").hide();
