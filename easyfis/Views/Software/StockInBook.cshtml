@@ -45,7 +45,7 @@
                                         </h4>
                                     </div>
                                     <div class="col-md-6" align="right">
-                                        <button onclick="" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                        <button onclick="stockInBookCSV_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
                                         <button onclick="stockInBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                         <a href="/Software/FinancialStatements" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
                                     </div>
@@ -147,13 +147,98 @@
 
             return stockInBook;
         }
+        var stockInBookCollections;
 
+        function stockInBookCSV_OnClick() {
+
+            var CSV = '';
+            var stockInBook = [];
+            var fileName = 'StockInBook.CSV';
+
+            for (i = 0; i < stockInBookCollections.items.length; i++) {
+                stockInBook.push({
+                    DocumentReference: stockInBookCollections.items[i].DocumentReference,
+                    AccountCode: stockInBookCollections.items[i].AccountCode,
+                    Account: stockInBookCollections.items[i].Account,
+                    Article: stockInBookCollections.items[i].Article,
+                    DebitAmount: stockInBookCollections.items[i].DebitAmount,
+                    CreditAmount: stockInBookCollections.items[i].CreditAmount,
+                    Balance: stockInBookCollections.items[i].Balance,
+
+                });
+            }
+
+            //for (var i = 0; i < symbols.length; i++) {
+            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
+            //}
+
+            var Headers = [];
+            Headers.push({
+                DocumentReference: "IN Number",
+                AccountCode: "Code",
+                Account: "Account",
+                Article: "Article",
+                DebitAmount: "Debit",
+                CreditAmount: "Credit",
+                Balance: "Balance",
+
+            });
+
+            var header = '';
+            // Rows
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+
+
+            CSV = header + '\r\n';
+            for (var i = 0; i < stockInBook.length; i++) {
+                var row = '';
+                for (var a in stockInBook[i]) {
+                    row += '"' + stockInBook[i][a] + '",';
+                }
+
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+
+
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }
+        }
 
         $(document).ready(function () {
             NProgress.start();
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
-            var stockInBookCollections = new wijmo.collections.CollectionView(getStockInBook());
+            stockInBookCollections = new wijmo.collections.CollectionView(getStockInBook());
             stockInBookCollections.canFilter = true;
 
             var filterText = '';

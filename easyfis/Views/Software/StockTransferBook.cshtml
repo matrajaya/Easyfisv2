@@ -45,7 +45,7 @@
                                         </h4>
                                     </div>
                                     <div class="col-md-6" align="right">
-                                        <button onclick="" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                        <button onclick="stockTransferBookCSV_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
                                         <button onclick="stockTransferBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                         <a href="/Software/FinancialStatements" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
                                     </div>
@@ -122,7 +122,7 @@
                         var totalAmount = 0;
 
                         for (i = 0; i < stockTransferBookResults.length; i++) {
-                              // Array Push
+                            // Array Push
                             stockTransferBook.push({
 
                                 DocumentReference: stockTransferBookResults[i]["DocumentReference"],
@@ -148,12 +148,98 @@
             return stockTransferBook;
         }
 
+        var stockTransferBookCollections;
 
+        function stockTransferBookCSV_OnClick() {
+
+            var CSV = '';
+            var stockTransferBook = [];
+            var fileName = 'StockTransferBook.CSV';
+
+            for (i = 0; i < stockTransferBookCollections.items.length; i++) {
+                stockTransferBook.push({
+                    DocumentReference: stockTransferBookCollections.items[i].DocumentReference,
+                    AccountCode: stockTransferBookCollections.items[i].AccountCode,
+                    Account: stockTransferBookCollections.items[i].Account,
+                    Article: stockTransferBookCollections.items[i].Article,
+                    DebitAmount: stockTransferBookCollections.items[i].DebitAmount,
+                    CreditAmount: stockTransferBookCollections.items[i].CreditAmount,
+                    Balance: stockTransferBookCollections.items[i].Balance,
+
+                });
+            }
+
+            //for (var i = 0; i < symbols.length; i++) {
+            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
+            //}
+
+            var Headers = [];
+            Headers.push({
+                DocumentReference: "ST Number",
+                AccountCode: "Code",
+                Account: "Account",
+                Article: "Article",
+                DebitAmount: "Debit",
+                CreditAmount: "Credit",
+                Balance: "Balance",
+
+            });
+
+            var header = '';
+            // Rows
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+
+
+            CSV = header + '\r\n';
+            for (var i = 0; i < stockTransferBook.length; i++) {
+                var row = '';
+                for (var a in stockTransferBook[i]) {
+                    row += '"' + stockTransferBook[i][a] + '",';
+                }
+
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+
+
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }
+        }
+    
         $(document).ready(function () {
             NProgress.start();
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
-            var stockTransferBookCollections = new wijmo.collections.CollectionView(getStockTransferBook());
+            stockTransferBookCollections = new wijmo.collections.CollectionView(getStockTransferBook());
             stockTransferBookCollections.canFilter = true;
 
             var filterText = '';
@@ -193,7 +279,7 @@
                             {
                                 "header": "Article",
                                 "binding": "Article",
-                                "isContentHtml" : true,
+                                "isContentHtml": true,
                                 "allowSorting": true,
                                 "width": "1.5*"
                             },

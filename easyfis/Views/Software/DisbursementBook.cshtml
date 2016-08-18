@@ -45,7 +45,7 @@
                                         </h4>
                                     </div>
                                     <div class="col-md-6" align="right">
-                                        <button onclick="" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                        <button onclick="disbursementBookCSV_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
                                         <button onclick="disbursementBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                         <a href="/Software/FinancialStatements" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
                                     </div>
@@ -147,13 +147,98 @@
 
             return disbursementBook;
         }
+        var disbursementBookCollections;
 
+        function disbursementBookCSV_OnClick() {
+
+            var CSV = '';
+            var disbursementBook = [];
+            var fileName = 'DisbursementBook.CSV';
+
+            for (i = 0; i < disbursementBookCollections.items.length; i++) {
+                disbursementBook.push({
+                    DocumentReference: disbursementBookCollections.items[i].DocumentReference,
+                    AccountCode: disbursementBookCollections.items[i].AccountCode,
+                    Account: disbursementBookCollections.items[i].Account,
+                    Article: disbursementBookCollections.items[i].Article,
+                    DebitAmount: disbursementBookCollections.items[i].DebitAmount,
+                    CreditAmount: disbursementBookCollections.items[i].CreditAmount,
+                    Balance: disbursementBookCollections.items[i].Balance,
+
+                });
+            }
+
+            //for (var i = 0; i < symbols.length; i++) {
+            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
+            //}
+
+            var Headers = [];
+            Headers.push({
+                DocumentReference: "CV Number",
+                AccountCode: "Code",
+                Account: "Account",
+                Article: "Article",
+                DebitAmount: "Debit",
+                CreditAmount: "Credit",
+                Balance: "Balance",
+
+            });
+
+            var header = '';
+            // Rows
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+
+
+            CSV = header + '\r\n';
+            for (var i = 0; i < disbursementBook.length; i++) {
+                var row = '';
+                for (var a in disbursementBook[i]) {
+                    row += '"' + disbursementBook[i][a] + '",';
+                }
+
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+
+
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }
+        }
 
         $(document).ready(function () {
             NProgress.start();
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
-            var disbursementBookCollections = new wijmo.collections.CollectionView(getDisbursementBook());
+            disbursementBookCollections = new wijmo.collections.CollectionView(getDisbursementBook());
             disbursementBookCollections.canFilter = true;
 
             var filterText = '';
