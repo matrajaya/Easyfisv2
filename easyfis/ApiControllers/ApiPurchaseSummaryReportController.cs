@@ -19,8 +19,13 @@ namespace easyfis.ApiControllers
 
         public Decimal getAmount(Int32 id)
         {
+            Decimal amount = 0;
+
             var purchaseOrderItems = from d in db.TrnPurchaseOrderItems where d.POId == id select d;
-            Decimal amount = purchaseOrderItems.Sum(d => d.Amount);
+            if (purchaseOrderItems.Any())
+            {
+                amount = purchaseOrderItems.Sum(d => d.Amount);
+            }
 
             return amount;
         }

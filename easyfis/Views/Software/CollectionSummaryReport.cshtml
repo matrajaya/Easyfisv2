@@ -33,7 +33,7 @@
             <section class="content">
                 <div class="box box-default">
                     <div class="box-header">
-                       
+
                     </div>
                     <div class="box-body">
                         <div class="panel panel-default">
@@ -52,6 +52,17 @@
                                         <button onclick="collectionSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                         <a href="/Software/AccountsReceivable" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8"></div>
                                 </div>
                             </div>
                             <div class="panel-body">
@@ -117,18 +128,19 @@
                             var docLink = "/Software/CollectionDetail?CollectonId=" + collectionSummaryReportResult[i]["Id"];
                             // Array Push
                             collectionSummaryReport.push({
-                              
+
 
                                 Id: collectionSummaryReportResult[i]["Id"],
                                 Branch: collectionSummaryReportResult[i]["Branch"],
                                 ORNumber: collectionSummaryReportResult[i]["ORNumber"],
+                                ORNumberForCSV: "OR-" + collectionSummaryReportResult[i]["ORNumber"],
                                 ORNumberButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + collectionSummaryReportResult[i]["ORNumber"],
                                 ORDate: collectionSummaryReportResult[i]["ORDate"],
                                 Customer: collectionSummaryReportResult[i]["Customer"],
                                 Amount: collectionSummaryReportResult[i]["Amount"],
-                                
+
                             });
-                            
+
                             totalAmount += collectionSummaryReportResult[i]["Amount"];
                         }
 
@@ -142,7 +154,7 @@
             });
 
             return collectionSummaryReport;
-            
+
         }
         var collectionSummaryReportCollection;
 
@@ -157,7 +169,7 @@
                 collectionSummaryReport.push({
                     Branch: collectionSummaryReportCollection.items[i].Branch,
                     ORDate: collectionSummaryReportCollection.items[i].ORDate,
-                    ORNumber: collectionSummaryReportCollection.items[i].ORNumber,
+                    ORNumber: collectionSummaryReportCollection.items[i].ORNumberForCSV,
                     Customer: collectionSummaryReportCollection.items[i].Customer,
                     Amount: collectionSummaryReportCollection.items[i].Amount,
 
@@ -169,7 +181,22 @@
             //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
             //}
 
-            // Rows
+            var Headers = [];
+            Headers.push({
+
+                Branch: "Branch",
+                ORDate: "OR Date",
+                ORNumber: "OR Number",
+                Customer: "Customer",
+                Amount: "Amount",
+
+            });
+
+            var header = '';
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+            CSV = header + '\r\n';
             for (var i = 0; i < collectionSummaryReport.length; i++) {
                 var row = '';
                 for (var a in collectionSummaryReport[i]) {
@@ -214,7 +241,19 @@
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
             collectionSummaryReportCollection = new wijmo.collections.CollectionView(getCollectionSummaryReport());
+            collectionSummaryReportCollection.canFilter = true;
 
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                collectionSummaryReportCollection.refresh();
+            });
+            collectionSummaryReportCollection.filter = function (item) {
+                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.ORNumber.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
+
+            }
             // Flex Grid
             var collectionSummaryReportGrid = new wijmo.grid.FlexGrid('#collectionSummaryReportGrid');
             collectionSummaryReportGrid.initialize({
@@ -245,13 +284,13 @@
                                 "width": "1*"
                             },
                             {
-                               "header": "Amount",
-                               "binding": "Amount",
-                               "allowSorting": true,
-                               "width": "0.5*"
+                                "header": "Amount",
+                                "binding": "Amount",
+                                "allowSorting": true,
+                                "width": "0.5*"
                             }
 
-                            
+
                 ],
                 autoGenerateColumns: false,
                 itemsSource: collectionSummaryReportCollection,

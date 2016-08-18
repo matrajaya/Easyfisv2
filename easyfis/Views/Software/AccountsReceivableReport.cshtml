@@ -51,6 +51,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8"></div>
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <div id="accountsReceivableGrid" class="grid"></div>
                             </div>
@@ -174,6 +185,7 @@
                                 Customer: accountsReceivableResults[i]["Customer"],
                                 SINumber: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + accountsReceivableResults[i]["SINumber"] + "</a>",
                                 SINumberValue: accountsReceivableResults[i]["SINumber"],
+                                SINumberValue: "SI-" + accountsReceivableResults[i]["SINumber"],
                                 SIDate: accountsReceivableResults[i]["SIDate"],
                                 DocumentReference: accountsReceivableResults[i]["DocumentReference"],
                                 BalanceAmount: accountsReceivableResults[i]["BalanceAmount"],
@@ -232,7 +244,32 @@
             //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
             //}
 
+            var Headers = [];
+            Headers.push({
+
+                SINumberValue: "SI Number",
+                Account: "Account",
+                Customer: "Customer",
+                SIDate: "SI Date",
+                DocumentReference: "Document Reference",
+                DueDate: "DueDate",
+                BalanceAmount: "Balance",
+                CurrentAmount: "Current",
+                Age30Amount: "30 Days",
+                Age60Amount: "60 Days",
+                Age90Amount: "90 Days",
+                Age120Amount: "120 Days"
+               
+
+            });
+
+            var header = '';
             // Rows
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+            CSV = header + '\r\n';
             for (var i = 0; i < accountReceivable.length; i++) {
                 var row = '';
                 for (var a in accountReceivable[i]) {
@@ -288,7 +325,19 @@
             });
 
             accountsReceivableCollection = new wijmo.collections.CollectionView(getAccountsReceivable());
+            accountsReceivableCollection.canFilter = true;
 
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                accountsReceivableCollection.refresh();
+            });
+            accountsReceivableCollection.filter = function (item) {
+                return !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.SINumberValue.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
+            }
             // Flex Grid
             accountsReceivableGrid = new wijmo.grid.FlexGrid('#accountsReceivableGrid');
             accountsReceivableGrid.initialize({

@@ -51,6 +51,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8"></div>
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <div id="purchaseSummaryReportGrid" class="grid"></div>
                             </div>
@@ -117,11 +128,12 @@
                                 Id: purchaseSummaryReportResults[i]["Id"],
                                 Branch: purchaseSummaryReportResults[i]["Branch"],
                                 PONumber: purchaseSummaryReportResults[i]["PONumber"],
+                                PONumberForCSV: "PO-" + purchaseSummaryReportResults[i]["PONumber"],
                                 PONumberButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + purchaseSummaryReportResults[i]["PONumber"],
                                 PODate: purchaseSummaryReportResults[i]["PODate"],
                                 Supplier: purchaseSummaryReportResults[i]["Supplier"],
                                 Remarks: purchaseSummaryReportResults[i]["Remarks"],
-                                IsClose: purchaseSummaryReportResults[i]["IsClose"],
+                                IsClose: purchaseSummaryReportResults[i]["IsClose"] ? "Closed" : "Not Closed",
                                 Amount: purchaseSummaryReportResults[i]["Amount"]
                             });
 
@@ -149,13 +161,13 @@
                 purchaseSummaryReport.push({
                     Branch: purchaseSummaryReportCollections.items[i].Branch,
                     PODate: purchaseSummaryReportCollections.items[i].PODate,
-                    PONumber: purchaseSummaryReportCollections.items[i].PONumber,
+                    PONumber: purchaseSummaryReportCollections.items[i].PONumberForCSV,
                     Supplier: purchaseSummaryReportCollections.items[i].Supplier,
                     Remarks: purchaseSummaryReportCollections.items[i].Remarks,
                     IsClose: purchaseSummaryReportCollections.items[i].IsClose,
                     Amount: purchaseSummaryReportCollections.items[i].Amount,
-                   
-                    
+
+
                 });
             }
 
@@ -163,15 +175,38 @@
             //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
             //}
 
+            var Headers = [];
+            Headers.push({
+
+                Branch: "Branch",
+                PODate: "PO Date",
+                PONumber: "PO Number",
+                Supplier: "Supplier",
+                Remarks: "Remarks",
+                Status: "Status",
+                Amount: "Amount",
+
+            });
+
+            var header = '';
             // Rows
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+
+
+            CSV = header + '\r\n';
             for (var i = 0; i < purchaseSummaryReport.length; i++) {
                 var row = '';
                 for (var a in purchaseSummaryReport[i]) {
                     row += '"' + purchaseSummaryReport[i][a] + '",';
                 }
+
                 row.slice(0, row.length - 1);
                 CSV += row + '\r\n';
             }
+
 
             if (CSV == '') {
                 toastr.error("No data.");
@@ -209,6 +244,19 @@
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
             purchaseSummaryReportCollections = new wijmo.collections.CollectionView(getPurchaseSummaryReport());
+            purchaseSummaryReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                purchaseSummaryReportCollections.refresh();
+            });
+            purchaseSummaryReportCollections.filter = function (item) {
+                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.PONumber.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+
+            }
 
             // Flex Grid
             var purchaseSummaryReportGrid = new wijmo.grid.FlexGrid('#purchaseSummaryReportGrid');
@@ -229,7 +277,7 @@
                             {
                                 "header": "PO Number",
                                 "binding": "PONumberButton",
-                                "isContentHtml" : true,
+                                "isContentHtml": true,
                                 "allowSorting": true,
                                 "width": "0.5*"
                             },
