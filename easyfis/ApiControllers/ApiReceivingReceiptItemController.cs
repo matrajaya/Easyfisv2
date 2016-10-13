@@ -195,12 +195,12 @@ namespace easyfis.Controllers
         {
             try
             {
-                var vatId = (from d in db.TrnPurchaseOrderItems where d.Id == receivingReceiptItem.Id select d.MstArticle.InputTaxId).SingleOrDefault();
-                var vatPercentage = (from d in db.TrnPurchaseOrderItems where d.Id == receivingReceiptItem.Id select d.MstArticle.MstTaxType1.TaxRate).SingleOrDefault();
-                var vatIsInclusive = (from d in db.TrnPurchaseOrderItems where d.Id == receivingReceiptItem.Id select d.MstArticle.MstTaxType1.IsInclusive).SingleOrDefault();
-                var wtaxId = (from d in db.TrnPurchaseOrderItems where d.Id == receivingReceiptItem.Id select d.MstArticle.WTaxTypeId).SingleOrDefault();
-                var wtaxPercentage = (from d in db.TrnPurchaseOrderItems where d.Id == receivingReceiptItem.Id select d.MstArticle.MstTaxType2.TaxRate).SingleOrDefault();
-                var wtaxIsInclusive = (from d in db.TrnPurchaseOrderItems where d.Id == receivingReceiptItem.Id select d.MstArticle.MstTaxType2.IsInclusive).SingleOrDefault();
+                var vatId = from d in db.MstArticles where d.Id == receivingReceiptItem.ItemId select d.InputTaxId;
+                var vatPercentage = from d in db.MstArticles where d.Id == receivingReceiptItem.ItemId select d.MstTaxType1.TaxRate;
+                var vatIsInclusive = from d in db.MstArticles where d.Id == receivingReceiptItem.ItemId select d.MstTaxType1.IsInclusive;
+                var wtaxId = from d in db.MstArticles where d.Id == receivingReceiptItem.ItemId select d.WTaxTypeId;
+                var wtaxPercentage = from d in db.MstArticles where d.Id == receivingReceiptItem.ItemId select d.MstTaxType2.TaxRate;
+                var wtaxIsInclusive = from d in db.MstArticles where d.Id == receivingReceiptItem.ItemId select d.MstTaxType2.IsInclusive;
 
                 Data.TrnReceivingReceiptItem newReceivingReceiptItem = new Data.TrnReceivingReceiptItem();
                 newReceivingReceiptItem = new Data.TrnReceivingReceiptItem();
@@ -208,32 +208,32 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.POId = receivingReceiptItem.POId;
                 newReceivingReceiptItem.ItemId = receivingReceiptItem.ItemId;
                 newReceivingReceiptItem.Particulars = receivingReceiptItem.Particulars;
-                newReceivingReceiptItem.UnitId = receivingReceiptItem.UnitId;
-                newReceivingReceiptItem.Quantity = receivingReceiptItem.Quantity;
-                newReceivingReceiptItem.Cost = receivingReceiptItem.Cost;
-                newReceivingReceiptItem.Amount = receivingReceiptItem.Quantity * receivingReceiptItem.Cost;
-                newReceivingReceiptItem.VATId = vatId;
-                newReceivingReceiptItem.VATPercentage = vatPercentage;
-                newReceivingReceiptItem.VATAmount = computeVATAmount(receivingReceiptItem.Quantity * receivingReceiptItem.Cost, vatPercentage, vatIsInclusive);
-                newReceivingReceiptItem.WTAXId = wtaxId;
-                newReceivingReceiptItem.WTAXPercentage = wtaxPercentage;
-                newReceivingReceiptItem.WTAXAmount = computeWTAXAmount(receivingReceiptItem.Quantity * receivingReceiptItem.Cost, vatPercentage, wtaxPercentage, wtaxIsInclusive);
+                newReceivingReceiptItem.UnitId = receivingReceiptItem.BaseUnitId;
+                newReceivingReceiptItem.Quantity = receivingReceiptItem.BaseQuantity;
+                newReceivingReceiptItem.Cost = receivingReceiptItem.BaseCost;
+                newReceivingReceiptItem.Amount = receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost;
+                newReceivingReceiptItem.VATId = vatId.FirstOrDefault();
+                newReceivingReceiptItem.VATPercentage = vatPercentage.FirstOrDefault();
+                newReceivingReceiptItem.VATAmount = computeVATAmount(receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost, vatPercentage.FirstOrDefault(), vatIsInclusive.FirstOrDefault());
+                newReceivingReceiptItem.WTAXId = wtaxId.FirstOrDefault();
+                newReceivingReceiptItem.WTAXPercentage = wtaxPercentage.FirstOrDefault();
+                newReceivingReceiptItem.WTAXAmount = computeWTAXAmount(receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost, vatPercentage.FirstOrDefault(), wtaxPercentage.FirstOrDefault(), wtaxIsInclusive.FirstOrDefault());
                 newReceivingReceiptItem.BranchId = receivingReceiptItem.BranchId;
 
                 var mstArticleUnit = from d in db.MstArticles where d.Id == receivingReceiptItem.ItemId select d;
                 newReceivingReceiptItem.BaseUnitId = mstArticleUnit.First().UnitId;
 
-                var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == receivingReceiptItem.ItemId && d.UnitId == receivingReceiptItem.UnitId select d;
+                var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == receivingReceiptItem.ItemId && d.UnitId == receivingReceiptItem.BaseUnitId select d;
                 if (conversionUnit.First().Multiplier > 0)
                 {
-                    newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                    newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.BaseQuantity * (1 / conversionUnit.First().Multiplier);
                 }
                 else
                 {
-                    newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.Quantity * 1;
+                    newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.BaseQuantity * 1;
                 }
 
-                var baseQuantity = receivingReceiptItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                var baseQuantity = receivingReceiptItem.BaseQuantity * (1 / conversionUnit.First().Multiplier);
                 if (baseQuantity > 0)
                 {
                     newReceivingReceiptItem.BaseCost = (receivingReceiptItem.Amount - receivingReceiptItem.VATAmount) / baseQuantity;

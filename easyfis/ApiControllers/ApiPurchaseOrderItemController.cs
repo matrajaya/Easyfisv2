@@ -40,7 +40,11 @@ namespace easyfis.Controllers
                                          Unit = d.MstUnit.Unit,
                                          Quantity = d.Quantity,
                                          Cost = d.Cost,
-                                         Amount = d.Amount
+                                         Amount = d.Amount,
+                                         BaseUnitId = d.BaseUnitId,
+                                         BaseUnit = d.MstUnit1.Unit,
+                                         BaseQuantity = d.BaseQuantity,
+                                         BaseCost = d.BaseCost
                                      };
 
             return purchaseOrderItems.ToList();
@@ -67,7 +71,10 @@ namespace easyfis.Controllers
                                          Unit = d.MstUnit.Unit,
                                          Quantity = d.Quantity,
                                          Cost = d.Cost,
-                                         Amount = d.Amount
+                                         Amount = d.Amount,
+                                         BaseUnit = d.MstUnit1.Unit,
+                                         BaseQuantity = d.BaseQuantity,
+                                         BaseCost = d.BaseCost
                                      };
 
             return purchaseOrderItems.ToList();
@@ -81,21 +88,38 @@ namespace easyfis.Controllers
         {
             var PurchaseOrderItems = from d in db.TrnPurchaseOrderItems
                                      where d.POId == Convert.ToInt32(POId)
-                                     select new Models.TrnPurchaseOrderItem
+                                     group d by new
                                      {
-                                         Id = d.Id,
                                          POId = d.POId,
                                          PO = d.TrnPurchaseOrder.PONumber,
                                          ItemId = d.ItemId,
                                          Item = d.MstArticle.Article,
                                          ItemCode = d.MstArticle.ManualArticleCode,
-                                         Particulars = d.Particulars,
-                                         UnitId = d.UnitId,
-                                         Unit = d.MstUnit.Unit,
-                                         Quantity = d.Quantity,
-                                         Received = getReceivedQuantity(Convert.ToInt32(POId), d.ItemId),
-                                         Cost = d.Cost,
-                                         Amount = d.Amount
+                                         //Particulars = d.Particulars,
+                                         //UnitId = d.UnitId,
+                                         //Unit = d.MstUnit.Unit,
+                                         //Quantity = d.Quantity,
+                                         //Received = getReceivedQuantity(Convert.ToInt32(POId), d.ItemId),
+                                         //Cost = d.Cost,
+                                         //Amount = d.Amount,
+                                         BaseUnitId = d.BaseUnitId,
+                                         BaseUnit = d.MstUnit1.Unit,
+                                         //BaseQuantity = d.BaseQuantity,
+                                         //BaseCost = d.BaseCost
+                                     } into g
+                                     select new Models.TrnPurchaseOrderItem
+                                     {
+                                         POId = g.Key.POId,
+                                         PO = g.Key.PO,
+                                         ItemId = g.Key.ItemId,
+                                         Item = g.Key.Item,
+                                         ItemCode = g.Key.ItemCode,
+                                         Received = getReceivedQuantity(Convert.ToInt32(POId), g.Key.ItemId),
+                                         BaseUnitId = g.Key.BaseUnitId,
+                                         BaseUnit = g.Key.BaseUnit,
+                                         BaseQuantity = g.Sum(d => d.BaseQuantity),
+                                         BaseCost = g.Sum(d => d.BaseCost),
+                                         Amount = g.Sum(d => d.Amount)
                                      };
 
             return PurchaseOrderItems.ToList();
@@ -117,6 +141,29 @@ namespace easyfis.Controllers
                 newPurchaseOrderItem.Quantity = purchaseOrderItem.Quantity;
                 newPurchaseOrderItem.Cost = purchaseOrderItem.Cost;
                 newPurchaseOrderItem.Amount = purchaseOrderItem.Amount;
+
+                var mstArticleUnit = from d in db.MstArticles where d.Id == purchaseOrderItem.ItemId select d;
+                newPurchaseOrderItem.BaseUnitId = mstArticleUnit.First().UnitId;
+
+                var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == purchaseOrderItem.ItemId && d.UnitId == purchaseOrderItem.UnitId select d;
+                if (conversionUnit.First().Multiplier > 0)
+                {
+                    newPurchaseOrderItem.BaseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                }
+                else
+                {
+                    newPurchaseOrderItem.BaseQuantity = purchaseOrderItem.Quantity * 1;
+                }
+
+                var baseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                if (baseQuantity > 0)
+                {
+                    newPurchaseOrderItem.BaseCost = purchaseOrderItem.Amount / baseQuantity;
+                }
+                else
+                {
+                    newPurchaseOrderItem.BaseCost = purchaseOrderItem.Amount;
+                }
 
                 db.TrnPurchaseOrderItems.InsertOnSubmit(newPurchaseOrderItem);
                 db.SubmitChanges();
@@ -148,6 +195,29 @@ namespace easyfis.Controllers
                     updatePurchaseOrderItem.Quantity = purchaseOrderItem.Quantity;
                     updatePurchaseOrderItem.Cost = purchaseOrderItem.Cost;
                     updatePurchaseOrderItem.Amount = purchaseOrderItem.Amount;
+
+                    var mstArticleUnit = from d in db.MstArticles where d.Id == purchaseOrderItem.ItemId select d;
+                    updatePurchaseOrderItem.BaseUnitId = mstArticleUnit.First().UnitId;
+
+                    var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == purchaseOrderItem.ItemId && d.UnitId == purchaseOrderItem.UnitId select d;
+                    if (conversionUnit.First().Multiplier > 0)
+                    {
+                        updatePurchaseOrderItem.BaseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                    }
+                    else
+                    {
+                        updatePurchaseOrderItem.BaseQuantity = purchaseOrderItem.Quantity * 1;
+                    }
+
+                    var baseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                    if (baseQuantity > 0)
+                    {
+                        updatePurchaseOrderItem.BaseCost = purchaseOrderItem.Amount / baseQuantity;
+                    }
+                    else
+                    {
+                        updatePurchaseOrderItem.BaseCost = purchaseOrderItem.Amount;
+                    }
 
                     db.SubmitChanges();
 

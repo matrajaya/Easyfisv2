@@ -12679,6 +12679,8 @@ namespace easyfis.Data
 		
 		private EntitySet<TrnPurchaseOrderItem> _TrnPurchaseOrderItems;
 		
+		private EntitySet<TrnPurchaseOrderItem> _TrnPurchaseOrderItems1;
+		
 		private EntitySet<TrnReceivingReceiptItem> _TrnReceivingReceiptItems;
 		
 		private EntitySet<TrnReceivingReceiptItem> _TrnReceivingReceiptItems1;
@@ -12726,6 +12728,7 @@ namespace easyfis.Data
 			this._MstArticles = new EntitySet<MstArticle>(new Action<MstArticle>(this.attach_MstArticles), new Action<MstArticle>(this.detach_MstArticles));
 			this._MstArticleUnits = new EntitySet<MstArticleUnit>(new Action<MstArticleUnit>(this.attach_MstArticleUnits), new Action<MstArticleUnit>(this.detach_MstArticleUnits));
 			this._TrnPurchaseOrderItems = new EntitySet<TrnPurchaseOrderItem>(new Action<TrnPurchaseOrderItem>(this.attach_TrnPurchaseOrderItems), new Action<TrnPurchaseOrderItem>(this.detach_TrnPurchaseOrderItems));
+			this._TrnPurchaseOrderItems1 = new EntitySet<TrnPurchaseOrderItem>(new Action<TrnPurchaseOrderItem>(this.attach_TrnPurchaseOrderItems1), new Action<TrnPurchaseOrderItem>(this.detach_TrnPurchaseOrderItems1));
 			this._TrnReceivingReceiptItems = new EntitySet<TrnReceivingReceiptItem>(new Action<TrnReceivingReceiptItem>(this.attach_TrnReceivingReceiptItems), new Action<TrnReceivingReceiptItem>(this.detach_TrnReceivingReceiptItems));
 			this._TrnReceivingReceiptItems1 = new EntitySet<TrnReceivingReceiptItem>(new Action<TrnReceivingReceiptItem>(this.attach_TrnReceivingReceiptItems1), new Action<TrnReceivingReceiptItem>(this.detach_TrnReceivingReceiptItems1));
 			this._TrnSalesInvoiceItems = new EntitySet<TrnSalesInvoiceItem>(new Action<TrnSalesInvoiceItem>(this.attach_TrnSalesInvoiceItems), new Action<TrnSalesInvoiceItem>(this.detach_TrnSalesInvoiceItems));
@@ -12949,6 +12952,19 @@ namespace easyfis.Data
 			set
 			{
 				this._TrnPurchaseOrderItems.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnPurchaseOrderItem1", Storage="_TrnPurchaseOrderItems1", ThisKey="Id", OtherKey="BaseUnitId")]
+		public EntitySet<TrnPurchaseOrderItem> TrnPurchaseOrderItems1
+		{
+			get
+			{
+				return this._TrnPurchaseOrderItems1;
+			}
+			set
+			{
+				this._TrnPurchaseOrderItems1.Assign(value);
 			}
 		}
 		
@@ -13202,6 +13218,18 @@ namespace easyfis.Data
 		{
 			this.SendPropertyChanging();
 			entity.MstUnit = null;
+		}
+		
+		private void attach_TrnPurchaseOrderItems1(TrnPurchaseOrderItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUnit1 = this;
+		}
+		
+		private void detach_TrnPurchaseOrderItems1(TrnPurchaseOrderItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUnit1 = null;
 		}
 		
 		private void attach_TrnReceivingReceiptItems(TrnReceivingReceiptItem entity)
@@ -23808,9 +23836,17 @@ namespace easyfis.Data
 		
 		private decimal _Amount;
 		
+		private int _BaseUnitId;
+		
+		private decimal _BaseQuantity;
+		
+		private decimal _BaseCost;
+		
 		private EntityRef<MstArticle> _MstArticle;
 		
 		private EntityRef<MstUnit> _MstUnit;
+		
+		private EntityRef<MstUnit> _MstUnit1;
 		
 		private EntityRef<TrnPurchaseOrder> _TrnPurchaseOrder;
 		
@@ -23834,12 +23870,19 @@ namespace easyfis.Data
     partial void OnCostChanged();
     partial void OnAmountChanging(decimal value);
     partial void OnAmountChanged();
+    partial void OnBaseUnitIdChanging(int value);
+    partial void OnBaseUnitIdChanged();
+    partial void OnBaseQuantityChanging(decimal value);
+    partial void OnBaseQuantityChanged();
+    partial void OnBaseCostChanging(decimal value);
+    partial void OnBaseCostChanged();
     #endregion
 		
 		public TrnPurchaseOrderItem()
 		{
 			this._MstArticle = default(EntityRef<MstArticle>);
 			this._MstUnit = default(EntityRef<MstUnit>);
+			this._MstUnit1 = default(EntityRef<MstUnit>);
 			this._TrnPurchaseOrder = default(EntityRef<TrnPurchaseOrder>);
 			OnCreated();
 		}
@@ -24016,6 +24059,70 @@ namespace easyfis.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BaseUnitId", DbType="Int NOT NULL")]
+		public int BaseUnitId
+		{
+			get
+			{
+				return this._BaseUnitId;
+			}
+			set
+			{
+				if ((this._BaseUnitId != value))
+				{
+					if (this._MstUnit1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnBaseUnitIdChanging(value);
+					this.SendPropertyChanging();
+					this._BaseUnitId = value;
+					this.SendPropertyChanged("BaseUnitId");
+					this.OnBaseUnitIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BaseQuantity", DbType="Decimal(18,5) NOT NULL")]
+		public decimal BaseQuantity
+		{
+			get
+			{
+				return this._BaseQuantity;
+			}
+			set
+			{
+				if ((this._BaseQuantity != value))
+				{
+					this.OnBaseQuantityChanging(value);
+					this.SendPropertyChanging();
+					this._BaseQuantity = value;
+					this.SendPropertyChanged("BaseQuantity");
+					this.OnBaseQuantityChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BaseCost", DbType="Decimal(18,5) NOT NULL")]
+		public decimal BaseCost
+		{
+			get
+			{
+				return this._BaseCost;
+			}
+			set
+			{
+				if ((this._BaseCost != value))
+				{
+					this.OnBaseCostChanging(value);
+					this.SendPropertyChanging();
+					this._BaseCost = value;
+					this.SendPropertyChanged("BaseCost");
+					this.OnBaseCostChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_TrnPurchaseOrderItem", Storage="_MstArticle", ThisKey="ItemId", OtherKey="Id", IsForeignKey=true)]
 		public MstArticle MstArticle
 		{
@@ -24080,6 +24187,40 @@ namespace easyfis.Data
 						this._UnitId = default(int);
 					}
 					this.SendPropertyChanged("MstUnit");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnPurchaseOrderItem1", Storage="_MstUnit1", ThisKey="BaseUnitId", OtherKey="Id", IsForeignKey=true)]
+		public MstUnit MstUnit1
+		{
+			get
+			{
+				return this._MstUnit1.Entity;
+			}
+			set
+			{
+				MstUnit previousValue = this._MstUnit1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUnit1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUnit1.Entity = null;
+						previousValue.TrnPurchaseOrderItems1.Remove(this);
+					}
+					this._MstUnit1.Entity = value;
+					if ((value != null))
+					{
+						value.TrnPurchaseOrderItems1.Add(this);
+						this._BaseUnitId = value.Id;
+					}
+					else
+					{
+						this._BaseUnitId = default(int);
+					}
+					this.SendPropertyChanged("MstUnit1");
 				}
 			}
 		}

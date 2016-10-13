@@ -1670,7 +1670,10 @@
                                             Unit: Results[i]["Unit"],
                                             Particulars: Results[i]["Particulars"],
                                             Cost: Results[i]["Cost"],
-                                            Amount: Results[i]["Amount"]
+                                            Amount: Results[i]["Amount"],
+                                            BaseUnit: Results[i]["BaseUnit"],
+                                            BaseQuantity: Results[i]["BaseQuantity"],
+                                            BaseCost: Results[i]["BaseCost"]
                                         });
                                     }
                                 }
@@ -2292,43 +2295,61 @@
                                 "header": "Item Code",
                                 "binding": "ItemCode",
                                 "allowSorting": true,
-                                "width": "2*",
+                                "width": 140,
                             },
                             {
                                 "header": "Item Description",
                                 "binding": "Item",
                                 "allowSorting": true,
-                                "width": "4*"
+                                "width": 170
                             },
                             {
                                 "header": "Particulars",
                                 "binding": "Particulars",
                                 "allowSorting": true,
-                                "width": "3*"
+                                "width": 150
                             },
                             {
                                 "header": "Quantity",
                                 "binding": "Quantity",
                                 "allowSorting": true,
-                                "width": "1*"
+                                "width": 130
                             },
                             {
                                 "header": "Unit",
                                 "binding": "Unit",
                                 "allowSorting": true,
-                                "width": "1*"
+                                "width": 100
                             },
                             {
                                 "header": "Cost",
                                 "binding": "Cost",
                                 "allowSorting": true,
-                                "width": "1*"
+                                "width": 130
                             },
                             {
                                 "header": "Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
-                                "width": "1*"
+                                "width": 130
+                            },
+                            {
+                                "header": "Base Unit",
+                                "binding": "BaseUnit",
+                                "allowSorting": true,
+                                "width": 100
+                            },
+                            {
+                                "header": "Base Quantity",
+                                "binding": "BaseQuantity",
+                                "allowSorting": true,
+                                "width": 130
+                            },
+                            {
+                                "header": "Base Cost",
+                                "binding": "BaseCost",
+                                "allowSorting": true,
+                                "width": 130
                             }
                 ],
                 autoGenerateColumns: false,
@@ -2341,6 +2362,42 @@
             });
 
             POLineGrid.trackChanges = true;
+
+            var hr = new wijmo.grid.Row();
+            POLineGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
+            POLineGrid.columnHeaders.rows.push(hr);
+            POLineGrid.columnHeaders.rows[0].allowMerging = true;
+
+            POLineGrid.columnHeaders.columns[0].allowMerging = true;
+            POLineGrid.columnHeaders.setCellData(0, 0, 'Edit');
+
+            POLineGrid.columnHeaders.columns[1].allowMerging = true;
+            POLineGrid.columnHeaders.setCellData(0, 1, 'Delete');
+
+            POLineGrid.columnHeaders.columns[2].allowMerging = true;
+            POLineGrid.columnHeaders.setCellData(0, 2, 'Item Code');
+
+            POLineGrid.columnHeaders.columns[3].allowMerging = true;
+            POLineGrid.columnHeaders.setCellData(0, 3, 'Item Description');
+
+            POLineGrid.columnHeaders.columns[4].allowMerging = true;
+            POLineGrid.columnHeaders.setCellData(0, 4, 'Particulars');
+
+            POLineGrid.columnHeaders.columns[5].allowMerging = true;
+            POLineGrid.columnHeaders.setCellData(0, 5, 'Quantity');
+
+            POLineGrid.columnHeaders.columns[6].allowMerging = true;
+            POLineGrid.columnHeaders.setCellData(0, 6, 'Unit');
+
+            POLineGrid.columnHeaders.columns[7].allowMerging = true;
+            POLineGrid.columnHeaders.setCellData(0, 7, 'Cost');
+
+            POLineGrid.columnHeaders.columns[8].allowMerging = true;
+            POLineGrid.columnHeaders.setCellData(0, 8, 'Amount');
+
+            for (var columnBasicUnitConversion = 9; columnBasicUnitConversion <= 11; columnBasicUnitConversion++) {
+                POLineGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Basic Unit Conversion');
+            }
 
             //$(document).ajaxStop(function () {
             //    if (document.location.search.length == 0) {

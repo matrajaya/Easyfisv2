@@ -1792,7 +1792,7 @@
                                             QuantityBalance[i] = QuantityBalance[index];
                                             returnBool = true;
                                         } else {
-                                            QuantityBalance[i] = Results[i]["Quantity"] - Results[i]["Received"];
+                                            QuantityBalance[i] = Results[i]["BaseQuantity"] - Results[i]["Received"];
                                             returnBool = false;
                                         }
                                     } else {
@@ -1821,17 +1821,20 @@
                                 Item: Results[i]["Item"],
                                 ItemCode: Results[i]["ItemCode"],
                                 POId: Results[i]["POId"],
-                                Quantity: Results[i]["Quantity"],
-                                UnitId: Results[i]["UnitId"],
-                                Unit: Results[i]["Unit"],
-                                Particulars: Results[i]["Particulars"],
+                                //Quantity: Results[i]["Quantity"],
+                                //UnitId: Results[i]["UnitId"],
+                                //Unit: Results[i]["Unit"],
+                                //Particulars: Results[i]["Particulars"],
                                 Received: Results[i]["Received"],
-                                Balance: Results[i]["Quantity"] - Results[i]["Received"],
+                                Balance: Results[i]["BaseQuantity"] - Results[i]["Received"],
                                 QuantityBalance: "<button class='btn btn-default btn-xs btn-block' style='text-align: right' onclick='editQuantity_OnClick("+ i + "," + handbool +")'>"+ QuantityBalance[i] +"</button>",
                                 QuantityBalanceValue: QuantityBalance[i],
-                                Cost: Results[i]["Cost"],
+                                //Cost: Results[i]["Cost"],
                                 Amount: Results[i]["Amount"],
-                                Pick: "<button class='btn btn-"+ btnColor +" btn-xs' onclick='pickQuantity_OnClick("+ i + "," + handbool +")'>" + icon + "</button>"
+                                Pick: "<button class='btn btn-"+ btnColor +" btn-xs' onclick='pickQuantity_OnClick("+ i + "," + handbool +")'>" + icon + "</button>",
+                                BaseUnitId: Results[i]["BaseUnitId"],
+                                BaseQuantity: Results[i]["BaseQuantity"],
+                                BaseCost: Results[i]["BaseCost"]
                             });
                         }
                     } else {
@@ -1934,14 +1937,14 @@
                             },
                             {
                                 "header": "Unit",
-                                "binding": "Unit",
+                                "binding": "BaseUnit",
                                 "allowSorting": true,
                                 "isReadOnly": true,
                                 "width": 110
                             },
                             {
                                 "header": "PO",
-                                "binding": "Quantity",
+                                "binding": "BaseQuantity",
                                 "allowSorting": true,
                                 "isReadOnly": true,
                                 "width": 100
@@ -2042,16 +2045,15 @@
                 if(item.QuantityBalanceValue > 0) {
 
                     var POItemObject = new Object();
-                    POItemObject.Id = item.Id;
                     POItemObject.RRId = getParam('ReceivingReceiptId');
                     POItemObject.POId = item.POId;
                     POItemObject.ItemId = item.ItemId;
-                    POItemObject.Particulars = item.Particulars;
-                    POItemObject.UnitId = item.UnitId;
-                    POItemObject.Quantity = item.QuantityBalanceValue;
-                    POItemObject.Cost = item.Cost;
-                    POItemObject.Amount = item.Amount;
+                    POItemObject.Particulars = "NA";
+                    POItemObject.BaseUnitId = item.BaseUnitId;
+                    POItemObject.BaseQuantity = item.QuantityBalanceValue;
+                    POItemObject.BaseCost = item.BaseCost;
                     POItemObject.BranchId = BranchId;
+                    
                     var POItemObjectData = JSON.stringify(POItemObject);
 
                     $.ajax({

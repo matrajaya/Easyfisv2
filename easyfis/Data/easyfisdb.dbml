@@ -508,6 +508,7 @@
       <Association Name="MstUnit_MstArticle" Member="MstArticles" ThisKey="Id" OtherKey="UnitId" Type="MstArticle" />
       <Association Name="MstUnit_MstArticleUnit" Member="MstArticleUnits" ThisKey="Id" OtherKey="UnitId" Type="MstArticleUnit" />
       <Association Name="MstUnit_TrnPurchaseOrderItem" Member="TrnPurchaseOrderItems" ThisKey="Id" OtherKey="UnitId" Type="TrnPurchaseOrderItem" />
+      <Association Name="MstUnit_TrnPurchaseOrderItem1" Member="TrnPurchaseOrderItems1" ThisKey="Id" OtherKey="BaseUnitId" Type="TrnPurchaseOrderItem" />
       <Association Name="MstUnit_TrnReceivingReceiptItem" Member="TrnReceivingReceiptItems" ThisKey="Id" OtherKey="UnitId" Type="TrnReceivingReceiptItem" />
       <Association Name="MstUnit_TrnReceivingReceiptItem1" Member="TrnReceivingReceiptItems1" ThisKey="Id" OtherKey="BaseUnitId" Type="TrnReceivingReceiptItem" />
       <Association Name="MstUnit_TrnSalesInvoiceItem" Member="TrnSalesInvoiceItems" ThisKey="Id" OtherKey="UnitId" Type="TrnSalesInvoiceItem" />
@@ -927,8 +928,12 @@
       <Column Name="Quantity" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
       <Column Name="Cost" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
       <Column Name="Amount" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="BaseUnitId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BaseQuantity" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="BaseCost" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
       <Association Name="MstArticle_TrnPurchaseOrderItem" Member="MstArticle" ThisKey="ItemId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
       <Association Name="MstUnit_TrnPurchaseOrderItem" Member="MstUnit" ThisKey="UnitId" OtherKey="Id" Type="MstUnit" IsForeignKey="true" />
+      <Association Name="MstUnit_TrnPurchaseOrderItem1" Member="MstUnit1" ThisKey="BaseUnitId" OtherKey="Id" Type="MstUnit" IsForeignKey="true" />
       <Association Name="TrnPurchaseOrder_TrnPurchaseOrderItem" Member="TrnPurchaseOrder" ThisKey="POId" OtherKey="Id" Type="TrnPurchaseOrder" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
