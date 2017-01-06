@@ -273,7 +273,9 @@
                                     <dt>Price</dt>
                                     <dd>
                                         <div class="input-50" id="saleItem_Price"></div>
-                                        <input type="hidden" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_PriceExVAT" placeholder="0.00" />
+                                    </dd>
+                                    <dd>
+                                        <input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_PriceExVAT" placeholder="0.00" disabled/>
                                     </dd>
                                     <dt>Discount</dt>
                                     <dd>
@@ -1862,10 +1864,8 @@
                             getItemInventoryCodeForComboBox();
                         }
                     });
-
-
-                    computeNetPrice();
-                    computeAmount();
+                    
+                    computation();
 
                     var quantity = document.getElementById('saleItem_Quantity').value;
                     var price = document.getElementById('saleItem_PriceExVAT').value;
@@ -1919,9 +1919,8 @@
                         getItemInventoryCodeForComboBox();
                     }
                 });
-
-                computeNetPrice();
-                computeAmount();
+                
+                computation();
 
                 var quantity = document.getElementById('saleItem_Quantity').value;
                 var price = document.getElementById('saleItem_PriceExVAT').value;
@@ -2036,21 +2035,14 @@
                 disabled: disabled,
                 placeholder: "Price",
                 itemsSource: salesItemPrice,
-                displayMemberPath: "Price",
+                displayMemberPath: "PriceDescription",
                 isEditable: false,
-                selectedValuePath: "Price",
+                selectedValuePath: "PriceDescription",
                 selectedValue: priceSelectedValue.toString(),
                 onSelectedIndexChanged: function () {
                     $("#saleItem_PriceExVAT").val(this.selectedItem.Price);
-
-                    var price = document.getElementById('saleItem_PriceExVAT').value;
-                    var discount = document.getElementById('saleItem_DiscountAmount').value;
-
-                    document.getElementById("saleItem_NetPrice").value = price - discount;
-                    var netPrice = document.getElementById("saleItem_NetPrice").value;
-
-                    document.getElementById("saleItem_Amount").value = netPrice * document.getElementById("saleItem_Quantity").value;
-                    computeTax();
+                    
+                    computation();
                 }
             });
 
@@ -2058,9 +2050,8 @@
                 document.getElementById("saleItem_PriceExVAT").value = cboSalesItemPrice.selectedItem.Price;
                 document.getElementById('saleItem_BUCPrice').value = cboSalesItemPrice.selectedItem.Price;
             }
-
-            computeNetPrice();
-            computeAmount();
+            
+            computation();
         }
 
 
@@ -2317,7 +2308,7 @@
                         for (i = 0; i < results.length; i++) {
                             discounts.push({
                                 Id: results[i]["Id"],
-                                Discount: results[i]["Discount"],
+                                Discount: results[i]["IsInclusive"] != false ? results[i]["Discount"] + " (Inclusive)": results[i]["Discount"] + " (Not Inclusive)",
                                 DiscountRate: results[i]["DiscountRate"],
                                 IsInclusive: results[i]["IsInclusive"],
                                 AccountId: results[i]["AccountId"],
@@ -2366,8 +2357,12 @@
                     $("#saleItem_DiscountRate").val(DiscountCollection.items[this.selectedIndex].DiscountRate);
                     $("#saleItem_DiscontInclusive").val(DiscountCollection.items[this.selectedIndex].IsInclusive);
 
-                    computeNetPrice();
-                    computeAmount();
+                    
+                    var priceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');
+                    var saleItemDiscountAmount = priceExVATPrice * (DiscountCollection.items[this.selectedIndex].DiscountRate / 100);
+                    document.getElementById('saleItem_DiscountAmount').value = saleItemDiscountAmount;
+                    
+                    computation();
                 }
             });
 
@@ -2375,10 +2370,16 @@
                 document.getElementById('saleItem_Discont_data').value = "";
                 document.getElementById('saleItem_Discont_selectedValue').value = "";
                 document.getElementById('saleItem_DiscountRate').value = 0;
+                document.getElementById('saleItem_DiscountAmount').value = 0;
                 document.getElementById('saleItem_DiscontInclusive').value = "";
             } else {
                 document.getElementById('saleItem_Discont_data').value = DiscountCollection.items[cboDiscount.selectedIndex].Id;
                 document.getElementById('saleItem_DiscountRate').value = DiscountCollection.items[cboDiscount.selectedIndex].DiscountRate;
+                
+                var priceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');
+                var saleItemDiscountAmount = priceExVATPrice * (DiscountCollection.items[cboDiscount.selectedIndex].DiscountRate / 100);
+                document.getElementById('saleItem_DiscountAmount').value = saleItemDiscountAmount;
+                
                 document.getElementById('saleItem_Discont_selectedValue').value = DiscountCollection.items[cboDiscount.selectedIndex].Discount;
                 document.getElementById('saleItem_DiscontInclusive').value = DiscountCollection.items[cboDiscount.selectedIndex].IsInclusive;
             }
@@ -2446,8 +2447,8 @@
                     $("#saleItem_VATRate").val(taxTypeCollection.items[this.selectedIndex].TaxRate);
                     $("#saleItem_VAT_selectedValue").val(taxTypeCollection.items[this.selectedIndex].TaxType);
                     $("#saleItem_TAXInclusive").val(taxTypeCollection.items[this.selectedIndex].IsInclusive);
-
-                    computeTax();
+                    
+                    computation();
                 }
             });
 
@@ -2461,79 +2462,6 @@
                 document.getElementById('saleItem_VATRate').value = taxTypeCollection.items[cboForVATTaxType.selectedIndex].TaxRate;
                 document.getElementById('saleItem_VAT_selectedValue').value = taxTypeCollection.items[cboForVATTaxType.selectedIndex].TaxType;
                 document.getElementById('saleItem_TAXInclusive').value = taxTypeCollection.items[cboForVATTaxType.selectedIndex].IsInclusive;
-            }
-        }
-
-        // =================
-        // Compute NET Price
-        // =================
-        function computeNetPrice() {
-            var DiscountIsInclusive = document.getElementById('saleItem_DiscontInclusive').value.replace(/\,/g, '');;
-            var DiscountRate = document.getElementById('saleItem_DiscountRate').value.replace(/\,/g, '');;
-            var PriceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');;
-            var VATPercentage = document.getElementById('saleItem_VATRate').value.replace(/\,/g, '');;
-            var discountAmount = document.getElementById('saleItem_DiscountAmount').value.replace(/\,/g, '');;
-
-            var price;
-            if (document.getElementById('saleItem_DiscontInclusive').value == 'false') {
-                price = PriceExVATPrice / (1 + (VATPercentage / 100));
-                var saleItemDiscountAmount = price * (DiscountRate / 100);
-
-                document.getElementById('saleItem_DiscountAmount').value = saleItemDiscountAmount.toLocaleString();
-
-                var newDiscountAmount = price * (DiscountRate / 100);
-                var netPrice = price - newDiscountAmount;
-
-                document.getElementById('saleItem_NetPrice').value = netPrice.toLocaleString();
-
-                computeAmount();
-            } else {
-                var saleItemDiscountAmount = PriceExVATPrice * (DiscountRate / 100);
-
-                document.getElementById('saleItem_DiscountAmount').value = saleItemDiscountAmount.toLocaleString();
-
-                var newDiscountAmount = PriceExVATPrice * (DiscountRate / 100);
-                var netPrice = PriceExVATPrice - newDiscountAmount;
-
-                document.getElementById('saleItem_NetPrice').value = netPrice.toLocaleString();
-
-            }
-        }
-
-        // ==============
-        // Compute Amount
-        // ==============
-        function computeAmount() {
-            var quantity = document.getElementById('saleItem_Quantity').value.replace(/\,/g, '');
-            var netPrice = document.getElementById('saleItem_NetPrice').value.replace(/\,/g, '');
-            var amount = quantity * netPrice;
-
-            document.getElementById('saleItem_Amount').value = amount.toLocaleString();
-            computeTax();
-        }
-
-        // ===========
-        // Compute Tax
-        // ===========
-        function computeTax() {
-            var PriceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');;
-            var DiscountIsInclusive = document.getElementById('saleItem_DiscontInclusive').value.replace(/\,/g, '');;
-            var VATPercentage = document.getElementById('saleItem_VATRate').value.replace(/\,/g, '');;
-            var netPrice = document.getElementById('saleItem_NetPrice').value.replace(/\,/g, '');;
-            var VATAmount = document.getElementById('saleItem_VATAmount').value.replace(/\,/g, '');;
-            var amount = document.getElementById('saleItem_Amount').value.replace(/\,/g, '');;
-            var quantity = document.getElementById('saleItem_Quantity').value.replace(/\,/g, '');;
-
-            if (document.getElementById('saleItem_TAXInclusive').value == 'true') {
-                var VATAmount = amount / (1 + (VATPercentage / 100)) * (VATPercentage / 100);
-
-                document.getElementById('saleItem_VATAmount').value = VATAmount.toLocaleString();
-            } else {
-                var amount = netPrice * quantity;
-                var VATAmount = amount * (VATPercentage / 100);
-
-                document.getElementById('saleItem_VATAmount').value = VATAmount.toLocaleString();
-                document.getElementById('saleItem_Amount').value = amount.toLocaleString();
             }
         }
 
@@ -3105,9 +3033,8 @@
 
             getArticleItemForManualCodeAndComponent();
             getDiscountForComboBox();
-
-            computeNetPrice();
-            computeAmount();
+            
+            computation();
         }
 
         function cmdItemQueryPickNonInventory_Onclick() {
@@ -3157,10 +3084,8 @@
 
             getArticleItemForManualCodeAndComponent();
             getDiscountForComboBox();
-
-            computeNetPrice();
-            computeAmount();
-
+            
+            computation();
         }
 
         function cmdItemQueryPick_Onclick() {
@@ -3210,13 +3135,9 @@
 
             getArticleItemForManualCodeAndComponent();
             getDiscountForComboBox();
-
-            computeNetPrice();
-            computeAmount();
-
+            
+            computation();
         }
-
-
 
         // =============
         // ADD Sale Item
@@ -3302,10 +3223,8 @@
             document.getElementById('saleItem_BUCUnit_selectedValue').value = '';
             document.getElementById('saleItem_BUCQuantity').value = 0;
             document.getElementById('saleItem_BUCPrice').value = 0;
-
-            computeNetPrice();
-            computeAmount();
-
+            
+            computation();
         }
 
         // ==============
@@ -3363,9 +3282,7 @@
             document.getElementById('saleItem_BUCQuantity').value = item.BaseQuantity;
             document.getElementById('saleItem_BUCPrice').value = item.BasePrice;
 
-            computeNetPrice();
-            computeAmount();
-
+            computation();
         }
 
         // ================
@@ -4101,40 +4018,71 @@
             };
         });
 
-        // ========================
-        // Key Up without letter
-        // ========================
         $("#saleItem_PriceExVAT").keyup(function (e) {
-            computeNetPrice();
-            computeAmount();
-
-            var quantity = document.getElementById('saleItem_Quantity').value;
-            var price = document.getElementById('saleItem_PriceExVAT').value;
-
-            document.getElementById('saleItem_BUCQuantity').value = quantity.replace(/\,/g, '');;
-            document.getElementById('saleItem_BUCPrice').value = price.replace(/\,/g, '');;
+            computation();
         });
 
         $("#saleItem_Quantity").keyup(function (e) {
-            computeNetPrice();
-            computeAmount();
-
-            var quantity = document.getElementById('saleItem_Quantity').value;
-            var price = document.getElementById('saleItem_PriceExVAT').value;
-
-            document.getElementById('saleItem_BUCQuantity').value = quantity.replace(/\,/g, '');;
-            document.getElementById('saleItem_BUCPrice').value = price.replace(/\,/g, '');;
+            computation();
         });
 
         $("#saleItem_DiscountRate").keyup(function (e) {
-            computeNetPrice();
-            computeAmount();
+            var priceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');
+            
+            var saleItemDiscountAmount = priceExVATPrice * (this.value / 100);
+            document.getElementById('saleItem_DiscountAmount').value = saleItemDiscountAmount.toLocaleString();
+            
+            computation();
         });
 
         $("#saleItem_DiscountAmount").keyup(function (e) {
-            computeNetPrice();
-            computeAmount();
+            var priceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');
+            
+            var saleItemDiscountRate = (this.value / priceExVATPrice) * 100;
+            document.getElementById('saleItem_DiscountRate').value = saleItemDiscountRate.toLocaleString();
+            
+            computation();
         });
+
+        // computation of all sale item discount, vat, netprice, and final amount
+        function computation() {
+            var DiscountIsInclusive = document.getElementById('saleItem_DiscontInclusive').value;
+            
+            var quantity = document.getElementById('saleItem_Quantity').value.replace(/\,/g, '');
+            var priceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');
+            var discountRate = document.getElementById('saleItem_DiscountRate').value.replace(/\,/g, '');
+            var VATPercentage = document.getElementById('saleItem_VATRate').value.replace(/\,/g, '');
+            
+            var discountAmount = 0;
+            var VATAmount = 0;
+
+            var netPrice = 0;
+
+            // compute net price
+            if (document.getElementById('saleItem_DiscontInclusive').value == 'false') {
+                var price = priceExVATPrice / (1 + (VATPercentage / 100));
+                discountAmount = price * (discountRate / 100);
+
+                netPrice = price - discountAmount;
+            } else {
+                discountAmount = priceExVATPrice * (discountRate / 100);
+
+                netPrice = priceExVATPrice - discountAmount;
+            }
+            
+            var amount = netPrice * quantity;
+
+            // compute sales amount
+            if (document.getElementById('saleItem_TAXInclusive').value == 'true') {
+                VATAmount = amount / (1 + (VATPercentage / 100)) * (VATPercentage / 100);
+            } else {
+                VATAmount = amount * (VATPercentage / 100);
+            }
+
+            document.getElementById('saleItem_NetPrice').value = netPrice.toLocaleString();
+            document.getElementById('saleItem_Amount').value = amount.toLocaleString();
+            document.getElementById('saleItem_VATAmount').value = VATAmount.toLocaleString();
+        }
 
         // ====
         // TABS
@@ -4160,15 +4108,6 @@
             $('#Items').show();
             $('#InventoryEntries').hide();
             itemTab();
-
-            //$(document).ajaxStop(function () {
-            //    if (document.location.search.length == 0) {
-            //        btnSalesSave_OnClick();
-            //        window.btnSalesSave_OnClick = function () {
-            //            return true;
-            //        }
-            //    }
-            //});
         });
 
         $(document).on('show.bs.modal', '.modal', function (event) {
