@@ -2133,6 +2133,7 @@
                     data: {},
                     success: function (Results) {
                         NProgress.done();
+                        var amount = 0;
                         if (Results.length > 0) {
                             var disbursements = new wijmo.collections.ObservableArray;
                             var disbursementId = getParam("DisbursementId");
@@ -2201,9 +2202,15 @@
                                             Particulars: Results[i]["Particulars"],
                                             Amount: Results[i]["Amount"]
                                         });
+
+                                        amount +=  Results[i]["Amount"];
                                     }
+                                    
+                                    document.getElementById('disbursement_Amount').value = amount.toLocaleString();
                                 }
                             });
+                        } else {
+                            document.getElementById('disbursement_Amount').value = 0;
                         }
                     }
                 }).fail(function (xhr, textStatus, err) {

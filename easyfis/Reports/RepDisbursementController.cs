@@ -328,11 +328,17 @@ namespace easyfis.Reports
                 document.Add(Chunk.NEWLINE);
                 document.Add(line);
 
-                string paidAmount = Convert.ToString(Math.Round(TotalAmount * 100) / 100);
+                string paidAmount = Convert.ToString(Math.Round(disbursementHeaders.FirstOrDefault().Amount * 100) / 100);
 
                 var amountPhrase = new Phrase();
+                var amountString = "ZERO";
+                if (Convert.ToDecimal(paidAmount) != 0)
+                {
+                    amountString = getMoneyWord(paidAmount).ToUpper();
+                }
+
                 amountPhrase.Add(new Chunk("Representing Payment from " + companyName + "the amount of ", fontArial11));
-                amountPhrase.Add(new Chunk(getMoneyWord(paidAmount).ToUpper() + "PESOS ONLY", fontArial11Bold));
+                amountPhrase.Add(new Chunk(amountString + " PESOS ONLY", fontArial11Bold));
 
                 document.Add(Chunk.NEWLINE);
                 // Table for sign Footer

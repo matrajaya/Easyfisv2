@@ -238,9 +238,8 @@
                                 <div class="input-30" id="POLine_ItemCode"></div>
                                 <div class="input-68" id="POLine_ItemDescription"></div>
 
-                                <input type="hidden" id="POLine_ItemCode_data" class="requiredPOLine">
+                                <input type="hidden" id="POLine_Item_data" class="requiredPOLine">
                                 <input type="hidden" id="POLine_ItemCode_selectedValue" />
-                                <input type="hidden" id="POLine_ItemDescription_data" class="requiredPOLine">
                                 <input type="hidden" id="POLine_ItemDescription_selectedValue" />
                             </dd>
                             <dt>Particulars</dt>
@@ -559,14 +558,13 @@
             $("#cmdSavePOLinesButton").prop("disabled", false);
             $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
 
-            getItemCodeForComboBox();
-            getItemDescriptionForComboBox();
+            //getItemCodeForComboBox();
+            getItem();
 
             var item = itemQueryItemsCollection.currentEditItem;
             document.getElementById('POLine_Id').value = '0';
-            document.getElementById('POLine_ItemCode_data').value = item.Id;
+            document.getElementById('POLine_Item_data').value = item.Id;
             document.getElementById('POLine_ItemCode_selectedValue').value = item.ManualArticleCode;
-            document.getElementById('POLine_ItemDescription_data').value = item.Id;
             document.getElementById('POLine_ItemDescription_selectedValue').value = item.Article;
             document.getElementById('POLine_Particulars').value = item.Particulars;
             document.getElementById('POLine_Quantity').value = '0';
@@ -1690,8 +1688,68 @@
         // ===========================
         // GET Item Code for Combo Box
         // ===========================
-        function getItemCodeForComboBox() {
-            itemCodes = new wijmo.collections.ObservableArray();
+        //function getItemCodeForComboBox() {
+        //    itemCodes = new wijmo.collections.ObservableArray();
+        //    $.ajax({
+        //        url: '/api/listArticleByArticleTypeId/1',
+        //        cache: false,
+        //        type: 'GET',
+        //        contentType: 'application/json; charset=utf-8',
+        //        data: {},
+        //        success: function (results) {
+        //            if (results.length > 0) {
+        //                for (i = 0; i < results.length; i++) {
+        //                    itemCodes.push({
+        //                        ItemId: results[i]["Id"],
+        //                        ItemCode: results[i]["ManualArticleCode"],
+        //                        ItemDescription: results[i]["Article"],
+        //                        UnitId: results[i]["UnitId"],
+        //                        Unit: results[i]["Unit"]
+        //                    });
+        //                }
+        //                createCboItemCode(itemCodes);
+        //            } else {
+        //                createCboItemCode(itemCodes);
+        //            }
+        //        }
+        //    });
+        //    return itemCodes;
+        //}
+        
+        //// ==================================
+        //// GET Item Description for Combo Box
+        //// ==================================
+        //function getItemDescriptionForComboBox() {
+        //    itemDescriptions = new wijmo.collections.ObservableArray();
+        //    $.ajax({
+        //        url: '/api/listArticleByArticleTypeId/1',
+        //        cache: false,
+        //        type: 'GET',
+        //        contentType: 'application/json; charset=utf-8',
+        //        data: {},
+        //        success: function (results) {
+        //            if (results.length > 0) {
+        //                for (i = 0; i < results.length; i++) {
+        //                    itemDescriptions.push({
+        //                        ItemId: results[i]["Id"],
+        //                        ItemCode: results[i]["ManualArticleCode"],
+        //                        ItemDescription: results[i]["Article"],
+        //                        UnitId: results[i]["UnitId"],
+        //                        Unit: results[i]["Unit"]
+        //                    });
+        //                }
+        //                createCboItemDescription(itemDescriptions);
+        //            } else {
+        //                createCboItemDescription(itemDescriptions);
+        //            }
+        //        }
+        //    });
+        //    return itemDescriptions;
+        //}
+        
+        // get item
+        function getItem() {
+            var items = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listArticleByArticleTypeId/1',
                 cache: false,
@@ -1701,7 +1759,7 @@
                 success: function (results) {
                     if (results.length > 0) {
                         for (i = 0; i < results.length; i++) {
-                            itemCodes.push({
+                            items.push({
                                 ItemId: results[i]["Id"],
                                 ItemCode: results[i]["ManualArticleCode"],
                                 ItemDescription: results[i]["Article"],
@@ -1709,20 +1767,19 @@
                                 Unit: results[i]["Unit"]
                             });
                         }
-                        createCboItemCode(itemCodes);
-                    } else {
-                        createCboItemCode(itemCodes);
                     }
+
+                    createCboItemCode(items);
+                    createCboItemDescription(items);
                 }
             });
-            return itemCodes;
         }
 
         // =======================
         // Combo Box for Item Code
         // =======================
-        function createCboItemCode(itemCodes) {
-            var itemCodeCollection = new wijmo.collections.CollectionView(itemCodes);
+        function createCboItemCode(items) {
+            var itemCodeCollection = new wijmo.collections.CollectionView(items);
             var itemCodeList = new Array();
             for (var i = 0; i < itemCodeCollection.items.length; i++) {
                 itemCodeList.push(itemCodeCollection.items[i].ItemCode);
@@ -1747,60 +1804,21 @@
                 isEditable: false,
                 selectedValue: document.getElementById('POLine_ItemCode_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#POLine_ItemCode_data").val(itemCodeCollection.items[this.selectedIndex].ItemId);
-                    $("#POLine_ItemDescription_data").val(itemCodeCollection.items[this.selectedIndex].ItemId);
+                    $("#POLine_Item_data").val(itemCodeCollection.items[this.selectedIndex].ItemId);
+                    $("#POLine_ItemCode_selectedValue").val(itemCodeCollection.items[this.selectedIndex].ItemCode);
                     $("#POLine_ItemDescription_selectedValue").val(itemCodeCollection.items[this.selectedIndex].ItemDescription);
-                    //$("#POLine_Unit_data").val(itemCodeCollection.items[this.selectedIndex].UnitId);
-                    //$("#POLine_Unit_selectedValue").val(itemCodeCollection.items[this.selectedIndex].Unit);
-
-                    getItemDescriptionForComboBox();
-                    getItemUnitForComboBox(itemCodeCollection.items[this.selectedIndex].ItemId);
+                    
+                    createCboItemDescription(items);
+                    //getItemUnitForComboBox(itemCodeCollection.items[this.selectedIndex].ItemId);
                 }
             });
-
-            document.getElementById('POLine_ItemCode_data').value = itemCodeCollection.items[cboItemCode.selectedIndex].ItemId;
-            document.getElementById('POLine_ItemDescription_data').value = itemCodeCollection.items[cboItemCode.selectedIndex].ItemId;
-            document.getElementById('POLine_ItemDescription_selectedValue').value = itemCodeCollection.items[cboItemCode.selectedIndex].ItemDescription;
-            //document.getElementById('POLine_Unit_data').value = itemCodeCollection.items[cboItemCode.selectedIndex].UnitId;
-            //document.getElementById('POLine_Unit_selectedValue').value = itemCodeCollection.items[cboItemCode.selectedIndex].Unit;
-        }
-
-        // ==================================
-        // GET Item Description for Combo Box
-        // ==================================
-        function getItemDescriptionForComboBox() {
-            itemDescriptions = new wijmo.collections.ObservableArray();
-            $.ajax({
-                url: '/api/listArticleByArticleTypeId/1',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            itemDescriptions.push({
-                                ItemId: results[i]["Id"],
-                                ItemCode: results[i]["ManualArticleCode"],
-                                ItemDescription: results[i]["Article"],
-                                UnitId: results[i]["UnitId"],
-                                Unit: results[i]["Unit"]
-                            });
-                        }
-                        createCboItemDescription(itemDescriptions);
-                    } else {
-                        createCboItemDescription(itemDescriptions);
-                    }
-                }
-            });
-            return itemDescriptions;
         }
 
         // ==============================
         // Combo Box for Item Description
         // ==============================
-        function createCboItemDescription(itemDescriptions) {
-            var itemDescriptionCollection = new wijmo.collections.CollectionView(itemDescriptions);
+        function createCboItemDescription(items) {
+            var itemDescriptionCollection = new wijmo.collections.CollectionView(items);
             var itemDescriptionList = new Array();
             for (var i = 0; i < itemDescriptionCollection.items.length; i++) {
                 itemDescriptionList.push(itemDescriptionCollection.items[i].ItemDescription);
@@ -1825,20 +1843,18 @@
                 isEditable: false,
                 selectedValue: document.getElementById('POLine_ItemDescription_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#POLine_ItemDescription_data").val(itemDescriptionCollection.items[this.selectedIndex].ItemId);
-                    $("#POLine_ItemCode_data").val(itemDescriptionCollection.items[this.selectedIndex].ItemId);
+                    $("#POLine_Item_data").val(itemDescriptionCollection.items[this.selectedIndex].ItemId);
                     $("#POLine_ItemCode_selectedValue").val(itemDescriptionCollection.items[this.selectedIndex].ItemCode);
-                    //$("#POLine_Unit_data").val(itemDescriptionCollection.items[this.selectedIndex].UnitId);
-                    //$("#POLine_Unit_selectedValue").val(itemDescriptionCollection.items[this.selectedIndex].Unit);
+                    $("#POLine_ItemDescription_selectedValue").val(itemDescriptionCollection.items[this.selectedIndex].ItemDescription);
 
-                    getItemCodeForComboBox();
+                    createCboItemCode(items);
                     getItemUnitForComboBox(itemDescriptionCollection.items[this.selectedIndex].ItemId);
                 }
             });
 
-            document.getElementById('POLine_ItemDescription_data').value = itemDescriptionCollection.items[cboItemDescription.selectedIndex].ItemId;
-            document.getElementById('POLine_ItemCode_data').value = itemDescriptionCollection.items[cboItemDescription.selectedIndex].ItemId;
-            document.getElementById('POLine_ItemCode_selectedValue').value = itemDescriptionCollection.items[cboItemDescription.selectedIndex].ItemCode;
+            document.getElementById('POLine_Item_data').value = itemDescriptionCollection.items[cboItemDescription.selectedIndex].ItemId;
+            document.getElementById('POLine_ItemCode_selectedValue').value = itemDescriptionCollection.items[cboItemCode.selectedIndex].ItemCode;
+            document.getElementById('POLine_ItemDescription_selectedValue').value = itemDescriptionCollection.items[cboItemDescription.selectedIndex].ItemDescription;
             //document.getElementById('POLine_Unit_data').value = itemDescriptionCollection.items[cboItemDescription.selectedIndex].UnitId;
             //document.getElementById('POLine_Unit_selectedValue').value = itemDescriptionCollection.items[cboItemDescription.selectedIndex].Unit;
 
@@ -1929,20 +1945,21 @@
             $("#cmdSavePOLinesButton").prop("disabled", false);
             $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
 
-            getItemCodeForComboBox();
-            getItemDescriptionForComboBox();
+            //getItemCodeForComboBox();
+            //getItemDescriptionForComboBox();
+
+            getItem();
 
             var POLine = POLines.currentEditItem;
             document.getElementById('POLine_Id').value = POLine.Id ? POLine.Id : '';
-            document.getElementById('POLine_ItemCode_data').value = POLine.ItemId ? POLine.ItemId : '';
+            document.getElementById('POLine_Item_data').value = POLine.ItemId ? POLine.ItemId : '';
             document.getElementById('POLine_ItemCode_selectedValue').value = POLine.ItemCode ? POLine.ItemCode : '';
-            document.getElementById('POLine_ItemDescription_data').value = POLine.ItemId ? POLine.ItemId : '';
             document.getElementById('POLine_ItemDescription_selectedValue').value = POLine.Item ? POLine.Item : '';
             document.getElementById('POLine_Particulars').value = POLine.Particulars ? POLine.Particulars : '';
-            document.getElementById('POLine_Quantity').value = POLine.Quantity ? POLine.Quantity : '';
+            document.getElementById('POLine_Quantity').value = POLine.Quantity ? POLine.Quantity : 0;
             document.getElementById('POLine_Unit_data').value = POLine.UnitId ? POLine.UnitId : '';
             document.getElementById('POLine_Unit_selectedValue').value = POLine.Unit ? POLine.Unit : '';
-            document.getElementById('POLine_Cost').value = POLine.Cost.toLocaleString() ? POLine.Cost.toLocaleString() : '';
+            document.getElementById('POLine_Cost').value = POLine.Cost.toLocaleString() ? POLine.Cost.toLocaleString() : 0;
             document.getElementById('POLine_Amount').value = POLine.Amount.toLocaleString() ? POLine.Amount.toLocaleString() : '';
         }
 
@@ -1959,13 +1976,14 @@
             $("#cmdSavePOLinesButton").prop("disabled", false);
             $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
 
-            getItemCodeForComboBox();
-            getItemDescriptionForComboBox();
+            //getItemCodeForComboBox();
+            //getItemDescriptionForComboBox();
+
+            getItem();
 
             document.getElementById('POLine_Id').value = 0;
-            document.getElementById('POLine_ItemCode_data').value = '';
+            document.getElementById('POLine_Item_data').value = '';
             document.getElementById('POLine_ItemCode_selectedValue').value = '';
-            document.getElementById('POLine_ItemDescription_data').value = '';
             document.getElementById('POLine_ItemDescription_selectedValue').value = '';
             document.getElementById('POLine_Particulars').value = "NA";
             document.getElementById('POLine_Quantity').value = 0;
@@ -2038,7 +2056,7 @@
             var POItemId = document.getElementById('POLine_Id').value;
             var PurchaseOrderId = getParam('PurchaseOrderId');
             POItemObject.POId = PurchaseOrderId;
-            POItemObject.ItemId = document.getElementById('POLine_ItemCode_data').value;
+            POItemObject.ItemId = document.getElementById('POLine_Item_data').value;
             POItemObject.Particulars = document.getElementById('POLine_Particulars').value;
             POItemObject.UnitId = document.getElementById('POLine_Unit_data').value;
             POItemObject.Quantity = document.getElementById('POLine_Quantity').value;
@@ -2046,15 +2064,11 @@
             POItemObject.Amount = document.getElementById('POLine_Amount').value;
             var POItemData = JSON.stringify(POItemObject);
 
-            if (document.getElementById('POLine_ItemCode_data').value == '') {
+            if (document.getElementById('POLine_Item_data').value == '') {
                 document.getElementById("POLine_ItemCode").style.border = "1px solid red";
-            } else {
-                document.getElementById("POLine_ItemCode").style.border = "1px solid #C8C8C8   ";
-            }
-
-            if (document.getElementById('POLine_ItemDescription_data').value == '') {
                 document.getElementById("POLine_ItemDescription").style.border = "1px solid red";
             } else {
+                document.getElementById("POLine_ItemCode").style.border = "1px solid #C8C8C8   ";
                 document.getElementById("POLine_ItemDescription").style.border = "1px solid #C8C8C8   ";
             }
 
