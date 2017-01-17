@@ -4079,9 +4079,13 @@
                 VATAmount = amount * (VATPercentage / 100);
             }
 
-            document.getElementById('saleItem_NetPrice').value = netPrice.toLocaleString();
-            document.getElementById('saleItem_Amount').value = amount.toLocaleString();
-            document.getElementById('saleItem_VATAmount').value = VATAmount.toLocaleString();
+            //document.getElementById('saleItem_NetPrice').value = netPrice.toLocaleString();
+            //document.getElementById('saleItem_Amount').value = amount.toLocaleString();
+            //document.getElementById('saleItem_VATAmount').value = VATAmount.toLocaleString();
+
+            document.getElementById('saleItem_NetPrice').value = Math.round(netPrice).toLocaleString();
+            document.getElementById('saleItem_Amount').value = Math.round(amount).toLocaleString();
+            document.getElementById('saleItem_VATAmount').value = Math.round(VATAmount).toLocaleString();
         }
 
         // ====

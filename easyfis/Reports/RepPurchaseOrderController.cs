@@ -102,7 +102,7 @@ namespace easyfis.Reports
 
                 String Supplier = "", Term = "", DateNeeded = "", Remarks = "";
                 String PONumber = "", PODate = "", RequestNo = "";
-                String PreparedBy = "", CheckedBy = "", ApprovedBy = "";
+                String PreparedBy = "", CheckedBy = "", ApprovedBy = "", RequestedBy = "";
 
                 foreach (var purchaseOrderHeader in purchaseOrderHeaders)
                 {
@@ -116,6 +116,7 @@ namespace easyfis.Reports
                     PreparedBy = purchaseOrderHeader.PreparedBy;
                     CheckedBy = purchaseOrderHeader.CheckedBy;
                     ApprovedBy = purchaseOrderHeader.ApprovedBy;
+                    RequestedBy = purchaseOrderHeader.RequestedBy;
                 }
 
                 PdfPTable tableSubHeader = new PdfPTable(4);
@@ -224,7 +225,7 @@ namespace easyfis.Reports
                 tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
                 tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
                 tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase("Received by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
+                tableFooter.AddCell(new PdfPCell(new Phrase("Requested by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
 
                 tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
                 tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
@@ -240,7 +241,7 @@ namespace easyfis.Reports
                 tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
                 tableFooter.AddCell(new PdfPCell(new Phrase(ApprovedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
                 tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase("Date Received: ", fontArial11Bold)) { Border = 1, HorizontalAlignment = 0, PaddingBottom = 5f });
+                tableFooter.AddCell(new PdfPCell(new Phrase(RequestedBy)) { Border = 1, HorizontalAlignment = 0, PaddingBottom = 5f });
                 document.Add(tableFooter);
             }
 

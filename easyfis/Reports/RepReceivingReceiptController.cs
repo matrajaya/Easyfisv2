@@ -209,7 +209,7 @@ namespace easyfis.Reports
                     tableRRLines.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Unit, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableRRLines.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Item, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableRRLines.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Branch, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableRRLines.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Price.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableRRLines.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Cost.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableRRLines.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Amount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
                     TotalAmount = TotalAmount + receivingReceiptItem.Amount;

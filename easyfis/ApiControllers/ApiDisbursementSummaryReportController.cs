@@ -44,7 +44,9 @@ namespace easyfis.ApiControllers
                                     Branch = d.MstBranch.Branch,
                                     CVNumber = d.CVNumber,
                                     CVDate = d.CVDate.ToShortDateString(),
-                                    Supplier = d.MstArticle1.Article,
+                                    Supplier = d.MstArticle.Article,
+                                    BankId = d.BankId,
+                                    Bank = d.MstArticle1.Article,
                                     CheckNumber = d.CheckNumber,
                                     Amount = d.Amount
                                 };
