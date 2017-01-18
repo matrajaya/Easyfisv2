@@ -627,7 +627,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('InputVATReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('InputVATReport_StartDate_data').value = thisDateValue;
 
                     console.log(thisDateValue);
@@ -648,7 +648,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('InputVATReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('InputVATReport_EndDate_data').value = thisDateValue;
 
                     setTimeout(function () {
@@ -663,7 +663,7 @@
             var InputVATReportStartDate = document.getElementById('InputVATReport_StartDate_data').value;
             var InputVATReportEndDate = document.getElementById('InputVATReport_EndDate_data').value;
 
-            window.location.href = '/RepInputVATReport/InputVATReport?StartDate=' + InputVATReportStartDate + '&EndDate=' + InputVATReportEndDate;
+            window.location.href = '/RepInputVATReport/InputVATReport?StartDate=' + convertDateToShortDateString(InputVATReportStartDate) + '&EndDate=' + convertDateToShortDateString(InputVATReportEndDate);
         }
 
         // get WithHolding TAX Report Start Date
@@ -675,7 +675,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('withHoldingTAXReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('withHoldingTAXReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getWithHoldingTAXReportEndDate();
@@ -693,7 +693,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('withHoldingTAXReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('withHoldingTAXReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getWithHoldingTAXReportStartDate();
@@ -708,7 +708,7 @@
             var WithHoldingTaxStartDate = document.getElementById('withHoldingTAXReport_StartDate_data').value;
             var WithHoldingTaxReportEndDate = document.getElementById('withHoldingTAXReport_EndDate_data').value;
 
-            window.location.href = '/RepWithholdingTaxReport/WithholdingTaxReport?StartDate=' + WithHoldingTaxStartDate + '&EndDate=' + WithHoldingTaxReportEndDate;
+            window.location.href = '/RepWithholdingTaxReport/WithholdingTaxReport?StartDate=' + convertDateToShortDateString(WithHoldingTaxStartDate) + '&EndDate=' + convertDateToShortDateString(WithHoldingTaxReportEndDate);
         }
 
         function AccountsPayablePDF_OnClick() {
@@ -722,7 +722,7 @@
             } else {
                 companyId = document.getElementById('accountsPaybleReport_Comapny_data').value;
                 document.getElementById('accountsPaybleReport_Comapny').style.border = " ";
-                window.location.href = '/RepAccountsPayable/AccountsPayable?DateAsOf=' + accountsPaybleReportDateAsOf + '&CompanyId=' + companyId;
+                window.location.href = '/RepAccountsPayable/AccountsPayable?DateAsOf=' + convertDateToShortDateString(accountsPaybleReportDateAsOf) + '&CompanyId=' + companyId;
             }
         }
 
@@ -737,7 +737,7 @@
             } else {
                 companyId = document.getElementById('accountsPaybleReport_Comapny_data').value;
                 document.getElementById('accountsPaybleReport_Comapny').style.border = " ";
-                window.location.href = '/Software/AccountsPayableReport?DateAsOf=' + accountsPaybleReportDateAsOf + '&CompanyId=' + companyId;
+                window.location.href = '/Software/AccountsPayableReport?DateAsOf=' + convertDateToShortDateString(accountsPaybleReportDateAsOf) + '&CompanyId=' + companyId;
             }
         }
 
@@ -750,7 +750,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('purchaseSummaryReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('purchaseSummaryReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getPurchaseSummaryReportEndDate();
@@ -768,7 +768,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('purchaseSummaryReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('purchaseSummaryReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getPurchaseSummaryReportStartDate();
@@ -782,7 +782,7 @@
             var purchaseSummaryReportStartDate = document.getElementById('purchaseSummaryReport_StartDate_data').value;
             var purchaseSummaryReportEndDate = document.getElementById('purchaseSummaryReport_EndDate_data').value;
 
-            window.location.href = '/RepPurchaseSummaryReport/PurchaseSummaryReport?StartDate=' + purchaseSummaryReportStartDate + '&EndDate=' + purchaseSummaryReportEndDate;
+            window.location.href = '/RepPurchaseSummaryReport/PurchaseSummaryReport?StartDate=' + convertDateToShortDateString(purchaseSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(purchaseSummaryReportEndDate);
         }
 
         // Purchase Summary report on click
@@ -790,7 +790,7 @@
             var purchaseSummaryReportStartDate = document.getElementById('purchaseSummaryReport_StartDate_data').value;
             var purchaseSummaryReportEndDate = document.getElementById('purchaseSummaryReport_EndDate_data').value;
 
-            window.location.href = '/Software/PurchaseSummaryReport?StartDate=' + purchaseSummaryReportStartDate + '&EndDate=' + purchaseSummaryReportEndDate;
+            window.location.href = '/Software/PurchaseSummaryReport?StartDate=' + convertDateToShortDateString(purchaseSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(purchaseSummaryReportEndDate);
         }
 
         // get Purchase Detail Report Start Date
@@ -802,7 +802,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('purchaseDetailReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('purchaseDetailReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getPurchaseDetailReportEndDate();
@@ -820,7 +820,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('purchaseDetailReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('purchaseDetailReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getPurchaseDetailReportStartDate();
@@ -834,7 +834,7 @@
             var purchaseDetailReportStartDate = document.getElementById('purchaseDetailReport_StartDate_data').value;
             var purchaseDetailReportEndDate = document.getElementById('purchaseDetailReport_EndDate_data').value;
 
-            window.location.href = '/RepPurchaseDetailReport/PurchaseDetailReport?StartDate=' + purchaseDetailReportStartDate + '&EndDate=' + purchaseDetailReportEndDate;
+            window.location.href = '/RepPurchaseDetailReport/PurchaseDetailReport?StartDate=' + convertDateToShortDateString(purchaseDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(purchaseDetailReportEndDate);
         }
 
         // Purchase Detail report on click
@@ -842,7 +842,7 @@
             var purchaseDetailReportStartDate = document.getElementById('purchaseDetailReport_StartDate_data').value;
             var purchaseDetailReportEndDate = document.getElementById('purchaseDetailReport_EndDate_data').value;
 
-            window.location.href = '/Software/PurchaseDetailReport?StartDate=' + purchaseDetailReportStartDate + '&EndDate=' + purchaseDetailReportEndDate;
+            window.location.href = '/Software/PurchaseDetailReport?StartDate=' + convertDateToShortDateString(purchaseDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(purchaseDetailReportEndDate);
 
         }
        
@@ -855,7 +855,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('receivingReceiptSummaryReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('receivingReceiptSummaryReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getReceivingReceiptSummaryReportEndDate();
@@ -873,7 +873,7 @@
                 mask: '99-99-999',
                 min: new Date(document.getElementById('receivingReceiptSummaryReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('receivingReceiptSummaryReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getReceivingReceiptSummaryReportStartDate();
@@ -887,14 +887,14 @@
             var receivingReceiptSummaryReportStartDate = document.getElementById('receivingReceiptSummaryReport_StartDate_data').value;
             var receivingReceiptSummaryReportEndDate = document.getElementById('receivingReceiptSummaryReport_EndDate_data').value;
 
-            window.location.href = '/RepReceivingReceiptSummaryReport/ReceivingReceiptSummaryReport?StartDate=' + receivingReceiptSummaryReportStartDate + '&EndDate=' + receivingReceiptSummaryReportEndDate;
+            window.location.href = '/RepReceivingReceiptSummaryReport/ReceivingReceiptSummaryReport?StartDate=' + convertDateToShortDateString(receivingReceiptSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(receivingReceiptSummaryReportEndDate);
         }
         // Receiving Receipt Summary report on click
         function receivingReceiptSummaryReportView_OnClick() {
             var receivingReceiptSummaryReport_StartDate_data = document.getElementById('receivingReceiptSummaryReport_StartDate_data').value;
             var receivingReceiptSummaryReport_EndDate_data = document.getElementById('receivingReceiptSummaryReport_EndDate_data').value;
 
-            window.location.href = '/Software/ReceivingReceiptSummaryReport?StartDate=' + receivingReceiptSummaryReport_StartDate_data + '&EndDate=' + receivingReceiptSummaryReport_EndDate_data;
+            window.location.href = '/Software/ReceivingReceiptSummaryReport?StartDate=' + convertDateToShortDateString(receivingReceiptSummaryReport_StartDate_data) + '&EndDate=' + convertDateToShortDateString(receivingReceiptSummaryReport_EndDate_data);
         }
 
         // get Receiving Receipt Detail Report Start Date
@@ -906,7 +906,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('receivingReceiptDetailReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('receivingReceiptDetailReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getReceivingReceiptDetailReportEndDate();
@@ -924,7 +924,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('receivingReceiptDetailReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('receivingReceiptDetailReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getReceivingReceiptDetailReportStartDate();
@@ -938,7 +938,7 @@
             var receivingReceiptDetailReportStartDate = document.getElementById('receivingReceiptDetailReport_StartDate_data').value;
             var receivingReceiptDetailReportEndDate = document.getElementById('receivingReceiptDetailReport_EndDate_data').value;
 
-            window.location.href = '/RepReceivingReceiptDetailReport/ReceivingReceiptDetailReport?StartDate=' + receivingReceiptDetailReportStartDate + '&EndDate=' + receivingReceiptDetailReportEndDate;
+            window.location.href = '/RepReceivingReceiptDetailReport/ReceivingReceiptDetailReport?StartDate=' + convertDateToShortDateString(receivingReceiptDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(receivingReceiptDetailReportEndDate);
         }
 
         // Receiving Receipt Detail report on click
@@ -946,7 +946,7 @@
             var receivingReceiptDetailReport_StartDate_data = document.getElementById('receivingReceiptDetailReport_StartDate_data').value;
             var receivingReceiptDetailReport_EndDate_data = document.getElementById('receivingReceiptDetailReport_EndDate_data').value;
 
-            window.location.href = '/Software/ReceivingReceiptDetailReport?StartDate=' + receivingReceiptDetailReport_StartDate_data + '&EndDate=' + receivingReceiptDetailReport_EndDate_data;
+            window.location.href = '/Software/ReceivingReceiptDetailReport?StartDate=' + convertDateToShortDateString(receivingReceiptDetailReport_StartDate_data) + '&EndDate=' + convertDateToShortDateString(receivingReceiptDetailReport_EndDate_data);
         }
 
         // get Disbursement Summary Report Start Date
@@ -958,7 +958,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('disbursementSummaryReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('disbursementSummaryReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getDisbursementSummaryReportEndDate();
@@ -976,7 +976,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('disbursementSummaryReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('disbursementSummaryReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getDisbursementSummaryReportStartDate();
@@ -990,7 +990,7 @@
             var disbursementSummaryReportStartDate = document.getElementById('disbursementSummaryReport_StartDate_data').value;
             var disbursementSummaryReportEndDate = document.getElementById('disbursementSummaryReport_EndDate_data').value;
 
-            window.location.href = '/RepDisbursementSummaryReport/DisbursementSummaryReport?StartDate=' + disbursementSummaryReportStartDate + '&EndDate=' + disbursementSummaryReportEndDate;
+            window.location.href = '/RepDisbursementSummaryReport/DisbursementSummaryReport?StartDate=' + convertDateToShortDateString(disbursementSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(disbursementSummaryReportEndDate);
         }
 
         // Disbursement Summary report on click
@@ -998,7 +998,7 @@
             var disbursementSummaryReport_StartDate_data = document.getElementById('disbursementSummaryReport_StartDate_data').value;
             var disbursementSummaryReport_EndDate_data = document.getElementById('disbursementSummaryReport_EndDate_data').value;
 
-            window.location.href = '/Software/DisbursementSummaryReport?StartDate=' + disbursementSummaryReport_StartDate_data + '&EndDate=' + disbursementSummaryReport_EndDate_data;
+            window.location.href = '/Software/DisbursementSummaryReport?StartDate=' + convertDateToShortDateString(disbursementSummaryReport_StartDate_data) + '&EndDate=' + convertDateToShortDateString(disbursementSummaryReport_EndDate_data);
         }
 
         // get Disbursement Detail Report Start Date
@@ -1010,7 +1010,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('disbursementDetailReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('disbursementDetailReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getDisbursementDetailReportEndDate();
@@ -1028,7 +1028,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('disbursementDetailReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('disbursementDetailReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getDisbursementDetailReportStartDate();
@@ -1042,7 +1042,7 @@
             var disbursementDetailReportStartDate = document.getElementById('disbursementDetailReport_StartDate_data').value;
             var disbursementDetailReportEndDate = document.getElementById('disbursementDetailReport_EndDate_data').value;
 
-            window.location.href = '/RepDisbursementDetailReport/DisbursementDetailReport?StartDate=' + disbursementDetailReportStartDate + '&EndDate=' + disbursementDetailReportEndDate;
+            window.location.href = '/RepDisbursementDetailReport/DisbursementDetailReport?StartDate=' + convertDateToShortDateString(disbursementDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(disbursementDetailReportEndDate);
         }
 
         // Disbursement Detail report on click
@@ -1050,7 +1050,12 @@
             var disbursementDetailReport_StartDate_data = document.getElementById('disbursementDetailReport_StartDate_data').value;
             var disbursementDetailReport_EndDate_data = document.getElementById('disbursementDetailReport_StartDate_data').value;
 
-            window.location.href = '/Software/DisbursementDetailReport?StartDate=' + disbursementDetailReport_StartDate_data + '&EndDate=' + disbursementDetailReport_StartDate_data;
+            window.location.href = '/Software/DisbursementDetailReport?StartDate=' + convertDateToShortDateString(disbursementDetailReport_StartDate_data) + '&EndDate=' + convertDateToShortDateString(disbursementDetailReport_EndDate_data);
+        }
+
+        function convertDateToShortDateString(theDate) {
+            var theDate = new Date(theDate);
+            return [theDate.getFullYear(), theDate.getMonth() + 1, theDate.getDate()].join('-');
         }
 
         // ===========
@@ -1058,7 +1063,7 @@
         // ===========
         $(document).ready(function () {
             var newDate = new Date();
-            var defaultDate = [newDate.getFullYear(), newDate.getMonth() + 1, newDate.getDate()].join('-');
+            var defaultDate = newDate;
 
             // Input Vat Summary Dates
             document.getElementById('InputVATReport_StartDate_data').value = defaultDate;
@@ -1146,7 +1151,7 @@
                 value: new Date(),
                 mask: '99-99-9999',
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('accountsPaybleReport_DateAsOf_data').value = thisDateValue;
                 }
             });

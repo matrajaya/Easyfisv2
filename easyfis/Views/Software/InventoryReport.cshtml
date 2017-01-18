@@ -594,7 +594,7 @@
             }
 
             var disabled;
-            if (branches == 0) {
+            if (branchesCollection.items.length == 0) {
                 disabled = true;
             } else {
                 disabled = false;
@@ -628,7 +628,7 @@
             }
 
             var disabled;
-            if (branches == 0) {
+            if (branchesCollection.items.length == 0) {
                 disabled = true;
             } else {
                 disabled = false;
@@ -662,7 +662,7 @@
             }
 
             var disabled;
-            if (branches == 0) {
+            if (branchesCollection.items.length == 0) {
                 disabled = true;
             } else {
                 disabled = false;
@@ -696,7 +696,7 @@
             }
 
             var disabled;
-            if (branches == 0) {
+            if (branchesCollection.items.length == 0) {
                 disabled = true;
             } else {
                 disabled = false;
@@ -917,7 +917,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('inventory_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('inventory_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getInventoryEndDate();
@@ -936,7 +936,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('inventory_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('inventory_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getInventoryStartDate();
@@ -955,7 +955,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('stockCard_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('stockCard_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getStockCardEndDate();
@@ -974,7 +974,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('stockCard_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('stockCard_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getStockCardStartDate();
@@ -1139,7 +1139,7 @@
             } else {
                 companyId = document.getElementById('Inventory_Company_data').value;
                 document.getElementById('Inventory_Company').style.border = " ";
-                window.location.href = '/RepInventoryReport/InventoryReport?StartDate=' + inventoryReportStartDate + '&EndDate=' + inventoryReportEndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepInventoryReport/InventoryReport?StartDate=' + convertDateToShortDateString(inventoryReportStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportEndDate) + '&CompanyId=' + companyId;
             }
         }
 
@@ -1155,7 +1155,7 @@
             } else {
                 companyId = document.getElementById('Inventory_Company_data').value;
                 document.getElementById('Inventory_Company').style.border = " ";
-                window.location.href = '/Software/Inventory?StartDate=' + inventoryReportStartDate + '&EndDate=' + inventoryReportEndDate + '&CompanyId=' + companyId;
+                window.location.href = '/Software/Inventory?StartDate=' + convertDateToShortDateString(inventoryReportStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportEndDate) + '&CompanyId=' + companyId;
             }
         }
 
@@ -1181,7 +1181,7 @@
 
                 document.getElementById('StockCard_Branch').style.border = " ";
                 document.getElementById('Items_Item').style.border = " ";
-                window.location.href = '/RepStockCard/StockCard?StartDate=' + inventoryReportStockCardStartDate + '&EndDate=' + inventoryReportStockCardEndDate + '&BranchId=' + branchId + '&ItemId=' + itemId;
+                window.location.href = '/RepStockCard/StockCard?StartDate=' + convertDateToShortDateString(inventoryReportStockCardStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportStockCardEndDate) + '&BranchId=' + branchId + '&ItemId=' + itemId;
             }
         }
 
@@ -1207,7 +1207,7 @@
 
                 document.getElementById('StockCard_Branch').style.border = " ";
                 document.getElementById('Items_Item').style.border = " ";
-                window.location.href = '/Software/StockCard?StartDate=' + inventoryReportStockCardStartDate + '&EndDate=' + inventoryReportStockCardEndDate + '&BranchId=' + branchId + '&ItemId=' + itemId;
+                window.location.href = '/Software/StockCard?StartDate=' + convertDateToShortDateString(inventoryReportStockCardStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportStockCardEndDate) + '&BranchId=' + branchId + '&ItemId=' + itemId;
             }
         }
 
@@ -1223,7 +1223,7 @@
             } else {
                 branchId = document.getElementById('StockIn_Branch_data').value;
                 document.getElementById('StockIn_Branch').style.border = " ";
-                window.location.href = '/RepStockInDetailReport/StockInDetailReport?StartDate=' + inventoryReportStockInDetailStartDate + '&EndDate=' + inventoryReportStockInDetailEndDate + '&BranchId=' + branchId;
+                window.location.href = '/RepStockInDetailReport/StockInDetailReport?StartDate=' + convertDateToShortDateString(inventoryReportStockInDetailStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportStockInDetailEndDate) + '&BranchId=' + branchId;
             }
         }
 
@@ -1239,7 +1239,7 @@
             } else {
                 branchId = document.getElementById('StockOut_Branch_data').value;
                 document.getElementById('StockOut_Branch').style.border = " ";
-                window.location.href = '/RepStockOutDetailReport/StockOutDetailReport?StartDate=' + inventoryReportStockOutDetailStartDate + '&EndDate=' + inventoryReportStockOutDetailEndDate + '&BranchId=' + branchId;
+                window.location.href = '/RepStockOutDetailReport/StockOutDetailReport?StartDate=' + convertDateToShortDateString(inventoryReportStockOutDetailStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportStockOutDetailEndDate) + '&BranchId=' + branchId;
             }
         }
 
@@ -1255,7 +1255,7 @@
             } else {
                 branchId = document.getElementById('StockTransfer_Branch_data').value;
                 document.getElementById('StockTransfer_Branch').style.border = " ";
-                window.location.href = '/RepStockTransferDetailReport/StockTransferDetailReport?StartDate=' + inventoryReportStockTransferDetailStartDate + '&EndDate=' + inventoryReportStockTransferDetailEndDate + '&BranchId=' + branchId;
+                window.location.href = '/RepStockTransferDetailReport/StockTransferDetailReport?StartDate=' + convertDateToShortDateString(inventoryReportStockTransferDetailStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportStockTransferDetailEndDate) + '&BranchId=' + branchId;
             }
         }
 
@@ -1310,8 +1310,13 @@
             } else {
                 companyId = document.getElementById('fixedAssetReport_Company_data').value;
                 document.getElementById('fixedAssetReport_Company').style.border = " ";
-                window.location.href = '/RepFixedAssets/FixedAssets?StartDate=' + inventoryReportFixedAssetsStartDate + '&EndDate=' + inventoryReportFixedAssetsEndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepFixedAssets/FixedAssets?StartDate=' + convertDateToShortDateString(inventoryReportFixedAssetsStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportFixedAssetsEndDate) + '&CompanyId=' + companyId;
             }
+        }
+
+        function convertDateToShortDateString(theDate) {
+            var theDate = new Date(theDate);
+            return [theDate.getFullYear(), theDate.getMonth() + 1, theDate.getDate()].join('-');
         }
 
         // ===========
@@ -1319,7 +1324,7 @@
         // ===========
         $(document).ready(function () {
             var newDate = new Date();
-            var defaultDate = [newDate.getFullYear(), newDate.getMonth() + 1, newDate.getDate()].join('-');
+            var defaultDate = newDate;
 
             // Inventory Dates
             document.getElementById('inventory_StartDate_data').value = defaultDate;
@@ -1342,8 +1347,8 @@
             getStockCardEndDate();
 
             // Stock In Dates
-            document.getElementById('stockIn_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('stockIn_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('stockIn_StartDate_data').value = defaultDate;
+            document.getElementById('stockIn_EndDate_data').value = defaultDate;
 
             stockInStartDate = new wijmo.input.InputDate('#stockIn_StartDate');
             stockInEndDate = new wijmo.input.InputDate('#stockIn_EndDate');
@@ -1352,8 +1357,8 @@
             getStockInEndDate();
 
             // Stock Out Dates
-            document.getElementById('stockOut_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('stockOut_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('stockOut_StartDate_data').value = defaultDate;
+            document.getElementById('stockOut_EndDate_data').value = defaultDate;
 
             stockOutStartDate = new wijmo.input.InputDate('#stockOut_StartDate');
             stockOutEndDate = new wijmo.input.InputDate('#stockOut_EndDate');
@@ -1362,8 +1367,8 @@
             getStockOutEndDate();
 
             // Stock Transfer Dates
-            document.getElementById('stockTransfer_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('stockTransfer_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('stockTransfer_StartDate_data').value = defaultDate;
+            document.getElementById('stockTransfer_EndDate_data').value = defaultDate;
 
             stockTransferStartDate = new wijmo.input.InputDate('#stockTransfer_StartDate');
             stockTransferEndDate = new wijmo.input.InputDate('#stockTransfer_EndDate');
@@ -1372,8 +1377,8 @@
             getStockTransferEndDate();
 
             // fixed Asset Report Dates
-            document.getElementById('fixedAssetReport_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('fixedAssetReport_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('fixedAssetReport_StartDate_data').value = defaultDate;
+            document.getElementById('fixedAssetReport_EndDate_data').value = defaultDate;
 
             fixedAssetReportStartDate = new wijmo.input.InputDate('#fixedAssetReport_StartDate');
             fixedAssetReportEndDate = new wijmo.input.InputDate('#fixedAssetReport_EndDate');

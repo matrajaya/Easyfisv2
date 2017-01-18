@@ -504,7 +504,7 @@
             } else {
                 companyId = document.getElementById('accountReceivableReport_Company_data').value;
                 document.getElementById('accountReceivableReport_Company').style.border = " ";
-                window.location.href = '/Software/AccountsReceivableReport?DateAsOf=' + accountReceivableReportDateAsOf + '&CompanyId=' + companyId;
+                window.location.href = '/Software/AccountsReceivableReport?DateAsOf=' + convertDateToShortDateString(accountReceivableReportDateAsOf) + '&CompanyId=' + companyId;
             }
         }
 
@@ -519,7 +519,7 @@
             } else {
                 companyId = document.getElementById('accountReceivableSummaryReport_Company_data').value;
                 document.getElementById('accountReceivableSummaryReport_Company').style.border = " ";
-                window.location.href = '/RepAccountsReceivableSummary/AccountsReceivableSummary?DateAsOf=' + accountReceivableSummaryReportDateAsOf + '&CompanyId=' + companyId;
+                window.location.href = '/RepAccountsReceivableSummary/AccountsReceivableSummary?DateAsOf=' + convertDateToShortDateString(accountReceivableSummaryReportDateAsOf) + '&CompanyId=' + companyId;
             }
         }
 
@@ -542,7 +542,7 @@
                 accountReceivableStatementOfTheAccountReportCustomerId = document.getElementById('StatementOfTheAccount_Customer_data').value;
                 document.getElementById('StatementOfTheAccount_Company').style.border = " ";
                 document.getElementById('StatementOfTheAccount_Customer').style.border = " ";
-                window.location.href = '/RepStatementOfAccount/StatementOfAccount?DateAsOf=' + accountReceivableStatementOfTheAccountReportDateAsOf + '&CompanyId=' + companyId + '&CustomerId=' + accountReceivableStatementOfTheAccountReportCustomerId;
+                window.location.href = '/RepStatementOfAccount/StatementOfAccount?DateAsOf=' + convertDateToShortDateString(accountReceivableStatementOfTheAccountReportDateAsOf) + '&CompanyId=' + companyId + '&CustomerId=' + accountReceivableStatementOfTheAccountReportCustomerId;
             }
         }
 
@@ -556,7 +556,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('SaleSummaryReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('SaleSummaryReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getSaleSummaryReportEndDate();
@@ -574,7 +574,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('SaleSummaryReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('SaleSummaryReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getSaleSummaryReportStartDate();
@@ -588,7 +588,7 @@
             var saleSummaryReportStartDate = document.getElementById('SaleSummaryReport_StartDate_data').value;
             var saleSummaryReportEndDate = document.getElementById('SaleSummaryReport_EndDate_data').value;
 
-            window.location.href = '/RepSalesSummaryReport/SalesSummaryReport?StartDate=' + saleSummaryReportStartDate + '&EndDate=' + saleSummaryReportEndDate;
+            window.location.href = '/RepSalesSummaryReport/SalesSummaryReport?StartDate=' + convertDateToShortDateString(saleSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(saleSummaryReportEndDate);
         }
 
         // sale summary report on click
@@ -596,7 +596,7 @@
             var saleSummaryReportStartDate = document.getElementById('SaleSummaryReport_StartDate_data').value;
             var saleSummaryReportEndDate = document.getElementById('SaleSummaryReport_EndDate_data').value;
 
-            window.location.href = '/Software/SalesSummaryReport?StartDate=' + saleSummaryReportStartDate + '&EndDate=' + saleSummaryReportEndDate;
+            window.location.href = '/Software/SalesSummaryReport?StartDate=' + convertDateToShortDateString(saleSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(saleSummaryReportEndDate);
         }
 
         // get Sale Detail Report Start Date
@@ -608,7 +608,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('SaleDetailReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('SaleDetailReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getSaleDetailReportEndDate();
@@ -626,7 +626,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('SaleDetailReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('SaleDetailReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getSaleDetailReportStartDate();
@@ -640,7 +640,7 @@
             var saleDetailReportStartDate = document.getElementById('SaleDetailReport_StartDate_data').value;
             var saleDetailReportEndDate = document.getElementById('SaleDetailReport_EndDate_data').value;
 
-            window.location.href = '/RepSalesDetailReport/SalesDetailReport?StartDate=' + saleDetailReportStartDate + '&EndDate=' + saleDetailReportEndDate;
+            window.location.href = '/RepSalesDetailReport/SalesDetailReport?StartDate=' + convertDateToShortDateString(saleDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(saleDetailReportEndDate);
         }
 
         // sale detail report on click
@@ -648,7 +648,7 @@
             var saleDetailReportStartDate = document.getElementById('SaleDetailReport_StartDate_data').value;
             var saleDetailReportEndDate = document.getElementById('SaleDetailReport_EndDate_data').value;
 
-            window.location.href = '/Software/SalesDetailReport?StartDate=' + saleDetailReportStartDate + '&EndDate=' + saleDetailReportEndDate;
+            window.location.href = '/Software/SalesDetailReport?StartDate=' + convertDateToShortDateString(saleDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(saleDetailReportEndDate);
         }
 
         // get Collection Summary Report Start Date
@@ -660,7 +660,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('CollectionSummaryReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('CollectionSummaryReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getCollectionSummaryReportEndDate();
@@ -678,7 +678,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('CollectionSummaryReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('CollectionSummaryReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getCollectionSummaryReportStartDate();
@@ -692,7 +692,7 @@
             var collectionSummaryReportStartDate = document.getElementById('CollectionSummaryReport_StartDate_data').value;
             var collectionSummaryReportEndDate = document.getElementById('CollectionSummaryReport_EndDate_data').value;
 
-            window.location.href = '/RepCollectionSummaryReport/CollectionSummaryReport?StartDate=' + collectionSummaryReportStartDate + '&EndDate=' + collectionSummaryReportEndDate;
+            window.location.href = '/RepCollectionSummaryReport/CollectionSummaryReport?StartDate=' + convertDateToShortDateString(collectionSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(collectionSummaryReportEndDate);
         }
 
           // collection summary report on click
@@ -700,7 +700,7 @@
             var collectionSummaryReportStartDate = document.getElementById('CollectionSummaryReport_StartDate_data').value;
             var collectionSummaryReportEndDate = document.getElementById('CollectionSummaryReport_EndDate_data').value;
 
-            window.location.href = '/Software/CollectionSummaryReport?StartDate=' + collectionSummaryReportStartDate + '&EndDate=' + collectionSummaryReportEndDate;
+            window.location.href = '/Software/CollectionSummaryReport?StartDate=' + convertDateToShortDateString(collectionSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(collectionSummaryReportEndDate);
         }
 
         // get Collection Detail Report Start Date
@@ -712,7 +712,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('CollectionDetailReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('CollectionDetailReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getCollectionDetailReportEndDate();
@@ -730,7 +730,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('CollectionDetailReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('CollectionDetailReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getCollectionDetailReportStartDate();
@@ -744,7 +744,7 @@
             var collectionDetailReportStartDate = document.getElementById('CollectionDetailReport_StartDate_data').value;
             var collectionDetailReportEndDate = document.getElementById('CollectionDetailReport_EndDate_data').value;
 
-            window.location.href = '/RepCollectionDetailReport/CollectionDetailReport?StartDate=' + collectionDetailReportStartDate + '&EndDate=' + collectionDetailReportEndDate;
+            window.location.href = '/RepCollectionDetailReport/CollectionDetailReport?StartDate=' + convertDateToShortDateString(collectionDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(collectionDetailReportEndDate);
         }
 
         // collection detail report on click
@@ -752,7 +752,12 @@
             var collectionDetailReportStartDate = document.getElementById('CollectionDetailReport_StartDate_data').value;
             var collectionDetailReportEndDate = document.getElementById('CollectionDetailReport_EndDate_data').value;
 
-            window.location.href = '/Software/CollectionDetailReport?StartDate=' + collectionDetailReportStartDate + '&EndDate=' + collectionDetailReportEndDate;
+            window.location.href = '/Software/CollectionDetailReport?StartDate=' + convertDateToShortDateString(collectionDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(collectionDetailReportEndDate);
+        }
+
+        function convertDateToShortDateString(theDate) {
+            var theDate = new Date(theDate);
+            return [theDate.getFullYear(), theDate.getMonth() + 1, theDate.getDate()].join('-');
         }
 
         // ============
@@ -767,11 +772,11 @@
             getCustomers();
 
             var newDate = new Date();
-            var defaultDate = [newDate.getFullYear(), newDate.getMonth() + 1, newDate.getDate()].join('-');
+            var defaultDate = newDate;
 
-            document.getElementById('accountReceivableReport_DateAsOf_data').value = defaultDate;
-            document.getElementById('accountReceivableSummaryReport_DateAsOf_data').value = new Date().toLocaleDateString();
-            document.getElementById('StatementOfTheAccount_DateAsOf_data').value = new Date().toLocaleDateString();
+            document.getElementById('accountReceivableReport_DateAsOf_data').value = convertDateToShortDateString(defaultDate);
+            document.getElementById('accountReceivableSummaryReport_DateAsOf_data').value = convertDateToShortDateString(defaultDate);
+            document.getElementById('StatementOfTheAccount_DateAsOf_data').value = convertDateToShortDateString(defaultDate);
 
             // Accounts Receivable Date As Of
             accountsReceivableDateAsOf = new wijmo.input.InputDate('#accountReceivableReport_DateAsOf', {
@@ -779,7 +784,7 @@
                 value: new Date(),
                 mask: '99-99-9999',
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    var thisDateValue = this.value;
                     document.getElementById('accountReceivableReport_DateAsOf_data').value = thisDateValue;
                 }
             });
@@ -790,7 +795,7 @@
                 value: new Date(),
                 mask: '99/99/9999',
                 onValueChanged: function () {
-                    document.getElementById('accountReceivableSummaryReport_DateAsOf_data').value = this.value.toLocaleDateString();
+                    document.getElementById('accountReceivableSummaryReport_DateAsOf_data').value = this.value;
                 }
             });
 
@@ -800,7 +805,7 @@
                 value: new Date(),
                 mask: '99/99/9999',
                 onValueChanged: function () {
-                    document.getElementById('StatementOfTheAccount_DateAsOf_data').value = this.value.toLocaleDateString();
+                    document.getElementById('StatementOfTheAccount_DateAsOf_data').value = this.value;
                 }
             });
 
