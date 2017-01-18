@@ -1041,7 +1041,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementTrialBalance_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementTrialBalance_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementTrialBalanceEndDate();
@@ -1059,7 +1059,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementTrialBalance_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementTrialBalance_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementTrialBalanceStartDate();
@@ -1077,7 +1077,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementAccountLedger_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementAccountLedger_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementAccountLedgerEndDate();
@@ -1095,7 +1095,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementAccountLedger_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementAccountLedger_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementAccountLedgerStartDate();
@@ -1113,7 +1113,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialReceivingReceiptBookEndDate();
@@ -1131,7 +1131,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialReceivingReceiptBookStartDate();
@@ -1149,7 +1149,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementDisbursementBookEndDate();
@@ -1167,7 +1167,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementDisbursementBookStartDate();
@@ -1185,7 +1185,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementSalesBook_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementSalesBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementSalesBookEndDate();
@@ -1203,7 +1203,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementSalesBook_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementSalesBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementSalesBookStartDate();
@@ -1221,7 +1221,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementCollectionBook_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementCollectionBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementCollectionBookEndDate();
@@ -1239,7 +1239,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementCollectionBook_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementCollectionBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementCollectionBookStartDate();
@@ -1257,7 +1257,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementStockInBook_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementStockInBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementStockInBookEndDate();
@@ -1275,7 +1275,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementStockInBook_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementStockInBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementStockInBookStartDate();
@@ -1293,7 +1293,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementStockOutBook_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementStockOutBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementStockOutBookEndDate();
@@ -1311,7 +1311,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementStockOutBook_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementStockOutBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementStockOutBookStartDate();
@@ -1329,7 +1329,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementStockTransferBookEndDate();
@@ -1347,7 +1347,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementStockTransferBookStartDate();
@@ -1365,7 +1365,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementJournalVoucherBook_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementJournalVoucherBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementJournalVoucherBookEndDate();
@@ -1383,7 +1383,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementJournalVoucherBook_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('FinancialStatementJournalVoucherBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementJournalVoucherBookStartDate();
@@ -1827,7 +1827,7 @@
             getFinancialStatementCashFlowEndDate();
 
             var newDate = new Date();
-            var defaultDate = [newDate.getMonth() + 1, newDate.getDate(), newDate.getFullYear()].join('-');
+            var defaultDate = [newDate.getFullYear(), newDate.getMonth() + 1, newDate.getDate()].join('-');
 
             // Financial Statement Trial Balance Dates
             document.getElementById('FinancialStatementTrialBalance_StartDate_data').value = defaultDate;

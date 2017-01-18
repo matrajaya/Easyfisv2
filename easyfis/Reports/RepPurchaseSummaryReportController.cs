@@ -135,8 +135,12 @@ namespace easyfis.Controllers
                                                            Id = d.Id,
                                                            Amount = d.Amount
                                                        };
+                    Decimal totalAmount = 0;
+                    if (purchaseOrderItemTotalAmount.Any())
+                    {
+                        totalAmount = purchaseOrderItemTotalAmount.Sum(d => d.Amount);
+                    }
 
-                    Decimal totalAmount = purchaseOrderItemTotalAmount.Sum(d => d.Amount);
                     tablePOData.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     total = total + totalAmount;
                 }

@@ -917,7 +917,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('inventory_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('inventory_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getInventoryEndDate();
@@ -936,7 +936,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('inventory_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('inventory_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getInventoryStartDate();
@@ -955,7 +955,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('stockCard_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('stockCard_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getStockCardEndDate();
@@ -974,7 +974,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('stockCard_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('stockCard_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getStockCardStartDate();
@@ -1319,7 +1319,7 @@
         // ===========
         $(document).ready(function () {
             var newDate = new Date();
-            var defaultDate = [newDate.getMonth() + 1, newDate.getDate(), newDate.getFullYear()].join('-');
+            var defaultDate = [newDate.getFullYear(), newDate.getMonth() + 1, newDate.getDate()].join('-');
 
             // Inventory Dates
             document.getElementById('inventory_StartDate_data').value = defaultDate;

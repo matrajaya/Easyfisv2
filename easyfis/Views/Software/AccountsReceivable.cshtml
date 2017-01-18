@@ -556,7 +556,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('SaleSummaryReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('SaleSummaryReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getSaleSummaryReportEndDate();
@@ -574,7 +574,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('SaleSummaryReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('SaleSummaryReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getSaleSummaryReportStartDate();
@@ -608,7 +608,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('SaleDetailReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('SaleDetailReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getSaleDetailReportEndDate();
@@ -626,7 +626,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('SaleDetailReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('SaleDetailReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getSaleDetailReportStartDate();
@@ -660,7 +660,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('CollectionSummaryReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('CollectionSummaryReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getCollectionSummaryReportEndDate();
@@ -678,7 +678,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('CollectionSummaryReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('CollectionSummaryReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getCollectionSummaryReportStartDate();
@@ -712,7 +712,7 @@
                 mask: '99-99-9999',
                 max: new Date(document.getElementById('CollectionDetailReport_EndDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('CollectionDetailReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getCollectionDetailReportEndDate();
@@ -730,7 +730,7 @@
                 mask: '99-99-9999',
                 min: new Date(document.getElementById('CollectionDetailReport_StartDate_data').value),
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('CollectionDetailReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getCollectionDetailReportStartDate();
@@ -767,7 +767,7 @@
             getCustomers();
 
             var newDate = new Date();
-            var defaultDate = [newDate.getMonth() + 1, newDate.getDate(), newDate.getFullYear()].join('-');
+            var defaultDate = [newDate.getFullYear(), newDate.getMonth() + 1, newDate.getDate()].join('-');
 
             document.getElementById('accountReceivableReport_DateAsOf_data').value = defaultDate;
             document.getElementById('accountReceivableSummaryReport_DateAsOf_data').value = new Date().toLocaleDateString();
@@ -779,7 +779,7 @@
                 value: new Date(),
                 mask: '99-99-9999',
                 onValueChanged: function () {
-                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
                     document.getElementById('accountReceivableReport_DateAsOf_data').value = thisDateValue;
                 }
             });
