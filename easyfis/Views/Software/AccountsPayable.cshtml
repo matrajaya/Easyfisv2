@@ -622,12 +622,16 @@
         function getInputVATReportStartDate() {
             InputVATReportStartDate.dispose();
             InputVATReportStartDate = new wijmo.input.InputDate('#InputVATReport_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('InputVATReport_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('InputVATReport_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('InputVATReport_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    document.getElementById('InputVATReport_StartDate_data').value = thisDateValue;
+
+                    console.log(thisDateValue);
+
                     setTimeout(function () {
                         getInputVATReportEndDate();
                     }, 50);
@@ -639,12 +643,14 @@
         function getInputVATReportEndDate() {
             InputVATReportEndDate.dispose();
             InputVATReportEndDate = new wijmo.input.InputDate('#InputVATReport_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('InputVATReport_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('InputVATReport_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('InputVATReport_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    document.getElementById('InputVATReport_EndDate_data').value = thisDateValue;
+
                     setTimeout(function () {
                         getInputVATReportStartDate();
                     }, 50);
@@ -664,12 +670,13 @@
         function getWithHoldingTAXReportStartDate() {
             withHoldingTAXReportStartDate.dispose();
             withHoldingTAXReportStartDate = new wijmo.input.InputDate('#withHoldingTAXReport_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('withHoldingTAXReport_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('withHoldingTAXReport_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('withHoldingTAXReport_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    document.getElementById('withHoldingTAXReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getWithHoldingTAXReportEndDate();
                     }, 50);
@@ -681,12 +688,13 @@
         function getWithHoldingTAXReportEndDate() {
             withHoldingTAXReportEndDate.dispose();
             withHoldingTAXReportEndDate = new wijmo.input.InputDate('#withHoldingTAXReport_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('withHoldingTAXReport_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('withHoldingTAXReport_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('withHoldingTAXReport_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate()].join('-');
+                    document.getElementById('withHoldingTAXReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getWithHoldingTAXReportStartDate();
                     }, 50);
@@ -695,7 +703,7 @@
         }
 
         
-        // Input VAT report on click
+        // withholding tax report on click
         function AccountsPayableWithHoldingTaxReportPDF_OnClick() {
             var WithHoldingTaxStartDate = document.getElementById('withHoldingTAXReport_StartDate_data').value;
             var WithHoldingTaxReportEndDate = document.getElementById('withHoldingTAXReport_EndDate_data').value;
@@ -1053,8 +1061,8 @@
             var defaultDate = [newDate.getFullYear(), newDate.getMonth() + 1, newDate.getDate()].join('-');
 
             // Input Vat Summary Dates
-            document.getElementById('InputVATReport_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('InputVATReport_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('InputVATReport_StartDate_data').value = defaultDate;
+            document.getElementById('InputVATReport_EndDate_data').value = defaultDate;
 
             InputVATReportStartDate = new wijmo.input.InputDate('#InputVATReport_StartDate');
             InputVATReportEndDate = new wijmo.input.InputDate('#InputVATReport_EndDate');
@@ -1063,8 +1071,8 @@
             getInputVATReportEndDate();
 
             // WithHolding TAX Report Dates
-            document.getElementById('withHoldingTAXReport_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('withHoldingTAXReport_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('withHoldingTAXReport_StartDate_data').value = defaultDate;
+            document.getElementById('withHoldingTAXReport_EndDate_data').value = defaultDate;
 
             withHoldingTAXReportStartDate = new wijmo.input.InputDate('#withHoldingTAXReport_StartDate');
             withHoldingTAXReportEndDate = new wijmo.input.InputDate('#withHoldingTAXReport_EndDate');
