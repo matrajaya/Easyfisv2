@@ -164,7 +164,13 @@ namespace easyfis.Controllers
         {
 
             var response = HttpContext.Request.Form["g-recaptcha-response"];
-            string secretKey = "6LeNBiMTAAAAAMZUdKMa_Q4_XRGLjOEjpVP96fge";
+            
+            // live easyfis secret key
+            // string secretKey = "6LeNBiMTAAAAAMZUdKMa_Q4_XRGLjOEjpVP96fge";
+            
+            // live innosoft easyfis key
+            string secretKey = "6LeMQhIUAAAAAGILgkPEdyV2wm6Jl9RDyxeOLMq7";
+
             var client = new System.Net.WebClient();
             var verificationResultJson = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
             var verificationResult = JsonConvert.DeserializeObject<CaptchaVerificationResult>(verificationResultJson);
