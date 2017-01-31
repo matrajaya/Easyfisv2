@@ -166,7 +166,7 @@ namespace easyfis.Controllers
             var response = HttpContext.Request.Form["g-recaptcha-response"];
             
             // live easyfis secret key
-            // string secretKey = "6LeNBiMTAAAAAMZUdKMa_Q4_XRGLjOEjpVP96fge";
+            //string secretKey = "6LeNBiMTAAAAAMZUdKMa_Q4_XRGLjOEjpVP96fge";
             
             // live innosoft easyfis key
             string secretKey = "6LeMQhIUAAAAAGILgkPEdyV2wm6Jl9RDyxeOLMq7";
