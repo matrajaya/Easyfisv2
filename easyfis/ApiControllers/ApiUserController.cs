@@ -13,6 +13,22 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // api for innosoft website list user
+        [HttpGet]
+        [Route("api/user/list")]
+        public List<Models.MstUser> listUsers()
+        {
+            var users = from d in db.MstUsers
+                        select new Models.MstUser
+                        {
+                            Id = d.Id,
+                            FullName = d.FullName,
+                            UserName = d.UserName,
+                        };
+
+            return users.ToList();
+        }
+
         // list ASP User
         [Authorize]
         [HttpGet]
@@ -197,7 +213,7 @@ namespace easyfis.Controllers
                     updateMstUsers.SupplierAdvancesAccountId = mstUser.SupplierAdvancesAccountId;
                     updateMstUsers.CustomerAdvancesAccountId = mstUser.CustomerAdvancesAccountId;
                     updateMstUsers.OfficialReceiptName = mstUser.OfficialReceiptName;
-                    
+
                     db.SubmitChanges();
 
                     if (aspUsers.Any())

@@ -1867,8 +1867,8 @@
                     
                     computation();
 
-                    var quantity = document.getElementById('saleItem_Quantity').value;
-                    var price = document.getElementById('saleItem_PriceExVAT').value;
+                    var quantity = document.getElementById('saleItem_Quantity').value.toLocaleString();
+                    var price = document.getElementById('saleItem_PriceExVAT').value.toLocaleString();
 
                     document.getElementById('saleItem_BUCQuantity').value = quantity;
                     document.getElementById('saleItem_BUCPrice').value = price;
@@ -1922,8 +1922,8 @@
                 
                 computation();
 
-                var quantity = document.getElementById('saleItem_Quantity').value;
-                var price = document.getElementById('saleItem_PriceExVAT').value;
+                var quantity = document.getElementById('saleItem_Quantity').value.toLocaleString();
+                var price = document.getElementById('saleItem_PriceExVAT').value.toLocaleString();
 
                 document.getElementById('saleItem_BUCQuantity').value = quantity;
                 document.getElementById('saleItem_BUCPrice').value = price;
@@ -2040,15 +2040,15 @@
                 selectedValuePath: "PriceDescription",
                 selectedValue: priceSelectedValue.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#saleItem_PriceExVAT").val(this.selectedItem.Price);
+                    $("#saleItem_PriceExVAT").val(this.selectedItem.Price).toLocaleString();
                     
                     computation();
                 }
             });
 
             if(salesItemPrice != null) {
-                document.getElementById("saleItem_PriceExVAT").value = cboSalesItemPrice.selectedItem.Price;
-                document.getElementById('saleItem_BUCPrice').value = cboSalesItemPrice.selectedItem.Price;
+                document.getElementById("saleItem_PriceExVAT").value = cboSalesItemPrice.selectedItem.Price.toLocaleString();
+                document.getElementById('saleItem_BUCPrice').value = cboSalesItemPrice.selectedItem.Price.toLocaleString();
             }
             
             computation();
@@ -4038,6 +4038,8 @@
         $("#saleItem_DiscountAmount").keyup(function (e) {
             var priceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');
             
+            //var discountRate = ((priceExVATPrice - this.value) / priceExVATPrice) * 100;
+
             var saleItemDiscountRate = (this.value / priceExVATPrice) * 100;
             document.getElementById('saleItem_DiscountRate').value = saleItemDiscountRate.toLocaleString();
             
@@ -4047,15 +4049,15 @@
         // computation of all sale item discount, vat, netprice, and final amount
         function computation() {
             var DiscountIsInclusive = document.getElementById('saleItem_DiscontInclusive').value;
-            
             var quantity = document.getElementById('saleItem_Quantity').value.replace(/\,/g, '');
             var priceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');
             var discountRate = document.getElementById('saleItem_DiscountRate').value.replace(/\,/g, '');
             var VATPercentage = document.getElementById('saleItem_VATRate').value.replace(/\,/g, '');
-            
+
+            //var discountAmount = document.getElementById('saleItem_DiscountAmount').value.replace(/\,/g, '');
+
             var discountAmount = 0;
             var VATAmount = 0;
-
             var netPrice = 0;
 
             // compute net price
@@ -4068,9 +4070,11 @@
                 discountAmount = priceExVATPrice * (discountRate / 100);
 
                 netPrice = priceExVATPrice - discountAmount;
+                //netPrice = priceExVATPrice - (discountAmount / quantity);
             }
             
             var amount = netPrice * quantity;
+            //var amount = (priceExVATPrice * quantity) - discountAmount;
 
             // compute sales amount
             if (document.getElementById('saleItem_TAXInclusive').value == 'true') {

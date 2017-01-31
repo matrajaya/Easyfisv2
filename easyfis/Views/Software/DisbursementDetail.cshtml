@@ -1132,6 +1132,10 @@
                         document.getElementById('disbursement_ManualCVNumber').value = Results.ManualCVNumber
                         document.getElementById('disbursement_Supplier_data').value = Results.SupplierId;
                         document.getElementById('disbursement_Supplier_selectedValue').value = Results.Supplier;
+
+                        console.log(Results.Supplier);
+                        console.log(Results.Bank);
+
                         document.getElementById('disbursement_Payee').value = Results.Payee;
                         document.getElementById('disbursement_PayType_data').value = Results.PayTypeId;
                         document.getElementById('disbursement_PayType_selectedValue').value = Results.PayType;
@@ -1443,7 +1447,7 @@
 
             document.getElementById('disbursement_Supplier_data').value = supplierCollection.items[cboSupplier.selectedIndex].SupplierId;
             document.getElementById('disbursement_Payee').value = supplierCollection.items[cboSupplier.selectedIndex].Supplier;
-            document.getElementById('disbursement_Supplier_selectedValue').value = supplierCollection.items[cboSupplier.selectedIndex].Supplier;
+            //document.getElementById('disbursement_Supplier_selectedValue').value = supplierCollection.items[cboSupplier.selectedIndex].Supplier;
         }
 
         // =========================
