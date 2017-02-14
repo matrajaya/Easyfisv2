@@ -65,7 +65,11 @@ namespace easyfis.Controllers
                         Decimal DebitAmount = 0;
                         Decimal CreditAmount = 0;
 
-                        var journalVoucherLines = from d in db.TrnJournalVoucherLines where d.APRRId == disbursementLine.RRId select d;
+                        var journalVoucherLines = from d in db.TrnJournalVoucherLines 
+                                                  where d.APRRId == disbursementLine.RRId 
+                                                  && d.TrnJournalVoucher.IsLocked == true
+                                                  select d;
+
                         if (journalVoucherLines.Any())
                         {
                             DebitAmount = journalVoucherLines.Sum(d => d.DebitAmount);

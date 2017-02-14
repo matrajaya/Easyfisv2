@@ -217,6 +217,98 @@ namespace easyfis.Controllers
             }
         }
 
+        // update after locking the journal voucher
+        public void updateBalances(Int32 JVId)
+        {
+            var journalVoucherLines = from d in db.TrnJournalVoucherLines
+                                      where d.JVId == Convert.ToInt32(JVId)
+                                      select new Models.TrnJournalVoucherLine
+                                      {
+                                          Id = d.Id,
+                                          JVId = d.JVId,
+                                          JVNumber = d.TrnJournalVoucher.JVNumber,
+                                          JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
+                                          JVParticulars = d.TrnJournalVoucher.Particulars,
+                                          BranchId = d.BranchId,
+                                          Branch = d.MstBranch.Branch,
+                                          AccountId = d.AccountId,
+                                          Account = d.MstAccount.Account,
+                                          ArticleId = d.ArticleId,
+                                          Article = d.MstArticle.Article,
+                                          Particulars = d.Particulars,
+                                          DebitAmount = d.DebitAmount,
+                                          CreditAmount = d.CreditAmount,
+                                          APRRId = d.APRRId,
+                                          APRR = d.TrnReceivingReceipt.RRNumber,
+                                          APRRBranch = d.TrnReceivingReceipt.MstBranch.Branch,
+                                          ARSIId = d.ARSIId,
+                                          ARSI = d.TrnSalesInvoice.SINumber,
+                                          ARSIBranch = d.TrnSalesInvoice.MstBranch.Branch,
+                                          IsClear = d.IsClear
+                                      };
+
+            if (journalVoucherLines.Any())
+            {
+                foreach (var journalVoucherLine in journalVoucherLines)
+                {
+                    if (journalVoucherLine.APRRId != null)
+                    {
+                        Decimal adjustmentAmount = journalVoucherLine.CreditAmount - journalVoucherLine.DebitAmount;
+                        var disbursementLines = from d in db.TrnDisbursementLines
+                                                where d.RRId == journalVoucherLine.APRRId
+                                                && d.TrnDisbursement.IsLocked == true
+                                                select d;
+
+                        if (disbursementLines.Any())
+                        {
+                            Decimal disburseAmount = disbursementLines.Sum(d => d.Amount);
+                            var receivingReceipt = from d in db.TrnReceivingReceipts
+                                                   where d.Id == journalVoucherLine.APRRId
+                                                   select d;
+
+                            Decimal receivingReceiptAmount = receivingReceipt.FirstOrDefault().Amount;
+                            Decimal receivingReceiptWTAXAmount = receivingReceipt.FirstOrDefault().WTaxAmount;
+                            Decimal receivingReceipPaidAmount = receivingReceipt.FirstOrDefault().PaidAmount;
+
+                            if (receivingReceipt.Any())
+                            {
+                                var updateReceivingReceipt = receivingReceipt.FirstOrDefault();
+                                updateReceivingReceipt.BalanceAmount = (receivingReceiptAmount - receivingReceiptWTAXAmount - receivingReceipPaidAmount) + adjustmentAmount;
+                                db.SubmitChanges();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (journalVoucherLine.ARSIId != null)
+                        {
+                            Decimal adjustmentAmount = journalVoucherLine.DebitAmount - journalVoucherLine.CreditAmount;
+                            var collectionLines = from d in db.TrnCollectionLines
+                                                  where d.SIId == journalVoucherLine.ARSIId
+                                                  && d.TrnCollection.IsLocked == true
+                                                  select d;
+
+                            if (collectionLines.Any())
+                            {
+                                Decimal paidAmount = collectionLines.Sum(d => d.Amount);
+                                var salesInvoices = from d in db.TrnSalesInvoices
+                                                    where d.Id == journalVoucherLine.ARSIId
+                                                    select d;
+
+                                Decimal salesAmount = salesInvoices.FirstOrDefault().Amount;
+                                if (salesInvoices.Any())
+                                {
+                                    var updateSalesInvoice = salesInvoices.FirstOrDefault();
+                                    updateSalesInvoice.BalanceAmount = (salesAmount - paidAmount) + adjustmentAmount;
+                                    db.SubmitChanges();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         // update journal voucher
         [Authorize]
         [HttpPut]
@@ -244,8 +336,9 @@ namespace easyfis.Controllers
                     updateJournalVoucher.UpdatedDateTime = DateTime.Now;
 
                     postJournal.insertJVJournal(Convert.ToInt32(id));
-
                     db.SubmitChanges();
+
+                    updateBalances(Convert.ToInt32(id));
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -279,8 +372,9 @@ namespace easyfis.Controllers
                     updateJournalVoucher.UpdatedDateTime = DateTime.Now;
 
                     postJournal.deleteJVJournal(Convert.ToInt32(id));
-
                     db.SubmitChanges();
+
+                    updateBalances(Convert.ToInt32(id));
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
