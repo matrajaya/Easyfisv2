@@ -183,7 +183,7 @@ namespace easyfis.Controllers
                         Decimal SubTotal90Days = 0;
                         Decimal SubTotalOver120Days = 0;
 
-                        foreach (var salesInvoicesArticleCustomer in salesInvoicesArticleCustomers)
+                        foreach (var salesInvoicesArticleCustomer in salesInvoicesArticleCustomers.OrderBy(d => d.Customer))
                         {
                             // Sales Invoice with compute ages
                             var salesInvoiceWithComputeAges = from d in db.TrnSalesInvoices
