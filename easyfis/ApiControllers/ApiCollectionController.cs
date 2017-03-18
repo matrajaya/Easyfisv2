@@ -73,23 +73,27 @@ namespace easyfis.Controllers
                 {
                     if (collectionLine.SIId != null)
                     {
-                        Decimal DebitAmount = 0;
-                        Decimal CreditAmount = 0;
                         var journalVoucherLines = from d in db.TrnJournalVoucherLines
-                                                  where d.ARSIId == collectionLine.SIId 
+                                                  where d.ARSIId == collectionLine.SIId
                                                   && d.TrnJournalVoucher.IsLocked == true
                                                   select d;
 
+                        Decimal DebitAmount = 0;
+                        Decimal CreditAmount = 0;
                         if (journalVoucherLines.Any())
                         {
                             DebitAmount = journalVoucherLines.Sum(d => d.DebitAmount);
                             CreditAmount = journalVoucherLines.Sum(d => d.CreditAmount);
                         }
 
+                        var collectionLineAmount = from d in db.TrnCollectionLines
+                                                   where d.SIId == collectionLine.SIId
+                                                   && d.TrnCollection.IsLocked == true
+                                                   select d;
+
                         Decimal PaidAmount = 0;
                         Decimal AdjustmentAmount = 0;
-                        var collectionLineAmount = from d in db.TrnCollectionLines where d.SIId == collectionLine.SIId select d;
-                        if (collectionLine.IsLocked == true)
+                        if (collectionLineAmount.Any())
                         {
                             PaidAmount = collectionLineAmount.Sum(d => d.Amount);
                             AdjustmentAmount = DebitAmount - CreditAmount;

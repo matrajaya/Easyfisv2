@@ -969,6 +969,7 @@ namespace easyfis.Controllers
                     newArticle.TermId = (from d in db.MstTerms select d.Id).FirstOrDefault();
                     newArticle.ContactNumber = "NA";
                     newArticle.ContactPerson = "NA";
+                    newArticle.EmailAddress = "NA";
                     newArticle.TaxNumber = "NA";
                     newArticle.CreditLimit = 0;
                     newArticle.DateAcquired = DateTime.Now;
@@ -1128,6 +1129,7 @@ namespace easyfis.Controllers
                         updateArticle.CreditLimit = article.CreditLimit;
                         updateArticle.ContactNumber = article.ContactNumber;
                         updateArticle.ContactPerson = article.ContactPerson;
+                        updateArticle.EmailAddress = article.EmailAddress;
                         updateArticle.TaxNumber = article.TaxNumber;
                         updateArticle.ManualArticleOldCode = " ";
                         updateArticle.IsLocked = true;

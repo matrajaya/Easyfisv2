@@ -108,6 +108,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
+                                                    <label class="control-label col-sm-4">Email Address</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_contactEmail" placeholder="Contact Email">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
                                                     <label class="control-label col-sm-4">TIN</label>
                                                     <div class="col-sm-8">
                                                         <input type="text" class="form-control input-sm input-50 requiredCustomer" id="artcileCustomer_TIN" placeholder="TIN Number">
@@ -277,6 +283,7 @@
                             document.getElementById('artcileCustomer_TIN').value = customerResults.TaxNumber;
                             document.getElementById('artcileCustomer_contactNo').value = customerResults.ContactNumber;
                             document.getElementById('artcileCustomer_contactPerson').value = customerResults.ContactPerson;
+                            document.getElementById('artcileCustomer_contactEmail').value = customerResults.EmailAddress;
                             document.getElementById('createdBy').innerHTML = customerResults.CreatedBy;
                             document.getElementById('createdDate').innerHTML = customerResults.CreatedDateTime;
                             document.getElementById('updatedBy').innerHTML = customerResults.UpdatedBy;
@@ -294,6 +301,7 @@
                                 document.getElementById('artcileCustomer_TIN').disabled = true;
                                 document.getElementById('artcileCustomer_contactNo').disabled = true;
                                 document.getElementById('artcileCustomer_contactPerson').disabled = true;
+                                document.getElementById('artcileCustomer_contactEmail').disabled = true;
                                 //$('#customer_SaveButton').prop('disabled', true);
                                 $('#customer_LockButton').prop('disabled', true);
                                 $('#customer_UnlockButton').prop('disabled', false);
@@ -316,6 +324,7 @@
                                 document.getElementById('artcileCustomer_TIN').disabled = false;
                                 document.getElementById('artcileCustomer_contactNo').disabled = false;
                                 document.getElementById('artcileCustomer_contactPerson').disabled = false;
+                                document.getElementById('artcileCustomer_contactEmail').disabled = false;
                                 //$('#customer_SaveButton').prop('disabled', false);
                                 $('#customer_LockButton').prop('disabled', false);
                                 $('#customer_UnlockButton').prop('disabled', true);
@@ -365,6 +374,7 @@
                 document.getElementById('artcileCustomer_TIN').value = "NA";
                 document.getElementById('artcileCustomer_contactNo').value = "NA";
                 document.getElementById('artcileCustomer_contactPerson').value = "NA";
+                document.getElementById('artcileCustomer_contactEmail').value = "NA";
 
                 NProgress.done();
             }
@@ -618,6 +628,7 @@
             customerObject.CreditLimit = document.getElementById('artcileCustomer_creditLimit').value;
             customerObject.ContactNumber = document.getElementById('artcileCustomer_contactNo').value;
             customerObject.ContactPerson = document.getElementById('artcileCustomer_contactPerson').value;
+            customerObject.EmailAddress = document.getElementById('artcileCustomer_contactEmail').value;
             customerObject.TaxNumber = document.getElementById('artcileCustomer_TIN').value;
             var data = JSON.stringify(customerObject);
             return data;
