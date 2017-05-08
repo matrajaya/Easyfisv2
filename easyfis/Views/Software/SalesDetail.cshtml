@@ -15,196 +15,191 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="hold-transition skin-blue fixed sidebar-mini">
-    <div class="wrapper">
-        @Html.Partial("_SoftwareHeader")
-        @Html.Partial("_SoftwareSideBarMenu")
-
-        <div class="content-wrapper">
+<body class="">
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
             <section class="content-header">
-                <h1>
-                    Sales Detail
-                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="/Software"> Dashboard</a></li>
-                    <li><a href="/Software/Sales"> Sales</a></li>
-                    <li> Sales Detail </li>
-                </ol>
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-tags fa-fw"></i> Sales Detail
+                    </h2>
+                </div>
             </section>
+            <br />
+            <section class="container">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <span class="input-group-addon">Company</span>
+                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+                </div>
 
-            <section class="content">
-                <div class="box box-default">
-                    <div class="box-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-12" align="right">
+                                <button class="btn btn-primary " id="cmdSalesJournal" onclick="btnJournalDetail_OnClick()"><i class="fa fa-book"></i> Journal</button>
+                                <button class="btn btn-primary " id="cmdSalesSaveLock" onclick="btnSaveLockSales_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                                @*<button class="btn btn-primary " id="cmdSalesSave" onclick="btnSalesSave_OnClick()"><i class="fa fa-save"></i> Save</button>*@
+                                <button class="btn btn-primary " id="cmdSalesEdit" onclick="btnSalesEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                <button class="btn btn-primary " id="cmdSalesPrint" onclick="btnSalesPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
+                                <button onclick="window.location.href = '/Software/Sales'" class="btn btn-danger " id="cmdSalesClose"><i class="fa fa-times"></i> Close</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="">
+                            <form class="form-horizontal" role="form">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Branch</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="SI_Branch"></div>
+
+                                                <input type="hidden" id="SI_Branch_data" class="requiredSales" />
+                                                <input type="hidden" id="SI_Branch_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">SI Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control   requiredSales" id="SI_SINumber_Display">
+                                                <input type="hidden" id="SI_SINumber">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">SI Date</label>
+                                            <div class="col-sm-8">
+                                                <div class="" id="SI_SIDate"></div>
+                                                <input type="hidden" id="SI_SIDate_data" class="requiredSales" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Doc Reference</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control  requiredSales" id="SI_DocReference" placeholder="Document Reference">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Customer</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="SI_Customer"></div>
+
+                                                <input type="hidden" id="SI_Customer_data" class="requiredSales" />
+                                                <input type="hidden" id="SI_Customer_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Term</label>
+                                            <div class="col-sm-8">
+                                                <div class="" id="SI_Term"></div>
+
+                                                <input type="hidden" id="SI_Term_data" class="requiredSales" />
+                                                <input type="hidden" id="SI_Term_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Remarks</label>
+                                            <div class="col-sm-8">
+                                                <textarea rows="5" class="form-control textarea-custom requiredSales" id="SI_SIRemarks" placeholder="Remarks"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Manual SI Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control  requiredSales" id="SI_ManualSINumber" placeholder="Manual SI Number">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Sold by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="SI_SoldBy"></div>
+
+                                                <input type="hidden" id="SI_SoldBy_data" class="requiredSales" />
+                                                <input type="hidden" id="SI_SoldBy_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Prepared by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="SI_PreparedBy"></div>
+
+                                                <input type="hidden" id="SI_PreparedBy_data" class="requiredSales" />
+                                                <input type="hidden" id="SI_PreparedBy_selectedValue" />
+                                                <input type="hidden" id="userId_data" value="@userId" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Checked by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="SI_CheckedBy"></div>
+
+                                                <input type="hidden" id="SI_CheckedBy_data" class="requiredSales" />
+                                                <input type="hidden" id="SI_CheckedBy_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Approved by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="SI_ApprovedBy"></div>
+
+                                                <input type="hidden" id="SI_ApprovedBy_data" class="requiredSales" />
+                                                <input type="hidden" id="SI_ApprovedBy_selectedValue" />
+                                            </div>
+                                        </div>
+                                        @*<div class="form-group">
+                                                <label class="control-label col-sm-4">Lock</label>
+                                                <div class="col-sm-8">
+                                                    <input type="checkbox" id="SI_Lock">
+                                                </div>
+                                            </div>*@
+                                        <div class="form-group">
+                                            <div class="col-sm-4"></div>
+                                            <div class="col-sm-8">
+                                                <input type="hidden" id="Sales_IsLocked">
+                                                <input type="hidden" id="Sales_IsLocked_defaultTrue">
+                                                <input type="hidden" id="Sales_IsLocked_defaultFalse">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Sales line -->
+                <ul class="nav nav-tabs" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#Items" id="itemTabId">Items</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">Inventory Entries</a></li>
+                </ul>
+                <br />
+                <div class="tab-content">
+                    <div id="Items" class="tab-pane fade in active">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <div class="row">
-                                    <div class="col-md-6"></div>
-                                    <div class="col-md-6" align="right">
-                                        <button class="btn btn-primary btn-sm" id="cmdSalesJournal" onclick="btnJournalDetail_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                                        <button class="btn btn-primary btn-sm" id="cmdSalesSaveLock" onclick="btnSaveLockSales_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                        @*<button class="btn btn-primary btn-sm" id="cmdSalesSave" onclick="btnSalesSave_OnClick()"><i class="fa fa-save"></i> Save</button>*@
-                                        <button class="btn btn-primary btn-sm" id="cmdSalesEdit" onclick="btnSalesEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                        <button class="btn btn-primary btn-sm" id="cmdSalesPrint" onclick="btnSalesPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
-                                        <button onclick="window.location.href = '/Software/Sales'" class="btn btn-danger btn-sm" id="cmdSalesClose"><i class="fa fa-times"></i> Close</button>
+                                    <div class="col-lg-12" align="right">
+                                        <button class="btn btn-primary " id="btnAddSaleItem" onclick="cmdAddSaleItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                        <button class="btn btn-primary " id="btnItemQuery" onclick="cmdItemQuery_OnClick()"><i class="fa fa-search-plus"></i> Item Query</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Branch</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="SI_Branch"></div>
-
-                                                        <input type="hidden" id="SI_Branch_data" class="requiredSales" />
-                                                        <input type="hidden" id="SI_Branch_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">SI Number</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-30 input-sm requiredSales" id="SI_SINumber_Display">
-                                                        <input type="hidden" id="SI_SINumber">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">SI Date</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-50" id="SI_SIDate"></div>
-                                                        <input type="hidden" id="SI_SIDate_data" class="requiredSales" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Doc Reference</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-sm requiredSales" id="SI_DocReference" placeholder="Document Reference">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Customer</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="SI_Customer"></div>
-
-                                                        <input type="hidden" id="SI_Customer_data" class="requiredSales" />
-                                                        <input type="hidden" id="SI_Customer_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Term</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-70" id="SI_Term"></div>
-
-                                                        <input type="hidden" id="SI_Term_data" class="requiredSales" />
-                                                        <input type="hidden" id="SI_Term_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Remarks</label>
-                                                    <div class="col-sm-8">
-                                                        <textarea class="form-control textarea-custom requiredSales" id="SI_SIRemarks" placeholder="Remarks"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Manual SI Number</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-sm requiredSales" id="SI_ManualSINumber" placeholder="Manual SI Number">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Sold by</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="SI_SoldBy"></div>
-
-                                                        <input type="hidden" id="SI_SoldBy_data" class="requiredSales" />
-                                                        <input type="hidden" id="SI_SoldBy_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Prepared by</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="SI_PreparedBy"></div>
-
-                                                        <input type="hidden" id="SI_PreparedBy_data" class="requiredSales" />
-                                                        <input type="hidden" id="SI_PreparedBy_selectedValue" />
-                                                        <input type="hidden" id="userId_data" value="@userId" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Checked by</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="SI_CheckedBy"></div>
-
-                                                        <input type="hidden" id="SI_CheckedBy_data" class="requiredSales" />
-                                                        <input type="hidden" id="SI_CheckedBy_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Approved by</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="SI_ApprovedBy"></div>
-
-                                                        <input type="hidden" id="SI_ApprovedBy_data" class="requiredSales" />
-                                                        <input type="hidden" id="SI_ApprovedBy_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                @*<div class="form-group">
-                                                        <label class="control-label col-sm-4">Lock</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="checkbox" id="SI_Lock">
-                                                        </div>
-                                                    </div>*@
-                                                <div class="form-group">
-                                                    <div class="col-sm-4"></div>
-                                                    <div class="col-sm-8">
-                                                        <input type="hidden" id="Sales_IsLocked">
-                                                        <input type="hidden" id="Sales_IsLocked_defaultTrue">
-                                                        <input type="hidden" id="Sales_IsLocked_defaultFalse">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="ItemGrid" class="grid"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <br />
-                        <!-- Sales line -->
-                        <ul class="nav nav-tabs" role="tablist" id="myTab">
-                            <li role="presentation" class="active"><a data-toggle="tab" href="#Items" id="itemTabId">Items</a></li>
-                            <li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">Inventory Entries</a></li>
-                        </ul>
-                        <br />
-                        <div class="tab-content">
-                            <div id="Items" class="tab-pane fade in active">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <div class="row">
-                                            <div class="col-lg-12" align="right">
-                                                <button class="btn btn-primary btn-sm" id="btnAddSaleItem" onclick="cmdAddSaleItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                                <button class="btn btn-primary btn-sm" id="btnItemQuery" onclick="cmdItemQuery_OnClick()"><i class="fa fa-search-plus"></i> Item Query</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="row" align="left">
-                                            <div class="col-lg-12">
-                                                <div id="ItemGrid" class="grid"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="InventoryEntries" class="tab-pane fade in">
-                                <br />
-                                <div class="row" align="left">
+                    <div id="InventoryEntries" class="tab-pane fade in">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
                                     <div class="col-lg-12">
                                         <div id="InventoryEntryGrid" class="grid"></div>
                                     </div>
@@ -214,11 +209,11 @@
                     </div>
                 </div>
             </section>
-        </div>
-
-        @Html.Partial("_SoftwareFooter")
+            @Html.Partial("_SoftwareFooter")
+        </main>
     </div>
 
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- ================== -->
     <!-- Sales Items Detail -->
     <!-- ================== -->
@@ -245,15 +240,23 @@
                                 <dl class="dl-horizontal">
                                     <dt>Item</dt>
                                     <dd>
-                                        <div class="input-30" id="saleItem_ItemCode"></div>
-                                        <div class="input-68" id="saleItem_ItemDescription"></div>
-
-                                        <input type="hidden" id="saleItem_ItemId_data" class="requiredSaleItem">
-                                        <input type="hidden" id="saleItem_ItemCode_selectedValue" />
-                                        <input type="hidden" id="saleItem_ItemDescription_selectedValue" />
+                                        <table style="width: 100%" border="0">
+                                            <tr>
+                                                <td style="width: 30%">
+                                                    <div class="" id="saleItem_ItemCode"></div>
+                                                </td>
+                                                <td style="width: 1%"></td>
+                                                <td style="width: 69%">
+                                                    <div class="" id="saleItem_ItemDescription"></div>
+                                                    <input type="hidden" id="saleItem_ItemId_data" class="requiredSaleItem">
+                                                    <input type="hidden" id="saleItem_ItemCode_selectedValue" />
+                                                    <input type="hidden" id="saleItem_ItemDescription_selectedValue" />
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </dd>
                                     <dt>Particulars</dt>
-                                    <dd><textarea class="form-control textarea-custom requiredSaleItem" id="saleItem_Particulars"></textarea></dd>
+                                    <dd><textarea rows="5" class="form-control textarea-custom requiredSaleItem" id="saleItem_Particulars"></textarea></dd>
                                     <dt>Inventory Code</dt>
                                     <dd>
                                         <div class="comboBox-wide" id="saleItem_InventoryCode"></div>
@@ -262,20 +265,27 @@
                                         <input type="hidden" id="saleItem_InventoryCode_selectedValue" />
                                     </dd>
                                     <dt>Quantity</dt>
-                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_Quantity" placeholder="0.00" /></dd>
+                                    <dd><input type="text" class="form-control  numberField  requiredSaleItem" id="saleItem_Quantity" placeholder="0.00" /></dd>
                                     <dt>Unit</dt>
                                     <dd>
-                                        <div class="input-50" id="saleItem_Unit"></div>
+                                        <div class="" id="saleItem_Unit"></div>
 
                                         <input type="hidden" id="saleItem_Unit_data" class="requiredSaleItem">
                                         <input type="hidden" id="saleItem_Unit_selectedValue" />
                                     </dd>
                                     <dt>Price</dt>
                                     <dd>
-                                        <div class="input-50" id="saleItem_Price"></div>
-                                    </dd>
-                                    <dd>
-                                        <input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_PriceExVAT" placeholder="0.00" disabled/>
+                                        <table style="width: 100%" border="0">
+                                            <tr>
+                                                <td style="width: 50%">
+                                                    <div class="" id="saleItem_Price"></div>
+                                                </td>
+                                                <td style="width: 1%"></td>
+                                                <td style="width: 49%">
+                                                    <input type="text" class="form-control  numberField  requiredSaleItem" id="saleItem_PriceExVAT" placeholder="0.00" disabled />
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </dd>
                                     <dt>Discount</dt>
                                     <dd>
@@ -286,13 +296,13 @@
                                         <input type="hidden" id="saleItem_DiscontInclusive" />
                                     </dd>
                                     <dt>Discount Rate</dt>
-                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_DiscountRate" placeholder="0.00" /></dd>
+                                    <dd><input type="text" class="form-control  numberField  requiredSaleItem" id="saleItem_DiscountRate" placeholder="0.00" /></dd>
                                     <dt>Discount Amount</dt>
-                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_DiscountAmount" placeholder="0.00" /></dd>
+                                    <dd><input type="text" class="form-control  numberField  requiredSaleItem" id="saleItem_DiscountAmount" placeholder="0.00" /></dd>
                                     <dt>Net Price</dt>
-                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_NetPrice" placeholder="0.00" /></dd>
+                                    <dd><input type="text" class="form-control  numberField  requiredSaleItem" id="saleItem_NetPrice" placeholder="0.00" /></dd>
                                     <dt>Amount</dt>
-                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_Amount" placeholder="0.00" /></dd>
+                                    <dd><input type="text" class="form-control  numberField  requiredSaleItem" id="saleItem_Amount" placeholder="0.00" /></dd>
                                 </dl>
                             </div>
                             <div id="SITax" class="tab-pane fade in">
@@ -306,32 +316,32 @@
                                         <input type="hidden" id="saleItem_TAXInclusive" />
                                     </dd>
                                     <dt>VAT Rate</dt>
-                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_VATRate" placeholder="0.00" /></dd>
+                                    <dd><input type="text" class="form-control  numberField  requiredSaleItem" id="saleItem_VATRate" placeholder="0.00" /></dd>
                                     <dt>VAT Amount</dt>
-                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_VATAmount" placeholder="0.00" /></dd>
+                                    <dd><input type="text" class="form-control  numberField  requiredSaleItem" id="saleItem_VATAmount" placeholder="0.00" /></dd>
                                 </dl>
                             </div>
-                            <div id="SIBUC" class="tab-pane fade in">
-                                <dl class="dl-horizontal">
-                                    <dt>Unit</dt>
-                                    <dd>
-                                        <div class="input-50" id="saleItem_BUCUnit"></div>
+                            @*<div id="SIBUC" class="tab-pane fade in">
+                                    <dl class="dl-horizontal">
+                                        <dt>Unit</dt>
+                                        <dd>
+                                            <div class="" id="saleItem_BUCUnit"></div>
 
-                                        <input type="hidden" id="saleItem_BUCUnit_data" class="requiredSaleItem">
-                                        <input type="hidden" id="saleItem_BUCUnit_selectedValue" />
-                                    </dd>
-                                    <dt>Quantity</dt>
-                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_BUCQuantity" placeholder="0.00" /></dd>
-                                    <dt>Price</dt>
-                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_BUCPrice" placeholder="0.00" /></dd>
-                                </dl>
-                            </div>
+                                            <input type="hidden" id="saleItem_BUCUnit_data" class="requiredSaleItem">
+                                            <input type="hidden" id="saleItem_BUCUnit_selectedValue" />
+                                        </dd>
+                                        <dt>Quantity</dt>
+                                        <dd><input type="text" class="form-control  numberField  requiredSaleItem" id="saleItem_BUCQuantity" placeholder="0.00" /></dd>
+                                        <dt>Price</dt>
+                                        <dd><input type="text" class="form-control  numberField  requiredSaleItem" id="saleItem_BUCPrice" placeholder="0.00" /></dd>
+                                    </dl>
+                                </div>*@
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="cmdSaveSaleItemsButton" onclick="cmdSaleItemsSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button id="cmdSaleItemsDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button class="btn btn-primary " id="cmdSaveSaleItemsButton" onclick="cmdSaleItemsSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdSaleItemsDetailCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -363,9 +373,9 @@
                                 <br />
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <div class="input-group input-group-sm  input-50">
+                                        <div class="input-group  ">
                                             <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                            <input type="text" class="form-control input-sm" id="InputFilterItemQueryGrid" placeholder="Search">
+                                            <input type="text" class="form-control " id="InputFilterItemQueryGrid" placeholder="Search">
                                         </div>
                                     </div>
                                     <div class="panel-body">
@@ -382,9 +392,9 @@
                                 <br />
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <div class="input-group input-group-sm  input-50">
+                                        <div class="input-group  ">
                                             <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                            <input type="text" class="form-control input-sm" id="InputFilterItemQueryGridNonInventory" placeholder="Search">
+                                            <input type="text" class="form-control " id="InputFilterItemQueryGridNonInventory" placeholder="Search">
                                         </div>
                                     </div>
                                     <div class="panel-body">
@@ -401,9 +411,9 @@
                                 <br />
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <div class="input-group input-group-sm  input-50">
+                                        <div class="input-group  ">
                                             <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                            <input type="text" class="form-control input-sm" id="InputFilterItemQueryGridPackage" placeholder="Search">
+                                            <input type="text" class="form-control " id="InputFilterItemQueryGridPackage" placeholder="Search">
                                         </div>
                                     </div>
                                     <div class="panel-body">
@@ -415,7 +425,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button id="" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -439,45 +449,42 @@
                     </center>
                     <div id="journal_Content">
                         <div id="journalGrid" class="grid" align="left"></div>
-                        <div class="panel panel-default">
-                            <div class="panel-footer">
-                                <div class="row">
-                                    <div class="col-md-6"></div>
-                                    <div class="col-md-6">
-                                        <table class="table table-responsive table-bordered">
-                                            <tr>
-                                                <td align="right">
-                                                    <b>Total Debit: </b>
-                                                </td>
-                                                <td style="padding-left: 10px" align="right">
-                                                    <span id="totalDebitInJournal">NA</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="right">
-                                                    <b>Total Credit: </b>
-                                                </td>
-                                                <td style="padding-left: 10px" align="right">
-                                                    <span id="totalCreditInJournal">NA</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="right">
-                                                    <b>Variance: </b>
-                                                </td>
-                                                <td style="padding-left: 10px" align="right">
-                                                    <span id="variance">NA</span>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
+
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6">
+                                <table class="table table-responsive table-bordered">
+                                    <tr>
+                                        <td align="right">
+                                            <b>Total Debit: </b>
+                                        </td>
+                                        <td style="padding-left: 10px" align="right">
+                                            <span id="totalDebitInJournal">NA</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Total Credit: </b>
+                                        </td>
+                                        <td style="padding-left: 10px" align="right">
+                                            <span id="totalCreditInJournal">NA</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Variance: </b>
+                                        </td>
+                                        <td style="padding-left: 10px" align="right">
+                                            <span id="variance">NA</span>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdJournalDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button id="cmdJournalDetailCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -499,8 +506,8 @@
                     Are you sure you want to delete this?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteSaleItems" onclick="cmdSaleItemsConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteSaleItemsCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-danger " id="cmdConfirmDeleteSaleItems" onclick="cmdSaleItemsConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteSaleItemsCloseButton" class="btn btn-primary " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -1769,8 +1776,8 @@
                 document.getElementById('saleItem_ItemDescription_selectedValue').value = "";
                 document.getElementById('saleItem_Unit_data').value = "";
                 document.getElementById('saleItem_Unit_selectedValue').value = "";
-                document.getElementById('saleItem_BUCUnit_data').value = "";
-                document.getElementById('saleItem_BUCUnit_selectedValue').value = "";
+                //document.getElementById('saleItem_BUCUnit_data').value = "";
+                //document.getElementById('saleItem_BUCUnit_selectedValue').value = "";
                 document.getElementById('saleItem_Particulars').value = "";
             } else {
                 document.getElementById('saleItem_ItemId_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId;
@@ -1864,14 +1871,14 @@
                             getItemInventoryCodeForComboBox();
                         }
                     });
-                    
+
                     computation();
 
                     var quantity = document.getElementById('saleItem_Quantity').value.toLocaleString();
                     var price = document.getElementById('saleItem_PriceExVAT').value.toLocaleString();
 
-                    document.getElementById('saleItem_BUCQuantity').value = quantity;
-                    document.getElementById('saleItem_BUCPrice').value = price;
+                    //document.getElementById('saleItem_BUCQuantity').value = quantity;
+                    //document.getElementById('saleItem_BUCPrice').value = price;
                 }
             });
 
@@ -1882,8 +1889,8 @@
                 document.getElementById('saleItem_ItemCode_selectedValue').value = "";
                 document.getElementById('saleItem_Unit_data').value = "";
                 document.getElementById('saleItem_Unit_selectedValue').value = "";
-                document.getElementById('saleItem_BUCUnit_data').value = "";
-                document.getElementById('saleItem_BUCUnit_selectedValue').value = "";
+                //document.getElementById('saleItem_BUCUnit_data').value = "";
+                //document.getElementById('saleItem_BUCUnit_selectedValue').value = "";
                 document.getElementById('saleItem_Particulars').value = "";
                 document.getElementById('saleItem_PriceExVAT').value = "";
 
@@ -1919,14 +1926,14 @@
                         getItemInventoryCodeForComboBox();
                     }
                 });
-                
+
                 computation();
 
                 var quantity = document.getElementById('saleItem_Quantity').value.toLocaleString();
                 var price = document.getElementById('saleItem_PriceExVAT').value.toLocaleString();
 
-                document.getElementById('saleItem_BUCQuantity').value = quantity;
-                document.getElementById('saleItem_BUCPrice').value = price;
+                //document.getElementById('saleItem_BUCQuantity').value = quantity;
+                //document.getElementById('saleItem_BUCPrice').value = price;
 
                 getTaxTyoeValues(ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId);
                 getSalesItemUnitForComboBox(ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId);
@@ -2041,16 +2048,16 @@
                 selectedValue: priceSelectedValue.toString(),
                 onSelectedIndexChanged: function () {
                     $("#saleItem_PriceExVAT").val(this.selectedItem.Price).toLocaleString();
-                    
+
                     computation();
                 }
             });
 
             if(salesItemPrice != null) {
                 document.getElementById("saleItem_PriceExVAT").value = cboSalesItemPrice.selectedItem.Price.toLocaleString();
-                document.getElementById('saleItem_BUCPrice').value = cboSalesItemPrice.selectedItem.Price.toLocaleString();
+                //document.getElementById('saleItem_BUCPrice').value = cboSalesItemPrice.selectedItem.Price.toLocaleString();
             }
-            
+
             computation();
         }
 
@@ -2144,9 +2151,9 @@
                                 Unit: results[i]["Unit"]
                             });
                         }
-                        createCboForSalesItemBaseUnit(ItemUnits,itemId);
+                        //createCboForSalesItemBaseUnit(ItemUnits,itemId);
                     } else {
-                        createCboForSalesItemBaseUnit(ItemUnits,itemId);
+                        //createCboForSalesItemBaseUnit(ItemUnits,itemId);
                     }
                 }
             });
@@ -2196,20 +2203,20 @@
                         required: false,
                         selectedValue: Unit.toString(),
                         onSelectedIndexChanged: function () {
-                            $("#saleItem_BUCUnit_data").val(SalesItemBaseUnitCollection.items[this.selectedIndex].UnitId);
-                            $("#saleItem_BUCUnit_selectedValue").val(SalesItemBaseUnitCollection.items[this.selectedIndex].Unit);
+                            //$("#saleItem_BUCUnit_data").val(SalesItemBaseUnitCollection.items[this.selectedIndex].UnitId);
+                            //$("#saleItem_BUCUnit_selectedValue").val(SalesItemBaseUnitCollection.items[this.selectedIndex].Unit);
 
                             //createCboForSalesItemUnit(salesItemUnits);
                         }
                     });
 
-                    if (salesItemUnits == 0) {
-                        document.getElementById('saleItem_BUCUnit_data').value = "";
-                        document.getElementById('saleItem_BUCUnit_selectedValue').value = "";
-                    } else {
-                        document.getElementById('saleItem_BUCUnit_data').value = SalesItemBaseUnitCollection.items[cboBaseUnit.selectedIndex].UnitId;
-                        document.getElementById('saleItem_BUCUnit_selectedValue').value = SalesItemBaseUnitCollection.items[cboBaseUnit.selectedIndex].Unit;
-                    }
+                    //if (salesItemUnits == 0) {
+                    //    document.getElementById('saleItem_BUCUnit_data').value = "";
+                    //    document.getElementById('saleItem_BUCUnit_selectedValue').value = "";
+                    //} else {
+                    //    document.getElementById('saleItem_BUCUnit_data').value = SalesItemBaseUnitCollection.items[cboBaseUnit.selectedIndex].UnitId;
+                    //    document.getElementById('saleItem_BUCUnit_selectedValue').value = SalesItemBaseUnitCollection.items[cboBaseUnit.selectedIndex].Unit;
+                    //}
                 }
             });
         }
@@ -2357,11 +2364,11 @@
                     $("#saleItem_DiscountRate").val(DiscountCollection.items[this.selectedIndex].DiscountRate);
                     $("#saleItem_DiscontInclusive").val(DiscountCollection.items[this.selectedIndex].IsInclusive);
 
-                    
+
                     var priceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');
                     var saleItemDiscountAmount = priceExVATPrice * (DiscountCollection.items[this.selectedIndex].DiscountRate / 100);
                     document.getElementById('saleItem_DiscountAmount').value = saleItemDiscountAmount;
-                    
+
                     computation();
                 }
             });
@@ -2375,11 +2382,11 @@
             } else {
                 document.getElementById('saleItem_Discont_data').value = DiscountCollection.items[cboDiscount.selectedIndex].Id;
                 document.getElementById('saleItem_DiscountRate').value = DiscountCollection.items[cboDiscount.selectedIndex].DiscountRate;
-                
+
                 var priceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');
                 var saleItemDiscountAmount = priceExVATPrice * (DiscountCollection.items[cboDiscount.selectedIndex].DiscountRate / 100);
                 document.getElementById('saleItem_DiscountAmount').value = saleItemDiscountAmount;
-                
+
                 document.getElementById('saleItem_Discont_selectedValue').value = DiscountCollection.items[cboDiscount.selectedIndex].Discount;
                 document.getElementById('saleItem_DiscontInclusive').value = DiscountCollection.items[cboDiscount.selectedIndex].IsInclusive;
             }
@@ -2447,7 +2454,7 @@
                     $("#saleItem_VATRate").val(taxTypeCollection.items[this.selectedIndex].TaxRate);
                     $("#saleItem_VAT_selectedValue").val(taxTypeCollection.items[this.selectedIndex].TaxType);
                     $("#saleItem_TAXInclusive").val(taxTypeCollection.items[this.selectedIndex].IsInclusive);
-                    
+
                     computation();
                 }
             });
@@ -3027,13 +3034,13 @@
             //document.getElementById('saleItem_VATRate').value = 0;
             //document.getElementById('saleItem_VATAmount').value = 0;
             //document.getElementById('saleItem_BUCUnit_data').value = '';
-            document.getElementById('saleItem_BUCUnit_selectedValue').value = '';
-            document.getElementById('saleItem_BUCQuantity').value = 0;
-            document.getElementById('saleItem_BUCPrice').value = 0;
+            //document.getElementById('saleItem_BUCUnit_selectedValue').value = '';
+            //document.getElementById('saleItem_BUCQuantity').value = 0;
+            //document.getElementById('saleItem_BUCPrice').value = 0;
 
             getArticleItemForManualCodeAndComponent();
             getDiscountForComboBox();
-            
+
             computation();
         }
 
@@ -3078,13 +3085,13 @@
             //document.getElementById('saleItem_VATRate').value = 0;
             //document.getElementById('saleItem_VATAmount').value = 0;
             //document.getElementById('saleItem_BUCUnit_data').value = '';
-            document.getElementById('saleItem_BUCUnit_selectedValue').value = '';
-            document.getElementById('saleItem_BUCQuantity').value = 0;
-            document.getElementById('saleItem_BUCPrice').value = 0;
+            //document.getElementById('saleItem_BUCUnit_selectedValue').value = '';
+            //document.getElementById('saleItem_BUCQuantity').value = 0;
+            //document.getElementById('saleItem_BUCPrice').value = 0;
 
             getArticleItemForManualCodeAndComponent();
             getDiscountForComboBox();
-            
+
             computation();
         }
 
@@ -3129,13 +3136,13 @@
             //document.getElementById('saleItem_VATRate').value = 0;
             //document.getElementById('saleItem_VATAmount').value = 0;
             //document.getElementById('saleItem_BUCUnit_data').value = '';
-            document.getElementById('saleItem_BUCUnit_selectedValue').value = '';
-            document.getElementById('saleItem_BUCQuantity').value = 0;
-            document.getElementById('saleItem_BUCPrice').value = 0;
+            //document.getElementById('saleItem_BUCUnit_selectedValue').value = '';
+            //document.getElementById('saleItem_BUCQuantity').value = 0;
+            //document.getElementById('saleItem_BUCPrice').value = 0;
 
             getArticleItemForManualCodeAndComponent();
             getDiscountForComboBox();
-            
+
             computation();
         }
 
@@ -3220,10 +3227,10 @@
             //document.getElementById('saleItem_VATRate').value = 0;
             //document.getElementById('saleItem_VATAmount').value = 0;
             //document.getElementById('saleItem_BUCUnit_data').value = '';
-            document.getElementById('saleItem_BUCUnit_selectedValue').value = '';
-            document.getElementById('saleItem_BUCQuantity').value = 0;
-            document.getElementById('saleItem_BUCPrice').value = 0;
-            
+            //document.getElementById('saleItem_BUCUnit_selectedValue').value = '';
+            //document.getElementById('saleItem_BUCQuantity').value = 0;
+            //document.getElementById('saleItem_BUCPrice').value = 0;
+
             computation();
         }
 
@@ -3277,10 +3284,10 @@
             //document.getElementById('saleItem_TAXInclusive').value = item.;
             document.getElementById('saleItem_VATRate').value = item.VATRate;
             document.getElementById('saleItem_VATAmount').value = item.VATAmount;
-            document.getElementById('saleItem_BUCUnit_data').value = item.BaseUnitId;
-            document.getElementById('saleItem_BUCUnit_selectedValue').value = item.BaseUnit;
-            document.getElementById('saleItem_BUCQuantity').value = item.BaseQuantity;
-            document.getElementById('saleItem_BUCPrice').value = item.BasePrice;
+            //document.getElementById('saleItem_BUCUnit_data').value = item.BaseUnitId;
+            //document.getElementById('saleItem_BUCUnit_selectedValue').value = item.BaseUnit;
+            //document.getElementById('saleItem_BUCQuantity').value = item.BaseQuantity;
+            //document.getElementById('saleItem_BUCPrice').value = item.BasePrice;
 
             computation();
         }
@@ -3407,11 +3414,11 @@
                 document.getElementById("saleItem_VAT").style.border = "1px solid #C8C8C8";
             }
 
-            if (document.getElementById('saleItem_BUCUnit_data').value == '') {
-                document.getElementById("saleItem_BUCUnit").style.border = "1px solid red";
-            } else {
-                document.getElementById("saleItem_BUCUnit").style.border = "1px solid #C8C8C8";
-            }
+            //if (document.getElementById('saleItem_BUCUnit_data').value == '') {
+            //    document.getElementById("saleItem_BUCUnit").style.border = "1px solid red";
+            //} else {
+            //    document.getElementById("saleItem_BUCUnit").style.border = "1px solid #C8C8C8";
+            //}
 
             var isValid = true;
             $('.requiredSaleItem').each(function () {
@@ -3512,12 +3519,12 @@
             cboInventoryCode = new wijmo.input.ComboBox('#saleItem_InventoryCode');
             cboDiscount = new wijmo.input.ComboBox('#saleItem_Discont');
             cboForVATTaxType = new wijmo.input.ComboBox('#saleItem_VAT');
-            cboBaseUnit = new wijmo.input.ComboBox('#saleItem_BUCUnit');
+            //cboBaseUnit = new wijmo.input.ComboBox('#saleItem_BUCUnit');
 
             document.getElementById('saleItem_NetPrice').disabled = true;
             document.getElementById('saleItem_Amount').disabled = true;
-            document.getElementById('saleItem_BUCQuantity').disabled = true;
-            document.getElementById('saleItem_BUCPrice').disabled = true;
+            //document.getElementById('saleItem_BUCQuantity').disabled = true;
+            //document.getElementById('saleItem_BUCPrice').disabled = true;
             document.getElementById('saleItem_VATRate').disabled = true;
             document.getElementById('saleItem_VATAmount').disabled = true;
 
@@ -3530,7 +3537,7 @@
                             {
                                 "header": "Edit",
                                 "binding": "EditId",
-                                "width": 60,
+                                "width": 70,
                                 "align": "center",
                                 "allowResizing": false,
                                 "allowSorting": false,
@@ -3549,49 +3556,49 @@
                                 "header": "Code",
                                 "binding": "ItemCode",
                                 "allowSorting": true,
-                                "width": 60,
+                                "width": 110,
                             },
                             {
                                 "header": "Item",
                                 "binding": "Item",
                                 "allowSorting": true,
-                                "width": 120,
+                                "width": 250,
                             },
                             {
                                 "header": "Particulars",
                                 "binding": "Particulars",
                                 "allowSorting": true,
-                                "width": 130,
+                                "width": 200,
                             },
                             {
                                 "header": "Inventory",
                                 "binding": "ItemInventory",
                                 "allowSorting": true,
-                                "width": 83,
+                                "width": 200,
                             },
                             {
                                 "header": "Quantity",
                                 "binding": "Quantity",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 150,
                             },
                             {
                                 "header": "Unit",
                                 "binding": "Unit",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 120,
                             },
                             {
                                 "header": "Price",
                                 "binding": "Price",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 150,
                             },
                             {
                                 "header": "Rate",
                                 "binding": "DiscountRate",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 150,
                                 "align": "right",
                                 "isContentHtml": true
                             },
@@ -3599,25 +3606,25 @@
                                 "header": "Discount Amount",
                                 "binding": "DiscountAmount",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 150,
                             },
                             {
                                 "header": "Net Price",
                                 "binding": "NetPrice",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 150,
                             },
                             {
                                 "header": "Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
-                                "width": 100,
+                                "width": 150,
                             },
                             {
                                 "header": "VAT Rate",
                                 "binding": "VATPercentage",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 150,
                                 "align": "right",
                                 "isContentHtml": true
                             },
@@ -3625,25 +3632,25 @@
                                 "header": "VAT Amount",
                                 "binding": "VATAmount",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 150,
                             },
                             {
                                 "header": "Unit",
                                 "binding": "BaseUnit",
                                 "allowSorting": true,
-                                "width": 100
+                                "width": 150
                             },
                             {
                                 "header": "Quantity",
                                 "binding": "BaseQuantity",
                                 "allowSorting": true,
-                                "width": 80
+                                "width": 150
                             },
                             {
                                 "header": "Price",
                                 "binding": "BasePrice",
                                 "allowSorting": true,
-                                "width": 80
+                                "width": 150
                             },
                 ],
                 autoGenerateColumns: false,
@@ -3801,45 +3808,45 @@
                                 "header": "Date",
                                 "binding": "InventoryDate",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 100,
                             },
                             {
                                 "header": "Branch",
                                 "binding": "Branch",
                                 "allowSorting": true,
-                                "width": 150,
+                                "width": 200,
                             },
                             {
                                 "header": "Item",
                                 "binding": "Article",
                                 "align": "left",
                                 "allowSorting": true,
-                                "width": 165,
+                                "width": 250,
                             },
                             {
                                 "header": "Particulars",
                                 "binding": "Particulars",
                                 "align": "left",
                                 "allowSorting": true,
-                                "width": 170,
+                                "width": 300,
                             },
                             {
                                 "header": "Inventory Code",
                                 "binding": "Code",
                                 "allowSorting": true,
-                                "width": 160,
+                                "width": 200,
                             },
                             {
                                 "header": "Quantity",
                                 "binding": "Quantity",
                                 "allowSorting": true,
-                                "width": 110,
+                                "width": 150,
                             },
                             {
                                 "header": "Unit",
                                 "binding": "Unit",
                                 "allowSorting": true,
-                                "width": 118,
+                                "width": 120,
                             },
                             {
                                 "header": "Amount",
@@ -3952,47 +3959,47 @@
                 journalListGrid.initialize({
                     columns: [
                                 {
-                                    "header": "Branch",
-                                    "binding": "Branch",
-                                    "allowSorting": true,
-                                    "width": 150
-                                },
-                                {
                                     "header": "Code",
                                     "binding": "AccountCode",
                                     "allowSorting": true,
-                                    "width": 60
+                                    "width": 100
                                 },
                                 {
                                     "header": "Account",
                                     "binding": "Account",
                                     "allowSorting": true,
-                                    "width": 200
+                                    "width": 220
                                 },
                                 {
                                     "header": "Article",
                                     "binding": "Article",
                                     "allowSorting": true,
-                                    "width": 162
+                                    "width": 212
                                 },
                                 {
                                     "header": "Debit",
                                     "binding": "DebitAmount",
                                     "allowSorting": true,
-                                    "width": 130
+                                    "width": 150
                                 }
                                 ,
                                 {
                                     "header": "Credit",
                                     "binding": "CreditAmount",
                                     "allowSorting": true,
-                                    "width": 130
+                                    "width": 150
+                                },
+                                {
+                                    "header": "Branch",
+                                    "binding": "Branch",
+                                    "allowSorting": true,
+                                    "width": 200
                                 },
                                 {
                                     "header": "Date",
                                     "binding": "JournalDate",
                                     "allowSorting": true,
-                                    "width": 80,
+                                    "width": 100,
                                 }
                     ],
                     autoGenerateColumns: false,
@@ -4028,21 +4035,21 @@
 
         $("#saleItem_DiscountRate").keyup(function (e) {
             var priceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');
-            
+
             var saleItemDiscountAmount = priceExVATPrice * (this.value / 100);
-            document.getElementById('saleItem_DiscountAmount').value = saleItemDiscountAmount.toLocaleString();
-            
+            document.getElementById('saleItem_DiscountAmount').value = saleItemDiscountAmount;
+
             computation();
         });
 
         $("#saleItem_DiscountAmount").keyup(function (e) {
             var priceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');
-            
+
             //var discountRate = ((priceExVATPrice - this.value) / priceExVATPrice) * 100;
 
             var saleItemDiscountRate = (this.value / priceExVATPrice) * 100;
-            document.getElementById('saleItem_DiscountRate').value = saleItemDiscountRate.toLocaleString();
-            
+            document.getElementById('saleItem_DiscountRate').value =  parseFloat(saleItemDiscountRate).toFixed(4);
+
             computation();
         });
 
@@ -4072,7 +4079,7 @@
                 netPrice = priceExVATPrice - discountAmount;
                 //netPrice = priceExVATPrice - (discountAmount / quantity);
             }
-            
+
             var amount = netPrice * quantity;
             //var amount = (priceExVATPrice * quantity) - discountAmount;
 
@@ -4128,6 +4135,21 @@
 
         $(document).on('hidden.bs.modal', '.modal', function () {
             $('.modal:visible').length && $(document.body).addClass('modal-open');
+        });
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
         });
     </script>
 </body>

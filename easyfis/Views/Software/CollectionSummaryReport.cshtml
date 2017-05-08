@@ -12,90 +12,83 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="hold-transition skin-blue fixed sidebar-mini">
-    <div class="wrapper">
-        @Html.Partial("_SoftwareHeader")
-        @Html.Partial("_SoftwareSideBarMenu")
+<body class="">
 
-        <div class="content-wrapper">
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
             <section class="content-header">
-                <h1>
-                    Collection Summary Report
-                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="/Software"> Dashboard</a></li>
-                    <li> <a href="/Software/AccountsReceivable"> Accounts Receivable </a></li>
-                    <li> Collection Summary Report </li>
-                </ol>
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-print fa-fw"></i> Collection Summary Report
+                    </h2>
+                </div>
             </section>
-
-            <section class="content">
-                <div class="box box-default">
-                    <div class="box-header">
-
+            <br />
+            <section class="container">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <span class="input-group-addon">Company</span>
+                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 59%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search">
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 40%" align="right">
+                                    <button onclick="collectionSummaryReportCSV_OnClick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    <button onclick="collectionSummaryReportPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                    <a href="/Software/AccountsReceivable" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                    <div class="box-body">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h4>
-                                            @ViewData["Company"]
-                                            <small>
-                                                <i class="fa fa-calendar fa-fw"></i> <span id="dateFrom"></span>
-                                            </small>
-                                        </h4>
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 59%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon">Date:</span>
+                                        <input type="text" class="form-control " id="dateFrom" placeholder="filter date" disabled>
                                     </div>
-                                    <div class="col-md-6" align="right">
-                                        <button onclick="collectionSummaryReportCSV_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                        <button onclick="collectionSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                        <a href="/Software/AccountsReceivable" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-8"></div>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div id="collectionSummaryReportGrid" class="grid"></div>
-                            </div>
-                            <div class="panel-footer">
-                                <div align="right">
-                                    <div class="row">
-                                        <div class="col-md-8"></div>
-                                        <div class="col-md-4">
-                                            <table class="table table-responsive table-bordered">
-                                                <tr>
-                                                    <td align="right">
-                                                        <b>Total: </b>
-                                                    </td>
-                                                    <td style="padding-left: 10px" align="right">
-                                                        <span id="total">NA</span>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 20%" align="right"></td>
+                                <td style="width: 20%"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <div id="collectionSummaryReportGrid" class="grid"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8"></div>
+                    <div class="col-md-4">
+                        <table class="table table-responsive table-bordered">
+                            <tr>
+                                <td align="right">
+                                    <b>Total: </b>
+                                </td>
+                                <td style="padding-left: 10px" align="right">
+                                    <span id="total">NA</span>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </section>
-        </div>
-
-        @Html.Partial("_SoftwareFooter")
+            @Html.Partial("_SoftwareFooter")
+        </main>
     </div>
 
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         function getParam(name) {
@@ -238,7 +231,7 @@
 
         $(document).ready(function () {
             NProgress.start();
-            document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
+            document.getElementById("dateFrom").value = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
             collectionSummaryReportCollection = new wijmo.collections.CollectionView(getCollectionSummaryReport());
             collectionSummaryReportCollection.canFilter = true;
@@ -262,32 +255,32 @@
                                 "header": "Branch  ",
                                 "binding": "Branch",
                                 "allowSorting": true,
-                                "width": "0.5*",
+                                "width": 250
                             },
                             {
                                 "header": "OR Date ",
                                 "binding": "ORDate",
                                 "allowSorting": true,
-                                "width": "0.5*"
+                                "width": 100
                             },
                             {
                                 "header": "OR Number ",
                                 "binding": "ORNumberButton",
                                 "isContentHtml": true,
                                 "allowSorting": true,
-                                "width": "0.5*"
+                                "width": 110
                             },
                             {
                                 "header": "Customer",
                                 "binding": "Customer",
                                 "allowSorting": true,
-                                "width": "1*"
+                                "width": 480
                             },
                             {
                                 "header": "Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
-                                "width": "0.5*"
+                                "width": 150
                             }
 
 
@@ -303,6 +296,21 @@
             collectionSummaryReportGrid.trackChanges = true;
         });
 
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
+        });
     </script>
 </body>
 </html>

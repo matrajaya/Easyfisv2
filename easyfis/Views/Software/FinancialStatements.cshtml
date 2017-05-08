@@ -13,628 +13,624 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="hold-transition skin-blue fixed sidebar-mini">
-    <div class="wrapper">
-        @Html.Partial("_SoftwareHeader")
-        @Html.Partial("_SoftwareSideBarMenu")
-
-        <div class="content-wrapper">
+<body class="">
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
             <section class="content-header">
-                <h1>
-                    Financial Statements
-                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="/Software"> Dashboard</a></li>
-                    <li> Financial Statements </li>
-                </ol>
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-print fa-fw"></i> Financial Statements
+                    </h2>
+                </div>
             </section>
+            <br />
+            <section class="container">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <span class="input-group-addon">Company</span>
+                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+                </div>
 
-            <section class="content">
-                <div class="box box-default">
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
-                                    <li class="active"><a data-toggle="pill" href="#BS">Balance Sheet</a></li>
-                                    <li><a data-toggle="pill" href="#IS">Income Statement</a></li>
-                                    <li><a data-toggle="pill" href="#CF">Cash Flow (Indirect)</a></li>
-                                    <li class="reportDivider"></li>
-                                    <li><a data-toggle="pill" href="#TB">Trial Balance</a></li>
-                                    <li><a data-toggle="pill" href="#AL">Account Ledger</a></li>
-                                    <li class="reportDivider"></li>
-                                    <li><a data-toggle="pill" href="#RRB">Receiving Receipt Book</a></li>
-                                    <li><a data-toggle="pill" href="#DB">Disbursement Book</a></li>
-                                    <li><a data-toggle="pill" href="#SB">Sales Book</a></li>
-                                    <li><a data-toggle="pill" href="#CB">Collection Book</a></li>
-                                    <li><a data-toggle="pill" href="#SIB">Stock-In Book</a></li>
-                                    <li><a data-toggle="pill" href="#SOB">Stock-Out Book</a></li>
-                                    <li><a data-toggle="pill" href="#STB">Stock Transfer Book</a></li>
-                                    <li><a data-toggle="pill" href="#JVB">Journal Voucher Book</a></li>
-                                    <li><a data-toggle="pill" href="#COA">Chart of Accounts</a></li>
-                                </ul>
+                <div class="row">
+                    <div class="col-md-5">
+                        <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
+                            <li class="active"><a data-toggle="pill" href="#BS">Balance Sheet</a></li>
+                            <li><a data-toggle="pill" href="#IS">Income Statement</a></li>
+                            <li><a data-toggle="pill" href="#CF">Cash Flow (Indirect)</a></li>
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#TB">Trial Balance</a></li>
+                            <li><a data-toggle="pill" href="#AL">Account Ledger</a></li>
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#RRB">Receiving Receipt Book</a></li>
+                            <li><a data-toggle="pill" href="#DB">Disbursement Book</a></li>
+                            <li><a data-toggle="pill" href="#SB">Sales Book</a></li>
+                            <li><a data-toggle="pill" href="#CB">Collection Book</a></li>
+                            <li><a data-toggle="pill" href="#SIB">Stock-In Book</a></li>
+                            <li><a data-toggle="pill" href="#SOB">Stock-Out Book</a></li>
+                            <li><a data-toggle="pill" href="#STB">Stock Transfer Book</a></li>
+                            <li><a data-toggle="pill" href="#JVB">Journal Voucher Book</a></li>
+                            <li><a data-toggle="pill" href="#COA">Chart of Accounts</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="tab-content">
+                            <div id="BS" class="tab-pane fade in active">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="FinancialStatementBalanceSheetPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Date as of</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementBalanceSheet_DateAsOf"></div>
+                                                                <input type="hidden" id="FinancialStatementBalanceSheet_DateAsOf_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Company</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementBalanceSheet_Company"></div>
+
+                                                                <input type="hidden" id="FinancialStatementBalanceSheet_Company_data" />
+                                                                <input type="hidden" id="FinancialStatementBalanceSheet_Company_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-8">
-                                <div class="tab-content">
-                                    <div id="BS" class="tab-pane fade in active">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div align="right">
-                                                    <button onclick="FinancialStatementBalanceSheetPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                                </div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="well">
-                                                    <form class="form-horizontal" role="form">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Date as of</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementBalanceSheet_DateAsOf"></div>
-                                                                        <input type="hidden" id="FinancialStatementBalanceSheet_DateAsOf_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Company</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementBalanceSheet_Company"></div>
-
-                                                                        <input type="hidden" id="FinancialStatementBalanceSheet_Company_data" />
-                                                                        <input type="hidden" id="FinancialStatementBalanceSheet_Company_selectedValue" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
+                            <div id="IS" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="FinancialStatementIncomeStatementPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
-                                    <div id="IS" class="tab-pane fade">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div align="right">
-                                                    <button onclick="FinancialStatementIncomeStatementPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                                </div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="well">
-                                                    <form class="form-horizontal" role="form">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementIncomeStatement_StartDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementIncomeStatement_StartDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">End Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementIncomeStatement_EndDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementIncomeStatement_EndDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Company</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementIncomeStatement_Company"></div>
-
-                                                                        <input type="hidden" id="FinancialStatementIncomeStatement_Company_data" />
-                                                                        <input type="hidden" id="FinancialStatementIncomeStatement_Company_selectedValue" />
-                                                                    </div>
-                                                                </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementIncomeStatement_StartDate"></div>
+                                                                <input type="hidden" id="FinancialStatementIncomeStatement_StartDate_data" />
                                                             </div>
                                                         </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="CF" class="tab-pane fade">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div align="right">
-                                                    <button onclick="FinancialStatementCashFlowInderectPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                                </div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="well">
-                                                    <form class="form-horizontal" role="form">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementCashFlow_StartDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementCashFlow_StartDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">End Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementCashFlow_EndDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementCashFlow_EndDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Company</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementCashFlow_Company"></div>
-
-                                                                        <input type="hidden" id="FinancialStatementCashFlow_Company_data" />
-                                                                        <input type="hidden" id="FinancialStatementCashFlow_Company_selectedValue" />
-                                                                    </div>
-                                                                </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementIncomeStatement_EndDate"></div>
+                                                                <input type="hidden" id="FinancialStatementIncomeStatement_EndDate_data" />
                                                             </div>
                                                         </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="TB" class="tab-pane fade">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div align="right">
-                                                    <button onclick="FinancialStatementTrialBalancePreview_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
-                                                    <button onclick="FinancialStatementTrialBalancePDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                                </div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="well">
-                                                    <form class="form-horizontal" role="form">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementTrialBalance_StartDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementTrialBalance_StartDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">End Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementTrialBalance_EndDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementTrialBalance_EndDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Company</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementTrialBalance_Company"></div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Company</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementIncomeStatement_Company"></div>
 
-                                                                        <input type="hidden" id="FinancialStatementTrialBalance_Company_data" />
-                                                                        <input type="hidden" id="FinancialStatementTrialBalance_Company_selectedValue" />
-                                                                    </div>
-                                                                </div>
+                                                                <input type="hidden" id="FinancialStatementIncomeStatement_Company_data" />
+                                                                <input type="hidden" id="FinancialStatementIncomeStatement_Company_selectedValue" />
                                                             </div>
                                                         </div>
-                                                    </form>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
-                                    <div id="AL" class="tab-pane fade">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div align="right">
-                                                    <button onclick="FinancialStatementAccountLedgerPreview_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
-                                                    <button onclick="FinancialStatementAccountLedgerPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                                </div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="well">
-                                                    <form class="form-horizontal" role="form">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementAccountLedger_StartDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementAccountLedger_StartDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">End Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementAccountLedger_EndDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementAccountLedger_EndDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Company</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementAccountLedger_Company"></div>
-
-                                                                        <input type="hidden" id="FinancialStatementAccountLedger_Company_data" />
-                                                                        <input type="hidden" id="FinancialStatementAccountLedger_Company_selectedValue" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Account</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementAccountLedger_Account"></div>
-
-                                                                        <input type="hidden" id="FinancialStatementAccountLedger_Account_data" />
-                                                                        <input type="hidden" id="FinancialStatementAccountLedger_Account_selectedValue" />
-                                                                    </div>
-                                                                </div>
+                                </div>
+                            </div>
+                            <div id="CF" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="FinancialStatementCashFlowInderectPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementCashFlow_StartDate"></div>
+                                                                <input type="hidden" id="FinancialStatementCashFlow_StartDate_data" />
                                                             </div>
                                                         </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="RRB" class="tab-pane fade">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div align="right">
-                                                    <button onclick="FinancialStatementReceivingReceiptBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
-                                                    <button onclick="FinancialStatementReceivingReceiptBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                                </div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="well">
-                                                    <form class="form-horizontal" role="form">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialReceivingReceiptBook_StartDate"></div>
-                                                                        <input type="hidden" id="FinancialReceivingReceiptBook_StartDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">End Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialReceivingReceiptBook_EndDate"></div>
-                                                                        <input type="hidden" id="FinancialReceivingReceiptBook_EndDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Company</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialReceivingReceiptBook_Company"></div>
-
-                                                                        <input type="hidden" id="FinancialReceivingReceiptBook_Company_data" />
-                                                                        <input type="hidden" id="FinancialReceivingReceiptBook_Company_selectedValue" />
-                                                                    </div>
-                                                                </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementCashFlow_EndDate"></div>
+                                                                <input type="hidden" id="FinancialStatementCashFlow_EndDate_data" />
                                                             </div>
                                                         </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="DB" class="tab-pane fade">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div align="right">
-                                                    <button onclick="FinancialStatementDisbursementBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
-                                                    <button onclick="FinancialStatementDisbursementBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                                </div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="well">
-                                                    <form class="form-horizontal" role="form">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementDisbursementBook_StartDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementDisbursementBook_StartDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">End Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementDisbursementBook_EndDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementDisbursementBook_EndDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Company</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementDisbursementBook_Company"></div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Company</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementCashFlow_Company"></div>
 
-                                                                        <input type="hidden" id="FinancialStatementDisbursementBook_Company_data" />
-                                                                        <input type="hidden" id="FinancialStatementDisbursementBook_Company_selectedValue" />
-                                                                    </div>
-                                                                </div>
+                                                                <input type="hidden" id="FinancialStatementCashFlow_Company_data" />
+                                                                <input type="hidden" id="FinancialStatementCashFlow_Company_selectedValue" />
                                                             </div>
                                                         </div>
-                                                    </form>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
-                                    <div id="SB" class="tab-pane fade">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div align="right">
-                                                    <button onclick="FinancialStatementSalesBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
-                                                    <button onclick="FinancialStatementSalesBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                                </div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="well">
-                                                    <form class="form-horizontal" role="form">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementSalesBook_StartDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementSalesBook_StartDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">End Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementSalesBook_EndDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementSalesBook_EndDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Company</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementSalesBook_Company"></div>
-
-                                                                        <input type="hidden" id="FinancialStatementSalesBook_Company_data" />
-                                                                        <input type="hidden" id="FinancialStatementSalesBook_Company_selectedValue" />
-                                                                    </div>
-                                                                </div>
+                                </div>
+                            </div>
+                            <div id="TB" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="FinancialStatementTrialBalancePreview_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <button onclick="FinancialStatementTrialBalancePDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementTrialBalance_StartDate"></div>
+                                                                <input type="hidden" id="FinancialStatementTrialBalance_StartDate_data" />
                                                             </div>
                                                         </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="CB" class="tab-pane fade">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div align="right">
-                                                    <button onclick="FinancialStatementCollectionBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
-                                                    <button onclick="FinancialStatementCollectionBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                                </div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="well">
-                                                    <form class="form-horizontal" role="form">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementCollectionBook_StartDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementCollectionBook_StartDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">End Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementCollectionBook_EndDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementCollectionBook_EndDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Company</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementCollectionBook_Company"></div>
-
-                                                                        <input type="hidden" id="FinancialStatementCollectionBook_Company_data" />
-                                                                        <input type="hidden" id="FinancialStatementCollectionBook_Company_selectedValue" />
-                                                                    </div>
-                                                                </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementTrialBalance_EndDate"></div>
+                                                                <input type="hidden" id="FinancialStatementTrialBalance_EndDate_data" />
                                                             </div>
                                                         </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="SIB" class="tab-pane fade">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div align="right">
-                                                    <button onclick="FinancialStatementStockInBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
-                                                    <button onclick="FinancialStatementStockInBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                                </div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="well">
-                                                    <form class="form-horizontal" role="form">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementStockInBook_StartDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementStockInBook_StartDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">End Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementStockInBook_EndDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementStockInBook_EndDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Company</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementStockInBook_Company"></div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Company</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementTrialBalance_Company"></div>
 
-                                                                        <input type="hidden" id="FinancialStatementStockInBook_Company_data" />
-                                                                        <input type="hidden" id="FinancialStatementStockInBook_Company_selectedValue" />
-                                                                    </div>
-                                                                </div>
+                                                                <input type="hidden" id="FinancialStatementTrialBalance_Company_data" />
+                                                                <input type="hidden" id="FinancialStatementTrialBalance_Company_selectedValue" />
                                                             </div>
                                                         </div>
-                                                    </form>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
-                                    <div id="SOB" class="tab-pane fade">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div align="right">
-                                                    <button onclick="FinancialStatementStockOutBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
-                                                    <button onclick="FinancialStatementStockOutBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                                </div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="well">
-                                                    <form class="form-horizontal" role="form">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementStockOutBook_StartDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementStockOutBook_StartDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">End Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementStockOutBook_EndDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementStockOutBook_EndDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Company</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementStockOutBook_Company"></div>
-
-                                                                        <input type="hidden" id="FinancialStatementStockOutBook_Company_data" />
-                                                                        <input type="hidden" id="FinancialStatementStockOutBook_Company_selectedValue" />
-                                                                    </div>
-                                                                </div>
+                                </div>
+                            </div>
+                            <div id="AL" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="FinancialStatementAccountLedgerPreview_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <button onclick="FinancialStatementAccountLedgerPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementAccountLedger_StartDate"></div>
+                                                                <input type="hidden" id="FinancialStatementAccountLedger_StartDate_data" />
                                                             </div>
                                                         </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="STB" class="tab-pane fade">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div align="right">
-                                                    <button onclick="FinancialStatementStockTransferBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
-                                                    <button onclick="FinancialStatementStockTransferBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                                </div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="well">
-                                                    <form class="form-horizontal" role="form">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementStockTransferBook_StartDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementStockTransferBook_StartDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">End Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementStockTransferBook_EndDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementStockTransferBook_EndDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Company</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementStockTransferBook_Company"></div>
-
-                                                                        <input type="hidden" id="FinancialStatementStockTransferBook_Company_data" />
-                                                                        <input type="hidden" id="FinancialStatementStockTransferBook_Company_selectedValue" />
-                                                                    </div>
-                                                                </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementAccountLedger_EndDate"></div>
+                                                                <input type="hidden" id="FinancialStatementAccountLedger_EndDate_data" />
                                                             </div>
                                                         </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="JVB" class="tab-pane fade">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div align="right">
-                                                    <button onclick="FinancialStatementJournalVoucherBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
-                                                    <button onclick="FinancialStatementJournalVoucherBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                                </div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="well">
-                                                    <form class="form-horizontal" role="form">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementJournalVoucherBook_StartDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementJournalVoucherBook_StartDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">End Date</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementJournalVoucherBook_EndDate"></div>
-                                                                        <input type="hidden" id="FinancialStatementJournalVoucherBook_EndDate_data" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-sm-2">Company</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="FinancialStatementJournalVoucherBook_Company"></div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Company</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementAccountLedger_Company"></div>
 
-                                                                        <input type="hidden" id="FinancialStatementJournalVoucherBook_Company_data" />
-                                                                        <input type="hidden" id="FinancialStatementJournalVoucherBook_Company_selectedValue" />
-                                                                    </div>
-                                                                </div>
+                                                                <input type="hidden" id="FinancialStatementAccountLedger_Company_data" />
+                                                                <input type="hidden" id="FinancialStatementAccountLedger_Company_selectedValue" />
                                                             </div>
                                                         </div>
-                                                    </form>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Account</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementAccountLedger_Account"></div>
+
+                                                                <input type="hidden" id="FinancialStatementAccountLedger_Account_data" />
+                                                                <input type="hidden" id="FinancialStatementAccountLedger_Account_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
-                                    <div id="COA" class="tab-pane fade">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <div align="right">
-                                                    <button onclick="FinancialStatementChartOfAccountsPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                </div>
+                            </div>
+                            <div id="RRB" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="FinancialStatementReceivingReceiptBookView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <button onclick="FinancialStatementReceivingReceiptBookPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialReceivingReceiptBook_StartDate"></div>
+                                                                <input type="hidden" id="FinancialReceivingReceiptBook_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialReceivingReceiptBook_EndDate"></div>
+                                                                <input type="hidden" id="FinancialReceivingReceiptBook_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Company</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialReceivingReceiptBook_Company"></div>
+
+                                                                <input type="hidden" id="FinancialReceivingReceiptBook_Company_data" />
+                                                                <input type="hidden" id="FinancialReceivingReceiptBook_Company_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="DB" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="FinancialStatementDisbursementBookView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <button onclick="FinancialStatementDisbursementBookPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementDisbursementBook_StartDate"></div>
+                                                                <input type="hidden" id="FinancialStatementDisbursementBook_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementDisbursementBook_EndDate"></div>
+                                                                <input type="hidden" id="FinancialStatementDisbursementBook_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Company</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementDisbursementBook_Company"></div>
+
+                                                                <input type="hidden" id="FinancialStatementDisbursementBook_Company_data" />
+                                                                <input type="hidden" id="FinancialStatementDisbursementBook_Company_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="SB" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="FinancialStatementSalesBookView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <button onclick="FinancialStatementSalesBookPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementSalesBook_StartDate"></div>
+                                                                <input type="hidden" id="FinancialStatementSalesBook_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementSalesBook_EndDate"></div>
+                                                                <input type="hidden" id="FinancialStatementSalesBook_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Company</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementSalesBook_Company"></div>
+
+                                                                <input type="hidden" id="FinancialStatementSalesBook_Company_data" />
+                                                                <input type="hidden" id="FinancialStatementSalesBook_Company_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="CB" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="FinancialStatementCollectionBookView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <button onclick="FinancialStatementCollectionBookPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementCollectionBook_StartDate"></div>
+                                                                <input type="hidden" id="FinancialStatementCollectionBook_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementCollectionBook_EndDate"></div>
+                                                                <input type="hidden" id="FinancialStatementCollectionBook_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Company</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementCollectionBook_Company"></div>
+
+                                                                <input type="hidden" id="FinancialStatementCollectionBook_Company_data" />
+                                                                <input type="hidden" id="FinancialStatementCollectionBook_Company_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="SIB" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="FinancialStatementStockInBookView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <button onclick="FinancialStatementStockInBookPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementStockInBook_StartDate"></div>
+                                                                <input type="hidden" id="FinancialStatementStockInBook_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementStockInBook_EndDate"></div>
+                                                                <input type="hidden" id="FinancialStatementStockInBook_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Company</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementStockInBook_Company"></div>
+
+                                                                <input type="hidden" id="FinancialStatementStockInBook_Company_data" />
+                                                                <input type="hidden" id="FinancialStatementStockInBook_Company_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="SOB" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="FinancialStatementStockOutBookView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <button onclick="FinancialStatementStockOutBookPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementStockOutBook_StartDate"></div>
+                                                                <input type="hidden" id="FinancialStatementStockOutBook_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementStockOutBook_EndDate"></div>
+                                                                <input type="hidden" id="FinancialStatementStockOutBook_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Company</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementStockOutBook_Company"></div>
+
+                                                                <input type="hidden" id="FinancialStatementStockOutBook_Company_data" />
+                                                                <input type="hidden" id="FinancialStatementStockOutBook_Company_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="STB" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="FinancialStatementStockTransferBookView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <button onclick="FinancialStatementStockTransferBookPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementStockTransferBook_StartDate"></div>
+                                                                <input type="hidden" id="FinancialStatementStockTransferBook_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementStockTransferBook_EndDate"></div>
+                                                                <input type="hidden" id="FinancialStatementStockTransferBook_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Company</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementStockTransferBook_Company"></div>
+
+                                                                <input type="hidden" id="FinancialStatementStockTransferBook_Company_data" />
+                                                                <input type="hidden" id="FinancialStatementStockTransferBook_Company_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="JVB" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="FinancialStatementJournalVoucherBookView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <button onclick="FinancialStatementJournalVoucherBookPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementJournalVoucherBook_StartDate"></div>
+                                                                <input type="hidden" id="FinancialStatementJournalVoucherBook_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementJournalVoucherBook_EndDate"></div>
+                                                                <input type="hidden" id="FinancialStatementJournalVoucherBook_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Company</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="FinancialStatementJournalVoucherBook_Company"></div>
+
+                                                                <input type="hidden" id="FinancialStatementJournalVoucherBook_Company_data" />
+                                                                <input type="hidden" id="FinancialStatementJournalVoucherBook_Company_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="COA" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="FinancialStatementChartOfAccountsPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
                                 </div>
@@ -643,11 +639,11 @@
                     </div>
                 </div>
             </section>
-        </div>
-
-        @Html.Partial("_SoftwareFooter")
+            @Html.Partial("_SoftwareFooter")
+        </main>
     </div>
-    
+
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         // ================
@@ -1139,7 +1135,7 @@
                 }
             });
         }
-       
+
         // get Financial Statement Disbursement Book Start Date
         function getFinancialStatementDisbursementBookStartDate() {
             FinancialStatementDisbursementBookStartDate.dispose();
@@ -1543,11 +1539,11 @@
                 toastr.error("Lacking Information");
             } else {
                 companyId = document.getElementById('FinancialReceivingReceiptBook_Company_data').value;
-                document.getElementById('FinancialReceivingReceiptBook_Company').style.border = " ";    
+                document.getElementById('FinancialReceivingReceiptBook_Company').style.border = " ";
                 window.location.href = '/RepReceivingReceiptBook/ReceivingReceiptBook?StartDate=' + convertDateToShortDateString(financialStatementReceivingReceiptBook_StartDate) + '&EndDate=' + convertDateToShortDateString(financialStatementReceivingReceiptBook_EndDate) + '&CompanyId=' + companyId;
             }
         }
-       
+
         //Financial Disbursement Book View
         function FinancialStatementDisbursementBookView_OnClick() {
             var financialStatementDisbursementBook_StartDate = document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value;
@@ -1580,7 +1576,7 @@
                 document.getElementById('FinancialStatementDisbursementBook_Company').style.border = " ";
                 window.location.href = '/RepDisbursementBook/DisbursementBook?StartDate=' + convertDateToShortDateString(financialStatementDisbursementBook_StartDate) + '&EndDate=' + convertDateToShortDateString(financialStatementDisbursementBook_EndDate) + '&CompanyId=' + companyId;
             }
-            
+
         }
 
         // Financial Statement Sales Book View
@@ -1686,7 +1682,7 @@
             }
         }
 
-        //Financial Statement Stock Out View 
+        //Financial Statement Stock Out View
 
         function FinancialStatementStockOutBookView_OnClick() {
             var financialStatementStockOutBook_StartDate = document.getElementById('FinancialStatementStockOutBook_StartDate_data').value;
@@ -1979,6 +1975,21 @@
             // Call Function
             getCompanies();
             getFinaancialStatementAccountLedgerAccountAccounts();
+        });
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
         });
     </script>
 </body>

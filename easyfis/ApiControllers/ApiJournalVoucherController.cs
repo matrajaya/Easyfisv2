@@ -139,11 +139,12 @@ namespace easyfis.Controllers
         // list journal voucher by JVDate
         [Authorize]
         [HttpGet]
-        [Route("api/listJournalVoucherByJVDate/{JVDate}")]
-        public List<Models.TrnJournalVoucher> listJournalVoucherByJVDate(String JVDate)
+        [Route("api/listJournalVoucherByJVDate/{JVStartDate}/{JVEndDate}")]
+        public List<Models.TrnJournalVoucher> listJournalVoucherByJVDate(String JVStartDate, String JVEndDate)
         {
             var journalVouchers = from d in db.TrnJournalVouchers.OrderByDescending(d => d.Id)
-                                  where d.JVDate == Convert.ToDateTime(JVDate)
+                                  where d.JVDate >= Convert.ToDateTime(JVStartDate)
+                                  && d.JVDate <= Convert.ToDateTime(JVEndDate)
                                   && d.BranchId == currentBranchId()
                                   select new Models.TrnJournalVoucher
                                   {

@@ -12,154 +12,159 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="hold-transition skin-blue fixed sidebar-mini">
-    <div class="wrapper">
-        @Html.Partial("_SoftwareHeader")
-        @Html.Partial("_SoftwareSideBarMenu")
+<body class="">
 
-        <div class="content-wrapper">
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
             <section class="content-header">
-                <h1>
-                    Supplier Detail
-                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="/Software"> Dashboard</a></li>
-                    <li><a href="/Software/Supplier">Supplier</a></li>
-                    <li> Supplier Detail </li>
-                </ol>
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-black-tie fa-fw"></i> Supplier Detail
+                    </h2>
+                </div>
             </section>
-
-            <section class="content">
-                <div class="box box-default">
-                    <div class="box-body">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-md-6"></div>
-                                    <div class="col-md-6" align="right">
-                                        @*<button class="btn btn-primary btn-sm" id="supplier_SaveButton" onclick="supplierSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>*@
-                                        <button class="btn btn-primary btn-sm" id="supplier_LockButton" onclick="supplierLockButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                        <button class="btn btn-primary btn-sm" id="supplier_UnlockButton" onclick="supplierUnlockButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                        <button class="btn btn-danger btn-sm" id="supplier_CloseButton" onclick="supplierCloseButton_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Code</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-30 input-sm requiredSupplier" id="artcileSupplier_code" placeholder="Code" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Supplier</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-sm requiredSupplier" id="artcileSupplier_Supplier" placeholder="Supplier" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Supplier Group</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-70" id="artcileSupplier_SupplierGroup"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Account</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-30" id="artcileSupplier_AccountCode"></div>
-                                                        <div class="input-68" id="artcileSupplier_Account"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Term</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-70" id="artcileSupplier_Term"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Address</label>
-                                                    <div class="col-sm-8">
-                                                        <textarea class="form-control textarea-custom requiredSupplier" id="artcileSupplier_Address" placeholder="Address"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Contact Number</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-sm input-50 requiredSupplier" id="artcileSupplier_ContactNo" placeholder="Contact No." />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Contact Person</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-sm requiredSupplier" id="artcileSupplier_ContactPerson" placeholder="Contact Person" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">TIN</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-sm input-50 requiredSupplier" id="artcileSupplier_TIN" placeholder="TIN Number" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Particulars</label>
-                                                    <div class="col-sm-8">
-                                                        <textarea class="form-control textarea-custom requiredSupplier" id="artcileSupplier_Particulars" placeholder="Particulars"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">E-mail</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-sm input-50 requiredSupplier" id="artcileSupplier_Email" placeholder="E-mail here.." />
-               
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+            <br />
+            <section class="container">
+                <div class="input-group " style="margin-bottom: 10px;">
+                    <span class="input-group-addon">Company</span>
+                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-12" align="right">
+                                @*<button class="btn btn-primary" id="supplier_SaveButton" onclick="supplierSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>*@
+                                <button class="btn btn-primary" id="supplier_LockButton" onclick="supplierLockButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                                <button class="btn btn-primary" id="supplier_UnlockButton" onclick="supplierUnlockButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                <button class="btn btn-danger" id="supplier_CloseButton" onclick="supplierCloseButton_OnClick()"><i class=" fa fa-times"></i> Close</button>
                             </div>
                         </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="">
+                            <form class="form-horizontal" role="form">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Code</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control requiredSupplier" id="artcileSupplier_code" placeholder="Code" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Supplier</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control  requiredSupplier" id="artcileSupplier_Supplier" placeholder="Supplier" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Supplier Group</label>
+                                            <div class="col-sm-8">
+                                                <div class="" id="artcileSupplier_SupplierGroup"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Account</label>
+                                            <div class="col-sm-8">
+                                                <table style="width: 100%" border="0">
+                                                    <tr>
+                                                        <td style="width: 30%">
+                                                            <div class="" id="artcileSupplier_AccountCode"></div>
+                                                        </td>
+                                                        <td style="width: 1%"></td>
+                                                        <td style="width: 69%">
+                                                            <div class="" id="artcileSupplier_Account"></div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Term</label>
+                                            <div class="col-sm-8">
+                                                <div class="" id="artcileSupplier_Term"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Address</label>
+                                            <div class="col-sm-8">
+                                                <textarea rows="5" class="form-control textarea-custom requiredSupplier" id="artcileSupplier_Address" placeholder="Address"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Contact Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control requiredSupplier" id="artcileSupplier_ContactNo" placeholder="Contact No." />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Contact Person</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control  requiredSupplier" id="artcileSupplier_ContactPerson" placeholder="Contact Person" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">TIN</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control requiredSupplier" id="artcileSupplier_TIN" placeholder="TIN Number" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Particulars</label>
+                                            <div class="col-sm-8">
+                                                <textarea rows="5" class="form-control textarea-custom requiredsupplier" id="artcileSupplier_Particulars" placeholder="Particulars"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">E-mail</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control requiredSupplier" id="artcileSupplier_Email" placeholder="E-mail here.." />
 
-                        <br />
-                        <!-- Supplier line -->
-                        <ul class="nav nav-tabs" role="tablist" id="myTab">
-                            <li role="presentation" class="active"><a data-toggle="tab" href="#JournalLedger" id="journalLedgerTabId">Journal Ledger</a></li>
-                            <li role="presentation"><a data-toggle="tab" href="#ContactInformation" id="contactInformationTabId">More Contact Information</a></li>
-                        </ul>
-                        <br />
-                        <div class="tab-content">
-                            <!-- Journal Ledger -->
-                            <div id="JournalLedger" class="tab-pane fade in active">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Supplier line -->
+                <ul class="nav nav-tabs" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#JournalLedger" id="journalLedgerTabId">Journal Ledger</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#ContactInformation" id="contactInformationTabId">More Contact Information</a></li>
+                </ul>
+                <br />
+                <div class="tab-content">
+                    <!-- Journal Ledger -->
+                    <div id="JournalLedger" class="tab-pane fade in active">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div id="JournalLedgerGrid" class="grid" align="left"></div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <!-- More Contact Information List -->
-                            <div id="ContactInformation" class="tab-pane fade in">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <div class="row">
-                                            <div class="col-lg-12" align="right">
-                                                <button class="btn btn-primary btn-sm" id="btnAddMoreContactInformation" onclick="cmdAddContact_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                            </div>
-                                        </div>
+                    <!-- More Contact Information List -->
+                    <div id="ContactInformation" class="tab-pane fade in">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-12" align="right">
+                                        <button class="btn btn-primary" id="btnAddMoreContactInformation" onclick="cmdAddContact_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                     </div>
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div id="ContactInformationGrid" class="grid"></div>
-                                            </div>
-                                        </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div id="ContactInformationGrid" class="grid"></div>
                                     </div>
                                 </div>
                             </div>
@@ -167,11 +172,10 @@
                     </div>
                 </div>
             </section>
-        </div>
-
-        @Html.Partial("_SoftwareFooter")
+            @Html.Partial("_SoftwareFooter")
+        </main>
     </div>
-
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- Contact Edit Detail -->
     <div class="modal fade" id="contactEdit" role="dialog">
         <div class="modal-dialog">
@@ -186,17 +190,17 @@
                         <input type="hidden" id="contact_Id" />
                         <dl class="dl-horizontal">
                             <dt>Contact Person</dt>
-                            <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactPerson" placeholder="Contact Person" /></dd>
+                            <dd><input type="text" class="form-control  requiredContact" id="contact_contactPerson" placeholder="Contact Person" /></dd>
                             <dt>Contact Number</dt>
-                            <dd><input type="text" class="form-control input-sm input-50 requiredContact" id="contact_contactNumber" placeholder="Contact Number" /></dd>
+                            <dd><input type="text" class="form-control requiredContact" id="contact_contactNumber" placeholder="Contact Number" /></dd>
                             <dt>Remarks</dt>
-                            <dd><textarea class="form-control textarea-custom requiredContact" id="contact_Remarks" placeholder="Remarks"></textarea></dd>
+                            <dd><textarea rows="5" class="form-control textarea-custom requiredContact" id="contact_Remarks" placeholder="Remarks"></textarea></dd>
                         </dl>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="cmdSaveContactButton" onclick="cmdContactSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button id="cmdContactDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button class="btn btn-primary" id="cmdSaveContactButton" onclick="cmdContactSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdContactDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -215,8 +219,8 @@
                     Are you sure you want to delete this?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteContact" onclick="cmdContactConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteContactCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-danger" id="cmdConfirmDeleteContact" onclick="cmdContactConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteContactCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -295,7 +299,7 @@
                                 document.getElementById('artcileSupplier_ContactNo').disabled = true;
                                 document.getElementById('artcileSupplier_ContactPerson').disabled = true;
                                 document.getElementById('artcileSupplier_Email').disabled = true;
-                                
+
                                 //$('#supplier_SaveButton').prop('disabled', true);
                                 $('#supplier_LockButton').prop('disabled', true);
                                 //$('#supplier_UnlockButton').prop('disabled', false);
@@ -811,7 +815,7 @@
         // ===================================
         // Global Variables for Journal Ledger
         // ===================================
-        var journalLedgers;
+        var journalLedgerCollectionView;
         var journalLedgerGrid;
 
         // =======================
@@ -856,6 +860,8 @@
                                 });
                             }
                         }
+
+                        NProgress.done();
                     }
                 }).fail(function (xhr, textStatus, err) {
                     alert(err);
@@ -868,7 +874,7 @@
         //  Journal Ledger
         // ===============
         function journalLedgerTab() {
-            var journalLedgerCollectionView = new wijmo.collections.CollectionView(getJournalLedger());
+            journalLedgerCollectionView = new wijmo.collections.CollectionView(getJournalLedger());
 
             // Flex Grid for Journal Ledger
             journalLedgerGrid = new wijmo.grid.FlexGrid('#JournalLedgerGrid');
@@ -878,31 +884,31 @@
                                 "header": "Document Reference",
                                 "binding": "DocumentReference",
                                 "allowSorting": true,
-                                "width": "2*",
+                                "width": 300,
                             },
                             {
                                 "header": "Date",
                                 "binding": "JournalDate",
                                 "allowSorting": true,
-                                "width": "1*",
+                                "width": 120,
                             },
                             {
                                 "header": "Particulars",
                                 "binding": "Particulars",
                                 "allowSorting": true,
-                                "width": "3*",
+                                "width": 320,
                             },
                             {
                                 "header": "Debit",
                                 "binding": "DebitAmount",
                                 "allowSorting": true,
-                                "width": "2*",
+                                "width": 170,
                             },
                             {
                                 "header": "Credit",
                                 "binding": "CreditAmount",
                                 "allowSorting": true,
-                                "width": "2*",
+                                "width": 170,
                             }
                 ],
                 autoGenerateColumns: false,
@@ -1211,7 +1217,7 @@
                             {
                                 "header": "Edit",
                                 "binding": "EditId",
-                                "width": 60,
+                                "width": 70,
                                 "align": "center",
                                 "allowResizing": false,
                                 "allowSorting": false,
@@ -1229,7 +1235,7 @@
                             {
                                 "header": "Contact",
                                 "binding": "ContactPerson",
-                                "width": "3*",
+                                "width": 320,
                                 "allowResizing": false,
                                 "allowSorting": false,
                                 "isContentHtml": true
@@ -1237,7 +1243,7 @@
                             {
                                 "header": "Contact Number(s)",
                                 "binding": "ContactNumber",
-                                "width": "2*",
+                                "width": 280,
                                 "allowResizing": false,
                                 "allowSorting": false,
                                 "isContentHtml": true
@@ -1246,7 +1252,7 @@
                                 "header": "Remarks",
                                 "binding": "Remarks",
                                 "allowSorting": true,
-                                "width": "4*",
+                                "width": 350,
                             },
                 ],
                 autoGenerateColumns: false,
@@ -1274,7 +1280,9 @@
                 return true;
             };
 
-            var journalLedgerCollectionView = new wijmo.collections.CollectionView(getJournalLedger());
+            NProgress.start();
+
+            journalLedgerCollectionView = new wijmo.collections.CollectionView(getJournalLedger());
 
             journalLedgerGrid.itemsSource = journalLedgerCollectionView;
             journalLedgerGrid.trackChanges = true;
@@ -1292,6 +1300,28 @@
 
             contactInformationGrid.itemsSource = contactInformations;
             contactInformationGrid.trackChanges = true;
+        });
+
+        function refreshGrids() {
+            setTimeout(function () {
+                journalLedgerCollectionView.refresh();
+                //contactInformations.refresh();
+            }, 500)
+        }
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
         });
     </script>
 </body>

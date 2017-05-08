@@ -15,215 +15,208 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="hold-transition skin-blue fixed sidebar-mini">
-    <div class="wrapper">
-        @Html.Partial("_SoftwareHeader")
-        @Html.Partial("_SoftwareSideBarMenu")
-
-        <div class="content-wrapper">
+<body class="">
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
             <section class="content-header">
-                <h1>
-                    Disbursement Detail
-                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="/Software"> Dashboard</a></li>
-                    <li><a href="/Software/Disbursement"> Disbursement </a></li>
-                    <li>Disbursement Detail</li>
-                </ol>
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-credit-card fa-fw"></i> Disbursement Detail
+                    </h2>
+                </div>
             </section>
+            <br />
+            <section class="container">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <span class="input-group-addon">Company</span>
+                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-12" align="right">
+                                <button class="btn btn-primary " id="cmdDisbursementJournal" onclick="btnJournalDetail_OnClick()"><i class="fa fa-book"></i> Journal</button>
+                                <button class="btn btn-primary " id="cmdDisbursementSaveLock" onclick="btnDisbursementSaveLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                                @*<button class="btn btn-primary " id="cmdDisbursementSave" onclick="btnDisbursementSave_OnClick()"><i class="fa fa-save"></i> Save</button>*@
+                                <button class="btn btn-primary " id="cmdDisbursementEdit" onclick="btnDisbursementEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                <button class="btn btn-primary " id="cmdDisbursementPrint" onclick="btnDisbursementPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
+                                <button id="cmdDisbursementClose" onclick="window.location.href = '/Software/Disbursement'" class="btn btn-danger "><i class="fa fa-times"></i> Close</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="">
+                            <form class="form-horizontal" role="form">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Branch</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="disbursement_Branch"></div>
 
-            <section class="content">
-                <div class="box box-default">
-                    <div class="box-body">
+                                                <input type="hidden" id="disbursement_Branch_data" class="requiredDisbursement" />
+                                                <input type="hidden" id="disbursement_Branch_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">CV Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control   requiredDisbursement" id="disbursement_CVNumber_Display" />
+                                                <input type="hidden" id="disbursement_CVNumber" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">CV Date</label>
+                                            <div class="col-sm-8">
+                                                <div class="" id="disbursement_CVDate"></div>
+                                                <input type="hidden" id="disbursement_CVDate_data" class="requiredDisbursement" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Manual CV Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control  requiredDisbursement" id="disbursement_ManualCVNumber" placeholder="Manual CV Number" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Supplier</label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <div class="comboBox-wide" id="disbursement_Supplier"></div>
+
+                                                    <input type="hidden" id="disbursement_Supplier_data" class="requiredDisbursement" />
+                                                    <input type="hidden" id="disbursement_Supplier_selectedValue" />
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-primary " id="cmdAP" onclick="btnnOclickAP()">AP</button>
+                                                        <button type="button" class="btn btn-primary " id="cmdAdvances" onclick="btnnOclickAdvances()">Advances</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Payee</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control  requiredDisbursement" id="disbursement_Payee" placeholder="Payee" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Pay Type</label>
+                                            <div class="col-sm-8">
+                                                <div class="" id="disbursement_PayType"></div>
+
+                                                <input type="hidden" id="disbursement_PayType_data" class="requiredDisbursement" />
+                                                <input type="hidden" id="disbursement_PayType_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Particulars</label>
+                                            <div class="col-sm-8">
+                                                <textarea rows="5" class="form-control textarea-custom requiredDisbursement" id="disbursement_Particulars" placeholder="Particulars"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Bank</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="disbursement_Bank"></div>
+
+                                                <input type="hidden" id="disbursement_Bank_data" class="requiredDisbursement" />
+                                                <input type="hidden" id="disbursement_Bank_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Check Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control  requiredDisbursement" id="disbursement_CheckNumber" placeholder="Check Number" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Check Date</label>
+                                            <div class="col-sm-8">
+                                                <div class="" id="disbursement_CheckDate"></div>
+                                                <input type="hidden" id="disbursement_CheckDate_data" class="requiredDisbursement" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Amount</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control  numberField  requiredDisbursement" id="disbursement_Amount" placeholder="0.00" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Cross Check</label>
+                                            <div class="col-sm-8">
+                                                <input type="checkbox" id="disbursement_CrossCheck">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Prepared by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="disbursement_PreparedBy"></div>
+
+                                                <input type="hidden" id="disbursement_PreparedBy_data" class="requiredDisbursement" />
+                                                <input type="hidden" id="disbursement_PreparedBy_selectedValue" />
+                                                <input type="hidden" id="userId_data" value="@userId" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Checked by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="disbursement_CheckedBy"></div>
+
+                                                <input type="hidden" id="disbursement_CheckedBy_data" class="requiredDisbursement" />
+                                                <input type="hidden" id="disbursement_CheckedBy_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Approved by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="disbursement_ApprovedBy"></div>
+
+                                                <input type="hidden" id="disbursement_ApprovedBy_data" class="requiredDisbursement" />
+                                                <input type="hidden" id="disbursement_ApprovedBy_selectedValue" />
+                                            </div>
+                                        </div>
+                                        @*<div class="form-group">
+                                                <label class="control-label col-sm-4">Lock</label>
+                                                <div class="col-sm-8">
+                                                    <input type="checkbox" id="disbursement_Lock">
+                                                </div>
+                                            </div>*@
+                                        <div class="form-group">
+                                            <div class="col-sm-4"></div>
+                                            <div class="col-sm-8">
+                                                <input type="hidden" id="disbursement_IsLocked">
+                                                <input type="hidden" id="disbursement_IsLocked_defaultTrue">
+                                                <input type="hidden" id="disbursement_IsLocked_defaultFalse">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#DisbursementLine" id="itemTabId">Disbursement Line</a></li>
+                </ul>
+                <br />
+                <div class="tab-content">
+                    <div id="DisbursementLine" class="tab-pane fade in active">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <div class="row">
-                                    <div class="col-md-12" align="right">
-                                        <button class="btn btn-primary btn-sm" id="cmdDisbursementJournal" onclick="btnJournalDetail_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                                        <button class="btn btn-primary btn-sm" id="cmdDisbursementSaveLock" onclick="btnDisbursementSaveLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                        @*<button class="btn btn-primary btn-sm" id="cmdDisbursementSave" onclick="btnDisbursementSave_OnClick()"><i class="fa fa-save"></i> Save</button>*@
-                                        <button class="btn btn-primary btn-sm" id="cmdDisbursementEdit" onclick="btnDisbursementEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                        <button class="btn btn-primary btn-sm" id="cmdDisbursementPrint" onclick="btnDisbursementPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
-                                        <button id="cmdDisbursementClose" onclick="window.location.href = '/Software/Disbursement'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
+                                    <div class="col-lg-12" align="right">
+                                        <button type="submit" class="btn btn-primary " id="btnAddDisbursementLine" onclick="cmdAddDisbursementLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Branch</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="disbursement_Branch"></div>
-
-                                                        <input type="hidden" id="disbursement_Branch_data" class="requiredDisbursement" />
-                                                        <input type="hidden" id="disbursement_Branch_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">CV Number</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-30 input-sm requiredDisbursement" id="disbursement_CVNumber_Display" />
-                                                        <input type="hidden" id="disbursement_CVNumber" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">CV Date</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-68" id="disbursement_CVDate"></div>
-                                                        <input type="hidden" id="disbursement_CVDate_data" class="requiredDisbursement" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Manual CV Number</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_ManualCVNumber" placeholder="Manual CV Number" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Supplier</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-group">
-                                                            <div class="comboBox-wide" id="disbursement_Supplier"></div>
-
-                                                            <input type="hidden" id="disbursement_Supplier_data" class="requiredDisbursement" />
-                                                            <input type="hidden" id="disbursement_Supplier_selectedValue" />
-                                                            <div class="input-group-btn">
-                                                                <button type="button" class="btn btn-primary btn-sm" id="cmdAP" onclick="btnnOclickAP()">AP</button>
-                                                                <button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="btnnOclickAdvances()">Advances</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Payee</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_Payee" placeholder="Payee" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Pay Type</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-70" id="disbursement_PayType"></div>
-
-                                                        <input type="hidden" id="disbursement_PayType_data" class="requiredDisbursement" />
-                                                        <input type="hidden" id="disbursement_PayType_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Particulars</label>
-                                                    <div class="col-sm-8">
-                                                        <textarea class="form-control textarea-custom requiredDisbursement" id="disbursement_Particulars" placeholder="Particulars"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Bank</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="disbursement_Bank"></div>
-
-                                                        <input type="hidden" id="disbursement_Bank_data" class="requiredDisbursement" />
-                                                        <input type="hidden" id="disbursement_Bank_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Check Number</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_CheckNumber" placeholder="Check Number" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Check Date</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-50" id="disbursement_CheckDate"></div>
-                                                        <input type="hidden" id="disbursement_CheckDate_data" class="requiredDisbursement" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Amount</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-50 numberField input-sm requiredDisbursement" id="disbursement_Amount" placeholder="0.00" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Cross Check</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="checkbox" id="disbursement_CrossCheck">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Prepared by</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="disbursement_PreparedBy"></div>
-
-                                                        <input type="hidden" id="disbursement_PreparedBy_data" class="requiredDisbursement" />
-                                                        <input type="hidden" id="disbursement_PreparedBy_selectedValue" />
-                                                        <input type="hidden" id="userId_data" value="@userId" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Checked by</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="disbursement_CheckedBy"></div>
-
-                                                        <input type="hidden" id="disbursement_CheckedBy_data" class="requiredDisbursement" />
-                                                        <input type="hidden" id="disbursement_CheckedBy_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Approved by</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="disbursement_ApprovedBy"></div>
-
-                                                        <input type="hidden" id="disbursement_ApprovedBy_data" class="requiredDisbursement" />
-                                                        <input type="hidden" id="disbursement_ApprovedBy_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                @*<div class="form-group">
-                                                        <label class="control-label col-sm-4">Lock</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="checkbox" id="disbursement_Lock">
-                                                        </div>
-                                                    </div>*@
-                                                <div class="form-group">
-                                                    <div class="col-sm-4"></div>
-                                                    <div class="col-sm-8">
-                                                        <input type="hidden" id="disbursement_IsLocked">
-                                                        <input type="hidden" id="disbursement_IsLocked_defaultTrue">
-                                                        <input type="hidden" id="disbursement_IsLocked_defaultFalse">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                        <ul class="nav nav-tabs" role="tablist" id="myTab">
-                            <li role="presentation" class="active"><a data-toggle="tab" href="#DisbursementLine" id="itemTabId">Disbursement Line</a></li>
-                        </ul>
-                        <br />
-                        <div class="tab-content">
-                            <div id="DisbursementLine" class="tab-pane fade in active">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <div class="row">
-                                            <div class="col-lg-12" align="right">
-                                                <button type="submit" class="btn btn-primary btn-sm" id="btnAddDisbursementLine" onclick="cmdAddDisbursementLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div id="DisbursementLineGrid" class="grid"></div>
-                                            </div>
-                                        </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div id="DisbursementLineGrid" class="grid"></div>
                                     </div>
                                 </div>
                             </div>
@@ -231,11 +224,11 @@
                     </div>
                 </div>
             </section>
-        </div>
-
-        @Html.Partial("_SoftwareFooter")
+            @Html.Partial("_SoftwareFooter")
+        </main>
     </div>
 
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- RR status -->
     <div class="modal fade" id="RRStatus" role="dialog">
         <div class="modal-dialog modal-lg">
@@ -248,9 +241,9 @@
                 <div class="modal-body">
                     <div class="panel panel-default" id="statusGrid">
                         <div class="panel-heading">
-                            <div class="input-group input-group-sm input-50">
+                            <div class="input-group  ">
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                <input type="text" class="form-control input-sm" id="RRStatusFilter" placeholder="Search">
+                                <input type="text" class="form-control " id="RRStatusFilter" placeholder="Search">
                             </div>
                         </div>
                         <div class="panel-body">
@@ -262,8 +255,8 @@
                     </center>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="btnIdApplyAllRR" onclick="btnOnclickApplyAllRR()"><i class="fa fa-check"></i> Apply</button>
-                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-primary " id="btnIdApplyAllRR" onclick="btnOnclickApplyAllRR()"><i class="fa fa-check"></i> Apply</button>
+                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -281,9 +274,9 @@
                 <div class="modal-body">
                     <div class="panel panel-default" id="AdvancesGrid">
                         @*<div class="panel-heading">
-                                <div class="input-group input-group-sm input-50">
+                                <div class="input-group  ">
                                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="RRAdvancesFilter" placeholder="Search">
+                                    <input type="text" class="form-control " id="RRAdvancesFilter" placeholder="Search">
                                 </div>
                             </div>*@
                         <div class="panel-body">
@@ -296,8 +289,8 @@
                     </center>
                 </div>
                 <div class="modal-footer">
-                    <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
-                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <!--tton class="btn btn-primary " id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
+                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -325,12 +318,21 @@
                             </dd>
                             <dt>Account</dt>
                             <dd>
-                                <div class="input-30" id="disbursementLine_accountCode"></div>
-                                <div class="input-68" id="disbursementLine_account"></div>
-
-                                <input type="hidden" id="disbursementLine_account_data" class="requiredDisbursementLine">
-                                <input type="hidden" id="disbursementLine_account_selectedValue" />
-                                <input type="hidden" id="disbursementLine_accountCode_selectedValue" />
+                                <table style="width: 100%" border="0">
+                                    <tr>
+                                        <td style="width: 30%">
+                                            <div class="" id="disbursementLine_accountCode"></div>
+                                        </td>
+                                        <td style="width: 1%"></td>
+                                        <td style="width: 69%">
+                                            <div class="" id="disbursementLine_account"></div>
+                                            <input type="hidden" id="disbursementLine_account_data" class="requiredDisbursementLine">
+                                            <input type="hidden" id="disbursementLine_account_selectedValue" />
+                                            <input type="hidden" id="disbursementLine_accountCode_selectedValue" />
+                                        </td>
+                                    </tr>
+                                </table>
+                                
                             </dd>
                             <dt>Article</dt>
                             <dd>
@@ -347,15 +349,15 @@
                                 <input type="hidden" id="disbursementLine_RRNo_selectedValue" />
                             </dd>
                             <dt>Particulars</dt>
-                            <dd><textarea class="form-control textarea-custom requiredDisbursementLine" id="disbursementLine_Particulars" placeholder="Particulars"></textarea></dd>
+                            <dd><textarea rows="5" class="form-control textarea-custom requiredDisbursementLine" id="disbursementLine_Particulars" placeholder="Particulars"></textarea></dd>
                             <dt>Amount</dt>
-                            <dd><input class="form-control input-50 numberField input-sm requiredDisbursementLine" id="disbursementLine_Amount" placeholder="0.00" /></dd>
+                            <dd><input class="form-control  numberField  requiredDisbursementLine" id="disbursementLine_Amount" placeholder="0.00" /></dd>
                         </dl>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="cmdSaveDisbursementLineButton" onclick="cmdDisbursementLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button id="cmdDisbursementLineDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button class="btn btn-primary " id="cmdSaveDisbursementLineButton" onclick="cmdDisbursementLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdDisbursementLineDetailCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -378,45 +380,41 @@
                     </center>
                     <div id="journal_Content">
                         <div id="journalListGrid" class="grid" align="left"></div>
-                        <div class="panel panel-default">
-                            <div class="panel-footer">
-                                <div class="row">
-                                    <div class="col-md-6"></div>
-                                    <div class="col-md-6">
-                                        <table class="table table-responsive table-bordered">
-                                            <tr>
-                                                <td align="right">
-                                                    <b>Total Debit: </b>
-                                                </td>
-                                                <td style="padding-left: 10px" align="right">
-                                                    <span id="totalDebitInJournal">NA</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="right">
-                                                    <b>Total Credit: </b>
-                                                </td>
-                                                <td style="padding-left: 10px" align="right">
-                                                    <span id="totalCreditInJournal">NA</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="right">
-                                                    <b>Variance: </b>
-                                                </td>
-                                                <td style="padding-left: 10px" align="right">
-                                                    <span id="variance">NA</span>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6">
+                                <table class="table table-responsive table-bordered">
+                                    <tr>
+                                        <td align="right">
+                                            <b>Total Debit: </b>
+                                        </td>
+                                        <td style="padding-left: 10px" align="right">
+                                            <span id="totalDebitInJournal">NA</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Total Credit: </b>
+                                        </td>
+                                        <td style="padding-left: 10px" align="right">
+                                            <span id="totalCreditInJournal">NA</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Variance: </b>
+                                        </td>
+                                        <td style="padding-left: 10px" align="right">
+                                            <span id="variance">NA</span>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdJournalDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button id="cmdJournalDetailCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -435,8 +433,8 @@
                     Are you sure you want to delete this?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteDisbursementLine" onclick="cmdDisbursementLineConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteDisbursementLineCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-danger " id="cmdConfirmDeleteDisbursementLine" onclick="cmdDisbursementLineConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteDisbursementLineCloseButton" class="btn btn-primary " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -455,8 +453,8 @@
                     Apply?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="cmdConfirmApplyAmount" onclick="btnConfrimApplyAmountOnClick()"><i class="fa fa-check"></i> Apply</button>
-                    <button class="btn btn-danger btn-sm" id="cmdCloseButtonApplyAmount" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-primary " id="cmdConfirmApplyAmount" onclick="btnConfrimApplyAmountOnClick()"><i class="fa fa-check"></i> Apply</button>
+                    <button class="btn btn-danger " id="cmdCloseButtonApplyAmount" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -475,8 +473,8 @@
                     Apply all Amount?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="cmdConfirmApplyAllAmount" onclick="btnConfrimApplyAllAmount_OnClick()"><i class="fa fa-check"></i> Apply</button>
-                    <button class="btn btn-danger btn-sm" id="cmdCloseButtonApplyAllAmount" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-primary " id="cmdConfirmApplyAllAmount" onclick="btnConfrimApplyAllAmount_OnClick()"><i class="fa fa-check"></i> Apply</button>
+                    <button class="btn btn-danger " id="cmdCloseButtonApplyAllAmount" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -495,8 +493,8 @@
                     Apply Advances?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="cmdConfirmApplyAdvances" onclick="btnConfrimApplyAdvances_OnClick()"><i class="fa fa-check-square-o"></i> Apply</button>
-                    <button class="btn btn-danger btn-sm" id="cmdCloseButtonApplyAdvances" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-primary " id="cmdConfirmApplyAdvances" onclick="btnConfrimApplyAdvances_OnClick()"><i class="fa fa-check-square-o"></i> Apply</button>
+                    <button class="btn btn-danger " id="cmdCloseButtonApplyAdvances" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -654,49 +652,49 @@
                                 "binding": "RRNumber",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": "1.9*"
+                                "width": 110
                             },
                             {
                                 "header": "Doc Ref",
                                 "binding": "DocumentReference",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": "1.5*"
+                                "width": 200
                             },
                             {
                                 "header": "Date",
                                 "binding": "RRDate",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": "1.7*",
+                                "width": 100
                             },
                             {
                                 "header": "RR Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "Payments",
                                 "binding": "PaidAmount",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "Adjustments",
                                 "binding": "AdjustmentAmount",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "Balance",
                                 "binding": "BalanceAmount",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "Pick",
@@ -714,7 +712,7 @@
                                 "binding": "Balance",
                                 "allowSorting": true,
                                 "isReadOnly": false,
-                                "width": "2*"
+                                "width": 150
                             },
                 ],
                 autoGenerateColumns: false,
@@ -1024,43 +1022,43 @@
                                 "header": "Code",
                                 "binding": "AccountCode",
                                 "allowSorting": true,
-                                "width": "2*",
+                                "width": 110,
                             },
                             {
                                 "header": "Account",
                                 "binding": "Account",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 200,
                             },
                             {
                                 "header": "Article",
                                 "binding": "Article",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 200,
                             },
                             {
                                 "header": "Debit",
                                 "binding": "DebitAmount",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 150,
                             },
                             {
                                 "header": "Credit",
                                 "binding": "CreditAmount",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 150,
                             },
                             {
                                 "header": "Balance",
                                 "binding": "Balance",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 150,
                             },
                             {
                                 "header": "Apply",
                                 "binding": "Pick",
                                 "allowSorting": true,
-                                "width": "2*",
+                                "width": 100,
                                 "align": "center",
                                 "allowResizing": false,
                                 "allowSorting": false,
@@ -2209,7 +2207,7 @@
 
                                         amount +=  Results[i]["Amount"];
                                     }
-                                    
+
                                     document.getElementById('disbursement_Amount').value = amount.toLocaleString();
                                 }
                             });
@@ -2910,48 +2908,48 @@
                 journalListGrid = new wijmo.grid.FlexGrid('#journalListGrid');
                 journalListGrid.initialize({
                     columns: [
-                               {
-                                   "header": "Branch",
-                                   "binding": "Branch",
-                                   "allowSorting": true,
-                                   "width": 150
-                               },
                                 {
                                     "header": "Code",
                                     "binding": "AccountCode",
                                     "allowSorting": true,
-                                    "width": 60
+                                    "width": 100
                                 },
                                 {
                                     "header": "Account",
                                     "binding": "Account",
                                     "allowSorting": true,
-                                    "width": 200
+                                    "width": 220
                                 },
                                 {
                                     "header": "Article",
                                     "binding": "Article",
                                     "allowSorting": true,
-                                    "width": 162
+                                    "width": 212
                                 },
                                 {
                                     "header": "Debit",
                                     "binding": "DebitAmount",
                                     "allowSorting": true,
-                                    "width": 130
+                                    "width": 150
                                 }
                                 ,
                                 {
                                     "header": "Credit",
                                     "binding": "CreditAmount",
                                     "allowSorting": true,
-                                    "width": 130
+                                    "width": 150
+                                },
+                                {
+                                    "header": "Branch",
+                                    "binding": "Branch",
+                                    "allowSorting": true,
+                                    "width": 200
                                 },
                                 {
                                     "header": "Date",
                                     "binding": "JournalDate",
                                     "allowSorting": true,
-                                    "width": 80,
+                                    "width": 100,
                                 }
                     ],
                     autoGenerateColumns: false,
@@ -3158,7 +3156,7 @@
                             {
                                 "header": "Edit",
                                 "binding": "EditId",
-                                "width": 60,
+                                "width": 70,
                                 "align": "center",
                                 "allowResizing": false,
                                 "allowSorting": false,
@@ -3177,37 +3175,37 @@
                                 "header": "Branch",
                                 "binding": "Branch",
                                 "allowSorting": true,
-                                "width": "2*",
+                                "width": 200
                             },
                             {
                                 "header": "Account",
                                 "binding": "Account",
                                 "allowSorting": true,
-                                "width": "4*"
+                                "width": 200
                             },
                             {
                                 "header": "Article",
                                 "binding": "Article",
                                 "allowSorting": true,
-                                "width": "4*"
+                                "width": 200
                             },
                             {
                                 "header": "Particulars",
                                 "binding": "Particulars",
                                 "allowSorting": true,
-                                "width": "3*"
+                                "width": 250
                             },
                             {
                                 "header": "RR No.",
                                 "binding": "RR",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 120
                             },
                             {
                                 "header": "Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 150
                             }
                 ],
                 autoGenerateColumns: false,
@@ -3240,6 +3238,21 @@
             //        }
             //    }
             //});
+        });
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
         });
     </script>
 </body>

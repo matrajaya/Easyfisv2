@@ -8,56 +8,79 @@
 
     <!-- Title of the Page -->
     <link rel="shortcut icon" href="~/Images/icon/easyfislogomini.ico">
-    <title>Easyfis - Dashboard</title>
+    <title>Easyfis - Forbidden</title>
 
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="hold-transition skin-blue fixed  sidebar-mini">
-    @* add class 'sidebar-collapse' when you want to collapse the sidebar menu *@
-    <div class="wrapper">
-        @Html.Partial("_SoftwareHeader")
-        @Html.Partial("_SoftwareSideBarMenu")
-
-        <div class="content-wrapper">
-            <section class="content">
-                <div class="box box-default">
-                    <div class="box-body">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                    </div>
-                                    <div class="col-lg-8" align="right">
-                                        <button class="btn btn-danger btn-sm" onclick="btnForbiddenOkayOnClick()"><i class=" fa fa-times"></i> Close</button>
-                                    </div>
-                                </div>
+<body class="">
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
+            <section class="content-header">
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-exclamation-triangle fa-fw"></i> Forbidden Page
+                    </h2>
+                </div>
+            </section>
+            <br />
+            <section class="container">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <span class="input-group-addon">Company</span>
+                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-lg-4">
                             </div>
-                            <div class="panel-body" style="background-color: #1e1e1e">
-                                <br /><br />
-                                <center>
-                                    <i class="fa fa-exclamation-triangle" style="font-size: 200px; color: #fffa00"></i>
-                                    <h1 style="color: #fff">Forbidden</h1>
-                                    <br />
-                                    <p style="color: #fff">Sorry, you have no rights to access this page.</p>
-                                    <br /><br />
-                                    <button class="btn btn-primary btn-lg" onclick="btnForbiddenOkayOnClick()"> Okay </button>
-                                </center>
-                                <br /><br />
+                            <div class="col-lg-8" align="right">
+                                <button class="btn btn-danger " onclick="btnForbiddenOkayOnClick()"><i class=" fa fa-times"></i> Close</button>
                             </div>
                         </div>
                     </div>
+                    <div class="panel-body" style="background-color: #1e1e1e">
+                        <br /><br />
+                        <center>
+                            <i class="fa fa-exclamation-triangle" style="font-size: 200px; color: #fffa00"></i>
+                            <h1 style="color: #fff">Forbidden</h1>
+                            <br />
+                            <p style="color: #fff">Sorry, you have no rights to access this page.</p>
+                            <br /><br />
+                            <button class="btn btn-primary btn-lg" onclick="btnForbiddenOkayOnClick()"> Okay </button>
+                        </center>
+                        <br /><br />
+                    </div>
                 </div>
             </section>
-        </div>
-
-        @Html.Partial("_SoftwareFooter")
+            @Html.Partial("_SoftwareFooter")
+        </main>
     </div>
+
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
+    @* add class 'sidebar-collapse' when you want to collapse the sidebar menu *@
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         function btnForbiddenOkayOnClick() {
             window.history.back();
         }
     </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
+        });
+    </script>
+
 </body>
 </html>

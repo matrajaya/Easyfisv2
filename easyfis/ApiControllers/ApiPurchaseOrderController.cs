@@ -153,11 +153,12 @@ namespace easyfis.Controllers
         // list purchase order by PODate
         [Authorize]
         [HttpGet]
-        [Route("api/listPurchaseOrderFilterByPODate/{PODate}")]
-        public List<Models.TrnPurchaseOrder> listPurchaseOrderByPODate(String PODate)
+        [Route("api/listPurchaseOrderFilterByPODate/{PODate}/{POEndDate}")]
+        public List<Models.TrnPurchaseOrder> listPurchaseOrderByPODate(String PODate, String POEndDate)
         {
             var purchaseOrders = from d in db.TrnPurchaseOrders.OrderByDescending(d => d.Id)
-                                 where d.PODate == Convert.ToDateTime(PODate)
+                                 where d.PODate >= Convert.ToDateTime(PODate)
+                                 && d.PODate <= Convert.ToDateTime(POEndDate)
                                  && d.BranchId == currentBranchId()
                                  select new Models.TrnPurchaseOrder
                                  {

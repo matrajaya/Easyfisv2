@@ -245,11 +245,12 @@ namespace easyfis.Controllers
         // list receiving receipt by RRDate
         [Authorize]
         [HttpGet]
-        [Route("api/listReceivingReceiptFilterByRRDate/{RRDate}")]
-        public List<Models.TrnReceivingReceipt> listReceivingReceiptByRRDate(String RRDate)
+        [Route("api/listReceivingReceiptFilterByRRDate/{RRStartDate}/{RREndDate}")]
+        public List<Models.TrnReceivingReceipt> listReceivingReceiptByRRDate(String RRStartDate, String RREndDate)
         {
             var receivingReceipts = from d in db.TrnReceivingReceipts.OrderByDescending(d => d.Id)
-                                    where d.RRDate == Convert.ToDateTime(RRDate)
+                                    where d.RRDate >= Convert.ToDateTime(RRStartDate)
+                                    && d.RRDate <= Convert.ToDateTime(RREndDate)
                                     && d.BranchId == currentBranchId()
                                     select new Models.TrnReceivingReceipt
                                     {

@@ -240,11 +240,12 @@ namespace easyfis.Controllers
         // list sales invoice by SIDate
         [Authorize]
         [HttpGet]
-        [Route("api/listSalesInvoiceFilterBySIDate/{SIDate}")]
-        public List<Models.TrnSalesInvoice> listSalesInvoiceBySIDate(String SIDate)
+        [Route("api/listSalesInvoiceFilterBySIDate/{SIStartDate}/{SISEndDate}")]
+        public List<Models.TrnSalesInvoice> listSalesInvoiceBySIDate(String SIStartDate, String SISEndDate)
         {
             var salesInvoices = from d in db.TrnSalesInvoices.OrderByDescending(d => d.Id)
-                                where d.SIDate == Convert.ToDateTime(SIDate)
+                                where d.SIDate >= Convert.ToDateTime(SIStartDate)
+                                && d.SIDate <= Convert.ToDateTime(SISEndDate)
                                 && d.BranchId == currentBranchId()
                                 select new Models.TrnSalesInvoice
                                 {

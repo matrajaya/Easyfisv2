@@ -13,7 +13,7 @@ namespace easyfis
             // ========================
             bundles.Add(new StyleBundle("~/Content/Home-css").Include(
                         "~/Content/bootstrap.min.css",
-                        "~/Content/bootstrap-theme.min.css",
+                        //"~/Content/bootstrap-theme.min.css",
                         "~/Content/toastr.css",
                         "~/Content/font-awesome.min.css",
                         //"~/wijmo/styles/wijmo.min.css",
@@ -29,10 +29,6 @@ namespace easyfis
                         "~/Scripts/bootstrap.min.js",
                         "~/Scripts/custom-tooltip.js",
                         "~/Scripts/toastr.js",
-                        //"~/wijmo/controls/wijmo.min.js",
-                        //"~/wijmo/controls/wijmo.input.min.js",
-                        //"~/wijmo/controls/wijmo.grid.min.js",
-                        //"~/wijmo/controls/wijmo.chart.min.js",
                         "~/Scripts/wijmo.min.js",
                         "~/Scripts/wijmo.input.min.js",
                         "~/Scripts/wijmo.grid.min.js",
@@ -44,10 +40,9 @@ namespace easyfis
             // ==============
             bundles.Add(new StyleBundle("~/Content/Software-css").Include(
                       "~/Content/bootstrap.min.css",
-                      "~/Content/bootstrap-theme.min.css",
+                      //"~/Content/bootstrap-theme.min.css",
                       "~/Content/toastr.css",
                       "~/Content/font-awesome.min.css",
-                      //"~/wijmo/styles/wijmo.min.css",
                       "~/Content/wijmo.min.css",
                       "~/Content/nprogress.css",
                       "~/Content/software.css"));
@@ -59,15 +54,12 @@ namespace easyfis
                     "~/Scripts/jquery-1.10.2.min.js",
                     "~/Scripts/bootstrap.min.js",
                     "~/Scripts/toastr.js",
-                    //"~/wijmo/controls/wijmo.min.js",
-                    //"~/wijmo/controls/wijmo.input.min.js",
-                    //"~/wijmo/controls/wijmo.grid.min.js",
-                    //"~/wijmo/controls/wijmo.chart.min.js",
                     "~/Scripts/wijmo.min.js",
                     "~/Scripts/wijmo.input.min.js",
                     "~/Scripts/wijmo.grid.min.js",
                     "~/Scripts/wijmo.chart.min.js",
                     "~/Scripts/nprogress.js",
+                    "~/Scripts/menu.js",
                     "~/Scripts/software.js",
                     "~/Scripts/jquery.slimscroll.min.js",
                     "~/Scripts/app.min.js"));

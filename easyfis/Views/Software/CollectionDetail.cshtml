@@ -15,164 +15,158 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="hold-transition skin-blue fixed sidebar-mini">
-    <div class="wrapper">
-        @Html.Partial("_SoftwareHeader")
-        @Html.Partial("_SoftwareSideBarMenu")
+<body class="">
 
-        <div class="content-wrapper">
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
             <section class="content-header">
-                <h1>
-                    Collection Detail
-                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="/Software"> Dashboard</a></li>
-                    <li><a href="/Software/Collection"> Collection </a></li>
-                    <li> Collection Detail </li>
-                </ol>
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-cc-visa fa-fw"></i> Collection Detail
+                    </h2>
+                </div>
             </section>
+            <br />
+            <section class="container">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <span class="input-group-addon">Company</span>
+                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-12" align="right">
+                                <button class="btn btn-primary " id="cmdCollectionJournal" onclick="btnJournalDetail_OnClick()"><i class="fa fa-book"></i> Journal</button>
+                                <button class="btn btn-primary " id="cmdCollectionSaveLock" onclick="btnCollectionSaveLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                                @*<button class="btn btn-primary " id="cmdCollectionSave" onclick="btnCollectionSave_OnClick()"><i class="fa fa-save"></i> Save</button>*@
+                                <button class="btn btn-primary " id="cmdCollectionEdit" onclick="btnCollectionEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                <button class="btn btn-primary " id="cmdCollectionPrint" onclick="btnCollectionPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
+                                <button onclick="window.location.href = '/Software/Collection'" class="btn btn-danger " id="cmdCollectionClose"><i class="fa fa-times"></i> Close</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="">
+                            <form class="form-horizontal" role="form">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Branch</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="collection_Branch"></div>
 
-            <section class="content">
-                <div class="box box-default">
-                    <div class="box-body">
+                                                <input type="hidden" id="collection_Branch_data" class="requiredCollection" />
+                                                <input type="hidden" id="collection_Branch_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">OR Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control   requiredCollection" id="collection_ORNumber_Display" />
+                                                <input type="hidden" id="collection_ORNumber" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">OR Date</label>
+                                            <div class="col-sm-8">
+                                                <div class="" id="collection_ORDate"></div>
+                                                <input type="hidden" id="collection_ORDate_data" class="requiredCollection" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Manual OR Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control  requiredCollection" id="collection_ManualORNumber" placeholder="Manual OR Number" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Customer</label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <div class="comboBox-wide" id="collection_Customer"></div>
+
+                                                    <input type="hidden" id="collection_Customer_data" class="requiredCollection" />
+                                                    <input type="hidden" id="collection_Customer_selectedValue" />
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class=" btn btn-primary " id="cmdAR" onclick="collectionAR_OnClick()">AR</button>
+                                                        <button type="button" class="btn btn-primary " id="cmdAdvances" onclick="collectionAdvances_OnClick()">Advances</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Particulars</label>
+                                            <div class="col-sm-8">
+                                                <textarea rows="5" class="form-control textarea-custom requiredCollection" id="collection_Particulars" placeholder="Particulars"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Prepared by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="collection_PreparedBy"></div>
+
+                                                <input type="hidden" id="collection_PreparedBy_data" class="requiredCollection" />
+                                                <input type="hidden" id="collection_PreparedBy_selectedValue" />
+                                                <input type="hidden" id="userId_data" value="@userId" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Checked by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="collection_CheckedBy"></div>
+
+                                                <input type="hidden" id="collection_CheckedBy_data" class="requiredCollection" />
+                                                <input type="hidden" id="collection_CheckedBy_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Approved by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="collection_ApprovedBy"></div>
+
+                                                <input type="hidden" id="collection_ApprovedBy_data" class="requiredCollection" />
+                                                <input type="hidden" id="collection_ApprovedBy_selectedValue" />
+                                            </div>
+                                        </div>
+                                        @*<div class="form-group">
+                                                <label class="control-label col-sm-4">Lock</label>
+                                                <div class="col-sm-8">
+                                                    <input type="checkbox" id="collection_Lock">
+                                                </div>
+                                            </div>*@
+                                        <div class="form-group">
+                                            <div class="col-sm-4"></div>
+                                            <div class="col-sm-8">
+                                                <input type="hidden" id="collection_IsLocked">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#CollectionLine" id="itemTabId">Collection Line</a></li>
+                </ul>
+                <br />
+                <div class="tab-content">
+                    <div id="CollectionLine" class="tab-pane fade in active">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <div class="row">
-                                    <div class="col-md-12" align="right">
-                                        <button class="btn btn-primary btn-sm" id="cmdCollectionJournal" onclick="btnJournalDetail_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                                        <button class="btn btn-primary btn-sm" id="cmdCollectionSaveLock" onclick="btnCollectionSaveLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                        @*<button class="btn btn-primary btn-sm" id="cmdCollectionSave" onclick="btnCollectionSave_OnClick()"><i class="fa fa-save"></i> Save</button>*@
-                                        <button class="btn btn-primary btn-sm" id="cmdCollectionEdit" onclick="btnCollectionEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                        <button class="btn btn-primary btn-sm" id="cmdCollectionPrint" onclick="btnCollectionPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
-                                        <button onclick="window.location.href = '/Software/Collection'" class="btn btn-danger btn-sm" id="cmdCollectionClose"><i class="fa fa-times"></i> Close</button>
+                                    <div class="col-lg-12">
+                                        <button type="submit" class="btn btn-primary pull-right " id="btnAddCollectionLine" onclick="cmdAddCollectionLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Branch</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="collection_Branch"></div>
-
-                                                        <input type="hidden" id="collection_Branch_data" class="requiredCollection" />
-                                                        <input type="hidden" id="collection_Branch_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">OR Number</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-30 input-sm requiredCollection" id="collection_ORNumber_Display" />
-                                                        <input type="hidden" id="collection_ORNumber" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">OR Date</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-50" id="collection_ORDate"></div>
-                                                        <input type="hidden" id="collection_ORDate_data" class="requiredCollection" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Manual OR Number</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-sm requiredCollection" id="collection_ManualORNumber" placeholder="Manual OR Number" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Customer</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-group">
-                                                            <div class="comboBox-wide" id="collection_Customer"></div>
-
-                                                            <input type="hidden" id="collection_Customer_data" class="requiredCollection" />
-                                                            <input type="hidden" id="collection_Customer_selectedValue" />
-                                                            <div class="input-group-btn">
-                                                                <button type="button" class=" btn btn-primary btn-sm" id="cmdAR" onclick="collectionAR_OnClick()">AR</button>
-                                                                <button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="collectionAdvances_OnClick()">Advances</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Particulars</label>
-                                                    <div class="col-sm-8">
-                                                        <textarea class="form-control textarea-custom requiredCollection" id="collection_Particulars" placeholder="Particulars"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Prepared by</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="collection_PreparedBy"></div>
-
-                                                        <input type="hidden" id="collection_PreparedBy_data" class="requiredCollection" />
-                                                        <input type="hidden" id="collection_PreparedBy_selectedValue" />
-                                                        <input type="hidden" id="userId_data" value="@userId" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Checked by</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="collection_CheckedBy"></div>
-
-                                                        <input type="hidden" id="collection_CheckedBy_data" class="requiredCollection" />
-                                                        <input type="hidden" id="collection_CheckedBy_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Approved by</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="collection_ApprovedBy"></div>
-
-                                                        <input type="hidden" id="collection_ApprovedBy_data" class="requiredCollection" />
-                                                        <input type="hidden" id="collection_ApprovedBy_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                @*<div class="form-group">
-                                                        <label class="control-label col-sm-4">Lock</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="checkbox" id="collection_Lock">
-                                                        </div>
-                                                    </div>*@
-                                                <div class="form-group">
-                                                    <div class="col-sm-4"></div>
-                                                    <div class="col-sm-8">
-                                                        <input type="hidden" id="collection_IsLocked">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                        <ul class="nav nav-tabs" role="tablist" id="myTab">
-                            <li role="presentation" class="active"><a data-toggle="tab" href="#CollectionLine" id="itemTabId">Collection Line</a></li>
-                        </ul>
-                        <br />
-                        <div class="tab-content">
-                            <div id="CollectionLine" class="tab-pane fade in active">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <button type="submit" class="btn btn-primary pull-right btn-sm" id="btnAddCollectionLine" onclick="cmdAddCollectionLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="row" align="left">
-                                            <div class="col-lg-12">
-                                                <div id="CollectionLineGrid" class="grid" align="left"></div>
-                                            </div>
-                                        </div>
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="CollectionLineGrid" class="grid" align="left"></div>
                                     </div>
                                 </div>
                             </div>
@@ -180,11 +174,11 @@
                     </div>
                 </div>
             </section>
-        </div>
-
-        @Html.Partial("_SoftwareFooter")
+            @Html.Partial("_SoftwareFooter")
+        </main>
     </div>
 
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- Sales for Collection Modal -->
     <div class="modal fade" id="SalesStatus" role="dialog">
         <div class="modal-dialog modal-lg">
@@ -197,9 +191,9 @@
                 <div class="modal-body">
                     <div class="panel panel-default" id="statusGrid">
                         <div class="panel-heading">
-                            <div class="input-group input-group-sm input-50">
+                            <div class="input-group  ">
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                <input type="text" class="form-control input-sm" id="SIStatusFilter" placeholder="Search">
+                                <input type="text" class="form-control " id="SIStatusFilter" placeholder="Search">
                             </div>
                         </div>
                         <div class="panel-body">
@@ -211,8 +205,8 @@
                     </center>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="btnIdApplyAllSI" onclick="btnOnclickApplyAllSI()"><i class="fa fa-check"></i> Apply</button>
-                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-primary " id="btnIdApplyAllSI" onclick="btnOnclickApplyAllSI()"><i class="fa fa-check"></i> Apply</button>
+                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -238,8 +232,8 @@
                     </center>
                 </div>
                 <div class="modal-footer">
-                    <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
-                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <!--tton class="btn btn-primary " id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
+                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -267,12 +261,20 @@
                             </dd>
                             <dt>Account</dt>
                             <dd>
-                                <div class="input-30" id="collectionLine_accountCode"></div>
-                                <div class="input-68" id="collectionLine_account"></div>
-
-                                <input type="hidden" id="collectionLine_account_data" class="requiredCollectionLine">
-                                <input type="hidden" id="collectionLine_accountCode_selectedValue" />
-                                <input type="hidden" id="collectionLine_account_selectedValue" />
+                                <table style="width: 100%" border="0">
+                                    <tr>
+                                        <td style="width: 30%">
+                                            <div class="" id="collectionLine_accountCode"></div>
+                                        </td>
+                                        <td style="width: 1%"></td>
+                                        <td style="width: 69%">
+                                            <div class="" id="collectionLine_account"></div>
+                                            <input type="hidden" id="collectionLine_account_data" class="requiredCollectionLine">
+                                            <input type="hidden" id="collectionLine_accountCode_selectedValue" />
+                                            <input type="hidden" id="collectionLine_account_selectedValue" />
+                                        </td>
+                                    </tr>
+                                </table>
                             </dd>
                             <dt>Article</dt>
                             <dd>
@@ -289,9 +291,9 @@
                                 <input type="hidden" id="collectionLine_SINo_selectedValue" />
                             </dd>
                             <dt>Particulars</dt>
-                            <dd><textarea class="form-control textarea-custom requiredCollectionLine" id="collectionLine_Particulars" placeholder="Particulars"></textarea></dd>
+                            <dd><textarea rows="5" class="form-control textarea-custom requiredCollectionLine" id="collectionLine_Particulars" placeholder="Particulars"></textarea></dd>
                             <dt>Amount</dt>
-                            <dd><input class="form-control input-50 numberField input-sm requiredCollectionLine" id="collectionLine_amount" placeholder="0.00" /></dd>
+                            <dd><input class="form-control  numberField  requiredCollectionLine" id="collectionLine_amount" placeholder="0.00" /></dd>
                             <dt>Pay Type</dt>
                             <dd>
                                 <div class="comboBox-wide" id="collectionLine_payType"></div>
@@ -300,15 +302,15 @@
                                 <input type="hidden" id="collectionLine_payType_selectedValue" />
                             </dd>
                             <dt>Check No.</dt>
-                            <dd><input type="text" class="form-control input-sm requiredCollectionLine" id="collectionLine_checkNo" /></dd>
+                            <dd><input type="text" class="form-control  requiredCollectionLine" id="collectionLine_checkNo" /></dd>
                             <dt>Check Date</dt>
                             <dd>
-                                <div class="input-50" id="collectionLine_checkDate"></div>
+                                <div class="" id="collectionLine_checkDate"></div>
 
                                 <input type="hidden" class="requiredCollectionLine" id="collectionLine_checkDate_data" />
                             </dd>
                             <dt>Check Bank</dt>
-                            <dd><input type="text" class="form-control input-sm requiredCollectionLine" id="collectionLine_checkBank" placeholder="Check Bank" /></dd>
+                            <dd><input type="text" class="form-control  requiredCollectionLine" id="collectionLine_checkBank" placeholder="Check Bank" /></dd>
                             <dt>Depository Bank</dt>
                             <dd>
                                 <div class="comboBox-wide" id="collectionLine_depositoryBank"></div>
@@ -322,8 +324,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="cmdSaveCollectionLineButton" onclick="cmdCollectionLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button id="cmdCollectionLineDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button class="btn btn-primary " id="cmdSaveCollectionLineButton" onclick="cmdCollectionLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdCollectionLineDetailCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -346,45 +348,41 @@
                     </center>
                     <div id="journal_Content">
                         <div id="journalListGrid" class="grid" align="left"></div>
-                        <div class="panel panel-default">
-                            <div class="panel-footer">
-                                <div class="row">
-                                    <div class="col-md-6"></div>
-                                    <div class="col-md-6">
-                                        <table class="table table-responsive table-bordered">
-                                            <tr>
-                                                <td align="right">
-                                                    <b>Total Debit: </b>
-                                                </td>
-                                                <td style="padding-left: 10px" align="right">
-                                                    <span id="totalDebitInJournal">NA</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="right">
-                                                    <b>Total Credit: </b>
-                                                </td>
-                                                <td style="padding-left: 10px" align="right">
-                                                    <span id="totalCreditInJournal">NA</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="right">
-                                                    <b>Variance: </b>
-                                                </td>
-                                                <td style="padding-left: 10px" align="right">
-                                                    <span id="variance">NA</span>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6">
+                                <table class="table table-responsive table-bordered">
+                                    <tr>
+                                        <td align="right">
+                                            <b>Total Debit: </b>
+                                        </td>
+                                        <td style="padding-left: 10px" align="right">
+                                            <span id="totalDebitInJournal">NA</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Total Credit: </b>
+                                        </td>
+                                        <td style="padding-left: 10px" align="right">
+                                            <span id="totalCreditInJournal">NA</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Variance: </b>
+                                        </td>
+                                        <td style="padding-left: 10px" align="right">
+                                            <span id="variance">NA</span>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdJournalDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button id="cmdJournalDetailCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -403,8 +401,8 @@
                     Are you sure you want to delete this?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteCollectionLine" onclick="cmdCollectionLineConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteCollectionLineCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-danger " id="cmdConfirmDeleteCollectionLine" onclick="cmdCollectionLineConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCollectionLineCloseButton" class="btn btn-primary " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -423,8 +421,8 @@
                     Apply Amount?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="cmdConfirmApplyAmount" onclick="btnConfrimApplyAmountOnClick()"><i class="fa fa-check"></i> Apply</button>
-                    <button class="btn btn-danger btn-sm" id="cmdCloseButtonApplyAmount" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-primary " id="cmdConfirmApplyAmount" onclick="btnConfrimApplyAmountOnClick()"><i class="fa fa-check"></i> Apply</button>
+                    <button class="btn btn-danger " id="cmdCloseButtonApplyAmount" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -443,8 +441,8 @@
                     Apply?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="cmdConfirmApplyAllAmount" onclick="btnConfrimApplyAllAmount_OnClick()"><i class="fa fa-check"></i> Apply</button>
-                    <button class="btn btn-danger btn-sm" id="cmdCloseButtonApplyAllAmount" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-primary " id="cmdConfirmApplyAllAmount" onclick="btnConfrimApplyAllAmount_OnClick()"><i class="fa fa-check"></i> Apply</button>
+                    <button class="btn btn-danger " id="cmdCloseButtonApplyAllAmount" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -463,8 +461,8 @@
                     Apply Advances?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="cmdConfirmApplyAdvances" onclick="btnConfrimApplyAdvances_OnClick()"><i class="fa fa-check-square-o"></i> Apply</button>
-                    <button class="btn btn-danger btn-sm" id="cmdCloseButtonApplyAdvances" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-primary " id="cmdConfirmApplyAdvances" onclick="btnConfrimApplyAdvances_OnClick()"><i class="fa fa-check-square-o"></i> Apply</button>
+                    <button class="btn btn-danger " id="cmdCloseButtonApplyAdvances" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -838,49 +836,49 @@
                                 "binding": "SINumber",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": "2*"
+                                "width": 110
                             },
                             {
                                 "header": "Manual SI No",
                                 "binding": "ManualSINumber",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": "2.3*"
+                                "width": 110
                             },
                             {
                                 "header": "Date",
                                 "binding": "SIDate",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": "2*",
+                                "width": 100
                             },
                             {
                                 "header": "SI Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "Payments",
                                 "binding": "PaidAmount",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "Adjustments",
                                 "binding": "AdjustmentAmount",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": "2.3*"
+                                "width": 150
                             },
                             {
                                 "header": "Balance",
                                 "binding": "BalanceAmount",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "Pick",
@@ -898,7 +896,7 @@
                                 "binding": "Balance",
                                 "allowSorting": true,
                                 "isReadOnly": false,
-                                "width": "2*"
+                                "width": 150
                             },
                 ],
                 autoGenerateColumns: false,
@@ -995,43 +993,43 @@
                                 "header": "Code",
                                 "binding": "AccountCode",
                                 "allowSorting": true,
-                                "width": "2*",
+                                "width": 110,
                             },
                             {
                                 "header": "Account",
                                 "binding": "Account",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 200
                             },
                             {
                                 "header": "Article",
                                 "binding": "Article",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 200
                             },
                             {
                                 "header": "Debit",
                                 "binding": "DebitAmount",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "Credit",
                                 "binding": "CreditAmount",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "Balance",
                                 "binding": "Balance",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "Pick",
                                 "binding": "Pick",
                                 "allowSorting": true,
-                                "width": "2*",
+                                "width": 100,
                                 "align": "center",
                                 "allowResizing": false,
                                 "allowSorting": false,
@@ -2817,47 +2815,47 @@
                 journalListGrid.initialize({
                     columns: [
                                 {
-                                    "header": "Branch",
-                                    "binding": "Branch",
-                                    "allowSorting": true,
-                                    "width": 150
-                                },
-                                {
                                     "header": "Code",
                                     "binding": "AccountCode",
                                     "allowSorting": true,
-                                    "width": 60
+                                    "width": 100
                                 },
                                 {
                                     "header": "Account",
                                     "binding": "Account",
                                     "allowSorting": true,
-                                    "width": 200
+                                    "width": 220
                                 },
                                 {
                                     "header": "Article",
                                     "binding": "Article",
                                     "allowSorting": true,
-                                    "width": 162
+                                    "width": 212
                                 },
                                 {
                                     "header": "Debit",
                                     "binding": "DebitAmount",
                                     "allowSorting": true,
-                                    "width": 130
+                                    "width": 150
                                 }
                                 ,
                                 {
                                     "header": "Credit",
                                     "binding": "CreditAmount",
                                     "allowSorting": true,
-                                    "width": 130
+                                    "width": 150
+                                },
+                                {
+                                    "header": "Branch",
+                                    "binding": "Branch",
+                                    "allowSorting": true,
+                                    "width": 200
                                 },
                                 {
                                     "header": "Date",
                                     "binding": "JournalDate",
                                     "allowSorting": true,
-                                    "width": 80,
+                                    "width": 100,
                                 }
                     ],
                     autoGenerateColumns: false,
@@ -3063,7 +3061,7 @@
                             {
                                 "header": "Edit",
                                 "binding": "EditId",
-                                "width": 60,
+                                "width": 70,
                                 "align": "center",
                                 "allowResizing": false,
                                 "allowSorting": false,
@@ -3082,19 +3080,19 @@
                                 "header": "Branch",
                                 "binding": "Branch",
                                 "allowSorting": true,
-                                "width": 150
+                                "width": 200
                             },
                             {
                                 "header": "Pay Type",
                                 "binding": "PayType",
                                 "allowSorting": true,
-                                "width": 150
+                                "width": 200
                             },
                             {
                                 "header": "Particulars",
                                 "binding": "Particulars",
                                 "allowSorting": true,
-                                "width": 170
+                                "width": 250
                             },
                             {
                                 "header": "SI No.",
@@ -3106,25 +3104,25 @@
                                 "header": "Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
-                                "width": 100
+                                "width": 150
                             },
                             {
                                 "header": "Account",
                                 "binding": "Account",
                                 "allowSorting": true,
-                                "width": 170
+                                "width": 200
                             },
                             {
                                 "header": "Article",
                                 "binding": "Article",
                                 "allowSorting": true,
-                                "width": 160
+                                "width": 200
                             },
                             {
                                 "header": "Check No.",
                                 "binding": "CheckNumber",
                                 "allowSorting": true,
-                                "width": 100
+                                "width": 200
                             },
                            {
                                "header": "Check Date",
@@ -3142,10 +3140,10 @@
                                "header": "Depository Bank",
                                "binding": "DepositoryBank",
                                "allowSorting": true,
-                               "width": 150
+                               "width": 200
                            },
                            {
-                               "header": "Clear",
+                               "header": "C",
                                "binding": "IsClear",
                                "allowSorting": true,
                                "width": 50
@@ -3182,6 +3180,21 @@
             //        }
             //    }
             //});
+        });
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
         });
     </script>
 </body>

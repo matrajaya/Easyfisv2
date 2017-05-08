@@ -256,11 +256,12 @@ namespace easyfis.Controllers
         // list collection by ORDate
         [Authorize]
         [HttpGet]
-        [Route("api/listCollectionFilterByORDate/{ORDate}")]
-        public List<Models.TrnCollection> listCollectionByORDate(String ORDate)
+        [Route("api/listCollectionFilterByORDate/{ORStartDate}/{OREndDate}")]
+        public List<Models.TrnCollection> listCollectionByORDate(String ORStartDate, String OREndDate)
         {
             var collections = from d in db.TrnCollections.OrderByDescending(d => d.Id)
-                              where d.ORDate == Convert.ToDateTime(ORDate)
+                              where d.ORDate >= Convert.ToDateTime(ORStartDate)
+                              && d.ORDate <= Convert.ToDateTime(OREndDate)
                               && d.BranchId == currentBranchId()
                               select new Models.TrnCollection
                               {

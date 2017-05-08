@@ -1,22 +1,155 @@
-﻿<header class="main-header">
-    <a href="/Home" class="logo">
-        <div class="logo-mini">
-            <img src="~/Images/logo/fab.png" style="border-radius: 0px !important;" class="img-thumbnail softwareminilogo" />
-        </div>
-        <div class="logo-lg">
-            <img src="~/Images/logo/easyfislogo.png" class="softwarelogo" />
-        </div>
-    </a>
-    <nav class="navbar navbar-default navbar-static-top" role="navigation">
-        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+﻿@*<header class="main-header">
+        <a href="/Home" class="logo">
+            <div class="logo-mini">
+                <img src="~/Images/logo/fab.png" style="border-radius: 0px !important;" class="img-thumbnail softwareminilogo" />
+            </div>
+            <div class="logo-lg">
+                <img src="~/Images/logo/easyfislogo.png" class="softwarelogo" />
+            </div>
         </a>
-        @Html.Partial("_SoftwareLoginPartial")
+        <nav class="navbar navbar-default navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button" onclick="refreshGrids()">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            @Html.Partial("_SoftwareLoginPartial")
+        </nav>
+    </header>*@
+<header>
+    <nav id="mainNav" class="navbar navbar-default userAuthentication navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="/Home">
+                    <img src="~/Images/logo/easyfislogo.png" class="softwarelogo" />
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#" id="c-button--slide-left" class=""><i class="fa fa-bars"></i></a>
+                    </li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
     </nav>
 </header>
+
+<nav id="c-menu--slide-left" class="c-menu c-menu--slide-left">
+    <div class="panel-group panel-group-menu" id="accordion">
+        <div class="panel panel-default panel-side">
+            <div class="panel-heading panel-heading-menu">
+                <a href="#index" class="panel-link-menu c-menu__close">
+                    <h4 class="panel-title">
+                        <i class="fa fa-arrow-left fa-fw"></i> &nbsp; Close Menu
+                    </h4>
+                </a>
+            </div>
+        </div>
+        <div class="panel panel-default panel-side">
+            <div class="panel-heading panel-heading-menu">
+                <a href="/Software" class="panel-link-menu">
+                    <h4 class="panel-title">
+                        <i class="fa fa-dashboard fa-fw"></i> &nbsp; Dashboard
+                    </h4>
+                </a>
+            </div>
+        </div>
+        <div class="panel panel-default panel-side">
+            <div class="panel-heading panel-heading-menu">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="panel-link-menu">
+                    <h4 class="panel-title">
+                        <i class="fa fa-wrench fa-fw"></i> &nbsp; Setup <i class="fa fa-chevron-down pull-right"></i>
+                    </h4>
+                </a>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse panel-collapse-menu">
+                <div class="panel-body panel-body-menu">
+                    <ul class="panel-list-menu">
+                        <li><a href="/Software/Supplier"> Supplier</a></li>
+                        <li><a href="/Software/Customer"> Customer</a></li>
+                        <li><a href="/Software/Items"> Item</a></li>
+                        <li><a href="/Software/Bank"> Bank</a></li>
+                        <li><a href="/Software/ChartOfAccounts"> Chart of Accounts</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default panel-side">
+            <div class="panel-heading panel-heading-menu">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="panel-link-menu">
+                    <h4 class="panel-title">
+                        <i class="fa fa-desktop fa-fw"></i> &nbsp; System <i class="fa fa-chevron-down pull-right"></i>
+                    </h4>
+                </a>
+            </div>
+            <div id="collapse2" class="panel-collapse collapse  panel-collapse-menu">
+                <div class="panel-body">
+                    <ul>
+                        <li><a href="/Software/Company"> Company</a></li>
+                        <li><a href="/Software/Users"> User</a></li>
+                        <li><a href="/Software/SystemTables"> System Tables</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default panel-side">
+            <div class="panel-heading panel-heading-menu">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="panel-link-menu">
+                    <h4 class="panel-title">
+                        <i class="fa fa-line-chart fa-fw"></i> &nbsp; Activity <i class="fa fa-chevron-down pull-right"></i>
+                    </h4>
+                </a>
+            </div>
+            <div id="collapse3" class="panel-collapse collapse panel-collapse-menu">
+                <div class="panel-body">
+                    <ul>
+                        <li><a href="/Software/PurchaseOrder"> Purchase Order</a></li>
+                        <li><a href="/Software/ReceivingReceipt"> Receiving Receipt</a></li>
+                        <li><a href="/Software/Disbursement"> Disbursement</a></li>
+                        <li><a href="/Software/Sales"> Sales</a></li>
+                        <li><a href="/Software/Collection"> Collection</a></li>
+                        <li><a href="/Software/StockIn"> Stock-In</a></li>
+                        <li><a href="/Software/StockOut"> Stock-Out</a></li>
+                        <li><a href="/Software/StockTransfer"> Stock Transfer</a></li>
+                        <li><a href="/Software/StockCount"> Stock Count</a></li>
+                        <li><a href="/Software/JournalVoucher"> Journal Voucher</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default panel-side">
+            <div class="panel-heading panel-heading-menu">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" class="panel-link-menu">
+                    <h4 class="panel-title">
+                        <i class="fa fa-print fa-fw"></i> &nbsp; Reports <i class="fa fa-chevron-down pull-right"></i>
+                    </h4>
+                </a>
+            </div>
+            <div id="collapse4" class="panel-collapse collapse panel-collapse-menu">
+                <div class="panel-body">
+                    <ul>
+                        <li><a href="/Software/AccountsPayable"> Accounts Payable</a></li>
+                        <li><a href="/Software/AccountsReceivable"> Accounts Receivable</a></li>
+                        <li><a href="/Software/InventoryReport"> Inventory Report</a></li>
+                        <li><a href="/Software/FinancialStatements"> Financial Statements</a></li>
+                        <li><a href="/Software/BankReconciliation"> Bank Reconciliation</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</nav><!-- /c-menu slide-left -->
 
 <div class="modal fade" id="modalLogout" role="dialog">
     <div class="modal-dialog modal-sm">

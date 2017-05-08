@@ -12,81 +12,97 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="hold-transition skin-blue fixed sidebar-mini">
-    <div class="wrapper">
-        @Html.Partial("_SoftwareHeader")
-        @Html.Partial("_SoftwareSideBarMenu")
+<body class="">
 
-        <div class="content-wrapper">
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
             <section class="content-header">
-                <h1>
-                    Purchase Order
-                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="/Software"> Dashboard</a></li>
-                    <li> Purchase Order </li>
-                </ol>
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-clipboard fa-fw"></i> Purchase Order
+                    </h2>
+                </div>
             </section>
-
-            <section class="content">
-                <div class="box box-default">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="input-group input-group-sm">
+            <br />
+            <section class="container">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <span class="input-group-addon">Company</span>
+                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 59%">
+                                    <div class="input-group ">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search">
                                     </div>
-                                </div>
-                                <div class="col-lg-2">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-addon">PO Date</span>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 40%" align="right">
+                                    <button class="btn btn-primary " id="btnAddPurchaseOrder" onclick="btnAddPurchaseOrder_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    <button class="btn btn-danger " id="btnAddClose" onclick="btnClosePurchaseOrder_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 29%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon">Start Date</span>
                                         <div id="filterDate"></div>
                                         <input type="hidden" id="filterDate_data" />
                                     </div>
-                                </div>
-                                <div class="col-lg-6" align="right">
-                                    <button class="btn btn-primary btn-sm" id="btnAddPurchaseOrder" onclick="btnAddPurchaseOrder_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <button class="btn btn-danger btn-sm" id="btnAddClose" onclick="btnClosePurchaseOrder_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                                </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 29%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon">End Date</span>
+                                        <div id="filterEndDate"></div>
+                                        <input type="hidden" id="filterEndDate_data" />
+                                    </div>
+                                </td>
+                                <td style="width: 41%"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="POGrid" class="grid" align="left"></div>
                             </div>
                         </div>
-                        <div class="panel-body">
-                            <div class="row" align="left">
-                                <div class="col-lg-12">
-                                    <div id="POGrid" class="grid" align="left"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel-footer">
-                            <div class="row">
-                                <div class="btn-group col-md-7" id="naviagtionPageGrid">
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
-                                        <span class="glyphicon glyphicon-fast-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
-                                        <span class="glyphicon glyphicon-step-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
-                                        <span class="glyphicon glyphicon-step-forward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
-                                        <span class="glyphicon glyphicon-fast-forward"></span>
-                                    </button>
-                                </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGrid">
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-        </div>
-
-        @Html.Partial("_SoftwareFooter")
+            @Html.Partial("_SoftwareFooter")
+        </main>
     </div>
 
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- PO Delete -->
     <div class="modal fade" id="deletePOConfirm" role="dialog">
         <div class="modal-dialog modal-sm">
@@ -100,8 +116,8 @@
                     Are you sure you want to delete this?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeletePO" onclick="cmdPOConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-danger " id="cmdConfirmDeletePO" onclick="cmdPOConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -120,7 +136,7 @@
                     Sorry, the record is lock! It can't be deleted!
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
+                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"> Okay</button>
                 </div>
             </div>
         </div>
@@ -141,15 +157,23 @@
         var btnCurrentPageGrid;
 
         var isFirstSelect = true;
+        var isEndFirstSelect = true;
+
+        var cboFilterDate;
+        var cboFilterEndDate;
 
         // ==================
         // GET Purchase Order
         // ==================
-        function getPOFilterByDate(PODateFilter) {
+        function getPOFilterByDate() {
             var POs = new wijmo.collections.ObservableArray;
             NProgress.start();
+
+            var PODateFilterValue = document.getElementById('filterDate_data').value;
+            var POEndDateFilterValue = document.getElementById('filterEndDate_data').value;
+
             $.ajax({
-                url: '/api/listPurchaseOrderFilterByPODate/' + PODateFilter,
+                url: '/api/listPurchaseOrderFilterByPODate/' + PODateFilterValue + '/' + POEndDateFilterValue,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -235,10 +259,7 @@
         // PO Delete Lock Button
         // =====================
         function PODeleteLockButton_OnClick() {
-            $('#deleteRecordLock').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            toastr.error("Record Locked")
         }
 
         // =========================
@@ -343,7 +364,7 @@
                         $('#deletePOConfirm').modal('hide');
 
                         var PODateFilter = document.getElementById('filterDate_data').value;
-                        POs = new wijmo.collections.CollectionView(getPOFilterByDate(PODateFilter));
+                        POs = new wijmo.collections.CollectionView(getPOFilterByDate());
                         POs.canFilter = true;
                         POs.pageSize = 15;
 
@@ -427,8 +448,8 @@
         $(document).ready(function () {
             var PODateFilter_Date = new Date();
             document.getElementById("filterDate_data").value = [PODateFilter_Date.getMonth() + 1, PODateFilter_Date.getDate(), PODateFilter_Date.getFullYear()].join('-');
+            document.getElementById("filterEndDate_data").value = [PODateFilter_Date.getMonth() + 1, PODateFilter_Date.getDate(), PODateFilter_Date.getFullYear()].join('-');
 
-            var cboFilterDate;
             cboFilterDate = new wijmo.input.InputDate('#filterDate', {
                 format: 'MM/dd/yyyy',
                 value: new Date(),
@@ -441,7 +462,7 @@
                         $('body').removeClass('modal-open');
                         $(".modal-backdrop").remove();
 
-                        POs = new wijmo.collections.CollectionView(getPOFilterByDate(PODateFilterValue));
+                        POs = new wijmo.collections.CollectionView(getPOFilterByDate());
                         POs.canFilter = true;
                         POs.pageSize = 15;
 
@@ -470,8 +491,50 @@
                 }
             });
 
+            cboFilterEndDate = new wijmo.input.InputDate('#filterEndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    if (!isEndFirstSelect) {
+                        document.getElementById('filterEndDate_data').value = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                        var POEndDateFilterValue = document.getElementById('filterEndDate_data').value;
+
+                        $('body').removeClass('modal-open');
+                        $(".modal-backdrop").remove();
+
+                        POs = new wijmo.collections.CollectionView(getPOFilterByDate());
+                        POs.canFilter = true;
+                        POs.pageSize = 15;
+
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            POs.refresh();
+                        });
+                        POs.filter = function (item) {
+                            return !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        POs.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsPO();
+                        });
+                        POs.currentChanged.addHandler(function (sender, args) {
+                            updateDetails();
+                        });
+
+                        POGrid.itemsSource = POs;
+                        POGrid.trackChanges = true;
+
+                        updateNavigateButtonsPO();
+                    } else {
+                        isEndFirstSelect = false;
+                    }
+                }
+            });
+
+
             var PODateFilter = document.getElementById('filterDate_data').value;
-            POs = new wijmo.collections.CollectionView(getPOFilterByDate(PODateFilter));
+            POs = new wijmo.collections.CollectionView(getPOFilterByDate());
             POs.canFilter = true;
             POs.pageSize = 15;
 
@@ -497,7 +560,7 @@
                             {
                                 "header": "Edit",
                                 "binding": "EditId",
-                                "width": 60,
+                                "width": 70,
                                 "align": "center",
                                 "allowResizing": false,
                                 "allowSorting": false,
@@ -516,37 +579,37 @@
                                 "header": "PO Number",
                                 "binding": "PONumber",
                                 "allowSorting": true,
-                                "width": "1*",
+                                "width": 110,
                             },
                             {
                                 "header": "PO Date",
                                 "binding": "PODate",
                                 "allowSorting": true,
-                                "width": "1*"
+                                "width": 100
                             },
                             {
                                 "header": "Supplier",
                                 "binding": "Supplier",
                                 "allowSorting": true,
-                                "width": "3*"
+                                "width": 440
                             },
                             {
                                 "header": "Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
-                                "width": "1.5*"
+                                "width": 170
                             },
                             {
                                 "header": "Close",
                                 "binding": "IsClose",
                                 "allowSorting": true,
-                                "width": "0.5*"
+                                "width": 70
                             },
                             {
                                 "header": "L",
                                 "binding": "IsLocked",
                                 "allowSorting": true,
-                                "width": "0.5*"
+                                "width": 50
                             }
                 ],
                 autoGenerateColumns: false,
@@ -593,6 +656,27 @@
             } else {
                 $("#btnAddPurchaseOrder").prop("disabled", true)
             }
+        });
+
+        function refreshGrids() {
+            setTimeout(function () {
+                POs.refresh();
+            }, 500)
+        }
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
         });
     </script>
 </body>

@@ -12,183 +12,175 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="hold-transition skin-blue fixed sidebar-mini">
-    <div class="wrapper">
-        @Html.Partial("_SoftwareHeader")
-        @Html.Partial("_SoftwareSideBarMenu")
+<body class="">
 
-        <div class="content-wrapper">
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
             <section class="content-header">
-                <h1>
-                    Bank Reconciliation
-                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="/Software"> Dashboard</a></li>
-                    <li> Bank Reconciliation </li>
-                </ol>
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-print fa-fw"></i> Bank Reconciliation
+                    </h2>
+                </div>
             </section>
-
-            <section class="content">
-                <div class="box box-default">
-                    <div class="box-header">
-                       
-                    </div>
-                    <div class="box-body">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-md-12" align="right">
-                                        <button class="btn btn-primary btn-sm" id="" onclick="btnBankReconciliationPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
-                                        <button class="btn btn-danger btn-sm" id="" onclick="btnBankReconciliationClose_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                                    </div>
-                                </div>
+            <br />
+            <section class="container">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <span class="input-group-addon">Company</span>
+                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-12" align="right">
+                                <button class="btn btn-primary " id="" onclick="btnBankReconciliationPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
+                                <button class="btn btn-danger " id="" onclick="btnBankReconciliationClose_OnClick()"><i class=" fa fa-times"></i> Close</button>
                             </div>
-                            <div class="panel-body">
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-5">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Bank</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="bankReconciliationBank"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Date Start</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-50" id="bankReconciliationStartDate"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Date End</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-50" id="bankReconciliationEndDate"></div>
-                                                    </div>
-                                                </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="">
+                            <form class="form-horizontal" role="form">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Bank</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="bankReconciliationBank"></div>
                                             </div>
-                                            <div class="col-md-7">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Ending Balance as per Bank</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm numberField input-50" id="bankReconciliationEndingBalanceAsPerBank" placeholder="0.00" />
-                                                        <input type="hidden" id="bankReconciliationEndingBalanceAsPerBankValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Total Deposit in Transit</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm numberField input-50" id="bankReconciliationTotalDepositInTransit" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Total Outstanding Withdrawals</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm numberField input-50" id="bankReconciliationTotalOutstandingWithdrawals" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Total Adjustments</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm numberField input-50" id="bankReconciliationTotalAdjustments" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Adjusted Ending Balance as per Bank</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm numberField input-50" id="bankReconciliationAdjustedEndingBalanceAsPerBank" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6"></div>
                                         </div>
-                                    </form>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Date Start</label>
+                                            <div class="col-sm-8">
+                                                <div class="" id="bankReconciliationStartDate"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Date End</label>
+                                            <div class="col-sm-8">
+                                                <div class="" id="bankReconciliationEndDate"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6">Ending Balance as per Bank</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control  numberField " id="bankReconciliationEndingBalanceAsPerBank" placeholder="0.00" />
+                                                <input type="hidden" id="bankReconciliationEndingBalanceAsPerBankValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6">Total Deposit in Transit</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control  numberField " id="bankReconciliationTotalDepositInTransit" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6">Total Outstanding Withdrawals</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control  numberField " id="bankReconciliationTotalOutstandingWithdrawals" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6">Total Adjustments</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control  numberField " id="bankReconciliationTotalAdjustments" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6">Adjusted Ending Balance as per Bank</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control  numberField " id="bankReconciliationAdjustedEndingBalanceAsPerBank" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#deposits" id="depositsCollection">Deposits (Collection)</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#withdrwals" id="withdrwalsDisbursment">Withdrawals (Disbursement)</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#adjustments" id="adjustmentsJournalVoucher">Adjustments (Journal Voucher)</a></li>
+                </ul>
+                <br />
+                <div class="tab-content">
+                    <!-- Deposits -->
+                    <div id="deposits" class="tab-pane fade in active">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div id="collectionLineGrid" class="grid"></div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-lg-8"></div>
+                                    <div class="col-lg-4">
+                                        <table class="table table-responsive table-bordered">
+                                            <tr>
+                                                <td align="right">
+                                                    <b>Total: </b>
+                                                </td>
+                                                <td style="padding-left: 10px" align="right">
+                                                    <span id="totalInTransit">0.00</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <br />
-                        <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
-                            <li role="presentation" class="active"><a data-toggle="tab" href="#deposits" id="depositsCollection">Deposits (Collection)</a></li>
-                            <li role="presentation"><a data-toggle="tab" href="#withdrwals" id="withdrwalsDisbursment">Withdrawals (Disbursement)</a></li>
-                            <li role="presentation"><a data-toggle="tab" href="#adjustments" id="adjustmentsJournalVoucher">Adjustments (Journal Voucher)</a></li>
-                        </ul>
-                        <br />
-                        <div class="tab-content">
-                            <!-- Deposits -->
-                            <div id="deposits" class="tab-pane fade in active">
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <div id="collectionLineGrid" class="grid"></div>
-                                    </div>
-                                    <div class="panel-footer">
-                                        <div class="row">
-                                            <div class="col-lg-8"></div>
-                                            <div class="col-lg-4">
-                                                <table class="table table-responsive table-bordered">
-                                                    <tr>
-                                                        <td align="right">
-                                                            <b>Total: </b>
-                                                        </td>
-                                                        <td style="padding-left: 10px" align="right">
-                                                            <span id="totalInTransit">0.00</span>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </div>
+                    </div>
+
+                    <!-- Withdrwals -->
+                    <div id="withdrwals" class="tab-pane fade in">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div id="disbursementGrid" class="grid"></div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-lg-8"></div>
+                                    <div class="col-lg-4">
+                                        <table class="table table-responsive table-bordered">
+                                            <tr>
+                                                <td align="right">
+                                                    <b>Total: </b>
+                                                </td>
+                                                <td style="padding-left: 10px" align="right">
+                                                    <span id="totalOutstanding">0.00</span>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <!-- Withdrwals -->
-                            <div id="withdrwals" class="tab-pane fade in">
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <div id="disbursementGrid" class="grid"></div>
-                                    </div>
-                                    <div class="panel-footer">
-                                        <div class="row">
-                                            <div class="col-lg-8"></div>
-                                            <div class="col-lg-4">
-                                                <table class="table table-responsive table-bordered">
-                                                    <tr>
-                                                        <td align="right">
-                                                            <b>Total: </b>
-                                                        </td>
-                                                        <td style="padding-left: 10px" align="right">
-                                                            <span id="totalOutstanding">0.00</span>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                    <!-- Adjustments -->
+                    <div id="adjustments" class="tab-pane fade in">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div id="adjustmentGrid" class="grid"></div>
                             </div>
-
-                            <!-- Adjustments -->
-                            <div id="adjustments" class="tab-pane fade in">
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <div id="adjustmentGrid" class="grid"></div>
-                                    </div>
-                                    <div class="panel-footer">
-                                        <div class="row">
-                                            <div class="col-lg-8"></div>
-                                            <div class="col-lg-4">
-                                                <table class="table table-responsive table-bordered">
-                                                    <tr>
-                                                        <td align="right">
-                                                            <b>Total: </b>
-                                                        </td>
-                                                        <td style="padding-left: 10px" align="right">
-                                                            <span id="totalAdjustments">0.00</span>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </div>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-lg-8"></div>
+                                    <div class="col-lg-4">
+                                        <table class="table table-responsive table-bordered">
+                                            <tr>
+                                                <td align="right">
+                                                    <b>Total: </b>
+                                                </td>
+                                                <td style="padding-left: 10px" align="right">
+                                                    <span id="totalAdjustments">0.00</span>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -196,11 +188,11 @@
                     </div>
                 </div>
             </section>
-        </div>
-
-        @Html.Partial("_SoftwareFooter")
+            @Html.Partial("_SoftwareFooter")
+        </main>
     </div>
 
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         // ================
@@ -486,7 +478,7 @@
         function pickAmountIntransit_OnClick(isCleard) {
             collectionLines.editItem(collectionLines.currentItem);
             var collectionLineItem = collectionLines.currentEditItem;
-            
+
             if (collectionLineItem.InTransit > 0) {
                 collectionLineItem.InTransit = 0;
                 collectionLineItem.IsClearHtml = "<button class='btn btn-primary btn-xs' onclick='pickAmountIntransit_OnClick(" + isCleard + ")'><i class='fa fa-hand-o-right'></i></button>";
@@ -503,7 +495,7 @@
                     collectionLineItem.IsClearHtml = "<button class='btn btn-warning btn-xs' onclick='pickAmountIntransit_OnClick(" + isCleard + ")'><i class='fa fa-hand-o-left'></i></button>";
                 }
 
-                
+
                 collectionLines.onCollectionChanged(function () {
                     collectionLines.refresh();
                 });
@@ -704,7 +696,7 @@
                                 icon = "<i class='fa fa-hand-o-left'></i>";
 
                                 totalOutStandingAmount += outstandingAmount[i];
-                                
+
                                 isCleard = true;
                             } else {
                                 btnColor = "primary";
@@ -790,7 +782,7 @@
                 } else {
                     disbursementItem.IsClearHtml = "<button class='btn btn-warning btn-xs' onclick='pickOutstandingAmount_OnClick(" + isCleard + ")'><i class='fa fa-hand-o-left'></i></button>";
                 }
-                
+
                 disbursements.onCollectionChanged(function () {
                     disbursements.refresh();
                 });
@@ -1236,6 +1228,21 @@
             $('#withdrwals').hide();
             $('#adjustments').hide();
 
+        });
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
         });
     </script>
 </body>

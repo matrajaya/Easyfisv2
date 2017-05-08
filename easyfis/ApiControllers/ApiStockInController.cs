@@ -120,11 +120,12 @@ namespace easyfis.Controllers
         // list stock in by INDate
         [Authorize]
         [HttpGet]
-        [Route("api/listStockInFilterByINDate/{INDate}")]
-        public List<Models.TrnStockIn> listStockInByINDate(String INDate)
+        [Route("api/listStockInFilterByINDate/{INStartDate}/{INEndDate}")]
+        public List<Models.TrnStockIn> listStockInByINDate(String INStartDate, String INEndDate)
         {
             var stockIns = from d in db.TrnStockIns.OrderByDescending(d => d.Id)
-                           where d.INDate == Convert.ToDateTime(INDate)
+                           where d.INDate >= Convert.ToDateTime(INStartDate)
+                           && d.INDate <= Convert.ToDateTime(INEndDate)
                            && d.BranchId == currentBranchId()
                            select new Models.TrnStockIn
                            {

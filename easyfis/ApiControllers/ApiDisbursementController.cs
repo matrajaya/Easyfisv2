@@ -249,11 +249,12 @@ namespace easyfis.Controllers
         // list disbursement by CVDate
         [Authorize]
         [HttpGet]
-        [Route("api/listDisbursementFilterByCVDate/{CVDate}")]
-        public List<Models.TrnDisbursement> listDisbusementByCVDate(String CVDate)
+        [Route("api/listDisbursementFilterByCVDate/{CVStartDate}/{CVEndDate}")]
+        public List<Models.TrnDisbursement> listDisbusementByCVDate(String CVStartDate, String CVEndDate)
         {
             var disbursements = from d in db.TrnDisbursements.OrderByDescending(d => d.Id)
-                                where d.CVDate == Convert.ToDateTime(CVDate)
+                                where d.CVDate >= Convert.ToDateTime(CVStartDate)
+                                && d.CVDate <= Convert.ToDateTime(CVEndDate)
                                 && d.BranchId == currentBranchId()
                                 select new Models.TrnDisbursement
                                 {
