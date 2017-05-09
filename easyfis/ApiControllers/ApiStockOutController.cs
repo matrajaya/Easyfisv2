@@ -76,11 +76,12 @@ namespace easyfis.Controllers
         // list stock out by OTDate
         [Authorize]
         [HttpGet]
-        [Route("api/listStockOutFilterByOTDate/{OTDate}")]
-        public List<Models.TrnStockOut> listStockOutByOTDate(String OTDate)
+        [Route("api/listStockOutFilterByOTDate/{OTStartDate}/{OTEndDate}")]
+        public List<Models.TrnStockOut> listStockOutByOTDate(String OTStartDate, String OTEndDate)
         {
             var stockOuts = from d in db.TrnStockOuts.OrderByDescending(d => d.Id)
-                            where d.OTDate == Convert.ToDateTime(OTDate)
+                            where d.OTDate >= Convert.ToDateTime(OTStartDate)
+                            && d.OTDate <= Convert.ToDateTime(OTEndDate)
                             && d.BranchId == currentBranchId()
                             select new Models.TrnStockOut
                             {

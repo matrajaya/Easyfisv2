@@ -4,94 +4,91 @@
 @if (Request.IsAuthenticated)
 {
     <!-- Section -->
-    <section class="secStyle">
-        <br /><br /><br />
-        <div class="container">
-            <div class="box box-default">
-                <div class="row">
-                    <div class="col-md-3">
-                        <ul class="nav nav-pills nav-stacked pill-custom" role="tablist" id="myTab">
-                            <li class="active"><a data-toggle="pill" href="#UI"><i class="fa fa-user"></i> User Information</a></li>
-                            <li class="manageDivider"></li>
-                            <li><a data-toggle="pill" href="#ST"><i class="fa fa-gears"></i> Settings</a></li>
-                            <li><a data-toggle="pill" href="#UT"><i class="fa fa-wrench"></i> Utilities</a></li>
+    <section class="container">
+        <div class="input-group" style="margin-bottom: 10px;">
+            <span class="input-group-addon">Company</span>
+            <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <ul class="nav nav-pills nav-stacked pill-custom" role="tablist" id="myTab">
+                    <li class="active"><a data-toggle="pill" href="#UI"><i class="fa fa-user"></i> User Information</a></li>
+                    <li class="manageDivider"></li>
+                    <li><a data-toggle="pill" href="#ST"><i class="fa fa-gears"></i> Settings</a></li>
+                    <li><a data-toggle="pill" href="#UT"><i class="fa fa-wrench"></i> Utilities</a></li>
+                </ul>
+                <br />
+                <button class="btn btn-success btn-block btn-xl launchSoftware" id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()"><i class=" fa fa-dashboard"></i> Software Dashboard</button>
+                <br /><br />
+            </div>
+            <div class="col-md-9">
+                <div class="tab-content">
+                    <div id="UI" class="tab-pane fade in active">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4><b>@ViewData["FullName"]</b></h4>
+                            </div>
+                            <div class="panel-body">
+                                <button class="btn btn-primary " onclick="cmdEditProfileDetails_OnClickButton()"> Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="ST" class="tab-pane fade in">
+                        <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
+                            <li role="presentation" class="active"><a data-toggle="tab" href="#Sys">System</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#DF">Defaults</a></li>
                         </ul>
                         <br />
-                        <button class="btn btn-success btn-block btn-xl launchSoftware" id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()"><i class=" fa fa-rocket"></i> Launch Software</button>
-                        <br /><br />
-                    </div>
-                    <div class="col-md-9">
                         <div class="tab-content">
-                            <div id="UI" class="tab-pane fade in active">
-                                <div class="well">
-                                    <h3><b>@ViewData["FullName"]</b></h3>
-                                    <br />
-                                    <button class="btn btn-primary btn-sm" onclick="cmdEditProfileDetails_OnClickButton()"> Edit</button>
-                                </div>
-                            </div>
-                            <div id="ST" class="tab-pane fade in">
-                                <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
-                                    <li role="presentation" class="active"><a data-toggle="tab" href="#Sys">System</a></li>
-                                    <li role="presentation"><a data-toggle="tab" href="#DF">Defaults</a></li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div id="Sys" class="tab-pane fade in active">
-                                        <br />
-                                        <div class="well">
+                            <div id="Sys" class="tab-pane fade in active">
 
-                                        </div>
+                            </div>
+                            <div id="DF" class="tab-pane fade in">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" align="right">
+                                        <button class="btn btn-primary " id="btnIdSaveDefaults" onclick="btnOnclickSaveDefaults()"><i class="fa fa-save"></i> Save</button>
                                     </div>
-                                    <div id="DF" class="tab-pane fade in">
-                                        <br />
-                                        <div class="row">
-                                            <div class="col-md-12" align="right">
-                                                <button class="btn btn-primary btn-sm" id="btnIdSaveDefaults" onclick="btnOnclickSaveDefaults()"><i class="fa fa-save"></i> Save</button>
-                                            </div>
-                                        </div>
-                                        <br />
-                                        <div class="well">
-                                            <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-8">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-6">Default Branch</label>
-                                                            <div class="col-sm-6">
-                                                                <div class="comboBox-wide" id="defaultBranch"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-6">Official Receipt Name</label>
-                                                            <div class="col-sm-6">
-                                                                <input type="text" class="form-control input-70" id="defaultOfficialReceiptName" />
-                                                            </div>
+                                    <div class="panel-body">
+                                        <form class="form-horizontal" role="form">
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-6">Default Branch</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="comboBox-wide" id="defaultBranch"></div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4"></div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-6">Official Receipt Name</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control " id="defaultOfficialReceiptName" />
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </form>
-                                        </div>
+                                                <div class="col-md-4"></div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-                            <div id="UT" class="tab-pane fade in">
-                                <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
-                                    <li role="presentation" class="active"><a data-toggle="tab" href="#DAT">Delete All Transaction</a></li>
-                                    <li role="presentation"><a data-toggle="tab" href="#AT">Audit Trail</a></li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div id="DAT" class="tab-pane fade in active">
-                                        <br />
-                                        <div class="well">
-                                            <button class="btn btn-danger" id="btnDeleteAllTransaction" onclick="btnDeleteAllTransactionOnclick()"><i class="fa fa-trash"></i> Delete</button>
-                                        </div>
-                                    </div>
-                                    <div id="AT" class="tab-pane fade in">
-                                        <br />
-                                        <div class="well">
-
-                                        </div>
+                        </div>
+                    </div>
+                    <div id="UT" class="tab-pane fade in">
+                        <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
+                            <li role="presentation" class="active"><a data-toggle="tab" href="#DAT">Delete All Transaction</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#AT">Audit Trail</a></li>
+                        </ul>
+                        <br />
+                        <div class="tab-content">
+                            <div id="DAT" class="tab-pane fade in active">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" align="right">
+                                        <button class="btn btn-danger" id="btnDeleteAllTransaction" onclick="btnDeleteAllTransactionOnclick()"><i class="fa fa-trash"></i> Delete</button>
                                     </div>
                                 </div>
+                            </div>
+                            <div id="AT" class="tab-pane fade in">
+
                             </div>
                         </div>
                     </div>
@@ -119,13 +116,13 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="well">
+                                        <div class="">
                                             <h1>@ViewData["FullName"]</h1>
                                         </div>
                                     </div>
                                 </div>
-                                <button class="btn btn-default btn-sm" onclick="cmdEditProfileDetails_OnClickButton()"> Edit</button>
-                                <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default btn-sm"> Change Your Password</a>
+                                <button class="btn btn-default " onclick="cmdEditProfileDetails_OnClickButton()"> Edit</button>
+                                <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default "> Change Your Password</a>
                                 <p class="change-password-success">@ViewBag.StatusMessage</p>
                             </div>
                         </div>
@@ -143,7 +140,7 @@
                                 <br />
                                 <div class="row">
                                     <div class="col-md-12" align="right">
-                                        <button id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()" class="btn btn-primary btn-sm">Launch Software</button>
+                                        <button id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()" class="btn btn-primary ">Launch Software</button>
                                     </div>
                                 </div>
                             </div>

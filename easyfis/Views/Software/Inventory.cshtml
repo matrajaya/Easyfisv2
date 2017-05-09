@@ -12,90 +12,86 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="hold-transition skin-blue fixed sidebar-mini">
-    <div class="wrapper">
-        @Html.Partial("_SoftwareHeader")
-        @Html.Partial("_SoftwareSideBarMenu")
-
-        <div class="content-wrapper">
+<body>
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
             <section class="content-header">
-                <h1>
-                    Inventory
-                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="/Software"> Dashboard</a></li>
-                    <li> <a href="/Software/InventoryReport"> Inventory Report </a></li>
-                    <li> Inventory </li>
-                </ol>
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-print fa-fw"></i> Inventory
+                    </h2>
+                </div>
             </section>
-
-            <section class="content">
-                <div class="box box-default">
-                    <div class="box-body">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="box-header">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <h4>
-                                                <span id="companyname"></span>
-                                                <small>
-                                                    <i class="fa fa-calendar fa-fw"></i> <span id="inventoryDate"></span>
-                                                </small>
-                                            </h4>
-                                        </div>
-                                        <div class="col-md-6" align="right">
-                                            <button onclick="inventoryReportInventoryCSV_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                            <button onclick="inventoryReportInventoryPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                            <a href="/Software/InventoryReport" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
-                                        </div>
+            <br />
+            <section class="container">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <span class="input-group-addon">Company</span>
+                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 49%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search">
                                     </div>
-                                </div>
-                            </div>
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
-                                        </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 50%" align="right">
+                                    <button onclick="inventoryReportInventoryCSV_OnClick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    <button onclick="inventoryReportInventoryPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                    <a href="/Software/InventoryReport" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 49%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon">Filter Company</span>
+                                        <input type="text" class="form-control " id="companyname" placeholder="filter company" disabled>
                                     </div>
-                                    <div class="col-lg-8"></div>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div id="inventoryGrid" class="grid"></div>
-                            </div>
-                            <div class="panel-footer">
-                                <div align="right">
-                                    <div class="row">
-                                        <div class="col-md-8"></div>
-                                        <div class="col-md-4">
-                                            <table class="table table-responsive table-bordered">
-                                                <tr>
-                                                    <td align="right">
-                                                        <b>Total Amount: </b>
-                                                    </td>
-                                                    <td style="padding-left: 10px" align="right">
-                                                        <span id="totalAmount">NA</span>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            <hr />
-                                        </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 50%" align="right">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon">Date</span>
+                                        <input type="text" class="form-control " id="inventoryDate" placeholder="Date" disabled>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <div id="inventoryGrid" class="grid"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <table class="table table-responsive table-bordered">
+                            <tr>
+                                <td align="right">
+                                    <b>Total Amount: </b>
+                                </td>
+                                <td style="padding-left: 10px" align="right">
+                                    <span id="totalAmount">NA</span>
+                                </td>
+                            </tr>
+                        </table>
+                        <hr />
                     </div>
                 </div>
             </section>
-        </div>
-
-        @Html.Partial("_SoftwareFooter")
+            @Html.Partial("_SoftwareFooter")
+        </main>
     </div>
-
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         var inventoryGrid;
@@ -114,7 +110,7 @@
         function getInventory() {
             NProgress.start();
             var inventories = new wijmo.collections.ObservableArray;
-            document.getElementById("inventoryDate").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
+            document.getElementById("inventoryDate").value = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
             $.ajax({
                 url: '/api/inventoryReport/list/' + getParam("StartDate") + "/" + getParam("EndDate") + "/" + getParam("CompanyId"),
                 cache: false,
@@ -175,7 +171,7 @@
             window.location.href = '/RepInventoryReport/InventoryReport?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&CompanyId=' + getParam("CompanyId");
         }
 
-        //CSV Inventory 
+        //CSV Inventory
         var inventoryCollections;
 
         function inventoryReportInventoryCSV_OnClick() {
@@ -220,7 +216,7 @@
                 EndQuantity: "End",
                 TotalAmount: "Total Amount",
                 Count: "Count",
-                QuantityVariance:"Variance",
+                QuantityVariance: "Variance",
                 VarianceAmount: "Variance Amount",
 
 
@@ -283,7 +279,7 @@
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 success: function (companyResults) {
-                    document.getElementById("companyname").innerHTML = companyResults.Company;
+                    document.getElementById("companyname").value = companyResults.Company;
                 }
             });
 
@@ -309,13 +305,13 @@
                                 "header": "Branch",
                                 "binding": "Branch",
                                 "allowSorting": true,
-                                "width": 150
+                                "width": 200
                             },
                             {
                                 "header": "Code",
                                 "binding": "InventoryCode",
                                 "allowSorting": true,
-                                "width": 150,
+                                "width": 200,
                                 "allowResizing": false,
                                 "allowSorting": false,
                                 "isContentHtml": true
@@ -333,61 +329,61 @@
                                 "header": "Unit",
                                 "binding": "Unit",
                                 "allowSorting": true,
-                                "width": 70
+                                "width": 120
                             },
                             {
                                 "header": "Cost",
                                 "binding": "Cost",
                                 "allowSorting": true,
-                                "width": 110
+                                "width": 150
                             },
                             {
                                 "header": "Beg",
                                 "binding": "BegQuantity",
                                 "allowSorting": true,
-                                "width": 110
+                                "width": 150
                             },
                             {
                                 "header": "In",
                                 "binding": "InQuantity",
                                 "allowSorting": true,
-                                "width": 110
+                                "width": 150
                             },
                             {
                                 "header": "Out",
                                 "binding": "OutQuantity",
                                 "allowSorting": true,
-                                "width": 110
+                                "width": 150
                             },
                             {
                                 "header": "End",
                                 "binding": "EndQuantity",
                                 "allowSorting": true,
-                                "width": 110
+                                "width": 150
                             },
                             {
                                 "header": "Total Amount",
                                 "binding": "TotalAmount",
                                 "allowSorting": true,
-                                "width": 110
+                                "width": 150
                             },
                             {
                                 "header": "Count",
                                 "binding": "Count",
                                 "allowSorting": true,
-                                "width": 110
+                                "width": 150
                             },
                             {
                                 "header": "Variance",
                                 "binding": "QuantityVariance",
                                 "allowSorting": true,
-                                "width": 110
+                                "width": 150
                             },
                             {
                                 "header": "Variance Amount",
                                 "binding": "VarianceAmount",
                                 "allowSorting": true,
-                                "width": 130
+                                "width": 150
                             }
                 ],
                 autoGenerateColumns: false,
@@ -433,6 +429,21 @@
 
             inventoryGrid.columnHeaders.columns[12].allowMerging = true;
             inventoryGrid.columnHeaders.setCellData(0, 12, 'Variance Amount');
+        });
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
         });
     </script>
 </body>

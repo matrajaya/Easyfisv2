@@ -111,11 +111,12 @@ namespace easyfis.Controllers
         // list stock transfer by STDate
         [Authorize]
         [HttpGet]
-        [Route("api/listStockTransferFilterBySTDate/{STDate}")]
-        public List<Models.TrnStockTransfer> listStockTransferBySTDate(String STDate)
+        [Route("api/listStockTransferFilterBySTDate/{STStartDate}/{STEndDate}")]
+        public List<Models.TrnStockTransfer> listStockTransferBySTDate(String STStartDate, String STEndDate)
         {
             var stockTransfer = from d in db.TrnStockTransfers.OrderByDescending(d => d.Id)
-                                where d.STDate == Convert.ToDateTime(STDate)
+                                where d.STDate >= Convert.ToDateTime(STStartDate)
+                                && d.STDate <= Convert.ToDateTime(STEndDate)
                                 && d.BranchId == currentBranchId()
                                 select new Models.TrnStockTransfer
                                 {

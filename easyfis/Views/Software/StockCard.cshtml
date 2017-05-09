@@ -12,102 +12,115 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="hold-transition skin-blue fixed sidebar-mini">
-    <div class="wrapper">
-        @Html.Partial("_SoftwareHeader")
-        @Html.Partial("_SoftwareSideBarMenu")
+<body class="">
 
-        <div class="content-wrapper">
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
             <section class="content-header">
-                <h1>
-                    Stock Card
-                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="/Software"> Dashboard</a></li>
-                    <li> <a href="/Software/InventoryReport"> Inventory Report </a></li>
-                    <li> Stock Card </li>
-                </ol>
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-print fa-fw"></i> Stock Card
+                    </h2>
+                </div>
             </section>
-
-            <section class="content">
-                <div class="box box-default">
-                    <div class="box-body">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h4>
-                                            <span id="companyname">@ViewData["Company"]</span>
-                                            <small>
-                                                <i class="fa fa-calendar fa-fw"></i> <span id="inventoryDate"></span>
-                                            </small>
-                                        </h4>
+            <br />
+            <section class="container">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <span class="input-group-addon">Company</span>
+                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 59%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search">
                                     </div>
-                                    <div class="col-md-6" align="right">
-                                        <button onclick="InventoryStockCardCSV_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                        <button onclick="InventoryStockCardPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                        <a href="/Software/InventoryReport" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 40%" align="right">
+                                    <button onclick="InventoryStockCardCSV_OnClick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    <button onclick="InventoryStockCardPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                    <a href="/Software/InventoryReport" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 59%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon">Date:</span>
+                                        <input type="text" class="form-control " id="inventoryDate" placeholder="date" disabled>
                                     </div>
-                                </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 20%" align="right"></td>
+                                <td style="width: 20%"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table table-responsive table-bordered">
+                                    <tr>
+                                        <td align="right">
+                                            <b>Branch: </b>
+                                        </td>
+                                        <td style="padding-left: 10px">
+                                            <span id="branchTitle">NA</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Item: </b>
+                                        </td>
+                                        <td style="padding-left: 10px">
+                                            <span id="itemTitle">NA</span>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-8"></div>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <h5>
-                                    <span id="branchTitle">branch</span>
-                                </h5>
-                                <h5>
-                                    <b><span id="itemTitle">item</span></b>
-                                </h5>
-                                <div id="stockCardGrid" class="grid"></div>
-                            </div>
-                            <div class="panel-footer">
-                                <div align="right">
-                                    <div class="row">
-                                        <div class="col-md-8"></div>
-                                        <div class="col-md-4">
-                                            <table class="table table-responsive table-bordered">
-                                                <tr>
-                                                    <td align="right">
-                                                        <b>Total Quantity: </b>
-                                                    </td>
-                                                    <td style="padding-left: 10px" align="right">
-                                                        <span id="totalEnd">NA</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td align="right">
-                                                        <b>Total Amount: </b>
-                                                    </td>
-                                                    <td style="padding-left: 10px" align="right">
-                                                        <span id="totalAmount">NA</span>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            <hr />
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="col-md-6">
                             </div>
                         </div>
+                        <div id="stockCardGrid" class="grid"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <table class="table table-responsive table-bordered">
+                            <tr>
+                                <td align="right">
+                                    <b>Total Quantity: </b>
+                                </td>
+                                <td style="padding-left: 10px" align="right">
+                                    <span id="totalEnd">NA</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    <b>Total Amount: </b>
+                                </td>
+                                <td style="padding-left: 10px" align="right">
+                                    <span id="totalAmount">NA</span>
+                                </td>
+                            </tr>
+                        </table>
+                        <hr />
                     </div>
                 </div>
             </section>
-        </div>
-
-        @Html.Partial("_SoftwareFooter")
+            @Html.Partial("_SoftwareFooter")
+        </main>
     </div>
-
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         var stockCardGrid;
@@ -126,7 +139,7 @@
         function getStockCard() {
             NProgress.start();
             var stockCards = new wijmo.collections.ObservableArray;
-            document.getElementById("inventoryDate").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
+            document.getElementById("inventoryDate").value = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
             $.ajax({
                 url: '/api/stockCard/list/' + getParam("StartDate") + "/" + getParam("EndDate") + "/" + getParam("BranchId") + "/" + getParam("ItemId"),
                 cache: false,
@@ -334,12 +347,12 @@
                                 "header": "Date",
                                 "binding": "InventoryDate",
                                 "allowSorting": true,
-                                "width": "1.5*",
+                                "width": 100
                             },
                             {
                                 "header": "Document",
                                 "binding": "DocumentReference",
-                                "width": "4*",
+                                "width": 200,
                                 "allowResizing": false,
                                 "allowSorting": false,
                                 "isContentHtml": true
@@ -348,43 +361,43 @@
                                 "header": "Beg",
                                 "binding": "Beg",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "In",
                                 "binding": "QuantityIn",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "Out",
                                 "binding": "QuantityOut",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "End",
                                 "binding": "Quantity",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "Unit",
                                 "binding": "Unit",
                                 "allowSorting": true,
-                                "width": "3*"
+                                "width": 120
                             },
                             {
                                 "header": "Cost",
                                 "binding": "Cost",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 150
                             },
                             {
                                 "header": "Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 150
                             }
                 ],
                 autoGenerateColumns: false,
@@ -422,6 +435,21 @@
             stockCardGrid.columnHeaders.columns[8].allowMerging = true;
             stockCardGrid.columnHeaders.setCellData(0, 8, 'Amount');
 
+        });
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
         });
     </script>
 </body>

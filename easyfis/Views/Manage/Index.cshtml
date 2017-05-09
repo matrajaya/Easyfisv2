@@ -12,16 +12,26 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Home-css")
 </head>
-<body data-spy="scroll" data-offset="100" id="home" class="account-body-custom secStyle">
-    <!-- Header -->
-    @Html.Partial("_ManageHeader")
+<body>
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
+            <section class="content-header">
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-gear fa-fw"></i> Manage Settings
+                    </h2>
+                </div>
+            </section>
+            <br />
+            <!-- Manage -->
+            @Html.Partial("_ManageIndex")
+            <!-- Footer -->
+            @Html.Partial("_ManageFooter")
+        </main>
+    </div>
 
-    <!-- Manage -->
-    @Html.Partial("_ManageIndex")
-
-    <!-- Footer -->
-    @Html.Partial("_ManageFooter")
-
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- User Edit Detail -->
     <div class="modal fade" id="userEdit" role="dialog">
         <div class="modal-dialog">
@@ -36,19 +46,19 @@
                         <input type="hidden" id="userId" value="@ViewData["UserId"]" />
                         <dl class="dl-horizontal">
                             <dt>Full Name:</dt>
-                            <dd><input type="text" class="form-control input-sm requiredUser" id="profileDetail_fullName" value="@ViewData["FullName"]" /></dd>
+                            <dd><input type="text" class="form-control  requiredUser" id="profileDetail_fullName" value="@ViewData["FullName"]" /></dd>
                             <dt>Address:</dt>
-                            <dd><input type="text" class="form-control input-sm " /></dd>
+                            <dd><input type="text" class="form-control  " /></dd>
                             <dt>Email address:</dt>
-                            <dd><input type="text" class="form-control input-sm " /></dd>
+                            <dd><input type="text" class="form-control  " /></dd>
                             <dt>Username:</dt>
-                            <dd><input type="text" class="form-control input-sm requiredUser" id="profileDetail_userName" value="@ViewData["UserName"]" readonly /></dd>
+                            <dd><input type="text" class="form-control  requiredUser" id="profileDetail_userName" value="@ViewData["UserName"]" readonly /></dd>
                         </dl>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="cmdSaveUserButton" onclick="cmdUserSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button id="cmdUserDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button class="btn btn-primary " id="cmdSaveUserButton" onclick="cmdUserSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdUserDetailCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -66,8 +76,8 @@
                     Are you sure you want to delete all Trasactions?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger btn-sm" id="confirmDeleteAllTrasactions" onclick="confirmDeleteAllTrasactionsOnclick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button class="btn btn-primary btn-sm" id="confirmDeleteAllTrasactionsClose" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-danger " id="confirmDeleteAllTrasactions" onclick="confirmDeleteAllTrasactionsOnclick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button class="btn btn-primary " id="confirmDeleteAllTrasactionsClose" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -375,6 +385,21 @@
             cboDefaultBranch = new wijmo.input.ComboBox('#defaultBranch');
             getBranch();
             //getBranchesForComboBox();
+        });
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
         });
     </script>
 </body>

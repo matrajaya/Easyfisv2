@@ -33,6 +33,7 @@ namespace easyfis
                         "~/Scripts/wijmo.input.min.js",
                         "~/Scripts/wijmo.grid.min.js",
                         "~/Scripts/wijmo.chart.min.js",
+                        "~/Scripts/menu.js",
                         "~/Scripts/nprogress.js"));
 
             // ==============

@@ -12,85 +12,95 @@
     <link rel="shortcut icon" href="~/Images/icon/easyfislogomini.ico">
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="hold-transition skin-blue fixed sidebar-mini">
-    <div class="wrapper">
-        @Html.Partial("_SoftwareHeader")
-        @Html.Partial("_SoftwareSideBarMenu")
+<body class="">
 
-        <div class="content-wrapper">
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
             <section class="content-header">
-                <h1>
-                    Stock Count
-                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="/Software"> Stock Count</a></li>
-                    <li> Stock Count </li>
-                </ol>
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-tablet fa-fw"></i> Stock Count
+                    </h2>
+                </div>
             </section>
-
-            <section class="content">
-                <div class="box box-default">
-                    <div class="box-header">
-
+            <br />
+            <section class="container">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <span class="input-group-addon">Company</span>
+                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 59%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input type="text" class="form-control " id="inputIdStockCountSearch" placeholder="Search">
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 40%" align="right">
+                                    <button class="btn btn-primary " id="btnAddStockCount" onclick="btnAddStockCount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    <button class="btn btn-danger " id="btnCloseStockCount" onclick="btnCloseStockCount_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                    <div class="box-body">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                            <input type="text" class="form-control input-sm" id="inputIdStockCountSearch" placeholder="Search">
-                                        </div>
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 29%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon">Start Date</span>
+                                        <div id="divIdStockCountSCDate"></div>
                                     </div>
-                                    <div class="col-lg-2">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-addon">SC Date</span>
-                                            <div id="divIdStockCountSCDate"></div>
-                                        </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 29%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon">End Date</span>
+                                        <div id="divIdStockCountSCEndDate"></div>
                                     </div>
-                                    <div class="col-lg-6" align="right">
-                                        <button class="btn btn-primary btn-sm" id="btnAddStockCount" onclick="btnAddStockCount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                        <button class="btn btn-danger btn-sm" id="btnCloseStockCount" onclick="btnCloseStockCount_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                                    </div>
-                                </div>
+                                </td>
+                                <td style="width: 41%"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="divIdStockCountGrid" class="grid" align="left"></div>
                             </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div id="divIdStockCountGrid" class="grid" align="left"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-footer">
-                                <div class="row">
-                                    <div class="btn-group col-md-7" id="divIdNavigationPageGrid">
-                                        <button type="button" class="btn btn-default border-custom" id="btnIdMoveToFirstPageGrid">
-                                            <span class="glyphicon glyphicon-fast-backward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default border-custom" id="btnIdMoveToPreviousPageGrid">
-                                            <span class="glyphicon glyphicon-step-backward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnIdCurrentPageGrid"></button>
-                                        <button type="button" class="btn btn-default border-custom" id="btnIdMoveToNextPageGrid">
-                                            <span class="glyphicon glyphicon-step-forward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default border-custom" id="btnIdMoveToLastPageGrid">
-                                            <span class="glyphicon glyphicon-fast-forward"></span>
-                                        </button>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="divIdNavigationPageGrid">
+                                <button type="button" class="btn btn-default border-custom" id="btnIdMoveToFirstPageGrid">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" id="btnIdMoveToPreviousPageGrid">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnIdCurrentPageGrid"></button>
+                                <button type="button" class="btn btn-default border-custom" id="btnIdMoveToNextPageGrid">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" id="btnIdMoveToLastPageGrid">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-        </div>
-
-        @Html.Partial("_SoftwareFooter")
+            @Html.Partial("_SoftwareFooter")
+        </main>
     </div>
 
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- Stock Count Confirm Delete Modal -->
     <div class="modal fade" id="divIdStockCountConfirmDeleteModal" role="dialog">
         <div class="modal-dialog modal-sm">
@@ -103,8 +113,8 @@
                     Are you sure you want to delete this?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger btn-sm" id="btnIdStockCountConfirmDeleteModalDelete" onclick="btnOnClickStockCountConfirmDeleteModalDelete()"><i class="fa fa-trash"></i> Delete</button>
-                    <button class="btn btn-primary btn-sm" id="btnIdConfirmDeleteModalClose" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-danger " id="btnIdStockCountConfirmDeleteModalDelete" onclick="btnOnClickStockCountConfirmDeleteModalDelete()"><i class="fa fa-trash"></i> Delete</button>
+                    <button class="btn btn-primary " id="btnIdConfirmDeleteModalClose" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -122,7 +132,7 @@
                     Sorry, the record is lock. Cannot be deleted.
                 </div>
                 <div class="modal-footer">
-                    <button id="btnIdStockCountDeleteLockModalOkay" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
+                    <button id="btnIdStockCountDeleteLockModalOkay" class="btn btn-primary " data-dismiss="modal"> Okay</button>
                 </div>
             </div>
         </div>
@@ -139,15 +149,21 @@
         var btnStockCountLastPageGrid;
         var btnStockCountCurrentPageGrid;
         var cboFilterDateIsFirstSelect = true;
+        var cboFilterEndDateIsFirstSelect = true;
         var cboStockCountSCDate;
         var stockCountSCDateValue;
+        var stockCountSCEndDateValue;
 
         // List StockCount By SCDate
         function listStockCountBySCDateByBranchId(SCDate) {
             NProgress.start();
             var stockCounts = new wijmo.collections.ObservableArray;
+
+            var startDate = stockCountSCDateValue;
+            var endDate = stockCountSCEndDateValue;
+
             $.ajax({
-                url: '/api/stockCount/listBySCDateByBranchId/' + SCDate,
+                url: '/api/stockCount/listBySCDateByBranchId/' + startDate + '/' + endDate,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -307,10 +323,7 @@
 
         // Stock Count Delete Lock Record
         function btnOnclickStockCountDeleteLock() {
-            $('#divIdStockCountDeleteLockModal').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            toastr.error("Record Locked");
         }
 
         // Navigation Buttons for Stock Count
@@ -349,9 +362,9 @@
         }
 
         // Refresh the Stock Count FlexGrid
-        function refreshStockCountFlexGrid(stockCountSCDateValue) {
+        function refreshStockCountFlexGrid() {
             // Collection View
-            stockCounts = new wijmo.collections.CollectionView(listStockCountBySCDateByBranchId(stockCountSCDateValue));
+            stockCounts = new wijmo.collections.CollectionView(listStockCountBySCDateByBranchId());
             stockCounts.canFilter = true;
             stockCounts.pageSize = 15;
 
@@ -389,6 +402,7 @@
         $(document).ready(function () {
             var date = new Date();
             stockCountSCDateValue = [date.getMonth() + 1, date.getDate(), date.getFullYear()].join('-');
+            stockCountSCEndDateValue = [date.getMonth() + 1, date.getDate(), date.getFullYear()].join('-');
 
             // SC Date Dropdown
             cboStockCountSCDate = new wijmo.input.InputDate('#divIdStockCountSCDate', {
@@ -405,8 +419,25 @@
                 }
             });
 
+
+            // SC Date Dropdown
+            cboStockCountSCEndDate = new wijmo.input.InputDate('#divIdStockCountSCEndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    if (!cboFilterEndDateIsFirstSelect) {
+                        stockCountSCEndDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                        refreshStockCountFlexGrid();
+                    } else {
+                        cboFilterEndDateIsFirstSelect = false;
+                    }
+                }
+            });
+
+
             // Collection View
-            stockCounts = new wijmo.collections.CollectionView(listStockCountBySCDateByBranchId(stockCountSCDateValue));
+            stockCounts = new wijmo.collections.CollectionView(listStockCountBySCDateByBranchId());
             stockCounts.canFilter = true;
             stockCounts.pageSize = 15;
 
@@ -440,7 +471,7 @@
                             {
                                 "header": "Edit",
                                 "binding": "Edit",
-                                "width": 60,
+                                "width": 70,
                                 "align": "center",
                                 "allowResizing": false,
                                 "allowSorting": false,
@@ -459,25 +490,25 @@
                                 "header": "SC Number",
                                 "binding": "SCNumber",
                                 "allowSorting": true,
-                                "width": "1*",
+                                "width": 110,
                             },
                             {
                                 "header": "SC Date",
                                 "binding": "SCDate",
                                 "allowSorting": true,
-                                "width": "1*"
+                                "width": 100
                             },
                             {
                                 "header": "Particulars",
                                 "binding": "Particulars",
                                 "allowSorting": true,
-                                "width": "3*"
+                                "width": 680
                             },
                             {
                                 "header": "L",
                                 "binding": "IsLocked",
                                 "allowSorting": true,
-                                "width": "0.5*"
+                                "width": 50
                             },
                 ],
                 autoGenerateColumns: false,
@@ -525,6 +556,21 @@
             } else {
                 $("#btnAddStockCount").prop("disabled", true)
             }
+        });
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
         });
     </script>
 </body>

@@ -12,83 +12,96 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="hold-transition skin-blue fixed sidebar-mini">
-    <div class="wrapper">
-        @Html.Partial("_SoftwareHeader")
-        @Html.Partial("_SoftwareSideBarMenu")
-
-        <div class="content-wrapper">
+<body>
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
             <section class="content-header">
-                <h1>
-                    Stock Transfer
-                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="/Software"> Dashboard</a></li>
-                    <li>Stock Transfer</li>
-                </ol>
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-exchange fa-fw"></i> Stock Transfer
+                    </h2>
+                </div>
             </section>
-
-            <section class="content">
-                <div class="box box-default">
-                    <div class="box-body">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
-                                        </div>
+            <br />
+            <section class="container">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <span class="input-group-addon">Company</span>
+                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 59%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search">
                                     </div>
-                                    <div class="col-lg-2">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-addon">ST Date</span>
-                                            <div id="filterDate"></div>
-                                            <input type="hidden" id="filterDate_data" />
-                                        </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 40%" align="right">
+                                    <button class="btn btn-primary " id="btnAddStockTransfer" onclick="btnAddStockTransfer_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    <button class="btn btn-danger " id="btnCloseStockTransfer" onclick="btnCloseStockTransfer_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 29%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon">Start Date</span>
+                                        <div id="filterDate"></div>
+                                        <input type="hidden" id="filterDate_data" />
                                     </div>
-                                    <div class="col-lg-6" align="right">
-                                        <button class="btn btn-primary btn-sm" id="btnAddStockTransfer" onclick="btnAddStockTransfer_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                        <button class="btn btn-danger btn-sm" id="btnCloseStockTransfer" onclick="btnCloseStockTransfer_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 29%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon">End Date</span>
+                                        <div id="filterEndDate"></div>
+                                        <input type="hidden" id="filterEndDate_data" />
                                     </div>
-                                </div>
+                                </td>
+                                <td style="width: 41%"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="StockTransferGrid" class="grid" align="left"></div>
                             </div>
-                            <div class="panel-body">
-                                <div class="row" align="left">
-                                    <div class="col-lg-12">
-                                        <div id="StockTransferGrid" class="grid" align="left"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-footer">
-                                <div class="row">
-                                    <div class="btn-group col-md-7" id="naviagtionPageGrid">
-                                        <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
-                                            <span class="glyphicon glyphicon-fast-backward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
-                                            <span class="glyphicon glyphicon-step-backward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
-                                        <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
-                                            <span class="glyphicon glyphicon-step-forward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
-                                            <span class="glyphicon glyphicon-fast-forward"></span>
-                                        </button>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGrid">
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-        </div>
-
-        @Html.Partial("_SoftwareFooter")
+            @Html.Partial("_SoftwareFooter")
+        </main>
     </div>
 
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- StockTransfer Delete -->
     <div class="modal fade" id="deleteStockTransferConfirm" role="dialog">
         <div class="modal-dialog modal-sm">
@@ -102,8 +115,8 @@
                     Are you sure you want to delete this?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteStockTransfer" onclick="cmdStockTransferConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button class="btn btn-danger " id="cmdConfirmDeleteStockTransfer" onclick="cmdStockTransferConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -122,7 +135,7 @@
                     Sorry, the record is lock! It can't be deleted!
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
+                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"> Okay</button>
                 </div>
             </div>
         </div>
@@ -142,15 +155,20 @@
         var btnCurrentPageGrid;
 
         var isFirstSelect = true;
+        var isFirstSelectEndDate = true;
 
         // =======================================
         // GET Stock Transfer List Flter by STDate
         // =======================================
-        function getStockTransferFilterBySTDate(STDateFilter) {
+        function getStockTransferFilterBySTDate() {
             var stockTransfers = new wijmo.collections.ObservableArray;
+            
+            var startDate = document.getElementById('filterDate_data').value;
+            var endDate = document.getElementById('filterEndDate_data').value;
+
             NProgress.start();
             $.ajax({
-                url: '/api/listStockTransferFilterBySTDate/' + STDateFilter,
+                url: '/api/listStockTransferFilterBySTDate/' + startDate + '/' + endDate,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -228,10 +246,7 @@
         // Stock Transfer Delete Lock Button
         // =================================
         function cmdStockTransferDeleteLockButton_OnClick() {
-            $('#deleteRecordLock').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            toastr.error("Record Locked")
         }
 
         // =========================
@@ -319,7 +334,7 @@
                         $('#deleteStockTransferConfirm').modal('hide');
 
                         var STDateFilter = document.getElementById('filterDate_data').value;
-                        stockTransfers = new wijmo.collections.CollectionView(getStockTransferFilterBySTDate(STDateFilter));
+                        stockTransfers = new wijmo.collections.CollectionView(getStockTransferFilterBySTDate());
                         stockTransfers.canFilter = true;
                         stockTransfers.pageSize = 15;
 
@@ -403,6 +418,7 @@
         $(document).ready(function () {
             var STDateFilter_Date = new Date();
             document.getElementById("filterDate_data").value = [STDateFilter_Date.getMonth() + 1, STDateFilter_Date.getDate(), STDateFilter_Date.getFullYear()].join('-');
+            document.getElementById("filterEndDate_data").value = [STDateFilter_Date.getMonth() + 1, STDateFilter_Date.getDate(), STDateFilter_Date.getFullYear()].join('-');
 
             var cboFilterDate;
             cboFilterDate = new wijmo.input.InputDate('#filterDate', {
@@ -446,8 +462,51 @@
                 }
             });
 
+            var cboFilterEndDate;
+            cboFilterEndDate = new wijmo.input.InputDate('#filterEndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    if (!isFirstSelectEndDate) {
+                        document.getElementById('filterEndDate_data').value = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                        var STDateFilterValue = document.getElementById('filterEndDate_data').value;
+
+                        $('body').removeClass('modal-open');
+                        $(".modal-backdrop").remove();
+
+                        stockTransfers = new wijmo.collections.CollectionView(getStockTransferFilterBySTDate(STDateFilterValue));
+                        stockTransfers.canFilter = true;
+                        stockTransfers.pageSize = 15;
+
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            stockTransfers.refresh();
+                        });
+                        stockTransfers.filter = function (item) {
+                            return !filterText || (item.STNumber.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        stockTransfers.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsStockTransfer();
+                        });
+                        stockTransfers.currentChanged.addHandler(function (sender, args) {
+                            updateDetails();
+                        });
+
+                        stockTransferGrid.itemsSource = stockTransfers;
+                        stockTransferGrid.trackChanges = true;
+
+                        updateNavigateButtonsStockTransfer();
+                    } else {
+                        isFirstSelectEndDate = false;
+                    }
+                }
+            });
+
+
             var STDateFilter = document.getElementById('filterDate_data').value;
-            stockTransfers = new wijmo.collections.CollectionView(getStockTransferFilterBySTDate(STDateFilter));
+            stockTransfers = new wijmo.collections.CollectionView(getStockTransferFilterBySTDate());
             stockTransfers.canFilter = true;
             stockTransfers.pageSize = 15;
 
@@ -473,7 +532,7 @@
                             {
                                 "header": "Edit",
                                 "binding": "EditId",
-                                "width": 60,
+                                "width": 70,
                                 "align": "center",
                                 "allowResizing": false,
                                 "allowSorting": false,
@@ -492,31 +551,31 @@
                                 "header": "ST Number",
                                 "binding": "STNumber",
                                 "allowSorting": true,
-                                "width": "1*",
+                                "width": 110,
                             },
                             {
                                 "header": "ST Date",
                                 "binding": "STDate",
                                 "allowSorting": true,
-                                "width": "1*"
+                                "width": 100
                             },
                             {
                                 "header": "From Branch",
                                 "binding": "Branch",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 340
                             },
                             {
                                 "header": "To Branch",
                                 "binding": "ToBranch",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 340
                             },
                             {
                                 "header": "L",
                                 "binding": "IsLocked",
                                 "allowSorting": true,
-                                "width": "0.5*"
+                                "width": 50
                             }
                 ],
                 autoGenerateColumns: false,
@@ -566,5 +625,21 @@
             }
         });
     </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
+        });
+    </script>
+
 </body>
 </html>

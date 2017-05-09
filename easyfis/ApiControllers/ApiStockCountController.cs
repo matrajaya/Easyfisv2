@@ -69,11 +69,12 @@ namespace easyfis.Controllers
         // list stock count by SCDate
         [Authorize]
         [HttpGet]
-        [Route("api/stockCount/listBySCDateByBranchId/{SCDate}")]
-        public List<Models.TrnStockCount> listStockCountBySCDate(String SCDate)
+        [Route("api/stockCount/listBySCDateByBranchId/{SCStartDate}/{SCEndDate}")]
+        public List<Models.TrnStockCount> listStockCountBySCDate(String SCStartDate, String SCEndDate)
         {
             var stockCounts = from d in db.TrnStockCounts.OrderByDescending(d => d.Id)
-                              where d.SCDate == Convert.ToDateTime(SCDate)
+                              where d.SCDate >= Convert.ToDateTime(SCStartDate)
+                              && d.SCDate <= Convert.ToDateTime(SCEndDate)
                               && d.BranchId == currentBranchId()
                               select new Models.TrnStockCount
                               {

@@ -34,7 +34,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#" id="c-button--slide-left" class=""><i class="fa fa-bars"></i></a>
+                        <button id="c-button--slide-left" class="btn-menu-link"><i class="fa fa-bars"></i></button>
                     </li>
                 </ul>
                 @Html.Partial("_LoginPartial")
@@ -50,6 +50,15 @@
                 <a href="#index" class="panel-link-menu c-menu__close">
                     <h4 class="panel-title">
                         <i class="fa fa-arrow-left fa-fw"></i> &nbsp; Close Menu
+                    </h4>
+                </a>
+            </div>
+        </div>
+        <div class="panel panel-default panel-side">
+            <div class="panel-heading panel-heading-menu">
+                <a href="/Manage" class="panel-link-menu">
+                    <h4 class="panel-title">
+                        <i class="fa fa-gear fa-fw"></i> &nbsp; Manage Settings
                     </h4>
                 </a>
             </div>
@@ -162,8 +171,8 @@
                 Are you sure you want to logout?
             </div>
             <div class="modal-footer">
-                <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-primary btn-sm"><i class="fa fa-sign-out"></i> Logout</a>
-                <button class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-primary "><i class="fa fa-sign-out"></i> Logout</a>
+                <button class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
             </div>
         </div>
     </div>
@@ -181,7 +190,7 @@
                 Sorry, you have no rights to access this page. Please contact the Administrator.
             </div>
             <div class="modal-footer">
-                <button id="btnNoRights" onclick="btnNoRightsOnclick()" class="btn btn-primary btn-sm"> Okay</button>
+                <button id="btnNoRights" onclick="btnNoRightsOnclick()" class="btn btn-primary "> Okay</button>
             </div>
         </div>
     </div>
