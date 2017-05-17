@@ -47,7 +47,14 @@ namespace easyfis.ApiControllers
                                       SI = d.TrnSalesInvoice.SINumber,
                                       Amount = d.Amount,
                                       DepositoryBank = d.MstArticle1.Article,
-                                      PayType = d.MstPayType.PayType
+                                      PayType = d.MstPayType.PayType,
+                                      Customer = d.TrnCollection.MstArticle.Article,
+                                      CheckNumber = d.CheckNumber,
+                                      CheckDate = d.CheckDate.ToShortDateString(),
+                                      CheckBank = d.CheckBank,
+                                      Particulars = d.TrnCollection.Particulars,
+                                      Remarks = d.TrnSalesInvoice.Remarks,
+                                      SoldBy = d.TrnSalesInvoice.MstUser4.FullName
                                   };
 
             return collectionLines.ToList();

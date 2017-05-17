@@ -133,6 +133,13 @@
                                 Amount: collectionDetailReportResult[i]["Amount"],
                                 DepositoryBank: collectionDetailReportResult[i]["DepositoryBank"],
                                 PayType: collectionDetailReportResult[i]["PayType"],
+                                Customer: collectionDetailReportResult[i]["Customer"],
+                                CheckNumber: collectionDetailReportResult[i]["CheckNumber"],
+                                CheckDate: collectionDetailReportResult[i]["CheckDate"],
+                                CheckBank: collectionDetailReportResult[i]["CheckBank"],
+                                Particulars: collectionDetailReportResult[i]["Particulars"],
+                                Remarks: collectionDetailReportResult[i]["Remarks"],
+                                SoldBy: collectionDetailReportResult[i]["SoldBy"],
                             });
 
                             totalAmount += collectionDetailReportResult[i]["Amount"];
@@ -159,12 +166,17 @@
                 collectionDetailReport.push({
                     OR: collectionDetailReportCollection.items[i].ORForCSV,
                     ORDate: collectionDetailReportCollection.items[i].ORDate,
+                    Customer: collectionDetailReportCollection.items[i].Customer,
                     PayType: collectionDetailReportCollection.items[i].PayType,
-                    SI: collectionDetailReportCollection.items[i].SIForCSV,
                     DepositoryBank: collectionDetailReportCollection.items[i].DepositoryBank,
                     Amount: collectionDetailReportCollection.items[i].Amount,
-
-
+                    CheckNumber: collectionDetailReportCollection.items[i].CheckNumber,
+                    CheckDate: collectionDetailReportCollection.items[i].CheckDate,
+                    CheckBank: collectionDetailReportCollection.items[i].CheckBank,
+                    Particulars: collectionDetailReportCollection.items[i].Particulars,
+                    SI: collectionDetailReportCollection.items[i].SIForCSV,
+                    Remarks: collectionDetailReportCollection.items[i].Remarks,
+                    SoldBy: collectionDetailReportCollection.items[i].SoldBy
                 });
             }
 
@@ -175,14 +187,19 @@
             //Rows
             var Headers = [];
             Headers.push({
-
                 OR: "OR Number",
                 ORDate: "OR Date",
+                Customer: "Customer",
                 PayType: "Pay Type",
-                SI: "SI Number",
                 DepositoryBank: "Dispository Bank",
                 Amount: "Amount",
-
+                CheckNumber: "Check Number",
+                CheckDate: "Check Date",
+                CheckBank: "Check Bank",
+                Particulars: "Particulars",
+                SI: "SI Number",
+                Remarks: "Remarks",
+                SoldBy: "Sold By",
             });
 
             var header = '';
@@ -266,22 +283,28 @@
                                 "width": 100
                             },
                             {
-                                "header": "Pay Type",
-                                "binding": "PayType",
+                                "header": "Customer",
+                                "binding": "Customer",
                                 "allowSorting": true,
                                 "width": 300
                             },
                             {
-                                "header": "SI Number ",
+                                "header": "Pay Type",
+                                "binding": "PayType",
+                                "allowSorting": true,
+                                "width": 200
+                            },
+                            {
+                                "header": "SI Number",
                                 "binding": "SI",
                                 "allowSorting": true,
                                 "width": 110
                             },
                             {
-                                "header": "Dispository Bank ",
+                                "header": "Dispository Bank",
                                 "binding": "DepositoryBank",
                                 "allowSorting": true,
-                                "width": 320
+                                "width": 200
                             },
                             {
                                 "header": "Amount",
@@ -289,8 +312,24 @@
                                 "allowSorting": true,
                                 "width": 150
                             },
-
-
+                            {
+                                "header": "Check Number",
+                                "binding": "CheckNumber",
+                                "allowSorting": true,
+                                "width": 170
+                            },
+                            {
+                                "header": "Check Date",
+                                "binding": "CheckDate",
+                                "allowSorting": true,
+                                "width": 100
+                            },
+                            {
+                                "header": "Check Bank",
+                                "binding": "CheckBank",
+                                "allowSorting": true,
+                                "width": 200
+                            },
                 ],
                 autoGenerateColumns: false,
                 itemsSource: collectionDetailReportCollection,

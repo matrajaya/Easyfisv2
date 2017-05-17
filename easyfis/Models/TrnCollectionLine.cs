@@ -33,6 +33,9 @@ namespace easyfis.Models
         public String DepositoryBank { get; set; }
         public Boolean IsClear { get; set; }
         public Boolean IsLocked { get; set; }
+        public String Remarks { get; set; }
+        public String Item { get; set; }
+        public String SoldBy { get; set; }
     }
 
 }
