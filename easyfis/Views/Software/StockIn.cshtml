@@ -348,7 +348,9 @@
                             stockIns.refresh();
                         });
                         stockIns.filter = function (item) {
-                            return !filterText || (item.INNumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.INNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
                         }
                         stockIns.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsStockIn();
@@ -447,7 +449,9 @@
                             stockIns.refresh();
                         });
                         stockIns.filter = function (item) {
-                            return !filterText || (item.INNumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.INNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
                         }
                         stockIns.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsStockIn();
@@ -490,7 +494,9 @@
                             stockIns.refresh();
                         });
                         stockIns.filter = function (item) {
-                            return !filterText || (item.INNumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.INNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
                         }
                         stockIns.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsStockIn();
@@ -521,7 +527,9 @@
                 stockIns.refresh();
             });
             stockIns.filter = function (item) {
-                return !filterText || (item.INNumber.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.INNumber.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
             }
             stockIns.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsStockIn();

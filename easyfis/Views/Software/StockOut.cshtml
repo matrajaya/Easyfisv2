@@ -345,7 +345,8 @@
                             stockOuts.refresh();
                         });
                         stockOuts.filter = function (item) {
-                            return !filterText || (item.OTNumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.OTNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Account.toLowerCase().indexOf(filterText) > -1);
                         }
                         stockOuts.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsStockOut();
@@ -443,7 +444,8 @@
                             stockOuts.refresh();
                         });
                         stockOuts.filter = function (item) {
-                            return !filterText || (item.OTNumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.OTNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Account.toLowerCase().indexOf(filterText) > -1);
                         }
                         stockOuts.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsStockOut();
@@ -486,7 +488,8 @@
                             stockOuts.refresh();
                         });
                         stockOuts.filter = function (item) {
-                            return !filterText || (item.OTNumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.OTNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Account.toLowerCase().indexOf(filterText) > -1);
                         }
                         stockOuts.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsStockOut();
@@ -518,7 +521,8 @@
                 stockOuts.refresh();
             });
             stockOuts.filter = function (item) {
-                return !filterText || (item.OTNumber.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.OTNumber.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Account.toLowerCase().indexOf(filterText) > -1);
             }
             stockOuts.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsStockOut();

@@ -43,7 +43,8 @@ namespace easyfis.ApiControllers
                                         Unit = d.MstUnit.Unit,
                                         Quantity = d.Quantity,
                                         Amount = d.Amount,
-                                        Price = d.Price
+                                        Price = d.Price,
+                                        Customer = d.TrnSalesInvoice.MstArticle.Article
                                     };
 
             return salesInvoiceItems.ToList();

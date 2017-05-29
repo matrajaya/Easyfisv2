@@ -344,7 +344,9 @@
                             stockTransfers.refresh();
                         });
                         stockTransfers.filter = function (item) {
-                            return !filterText || (item.STNumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.STNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.ToBranch.toLowerCase().indexOf(filterText) > -1);
                         }
                         stockTransfers.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsStockTransfer();
@@ -443,7 +445,9 @@
                             stockTransfers.refresh();
                         });
                         stockTransfers.filter = function (item) {
-                            return !filterText || (item.STNumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.STNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.ToBranch.toLowerCase().indexOf(filterText) > -1);
                         }
                         stockTransfers.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsStockTransfer();
@@ -485,7 +489,9 @@
                             stockTransfers.refresh();
                         });
                         stockTransfers.filter = function (item) {
-                            return !filterText || (item.STNumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.STNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.ToBranch.toLowerCase().indexOf(filterText) > -1);
                         }
                         stockTransfers.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsStockTransfer();
@@ -516,7 +522,9 @@
                 stockTransfers.refresh();
             });
             stockTransfers.filter = function (item) {
-                return !filterText || (item.STNumber.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.STNumber.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ToBranch.toLowerCase().indexOf(filterText) > -1);
             }
             stockTransfers.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsStockTransfer();

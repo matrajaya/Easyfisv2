@@ -354,10 +354,12 @@
                         var filterText = '';
                         $('#InputFilter').keyup(function () {
                             filterText = this.value.toLowerCase();
-                            stockIns.refresh();
+                            RRs.refresh();
                         });
                         RRs.filter = function (item) {
-                            return !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.RRNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
                         }
                         RRs.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsRR();
@@ -453,10 +455,12 @@
                         var filterText = '';
                         $('#InputFilter').keyup(function () {
                             filterText = this.value.toLowerCase();
-                            stockIns.refresh();
+                            RRs.refresh();
                         });
                         RRs.filter = function (item) {
-                            return !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.RRNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
                         }
                         RRs.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsRR();
@@ -497,10 +501,12 @@
                         var filterText = '';
                         $('#InputFilter').keyup(function () {
                             filterText = this.value.toLowerCase();
-                            stockIns.refresh();
+                            RRs.refresh();
                         });
                         RRs.filter = function (item) {
-                            return !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.RRNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
                         }
                         RRs.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsRR();
@@ -529,10 +535,12 @@
             var filterText = '';
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
-                stockIns.refresh();
+                RRs.refresh();
             });
             RRs.filter = function (item) {
-                return !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.RRNumber.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
             }
             RRs.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsRR();

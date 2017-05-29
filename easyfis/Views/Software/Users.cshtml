@@ -171,8 +171,6 @@
                                 editDisabled = "disabled";
                             }
 
-                            console.log(canEdit);
-
                             users.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='btnEditUser_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
@@ -296,7 +294,8 @@
                 users.refresh();
             });
             users.filter = function (item) {
-                return !filterText || (item.UserName.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.UserName.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.FullName.toLowerCase().indexOf(filterText) > -1);
             }
             users.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsUsers();

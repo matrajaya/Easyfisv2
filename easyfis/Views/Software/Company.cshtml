@@ -305,7 +305,9 @@
                             companies.refresh();
                         });
                         companies.filter = function (item) {
-                            return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Address.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.TaxNumber.toLowerCase().indexOf(filterText) > -1);
                         }
                         companies.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsCompany();
@@ -387,7 +389,9 @@
                 companies.refresh();
             });
             companies.filter = function (item) {
-                return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Address.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.TaxNumber.toLowerCase().indexOf(filterText) > -1);
             }
             companies.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsCompany();

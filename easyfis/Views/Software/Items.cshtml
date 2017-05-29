@@ -312,7 +312,11 @@
                 items.refresh();
             });
             items.filter = function (item) {
-                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Category.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Unit.toLowerCase().indexOf(filterText) > -1);
             }
             items.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsItems();
@@ -422,7 +426,11 @@
                 items.refresh();
             });
             items.filter = function (item) {
-                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Category.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Unit.toLowerCase().indexOf(filterText) > -1);
             }
             items.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsItems();

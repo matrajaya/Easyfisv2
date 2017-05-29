@@ -688,7 +688,10 @@
                             banks.refresh();
                         });
                         banks.filter = function (item) {
-                            return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Address.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1);
                         }
                         banks.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsBank();
@@ -801,7 +804,10 @@
                                     banks.refresh();
                                 });
                                 banks.filter = function (item) {
-                                    return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+                                    return !filterText || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
+                                                       || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                                                       || (item.Address.toLowerCase().indexOf(filterText) > -1)
+                                                       || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1);
                                 }
                                 banks.collectionChanged.addHandler(function (sender, args) {
                                     updateNavigateButtonsBank();
@@ -850,7 +856,10 @@
                                     banks.refresh();
                                 });
                                 banks.filter = function (item) {
-                                    return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+                                    return !filterText || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
+                                                       || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                                                       || (item.Address.toLowerCase().indexOf(filterText) > -1)
+                                                       || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1);
                                 }
                                 banks.collectionChanged.addHandler(function (sender, args) {
                                     updateNavigateButtonsBank();
@@ -954,7 +963,10 @@
                 banks.refresh();
             });
             banks.filter = function (item) {
-                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Address.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1);
             }
             banks.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsBank();

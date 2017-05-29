@@ -301,7 +301,10 @@
                 customers.refresh();
             });
             customers.filter = function (item) {
-                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ArticleGroup.toLowerCase().indexOf(filterText) > -1);
             }
             customers.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsCustomer();
@@ -417,7 +420,10 @@
                 customers.refresh();
             });
             customers.filter = function (item) {
-                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ArticleGroup.toLowerCase().indexOf(filterText) > -1);
             }
             customers.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsCustomer();

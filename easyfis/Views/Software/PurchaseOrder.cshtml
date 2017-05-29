@@ -374,7 +374,8 @@
                             POs.refresh();
                         });
                         POs.filter = function (item) {
-                            return !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.PONumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1);
                         }
                         POs.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsPO();
@@ -472,7 +473,8 @@
                             POs.refresh();
                         });
                         POs.filter = function (item) {
-                            return !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.PONumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1);
                         }
                         POs.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsPO();
@@ -513,7 +515,8 @@
                             POs.refresh();
                         });
                         POs.filter = function (item) {
-                            return !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.PONumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1);
                         }
                         POs.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsPO();
@@ -544,7 +547,8 @@
                 POs.refresh();
             });
             POs.filter = function (item) {
-                return !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.PONumber.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Supplier.toLowerCase().indexOf(filterText) > -1);
             }
             POs.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsPO();

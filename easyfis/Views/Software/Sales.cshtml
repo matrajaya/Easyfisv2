@@ -350,7 +350,10 @@
                             sales.refresh();
                         });
                         sales.filter = function (item) {
-                            return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Customer.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
                         }
                         sales.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsSales();
@@ -448,7 +451,10 @@
                             sales.refresh();
                         });
                         sales.filter = function (item) {
-                            return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Customer.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
                         }
                         sales.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsSales();
@@ -491,7 +497,10 @@
                             sales.refresh();
                         });
                         sales.filter = function (item) {
-                            return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Customer.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
                         }
                         sales.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsSales();
@@ -522,7 +531,10 @@
                 sales.refresh();
             });
             sales.filter = function (item) {
-                return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Customer.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
             }
             sales.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsSales();

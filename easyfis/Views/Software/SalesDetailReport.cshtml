@@ -128,12 +128,12 @@
                                 SIButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + salesDetailReportResult[i]["SI"],
                                 SIDate: salesDetailReportResult[i]["SIDate"],
                                 Item: salesDetailReportResult[i]["Item"],
-                                ItemInventory: salesDetailReportResult[i]["ItemInventory"],
+                                ItemInventory: salesDetailReportResult[i]["ItemInventory"] != null ? salesDetailReportResult[i]["ItemInventory"] : "",
                                 Unit: salesDetailReportResult[i]["Unit"],
                                 Quantity: salesDetailReportResult[i]["Quantity"],
                                 Price: salesDetailReportResult[i]["Price"],
                                 Amount: salesDetailReportResult[i]["Amount"],
-
+                                Customer: salesDetailReportResult[i]["Customer"],
                             });
 
                             totalAmount += salesDetailReportResult[i]["Amount"];
@@ -250,7 +250,9 @@
             salesDetailReportCollection.filter = function (item) {
                 return !filterText || (item.SI.toLowerCase().indexOf(filterText) > -1)
                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
                    || !filterText || (item.ItemInventory.toLowerCase().indexOf(filterText) > -1)
+                   || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1)
 
             }
             // Flex Grid
@@ -269,6 +271,12 @@
                                 "binding": "SIDate",
                                 "allowSorting": true,
                                 "width": 100
+                            },
+                            {
+                                "header": "Customer",
+                                "binding": "Customer",
+                                "allowSorting": true,
+                                "width": 200
                             },
                             {
                                 "header": "Item ",

@@ -219,8 +219,8 @@
                             totalEnd = totalEnd + Results[i]["Quantity"];
                             totalAmount = totalAmount + Results[i]["Amount"];
 
-                            document.getElementById("totalEnd").innerHTML = Math.round(totalEnd * 100) / 100;
-                            document.getElementById("totalAmount").innerHTML = Math.round(totalAmount * 100) / 100;
+                            document.getElementById("totalEnd").innerHTML = (Math.round(totalEnd * 100) / 100).toLocaleString();
+                            document.getElementById("totalAmount").innerHTML = (Math.round(totalAmount * 100) / 100).toLocaleString();
                         }
                     }
                     NProgress.done();

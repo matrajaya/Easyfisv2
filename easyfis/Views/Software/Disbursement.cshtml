@@ -354,7 +354,9 @@
                             disbursements.refresh();
                         });
                         disbursements.filter = function (item) {
-                            return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.CheckNumber.toLowerCase().indexOf(filterText) > -1);
                         }
                         disbursements.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsDisbursement();
@@ -453,7 +455,9 @@
                             disbursements.refresh();
                         });
                         disbursements.filter = function (item) {
-                            return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.CheckNumber.toLowerCase().indexOf(filterText) > -1);
                         }
                         disbursements.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsDisbursement();
@@ -495,7 +499,9 @@
                             disbursements.refresh();
                         });
                         disbursements.filter = function (item) {
-                            return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1);
+                            return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                                               || (item.CheckNumber.toLowerCase().indexOf(filterText) > -1);
                         }
                         disbursements.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsDisbursement();
@@ -525,7 +531,9 @@
                 disbursements.refresh();
             });
             disbursements.filter = function (item) {
-                return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.CheckNumber.toLowerCase().indexOf(filterText) > -1);
             }
             disbursements.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsDisbursement();

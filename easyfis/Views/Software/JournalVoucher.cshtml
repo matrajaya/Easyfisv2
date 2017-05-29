@@ -345,7 +345,8 @@
                             journalVouchers.refresh();
                         });
                         journalVouchers.filter = function (item) {
-                            return !filterTextJournalVoucher || (item.JVNumber.toLowerCase().indexOf(filterTextJournalVoucher) > -1);
+                            return !filterTextJournalVoucher || (item.JVNumber.toLowerCase().indexOf(filterTextJournalVoucher) > -1)
+                                                             || (item.Particulars.toLowerCase().indexOf(filterTextJournalVoucher) > -1);
                         }
                         journalVouchers.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsJournalVoucher();
@@ -444,7 +445,8 @@
                             journalVouchers.refresh();
                         });
                         journalVouchers.filter = function (item) {
-                            return !filterTextJournalVoucher || (item.JVNumber.toLowerCase().indexOf(filterTextJournalVoucher) > -1);
+                            return !filterTextJournalVoucher || (item.JVNumber.toLowerCase().indexOf(filterTextJournalVoucher) > -1)
+                                                             || (item.Particulars.toLowerCase().indexOf(filterTextJournalVoucher) > -1);
                         }
                         journalVouchers.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsJournalVoucher();
@@ -483,7 +485,8 @@
                             journalVouchers.refresh();
                         });
                         journalVouchers.filter = function (item) {
-                            return !filterTextJournalVoucher || (item.JVNumber.toLowerCase().indexOf(filterTextJournalVoucher) > -1);
+                            return !filterTextJournalVoucher || (item.JVNumber.toLowerCase().indexOf(filterTextJournalVoucher) > -1)
+                                                             || (item.Particulars.toLowerCase().indexOf(filterTextJournalVoucher) > -1);
                         }
                         journalVouchers.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsJournalVoucher();
@@ -514,7 +517,8 @@
                 journalVouchers.refresh();
             });
             journalVouchers.filter = function (item) {
-                return !filterTextJournalVoucher || (item.JVNumber.toLowerCase().indexOf(filterTextJournalVoucher) > -1);
+                return !filterTextJournalVoucher || (item.JVNumber.toLowerCase().indexOf(filterTextJournalVoucher) > -1)
+                                                 || (item.Particulars.toLowerCase().indexOf(filterTextJournalVoucher) > -1);
             }
             journalVouchers.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsJournalVoucher();
