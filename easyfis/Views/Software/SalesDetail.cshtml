@@ -2268,14 +2268,19 @@
                 InventoryCodeList.push(InventoryCodeCollection.items[i].InventoryCode);
             }
 
-            var disabled;
-            if (inventories == 0) {
+            var disabled = false;
+            var InventoryType = "@ViewData["InventoryType"]";
+            if(InventoryType == "Moving Average") {
                 disabled = true;
             } else {
-                if (document.getElementById('Sales_IsLocked').value == '') {
+                if (inventories == 0) {
                     disabled = true;
                 } else {
-                    disabled = false;
+                    if (document.getElementById('Sales_IsLocked').value == '') {
+                        disabled = true;
+                    } else {
+                        disabled = false;
+                    }
                 }
             }
 

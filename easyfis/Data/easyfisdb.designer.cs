@@ -13367,6 +13367,8 @@ namespace easyfis.Data
 		
 		private string _OfficialReceiptName;
 		
+		private string _InventoryType;
+		
 		private EntitySet<MstAccount> _MstAccounts;
 		
 		private EntitySet<MstAccount> _MstAccounts1;
@@ -13581,6 +13583,8 @@ namespace easyfis.Data
     partial void OnCustomerAdvancesAccountIdChanged();
     partial void OnOfficialReceiptNameChanging(string value);
     partial void OnOfficialReceiptNameChanged();
+    partial void OnInventoryTypeChanging(string value);
+    partial void OnInventoryTypeChanged();
     #endregion
 		
 		public MstUser()
@@ -14017,6 +14021,26 @@ namespace easyfis.Data
 					this._OfficialReceiptName = value;
 					this.SendPropertyChanged("OfficialReceiptName");
 					this.OnOfficialReceiptNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InventoryType", DbType="NVarChar(50)")]
+		public string InventoryType
+		{
+			get
+			{
+				return this._InventoryType;
+			}
+			set
+			{
+				if ((this._InventoryType != value))
+				{
+					this.OnInventoryTypeChanging(value);
+					this.SendPropertyChanging();
+					this._InventoryType = value;
+					this.SendPropertyChanged("InventoryType");
+					this.OnInventoryTypeChanged();
 				}
 			}
 		}
@@ -24083,7 +24107,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BaseQuantity", DbType="Decimal(18,5) NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BaseQuantity", DbType="Decimal(18,0) NOT NULL")]
 		public decimal BaseQuantity
 		{
 			get
@@ -24103,7 +24127,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BaseCost", DbType="Decimal(18,5) NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BaseCost", DbType="Decimal(18,0) NOT NULL")]
 		public decimal BaseCost
 		{
 			get

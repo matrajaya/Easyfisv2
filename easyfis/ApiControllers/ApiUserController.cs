@@ -281,6 +281,14 @@ namespace easyfis.Controllers
                     updateUserDefaults.BranchId = mstUser.BranchId;
                     updateUserDefaults.OfficialReceiptName = mstUser.OfficialReceiptName;
 
+                    var inventory = from d in db.TrnInventories
+                                    select d;
+
+                    if (!inventory.Any())
+                    {
+                        updateUserDefaults.InventoryType = mstUser.InventoryType;
+                    }
+
                     db.SubmitChanges();
 
                     return Request.CreateResponse(HttpStatusCode.OK);

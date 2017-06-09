@@ -37,5 +37,7 @@ namespace easyfis.Models
         public Int32 UnitId { get; set; }
         public String Unit { get; set; }
         public Decimal? Cost { get; set; }
+        public Decimal PositiveQuantity { get; set; }
+        public Decimal PositiveAmount { get; set; }
     }
 }

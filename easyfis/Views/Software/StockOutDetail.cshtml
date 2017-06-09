@@ -2230,16 +2230,23 @@
                             InventoryCodeList.push(InventoryCodeCollection.items[i].InventoryCode);
                         }
 
-                        var disabled;
-                        if(articleInventories == 0) {
+
+                        var disabled = false;
+                        var InventoryType = "@ViewData["InventoryType"]";
+                        if(InventoryType == "Moving Average") {
                             disabled = true;
                         } else {
-                            if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                            if(articleInventories == 0) {
                                 disabled = true;
                             } else {
-                                disabled = false;
+                                if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                                    disabled = true;
+                                } else {
+                                    disabled = false;
+                                }
                             }
                         }
+
 
                         cboInventoryCode.dispose();
                         cboInventoryCode = new wijmo.input.ComboBox('#stockOutItem_ItemInventoryCode', {

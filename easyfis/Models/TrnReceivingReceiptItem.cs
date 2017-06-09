@@ -46,5 +46,7 @@ namespace easyfis.Models
         public String BaseUnit { get; set; }
         public Decimal BaseQuantity { get; set; }
         public Decimal BaseCost { get; set; }
+        public Int32 UpdatedByUserId { get; set; }
+        public String InventoryType { get; set; }
     }
 }

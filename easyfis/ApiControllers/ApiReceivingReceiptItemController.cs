@@ -236,11 +236,11 @@ namespace easyfis.Controllers
                 var baseQuantity = receivingReceiptItem.BaseQuantity * (1 / conversionUnit.First().Multiplier);
                 if (baseQuantity > 0)
                 {
-                    newReceivingReceiptItem.BaseCost = (receivingReceiptItem.Amount - receivingReceiptItem.VATAmount) / baseQuantity;
+                    newReceivingReceiptItem.BaseCost = ((receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost) - (computeVATAmount(receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost, vatPercentage.FirstOrDefault(), vatIsInclusive.FirstOrDefault()))) / baseQuantity;
                 }
                 else
                 {
-                    newReceivingReceiptItem.BaseCost = receivingReceiptItem.Amount - receivingReceiptItem.VATAmount;
+                    newReceivingReceiptItem.BaseCost = (receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost) -  (computeVATAmount(receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost, vatPercentage.FirstOrDefault(), vatIsInclusive.FirstOrDefault()));
                 }
 
                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);

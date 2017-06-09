@@ -1837,8 +1837,13 @@
                         }
 
                         var disabled = false;
-                        if (inventories == 0) {
+                        var InventoryType = "@ViewData["InventoryType"]";
+                        if(InventoryType == "Moving Average") {
                             disabled = true;
+                        } else {
+                            if (inventories == 0) {
+                                disabled = true;
+                            }
                         }
 
                         cboInventoryCode.dispose();

@@ -31,6 +31,6 @@ namespace easyfis.Models
         public Int32 UpdatedById { get; set; }
         public String UpdatedBy { get; set; }
         public String UpdatedDateTime { get; set; }
-
+        public String InventoryType { get; set; }
     }
 }

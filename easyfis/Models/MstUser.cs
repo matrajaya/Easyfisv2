@@ -34,5 +34,6 @@ namespace easyfis.Models
         public Int32 CustomerAdvancesAccountId { get; set; }
         public String CustomerAdvancesAccount { get; set; }
         public String OfficialReceiptName { get; set; }
+        public String InventoryType { get; set; }
     }
 }

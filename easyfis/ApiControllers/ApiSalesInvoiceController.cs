@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using System.Diagnostics;
 
 namespace easyfis.Controllers
 {
@@ -377,8 +378,9 @@ namespace easyfis.Controllers
 
                 return newSalesInvoice.Id;
             }
-            catch
+            catch (Exception e)
             {
+                Debug.WriteLine(e);
                 return 0;
             }
         }

@@ -348,6 +348,8 @@
             var userDefaultObject = new Object();
             userDefaultObject.BranchId = cboDefaultBranch.selectedItem["Id"];
             userDefaultObject.OfficialReceiptName = document.getElementById("defaultOfficialReceiptName").value;
+            userDefaultObject.InventoryType = cboInventoryType.selectedValue;
+
             var userDefaultData = JSON.stringify(userDefaultObject);
 
             var userId = "@ViewData["UserId"]";
@@ -378,6 +380,32 @@
             });
         }
 
+        var inventoryTypeSelectedValue = "@ViewData["InventoryType"]";
+
+        function createCboInventoryType() {
+            $.ajax({
+                url: '/api/first/inventory',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (resultInventory) {
+                    var disabled = false;
+                    if (resultInventory != null) {
+                        disabled = true;
+                    }
+
+                    var InventoryTypes = new Array("Specific Identification", "Moving Average");
+                    cboInventoryType.dispose();
+                    cboInventoryType = new wijmo.input.ComboBox('#cboInventoryType', {
+                        disabled: disabled,
+                        placeholder: "Select Inventory Type",
+                        itemsSource: InventoryTypes,
+                        selectedValue: inventoryTypeSelectedValue
+                    });
+                }
+            });
+        }
+
         // =======
         // On Load
         // =======
@@ -386,6 +414,8 @@
 
             document.getElementById("profileDetail_fullName").value = "@ViewData["FullName"]";
             document.getElementById("profileDetail_userName").value = "@ViewData["UserName"]";
+            cboInventoryType = new wijmo.input.ComboBox('#cboInventoryType');
+            createCboInventoryType();
 
             getBranch();
             //getBranchesForComboBox();

@@ -14,29 +14,60 @@ namespace easyfis.Controllers
         // list inventory
         [Authorize]
         [HttpGet]
+        [Route("api/first/inventory")]
+        public Models.TrnInventory firstInventory()
+        {
+            var inventory = from d in db.TrnInventories
+                            select new Models.TrnInventory
+                            {
+                                Id = d.Id,
+                                BranchId = d.BranchId,
+                                Branch = d.MstBranch.Branch,
+                                InventoryDate = d.InventoryDate.ToShortDateString(),
+                                ArticleId = d.ArticleId,
+                                ArticleInventoryId = d.ArticleInventoryId,
+                                RRId = d.RRId,
+                                SIId = d.SIId,
+                                INId = d.INId,
+                                OTId = d.OTId,
+                                STId = d.STId,
+                                QuantityIn = d.QuantityIn,
+                                Quantity = d.Quantity,
+                                QuantityOut = d.QuantityOut,
+                                Amount = d.Amount,
+                                Particulars = d.Particulars
+                            };
+
+            return (Models.TrnInventory)inventory.FirstOrDefault();
+        }
+
+
+        // list inventory
+        [Authorize]
+        [HttpGet]
         [Route("api/listInventory")]
         public List<Models.TrnInventory> listInventory()
         {
             var inventories = from d in db.TrnInventories
-                        select new Models.TrnInventory
-                        {
-                            Id = d.Id,
-                            BranchId = d.BranchId,
-                            Branch = d.MstBranch.Branch,
-                            InventoryDate = d.InventoryDate.ToShortDateString(),
-                            ArticleId = d.ArticleId,
-                            ArticleInventoryId = d.ArticleInventoryId,
-                            RRId = d.RRId,
-                            SIId = d.SIId,
-                            INId = d.INId,
-                            OTId = d.OTId,
-                            STId = d.STId,
-                            QuantityIn = d.QuantityIn,
-                            Quantity = d.Quantity,
-                            QuantityOut = d.QuantityOut,
-                            Amount = d.Amount,
-                            Particulars = d.Particulars
-                        };
+                              select new Models.TrnInventory
+                              {
+                                  Id = d.Id,
+                                  BranchId = d.BranchId,
+                                  Branch = d.MstBranch.Branch,
+                                  InventoryDate = d.InventoryDate.ToShortDateString(),
+                                  ArticleId = d.ArticleId,
+                                  ArticleInventoryId = d.ArticleInventoryId,
+                                  RRId = d.RRId,
+                                  SIId = d.SIId,
+                                  INId = d.INId,
+                                  OTId = d.OTId,
+                                  STId = d.STId,
+                                  QuantityIn = d.QuantityIn,
+                                  Quantity = d.Quantity,
+                                  QuantityOut = d.QuantityOut,
+                                  Amount = d.Amount,
+                                  Particulars = d.Particulars
+                              };
 
             return inventories.ToList();
         }
