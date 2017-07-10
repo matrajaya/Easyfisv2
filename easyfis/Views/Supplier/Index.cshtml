@@ -1,0 +1,550 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <!-- Title of the Page -->
+    <link rel="shortcut icon" href="~/Images/icon/easyfislogomini.ico">
+    <title>Supplier List</title>
+
+    <!-- CSS StyleSheets-->
+    @Styles.Render("~/Content/Software-css")
+</head>
+
+<body class="">
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
+            <section class="content-header">
+                <div class="container">
+                    <h2>
+                        <i class="fa fa-black-tie fa-fw"></i> Supplier List
+                    </h2>
+                </div>
+            </section>
+            <br />
+            <section class="container">
+                <div class="input-group " style="margin-bottom: 10px;">
+                    <span class="input-group-addon">Company</span>
+                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 59%">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input type="text" class="form-control" id="InputFilter" placeholder="Filter">
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 40%" align="right">
+                                    <button class="btn btn-primary" id="btnAddSupplier" onclick="btnAddSupplier_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    <button class="btn btn-danger" id="btnCloseSupplier" onclick="btnCloseSupplier_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="SupplierGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGrid">
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            @Html.Partial("_SoftwareFooter")
+        </main>
+    </div>
+
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
+    <!-- Supplier Delete -->
+    <div class="modal fade" id="deleteSupplierConfirm" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Supplier <i class="fa fa-trash"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Delete Supplier?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" id="cmdConfirmDeleteSupplier" onclick="cmdSupplierConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Lock -->
+    <div class="modal fade" id="deleteRecordLock" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Sorry, the record is lock! It can't be deleted!
+                </div>
+                <div class="modal-footer">
+                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"> Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/Scripts/Software-js")
+    <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var suppliers;
+        var supplierGrid;
+        var btnFirstPageGrid;
+        var btnPreviousPageGrid;
+        var btnNextPageGrid;
+        var btnLastPageGrid;
+        var btnCurrentPageGrid;
+
+        // ==============================
+        // Get Data from MstArtcile Table
+        // ==============================
+        function getArtcileForSuppliers() {
+            var suppliers = new wijmo.collections.ObservableArray;
+            NProgress.start();
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/3',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (supplierResults) {
+                    if (supplierResults.length > 0) {
+                        for (i = 0; i < supplierResults.length; i++) {
+
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            } else {
+                                deleteDisabled = "disabled";
+                            }
+
+                            var btnDeleteId;
+                            if (supplierResults[i]["IsLocked"] == true) {
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdSupplierDeleteLockButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            } else {
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdSupplierDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
+                            }
+
+                            suppliers.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdSupplierEditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: btnDeleteId,
+                                Id: supplierResults[i]["Id"],
+                                ArticleCode: supplierResults[i]["ArticleCode"],
+                                ManualArticleCode: supplierResults[i]["ManualArticleCode"],
+                                Article: supplierResults[i]["Article"],
+                                Category: supplierResults[i]["Category"],
+                                ArticleTypeId: supplierResults[i]["ArticleTypeId"],
+                                ArticleType: supplierResults[i]["ArticleType"],
+                                ArticleGroupId: supplierResults[i]["ArticleGroupId"],
+                                ArticleGroup: supplierResults[i]["ArticleGroup"],
+                                AccountId: supplierResults[i]["AccountId"],
+                                Account: supplierResults[i]["Account"],
+                                SalesAccountId: supplierResults[i]["SalesAccountId"],
+                                CostAccountId: supplierResults[i]["CostAccountId"],
+                                AssetAccountId: supplierResults[i]["AssetAccountId"],
+                                ExpenseAccountId: supplierResults[i]["ExpenseAccountId"],
+                                UnitId: supplierResults[i]["UnitId"],
+                                OutputTaxId: supplierResults[i]["OutputTaxId"],
+                                InputTaxId: supplierResults[i]["InputTaxId"],
+                                WTaxTypeId: supplierResults[i]["WTaxTypeId"],
+                                Price: supplierResults[i]["Price"],
+                                Cost: supplierResults[i]["Cost"],
+                                IsInventory: supplierResults[i]["IsInventory"],
+                                Particulars: supplierResults[i]["Particulars"],
+                                Address: supplierResults[i]["Address"],
+                                TermId: supplierResults[i]["TermId"],
+                                ContactNumber: supplierResults[i]["ContactNumber"],
+                                ContactPerson: supplierResults[i]["ContactPerson"],
+                                TaxNumber: supplierResults[i]["TaxNumber"],
+                                CreditLimit: supplierResults[i]["CreditLimit"],
+                                DateAcquired: supplierResults[i]["DateAcquired"],
+                                UsefulLife: supplierResults[i]["UsefulLife"],
+                                SalvageValue: supplierResults[i]["SalvageValue"],
+                                ManualArticleOldCode: supplierResults[i]["ManualArticleOldCode"],
+                                IsLocked: supplierResults[i]["IsLocked"],
+                                CreatedById: supplierResults[i]["CreatedById"],
+                                CreatedBy: supplierResults[i]["CreatedBy"],
+                                CreatedDateTime: supplierResults[i]["CreatedDateTime"],
+                                UpdatedById: supplierResults[i]["UpdatedById"],
+                                UpdatedBy: supplierResults[i]["UpdatedBy"],
+                                UpdatedDateTime: supplierResults[i]["UpdatedDateTime"]
+                            });
+                        }
+                    }
+                    NProgress.done();
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return suppliers;
+        }
+
+        // ===========================
+        // Supplier Delete Lock Button
+        // ===========================
+        function cmdSupplierDeleteLockButton_OnClick() {
+            toastr.error("Record Locked")
+        }
+
+        // =========================
+        // Refresh Supplier Flexgrid
+        // =========================
+        function refreshSupplierFlexgrid() {
+            suppliers = new wijmo.collections.CollectionView(getArtcileForSuppliers());
+            suppliers.canFilter = true;
+            suppliers.pageSize = 15;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                suppliers.refresh();
+            });
+            suppliers.filter = function (item) {
+                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ArticleGroup.toLowerCase().indexOf(filterText) > -1);
+            }
+            suppliers.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsSupplier();
+            });
+            suppliers.currentChanged.addHandler(function (sender, args) {
+                updateDetails();
+            });
+
+            // Flex Grid
+            supplierGrid.itemsSource = suppliers;
+            supplierGrid.trackChanges = true;
+        }
+
+        // ===================
+        // Supplier Add Button
+        // ===================
+        function btnAddSupplier_OnClick() {
+            //window.location = '/Software/SupplierDetail';
+            document.getElementById('btnAddSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Adding";
+            $('#btnAddSupplier').prop('disabled', true);
+            $('#btnCloseSupplier').prop('disabled', true);
+
+            var canAccessToDetailPage = "@ViewData["CanAccessToDetailPage"]";
+            if (canAccessToDetailPage == "True") {
+                $.ajax({
+                    type: "POST",
+                    url: '/api/addArticle/3',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (id) {
+                        if (id > 0) {
+                            window.location = '/Software/SupplierDetail?SupplierId=' + id;
+                        } else {
+                            toastr.error("Internal Server Error");
+                        }
+                    }
+                });
+            } else if (canAccessToDetailPage == "False") {
+                window.location = '/Software/Forbidden';
+            } else {
+                document.getElementById('btnAddSupplier').innerHTML = "<i class='fa fa-plus'></i> Add";
+                $('#btnAddSupplier').prop('disabled', false);
+                $('#btnCloseSupplier').prop('disabled', false);
+            }
+        }
+
+        // =====================
+        // Supplier Close Button
+        // =====================
+        function btnCloseSupplier_OnClick() {
+            window.location = '/Software';
+        }
+
+        // ====================
+        // Supplier Edit Button
+        // ====================
+        function cmdSupplierEditButton_OnClick() {
+            suppliers.editItem(suppliers.currentItem);
+            var supplier = suppliers.currentEditItem;
+            var supplierId = supplier.Id;
+            window.location = '/Software/SupplierDetail?SupplierId=' + supplierId;
+        }
+
+        // =====================
+        // Supplier delete Button
+        // =====================
+        function cmdSupplierDeleteButton_OnClick() {
+            $('#deleteSupplierConfirm').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-trash'></i> Delete";
+            $('#cmdConfirmDeleteSupplier').prop('disabled', false);
+            $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
+        }
+        // Supplier Confirm Delete Button
+        function cmdSupplierConfirmDeleteButton_OnClick() {
+            document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
+            $('#cmdConfirmDeleteSupplier').prop('disabled', true);
+            $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
+
+            suppliers.editItem(suppliers.currentItem);
+            var supplierId = suppliers.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteArticle/' + supplierId,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
+                        toastr.success("Delete Successful");
+                        $('#deleteSupplierConfirm').modal('hide');
+                        refreshSupplierFlexgrid();
+                    },
+                    404: function () {
+                        toastr.error("Not Found");
+                        $('#deleteSupplierConfirm').modal('hide');
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#deleteSupplierConfirm').modal('hide');
+                    }
+                }
+            });
+        }
+
+        // ===================
+        // FlexGrid Selection
+        // ===================
+        function updateDetails() {
+            var supplier = suppliers.currentItem;
+            document.getElementById('createdBy').innerHTML = supplier.CreatedBy;
+            document.getElementById('createdDate').innerHTML = supplier.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = supplier.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = supplier.UpdatedDateTime;
+        }
+
+        // ===============================
+        // Navigation Buttons for Supplier
+        // ===============================
+        function updateNavigateButtonsSupplier() {
+            if (suppliers.pageSize <= 0) {
+                document.getElementById('naviagtionPageGrid').style.display = 'none';
+                return;
+            }
+            document.getElementById('naviagtionPageGrid').style.display = 'block';
+            if (suppliers.pageIndex === 0) {
+                btnFirstPageGrid.setAttribute('disabled', 'disabled');
+                btnPreviousPageGrid.setAttribute('disabled', 'disabled');
+                btnNextPageGrid.removeAttribute('disabled');
+                btnLastPageGrid.removeAttribute('disabled');
+            } else if (suppliers.pageIndex === (suppliers.pageCount - 1)) {
+                btnFirstPageGrid.removeAttribute('disabled');
+                btnPreviousPageGrid.removeAttribute('disabled');
+                btnLastPageGrid.setAttribute('disabled', 'disabled');
+                btnNextPageGrid.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGrid.removeAttribute('disabled');
+                btnPreviousPageGrid.removeAttribute('disabled');
+                btnNextPageGrid.removeAttribute('disabled');
+                btnLastPageGrid.removeAttribute('disabled');
+            }
+            btnCurrentPageGrid.innerHTML = (suppliers.pageIndex + 1) + ' / ' + suppliers.pageCount;
+        }
+
+        function refreshGrids() {
+            setTimeout(function () {
+                suppliers.refresh();
+            }, 500)
+        }
+
+        // ============
+        // On Page Load
+        // ============
+        $(document).ready(function () {
+            suppliers = new wijmo.collections.CollectionView(getArtcileForSuppliers());
+            suppliers.canFilter = true;
+            suppliers.pageSize = 15;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                suppliers.refresh();
+            });
+            suppliers.filter = function (item) {
+                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
+                                   || (item.ArticleGroup.toLowerCase().indexOf(filterText) > -1);
+            }
+            suppliers.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsSupplier();
+            });
+            suppliers.currentChanged.addHandler(function (sender, args) {
+                updateDetails();
+            });
+
+            // Flex Grid
+            supplierGrid = new wijmo.grid.FlexGrid('#SupplierGrid');
+            supplierGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Code",
+                                "binding": "ArticleCode",
+                                "allowSorting": true,
+                                "width": 100,
+                            },
+                            {
+                                "header": "Supplier",
+                                "binding": "Article",
+                                "allowSorting": true,
+                                "width": 365
+                            },
+                            {
+                                "header": "Contact Number",
+                                "binding": "ContactNumber",
+                                "allowSorting": true,
+                                "width": 200
+                            },
+                            {
+                                "header": "Group",
+                                "binding": "ArticleGroup",
+                                "allowSorting": true,
+                                "width": 220
+                            },
+                            {
+                                "header": "L",
+                                "binding": "IsLocked",
+                                "allowSorting": true,
+                                "width": 50
+                            }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: suppliers,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+            supplierGrid.trackChanges = true;
+
+            //Navigation button
+            btnFirstPageGrid = document.getElementById('btnMoveToFirstPageGrid');
+            btnPreviousPageGrid = document.getElementById('btnMoveToPreviousPageGrid');
+            btnNextPageGrid = document.getElementById('btnMoveToNextPageGrid');
+            btnLastPageGrid = document.getElementById('btnMoveToLastPageGrid');
+            btnCurrentPageGrid = document.getElementById('btnCurrentPageGrid');
+
+            updateNavigateButtonsSupplier();
+
+            btnFirstPageGrid.addEventListener('click', function () {
+                suppliers.moveToFirstPage();
+                updateNavigateButtonsSupplier();
+            });
+            btnPreviousPageGrid.addEventListener('click', function () {
+                suppliers.moveToPreviousPage();
+                updateNavigateButtonsSupplier();
+            });
+            btnNextPageGrid.addEventListener('click', function () {
+                suppliers.moveToNextPage();
+                updateNavigateButtonsSupplier();
+            });
+            btnLastPageGrid.addEventListener('click', function () {
+                suppliers.moveToLastPage();
+                updateNavigateButtonsSupplier();
+            });
+
+            var canAdd = "@ViewData["CanAdd"]";
+            if (canAdd == "True") {
+                $("#btnAddSupplier").prop("disabled", false)
+            } else if (canAdd == "False") {
+                $("#btnAddSupplier").prop("disabled", true)
+            } else {
+                $("#btnAddSupplier").prop("disabled", true)
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
+        });
+    </script>
+</body>
+</html>

@@ -112,7 +112,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Supplier()
         {
-            if (pageAccess("Supplier").Equals("Supplier"))
+            if (pageAccess("SupplierList").Equals("SupplierList"))
             {
                 if (accessToDetail("SupplierDetail").Equals("SupplierDetail"))
                 {
@@ -147,7 +147,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult PurchaseOrder()
         {
-            if (pageAccess("PurchaseOrder").Equals("PurchaseOrder"))
+            if (pageAccess("PurchaseOrderList").Equals("PurchaseOrderList"))
             {
                 if (accessToDetail("PurchaseOrderDetail").Equals("PurchaseOrderDetail"))
                 {
@@ -182,7 +182,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult ReceivingReceipt()
         {
-            if (pageAccess("ReceivingReceipt").Equals("ReceivingReceipt"))
+            if (pageAccess("ReceivingReceiptList").Equals("ReceivingReceiptList"))
             {
                 if (accessToDetail("ReceivingReceiptDetail").Equals("ReceivingReceiptDetail"))
                 {
@@ -217,7 +217,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult AccountsPayable()
         {
-            if (pageAccess("AccountsPayable").Equals("AccountsPayable"))
+            if (pageAccess("AccountsPayableReport").Equals("AccountsPayableReport"))
             {
                 return View();
             }
@@ -230,7 +230,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult AccountsPayableReport()
         {
-            if (pageAccess("AccountsPayableReport").Equals("AccountsPayableReport"))
+            if (pageAccess("ViewAccountsPayableReport").Equals("ViewAccountsPayableReport"))
             {
                 return View();
             }
@@ -243,7 +243,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult PurchaseSummaryReport()
         {
-            if (pageAccess("PurchaseSummaryReport").Equals("PurchaseSummaryReport"))
+            if (pageAccess("ViewPurchaseSummaryReport").Equals("ViewPurchaseSummaryReport"))
             {
                 return View();
             }
@@ -256,7 +256,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult PurchaseDetailReport()
         {
-            if (pageAccess("PurchaseDetailReport").Equals("PurchaseDetailReport"))
+            if (pageAccess("ViewPurchaseDetailReport").Equals("ViewPurchaseDetailReport"))
             {
                 return View();
             }
@@ -269,7 +269,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult ReceivingReceiptSummaryReport()
         {
-            if (pageAccess("ReceivingReceiptSummaryReport").Equals("ReceivingReceiptSummaryReport"))
+            if (pageAccess("ViewReceivingReceiptSummaryReport").Equals("ViewReceivingReceiptSummaryReport"))
             {
                 return View();
             }
@@ -282,7 +282,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult ReceivingReceiptDetailReport()
         {
-            if (pageAccess("ReceivingReceiptDetailReport").Equals("ReceivingReceiptDetailReport"))
+            if (pageAccess("ViewReceivingReceiptDetailReport").Equals("ViewReceivingReceiptDetailReport"))
             {
                 return View();
             }
@@ -295,7 +295,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult DisbursementSummaryReport()
         {
-            if (pageAccess("DisbursementSummaryReport").Equals("DisbursementSummaryReport"))
+            if (pageAccess("ViewDisbursementSummaryReport").Equals("ViewDisbursementSummaryReport"))
             {
                 return View();
             }
@@ -308,7 +308,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult DisbursementDetailReport()
         {
-            if (pageAccess("DisbursementDetailReport").Equals("DisbursementDetailReport"))
+            if (pageAccess("ViewDisbursementDetailReport").Equals("ViewDisbursementDetailReport"))
             {
                 return View();
             }
@@ -321,7 +321,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Disbursement()
         {
-            if (pageAccess("Disbursement").Equals("Disbursement"))
+            if (pageAccess("DisbursementList").Equals("DisbursementList"))
             {
                 if (accessToDetail("DisbursementDetail").Equals("DisbursementDetail"))
                 {
@@ -356,7 +356,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Bank()
         {
-            if (pageAccess("Bank").Equals("Bank"))
+            if (pageAccess("BankList").Equals("BankList"))
             {
                 return View();
             }
@@ -369,7 +369,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Customer()
         {
-            if (pageAccess("Customer").Equals("Customer"))
+            if (pageAccess("CustomerList").Equals("CustomerList"))
             {
                 if (accessToDetail("CustomerDetail").Equals("CustomerDetail"))
                 {
@@ -404,7 +404,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Sales()
         {
-            if (pageAccess("Sales").Equals("Sales"))
+            if (pageAccess("SalesInvoiceList").Equals("SalesInvoiceList"))
             {
                 if (accessToDetail("SalesDetail").Equals("SalesDetail"))
                 {
@@ -439,7 +439,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult AccountsReceivable()
         {
-            if (pageAccess("AccountsReceivable").Equals("AccountsReceivable"))
+            if (pageAccess("AccountsReceivableReport").Equals("AccountsReceivableReport"))
             {
                 return View();
             }
@@ -452,7 +452,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult AccountsReceivableReport()
         {
-            if (pageAccess("AccountsReceivableReport").Equals("AccountsReceivableReport"))
+            if (pageAccess("ViewAccountsReceivableReport").Equals("ViewAccountsReceivableReport"))
             {
                 return View();
             }
@@ -465,7 +465,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult SalesSummaryReport()
         {
-            if (pageAccess("SalesSummaryReport").Equals("SalesSummaryReport"))
+            if (pageAccess("ViewSalesSummaryReport").Equals("ViewSalesSummaryReport"))
             {
                 return View();
             }
@@ -478,7 +478,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult SalesDetailReport()
         {
-            if (pageAccess("SalesDetailReport").Equals("SalesDetailReport"))
+            if (pageAccess("ViewSalesDetailReport").Equals("ViewSalesDetailReport"))
             {
                 return View();
             }
@@ -491,7 +491,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult CollectionSummaryReport()
         {
-            if (pageAccess("CollectionSummaryReport").Equals("CollectionSummaryReport"))
+            if (pageAccess("ViewCollectionSummaryReport").Equals("ViewCollectionSummaryReport"))
             {
                 return View();
             }
@@ -504,7 +504,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult CollectionDetailReport()
         {
-            if (pageAccess("CollectionDetailReport").Equals("CollectionDetailReport"))
+            if (pageAccess("ViewCollectionDetailReport").Equals("ViewCollectionDetailReport"))
             {
                 return View();
             }
@@ -517,7 +517,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult ReceivingReceiptBook()
         {
-            if (pageAccess("ReceivingReceiptBook").Equals("ReceivingReceiptBook"))
+            if (pageAccess("ViewReceivingReceiptBook").Equals("ViewReceivingReceiptBook"))
             {
                 return View();
             }
@@ -530,7 +530,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult DisbursementBook()
         {
-            if (pageAccess("DisbursementBook").Equals("DisbursementBook"))
+            if (pageAccess("ViewDisbursementBook").Equals("ViewDisbursementBook"))
             {
                 return View();
             }
@@ -543,7 +543,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult SalesBook()
         {
-            if (pageAccess("SalesBook").Equals("SalesBook"))
+            if (pageAccess("ViewSalesBook").Equals("ViewSalesBook"))
             {
                 return View();
             }
@@ -556,7 +556,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult CollectionBook()
         {
-            if (pageAccess("CollectionBook").Equals("CollectionBook"))
+            if (pageAccess("ViewCollectionBook").Equals("ViewCollectionBook"))
             {
                 return View();
             }
@@ -569,7 +569,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult StockInBook()
         {
-            if (pageAccess("StockInBook").Equals("StockInBook"))
+            if (pageAccess("ViewStockInBook").Equals("ViewStockInBook"))
             {
                 return View();
             }
@@ -583,7 +583,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult StockOutBook()
         {
-            if (pageAccess("StockOutBook").Equals("StockOutBook"))
+            if (pageAccess("ViewStockOutBook").Equals("ViewStockOutBook"))
             {
                 return View();
             }
@@ -596,7 +596,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult StockTransferBook()
         {
-            if (pageAccess("StockTransferBook").Equals("StockTransferBook"))
+            if (pageAccess("ViewStockTransferBook").Equals("ViewStockTransferBook"))
             {
                 return View();
             }
@@ -609,7 +609,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult JournalVoucherBook()
         {
-            if (pageAccess("JournalVoucherBook").Equals("JournalVoucherBook"))
+            if (pageAccess("ViewJournalVoucherBook").Equals("ViewJournalVoucherBook"))
             {
                 return View();
             }
@@ -622,7 +622,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Collection()
         {
-            if (pageAccess("Collection").Equals("Collection"))
+            if (pageAccess("CollectionList").Equals("CollectionList"))
             {
                 if (accessToDetail("CollectionDetail").Equals("CollectionDetail"))
                 {
@@ -670,7 +670,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Items()
         {
-            if (pageAccess("Items").Equals("Items"))
+            if (pageAccess("ItemList").Equals("ItemList"))
             {
                 if (accessToDetail("ItemDetail").Equals("ItemDetail"))
                 {
@@ -705,7 +705,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult StockIn()
         {
-            if (pageAccess("StockIn").Equals("StockIn"))
+            if (pageAccess("StockInList").Equals("StockInList"))
             {
                 if (accessToDetail("StockInDetail").Equals("StockInDetail"))
                 {
@@ -740,7 +740,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult StockOut()
         {
-            if (pageAccess("StockOut").Equals("StockOut"))
+            if (pageAccess("StockOutList").Equals("StockOutList"))
             {
                 if (accessToDetail("StockOutDetail").Equals("StockOutDetail"))
                 {
@@ -800,7 +800,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult StockTransfer()
         {
-            if (pageAccess("StockTransfer").Equals("StockTransfer"))
+            if (pageAccess("StockTransferList").Equals("StockTransferList"))
             {
                 if (accessToDetail("StockTransferDetail").Equals("StockTransferDetail"))
                 {
@@ -835,7 +835,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult StockCount()
         {
-            if (pageAccess("StockCount").Equals("StockCount"))
+            if (pageAccess("StockCountList").Equals("StockCountList"))
             {
                 if (accessToDetail("StockCountDetail").Equals("StockCountDetail"))
                 {
@@ -870,7 +870,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult ChartOfAccounts()
         {
-            if (pageAccess("ChartOfAccounts").Equals("ChartOfAccounts"))
+            if (pageAccess("CharOfAccounts").Equals("CharOfAccounts"))
             {
                 return View();
             }
@@ -883,7 +883,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult JournalVoucher()
         {
-            if (pageAccess("JournalVoucher").Equals("JournalVoucher"))
+            if (pageAccess("JournalVoucherList").Equals("JournalVoucherList"))
             {
                 if (accessToDetail("JournalVoucherDetail").Equals("JournalVoucherDetail"))
                 {
@@ -918,7 +918,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Company()
         {
-            if (pageAccess("Company").Equals("Company"))
+            if (pageAccess("CompanyList").Equals("CompanyList"))
             {
                 if (accessToDetail("CompanyDetail").Equals("CompanyDetail"))
                 {
@@ -953,7 +953,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult FinancialStatements()
         {
-            if (pageAccess("FinancialStatements").Equals("FinancialStatements"))
+            if (pageAccess("FinancialStatementReport").Equals("FinancialStatementReport"))
             {
                 return View();
             }
@@ -966,7 +966,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult TrialBalance()
         {
-            if (pageAccess("TrialBalance").Equals("TrialBalance"))
+            if (pageAccess("ViewTrialBalance").Equals("ViewTrialBalance"))
             {
                 return View();
             }
@@ -979,7 +979,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult AccountLedger()
         {
-            if (pageAccess("AccountLedger").Equals("AccountLedger"))
+            if (pageAccess("ViewAccountLedger").Equals("ViewAccountLedger"))
             {
                 return View();
             }
@@ -992,7 +992,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Users()
         {
-            if (pageAccess("Users").Equals("Users"))
+            if (pageAccess("UserList").Equals("UserList"))
             {
                 return View();
             }
