@@ -406,7 +406,7 @@ namespace easyfis.Controllers
         {
             if (pageAccess("SalesInvoiceList").Equals("SalesInvoiceList"))
             {
-                if (accessToDetail("SalesDetail").Equals("SalesDetail"))
+                if (accessToDetail("SalesInvoiceDetail").Equals("SalesInvoiceDetail"))
                 {
                     ViewData.Add("CanAccessToDetailPage", "True");
                 }
@@ -426,7 +426,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult SalesDetail()
         {
-            if (pageAccess("SalesDetail").Equals("SalesDetail"))
+            if (pageAccess("SalesInvoiceDetail").Equals("SalesInvoiceDetail"))
             {
                 return View();
             }
@@ -1005,7 +1005,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult UsersDetail()
         {
-            if (pageAccess("UsersDetail").Equals("UsersDetail"))
+            if (pageAccess("UserDetail").Equals("UserDetail"))
             {
                 return View();
             }
