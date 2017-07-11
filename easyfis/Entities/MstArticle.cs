@@ -78,12 +78,14 @@ namespace easyfis.Entities
         public List<Entities.MstUser> UpdatedByUserList { get; set; }
         public String UpdatedDateTime { get; set; }
 
-        // user rights fields
+        // user security rights
+        // ================================================
         public Boolean CanAdd { get; set; }
         public Boolean CanEdit { get; set; }
         public Boolean CanDelete { get; set; }
         public Boolean CanLock { get; set; }
         public Boolean CanUnlock { get; set; }
         public Boolean CanPrint { get; set; }
+        // ================================================
     }
 }

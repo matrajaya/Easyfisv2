@@ -49,6 +49,17 @@ namespace easyfis
                       "~/Content/software.css"));
 
             // ============
+            // System - css
+            // ============
+            bundles.Add(new StyleBundle("~/Content/System-css").Include(
+                      "~/Content/bootstrap.min.css",
+                      "~/Content/toastr.css",
+                      "~/Content/font-awesome.min.css",
+                      "~/Content/wijmo.min.css",
+                      "~/Content/nprogress.css",
+                      "~/Content/system.css"));
+
+            // ============
             // Software -js
             // ============
             bundles.Add(new ScriptBundle("~/Scripts/Software-js").Include(

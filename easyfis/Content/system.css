@@ -1,0 +1,216 @@
+﻿
+/*font Awesome http://fontawesome.io*/
+@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css);
+
+body {
+    margin-top: 60px;
+}
+
+/* navbar custom */
+.navbar-default {
+    border-color: rgba(34,34,34,.05);
+    font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif;
+    -webkit-transition: all .35s;
+    -moz-transition: all .35s;
+    transition: all .35s;
+}
+
+.navbar-brand > center > img {
+    margin-top: 5px;
+    height: 30px;
+    width: 100px;
+}
+
+.navbar-default .navbar-header .navbar-brand {
+    font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu {
+    box-shadow: none;
+}
+/*--------------------------------------------------------------------------
+  Navbar Style
+--------------------------------------------------------------------------*/
+.navbar {
+    border-bottom-left-radius: 0; /*Change bootstrap default border-radius for menu*/
+}
+
+@media(min-width:768px) {
+    .navbar .navbar-brand {
+        width: 224px; /*Change the width of .navbar-brand to center text and align with .sider-navbar border-right*/
+        text-align: center;
+    }
+}
+
+/*--------------------------------------------------------------------------
+  Side Navigation
+--------------------------------------------------------------------------*/
+@media(min-width:768px) {
+    .sider-navbar {
+        position: fixed;
+        top: 50px; /*Change to reposition .sider-navbar from top*/
+        left: 225px;
+        width: 225px;
+        margin-left: -225px;
+        border-right: 1px solid #E7E7E7; /*Change for right side border color*/
+        border-radius: 0;
+        overflow-y: auto;
+        background: #ffffff; /*Change for background color*/
+        bottom: 0;
+        overflow: hidden;
+        padding-bottom: 40px;
+    }
+
+        .sider-navbar:hover {
+            overflow-x: hidden;
+            overflow-y: auto;
+            transition: 1s all;
+        }
+
+        .sider-navbar::-webkit-scrollbar {
+            width: 10px;
+            background-color: #F5F5F5;
+            opacity: 0.75;
+            transition: 1s all;
+        }
+
+        .sider-navbar::-webkit-scrollbar-thumb {
+            background-color: #e1e1e1;
+            opacity: 0.5;
+            transition: 1s all;
+        }
+
+        .sider-navbar li.sider-menu {
+        }
+
+            .sider-navbar li.sider-menu ul {
+                width: 225px;
+            }
+
+                .sider-navbar li.sider-menu > ul > li,
+                .sider-navbar li.sider-menu ul li ul li {
+                    border-top: 1px solid #E7E7E7; /*Change for .sider-menu border color*/
+                    -webkit-transition: all 0.3s ease-out;
+                    transition: all 0.3s ease-out;
+                }
+
+                    .sider-navbar li.sider-menu > ul > li:last-child {
+                        border-bottom: 1px solid #E7E7E7; /*Change for .sider-menu border color*/
+                    }
+
+                    .sider-navbar li.sider-menu > ul > li.active,
+                    .sider-navbar li.sider-menu > ul > li:hover,
+                    .sider-navbar li.sider-menu ul li ul li:hover {
+                        color: white;
+                    }
+
+
+                    .sider-navbar li.sider-menu > ul > li > a:hover,
+                    .sider-navbar li.sider-menu > ul > li > a:focus,
+                    .sider-navbar li.sider-menu > ul > li > a:active {
+                        background-color: #7a0400;
+                        color: white;
+                    }
+
+                    .sider-navbar li.sider-menu ul li ul li:hover {
+                        background-color: #e7e7e7;
+                    }
+}
+
+.sider-navbar li.sider-menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+    .sider-navbar li.sider-menu ul li a {
+        display: block;
+        padding: 15px;
+        text-decoration: none;
+        color: #5E5E5E; /*Change for .sider-menu color*/
+    }
+
+    .sider-navbar li.sider-menu ul li ul {
+    }
+/*--------------------------------------------------------------------------
+  Profile container
+  Thanks to keenthemes' bootstrap snippet for a starting point for the styles
+  http://bootsnipp.com/snippets/featured/user-profile-sidebar 
+--------------------------------------------------------------------------*/
+#profile {
+}
+
+.profile-userpic img {
+    float: none;
+    margin: 16px auto 0;
+    padding: 6px;
+    width: 50%;
+    height: 50%;
+    -webkit-border-radius: 50% !important;
+    -moz-border-radius: 50% !important;
+    border-radius: 50% !important;
+    border: none;
+}
+
+.profile-usertitle {
+    text-align: center;
+    padding: 16px;
+    color: #333333;
+}
+
+.profile-usertitle-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.profile-company-details {
+    border-top: 1px solid #e1e1e1;
+    border-bottom: none;
+    padding: 16px;
+    color: #333333;
+    width: 225px;
+    white-space: nowrap;
+}
+
+.profile-company-title {
+    font-size: 14px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-branch-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+
+/*Hide profile picture on smaller devices*/
+@media(max-width:768px) {
+    #profile {
+        display: none;
+    }
+}
+/*--------------------------------------------------------------------------
+  Page Keeper
+  Setup layout so the main content will be to the right of .sider-navbar
+--------------------------------------------------------------------------*/
+@media(min-width:768px) {
+    #page-keeper {
+        width: 100%;
+        padding: 10px 10px 10px 225px;
+    }
+}
+
+.panel,
+.wj-content {
+    border-radius: 0 !important;
+}
