@@ -1,186 +1,242 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-    <!-- Title of the Page -->
     <link rel="shortcut icon" href="~/Images/icon/easyfislogomini.ico">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" type="text/css">
     <title>Supplier List</title>
-
-    <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/System-css")
 </head>
-
-<body class="">
-    <header>
-        @Html.Partial("_SystemHeader")
-    </header>
-    <!-- Navigation -->
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/Home">
-                    <center>
-                        <img src="~/Images/logo/easyfislogo.png" class="softwarelogo" />
-                    </center>
-                </a>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-lg-2">
+                <nav class="navbar navbar-default navbar-fixed-side">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="/Home">
+                                <center>
+                                    <img src="~/Images/logo/easyfislogo.png" class="img-responsive" />
+                                </center>
+                            </a>
+                        </div>
+                        <div class="collapse navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        User <b class="caret pull-right" style="margin-top: 7px;"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="/Software/">
+                                                <i class="fa fa-user fa-fw"></i> &nbsp; Noah Oliver Rigonan
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/Software/">
+                                                <i class="fa fa-gears fa-fw"></i> &nbsp; Manage Settings
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/Software/">
+                                                <i class="fa fa-edit fa-fw"></i> &nbsp; Change Password
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/Software/">
+                                                <i class="fa fa-power-off fa-fw"></i> &nbsp; Logout
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown second-child">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        Company <b class="caret pull-right" style="margin-top: 7px;"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="/Software/Company" class="profile-nowrap-text">
+                                                <i class="fa fa-building fa-fw"></i> &nbsp; Cebu Innosoft Solutions Services Incorporated
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/Software/Company" class="profile-nowrap-text">
+                                                <i class="fa fa-building-o fa-fw"></i> &nbsp; Main Branch
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        Setup <b class="caret pull-right" style="margin-top: 7px;"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="active"><a href="/Software/Supplier"> Supplier</span></a></li>
+                                        <li><a href="/Software/Customer"> Customer</a></li>
+                                        <li><a href="/Software/Items"> Item</a></li>
+                                        <li><a href="/Software/Bank"> Bank</a></li>
+                                        <li><a href="/Software/ChartOfAccounts"> Chart of Accounts</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        Activity <b class="caret pull-right" style="margin-top: 7px;"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="/Software/PurchaseOrder"> Purchase Order</a></li>
+                                        <li><a href="/Software/ReceivingReceipt"> Receiving Receipt</a></li>
+                                        <li><a href="/Software/Disbursement"> Disbursement</a></li>
+                                        <li><a href="/Software/Sales"> Sales</a></li>
+                                        <li><a href="/Software/Collection"> Collection</a></li>
+                                        <li><a href="/Software/StockIn"> Stock-In</a></li>
+                                        <li><a href="/Software/StockOut"> Stock-Out</a></li>
+                                        <li><a href="/Software/StockTransfer"> Stock Transfer</a></li>
+                                        <li><a href="/Software/StockCount"> Stock Count</a></li>
+                                        <li><a href="/Software/JournalVoucher"> Journal Voucher</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        System <b class="caret pull-right" style="margin-top: 7px;"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="/Software/Company"> Company</a></li>
+                                        <li><a href="/Software/Users"> User</a></li>
+                                        <li><a href="/Software/SystemTables"> System Tables</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        Report <b class="caret pull-right" style="margin-top: 7px;"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="/Software/AccountsPayable"> Accounts Payable</a></li>
+                                        <li><a href="/Software/AccountsReceivable"> Accounts Receivable</a></li>
+                                        <li><a href="/Software/InventoryReport"> Inventory Report</a></li>
+                                        <li><a href="/Software/FinancialStatements"> Financial Statements</a></li>
+                                        <li><a href="/Software/BankReconciliation"> Bank Reconciliation</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
             </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            Manage Settings <i class="fa fa-fw fa-chevron-down pull-right" style="margin-top: 2px; margin-right: 7px;"></i>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/Account/Login"><i class="fa fa-gear fa-fw"></i> Profile</a></li>
-                            <li><a href="/Manage/ChangePassword"><i class="fa fa-pencil-square-o fa-fw"></i> Change Password</a></li>
-                            <li><a href="/Software"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#" data-toggle="modal" onclick="cmdLogoutModal_OnClick()"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav sider-navbar">
-                    <li class="sider-menu">
-                        <ul>
-                            <li id="profile">
-                                <figure class="profile-userpic">
-                                    <img src="http://www.keita-gaming.com/assets/profile/default-avatar-c5d8ec086224cb6fc4e395f4ba3018c2.jpg" class="img-responsive" alt="Profile Picture">
-                                </figure>
-                                <div class="profile-usertitle">
-                                    <div class="profile-usertitle-name">Noah Oliver Rigonan</div>
-                                </div>
-                                <div class="profile-company-details">
-                                    <div class="profile-company-title">
-                                        <i class="fa fa-building fa-fw"></i> &nbsp; Cebu Innosoft Solutions Inc.
-                                    </div>
-                                    <div class="profile-branch-title">
-                                        <i class="fa fa-building-o fa-fw"></i> &nbsp; Main Branch
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="">
-                                <a href="#">
-                                    Dashboard
-                                </a>
-                            </li>
-                            <li class="">
-                                <a href="#" data-toggle="collapse" data-target="#Setup-1">
-                                    Setup <i class="fa fa-fw fa-chevron-down pull-right" style="margin-top: 2px; margin-right: 7px;"></i>
-                                </a>
-                                <ul id="Setup-1" class="collapse">
-                                    <li><a href="/Software/Supplier"> &nbsp;&nbsp; Supplier</a></li>
-                                    <li><a href="/Software/Customer"> &nbsp;&nbsp; Customer</a></li>
-                                    <li><a href="/Software/Items"> &nbsp;&nbsp; Item</a></li>
-                                    <li><a href="/Software/Bank"> &nbsp;&nbsp; Bank</a></li>
-                                    <li><a href="/Software/ChartOfAccounts"> &nbsp;&nbsp; Chart of Accounts</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#" data-toggle="collapse" data-target="#Activity-1">
-                                    Activity <i class="fa fa-fw fa-chevron-down pull-right" style="margin-top: 2px; margin-right: 7px;"></i>
-                                </a>
-                                <ul id="Activity-1" class="collapse">
-                                    <li><a href="/Software/PurchaseOrder"> &nbsp;&nbsp; Purchase Order</a></li>
-                                    <li><a href="/Software/ReceivingReceipt"> &nbsp;&nbsp; Receiving Receipt</a></li>
-                                    <li><a href="/Software/Disbursement"> &nbsp;&nbsp; Disbursement</a></li>
-                                    <li><a href="/Software/Sales"> &nbsp;&nbsp; Sales</a></li>
-                                    <li><a href="/Software/Collection"> &nbsp;&nbsp; Collection</a></li>
-                                    <li><a href="/Software/StockIn"> &nbsp;&nbsp; Stock-In</a></li>
-                                    <li><a href="/Software/StockOut"> &nbsp;&nbsp; Stock-Out</a></li>
-                                    <li><a href="/Software/StockTransfer"> &nbsp;&nbsp; Stock Transfer</a></li>
-                                    <li><a href="/Software/StockCount"> &nbsp;&nbsp; Stock Count</a></li>
-                                    <li><a href="/Software/JournalVoucher"> &nbsp;&nbsp; Journal Voucher</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#" data-toggle="collapse" data-target="#System-1">
-                                    System <i class="fa fa-fw fa-chevron-down pull-right" style="margin-top: 2px; margin-right: 7px;"></i>
-                                </a>
-                                <ul id="System-1" class="collapse">
-                                    <li><a href="/Software/Company"> &nbsp;&nbsp; Company</a></li>
-                                    <li><a href="/Software/Users"> &nbsp;&nbsp; User</a></li>
-                                    <li><a href="/Software/SystemTables"> &nbsp;&nbsp; System Tables</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#" data-toggle="collapse" data-target="#Reports-1">
-                                    Reports <i class="fa fa-fw fa-chevron-down pull-right" style="margin-top: 2px; margin-right: 7px;"></i>
-                                </a>
-                                <ul id="Reports-1" class="collapse">
-                                    <li><a href="/Software/AccountsPayable"> &nbsp;&nbsp; Accounts Payable</a></li>
-                                    <li><a href="/Software/AccountsReceivable"> &nbsp;&nbsp; Accounts Receivable</a></li>
-                                    <li><a href="/Software/InventoryReport"> &nbsp;&nbsp; Inventory Report</a></li>
-                                    <li><a href="/Software/FinancialStatements"> &nbsp;&nbsp; Financial Statements</a></li>
-                                    <li><a href="/Software/BankReconciliation"> &nbsp;&nbsp; Bank Reconciliation</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <section id="page-keeper">
-        <div class="container-fluid">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <table style="width: 100%" border="0">
-                        <tr>
-                            <td style="width: 59%">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control" id="InputFilter" placeholder="Filter">
-                                </div>
-                            </td>
-                            <td style="width: 1%"></td>
-                            <td style="width: 40%" align="right">
-                                <button class="btn btn-primary" id="btnAddSupplier" onclick="btnAddSupplier_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                <button class="btn btn-danger" id="btnCloseSupplier" onclick="btnCloseSupplier_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                            </td>
-                        </tr>
-                    </table>
+            <div class="col-sm-9 col-lg-10 no-padding">
+                <div class="header-content">
+                    <h4>
+                        Supplier List
+                    </h4>
                 </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div id="SupplierGrid" class="grid" align="left"></div>
+                <div id="content">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <table style="width: 100%" border="0">
+                                <tr>
+                                    <td style="width: 59%">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control" id="InputFilter" placeholder="Filter">
+                                        </div>
+                                    </td>
+                                    <td style="width: 1%"></td>
+                                    <td style="width: 40%" align="right">
+                                        <button class="btn btn-primary" id="btnAddSupplier" onclick="btnAddSupplier_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                        <button class="btn btn-danger" id="btnCloseSupplier" onclick="btnCloseSupplier_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div id="SupplierGrid" class="grid" align="left"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="btn-group col-md-7" id="naviagtionPageGrid">
+                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
+                                        <span class="glyphicon glyphicon-fast-backward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
+                                        <span class="glyphicon glyphicon-step-backward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
+                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
+                                        <span class="glyphicon glyphicon-step-forward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
+                                        <span class="glyphicon glyphicon-fast-forward"></span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="btn-group col-md-7" id="naviagtionPageGrid">
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
-                                <span class="glyphicon glyphicon-fast-backward"></span>
-                            </button>
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
-                                <span class="glyphicon glyphicon-step-backward"></span>
-                            </button>
-                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
-                                <span class="glyphicon glyphicon-step-forward"></span>
-                            </button>
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
-                                <span class="glyphicon glyphicon-fast-forward"></span>
-                            </button>
+            </div>
+        </div>
+    </div>
+    @*<header>
+            @Html.Partial("_SystemHeader")
+        </header>
+        <section id="page-keeper">
+            <div class="container-fluid">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 59%">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input type="text" class="form-control" id="InputFilter" placeholder="Filter">
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 40%" align="right">
+                                    <button class="btn btn-primary" id="btnAddSupplier" onclick="btnAddSupplier_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    <button class="btn btn-danger" id="btnCloseSupplier" onclick="btnCloseSupplier_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="SupplierGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGrid">
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
+        </section>*@
 
     <!-- Supplier Delete -->
     <div class="modal fade" id="deleteSupplierConfirm" role="dialog">
@@ -238,7 +294,7 @@
         function getArtcileForSuppliers() {
             var suppliers = new wijmo.collections.ObservableArray;
             NProgress.start();
-            $.ajax({
+            @*$.ajax({
                 url: '/api/listArticleByArticleTypeId/1',
                 cache: false,
                 type: 'GET',
@@ -327,7 +383,8 @@
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
-            });
+            });*@
+            NProgress.done();
             return suppliers;
         }
 

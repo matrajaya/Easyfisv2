@@ -1,18 +1,8 @@
-﻿
-/*font Awesome http://fontawesome.io*/
-@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css);
-
-body {
-    margin-top: 60px;
-}
-
-/* navbar custom */
-.navbar-default {
-    border-color: rgba(34,34,34,.05);
-    font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif;
-    -webkit-transition: all .35s;
-    -moz-transition: all .35s;
-    transition: all .35s;
+﻿@media (max-width: 768px) {
+    .navbar-fixed-side {
+        margin-left: -15px;
+        margin-right: -15px
+    }
 }
 
 .navbar-brand > center > img {
@@ -27,190 +17,218 @@ body {
     padding-bottom: 5px;
 }
 
-.navbar-default .navbar-nav .open .dropdown-menu > li > a {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
 
-.navbar-default .navbar-nav .open .dropdown-menu {
-    box-shadow: none;
-}
-/*--------------------------------------------------------------------------
-  Navbar Style
---------------------------------------------------------------------------*/
-.navbar {
-    border-bottom-left-radius: 0; /*Change bootstrap default border-radius for menu*/
-}
-
-@media(min-width:768px) {
-    .navbar .navbar-brand {
-        width: 224px; /*Change the width of .navbar-brand to center text and align with .sider-navbar border-right*/
-        text-align: center;
-    }
-}
-
-/*--------------------------------------------------------------------------
-  Side Navigation
---------------------------------------------------------------------------*/
-@media(min-width:768px) {
-    .sider-navbar {
+@media (min-width: 768px) {
+    .navbar-fixed-side {
         position: fixed;
-        top: 50px; /*Change to reposition .sider-navbar from top*/
-        left: 225px;
-        width: 225px;
-        margin-left: -225px;
-        border-right: 1px solid #E7E7E7; /*Change for right side border color*/
+        margin: 0 -15px;
+        height: 100vh;
+        width: inherit;
+        overflow: auto;
+        border-top-width: 0;
+        border-bottom-width: 0;
         border-radius: 0;
-        overflow-y: auto;
-        background: #ffffff; /*Change for background color*/
-        bottom: 0;
-        overflow: hidden;
-        padding-bottom: 40px;
+        padding-bottom: 20px;
     }
 
-        .sider-navbar:hover {
-            overflow-x: hidden;
-            overflow-y: auto;
-            transition: 1s all;
-        }
-
-        .sider-navbar::-webkit-scrollbar {
+        .navbar-fixed-side::-webkit-scrollbar {
             width: 10px;
             background-color: #F5F5F5;
             opacity: 0.75;
             transition: 1s all;
         }
 
-        .sider-navbar::-webkit-scrollbar-thumb {
+        .navbar-fixed-side::-webkit-scrollbar-thumb {
             background-color: #e1e1e1;
             opacity: 0.5;
             transition: 1s all;
         }
 
-        .sider-navbar li.sider-menu {
+    .navbar-fixed-side .container, .navbar-fixed-side .container-fluid {
+        width: auto;
+        padding-left: 0;
+        padding-right: 0
+    }
+
+    .navbar-fixed-side .navbar-header {
+        float: none
+    }
+
+    .navbar-fixed-side .navbar-brand {
+        height: auto;
+        width: 100%;
+    }
+
+    .navbar-fixed-side > .container .navbar-brand, .navbar-fixed-side > .container-fluid .navbar-brand {
+        margin-left: 0
+    }
+
+    .navbar-fixed-side .navbar-collapse {
+        width: 100%;
+        border-top: 1px solid #e7e7e7;
+    }
+
+    .navbar-fixed-side .navbar-nav {
+        float: none;
+        margin: 0 -15px
+    }
+
+        .navbar-fixed-side .navbar-nav > li {
+            float: none
         }
 
-            .sider-navbar li.sider-menu ul {
-                width: 225px;
+            .navbar-fixed-side .navbar-nav > li > a {
+                padding-top: 10px;
+                padding-bottom: 10px;
+                font-weight: bold;
+                /*border-bottom: 1px solid #e7e7e7*/
             }
 
-                .sider-navbar li.sider-menu > ul > li,
-                .sider-navbar li.sider-menu ul li ul li {
-                    border-top: 1px solid #E7E7E7; /*Change for .sider-menu border color*/
-                    -webkit-transition: all 0.3s ease-out;
-                    transition: all 0.3s ease-out;
-                }
-
-                    .sider-navbar li.sider-menu > ul > li:last-child {
-                        border-bottom: 1px solid #E7E7E7; /*Change for .sider-menu border color*/
-                    }
-
-                    .sider-navbar li.sider-menu > ul > li.active,
-                    .sider-navbar li.sider-menu > ul > li:hover,
-                    .sider-navbar li.sider-menu ul li ul li:hover {
-                        color: white;
-                    }
-
-
-                    .sider-navbar li.sider-menu > ul > li > a:hover,
-                    .sider-navbar li.sider-menu > ul > li > a:focus,
-                    .sider-navbar li.sider-menu > ul > li > a:active {
-                        background-color: #7a0400;
-                        color: white;
-                    }
-
-                    .sider-navbar li.sider-menu ul li ul li:hover {
-                        background-color: #e7e7e7;
-                    }
-}
-
-.sider-navbar li.sider-menu ul {
-    list-style: none;
-    padding: 0;
-}
-
-    .sider-navbar li.sider-menu ul li a {
-        display: block;
-        padding: 15px;
-        text-decoration: none;
-        color: #5E5E5E; /*Change for .sider-menu color*/
+    .navbar-fixed-side .navbar-form {
+        margin: 0;
+        margin-left: -15px;
+        margin-right: -15px;
+        padding: 10px 15px;
+        border-bottom: 1px solid #e7e7e7
     }
 
-    .sider-navbar li.sider-menu ul li ul {
+    .navbar-fixed-side .navbar-text {
+        float: none;
+        margin-left: 0;
+        margin-right: 0
     }
-/*--------------------------------------------------------------------------
-  Profile container
-  Thanks to keenthemes' bootstrap snippet for a starting point for the styles
-  http://bootsnipp.com/snippets/featured/user-profile-sidebar 
---------------------------------------------------------------------------*/
-#profile {
+
+    .navbar-fixed-side .navbar-left, .navbar-fixed-side .navbar-right {
+        float: none !important
+    }
+
+    .navbar-fixed-side .navbar-nav .dropdown-menu {
+        position: static;
+        float: none;
+        width: auto;
+        margin-top: 0;
+        background-color: transparent;
+        border: 0;
+        box-shadow: none;
+        /*border-bottom: 1px solid #e7e7e7;*/
+    }
+
+        .navbar-fixed-side .navbar-nav > li:first-child,
+        .navbar-fixed-side .navbar-nav > li.second-child {
+            border-bottom: 1px solid #e7e7e7;
+        }
+
+        .navbar-fixed-side .navbar-nav .dropdown-menu > li > a, .navbar-fixed-side .navbar-nav .dropdown-menu .dropdown-header {
+            padding: 5px 15px 5px 25px
+        }
+
+        .navbar-fixed-side .navbar-nav .dropdown-menu > li > a {
+            line-height: 20px;
+            color: #777;
+        }
+
+            .navbar-fixed-side .navbar-nav .dropdown-menu > li > a:hover, .navbar-fixed-side .navbar-nav .dropdown-menu > li > a:focus {
+                background-image: none
+            }
+
+        .navbar-fixed-side .navbar-nav .dropdown-menu > .active > a {
+            background-color: #112540;
+            color: #fff;
+        }
+
+        .navbar-fixed-side .navbar-nav .dropdown-menu > .active > a:hover {
+            background-color: #112540;
+            color: #fff;
+        }
+
+        .navbar-fixed-side .navbar-nav > li > a:hover, .navbar-fixed-side .navbar-nav > li > a:focus, .navbar-fixed-side .navbar-nav .dropdown-menu > li > a:hover, .navbar-fixed-side .navbar-nav .dropdown-menu > li > a:focus {
+            background-color: #e7e7e7;
+            color: #333
+        }
+
+    .navbar-fixed-side .dropdown > .dropdown-toggle, .navbar-fixed-side .dropdown-menu > .dropdown-header {
+        background-color: transparent !important;
+        color: #9d9d9d !important;
+        cursor: default;
+        font-size: 0.8em;
+        text-transform: uppercase;
+        border-bottom: none;
+        padding-bottom: 0
+    }
+
+    .navbar-fixed-side .dropdown-toggle .caret {
+        display: none
+    }
+
+    .navbar-fixed-side .dropdown-menu {
+        display: block
+    }
+
+    .navbar-fixed-side.navbar-inverse .navbar-collapse, .navbar-fixed-side.navbar-inverse .navbar-nav > li > a, .navbar-fixed-side.navbar-inverse .navbar-form, .navbar-fixed-side.navbar-inverse .navbar-nav .dropdown-menu {
+        border-color: #363636
+    }
+
+    .navbar-fixed-side.navbar-inverse .divider {
+        background-color: #363636
+    }
+
+        .navbar-fixed-side.navbar-inverse .navbar-nav .dropdown-menu > li > a {
+            color: #9d9d9d;
+            font-weight: bold;
+        }
+
+        .navbar-fixed-side.navbar-inverse .navbar-nav .dropdown-menu > .active > a {
+            background-color: #090909;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .navbar-fixed-side.navbar-inverse .navbar-nav > li:not(.active) > a:hover, .navbar-fixed-side.navbar-inverse .navbar-nav > li:not(.active) > a:focus, .navbar-fixed-side.navbar-inverse .navbar-nav .dropdown-menu > li:not(.active) > a:hover, .navbar-fixed-side.navbar-inverse .navbar-nav .dropdown-menu > li:not(.active) > a:focus {
+            background-color: #2f2f2f;
+            color: #fff;
+        }
+
+        .navbar-fixed-side.navbar-inverse .dropdown > .dropdown-toggle {
+            color: #777777 !important;
+        }
+
+    .navbar-brand > center > img {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        height: 30px;
+        width: 100px;
+    }
+
 }
 
-.profile-userpic img {
-    float: none;
-    margin: 16px auto 0;
-    padding: 6px;
-    width: 50%;
-    height: 50%;
-    -webkit-border-radius: 50% !important;
-    -moz-border-radius: 50% !important;
-    border-radius: 50% !important;
-    border: none;
-}
-
-.profile-usertitle {
-    text-align: center;
-    padding: 16px;
-    color: #333333;
-}
-
-.profile-usertitle-name {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 7px;
-}
-
-.profile-company-details {
-    border-top: 1px solid #e1e1e1;
-    border-bottom: none;
-    padding: 16px;
-    color: #333333;
-    width: 225px;
+.profile-nowrap-text {
     white-space: nowrap;
-}
-
-.profile-company-title {
-    font-size: 14px;
-    margin-bottom: 5px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.profile-branch-title {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 14px;
+#content {
+    padding-top: 65px;
+    padding-bottom: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
-
-/*Hide profile picture on smaller devices*/
-@media(max-width:768px) {
-    #profile {
-        display: none;
-    }
-}
-/*--------------------------------------------------------------------------
-  Page Keeper
-  Setup layout so the main content will be to the right of .sider-navbar
---------------------------------------------------------------------------*/
-@media(min-width:768px) {
-    #page-keeper {
-        width: 100%;
-        padding: 10px 10px 10px 225px;
-    }
+.no-padding {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
-.panel,
-.wj-content {
-    border-radius: 0 !important;
+.header-content {
+    float: left;
+    background: #f8f8f8;
+    border-bottom: 1px solid #e7e7e7;
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    height: 51px;
 }
