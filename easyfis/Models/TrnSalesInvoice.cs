@@ -18,6 +18,7 @@ namespace easyfis.Models
         public String SIDate { get; set; }
         public Int32 CustomerId { get; set; }
         public String Customer { get; set; }
+        public String CustomerManualArticleCode { get; set; }
         public Int32 TermId { get; set; }
         public String Term { get; set; }
         public String DocumentReference { get; set; }
@@ -54,5 +55,6 @@ namespace easyfis.Models
         public Int32 AccountId { get; set; }
         public String AccountCode { get; set; }
         public String Account { get; set; }
+
     }
 }

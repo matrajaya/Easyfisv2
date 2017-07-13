@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using System.Diagnostics;
 
 namespace easyfis.POSIntegrationApiControllers
 {
@@ -16,23 +17,6 @@ namespace easyfis.POSIntegrationApiControllers
         // business folders
         private Business.Inventory inventory = new Business.Inventory();
         private Business.PostJournal journal = new Business.PostJournal();
-
-        // get current user's branch
-        public Int32 getCurrentUserBranchId()
-        {
-            var mstUser = from d in db.MstUsers
-                          where d.UserId == User.Identity.GetUserId()
-                          select d;
-
-            if (mstUser.Any())
-            {
-                return mstUser.FirstOrDefault().BranchId;
-            }
-            else
-            {
-                return 0;
-            }
-        }
 
         // zero padding for auto increment and auto generated code in every table
         public String zeroFill(Int32 number, Int32 length)
@@ -48,105 +32,15 @@ namespace easyfis.POSIntegrationApiControllers
             return result;
         }
 
-        // list of sales invoice for POS Integration
-        [HttpGet]
-        [Route("api/list/POSIntegration/salesInvoice")]
-        public List<Models.TrnSalesInvoice> listSalesInvoicePOSIntegration()
-        {
-            var salesInvoices = from d in db.TrnSalesInvoices.OrderByDescending(d => d.Id)
-                                where d.BranchId == getCurrentUserBranchId()
-                                select new Models.TrnSalesInvoice
-                                {
-                                    Id = d.Id,
-                                    BranchId = d.BranchId,
-                                    Branch = d.MstBranch.Branch,
-                                    SINumber = d.SINumber,
-                                    SIDate = d.SIDate.ToShortDateString(),
-                                    CustomerId = d.CustomerId,
-                                    Customer = d.MstArticle.Article,
-                                    TermId = d.TermId,
-                                    Term = d.MstTerm.Term,
-                                    DocumentReference = d.DocumentReference,
-                                    ManualSINumber = d.ManualSINumber,
-                                    Remarks = d.Remarks,
-                                    Amount = d.Amount,
-                                    PaidAmount = d.PaidAmount,
-                                    AdjustmentAmount = d.AdjustmentAmount,
-                                    BalanceAmount = d.BalanceAmount,
-                                    SoldById = d.SoldById,
-                                    SoldBy = d.MstUser4.FullName,
-                                    PreparedById = d.PreparedById,
-                                    PreparedBy = d.MstUser3.FullName,
-                                    CheckedById = d.CheckedById,
-                                    CheckedBy = d.MstUser1.FullName,
-                                    ApprovedById = d.ApprovedById,
-                                    ApprovedBy = d.MstUser.FullName,
-                                    IsLocked = d.IsLocked,
-                                    CreatedById = d.CreatedById,
-                                    CreatedBy = d.MstUser2.FullName,
-                                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                    UpdatedById = d.UpdatedById,
-                                    UpdatedBy = d.MstUser5.FullName,
-                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                };
-
-            return salesInvoices.ToList();
-        }
-
-        // get sales invoice by id for POS Integration
-        [HttpGet]
-        [Route("api/get/POSIntegration/salesInvoice/{id}")]
-        public Models.TrnSalesInvoice getSalesInvoicePOSIntegration(String id)
-        {
-            var salesInvoices = from d in db.TrnSalesInvoices
-                                where d.Id == Convert.ToInt32(id)
-                                select new Models.TrnSalesInvoice
-                                {
-                                    Id = d.Id,
-                                    BranchId = d.BranchId,
-                                    Branch = d.MstBranch.Branch,
-                                    SINumber = d.SINumber,
-                                    SIDate = d.SIDate.ToShortDateString(),
-                                    CustomerId = d.CustomerId,
-                                    Customer = d.MstArticle.Article,
-                                    TermId = d.TermId,
-                                    Term = d.MstTerm.Term,
-                                    DocumentReference = d.DocumentReference,
-                                    ManualSINumber = d.ManualSINumber,
-                                    Remarks = d.Remarks,
-                                    Amount = d.Amount,
-                                    PaidAmount = d.PaidAmount,
-                                    AdjustmentAmount = d.AdjustmentAmount,
-                                    BalanceAmount = d.BalanceAmount,
-                                    SoldById = d.SoldById,
-                                    SoldBy = d.MstUser4.FullName,
-                                    PreparedById = d.PreparedById,
-                                    PreparedBy = d.MstUser3.FullName,
-                                    CheckedById = d.CheckedById,
-                                    CheckedBy = d.MstUser1.FullName,
-                                    ApprovedById = d.ApprovedById,
-                                    ApprovedBy = d.MstUser.FullName,
-                                    IsLocked = d.IsLocked,
-                                    CreatedById = d.CreatedById,
-                                    CreatedBy = d.MstUser2.FullName,
-                                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                    UpdatedById = d.UpdatedById,
-                                    UpdatedBy = d.MstUser5.FullName,
-                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                };
-
-            return (Models.TrnSalesInvoice)salesInvoices.FirstOrDefault();
-        }
-
         // add sales invoice for POS Integration
         [HttpPost]
         [Route("api/add/POSIntegration/salesInvoice")]
-        public Int32 addSalesInvoicePOSIntegration(Models.TrnSalesInvoice sales)
+        public HttpResponseMessage addSalesInvoicePOSIntegration(POSIntegrationEntities.POSIntegrationTrnSalesInvoice POSIntegrationTrnSalesInvoiceObject)
         {
             try
             {
                 // current user  id
-                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d).FirstOrDefault().Id;
+                //var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d).FirstOrDefault().Id;
 
                 // get last SI Number
                 var lastSINumber = from d in db.TrnSalesInvoices.OrderByDescending(d => d.Id) select d;
@@ -158,220 +52,605 @@ namespace easyfis.POSIntegrationApiControllers
                 }
 
                 // customers and terms
-                var customers = from d in db.MstArticles where d.ArticleTypeId == 2 select d;
-                var terms = from d in db.MstTerms select d;
+                var customers = from d in db.MstArticles
+                                where d.ManualArticleCode == POSIntegrationTrnSalesInvoiceObject.CustomerManualArticleCode
+                                select d;
 
-                // add Sales invoice
-                Data.TrnSalesInvoice addSalesInvoice = new Data.TrnSalesInvoice();
-                addSalesInvoice.BranchId = getCurrentUserBranchId();
-                addSalesInvoice.SINumber = SINumberResult;
-                addSalesInvoice.SIDate = DateTime.Today;
-                addSalesInvoice.CustomerId = customers.FirstOrDefault().Id;
-                addSalesInvoice.TermId = customers.FirstOrDefault().Id;
-                addSalesInvoice.DocumentReference = "NA";
-                addSalesInvoice.ManualSINumber = "NA";
-                addSalesInvoice.Remarks = "NA";
-                addSalesInvoice.Amount = 0;
-                addSalesInvoice.PaidAmount = 0;
-                addSalesInvoice.AdjustmentAmount = 0;
-                addSalesInvoice.BalanceAmount = 0;
-                addSalesInvoice.SoldById = userId;
-                addSalesInvoice.PreparedById = userId;
-                addSalesInvoice.CheckedById = userId;
-                addSalesInvoice.ApprovedById = userId;
-                addSalesInvoice.IsLocked = false;
-                addSalesInvoice.CreatedById = userId;
-                addSalesInvoice.CreatedDateTime = DateTime.Now;
-                addSalesInvoice.UpdatedById = userId;
-                addSalesInvoice.UpdatedDateTime = DateTime.Now;
-                db.TrnSalesInvoices.InsertOnSubmit(addSalesInvoice);
-                db.SubmitChanges();
-
-                return addSalesInvoice.Id;
-            }
-            catch
-            {
-                return 0;
-            }
-        }
-
-        // lock sales invoice for POS Integration
-        [HttpPut]
-        [Route("api/lock/POSIntegration/salesInvoice/{id}")]
-        public HttpResponseMessage lockSalesInvoicePOSIntegration(String id, Models.TrnSalesInvoice sales)
-        {
-            try
-            {
-                // sales invoice by Id
-                var salesInvoice = from d in db.TrnSalesInvoices
-                                   where d.Id == Convert.ToInt32(id)
-                                   select d;
-
-                // check if exist
-                if (salesInvoice.Any())
+                if (customers.Any())
                 {
-                    // check if unlock
-                    if (!salesInvoice.FirstOrDefault().IsLocked)
+                    if (customers.Count() == 1)
                     {
+                        var users = from d in db.MstUsers
+                                    where d.UserName == POSIntegrationTrnSalesInvoiceObject.CreatedBy
+                                    select d;
 
-                        // get collection line
-                        Decimal collectionLinesTotalAmount = 0;
-                        var collectionLines = from d in db.TrnCollectionLines
-                                              where d.SIId == Convert.ToInt32(id)
-                                              && d.TrnCollection.IsLocked == true
-                                              select d;
-
-                        // check if exist
-                        if (collectionLines.Any())
+                        if (users.Any())
                         {
-                            collectionLinesTotalAmount = collectionLines.Sum(d => d.Amount);
+                            if (users.Count() == 1)
+                            {
+                                var terms = from d in db.MstTerms
+                                            where d.Term == POSIntegrationTrnSalesInvoiceObject.Term
+                                            select d;
+
+                                if (terms.Any())
+                                {
+                                    if (terms.Count() == 1)
+                                    {
+                                        var branches = from d in db.MstBranches
+                                                       where d.BranchCode == POSIntegrationTrnSalesInvoiceObject.BranchCode
+                                                       select d;
+
+                                        if (branches.Any())
+                                        {
+                                            if (branches.Count() == 1)
+                                            {
+                                                // add Sales invoice
+                                                Data.TrnSalesInvoice addSalesInvoice = new Data.TrnSalesInvoice();
+                                                addSalesInvoice.BranchId = branches.FirstOrDefault().Id;
+                                                addSalesInvoice.SINumber = SINumberResult;
+                                                addSalesInvoice.SIDate = DateTime.Today;
+                                                addSalesInvoice.CustomerId = customers.FirstOrDefault().Id;
+                                                addSalesInvoice.TermId = terms.FirstOrDefault().Id;
+                                                addSalesInvoice.DocumentReference = POSIntegrationTrnSalesInvoiceObject.DocumentReference;
+                                                addSalesInvoice.ManualSINumber = POSIntegrationTrnSalesInvoiceObject.ManualSINumber;
+                                                addSalesInvoice.Remarks = POSIntegrationTrnSalesInvoiceObject.Remarks;
+                                                addSalesInvoice.Amount = POSIntegrationTrnSalesInvoiceObject.Amount;
+                                                addSalesInvoice.PaidAmount = POSIntegrationTrnSalesInvoiceObject.PaidAmount;
+                                                addSalesInvoice.AdjustmentAmount = POSIntegrationTrnSalesInvoiceObject.AdjustmentAmount;
+                                                addSalesInvoice.BalanceAmount = (POSIntegrationTrnSalesInvoiceObject.Amount - POSIntegrationTrnSalesInvoiceObject.PaidAmount) + POSIntegrationTrnSalesInvoiceObject.AdjustmentAmount;
+                                                addSalesInvoice.SoldById = users.FirstOrDefault().Id;
+                                                addSalesInvoice.PreparedById = users.FirstOrDefault().Id;
+                                                addSalesInvoice.CheckedById = users.FirstOrDefault().Id;
+                                                addSalesInvoice.ApprovedById = users.FirstOrDefault().Id;
+                                                addSalesInvoice.IsLocked = true;
+                                                addSalesInvoice.CreatedById = users.FirstOrDefault().Id;
+                                                addSalesInvoice.CreatedDateTime = DateTime.Now;
+                                                addSalesInvoice.UpdatedById = users.FirstOrDefault().Id;
+                                                addSalesInvoice.UpdatedDateTime = DateTime.Now;
+                                                db.TrnSalesInvoices.InsertOnSubmit(addSalesInvoice);
+                                                db.SubmitChanges();
+
+                                                // from items
+                                                foreach (var salesInvoiceItem in POSIntegrationTrnSalesInvoiceObject.listPOSIntegrationTrnSalesInvoiceItem.ToList())
+                                                {
+                                                    Debug.WriteLine(salesInvoiceItem.Discount);
+
+                                                    // get article components
+                                                    var articleComponents = from d in db.MstArticleComponents
+                                                                            where d.MstArticle.ManualArticleCode == salesInvoiceItem.ItemManualArticleCode
+                                                                            select d;
+
+                                                    // check if exist
+                                                    if (articleComponents.Any())
+                                                    {
+                                                        // check if kitting is package or equal 2
+                                                        // 2 is equals package
+                                                        // ===============================================
+
+                                                        // check if kitting is package
+                                                        if (articleComponents.FirstOrDefault().MstArticle.Kitting == 2)
+                                                        {
+                                                            var items = from d in db.MstArticles
+                                                                        where d.Id == articleComponents.FirstOrDefault().ArticleId
+                                                                        select d;
+
+                                                            if (items.Any())
+                                                            {
+                                                                if (items.Count() == 1)
+                                                                {
+                                                                    // get article inventory 
+                                                                    var articleInventory = from d in db.MstArticleInventories
+                                                                                           where d.BranchId == branches.FirstOrDefault().Id
+                                                                                           && d.ArticleId == items.FirstOrDefault().Id
+                                                                                           select d;
+
+                                                                    // check if exist
+                                                                    if (articleInventory.Any())
+                                                                    {
+                                                                        var units = from d in db.MstUnits
+                                                                                    where d.Unit == salesInvoiceItem.Unit
+                                                                                    select d;
+
+                                                                        if (units.Any())
+                                                                        {
+                                                                            if (units.Count() == 1)
+                                                                            {
+
+                                                                                var discounts = from d in db.MstDiscounts
+                                                                                                where d.Discount == salesInvoiceItem.Discount
+                                                                                                select d;
+
+                                                                                if (discounts.Any())
+                                                                                {
+                                                                                    if (discounts.Count() == 1)
+                                                                                    {
+                                                                                        var taxes = from d in db.MstTaxTypes
+                                                                                                    where d.TaxType == salesInvoiceItem.VAT
+                                                                                                    select d;
+
+                                                                                        if (taxes.Any())
+                                                                                        {
+                                                                                            if (taxes.Count() == 1)
+                                                                                            {
+                                                                                                // add new sales invoice item package
+                                                                                                Data.TrnSalesInvoiceItem addSaleInvoiceItemPackage = new Data.TrnSalesInvoiceItem();
+                                                                                                addSaleInvoiceItemPackage.SIId = addSalesInvoice.Id;
+                                                                                                addSaleInvoiceItemPackage.ItemId = items.FirstOrDefault().Id;
+                                                                                                addSaleInvoiceItemPackage.ItemInventoryId = articleInventory.FirstOrDefault().Id;
+                                                                                                addSaleInvoiceItemPackage.Particulars = salesInvoiceItem.Particulars;
+                                                                                                addSaleInvoiceItemPackage.UnitId = units.FirstOrDefault().Id;
+                                                                                                addSaleInvoiceItemPackage.Quantity = salesInvoiceItem.Quantity;
+                                                                                                addSaleInvoiceItemPackage.Price = salesInvoiceItem.Price;
+                                                                                                addSaleInvoiceItemPackage.DiscountId = discounts.FirstOrDefault().Id;
+                                                                                                addSaleInvoiceItemPackage.DiscountRate = discounts.FirstOrDefault().DiscountRate;
+                                                                                                addSaleInvoiceItemPackage.DiscountAmount = salesInvoiceItem.DiscountAmount;
+                                                                                                addSaleInvoiceItemPackage.NetPrice = salesInvoiceItem.NetPrice;
+                                                                                                addSaleInvoiceItemPackage.Amount = salesInvoiceItem.Amount;
+                                                                                                addSaleInvoiceItemPackage.VATId = taxes.FirstOrDefault().Id;
+                                                                                                addSaleInvoiceItemPackage.VATPercentage = taxes.FirstOrDefault().TaxRate;
+                                                                                                addSaleInvoiceItemPackage.VATAmount = salesInvoiceItem.VATAmount;
+                                                                                                addSaleInvoiceItemPackage.BaseUnitId = articleComponents.FirstOrDefault().MstArticle.UnitId;
+
+                                                                                                // conversion unit from package item
+                                                                                                var packageConversionUnit = from d in db.MstArticleUnits
+                                                                                                                            where d.ArticleId == items.FirstOrDefault().Id
+                                                                                                                            && d.UnitId == items.FirstOrDefault().UnitId
+                                                                                                                            select d;
+
+                                                                                                // check if multiplier greater than zero
+                                                                                                if (packageConversionUnit.FirstOrDefault().Multiplier > 0)
+                                                                                                {
+                                                                                                    addSaleInvoiceItemPackage.BaseQuantity = salesInvoiceItem.Quantity * (1 / packageConversionUnit.FirstOrDefault().Multiplier);
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    addSaleInvoiceItemPackage.BaseQuantity = salesInvoiceItem.Quantity * 1;
+                                                                                                }
+
+                                                                                                // base unit from package item
+                                                                                                var packageBaseQuantity = salesInvoiceItem.Quantity * (1 / packageConversionUnit.FirstOrDefault().Multiplier);
+                                                                                                if (packageBaseQuantity > 0)
+                                                                                                {
+                                                                                                    addSaleInvoiceItemPackage.BasePrice = salesInvoiceItem.Amount / packageBaseQuantity;
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    addSaleInvoiceItemPackage.BasePrice = salesInvoiceItem.Amount;
+                                                                                                }
+
+                                                                                                db.TrnSalesInvoiceItems.InsertOnSubmit(addSaleInvoiceItemPackage);
+                                                                                                db.SubmitChanges();
+
+                                                                                                // this is to update the amount of sales invoice header
+                                                                                                // get total amount from sales invoice item
+                                                                                                // ===============================================================
+
+                                                                                                // sales invoice
+                                                                                                var salesInvoice = from d in db.TrnSalesInvoices
+                                                                                                                   where d.Id == addSalesInvoice.Id
+                                                                                                                   select d;
+
+                                                                                                // check if exist
+                                                                                                if (salesInvoice.Any())
+                                                                                                {
+                                                                                                    // get sales invoice items for total amount
+                                                                                                    var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
+                                                                                                                            where d.SIId == addSalesInvoice.Id
+                                                                                                                            select d;
+
+                                                                                                    // article component
+                                                                                                    foreach (var articleComponent in articleComponents)
+                                                                                                    {
+                                                                                                        // get discount
+                                                                                                        var discount = from d in db.MstDiscounts
+                                                                                                                       where d.Id == discounts.FirstOrDefault().Id
+                                                                                                                       select d;
+
+                                                                                                        Decimal salesInvoiceItemDiscountAmount = 0;
+                                                                                                        Decimal salesInvoiceItemNetPrice = 0;
+
+                                                                                                        // check if discount exist
+                                                                                                        if (discount.Any())
+                                                                                                        {
+                                                                                                            if (discount.FirstOrDefault().IsInclusive == false)
+                                                                                                            {
+                                                                                                                var price = 0 / (1 + (taxes.FirstOrDefault().TaxRate / 100));
+                                                                                                                salesInvoiceItemDiscountAmount = price * (discounts.FirstOrDefault().DiscountRate / 100);
+                                                                                                                salesInvoiceItemNetPrice = price - (price * (discounts.FirstOrDefault().DiscountRate / 100));
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                salesInvoiceItemDiscountAmount = 0 * (discounts.FirstOrDefault().DiscountRate / 100);
+                                                                                                                salesInvoiceItemNetPrice = 0 - (0 * (discounts.FirstOrDefault().DiscountRate / 100));
+                                                                                                            }
+                                                                                                        }
+
+                                                                                                        Decimal quantity = articleComponent.Quantity * salesInvoiceItem.Quantity;
+                                                                                                        Decimal amount = quantity * salesInvoiceItemNetPrice;
+                                                                                                        Decimal VATAmount = 0;
+
+                                                                                                        var taxTypeTAXIsInclusive = from d in db.MstTaxTypes where d.Id == taxes.FirstOrDefault().Id select d;
+
+                                                                                                        if (taxTypeTAXIsInclusive.FirstOrDefault().IsInclusive == true)
+                                                                                                        {
+                                                                                                            VATAmount = amount / (1 + (taxes.FirstOrDefault().TaxRate / 100)) * (taxes.FirstOrDefault().TaxRate / 100);
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            VATAmount = amount * (taxes.FirstOrDefault().TaxRate / 100);
+                                                                                                        }
+
+                                                                                                        Data.TrnSalesInvoiceItem addSaleInvoiceItem = new Data.TrnSalesInvoiceItem();
+                                                                                                        addSaleInvoiceItem.SIId = addSalesInvoice.Id;
+                                                                                                        addSaleInvoiceItem.ItemId = articleComponent.ComponentArticleId;
+
+                                                                                                        // get component article inventory 
+                                                                                                        var componentArticleInventory = from d in db.MstArticleInventories
+                                                                                                                                        where d.BranchId == branches.FirstOrDefault().Id
+                                                                                                                                        && d.ArticleId == articleComponent.ComponentArticleId
+                                                                                                                                        select d;
+
+                                                                                                        // check if exist
+                                                                                                        if (componentArticleInventory.Any())
+                                                                                                        {
+                                                                                                            addSaleInvoiceItem.ItemInventoryId = componentArticleInventory.FirstOrDefault().Id;
+                                                                                                        }
+
+                                                                                                        addSaleInvoiceItem.Particulars = articleComponent.Particulars;
+                                                                                                        addSaleInvoiceItem.UnitId = articleComponent.MstArticle1.UnitId;
+                                                                                                        addSaleInvoiceItem.Quantity = articleComponent.Quantity * salesInvoiceItem.Quantity;
+                                                                                                        addSaleInvoiceItem.Price = 0;
+                                                                                                        addSaleInvoiceItem.DiscountId = discounts.FirstOrDefault().Id;
+                                                                                                        addSaleInvoiceItem.DiscountRate = discounts.FirstOrDefault().DiscountRate;
+                                                                                                        addSaleInvoiceItem.DiscountAmount = salesInvoiceItemDiscountAmount;
+                                                                                                        addSaleInvoiceItem.NetPrice = salesInvoiceItemNetPrice;
+                                                                                                        addSaleInvoiceItem.Amount = amount;
+                                                                                                        addSaleInvoiceItem.VATId = taxes.FirstOrDefault().Id;
+                                                                                                        addSaleInvoiceItem.VATPercentage = taxes.FirstOrDefault().TaxRate;
+                                                                                                        addSaleInvoiceItem.VATAmount = VATAmount;
+
+                                                                                                        // get the component item
+                                                                                                        var componentItem = from d in db.MstArticles
+                                                                                                                            where d.Id == articleComponent.ComponentArticleId
+                                                                                                                            select d;
+
+                                                                                                        if (componentItem.Any())
+                                                                                                        {
+                                                                                                            addSaleInvoiceItem.BaseUnitId = componentItem.FirstOrDefault().UnitId;
+                                                                                                        }
+
+                                                                                                        // get component conversion unit
+                                                                                                        var componentItemConversionUnit = from d in db.MstArticleUnits
+                                                                                                                                          where d.ArticleId == articleComponent.ComponentArticleId
+                                                                                                                                          && d.UnitId == articleComponent.MstArticle1.UnitId
+                                                                                                                                          select d;
+
+                                                                                                        // check if exist
+                                                                                                        if (componentItemConversionUnit.Any())
+                                                                                                        {
+                                                                                                            if (componentItemConversionUnit.FirstOrDefault().Multiplier > 0)
+                                                                                                            {
+                                                                                                                addSaleInvoiceItem.BaseQuantity = (articleComponent.Quantity * salesInvoiceItem.Quantity) * (1 / componentItemConversionUnit.FirstOrDefault().Multiplier);
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                addSaleInvoiceItem.BaseQuantity = (articleComponent.Quantity * salesInvoiceItem.Quantity) * 1;
+                                                                                                            }
+
+                                                                                                            var baseQuantity = (articleComponent.Quantity * salesInvoiceItem.Quantity) * (1 / componentItemConversionUnit.FirstOrDefault().Multiplier);
+                                                                                                            if (baseQuantity > 0)
+                                                                                                            {
+                                                                                                                addSaleInvoiceItem.BasePrice = amount / baseQuantity;
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                addSaleInvoiceItem.BasePrice = amount;
+                                                                                                            }
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            addSaleInvoiceItem.BaseQuantity = (articleComponent.Quantity * salesInvoiceItem.Quantity) * 1;
+                                                                                                            addSaleInvoiceItem.BasePrice = amount;
+                                                                                                        }
+
+                                                                                                        db.TrnSalesInvoiceItems.InsertOnSubmit(addSaleInvoiceItem);
+                                                                                                        db.SubmitChanges();
+                                                                                                    }
+
+                                                                                                    // total sales invoice item amount
+                                                                                                    Decimal totalSalesInvoiceItemAmount = 0;
+
+                                                                                                    // check if exist
+                                                                                                    if (salesInvoiceItems.Any())
+                                                                                                    {
+                                                                                                        totalSalesInvoiceItemAmount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
+                                                                                                    }
+
+                                                                                                    // update the sales invoice amount
+                                                                                                    var updateSalesInvoiceAmount = salesInvoice.FirstOrDefault();
+                                                                                                    updateSalesInvoiceAmount.Amount = totalSalesInvoiceItemAmount;
+                                                                                                    db.SubmitChanges();
+                                                                                                }
+                                                                                            }
+                                                                                            else
+                                                                                            {
+
+                                                                                            }
+                                                                                        }
+                                                                                        else
+                                                                                        {
+
+                                                                                        }
+
+                                                                                    }
+                                                                                    else
+                                                                                    {
+
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+
+                                                                                }
+
+                                                                            }
+                                                                            else
+                                                                            {
+
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        var items = from d in db.MstArticles
+                                                                    where d.ManualArticleCode == salesInvoiceItem.ItemManualArticleCode
+                                                                    select d;
+
+                                                        if (items.Any())
+                                                        {
+                                                            if (items.Count() == 1)
+                                                            {
+                                                                // get article inventory 
+                                                                var articleInventory = from d in db.MstArticleInventories
+                                                                                       where d.BranchId == branches.FirstOrDefault().Id
+                                                                                       && d.ArticleId == items.FirstOrDefault().Id
+                                                                                       select d;
+
+                                                                // check if exist
+                                                                if (articleInventory.Any())
+                                                                {
+                                                                    var units = from d in db.MstUnits
+                                                                                where d.Unit == salesInvoiceItem.Unit
+                                                                                select d;
+
+                                                                    if (units.Any())
+                                                                    {
+                                                                        if (units.Count() == 1)
+                                                                        {
+
+                                                                            var discounts = from d in db.MstDiscounts
+                                                                                            where d.Discount == salesInvoiceItem.Discount
+                                                                                            select d;
+
+                                                                            if (discounts.Any())
+                                                                            {
+                                                                                if (discounts.Count() == 1)
+                                                                                {
+                                                                                    var taxes = from d in db.MstTaxTypes
+                                                                                                where d.TaxType == salesInvoiceItem.VAT
+                                                                                                select d;
+
+                                                                                    if (taxes.Any())
+                                                                                    {
+                                                                                        if (taxes.Count() == 1)
+                                                                                        {
+                                                                                            Data.TrnSalesInvoiceItem addSaleInvoiceItem = new Data.TrnSalesInvoiceItem();
+                                                                                            addSaleInvoiceItem.SIId = addSalesInvoice.Id;
+                                                                                            addSaleInvoiceItem.ItemId = items.FirstOrDefault().Id;
+                                                                                            addSaleInvoiceItem.ItemInventoryId = articleInventory.FirstOrDefault().Id;
+                                                                                            addSaleInvoiceItem.Particulars = salesInvoiceItem.Particulars;
+                                                                                            addSaleInvoiceItem.UnitId = units.FirstOrDefault().Id;
+                                                                                            addSaleInvoiceItem.Quantity = salesInvoiceItem.Quantity;
+                                                                                            addSaleInvoiceItem.Price = salesInvoiceItem.Price;
+                                                                                            addSaleInvoiceItem.DiscountId = discounts.FirstOrDefault().Id;
+                                                                                            addSaleInvoiceItem.DiscountRate = discounts.FirstOrDefault().DiscountRate;
+                                                                                            addSaleInvoiceItem.DiscountAmount = salesInvoiceItem.DiscountAmount;
+                                                                                            addSaleInvoiceItem.NetPrice = salesInvoiceItem.NetPrice;
+                                                                                            addSaleInvoiceItem.Amount = salesInvoiceItem.Amount;
+                                                                                            addSaleInvoiceItem.VATId = taxes.FirstOrDefault().Id;
+                                                                                            addSaleInvoiceItem.VATPercentage = taxes.FirstOrDefault().TaxRate;
+                                                                                            addSaleInvoiceItem.VATAmount = salesInvoiceItem.VATAmount;
+                                                                                            addSaleInvoiceItem.BaseUnitId = items.FirstOrDefault().UnitId;
+
+                                                                                            // get selected item conversion unit 
+                                                                                            var conversionUnit = from d in db.MstArticleUnits
+                                                                                                                 where d.ArticleId == items.FirstOrDefault().Id
+                                                                                                                 && d.UnitId == items.FirstOrDefault().UnitId
+                                                                                                                 select d;
+
+                                                                                            if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                                                                                            {
+                                                                                                addSaleInvoiceItem.BaseQuantity = salesInvoiceItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                addSaleInvoiceItem.BaseQuantity = salesInvoiceItem.Quantity * 1;
+                                                                                            }
+
+                                                                                            var baseQuantity = salesInvoiceItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                                                                                            if (baseQuantity > 0)
+                                                                                            {
+                                                                                                addSaleInvoiceItem.BasePrice = salesInvoiceItem.Amount / baseQuantity;
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                addSaleInvoiceItem.BasePrice = salesInvoiceItem.Amount;
+                                                                                            }
+
+                                                                                            db.TrnSalesInvoiceItems.InsertOnSubmit(addSaleInvoiceItem);
+                                                                                            db.SubmitChanges();
+
+
+                                                                                            // this is to update the amount of sales invoice header
+                                                                                            // get total amount from sales invoice item
+                                                                                            // ===============================================================
+
+                                                                                            // get sales invoice header
+                                                                                            var salesInvoice = from d in db.TrnSalesInvoices
+                                                                                                               where d.Id == addSalesInvoice.Id
+                                                                                                               select d;
+
+                                                                                            // check if exist
+                                                                                            if (salesInvoice.Any())
+                                                                                            {
+                                                                                                // get sales invoice items
+                                                                                                var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
+                                                                                                                        where d.SIId == addSalesInvoice.Id
+                                                                                                                        select d;
+
+                                                                                                // total sales invoice item amount
+                                                                                                Decimal totalSalesInvoiceItemAmount = 0;
+
+                                                                                                // check if exist
+                                                                                                if (salesInvoiceItems.Any())
+                                                                                                {
+                                                                                                    totalSalesInvoiceItemAmount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
+                                                                                                }
+
+                                                                                                // update the sales invoice amount
+                                                                                                var updateSalesInvoiceAmount = salesInvoice.FirstOrDefault();
+                                                                                                updateSalesInvoiceAmount.Amount = totalSalesInvoiceItemAmount;
+                                                                                                db.SubmitChanges();
+                                                                                            }
+                                                                                        }
+                                                                                        else
+                                                                                        {
+
+                                                                                        }
+                                                                                    }
+                                                                                    else
+                                                                                    {
+
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+
+                                                        }
+                                                    }
+                                                }
+
+                                                // sales invoice by Id
+                                                var salesInvoiceForBusiness = from d in db.TrnSalesInvoices
+                                                                              where d.Id == Convert.ToInt32(addSalesInvoice.Id)
+                                                                              select d;
+
+                                                if (salesInvoiceForBusiness.Any())
+                                                {
+                                                    // business
+                                                    inventory.InsertSIInventory(Convert.ToInt32(salesInvoiceForBusiness.FirstOrDefault().Id));
+                                                    journal.insertSIJournal(Convert.ToInt32(salesInvoiceForBusiness.FirstOrDefault().Id));
+                                                }
+
+                                                return Request.CreateResponse(HttpStatusCode.OK);
+                                            }
+                                            else
+                                            {
+                                                return Request.CreateResponse(HttpStatusCode.BadRequest, "Duplicate record in easyfis branch table.");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            return Request.CreateResponse(HttpStatusCode.BadRequest, "No branch found.");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Duplicate record in easyfis term table.");
+                                    }
+                                }
+                                else
+                                {
+                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "No term found.");
+                                }
+                            }
+                            else
+                            {
+                                return Request.CreateResponse(HttpStatusCode.BadRequest, "Duplicate record in easyfis user table.");
+                            }
                         }
-
-                        // get total amount in sales invoice items
-                        Decimal salesInvoiceItemTotalAmount = 0;
-                        var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
-                                                where d.SIId == Convert.ToInt32(id)
-                                                select d;
-
-                        if (salesInvoiceItems.Any())
+                        else
                         {
-                            salesInvoiceItemTotalAmount = salesInvoiceItems.Sum(d => d.Amount);
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, "No user found.");
                         }
-
-                        // current user  id
-                        var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d).FirstOrDefault().Id;
-
-                        // lock and update sales invoice item
-                        var lockSalesInvoice = salesInvoice.FirstOrDefault();
-                        lockSalesInvoice.BranchId = sales.BranchId;
-                        lockSalesInvoice.SINumber = sales.SINumber;
-                        lockSalesInvoice.SIDate = Convert.ToDateTime(sales.SIDate);
-                        lockSalesInvoice.CustomerId = sales.CustomerId;
-                        lockSalesInvoice.TermId = sales.TermId;
-                        lockSalesInvoice.DocumentReference = sales.DocumentReference;
-                        lockSalesInvoice.ManualSINumber = sales.ManualSINumber;
-                        lockSalesInvoice.Remarks = sales.Remarks;
-                        lockSalesInvoice.Amount = salesInvoiceItemTotalAmount;
-                        lockSalesInvoice.PaidAmount = collectionLinesTotalAmount;
-                        lockSalesInvoice.AdjustmentAmount = 0;
-                        lockSalesInvoice.BalanceAmount = salesInvoiceItemTotalAmount - collectionLinesTotalAmount;
-                        lockSalesInvoice.SoldById = sales.SoldById;
-                        lockSalesInvoice.PreparedById = sales.PreparedById;
-                        lockSalesInvoice.CheckedById = sales.CheckedById;
-                        lockSalesInvoice.ApprovedById = sales.ApprovedById;
-                        lockSalesInvoice.IsLocked = true;
-                        lockSalesInvoice.UpdatedById = userId;
-                        lockSalesInvoice.UpdatedDateTime = DateTime.Now;
-                        db.SubmitChanges();
-
-                        // business
-                        inventory.InsertSIInventory(Convert.ToInt32(id));
-                        journal.insertSIJournal(Convert.ToInt32(id));
-
-                        return Request.CreateResponse(HttpStatusCode.OK);
                     }
                     else
                     {
-                        return Request.CreateResponse(HttpStatusCode.BadRequest, "The sales invoice record you're trying to lock was already locked.");
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Duplicate record in easyfis customer table.");
                     }
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "No sales invoice record found.");
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "No customer found.");
                 }
             }
-            catch
+            catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Something's went wrong from the server.");
-            }
-        }
-
-        // unlock sales invoice for POS Integration 
-        [HttpPut]
-        [Route("api/unlock/POSIntegration/salesInvoice/{id}")]
-        public HttpResponseMessage unlockSalesInvoicePOSIntegration(String id)
-        {
-            try
-            {
-                // current sales invoice
-                var salesInvoce = from d in db.TrnSalesInvoices
-                                  where d.Id == Convert.ToInt32(id)
-                                  select d;
-
-                // check if exist
-                if (salesInvoce.Any())
-                {
-                    // check if lock
-                    if (salesInvoce.FirstOrDefault().IsLocked)
-                    {
-                        // current user  id
-                        var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d).FirstOrDefault().Id;
-
-                        // unlock and update sales invoice
-                        var unlockSalesInvoice = salesInvoce.FirstOrDefault();
-                        unlockSalesInvoice.IsLocked = false;
-                        unlockSalesInvoice.UpdatedById = userId;
-                        unlockSalesInvoice.UpdatedDateTime = DateTime.Now;
-                        db.SubmitChanges();
-
-                        // business
-                        inventory.deleteSIInventory(Convert.ToInt32(id));
-                        journal.deleteSIJournal(Convert.ToInt32(id));
-
-                        return Request.CreateResponse(HttpStatusCode.OK);
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(HttpStatusCode.BadRequest, "The sales invoice record you're trying to unlock was already unlocked.");
-                    }
-                }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "No sales invoice record found.");
-                }
-            }
-            catch
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Something's went wrong from the server.");
-            }
-        }
-
-        // delete sales invoice for POS Integration 
-        [HttpDelete]
-        [Route("api/delete/POSIntegration/salesInvoice/{id}")]
-        public HttpResponseMessage deleteSalesInvoicePOSIntegration(String id)
-        {
-            try
-            {
-                // current sales invoice
-                var salesInvoce = from d in db.TrnSalesInvoices
-                                  where d.Id == Convert.ToInt32(id)
-                                  select d;
-
-                // check if exist
-                if (salesInvoce.Any())
-                {
-                    // check if unlock
-                    if (!salesInvoce.FirstOrDefault().IsLocked)
-                    {
-                        // delete the selected record
-                        db.TrnSalesInvoices.DeleteOnSubmit(salesInvoce.First());
-                        db.SubmitChanges();
-
-                        return Request.CreateResponse(HttpStatusCode.OK);
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Delete is not allowed when the sales invoice record is locked. Unlock the record first then try to delete again.");
-                    }
-                }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "No sales invoice record found.");
-                }
-            }
-            catch
-            {
+                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Something's went wrong from the server.");
             }
         }
