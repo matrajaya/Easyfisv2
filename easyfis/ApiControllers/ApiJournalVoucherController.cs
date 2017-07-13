@@ -223,7 +223,6 @@ namespace easyfis.Controllers
         {
             var journalVoucherLines = from d in db.TrnJournalVoucherLines
                                       where d.JVId == Convert.ToInt32(JVId)
-                                      && d.TrnJournalVoucher.IsLocked == true
                                       select new Models.TrnJournalVoucherLine
                                       {
                                           Id = d.Id,
@@ -265,6 +264,7 @@ namespace easyfis.Controllers
                             // get all amounts in jv lines for accounts payable
                             var APRRjournalVoucherLines = from d in db.TrnJournalVoucherLines
                                                           where d.APRRId == journalVoucherLine.APRRId
+                                                          && d.TrnJournalVoucher.IsLocked == true
                                                           select d;
 
                             Decimal APRRdadjustmentAmount = 0;
@@ -311,6 +311,7 @@ namespace easyfis.Controllers
                                 // get all amounts in jv lines for accounts receivable
                                 var APRRjournalVoucherLines = from d in db.TrnJournalVoucherLines
                                                               where d.ARSIId == journalVoucherLine.ARSIId
+                                                              && d.TrnJournalVoucher.IsLocked == true
                                                               select d;
 
                                 Decimal ARSIadjustmentAmount = 0;
