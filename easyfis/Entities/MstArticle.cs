@@ -77,15 +77,5 @@ namespace easyfis.Entities
         public String UpdatedBy { get; set; }
         public List<Entities.MstUser> UpdatedByUserList { get; set; }
         public String UpdatedDateTime { get; set; }
-
-        // user security rights
-        // ================================================
-        public Boolean CanAdd { get; set; }
-        public Boolean CanEdit { get; set; }
-        public Boolean CanDelete { get; set; }
-        public Boolean CanLock { get; set; }
-        public Boolean CanUnlock { get; set; }
-        public Boolean CanPrint { get; set; }
-        // ================================================
     }
 }

@@ -110,28 +110,28 @@ namespace easyfis.Controllers
             var journalVouchers = from d in db.TrnJournalVouchers
                                   where d.Id == Convert.ToInt32(Id)
                                   select new Models.TrnJournalVoucher
-                                      {
-                                          Id = d.Id,
-                                          BranchId = d.BranchId,
-                                          Branch = d.MstBranch.Branch,
-                                          JVNumber = d.JVNumber,
-                                          JVDate = d.JVDate.ToShortDateString(),
-                                          Particulars = d.Particulars,
-                                          ManualJVNumber = d.ManualJVNumber,
-                                          PreparedById = d.PreparedById,
-                                          PreparedBy = d.MstUser.FullName,
-                                          CheckedById = d.CheckedById,
-                                          CheckedBy = d.MstUser1.FullName,
-                                          ApprovedById = d.ApprovedById,
-                                          ApprovedBy = d.MstUser2.FullName,
-                                          IsLocked = d.IsLocked,
-                                          CreatedById = d.CreatedById,
-                                          CreatedBy = d.MstUser3.FullName,
-                                          CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                          UpdatedById = d.UpdatedById,
-                                          UpdatedBy = d.MstUser4.FullName,
-                                          UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                      };
+                                  {
+                                      Id = d.Id,
+                                      BranchId = d.BranchId,
+                                      Branch = d.MstBranch.Branch,
+                                      JVNumber = d.JVNumber,
+                                      JVDate = d.JVDate.ToShortDateString(),
+                                      Particulars = d.Particulars,
+                                      ManualJVNumber = d.ManualJVNumber,
+                                      PreparedById = d.PreparedById,
+                                      PreparedBy = d.MstUser.FullName,
+                                      CheckedById = d.CheckedById,
+                                      CheckedBy = d.MstUser1.FullName,
+                                      ApprovedById = d.ApprovedById,
+                                      ApprovedBy = d.MstUser2.FullName,
+                                      IsLocked = d.IsLocked,
+                                      CreatedById = d.CreatedById,
+                                      CreatedBy = d.MstUser3.FullName,
+                                      CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                      UpdatedById = d.UpdatedById,
+                                      UpdatedBy = d.MstUser4.FullName,
+                                      UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                  };
 
             return (Models.TrnJournalVoucher)journalVouchers.FirstOrDefault();
         }
@@ -223,6 +223,7 @@ namespace easyfis.Controllers
         {
             var journalVoucherLines = from d in db.TrnJournalVoucherLines
                                       where d.JVId == Convert.ToInt32(JVId)
+                                      && d.TrnJournalVoucher.IsLocked == true
                                       select new Models.TrnJournalVoucherLine
                                       {
                                           Id = d.Id,
@@ -254,55 +255,89 @@ namespace easyfis.Controllers
                 {
                     if (journalVoucherLine.APRRId != null)
                     {
-                        Decimal adjustmentAmount = journalVoucherLine.CreditAmount - journalVoucherLine.DebitAmount;
-                        var disbursementLines = from d in db.TrnDisbursementLines
-                                                where d.RRId == journalVoucherLine.APRRId
-                                                && d.TrnDisbursement.IsLocked == true
-                                                select d;
+                        var receivingReceipt = from d in db.TrnReceivingReceipts
+                                               where d.Id == journalVoucherLine.APRRId
+                                               select d;
 
-                        if (disbursementLines.Any())
+                        // check receiving receipt
+                        if (receivingReceipt.Any())
                         {
-                            Decimal disburseAmount = disbursementLines.Sum(d => d.Amount);
-                            var receivingReceipt = from d in db.TrnReceivingReceipts
-                                                   where d.Id == journalVoucherLine.APRRId
-                                                   select d;
+                            // get all amounts in jv lines for accounts payable
+                            var APRRjournalVoucherLines = from d in db.TrnJournalVoucherLines
+                                                          where d.APRRId == journalVoucherLine.APRRId
+                                                          select d;
+
+                            Decimal APRRdadjustmentAmount = 0;
+                            if (APRRjournalVoucherLines.Any())
+                            {
+                                APRRdadjustmentAmount = APRRjournalVoucherLines.Sum(d => d.CreditAmount) - APRRjournalVoucherLines.Sum(d => d.DebitAmount);
+                            }
+
+                            // get disburement amount
+                            var disbursementLines = from d in db.TrnDisbursementLines
+                                                    where d.RRId == journalVoucherLine.APRRId
+                                                    && d.TrnDisbursement.IsLocked == true
+                                                    select d;
+
+                            Decimal disburseAmount = 0;
+                            if (disbursementLines.Any())
+                            {
+                                disburseAmount = disbursementLines.Sum(d => d.Amount);
+                            }
+
 
                             Decimal receivingReceiptAmount = receivingReceipt.FirstOrDefault().Amount;
                             Decimal receivingReceiptWTAXAmount = receivingReceipt.FirstOrDefault().WTaxAmount;
                             Decimal receivingReceipPaidAmount = receivingReceipt.FirstOrDefault().PaidAmount;
+                            Decimal adjustmentAmount = APRRdadjustmentAmount;
 
-                            if (receivingReceipt.Any())
-                            {
-                                var updateReceivingReceipt = receivingReceipt.FirstOrDefault();
-                                updateReceivingReceipt.BalanceAmount = (receivingReceiptAmount - receivingReceiptWTAXAmount - receivingReceipPaidAmount) + adjustmentAmount;
-                                db.SubmitChanges();
-                            }
+                            var updateReceivingReceipt = receivingReceipt.FirstOrDefault();
+                            updateReceivingReceipt.BalanceAmount = (receivingReceiptAmount - receivingReceiptWTAXAmount - receivingReceipPaidAmount) + adjustmentAmount;
+                            updateReceivingReceipt.AdjustmentAmount = adjustmentAmount;
+                            db.SubmitChanges();
                         }
                     }
                     else
                     {
                         if (journalVoucherLine.ARSIId != null)
                         {
-                            Decimal adjustmentAmount = journalVoucherLine.DebitAmount - journalVoucherLine.CreditAmount;
-                            var collectionLines = from d in db.TrnCollectionLines
-                                                  where d.SIId == journalVoucherLine.ARSIId
-                                                  && d.TrnCollection.IsLocked == true
-                                                  select d;
+                            var salesInvoices = from d in db.TrnSalesInvoices
+                                                where d.Id == journalVoucherLine.ARSIId
+                                                select d;
 
-                            if (collectionLines.Any())
+                            // check sales invoice
+                            if (salesInvoices.Any())
                             {
-                                Decimal paidAmount = collectionLines.Sum(d => d.Amount);
-                                var salesInvoices = from d in db.TrnSalesInvoices
-                                                    where d.Id == journalVoucherLine.ARSIId
-                                                    select d;
+                                // get all amounts in jv lines for accounts receivable
+                                var APRRjournalVoucherLines = from d in db.TrnJournalVoucherLines
+                                                              where d.ARSIId == journalVoucherLine.ARSIId
+                                                              select d;
+
+                                Decimal ARSIadjustmentAmount = 0;
+                                if (APRRjournalVoucherLines.Any())
+                                {
+                                    ARSIadjustmentAmount = APRRjournalVoucherLines.Sum(d => d.DebitAmount) - APRRjournalVoucherLines.Sum(d => d.CreditAmount);
+                                }
+
+                                // get paid amount
+                                var collectionLines = from d in db.TrnCollectionLines
+                                                      where d.SIId == journalVoucherLine.ARSIId
+                                                      && d.TrnCollection.IsLocked == true
+                                                      select d;
+
+                                Decimal paidAmount = 0;
+                                if (collectionLines.Any())
+                                {
+                                    paidAmount = collectionLines.Sum(d => d.Amount);
+                                }
 
                                 Decimal salesAmount = salesInvoices.FirstOrDefault().Amount;
-                                if (salesInvoices.Any())
-                                {
-                                    var updateSalesInvoice = salesInvoices.FirstOrDefault();
-                                    updateSalesInvoice.BalanceAmount = (salesAmount - paidAmount) + adjustmentAmount;
-                                    db.SubmitChanges();
-                                }
+                                Decimal adjustmentAmount = ARSIadjustmentAmount;
+
+                                var updateSalesInvoice = salesInvoices.FirstOrDefault();
+                                updateSalesInvoice.BalanceAmount = (salesAmount - paidAmount) + adjustmentAmount;
+                                updateSalesInvoice.AdjustmentAmount = adjustmentAmount;
+                                db.SubmitChanges();
                             }
                         }
                     }

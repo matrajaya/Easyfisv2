@@ -30,14 +30,6 @@ namespace easyfis.SubApiControllers
                 // check if current user exist
                 if (currentUser.Any())
                 {
-                    // user form rights
-                    var canAdd = false;
-                    var canEdit = false;
-                    var canDelete = false;
-                    var canLock = false;
-                    var canUnlock = false;
-                    var canPrint = false;
-
                     // user forms
                     var userForms = from d in db.MstUserForms
                                     where d.UserId == currentUser.FirstOrDefault().Id
@@ -47,13 +39,6 @@ namespace easyfis.SubApiControllers
                     // check if exist
                     if (userForms.Any())
                     {
-                        canAdd = userForms.FirstOrDefault().CanAdd;
-                        canEdit = userForms.FirstOrDefault().CanEdit;
-                        canDelete = userForms.FirstOrDefault().CanDelete;
-                        canLock = userForms.FirstOrDefault().CanLock;
-                        canUnlock = userForms.FirstOrDefault().CanUnlock;
-                        canPrint = userForms.FirstOrDefault().CanPrint;
-
                         // supplier list query
                         var supplierList = from d in db.MstArticles.OrderByDescending(d => d.Id)
                                            where d.ArticleTypeId == 3
@@ -71,16 +56,7 @@ namespace easyfis.SubApiControllers
                                                CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                                                UpdatedById = d.UpdatedById,
                                                UpdatedBy = d.MstUser1.FullName,
-                                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString(),
-
-                                               // user security rights
-                                               // =========================================
-                                               CanAdd = canAdd,
-                                               CanEdit = canEdit,
-                                               CanDelete = canDelete,
-                                               CanLock = canLock,
-                                               CanUnlock = canUnlock,
-                                               CanPrint = canPrint
+                                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                            };
 
                         return supplierList.ToList();
@@ -130,14 +106,6 @@ namespace easyfis.SubApiControllers
             // check if current user exist
             if (currentUser.Any())
             {
-                // user form rights
-                var canAdd = false;
-                var canEdit = false;
-                var canDelete = false;
-                var canLock = false;
-                var canUnlock = false;
-                var canPrint = false;
-
                 // user forms
                 var userForms = from d in db.MstUserForms
                                 where d.UserId == currentUser.FirstOrDefault().Id
@@ -147,13 +115,6 @@ namespace easyfis.SubApiControllers
                 // check if exist
                 if (userForms.Any())
                 {
-                    canAdd = userForms.FirstOrDefault().CanAdd;
-                    canEdit = userForms.FirstOrDefault().CanEdit;
-                    canDelete = userForms.FirstOrDefault().CanDelete;
-                    canLock = userForms.FirstOrDefault().CanLock;
-                    canUnlock = userForms.FirstOrDefault().CanUnlock;
-                    canPrint = userForms.FirstOrDefault().CanPrint;
-
                     // supplier detail query
                     var supplierDetail = from d in db.MstArticles
                                          where d.Id == articleId
@@ -234,16 +195,7 @@ namespace easyfis.SubApiControllers
                                              CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                                              UpdatedById = d.UpdatedById,
                                              UpdatedBy = d.MstUser1.FullName,
-                                             UpdatedDateTime = d.UpdatedDateTime.ToShortDateString(),
-
-                                             // user security rights
-                                             // =========================================
-                                             CanAdd = canAdd,
-                                             CanEdit = canEdit,
-                                             CanDelete = canDelete,
-                                             CanLock = canLock,
-                                             CanUnlock = canUnlock,
-                                             CanPrint = canPrint
+                                             UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                          };
 
                     return (Entities.MstArticle)supplierDetail.FirstOrDefault();

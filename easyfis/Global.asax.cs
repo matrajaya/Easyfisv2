@@ -13,6 +13,15 @@ namespace easyfis
     {
         protected void Application_Start()
         {
+            ViewEngines.Engines.Clear();
+            IViewEngine RazorEngine = new RazorViewEngine()
+            {
+                FileExtensions = new string[] {
+                    "cshtml"
+                }
+            };
+            ViewEngines.Engines.Add(RazorEngine);
+
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
