@@ -129,7 +129,8 @@ namespace easyfis.SubApiControllers
                                              ArticleGroupList = articleGroupList.Select(ag => new Entities.MstArticleGroup
                                              {
                                                  Id = ag.Id,
-                                                 ArticleGroup = ag.ArticleGroup
+                                                 ArticleGroup = ag.ArticleGroup,
+                                                 AccountId = ag.AccountId
                                              }).ToList(),
                                              AccountId = d.AccountId,
                                              AccountCode = d.MstAccount.AccountCode,

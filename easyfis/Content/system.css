@@ -37,7 +37,6 @@
     height: 51px;
     margin-top: 51px;
     margin-bottom: 20px;
-    box-shadow: 4.5px 0px 5px 0px;
     position: fixed;
     z-index: 10;
 }
@@ -58,10 +57,9 @@
         overflow: auto;
         border-top-width: 0;
         border-bottom-width: 0;
-        border-right-width: 0;
+        border-right: 1px solid #e7e7e7;
         border-radius: 0;
         padding-bottom: 20px;
-        box-shadow: 0px 0px 5px 0px;
     }
 
         .navbar-fixed-side::-webkit-scrollbar {
@@ -91,7 +89,6 @@
 
         .navbar-fixed-side .navbar-header {
             position: fixed;
-            padding-left: 45px;
             width: 100%;
             background: #f8f8f8;
             z-index: 1000;
@@ -122,9 +119,9 @@
         }
 
             .navbar-fixed-side .navbar-nav > li > a {
-                padding-top: 10px;
-                padding-bottom: 10px;
-                font-weight: bold;
+                padding-top: 7px;
+                padding-bottom: 7px;
+                font-size: 15px;
                 /*border-bottom: 1px solid #e7e7e7*/
             }
 
@@ -141,9 +138,16 @@
         margin-left: 0;
         margin-right: 0
     }
+    .navbar-nav > li > a {
+        line-height: 30px;
+    }
 
     .navbar-fixed-side .navbar-left, .navbar-fixed-side .navbar-right {
         float: none !important
+    }
+
+    .navbar-fixed-side .navbar-nav > .dropdown {
+        border-top: 1px solid #e7e7e7;
     }
 
     .navbar-fixed-side .navbar-nav .dropdown-menu {
@@ -159,7 +163,7 @@
 
         .navbar-fixed-side .navbar-nav > li:first-child,
         .navbar-fixed-side .navbar-nav > li.second-child {
-            border-bottom: 1px solid #e7e7e7;
+            /*border-bottom: 1px solid #e7e7e7;*/
         }
 
         .navbar-fixed-side .navbar-nav .dropdown-menu > li > a, .navbar-fixed-side .navbar-nav .dropdown-menu .dropdown-header {
@@ -167,7 +171,7 @@
         }
 
         .navbar-fixed-side .navbar-nav .dropdown-menu > li > a {
-            line-height: 28px;
+            line-height: 25px;
             color: #777;
         }
 
@@ -176,14 +180,14 @@
             }
 
         .navbar-fixed-side .navbar-nav .dropdown-menu > .active > a {
-            background-color: #112540;
-            color: #fff;
+            background-color: #2b8e7f;
+            color: white;
         }
 
-        .navbar-fixed-side .navbar-nav .dropdown-menu > .active > a:hover {
-            background-color: #112540;
-            color: #fff;
-        }
+            .navbar-fixed-side .navbar-nav .dropdown-menu > .active > a:hover {
+                background-color: #2b8e7f;
+                color: white;
+            }
 
         .navbar-fixed-side .navbar-nav > li > a:hover, .navbar-fixed-side .navbar-nav > li > a:focus, .navbar-fixed-side .navbar-nav .dropdown-menu > li > a:hover, .navbar-fixed-side .navbar-nav .dropdown-menu > li > a:focus {
             background-color: #e7e7e7;
@@ -266,6 +270,13 @@
     }
 }
 
+.header-content > h4,
+.header-content > h4 > small {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .profile-nowrap-text {
     white-space: nowrap;
     overflow: hidden;
@@ -280,6 +291,13 @@
 }
 
 .svg-icon-style {
+    height: 20px;
+    float: left;
+    margin-top: 2px;
+    margin-right: 10px;
+}
+
+.svg-icon-style-top {
     height: 25px;
     float: left;
     margin-top: 1.5px;
@@ -321,4 +339,40 @@
             text-align: center;
         }
 }
+
+
+/* custom */
+input[type="text"] {
+    color: #000;
+}
+
+textarea.form-control {
+    /*color: #000;*/
+    resize: vertical;
+}
+
+.wj-dropdown {
+    color: #000;
+    padding-left: 3px;
+    display: block;
+    width: 100%;
+    height: 34px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.wj-control[disabled] {
+    color: #000;
+    opacity: 10;
+}
+
 
