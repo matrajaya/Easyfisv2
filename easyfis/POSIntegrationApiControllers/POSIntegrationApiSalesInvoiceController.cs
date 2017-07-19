@@ -606,7 +606,7 @@ namespace easyfis.POSIntegrationApiControllers
                                                     journal.insertSIJournal(Convert.ToInt32(salesInvoiceForBusiness.FirstOrDefault().Id));
                                                 }
 
-                                                return Request.CreateResponse(HttpStatusCode.OK);
+                                                return Request.CreateResponse(HttpStatusCode.OK, addSalesInvoice.SINumber);
                                             }
                                             else
                                             {
