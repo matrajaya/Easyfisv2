@@ -18,17 +18,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-print fa-fw"></i> Disbursement Detail Report
-                    </h2>
+                    <h3>
+                        Disbursement Detail Report <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
@@ -246,59 +241,59 @@
             });
             disbursementDetailReportCollection.filter = function (item) {
                 return !filterText || (item.CV.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1)
 
             }
             // Flex Grid
             var disbursementDetailReportGrid = new wijmo.grid.FlexGrid('#disbursementDetailReportGrid');
             disbursementDetailReportGrid.initialize({
                 columns: [
-                            {
-                                "header": "CV Number  ",
-                                "binding": "CVButton",
-                                "isContentHtml": true,
-                                "allowSorting": true,
-                                "width": 110
-                            },
-                            {
-                                "header": "CV Date",
-                                "binding": "CVDate",
-                                "allowSorting": true,
-                                "width": 100
-                            },
-                            {
-                                "header": "Account ",
-                                "binding": "Account",
-                                "allowSorting": true,
-                                "width": 200
-                            },
-                            {
-                                "header": "Article",
-                                "binding": "Article",
-                                "allowSorting": true,
-                                "width": 250
-                            },
-                            {
-                                "header": "RR Number",
-                                "binding": "RR",
-                                "allowSorting": true,
-                                "width": 110
-                            },
-                            {
-                                "header": "Particulars",
-                                "binding": "Particulars",
-                                "allowSorting": true,
-                                "width": 200
-                            },
-                            {
-                                "header": "Amount",
-                                "binding": "Amount",
-                                "allowSorting": true,
-                                "width": 150
-                            }
+                    {
+                        "header": "CV Number  ",
+                        "binding": "CVButton",
+                        "isContentHtml": true,
+                        "allowSorting": true,
+                        "width": 110
+                    },
+                    {
+                        "header": "CV Date",
+                        "binding": "CVDate",
+                        "allowSorting": true,
+                        "width": 100
+                    },
+                    {
+                        "header": "Account ",
+                        "binding": "Account",
+                        "allowSorting": true,
+                        "width": 200
+                    },
+                    {
+                        "header": "Article",
+                        "binding": "Article",
+                        "allowSorting": true,
+                        "width": 250
+                    },
+                    {
+                        "header": "RR Number",
+                        "binding": "RR",
+                        "allowSorting": true,
+                        "width": 110
+                    },
+                    {
+                        "header": "Particulars",
+                        "binding": "Particulars",
+                        "allowSorting": true,
+                        "width": 200
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "Amount",
+                        "allowSorting": true,
+                        "width": 150
+                    }
                 ],
                 autoGenerateColumns: false,
                 itemsSource: disbursementDetailReportCollection,

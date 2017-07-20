@@ -21,17 +21,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-dropbox fa-fw"></i> Stock Out Detail
-                    </h2>
+                    <h3>
+                        Stock Out Detail <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
@@ -3180,56 +3175,56 @@
             inventoryEntryGrid = new wijmo.grid.FlexGrid('#InventoryEntryGrid');
             inventoryEntryGrid.initialize({
                 columns: [
-                            {
-                                "header": "Date",
-                                "binding": "InventoryDate",
-                                "allowSorting": true,
-                                "width": 100,
-                            },
-                            {
-                                "header": "Branch",
-                                "binding": "Branch",
-                                "allowSorting": true,
-                                "width": 200,
-                            },
-                            {
-                                "header": "Item",
-                                "binding": "Article",
-                                "align": "left",
-                                "allowSorting": true,
-                                "width": 250,
-                            },
-                            {
-                                "header": "Particulars",
-                                "binding": "Particulars",
-                                "align": "left",
-                                "allowSorting": true,
-                                "width": 300,
-                            },
-                            {
-                                "header": "Inventory Code",
-                                "binding": "Code",
-                                "allowSorting": true,
-                                "width": 200,
-                            },
-                            {
-                                "header": "Quantity",
-                                "binding": "Quantity",
-                                "allowSorting": true,
-                                "width": 150,
-                            },
-                            {
-                                "header": "Unit",
-                                "binding": "Unit",
-                                "allowSorting": true,
-                                "width": 150,
-                            },
-                            {
-                                "header": "Amount",
-                                "binding": "Amount",
-                                "allowSorting": true,
-                                "width": 150,
-                            },
+                    {
+                        "header": "Date",
+                        "binding": "InventoryDate",
+                        "allowSorting": true,
+                        "width": 100,
+                    },
+                    {
+                        "header": "Branch",
+                        "binding": "Branch",
+                        "allowSorting": true,
+                        "width": 200,
+                    },
+                    {
+                        "header": "Item",
+                        "binding": "Article",
+                        "align": "left",
+                        "allowSorting": true,
+                        "width": 250,
+                    },
+                    {
+                        "header": "Particulars",
+                        "binding": "Particulars",
+                        "align": "left",
+                        "allowSorting": true,
+                        "width": 300,
+                    },
+                    {
+                        "header": "Inventory Code",
+                        "binding": "Code",
+                        "allowSorting": true,
+                        "width": 200,
+                    },
+                    {
+                        "header": "Quantity",
+                        "binding": "Quantity",
+                        "allowSorting": true,
+                        "width": 150,
+                    },
+                    {
+                        "header": "Unit",
+                        "binding": "Unit",
+                        "allowSorting": true,
+                        "width": 150,
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "Amount",
+                        "allowSorting": true,
+                        "width": 150,
+                    },
                 ],
                 autoGenerateColumns: false,
                 itemsSource: inventoryEntries,
@@ -3334,56 +3329,56 @@
 
             $("#loadingJournalGridList").show();
             $("#journal_Content").hide();
-            setTimeout(function() {
+            setTimeout(function () {
                 $("#loadingJournalGridList").hide();
                 $("#journal_Content").show();
                 // Flex Grid
                 journalListGrid = new wijmo.grid.FlexGrid('#journalGrid');
                 journalListGrid.initialize({
                     columns: [
-                                {
-                                    "header": "Code",
-                                    "binding": "AccountCode",
-                                    "allowSorting": true,
-                                    "width": 100
-                                },
-                                {
-                                    "header": "Account",
-                                    "binding": "Account",
-                                    "allowSorting": true,
-                                    "width": 220
-                                },
-                                {
-                                    "header": "Article",
-                                    "binding": "Article",
-                                    "allowSorting": true,
-                                    "width": 212
-                                },
-                                {
-                                    "header": "Debit",
-                                    "binding": "DebitAmount",
-                                    "allowSorting": true,
-                                    "width": 150
-                                }
-                                ,
-                                {
-                                    "header": "Credit",
-                                    "binding": "CreditAmount",
-                                    "allowSorting": true,
-                                    "width": 150
-                                },
-                                {
-                                    "header": "Branch",
-                                    "binding": "Branch",
-                                    "allowSorting": true,
-                                    "width": 200
-                                },
-                                {
-                                    "header": "Date",
-                                    "binding": "JournalDate",
-                                    "allowSorting": true,
-                                    "width": 100,
-                                }
+                        {
+                            "header": "Code",
+                            "binding": "AccountCode",
+                            "allowSorting": true,
+                            "width": 100
+                        },
+                        {
+                            "header": "Account",
+                            "binding": "Account",
+                            "allowSorting": true,
+                            "width": 220
+                        },
+                        {
+                            "header": "Article",
+                            "binding": "Article",
+                            "allowSorting": true,
+                            "width": 212
+                        },
+                        {
+                            "header": "Debit",
+                            "binding": "DebitAmount",
+                            "allowSorting": true,
+                            "width": 150
+                        }
+                        ,
+                        {
+                            "header": "Credit",
+                            "binding": "CreditAmount",
+                            "allowSorting": true,
+                            "width": 150
+                        },
+                        {
+                            "header": "Branch",
+                            "binding": "Branch",
+                            "allowSorting": true,
+                            "width": 200
+                        },
+                        {
+                            "header": "Date",
+                            "binding": "JournalDate",
+                            "allowSorting": true,
+                            "width": 100,
+                        }
                     ],
                     autoGenerateColumns: false,
                     itemsSource: journals,

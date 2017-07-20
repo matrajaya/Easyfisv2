@@ -19,18 +19,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-table fa-fw"></i> System Tables
-                    </h2>
+                    <h3>
+                        System Tables <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled />
-                </div>
-
                 <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Discount" id="discountTabId">Discount</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#PayType" id="payTypeTabId">Pay Type</a></li>

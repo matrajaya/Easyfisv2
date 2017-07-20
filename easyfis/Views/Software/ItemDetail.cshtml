@@ -18,17 +18,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-cubes fa-fw"></i> Item Detail
-                    </h2>
+                    <h3>
+                        Item Detail <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-                <div class="input-group " style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
@@ -2786,36 +2781,36 @@
             inventoryGrid = new wijmo.grid.FlexGrid('#InventoryGrid');
             inventoryGrid.initialize({
                 columns: [
-                            {
-                                "header": "Branch",
-                                "binding": "Branch",
-                                "allowSorting": true,
-                                "width": 320,
-                            },
-                            {
-                                "header": "Code",
-                                "binding": "InventoryCode",
-                                "allowSorting": true,
-                                "width": 250
-                            },
-                            {
-                                "header": "Quantity",
-                                "binding": "Quantity",
-                                "allowSorting": true,
-                                "width": 170
-                            },
-                            {
-                                "header": "Cost",
-                                "binding": "Cost",
-                                "allowSorting": true,
-                                "width": 170
-                            },
-                            {
-                                "header": "Amount",
-                                "binding": "Amount",
-                                "allowSorting": true,
-                                "width": 170
-                            },
+                    {
+                        "header": "Branch",
+                        "binding": "Branch",
+                        "allowSorting": true,
+                        "width": 320,
+                    },
+                    {
+                        "header": "Code",
+                        "binding": "InventoryCode",
+                        "allowSorting": true,
+                        "width": 250
+                    },
+                    {
+                        "header": "Quantity",
+                        "binding": "Quantity",
+                        "allowSorting": true,
+                        "width": 170
+                    },
+                    {
+                        "header": "Cost",
+                        "binding": "Cost",
+                        "allowSorting": true,
+                        "width": 170
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "Amount",
+                        "allowSorting": true,
+                        "width": 170
+                    },
                 ],
                 autoGenerateColumns: false,
                 itemsSource: inventories,

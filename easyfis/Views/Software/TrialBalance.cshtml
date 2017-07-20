@@ -18,17 +18,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-print fa-fw"></i> Trial Balance
-                    </h2>
+                    <h3>
+                        Trial Balance <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
@@ -281,26 +276,26 @@
             trialBalanceGrid = new wijmo.grid.FlexGrid('#trialBalanceGrid');
             trialBalanceGrid.initialize({
                 columns: [
-                            {
-                                "header": "Account",
-                                "binding": "Account",
-                                "width": 780,
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Debit",
-                                "binding": "DebitAmount",
-                                "allowSorting": true,
-                                "width": 150,
-                            },
-                            {
-                                "header": "Credit",
-                                "binding": "CreditAmount",
-                                "allowSorting": true,
-                                "width": 150,
-                            },
+                    {
+                        "header": "Account",
+                        "binding": "Account",
+                        "width": 780,
+                        "allowResizing": false,
+                        "allowSorting": false,
+                        "isContentHtml": true
+                    },
+                    {
+                        "header": "Debit",
+                        "binding": "DebitAmount",
+                        "allowSorting": true,
+                        "width": 150,
+                    },
+                    {
+                        "header": "Credit",
+                        "binding": "CreditAmount",
+                        "allowSorting": true,
+                        "width": 150,
+                    },
                 ],
                 autoGenerateColumns: false,
                 itemsSource: trialBalances,

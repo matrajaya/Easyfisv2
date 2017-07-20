@@ -18,17 +18,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-print fa-fw"></i> Purchase Summary Report
-                    </h2>
+                    <h3>
+                        Purchase Summary Report <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
@@ -248,9 +243,9 @@
             });
             purchaseSummaryReportCollections.filter = function (item) {
                 return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.PONumber.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.Remarks.toLowerCase().indexOf(filterText) > -1);
+                    || !filterText || (item.PONumber.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Remarks.toLowerCase().indexOf(filterText) > -1);
 
             }
 
@@ -258,49 +253,49 @@
             var purchaseSummaryReportGrid = new wijmo.grid.FlexGrid('#purchaseSummaryReportGrid');
             purchaseSummaryReportGrid.initialize({
                 columns: [
-                            {
-                                "header": "Branch",
-                                "binding": "Branch",
-                                "allowSorting": true,
-                                "width": 200,
-                            },
-                            {
-                                "header": "PO Date",
-                                "binding": "PODate",
-                                "allowSorting": true,
-                                "width": 100,
-                            },
-                            {
-                                "header": "PO Number",
-                                "binding": "PONumberButton",
-                                "isContentHtml": true,
-                                "allowSorting": true,
-                                "width": 110
-                            },
-                            {
-                                "header": "Supplier",
-                                "binding": "Supplier",
-                                "allowSorting": true,
-                                "width": 200,
-                            },
-                            {
-                                "header": "Remarks",
-                                "binding": "Remarks",
-                                "allowSorting": true,
-                                "width": 250,
-                            },
-                            {
-                                "header": "Is Close",
-                                "binding": "IsClose",
-                                "allowSorting": true,
-                                "width": 100,
-                            },
-                            {
-                                "header": "Amount",
-                                "binding": "Amount",
-                                "allowSorting": true,
-                                "width": 150,
-                            }
+                    {
+                        "header": "Branch",
+                        "binding": "Branch",
+                        "allowSorting": true,
+                        "width": 200,
+                    },
+                    {
+                        "header": "PO Date",
+                        "binding": "PODate",
+                        "allowSorting": true,
+                        "width": 100,
+                    },
+                    {
+                        "header": "PO Number",
+                        "binding": "PONumberButton",
+                        "isContentHtml": true,
+                        "allowSorting": true,
+                        "width": 110
+                    },
+                    {
+                        "header": "Supplier",
+                        "binding": "Supplier",
+                        "allowSorting": true,
+                        "width": 200,
+                    },
+                    {
+                        "header": "Remarks",
+                        "binding": "Remarks",
+                        "allowSorting": true,
+                        "width": 250,
+                    },
+                    {
+                        "header": "Is Close",
+                        "binding": "IsClose",
+                        "allowSorting": true,
+                        "width": 100,
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "Amount",
+                        "allowSorting": true,
+                        "width": 150,
+                    }
                 ],
                 autoGenerateColumns: false,
                 itemsSource: purchaseSummaryReportCollections,

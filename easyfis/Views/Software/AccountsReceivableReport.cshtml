@@ -19,17 +19,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-print fa-fw"></i> Accounts Receivable Report
-                    </h2>
+                    <h3>
+                        Accounts Receivable Report <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
@@ -335,90 +330,90 @@
             });
             accountsReceivableCollection.filter = function (item) {
                 return !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.SINumberValue.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
+                    || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.SINumberValue.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
             }
             // Flex Grid
             accountsReceivableGrid = new wijmo.grid.FlexGrid('#accountsReceivableGrid');
             accountsReceivableGrid.initialize({
                 columns: [
-                            {
-                                "header": "SI Number",
-                                "binding": "SINumber",
-                                "allowSorting": true,
-                                "width": 120,
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Account",
-                                "binding": "Account",
-                                "allowSorting": true,
-                                "width": 220
-                            },
-                            {
-                                "header": "Customer",
-                                "binding": "Customer",
-                                "allowSorting": true,
-                                "width": 250,
+                    {
+                        "header": "SI Number",
+                        "binding": "SINumber",
+                        "allowSorting": true,
+                        "width": 120,
+                        "allowResizing": false,
+                        "allowSorting": false,
+                        "isContentHtml": true
+                    },
+                    {
+                        "header": "Account",
+                        "binding": "Account",
+                        "allowSorting": true,
+                        "width": 220
+                    },
+                    {
+                        "header": "Customer",
+                        "binding": "Customer",
+                        "allowSorting": true,
+                        "width": 250,
 
-                            },
-                            {
-                                "header": "SI Date",
-                                "binding": "SIDate",
-                                "allowSorting": true,
-                                "width": 90
-                            },
-                            {
-                                "header": "Document Ref.",
-                                "binding": "DocumentReference",
-                                "allowSorting": true,
-                                "width": 204,
-                            },
-                            {
-                                "header": "Due Date",
-                                "binding": "DueDate",
-                                "allowSorting": true,
-                                "width": 110
-                            },
-                            {
-                                "header": "Balance",
-                                "binding": "BalanceAmount",
-                                "allowSorting": true,
-                                "width": 135
-                            },
-                            {
-                                "header": "Current",
-                                "binding": "CurrentAmount",
-                                "allowSorting": true,
-                                "width": 135
-                            },
-                            {
-                                "header": "30 Days",
-                                "binding": "Age30Amount",
-                                "allowSorting": true,
-                                "width": 120
-                            },
-                            {
-                                "header": "60 Days",
-                                "binding": "Age60Amount",
-                                "allowSorting": true,
-                                "width": 120
-                            },
-                            {
-                                "header": "90 Days",
-                                "binding": "Age90Amount",
-                                "allowSorting": true,
-                                "width": 120
-                            },
-                            {
-                                "header": "Over 120 Days",
-                                "binding": "Age120Amount",
-                                "allowSorting": true,
-                                "width": 120
-                            },
+                    },
+                    {
+                        "header": "SI Date",
+                        "binding": "SIDate",
+                        "allowSorting": true,
+                        "width": 90
+                    },
+                    {
+                        "header": "Document Ref.",
+                        "binding": "DocumentReference",
+                        "allowSorting": true,
+                        "width": 204,
+                    },
+                    {
+                        "header": "Due Date",
+                        "binding": "DueDate",
+                        "allowSorting": true,
+                        "width": 110
+                    },
+                    {
+                        "header": "Balance",
+                        "binding": "BalanceAmount",
+                        "allowSorting": true,
+                        "width": 135
+                    },
+                    {
+                        "header": "Current",
+                        "binding": "CurrentAmount",
+                        "allowSorting": true,
+                        "width": 135
+                    },
+                    {
+                        "header": "30 Days",
+                        "binding": "Age30Amount",
+                        "allowSorting": true,
+                        "width": 120
+                    },
+                    {
+                        "header": "60 Days",
+                        "binding": "Age60Amount",
+                        "allowSorting": true,
+                        "width": 120
+                    },
+                    {
+                        "header": "90 Days",
+                        "binding": "Age90Amount",
+                        "allowSorting": true,
+                        "width": 120
+                    },
+                    {
+                        "header": "Over 120 Days",
+                        "binding": "Age120Amount",
+                        "allowSorting": true,
+                        "width": 120
+                    },
                 ],
                 autoGenerateColumns: false,
                 itemsSource: accountsReceivableCollection,

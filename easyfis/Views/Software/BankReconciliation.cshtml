@@ -19,17 +19,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-print fa-fw"></i> Bank Reconciliation
-                    </h2>
+                    <h3>
+                        Bank Reconciliation <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
@@ -571,71 +566,71 @@
             collectionLineGrid = new wijmo.grid.FlexGrid('#collectionLineGrid');
             collectionLineGrid.initialize({
                 columns: [
-                            {
-                                "header": "OR Number",
-                                "binding": "OR",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": 100
-                            },
-                            {
-                                "header": "OR Date",
-                                "binding": "ORDate",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": 100
-                            },
-                            {
-                                "header": "Customer",
-                                "binding": "Customer",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": "3*"
-                            },
-                            {
-                                "header": "Pay Type",
-                                "binding": "PayType",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": "2*"
-                            },
-                            {
-                                "header": "Check No.",
-                                "binding": "CheckNumber",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": "1.5*"
-                            },
-                            {
-                                "header": "Check Date",
-                                "binding": "CheckDate",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": 100
-                            },
-                            {
-                                "header": "Amount",
-                                "binding": "Amount",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": "2*"
-                            },
-                            {
-                                "header": "C",
-                                "binding": "IsClearHtml",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "isContentHtml": true,
-                                "align": "center",
-                                "width": 50
-                            },
-                           {
-                               "header": "In Transit",
-                               "binding": "InTransit",
-                               "allowSorting": true,
-                               "isReadOnly": true,
-                               "width": "2*"
-                           },
+                    {
+                        "header": "OR Number",
+                        "binding": "OR",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": 100
+                    },
+                    {
+                        "header": "OR Date",
+                        "binding": "ORDate",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": 100
+                    },
+                    {
+                        "header": "Customer",
+                        "binding": "Customer",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "3*"
+                    },
+                    {
+                        "header": "Pay Type",
+                        "binding": "PayType",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "2*"
+                    },
+                    {
+                        "header": "Check No.",
+                        "binding": "CheckNumber",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "1.5*"
+                    },
+                    {
+                        "header": "Check Date",
+                        "binding": "CheckDate",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": 100
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "Amount",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "2*"
+                    },
+                    {
+                        "header": "C",
+                        "binding": "IsClearHtml",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "isContentHtml": true,
+                        "align": "center",
+                        "width": 50
+                    },
+                    {
+                        "header": "In Transit",
+                        "binding": "InTransit",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "2*"
+                    },
                 ],
                 autoGenerateColumns: false,
                 itemsSource: collectionLines,
@@ -826,71 +821,71 @@
             disbursementGrid = new wijmo.grid.FlexGrid('#disbursementGrid');
             disbursementGrid.initialize({
                 columns: [
-                            {
-                                "header": "CV Number",
-                                "binding": "CVNumber",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": 100
-                            },
-                            {
-                                "header": "CV Date",
-                                "binding": "CVDate",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": 100
-                            },
-                            {
-                                "header": "Payee",
-                                "binding": "Payee",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": "3*"
-                            },
-                            {
-                                "header": "Pay Type",
-                                "binding": "PayType",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": "2*"
-                            },
-                            {
-                                "header": "Check No.",
-                                "binding": "CheckNumber",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": "1.5*"
-                            },
-                            {
-                                "header": "Check Date",
-                                "binding": "CheckDate",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": 100
-                            },
-                            {
-                                "header": "Amount",
-                                "binding": "Amount",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": "2*"
-                            },
-                            {
-                                "header": "C",
-                                "binding": "IsClearHtml",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "isContentHtml": true,
-                                "align": "center",
-                                "width": 50
-                            },
-                           {
-                               "header": "Outstanding",
-                               "binding": "OutstandingAmount",
-                               "allowSorting": true,
-                               "isReadOnly": true,
-                               "width": "2*"
-                           },
+                    {
+                        "header": "CV Number",
+                        "binding": "CVNumber",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": 100
+                    },
+                    {
+                        "header": "CV Date",
+                        "binding": "CVDate",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": 100
+                    },
+                    {
+                        "header": "Payee",
+                        "binding": "Payee",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "3*"
+                    },
+                    {
+                        "header": "Pay Type",
+                        "binding": "PayType",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "2*"
+                    },
+                    {
+                        "header": "Check No.",
+                        "binding": "CheckNumber",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "1.5*"
+                    },
+                    {
+                        "header": "Check Date",
+                        "binding": "CheckDate",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": 100
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "Amount",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "2*"
+                    },
+                    {
+                        "header": "C",
+                        "binding": "IsClearHtml",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "isContentHtml": true,
+                        "align": "center",
+                        "width": 50
+                    },
+                    {
+                        "header": "Outstanding",
+                        "binding": "OutstandingAmount",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "2*"
+                    },
                 ],
                 autoGenerateColumns: false,
                 itemsSource: disbursements,
@@ -1073,64 +1068,64 @@
             journalVoucherLineGrid = new wijmo.grid.FlexGrid('#adjustmentGrid');
             journalVoucherLineGrid.initialize({
                 columns: [
-                             {
-                                 "header": "JV Number",
-                                 "binding": "JVNumber",
-                                 "allowSorting": true,
-                                 "isReadOnly": true,
-                                 "width": 130
-                             },
-                            {
-                                "header": "JV Date",
-                                "binding": "JVDate",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": 100
-                            },
-                            {
-                                "header": "Particulars",
-                                "binding": "JVParticulars",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": "3*"
-                            },
-                            {
-                                "header": "Debit",
-                                "binding": "DebitAmount",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": "2*"
-                            },
-                            {
-                                "header": "Credit",
-                                "binding": "CreditAmount",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": "2*"
-                            },
-                            {
-                                "header": "Balance",
-                                "binding": "Balance",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "width": "2*"
-                            },
-                            {
-                                "header": "C",
-                                "binding": "IsClearHtml",
-                                "allowSorting": true,
-                                "isReadOnly": true,
-                                "isContentHtml": true,
-                                "align": "center",
-                                "width": 50
-                            },
-                           {
-                               "header": "Adjustments",
-                               "binding": "Adjustments",
-                               "allowSorting": true,
-                               "isReadOnly": true,
-                               "width": "2*"
-                           },
+                    {
+                        "header": "JV Number",
+                        "binding": "JVNumber",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": 130
+                    },
+                    {
+                        "header": "JV Date",
+                        "binding": "JVDate",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": 100
+                    },
+                    {
+                        "header": "Particulars",
+                        "binding": "JVParticulars",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "3*"
+                    },
+                    {
+                        "header": "Debit",
+                        "binding": "DebitAmount",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "2*"
+                    },
+                    {
+                        "header": "Credit",
+                        "binding": "CreditAmount",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "2*"
+                    },
+                    {
+                        "header": "Balance",
+                        "binding": "Balance",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "2*"
+                    },
+                    {
+                        "header": "C",
+                        "binding": "IsClearHtml",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "isContentHtml": true,
+                        "align": "center",
+                        "width": 50
+                    },
+                    {
+                        "header": "Adjustments",
+                        "binding": "Adjustments",
+                        "allowSorting": true,
+                        "isReadOnly": true,
+                        "width": "2*"
+                    },
                 ],
                 autoGenerateColumns: false,
                 itemsSource: journalVoucherLines,

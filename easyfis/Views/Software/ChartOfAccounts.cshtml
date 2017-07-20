@@ -19,18 +19,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-list fa-fw"></i> Chart of Accounts
-                    </h2>
+                    <h3>
+                        Chart of Accounts <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-
-                <div class="input-group " style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
-                </div>
                 <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="accountTabId">Account</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId">Account Type</a></li>
@@ -3196,8 +3190,8 @@
             });
             accounts.filter = function (item) {
                 return !filterTextAccount || (item.AccountCode.toLowerCase().indexOf(filterTextAccount) > -1)
-                                          || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1)
-                                          || (item.AccountType.toLowerCase().indexOf(filterTextAccount) > -1);
+                    || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1)
+                    || (item.AccountType.toLowerCase().indexOf(filterTextAccount) > -1);
             }
             accounts.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsAccount();
@@ -3232,9 +3226,9 @@
             });
             accountTypes.filter = function (item) {
                 return !filterTextAccountType || (item.AccountTypeCode.toLowerCase().indexOf(filterTextAccountType) > -1)
-                                              || (item.AccountType.toLowerCase().indexOf(filterTextAccountType) > -1)
-                                              || (item.AccountCategory.toLowerCase().indexOf(filterTextAccountType) > -1)
-                                              || (item.SubCategoryDescription.toLowerCase().indexOf(filterTextAccountType) > -1);
+                    || (item.AccountType.toLowerCase().indexOf(filterTextAccountType) > -1)
+                    || (item.AccountCategory.toLowerCase().indexOf(filterTextAccountType) > -1)
+                    || (item.SubCategoryDescription.toLowerCase().indexOf(filterTextAccountType) > -1);
             }
             accountTypes.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsAccountType();
@@ -3269,7 +3263,7 @@
             });
             accountCashFlows.filter = function (item) {
                 return !filterTextAccountCashFlow || (item.AccountCashFlowCode.toLowerCase().indexOf(filterTextAccountCashFlow) > -1)
-                                                  || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
+                    || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
             }
             accountCashFlows.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsAccountCashFlow();
@@ -3304,7 +3298,7 @@
             });
             accountCategories.filter = function (item) {
                 return !filterTextAccountCategory || (item.AccountCategoryCode.toLowerCase().indexOf(filterTextAccountCategory) > -1)
-                                                  || (item.AccountCategory.toLowerCase().indexOf(filterTextAccountCategory) > -1);
+                    || (item.AccountCategory.toLowerCase().indexOf(filterTextAccountCategory) > -1);
             }
             accountCategories.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsAccountCategory();

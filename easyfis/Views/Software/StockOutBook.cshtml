@@ -18,17 +18,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-print fa-fw"></i> Stock Out Book
-                    </h2>
+                    <h3>
+                        Stock Out Book <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
@@ -242,58 +237,58 @@
             });
             stockOutBookCollections.filter = function (item) {
                 return !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1)
-                || !filterText || (item.AccountCode.toLowerCase().indexOf(filterText) > -1)
-                || !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
-                || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.AccountCode.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
 
             }
             // Flex Grid
             var stockOutBookGrid = new wijmo.grid.FlexGrid('#stockOutBookGrid');
             stockOutBookGrid.initialize({
                 columns: [
-                            {
-                                "header": "OT Number",
-                                "binding": "DocumentReference",
-                                "allowSorting": true,
-                                "width": 180,
-                            },
-                            {
-                                "header": "Code",
-                                "binding": "AccountCode",
-                                "allowSorting": true,
-                                "width": 100
-                            },
-                            {
-                                "header": "Account",
-                                "binding": "Account",
-                                "allowSorting": true,
-                                "width": 200
-                            },
-                            {
-                                "header": "Article",
-                                "binding": "Article",
-                                "isContentHtml": true,
-                                "allowSorting": true,
-                                "width": 200
-                            },
-                            {
-                                "header": "Debit",
-                                "binding": "DebitAmount",
-                                "allowSorting": true,
-                                "width": 150
-                            },
-                            {
-                                "header": "Credit",
-                                "binding": "CreditAmount",
-                                "allowSorting": true,
-                                "width": 150
-                            },
-                            {
-                                "header": "Balance",
-                                "binding": "Balance",
-                                "allowSorting": true,
-                                "width": 150
-                            },
+                    {
+                        "header": "OT Number",
+                        "binding": "DocumentReference",
+                        "allowSorting": true,
+                        "width": 180,
+                    },
+                    {
+                        "header": "Code",
+                        "binding": "AccountCode",
+                        "allowSorting": true,
+                        "width": 100
+                    },
+                    {
+                        "header": "Account",
+                        "binding": "Account",
+                        "allowSorting": true,
+                        "width": 200
+                    },
+                    {
+                        "header": "Article",
+                        "binding": "Article",
+                        "isContentHtml": true,
+                        "allowSorting": true,
+                        "width": 200
+                    },
+                    {
+                        "header": "Debit",
+                        "binding": "DebitAmount",
+                        "allowSorting": true,
+                        "width": 150
+                    },
+                    {
+                        "header": "Credit",
+                        "binding": "CreditAmount",
+                        "allowSorting": true,
+                        "width": 150
+                    },
+                    {
+                        "header": "Balance",
+                        "binding": "Balance",
+                        "allowSorting": true,
+                        "width": 150
+                    },
                 ],
                 autoGenerateColumns: false,
                 itemsSource: stockOutBookCollections,

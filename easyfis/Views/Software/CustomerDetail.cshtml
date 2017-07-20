@@ -18,18 +18,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-users fa-fw"></i> Customer Detail
-                    </h2>
+                    <h3>
+                        Customer Detail <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
@@ -901,36 +895,36 @@
             journalLedgerGrid = new wijmo.grid.FlexGrid('#JournalLedgerGrid');
             journalLedgerGrid.initialize({
                 columns: [
-                             {
-                                 "header": "Document Reference",
-                                 "binding": "DocumentReference",
-                                 "allowSorting": true,
-                                 "width": 300,
-                             },
-                            {
-                                "header": "Date",
-                                "binding": "JournalDate",
-                                "allowSorting": true,
-                                "width": 120,
-                            },
-                            {
-                                "header": "Particulars",
-                                "binding": "Particulars",
-                                "allowSorting": true,
-                                "width": 320,
-                            },
-                            {
-                                "header": "Debit",
-                                "binding": "DebitAmount",
-                                "allowSorting": true,
-                                "width": 170
-                            },
-                            {
-                                "header": "Credit",
-                                "binding": "CreditAmount",
-                                "allowSorting": true,
-                                "width": 170
-                            }
+                    {
+                        "header": "Document Reference",
+                        "binding": "DocumentReference",
+                        "allowSorting": true,
+                        "width": 300,
+                    },
+                    {
+                        "header": "Date",
+                        "binding": "JournalDate",
+                        "allowSorting": true,
+                        "width": 120,
+                    },
+                    {
+                        "header": "Particulars",
+                        "binding": "Particulars",
+                        "allowSorting": true,
+                        "width": 320,
+                    },
+                    {
+                        "header": "Debit",
+                        "binding": "DebitAmount",
+                        "allowSorting": true,
+                        "width": 170
+                    },
+                    {
+                        "header": "Credit",
+                        "binding": "CreditAmount",
+                        "allowSorting": true,
+                        "width": 170
+                    }
                 ],
                 autoGenerateColumns: false,
                 itemsSource: journalLedgerCollectionView,

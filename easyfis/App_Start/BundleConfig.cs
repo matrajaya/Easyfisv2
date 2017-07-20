@@ -8,22 +8,16 @@ namespace easyfis
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            // ========================
             // Landing page | Home- css
-            // ========================
             bundles.Add(new StyleBundle("~/Content/Home-css").Include(
                         "~/Content/bootstrap.min.css",
-                        //"~/Content/bootstrap-theme.min.css",
                         "~/Content/toastr.css",
                         "~/Content/font-awesome.min.css",
-                        //"~/wijmo/styles/wijmo.min.css",
                         "~/Content/wijmo.min.css",
                         "~/Content/nprogress.css",
                         "~/Content/home.css"));
 
-            // ========================
             // Landing page | Home - js
-            // ========================
             bundles.Add(new ScriptBundle("~/Scripts/Home-js").Include(
                         "~/Scripts/jquery-1.10.2.min.js",
                         "~/Scripts/bootstrap.min.js",
@@ -36,21 +30,16 @@ namespace easyfis
                         "~/Scripts/menu.js",
                         "~/Scripts/nprogress.js"));
 
-            // ==============
             // Software - css
-            // ==============
             bundles.Add(new StyleBundle("~/Content/Software-css").Include(
                       "~/Content/bootstrap.min.css",
-                      //"~/Content/bootstrap-theme.min.css",
                       "~/Content/toastr.css",
                       "~/Content/font-awesome.min.css",
                       "~/Content/wijmo.min.css",
                       "~/Content/nprogress.css",
                       "~/Content/software.css"));
 
-            // ============
             // System - css
-            // ============
             bundles.Add(new StyleBundle("~/Content/System-css").Include(
                       "~/Content/bootstrap.min.css",
                       "~/Content/toastr.css",
@@ -59,9 +48,7 @@ namespace easyfis
                       "~/Content/nprogress.css",
                       "~/Content/system.css"));
 
-            // ============
             // Software -js
-            // ============
             bundles.Add(new ScriptBundle("~/Scripts/Software-js").Include(
                     "~/Scripts/jquery-1.10.2.min.js",
                     "~/Scripts/bootstrap.min.js",
@@ -76,16 +63,11 @@ namespace easyfis
                     "~/Scripts/jquery.slimscroll.min.js",
                     "~/Scripts/app.min.js"));
 
-
-            // ========
             // JQueries
-            // ========
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
-            // =================
             // JQuery Validation
-            // =================
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 

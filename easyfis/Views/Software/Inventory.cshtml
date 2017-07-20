@@ -18,17 +18,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-print fa-fw"></i> Inventory
-                    </h2>
+                    <h3>
+                        Inventory <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
@@ -132,7 +127,7 @@
 
                             var branchId = inventoryResults[i]["BranchId"],
 
-                            articleLink = '/Software/StockCard?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&BranchId=' + branchId + '&ItemId=' + inventoryResults[i]["ArticleId"];
+                                articleLink = '/Software/StockCard?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&BranchId=' + branchId + '&ItemId=' + inventoryResults[i]["ArticleId"];
 
                             totalAllAmount = totalAllAmount + totalAmount;
                             totalVarianceAmount = totalVarianceAmount + varianceAmount;
@@ -293,99 +288,99 @@
             });
             inventoryCollections.filter = function (item) {
                 return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1)
 
             }
             // Flex Grid
             inventoryGrid = new wijmo.grid.FlexGrid('#inventoryGrid');
             inventoryGrid.initialize({
                 columns: [
-                            {
-                                "header": "Branch",
-                                "binding": "Branch",
-                                "allowSorting": true,
-                                "width": 200
-                            },
-                            {
-                                "header": "Code",
-                                "binding": "InventoryCode",
-                                "allowSorting": true,
-                                "width": 200,
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Item",
-                                "binding": "Article",
-                                "allowSorting": true,
-                                "width": 200,
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Unit",
-                                "binding": "Unit",
-                                "allowSorting": true,
-                                "width": 120
-                            },
-                            {
-                                "header": "Cost",
-                                "binding": "Cost",
-                                "allowSorting": true,
-                                "width": 150
-                            },
-                            {
-                                "header": "Beg",
-                                "binding": "BegQuantity",
-                                "allowSorting": true,
-                                "width": 150
-                            },
-                            {
-                                "header": "In",
-                                "binding": "InQuantity",
-                                "allowSorting": true,
-                                "width": 150
-                            },
-                            {
-                                "header": "Out",
-                                "binding": "OutQuantity",
-                                "allowSorting": true,
-                                "width": 150
-                            },
-                            {
-                                "header": "End",
-                                "binding": "EndQuantity",
-                                "allowSorting": true,
-                                "width": 150
-                            },
-                            {
-                                "header": "Total Amount",
-                                "binding": "TotalAmount",
-                                "allowSorting": true,
-                                "width": 150
-                            },
-                            {
-                                "header": "Count",
-                                "binding": "Count",
-                                "allowSorting": true,
-                                "width": 150
-                            },
-                            {
-                                "header": "Variance",
-                                "binding": "QuantityVariance",
-                                "allowSorting": true,
-                                "width": 150
-                            },
-                            {
-                                "header": "Variance Amount",
-                                "binding": "VarianceAmount",
-                                "allowSorting": true,
-                                "width": 150
-                            }
+                    {
+                        "header": "Branch",
+                        "binding": "Branch",
+                        "allowSorting": true,
+                        "width": 200
+                    },
+                    {
+                        "header": "Code",
+                        "binding": "InventoryCode",
+                        "allowSorting": true,
+                        "width": 200,
+                        "allowResizing": false,
+                        "allowSorting": false,
+                        "isContentHtml": true
+                    },
+                    {
+                        "header": "Item",
+                        "binding": "Article",
+                        "allowSorting": true,
+                        "width": 200,
+                        "allowResizing": false,
+                        "allowSorting": false,
+                        "isContentHtml": true
+                    },
+                    {
+                        "header": "Unit",
+                        "binding": "Unit",
+                        "allowSorting": true,
+                        "width": 120
+                    },
+                    {
+                        "header": "Cost",
+                        "binding": "Cost",
+                        "allowSorting": true,
+                        "width": 150
+                    },
+                    {
+                        "header": "Beg",
+                        "binding": "BegQuantity",
+                        "allowSorting": true,
+                        "width": 150
+                    },
+                    {
+                        "header": "In",
+                        "binding": "InQuantity",
+                        "allowSorting": true,
+                        "width": 150
+                    },
+                    {
+                        "header": "Out",
+                        "binding": "OutQuantity",
+                        "allowSorting": true,
+                        "width": 150
+                    },
+                    {
+                        "header": "End",
+                        "binding": "EndQuantity",
+                        "allowSorting": true,
+                        "width": 150
+                    },
+                    {
+                        "header": "Total Amount",
+                        "binding": "TotalAmount",
+                        "allowSorting": true,
+                        "width": 150
+                    },
+                    {
+                        "header": "Count",
+                        "binding": "Count",
+                        "allowSorting": true,
+                        "width": 150
+                    },
+                    {
+                        "header": "Variance",
+                        "binding": "QuantityVariance",
+                        "allowSorting": true,
+                        "width": 150
+                    },
+                    {
+                        "header": "Variance Amount",
+                        "binding": "VarianceAmount",
+                        "allowSorting": true,
+                        "width": 150
+                    }
                 ],
                 autoGenerateColumns: false,
                 itemsSource: inventoryCollections,

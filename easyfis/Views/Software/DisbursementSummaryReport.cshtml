@@ -18,17 +18,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-print fa-fw"></i> Disbursement Summary Report
-                    </h2>
+                    <h3>
+                        Disbursement Summary Report <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
@@ -244,52 +239,52 @@
             });
             disbursementSummaryReportCollection.filter = function (item) {
                 return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
-                   || !filterText || (item.CheckNumber.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.CheckNumber.toLowerCase().indexOf(filterText) > -1)
 
             }
             // Flex Grid
             var disbursementSummaryReportGrid = new wijmo.grid.FlexGrid('#disbursementSummaryReportGrid');
             disbursementSummaryReportGrid.initialize({
                 columns: [
-                            {
-                                "header": "Branch  ",
-                                "binding": "Branch",
-                                "allowSorting": true,
-                                "width": 200,
-                            },
-                            {
-                                "header": "CV Date",
-                                "binding": "CVDate",
-                                "allowSorting": true,
-                                "width": 100,
-                            },
-                            {
-                                "header": "CV Number ",
-                                "binding": "CVNumberButton",
-                                "isContentHtml": true,
-                                "allowSorting": true,
-                                "width": 110,
-                            },
-                            {
-                                "header": "Supplier",
-                                "binding": "Supplier",
-                                "allowSorting": true,
-                                "width": 300,
-                            },
-                            {
-                                "header": "Check Number",
-                                "binding": "CheckNumber",
-                                "allowSorting": true,
-                                "width": 250,
-                            },
-                            {
-                                "header": "Amount",
-                                "binding": "Amount",
-                                "allowSorting": true,
-                                "width": 150,
-                            }
+                    {
+                        "header": "Branch  ",
+                        "binding": "Branch",
+                        "allowSorting": true,
+                        "width": 200,
+                    },
+                    {
+                        "header": "CV Date",
+                        "binding": "CVDate",
+                        "allowSorting": true,
+                        "width": 100,
+                    },
+                    {
+                        "header": "CV Number ",
+                        "binding": "CVNumberButton",
+                        "isContentHtml": true,
+                        "allowSorting": true,
+                        "width": 110,
+                    },
+                    {
+                        "header": "Supplier",
+                        "binding": "Supplier",
+                        "allowSorting": true,
+                        "width": 300,
+                    },
+                    {
+                        "header": "Check Number",
+                        "binding": "CheckNumber",
+                        "allowSorting": true,
+                        "width": 250,
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "Amount",
+                        "allowSorting": true,
+                        "width": 150,
+                    }
                 ],
                 autoGenerateColumns: false,
                 itemsSource: disbursementSummaryReportCollection,

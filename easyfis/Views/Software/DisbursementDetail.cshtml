@@ -21,17 +21,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-credit-card fa-fw"></i> Disbursement Detail
-                    </h2>
+                    <h3>
+                        Disbursement Detail <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
@@ -332,7 +327,7 @@
                                         </td>
                                     </tr>
                                 </table>
-                                
+
                             </dd>
                             <dt>Article</dt>
                             <dd>

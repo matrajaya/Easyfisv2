@@ -18,17 +18,12 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-print fa-fw"></i>  Account Ledger
-                    </h2>
+                    <h3>
+                        Account Ledger  <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <section class="container">
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <span class="input-group-addon">Company</span>
-                    <input type="text" class="form-control" id="" value="@ViewData["Company"] / @ViewData["Branch"]" placeholder="Company" disabled>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
@@ -76,9 +71,7 @@
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 50%" align="right">
-                                  
-                                </td>
+                                <td style="width: 50%" align="right"></td>
                             </tr>
                         </table>
                     </div>
@@ -242,58 +235,58 @@
             });
             accountLedgers.filter = function (item) {
                 return !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1)
-                || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
-                || !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1)
 
             }
             // Flex Grid
             accountLedgerGrid = new wijmo.grid.FlexGrid('#accountLedgerGrid');
             accountLedgerGrid.initialize({
                 columns: [
-                            {
-                                "header": "Date",
-                                "binding": "JournalDate",
-                                "allowSorting": true,
-                                "width": 100
-                            },
-                            {
-                                "header": "Document Reference ",
-                                "binding": "DocumentReference",
-                                "width": 200,
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Article",
-                                "binding": "Article",
-                                "allowSorting": true,
-                                "width": 300
-                            },
-                            {
-                                "header": "Particulars",
-                                "binding": "Particulars",
-                                "allowSorting": true,
-                                "width": 300
-                            },
-                            {
-                                "header": "Debit",
-                                "binding": "DebitAmount",
-                                "allowSorting": true,
-                                "width": 150
-                            },
-                            {
-                                "header": "Credit",
-                                "binding": "CreditAmount",
-                                "allowSorting": true,
-                                "width": 150
-                            },
-                            {
-                                "header": "Balance",
-                                "binding": "Balance",
-                                "allowSorting": true,
-                                "width": 150
-                            }
+                    {
+                        "header": "Date",
+                        "binding": "JournalDate",
+                        "allowSorting": true,
+                        "width": 100
+                    },
+                    {
+                        "header": "Document Reference ",
+                        "binding": "DocumentReference",
+                        "width": 200,
+                        "allowResizing": false,
+                        "allowSorting": false,
+                        "isContentHtml": true
+                    },
+                    {
+                        "header": "Article",
+                        "binding": "Article",
+                        "allowSorting": true,
+                        "width": 300
+                    },
+                    {
+                        "header": "Particulars",
+                        "binding": "Particulars",
+                        "allowSorting": true,
+                        "width": 300
+                    },
+                    {
+                        "header": "Debit",
+                        "binding": "DebitAmount",
+                        "allowSorting": true,
+                        "width": 150
+                    },
+                    {
+                        "header": "Credit",
+                        "binding": "CreditAmount",
+                        "allowSorting": true,
+                        "width": 150
+                    },
+                    {
+                        "header": "Balance",
+                        "binding": "Balance",
+                        "allowSorting": true,
+                        "width": 150
+                    }
                 ],
                 autoGenerateColumns: false,
                 itemsSource: accountLedgers,

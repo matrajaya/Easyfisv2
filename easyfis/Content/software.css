@@ -1,5 +1,5 @@
 ﻿body {
-    font-family: Tahoma;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .content-wrapper,
@@ -134,10 +134,57 @@ a {
 
 .content-header {
     position: relative;
-    padding-top: 45px;
-    padding-bottom: 10px;
-    background: #112540;
-    color: #ffffff;
+    padding-top: 70px;
+    padding-bottom: 20px;
+    margin-bottom: 15px;
+    background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url(../images/coverImages/header.jpg) no-repeat center center;
+    background-size: cover;
+    border-bottom: 5px solid #112540
+}
+
+    .content-header > .container > h3 {
+        color: #ffffff;
+        font-size: 30px;
+        line-height: 27px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        text-transform: uppercase;
+    }
+
+        .content-header > .container > h3 > small {
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-transform: initial;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-transform: initial;
+            font-size: initial;
+        }
+
+@media screen and (max-width: 991px) {
+
+    .content-header {
+        padding-top: 50px;
+        padding-bottom: 10px;
+    }
+
+    .content-header > .container > h3 {
+        color: #ffffff;
+        font-size: 20px;
+    }
+
+        .content-header > .container > h3 > small {
+            color: white;
+            font-size: 13px;
+        }
+
+
+    @media screen and (max-width: 767px) {
+
+    }
 }
 
 .sub-header {
@@ -1169,7 +1216,8 @@ textarea.form-control {
 .c-menu {
     position: fixed;
     z-index: 200;
-    background-color: #191919;
+    background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url(../images/coverImages/templateHeader.jpg) no-repeat center center;
+    background-size: cover;
     -webkit-transition: -webkit-transform 0.3s;
     transition: transform 0.3s;
 }
@@ -1676,11 +1724,11 @@ body.has-active-menu {
 .btn-menu-link {
     border: none;
     background-color: transparent;
-    height: 50px;
+    height: 51px;
     padding-left: 13px;
     padding-right: 13px;
-    width: 100%;
     text-align: left;
+    float: left;
 }
 
 .btn-menu-link:hover {
@@ -1690,4 +1738,33 @@ body.has-active-menu {
 .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+@media screen and (max-width: 600px) {
+    table {
+        width: 100%;
+    }
+
+    thead {
+        display: none;
+    }
+
+    tbody td {
+        width: 100% !important;
+        display: block;
+        text-align: center;
+    }
+
+        tbody td > button,
+        tbody td > input,
+        tbody td > div {
+            width: 100% !important;
+            margin-bottom: 2px !important;
+        }
+
+        tbody td:before {
+            content: attr(data-th);
+            display: block;
+            text-align: center;
+        }
 }
