@@ -407,53 +407,57 @@ a {
 
 .content-header {
     position: relative;
-    padding-top: 45px;
-    padding-bottom: 10px;
-    background: #112540;
-    color: #ffffff;
+    padding-top: 70px;
+    padding-bottom: 20px;
+    margin-bottom: 15px;
+    background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url(../images/coverImages/header.jpg) no-repeat center center;
+    background-size: cover;
+    border-bottom: 5px solid #112540
 }
 
-    .content-header > h1 {
-        margin: 0;
-        font-size: 20px;
+    .content-header > .container > h3 {
+        color: #ffffff;
+        font-size: 30px;
+        line-height: 27px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        text-transform: uppercase;
     }
 
-        .content-header > h1 > small {
-            font-size: 12px;
-            display: inline-block;
-            padding-left: 4px;
-            font-weight: 300;
+        .content-header > .container > h3 > small {
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-transform: initial;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-transform: initial;
+            font-size: initial;
         }
 
-    .content-header > .breadcrumb {
-        float: right;
-        background: transparent;
-        margin-top: 0;
-        margin-bottom: 0;
-        font-size: 14px;
-        position: absolute;
-        top: 10px;
-        right: 10px;
+@media screen and (max-width: 991px) {
+
+    .content-header {
+        padding-top: 50px;
+        padding-bottom: 10px;
     }
 
-        .content-header > .breadcrumb > li > a {
-            text-decoration: none;
-            display: inline-block;
+        .content-header > .container > h3 {
+            color: #ffffff;
+            font-size: 20px;
         }
 
-            .content-header > .breadcrumb > li > a > .fa,
-            .content-header > .breadcrumb > li > a > .glyphicon,
-            .content-header > .breadcrumb > li > a > .ion {
-                margin-right: 5px;
+            .content-header > .container > h3 > small {
+                color: white;
+                font-size: 13px;
             }
 
-        .content-header > .breadcrumb > li + li:before {
-            content: '>\00a0';
-        }
 
-
-
-
+    @media screen and (max-width: 767px) {
+    }
+}
 
 .o-wrapper {
     -webkit-transition: -webkit-transform 0.3s;
@@ -620,10 +624,12 @@ a {
 .c-menu {
     position: fixed;
     z-index: 200;
-    background-color: #191919;
+    background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url(../images/coverImages/templateHeader.jpg) no-repeat center center;
+    background-size: cover;
     -webkit-transition: -webkit-transform 0.3s;
     transition: transform 0.3s;
 }
+
 
 .c-menu__items {
     list-style: none;
@@ -1123,11 +1129,11 @@ body.has-active-menu {
 .btn-menu-link {
     border: none;
     background-color: transparent;
-    height: 50px;
+    height: 51px;
     padding-left: 13px;
     padding-right: 13px;
-    width: 100%;
     text-align: left;
+    float: left;
 }
 
 .btn-menu-link:hover {

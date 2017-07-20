@@ -18,12 +18,11 @@
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
-                    <h2>
-                        <i class="fa fa-gear fa-fw"></i> Manage Settings
-                    </h2>
+                    <h3>
+                        Manage Settings  <br />  <small>@ViewData["Company"] &nbsp; | &nbsp; @ViewData["Branch"]</small>
+                    </h3>
                 </div>
             </section>
-            <br />
             <!-- Manage -->
             @Html.Partial("_ManageIndex")
             <!-- Footer -->
