@@ -186,7 +186,6 @@ a {
 
 
     @media screen and (max-width: 767px) {
-
     }
 }
 
@@ -199,43 +198,43 @@ a {
     margin-bottom: 15px;
 }
 
-    .content-header > h1 {
-        margin: 0;
-        font-size: 20px;
+.content-header > h1 {
+    margin: 0;
+    font-size: 20px;
+}
+
+    .content-header > h1 > small {
+        font-size: 12px;
+        display: inline-block;
+        padding-left: 4px;
+        font-weight: 300;
     }
 
-        .content-header > h1 > small {
-            font-size: 12px;
-            display: inline-block;
-            padding-left: 4px;
-            font-weight: 300;
-        }
+.content-header > .breadcrumb {
+    float: right;
+    background: transparent;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 14px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
 
-    .content-header > .breadcrumb {
-        float: right;
-        background: transparent;
-        margin-top: 0;
-        margin-bottom: 0;
-        font-size: 14px;
-        position: absolute;
-        top: 10px;
-        right: 10px;
+    .content-header > .breadcrumb > li > a {
+        text-decoration: none;
+        display: inline-block;
     }
 
-        .content-header > .breadcrumb > li > a {
-            text-decoration: none;
-            display: inline-block;
+        .content-header > .breadcrumb > li > a > .fa,
+        .content-header > .breadcrumb > li > a > .glyphicon,
+        .content-header > .breadcrumb > li > a > .ion {
+            margin-right: 5px;
         }
 
-            .content-header > .breadcrumb > li > a > .fa,
-            .content-header > .breadcrumb > li > a > .glyphicon,
-            .content-header > .breadcrumb > li > a > .ion {
-                margin-right: 5px;
-            }
-
-        .content-header > .breadcrumb > li + li:before {
-            content: '>\00a0';
-        }
+    .content-header > .breadcrumb > li + li:before {
+        content: '>\00a0';
+    }
 
 .navbar-custom-menu .navbar-nav > li > a {
     margin-right: 15px;
@@ -672,6 +671,7 @@ a {
     transition: all 0.1s ease;
     text-align: center;
     padding: 15px;
+    border-radius: 4px !important;
 }
 
 .panel-theme-sales {
@@ -684,7 +684,8 @@ a {
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 85px;
-    padding-bottom: 92.2px;
+    padding-bottom: 113.2px;
+    border-radius: 4px !important;
 }
     /* == */
 
@@ -869,12 +870,14 @@ dd {
     border-bottom-color: #337ab7;
     border-bottom-style: solid;
     border-width: 3px;
+    border-radius: 0 !important;
 }
 
     .nav-tabs > li > a:hover {
         border-bottom-color: #337ab7;
         border-bottom-style: solid;
         color: #75a7d2;
+        border-radius: 0 !important;
     }
 
     .nav-tabs > li.active > a,
@@ -884,8 +887,8 @@ dd {
         border-color: #2e6da4;
         color: #fff;
         box-shadow: none;
+        border-radius: 0 !important;
     }
-
 
 input.checkbox_custom {
     margin-top: 11px;
@@ -929,6 +932,10 @@ a:hover.branchNameStyle {
 .pill-custom {
     background-color: #f5f2f2;
 }
+
+    .pill-custom > li > a {
+        border-radius: 0 !important;
+    }
 
 .pill-report-custom {
     margin-bottom: 30px;
@@ -1408,7 +1415,7 @@ textarea.form-control {
         color: #fff;
     }
 
-    /*.c-menu--slide-top .c-menu__close,
+/*.c-menu--slide-top .c-menu__close,
     .c-menu--slide-bottom .c-menu__close,
     .c-menu--push-top .c-menu__close,
     .c-menu--push-bottom .c-menu__close {
@@ -1530,7 +1537,7 @@ body.has-active-menu {
     margin-bottom: 5px;
 }*/
 
-    /*.c-menu__close:focus {
+/*.c-menu__close:focus {
         outline: none;
     }*/
 
@@ -1660,7 +1667,7 @@ body.has-active-menu {
     border: none;
 }
 
-.panel-side>.panel-heading-menu {
+.panel-side > .panel-heading-menu {
     background-color: transparent;
     border-radius: 0;
     width: 100%;
@@ -1668,57 +1675,57 @@ body.has-active-menu {
     padding: 0;
 }
 
-.panel-side>.panel-heading-menu>.panel-link-menu>.panel-title {
-    background-color: #323232;
-    color: white;
-    padding: 15px 20px 15px 20px;
-    border-left: 5px solid #323232;
-}
+    .panel-side > .panel-heading-menu > .panel-link-menu > .panel-title {
+        background-color: #323232;
+        color: white;
+        padding: 15px 20px 15px 20px;
+        border-left: 5px solid #323232;
+    }
 
-.panel-side>.panel-heading-menu>.panel-link-menu>.panel-title:hover {
-    background-color: #7a0400;
-    border-left: 5px solid #a19b9b;
-}
+        .panel-side > .panel-heading-menu > .panel-link-menu > .panel-title:hover {
+            background-color: #7a0400;
+            border-left: 5px solid #a19b9b;
+        }
 
 
-.panel-side>.panel-heading-menu>.panel-link-menu {
-    width: 100%;
-}
+    .panel-side > .panel-heading-menu > .panel-link-menu {
+        width: 100%;
+    }
 
-.panel-side>.panel-collapse-menu {
+.panel-side > .panel-collapse-menu {
     border-top: none;
     padding: 0;
     margin: 0;
 }
 
-.panel-side>.panel-collapse-menu > .panel-body {
-    padding: 0;
-    margin: 0;
-    border: none;
-}
+    .panel-side > .panel-collapse-menu > .panel-body {
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
 
-.panel-side>.panel-collapse-menu > .panel-body > ul {
-    list-style: none;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
+        .panel-side > .panel-collapse-menu > .panel-body > ul {
+            list-style: none;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
 
-.panel-side>.panel-collapse-menu > .panel-body > ul > li {
-    color: white;
-}
+            .panel-side > .panel-collapse-menu > .panel-body > ul > li {
+                color: white;
+            }
 
-.panel-side>.panel-collapse-menu > .panel-body > ul > li > a {
-    padding: 10px 10px 10px 60px;
-    color: white;
-    display: block;
-}
+                .panel-side > .panel-collapse-menu > .panel-body > ul > li > a {
+                    padding: 10px 10px 10px 50px;
+                    color: white;
+                    display: block;
+                }
 
-.panel-side>.panel-collapse-menu > .panel-body > ul > li > a:hover {
-    color: white;
-    background-color: #112540;
-    margin: 0;
-}
+                    .panel-side > .panel-collapse-menu > .panel-body > ul > li > a:hover {
+                        color: white;
+                        background-color: #112540;
+                        margin: 0;
+                    }
 
 .table {
     border-radius: 15px;
@@ -1734,9 +1741,9 @@ body.has-active-menu {
     float: left;
 }
 
-.btn-menu-link:hover {
-    background-color: #d7d7d7;
-}
+    .btn-menu-link:hover {
+        background-color: #d7d7d7;
+    }
 
 .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     padding-top: 10px;
@@ -1770,4 +1777,49 @@ body.has-active-menu {
             display: block;
             text-align: center;
         }
+}
+
+.scrolling { /* Note #2 */
+    position: fixed;
+    top: 60px;
+    float: right;
+}
+
+
+@media screen and (max-width: 991px) {
+    .scrolling { /* Note #2 */
+        position: initial;
+        top: 0px;
+        width: 100%;
+    }
+}
+
+.svg-icon-style {
+    height: 75px;
+    margin-top: 2px;
+}
+
+.svg-icon-style-side-menu {
+    height: 30px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+}
+
+
+.c-menu--slide-left::-webkit-scrollbar {
+    width: 10px;
+    background-color: #ffffff;
+    opacity: 0.75;
+    transition: 1s all;
+}
+
+.c-menu--slide-left::-webkit-scrollbar-thumb {
+    background-color: #8f8f8f;
+    opacity: 0.5;
+    transition: 1s all;
+}
+
+.panel,
+.wj-flexgrid.wj-content {
+    border-radius: 0;
 }

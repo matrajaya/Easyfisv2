@@ -20,7 +20,7 @@
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Accounts Receivable 
+                        Accounts Receivable
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -41,9 +41,35 @@
                             <li><a data-toggle="pill" href="#SDR">Sales Detail Report</a></li>
                             <li><a data-toggle="pill" href="#CSR">Collection Summary Report</a></li>
                             <li><a data-toggle="pill" href="#CDR">Collection Detail Report</a></li>
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#SDRVS">Sales Detail Report (VAT Sales)</a></li>
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#SSRBSN">Sales Summary Report By Sales No.</a></li>
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#CSR">Cancelled Sales Summary Report</a></li>
+                            <li><a data-toggle="pill" href="#SCSSR">Senior Citizen Sales Summary Report</a></li>
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#TSIR">Top Selling Items Report</a></li>
+                            <li><a data-toggle="pill" href="#HTSIR">Hourly Top Selling Items Report</a></li>
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#CMST">Chart Monthly Sales Trend</a></li>
+                            <li><a data-toggle="pill" href="#CMSC">Chart Monthly Sales Comparison</a></li>
+                            <li><a data-toggle="pill" href="#CYSTC">Chart Yearly Sales Trend Comparison</a></li>
+                            <li><a data-toggle="pill" href="#CHSC">Chart Hourly Sales Comparison</a></li>
+                            <li><a data-toggle="pill" href="#CHSCA">Chart Hourly Sales Comparison (Amount)</a></li>
+                            <li><a data-toggle="pill" href="#CCSC">Chart Category Sold Comparison</a></li>
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#SRSR">Sales Reward Summary Report</a></li>
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#SSTR">Sales Status Report</a></li>
+                            <li><a data-toggle="pill" href="#SSTRBSN">Sales Status Report By Sales No.</a></li>
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#SSRAF">Sales Summary Report (All Fields)</a></li>
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#SCR">Sales Consumption Report</a></li>
                         </ul>
                     </div>
-                    <div class="col-md-7">
+                    <div id="col" class="col-md-7">
                         <div class="tab-content">
                             <div id="AR" class="tab-pane fade in active">
                                 <div class="panel panel-default">
@@ -315,6 +341,648 @@
                                     </div>
                                 </div>
                             </div>
+                            <div id="SDRVS" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="SalesDetailReportVatSalesView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="SalesDetailReportVatSales_StartDate"></div>
+                                                                <input type="hidden" id="SalesDetailReportVatSales_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="SalesDetailReportVatSales_EndDate"></div>
+                                                                <input type="hidden" id="SalesDetailReportVatSales_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="SSRBSN" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="SalesSummaryReportBySalesNoView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Sales Start No.</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control" id="SalesSummaryReportBySalesNo_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Sales End No.</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control" id="SalesSummaryReportBySalesNo_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="CSR" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="CancelledSalesSummaryReportView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="CancelledSalesSummaryReport_StartDate"></div>
+                                                                <input type="hidden" id="CancelledSalesSummaryReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="CancelledSalesSummaryReport_EndDate"></div>
+                                                                <input type="hidden" id="CancelledSalesSummaryReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="SCSSR" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="SeniorCitizenSalesSummaryReportView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="SeniorCitizenSalesSummaryReport_StartDate"></div>
+                                                                <input type="hidden" id="SeniorCitizenSalesSummaryReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="SeniorCitizenSalesSummaryReport_EndDate"></div>
+                                                                <input type="hidden" id="SeniorCitizenSalesSummaryReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="TSIR" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="TopSellingItemsReportView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="TopSellingItemsReport_StartDate"></div>
+                                                                <input type="hidden" id="TopSellingItemsReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="TopSellingItemsReport_EndDate"></div>
+                                                                <input type="hidden" id="TopSellingItemsReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="HTSIR" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="HourlyTopSellingItemsReportView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="HourlyTopSellingItemsReport_StartDate"></div>
+                                                                <input type="hidden" id="HourlyTopSellingItemsReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="HourlyTopSellingItemsReport_EndDate"></div>
+                                                                <input type="hidden" id="HourlyTopSellingItemsReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="CMST" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="ChartMonthlySalesTrendView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="ChartMonthlySalesTrend_StartDate"></div>
+                                                                <input type="hidden" id="ChartMonthlySalesTrend_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="ChartMonthlySalesTrend_EndDate"></div>
+                                                                <input type="hidden" id="ChartMonthlySalesTrend_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="CMSC" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="ChartMonthlySalesComparisonView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="ChartMonthlySalesComparison_StartDate"></div>
+                                                                <input type="hidden" id="ChartMonthlySalesComparison_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="ChartMonthlySalesComparison_EndDate"></div>
+                                                                <input type="hidden" id="ChartMonthlySalesComparison_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="CYSTC" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="ChartYearlySalesTrendComparisonView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="ChartYearlySalesTrendComparison_StartDate"></div>
+                                                                <input type="hidden" id="ChartYearlySalesTrendComparison_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="ChartYearlySalesTrendComparison_EndDate"></div>
+                                                                <input type="hidden" id="ChartYearlySalesTrendComparison_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="CHSC" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="ChartHourlySalesComparisonView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="ChartHourlySalesComparison_StartDate"></div>
+                                                                <input type="hidden" id="ChartHourlySalesComparison_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="ChartHourlySalesComparison_EndDate"></div>
+                                                                <input type="hidden" id="ChartHourlySalesComparison_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="CHSCA" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="ChartHourlySalesComparisonAmountView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="ChartHourlySalesComparisonAmount_StartDate"></div>
+                                                                <input type="hidden" id="ChartHourlySalesComparisonAmount_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="ChartHourlySalesComparisonAmount_EndDate"></div>
+                                                                <input type="hidden" id="ChartHourlySalesComparisonAmount_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="CCSC" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="ChartCategorySoldComparisonView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="ChartCategorySoldComparison_StartDate"></div>
+                                                                <input type="hidden" id="ChartCategorySoldComparison_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="ChartCategorySoldComparison_EndDate"></div>
+                                                                <input type="hidden" id="ChartCategorySoldComparison_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="SRSR" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="SalesRewardSummaryReportView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="SalesRewardSummaryReport_StartDate"></div>
+                                                                <input type="hidden" id="SalesRewardSummaryReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="SalesRewardSummaryReport_EndDate"></div>
+                                                                <input type="hidden" id="SalesRewardSummaryReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="SSTR" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="SalesStatusReportView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="SalesStatusReport_StartDate"></div>
+                                                                <input type="hidden" id="SalesStatusReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="SalesStatusReport_EndDate"></div>
+                                                                <input type="hidden" id="SalesStatusReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="SSTRBSN" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="SalesStatusReportBySalesNoView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Sales Start No.</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control" id="SalesStatusReportBySalesNo_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Sales End No.</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control" id="SalesStatusReportBySalesNo_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="SSRAF" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="SaleSummaryReportAllFieldsAllFieldsView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="SaleSummaryReportAllFields_StartDate"></div>
+                                                                <input type="hidden" id="SaleSummaryReportAllFields_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="SaleSummaryReportAllFields_EndDate"></div>
+                                                                <input type="hidden" id="SaleSummaryReportAllFields_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="SCR" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div align="right">
+                                            <button onclick="SaleConsumptionReportView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Start Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="SaleConsumptionReport_StartDate"></div>
+                                                                <input type="hidden" id="SaleConsumptionReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">End Date</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="SaleConsumptionReport_EndDate"></div>
+                                                                <input type="hidden" id="SaleConsumptionReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -346,6 +1014,36 @@
         var collectionSummaryReportEndDate;
         var collectionDetailReportStartDate;
         var collectionDetailReportEndDate;
+        var salesDetailReportVatSalesStartDate;
+        var salesDetailReportVatSalesEndDate;
+        var cancelledSalesSummaryReportStartDate;
+        var cancelledSalesSummaryReportEndDate;
+        var seniorCitizenSalesSummaryReportStartDate;
+        var seniorCitizenSalesSummaryReportEndDate;
+        var topSellingItemsReportStartDate;
+        var topSellingItemsReportEndDate;
+        var hourlyTopSellingItemsReportStartDate;
+        var hourlyTopSellingItemsReportEndDate;
+        var chartMonthlySalesTrendStartDate;
+        var chartMonthlySalesTrendEndDate;
+        var chartMonthlySalesComparisonStartDate;
+        var chartMonthlySalesComparisonEndDate;
+        var chartYearlySalesTrendComparisonStartDate;
+        var chartYearlySalesTrendComparisonEndDate;
+        var chartHourlySalesComparisonStartDate;
+        var chartHourlySalesComparisonEndDate;
+        var chartHourlySalesComparisonAmountStartDate;
+        var chartHourlySalesComparisonAmountEndDate;
+        var chartCategorySoldComparisonStartDate;
+        var chartCategorySoldComparisonEndDate;
+        var salesRewardSummaryReportStartDate;
+        var salesRewardSummaryReportEndDate;
+        var salesStatusReportStartDate;
+        var salesStatusReportEndDate;
+        var saleSummaryReportAllFieldsStartDate;
+        var saleSummaryReportAllFieldsEndDate;
+        var saleConsumptionReportStartDate;
+        var saleConsumptionReportEndDate;
 
         // ===========
         // Get company
@@ -540,7 +1238,6 @@
                 window.location.href = '/RepStatementOfAccount/StatementOfAccount?DateAsOf=' + convertDateToShortDateString(accountReceivableStatementOfTheAccountReportDateAsOf) + '&CompanyId=' + companyId + '&CustomerId=' + accountReceivableStatementOfTheAccountReportCustomerId;
             }
         }
-
 
         // get Sale Summary Report Start Date
         function getSaleSummaryReportStartDate() {
@@ -755,6 +1452,547 @@
             return [theDate.getFullYear(), theDate.getMonth() + 1, theDate.getDate()].join('-');
         }
 
+        // get Sales Detail Report Vat Sales Start Date
+        function getSalesDetailReportVatSalesStartDate() {
+            salesDetailReportVatSalesStartDate.dispose();
+            salesDetailReportVatSalesStartDate = new wijmo.input.InputDate('#SalesDetailReportVatSales_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('SalesDetailReportVatSales_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('SalesDetailReportVatSales_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('SalesDetailReportVatSales_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getSalesDetailReportVatSalesEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Sales Detail Report Vat Sales End Date
+        function getSalesDetailReportVatSalesEndDate() {
+            salesDetailReportVatSalesEndDate.dispose();
+            salesDetailReportVatSalesEndDate = new wijmo.input.InputDate('#SalesDetailReportVatSales_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('SalesDetailReportVatSales_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('SalesDetailReportVatSales_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('SalesDetailReportVatSales_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getSalesDetailReportVatSalesStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Cancelled Sales Summary Report Start Date
+        function getCancelledSalesSummaryReportStartDate() {
+            cancelledSalesSummaryReportStartDate.dispose();
+            cancelledSalesSummaryReportStartDate = new wijmo.input.InputDate('#CancelledSalesSummaryReport_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('CancelledSalesSummaryReport_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('CancelledSalesSummaryReport_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('CancelledSalesSummaryReport_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getCancelledSalesSummaryReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Cancelled Sales Summary Report End Date
+        function getCancelledSalesSummaryReportEndDate() {
+            cancelledSalesSummaryReportEndDate.dispose();
+            cancelledSalesSummaryReportEndDate = new wijmo.input.InputDate('#CancelledSalesSummaryReport_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('CancelledSalesSummaryReport_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('CancelledSalesSummaryReport_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('CancelledSalesSummaryReport_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getCancelledSalesSummaryReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Senior Citizen Sales Summary Report Start Date
+        function getSeniorCitizenSalesSummaryReportStartDate() {
+            seniorCitizenSalesSummaryReportStartDate.dispose();
+            seniorCitizenSalesSummaryReportStartDate = new wijmo.input.InputDate('#SeniorCitizenSalesSummaryReport_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('SeniorCitizenSalesSummaryReport_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('SeniorCitizenSalesSummaryReport_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('SeniorCitizenSalesSummaryReport_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getSeniorCitizenSalesSummaryReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Senior Citizen Sales Summary Report End Date
+        function getSeniorCitizenSalesSummaryReportEndDate() {
+            seniorCitizenSalesSummaryReportEndDate.dispose();
+            seniorCitizenSalesSummaryReportEndDate = new wijmo.input.InputDate('#SeniorCitizenSalesSummaryReport_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('SeniorCitizenSalesSummaryReport_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('SeniorCitizenSalesSummaryReport_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('SeniorCitizenSalesSummaryReport_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getSeniorCitizenSalesSummaryReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+
+        // get Top Selling Items Report Start Date
+        function getTopSellingItemsReportStartDate() {
+            topSellingItemsReportStartDate.dispose();
+            topSellingItemsReportStartDate = new wijmo.input.InputDate('#TopSellingItemsReport_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('TopSellingItemsReport_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('TopSellingItemsReport_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('TopSellingItemsReport_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getTopSellingItemsReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Top Selling Items Report End Date
+        function getTopSellingItemsReportEndDate() {
+            topSellingItemsReportEndDate.dispose();
+            topSellingItemsReportEndDate = new wijmo.input.InputDate('#TopSellingItemsReport_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('TopSellingItemsReport_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('TopSellingItemsReport_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('TopSellingItemsReport_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getTopSellingItemsReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Hourly Top Selling Items Report Start Date
+        function getHourlyTopSellingItemsReportStartDate() {
+            hourlyTopSellingItemsReportStartDate.dispose();
+            hourlyTopSellingItemsReportStartDate = new wijmo.input.InputDate('#HourlyTopSellingItemsReport_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('HourlyTopSellingItemsReport_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('HourlyTopSellingItemsReport_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('HourlyTopSellingItemsReport_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getHourlyTopSellingItemsReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Hourly Top Selling Items Report End Date
+        function getHourlyTopSellingItemsReportEndDate() {
+            hourlyTopSellingItemsReportEndDate.dispose();
+            hourlyTopSellingItemsReportEndDate = new wijmo.input.InputDate('#HourlyTopSellingItemsReport_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('HourlyTopSellingItemsReport_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('HourlyTopSellingItemsReport_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('HourlyTopSellingItemsReport_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getHourlyTopSellingItemsReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Chart Monthly Sales Trend Start Date
+        function getChartMonthlySalesTrendStartDate() {
+            chartMonthlySalesTrendStartDate.dispose();
+            chartMonthlySalesTrendStartDate = new wijmo.input.InputDate('#ChartMonthlySalesTrend_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('ChartMonthlySalesTrend_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('ChartMonthlySalesTrend_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('ChartMonthlySalesTrend_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getChartMonthlySalesTrendEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Chart Monthly Sales Trend End Date
+        function getChartMonthlySalesTrendEndDate() {
+            chartMonthlySalesTrendEndDate.dispose();
+            chartMonthlySalesTrendEndDate = new wijmo.input.InputDate('#ChartMonthlySalesTrend_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('ChartMonthlySalesTrend_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('ChartMonthlySalesTrend_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('ChartMonthlySalesTrend_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getChartMonthlySalesTrendStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Chart Monthly Sales Comparison Start Date
+        function getChartMonthlySalesComparisonStartDate() {
+            chartMonthlySalesComparisonStartDate.dispose();
+            chartMonthlySalesComparisonStartDate = new wijmo.input.InputDate('#ChartMonthlySalesComparison_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('ChartMonthlySalesComparison_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('ChartMonthlySalesComparison_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('ChartMonthlySalesComparison_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getChartMonthlySalesComparisonEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Chart Monthly Sales Comparison End Date
+        function getChartMonthlySalesComparisonEndDate() {
+            chartMonthlySalesComparisonEndDate.dispose();
+            chartMonthlySalesComparisonEndDate = new wijmo.input.InputDate('#ChartMonthlySalesComparison_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('ChartMonthlySalesComparison_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('ChartMonthlySalesComparison_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('ChartMonthlySalesComparison_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getChartMonthlySalesComparisonStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Chart Yearly Sales Trend Comparison Start Date
+        function getChartYearlySalesTrendComparisonStartDate() {
+            chartYearlySalesTrendComparisonStartDate.dispose();
+            chartYearlySalesTrendComparisonStartDate = new wijmo.input.InputDate('#ChartYearlySalesTrendComparison_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('ChartYearlySalesTrendComparison_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('ChartYearlySalesTrendComparison_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('ChartYearlySalesTrendComparison_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getChartYearlySalesTrendComparisonEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Chart Yearly Sales Trend Comparison End Date
+        function getChartYearlySalesTrendComparisonEndDate() {
+            chartYearlySalesTrendComparisonEndDate.dispose();
+            chartYearlySalesTrendComparisonEndDate = new wijmo.input.InputDate('#ChartYearlySalesTrendComparison_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('ChartYearlySalesTrendComparison_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('ChartYearlySalesTrendComparison_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('ChartYearlySalesTrendComparison_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getChartYearlySalesTrendComparisonStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Chart Hourly Sales Comparison Start Date
+        function getChartHourlySalesComparisonStartDate() {
+            chartHourlySalesComparisonStartDate.dispose();
+            chartHourlySalesComparisonStartDate = new wijmo.input.InputDate('#ChartHourlySalesComparison_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('ChartHourlySalesComparison_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('ChartHourlySalesComparison_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('ChartHourlySalesComparison_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getChartHourlySalesComparisonEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Chart Hourly Sales Comparison End Date
+        function getChartHourlySalesComparisonEndDate() {
+            chartHourlySalesComparisonEndDate.dispose();
+            chartHourlySalesComparisonEndDate = new wijmo.input.InputDate('#ChartHourlySalesComparison_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('ChartHourlySalesComparison_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('ChartHourlySalesComparison_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('ChartHourlySalesComparison_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getChartHourlySalesComparisonStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Chart Hourly Sales Comparison Amount Start Date
+        function getChartHourlySalesComparisonAmountStartDate() {
+            chartHourlySalesComparisonAmountStartDate.dispose();
+            chartHourlySalesComparisonAmountStartDate = new wijmo.input.InputDate('#ChartHourlySalesComparisonAmount_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('ChartHourlySalesComparisonAmount_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('ChartHourlySalesComparisonAmount_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('ChartHourlySalesComparisonAmount_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getChartHourlySalesComparisonAmountEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Chart Hourly Sales Comparison Amount End Date
+        function getChartHourlySalesComparisonAmountEndDate() {
+            chartHourlySalesComparisonAmountEndDate.dispose();
+            chartHourlySalesComparisonAmountEndDate = new wijmo.input.InputDate('#ChartHourlySalesComparisonAmount_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('ChartHourlySalesComparisonAmount_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('ChartHourlySalesComparisonAmount_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('ChartHourlySalesComparisonAmount_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getChartHourlySalesComparisonAmountStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Chart Category Sold Comparison Amount Start Date
+        function getChartCategorySoldComparisonStartDate() {
+            chartCategorySoldComparisonStartDate.dispose();
+            chartCategorySoldComparisonStartDate = new wijmo.input.InputDate('#ChartCategorySoldComparison_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('ChartCategorySoldComparison_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('ChartCategorySoldComparison_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('ChartCategorySoldComparison_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getChartCategorySoldComparisonEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Chart Category Sold Comparison Amount End Date
+        function getChartCategorySoldComparisonEndDate() {
+            chartCategorySoldComparisonEndDate.dispose();
+            chartCategorySoldComparisonEndDate = new wijmo.input.InputDate('#ChartCategorySoldComparison_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('ChartCategorySoldComparison_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('ChartCategorySoldComparison_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('ChartCategorySoldComparison_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getChartCategorySoldComparisonStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Sales Reward Summary Report Start Date
+        function getSalesRewardSummaryReportStartDate() {
+            salesRewardSummaryReportStartDate.dispose();
+            salesRewardSummaryReportStartDate = new wijmo.input.InputDate('#SalesRewardSummaryReport_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('SalesRewardSummaryReport_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('SalesRewardSummaryReport_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('SalesRewardSummaryReport_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getSalesRewardSummaryReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Sales Reward Summary Report End Date
+        function getSalesRewardSummaryReportEndDate() {
+            salesRewardSummaryReportEndDate.dispose();
+            salesRewardSummaryReportEndDate = new wijmo.input.InputDate('#SalesRewardSummaryReport_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('SalesRewardSummaryReport_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('SalesRewardSummaryReport_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('SalesRewardSummaryReport_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getSalesRewardSummaryReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Sales Status Report Start Date
+        function getSalesStatusReportStartDate() {
+            salesStatusReportStartDate.dispose();
+            salesStatusReportStartDate = new wijmo.input.InputDate('#SalesStatusReport_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('SalesStatusReport_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('SalesStatusReport_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('SalesStatusReport_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getSalesStatusReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Sales Status Report End Date
+        function getSalesStatusReportEndDate() {
+            salesStatusReportEndDate.dispose();
+            salesStatusReportEndDate = new wijmo.input.InputDate('#SalesStatusReport_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('SalesStatusReport_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('SalesStatusReport_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('SalesStatusReport_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getSalesStatusReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Sale Summary Report All Fields Start Date
+        function getSaleSummaryReportAllFieldsStartDate() {
+            saleSummaryReportAllFieldsStartDate.dispose();
+            saleSummaryReportAllFieldsStartDate = new wijmo.input.InputDate('#SaleSummaryReportAllFields_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('SaleSummaryReportAllFields_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('SaleSummaryReportAllFields_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('SaleSummaryReportAllFields_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getSaleSummaryReportAllFieldsEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Sale Summary Report All Fields End Date
+        function getSaleSummaryReportAllFieldsEndDate() {
+            saleSummaryReportAllFieldsEndDate.dispose();
+            saleSummaryReportAllFieldsEndDate = new wijmo.input.InputDate('#SaleSummaryReportAllFields_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('SaleSummaryReportAllFields_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('SaleSummaryReportAllFields_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('SaleSummaryReportAllFields_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getSaleSummaryReportAllFieldsStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Sale Consumption Report Start Date
+        function getSaleConsumptionReportStartDate() {
+            saleConsumptionReportStartDate.dispose();
+            saleConsumptionReportStartDate = new wijmo.input.InputDate('#SaleConsumptionReport_StartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('SaleConsumptionReport_StartDate_data').value),
+                mask: '99-99-9999',
+                max: new Date(document.getElementById('SaleConsumptionReport_EndDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('SaleConsumptionReport_StartDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getSaleConsumptionReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Sale Consumption Report End Date
+        function getSaleConsumptionReportEndDate() {
+            saleConsumptionReportEndDate.dispose();
+            saleConsumptionReportEndDate = new wijmo.input.InputDate('#SaleConsumptionReport_EndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(document.getElementById('SaleConsumptionReport_EndDate_data').value),
+                mask: '99-99-9999',
+                min: new Date(document.getElementById('SaleConsumptionReport_StartDate_data').value),
+                onValueChanged: function () {
+                    var thisDateValue = this.value;
+                    document.getElementById('SaleConsumptionReport_EndDate_data').value = thisDateValue;
+                    setTimeout(function () {
+                        getSaleConsumptionReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
         // ============
         // On Load Page
         // ============
@@ -843,6 +2081,167 @@
 
             getCollectionDetailReportStartDate();
             getCollectionDetailReportEndDate();
+
+            // sales detail report vat sales report
+            document.getElementById('SalesDetailReportVatSales_StartDate_data').value = defaultDate;
+            document.getElementById('SalesDetailReportVatSales_EndDate_data').value = defaultDate;
+
+            salesDetailReportVatSalesStartDate = new wijmo.input.InputDate('#SalesDetailReportVatSales_StartDate');
+            salesDetailReportVatSalesEndDate = new wijmo.input.InputDate('#SalesDetailReportVatSales_EndDate');
+
+            getSalesDetailReportVatSalesStartDate();
+            getSalesDetailReportVatSalesEndDate();
+
+            // cancelled sales summary report
+            document.getElementById('CancelledSalesSummaryReport_StartDate_data').value = defaultDate;
+            document.getElementById('CancelledSalesSummaryReport_EndDate_data').value = defaultDate;
+
+            cancelledSalesSummaryReportStartDate = new wijmo.input.InputDate('#CancelledSalesSummaryReport_StartDate');
+            cancelledSalesSummaryReportEndDate = new wijmo.input.InputDate('#CancelledSalesSummaryReport_EndDate');
+
+            getCancelledSalesSummaryReportStartDate();
+            getCancelledSalesSummaryReportEndDate();
+
+            // Senior Citizen sales summary report
+            document.getElementById('SeniorCitizenSalesSummaryReport_StartDate_data').value = defaultDate;
+            document.getElementById('SeniorCitizenSalesSummaryReport_EndDate_data').value = defaultDate;
+
+            seniorCitizenSalesSummaryReportStartDate = new wijmo.input.InputDate('#SeniorCitizenSalesSummaryReport_StartDate');
+            seniorCitizenSalesSummaryReportEndDate = new wijmo.input.InputDate('#SeniorCitizenSalesSummaryReport_EndDate');
+
+            getSeniorCitizenSalesSummaryReportStartDate();
+            getSeniorCitizenSalesSummaryReportEndDate();
+
+            // top selling item report
+            document.getElementById('TopSellingItemsReport_StartDate_data').value = defaultDate;
+            document.getElementById('TopSellingItemsReport_EndDate_data').value = defaultDate;
+
+            topSellingItemsReportStartDate = new wijmo.input.InputDate('#TopSellingItemsReport_StartDate');
+            topSellingItemsReportEndDate = new wijmo.input.InputDate('#TopSellingItemsReport_EndDate');
+
+            getTopSellingItemsReportStartDate();
+            getTopSellingItemsReportEndDate();
+
+            // Hourly top selling item report
+            document.getElementById('HourlyTopSellingItemsReport_StartDate_data').value = defaultDate;
+            document.getElementById('HourlyTopSellingItemsReport_EndDate_data').value = defaultDate;
+
+            hourlyTopSellingItemsReportStartDate = new wijmo.input.InputDate('#HourlyTopSellingItemsReport_StartDate');
+            hourlyTopSellingItemsReportEndDate = new wijmo.input.InputDate('#HourlyTopSellingItemsReport_EndDate');
+
+            getHourlyTopSellingItemsReportStartDate();
+            getHourlyTopSellingItemsReportEndDate();
+
+            // chart monthly sales trend report
+            document.getElementById('ChartMonthlySalesTrend_StartDate_data').value = defaultDate;
+            document.getElementById('ChartMonthlySalesTrend_EndDate_data').value = defaultDate;
+
+            chartMonthlySalesTrendStartDate = new wijmo.input.InputDate('#ChartMonthlySalesTrend_StartDate');
+            chartMonthlySalesTrendEndDate = new wijmo.input.InputDate('#ChartMonthlySalesTrend_EndDate');
+
+            getChartMonthlySalesTrendStartDate();
+            getChartMonthlySalesTrendEndDate();
+
+            // chart monthly sales comparison report
+            document.getElementById('ChartMonthlySalesComparison_StartDate_data').value = defaultDate;
+            document.getElementById('ChartMonthlySalesComparison_EndDate_data').value = defaultDate;
+
+            chartMonthlySalesComparisonStartDate = new wijmo.input.InputDate('#ChartMonthlySalesComparison_StartDate');
+            chartMonthlySalesComparisonEndDate = new wijmo.input.InputDate('#ChartMonthlySalesComparison_EndDate');
+
+            getChartMonthlySalesComparisonStartDate();
+            getChartMonthlySalesComparisonEndDate();
+
+            // chart yearly sales trend comparison report
+            document.getElementById('ChartYearlySalesTrendComparison_StartDate_data').value = defaultDate;
+            document.getElementById('ChartYearlySalesTrendComparison_EndDate_data').value = defaultDate;
+
+            chartYearlySalesTrendComparisonStartDate = new wijmo.input.InputDate('#ChartYearlySalesTrendComparison_StartDate');
+            chartYearlySalesTrendComparisonEndDate = new wijmo.input.InputDate('#ChartYearlySalesTrendComparison_EndDate');
+
+            getChartYearlySalesTrendComparisonStartDate();
+            getChartYearlySalesTrendComparisonEndDate();
+
+            // chart hourly sales comparison report
+            document.getElementById('ChartHourlySalesComparison_StartDate_data').value = defaultDate;
+            document.getElementById('ChartHourlySalesComparison_EndDate_data').value = defaultDate;
+
+            chartHourlySalesComparisonStartDate = new wijmo.input.InputDate('#ChartHourlySalesComparison_StartDate');
+            chartHourlySalesComparisonEndDate = new wijmo.input.InputDate('#ChartHourlySalesComparison_EndDate');
+
+            getChartHourlySalesComparisonStartDate();
+            getChartHourlySalesComparisonEndDate();
+
+            // chart hourly sales comparison amount report
+            document.getElementById('ChartHourlySalesComparisonAmount_StartDate_data').value = defaultDate;
+            document.getElementById('ChartHourlySalesComparisonAmount_EndDate_data').value = defaultDate;
+
+            chartHourlySalesComparisonAmountStartDate = new wijmo.input.InputDate('#ChartHourlySalesComparisonAmount_StartDate');
+            chartHourlySalesComparisonAmountEndDate = new wijmo.input.InputDate('#ChartHourlySalesComparisonAmount_EndDate');
+
+            getChartHourlySalesComparisonAmountStartDate();
+            getChartHourlySalesComparisonAmountEndDate();
+
+            // chart category sold comparison amount report
+            document.getElementById('ChartCategorySoldComparison_StartDate_data').value = defaultDate;
+            document.getElementById('ChartCategorySoldComparison_EndDate_data').value = defaultDate;
+
+            chartCategorySoldComparisonStartDate = new wijmo.input.InputDate('#ChartCategorySoldComparison_StartDate');
+            chartCategorySoldComparisonEndDate = new wijmo.input.InputDate('#ChartCategorySoldComparison_EndDate');
+
+            getChartCategorySoldComparisonStartDate();
+            getChartCategorySoldComparisonEndDate();
+
+            // sales reward summary report
+            document.getElementById('SalesRewardSummaryReport_StartDate_data').value = defaultDate;
+            document.getElementById('SalesRewardSummaryReport_EndDate_data').value = defaultDate;
+
+            salesRewardSummaryReportStartDate = new wijmo.input.InputDate('#SalesRewardSummaryReport_StartDate');
+            salesRewardSummaryReportEndDate = new wijmo.input.InputDate('#SalesRewardSummaryReport_EndDate');
+
+            getSalesRewardSummaryReportStartDate();
+            getSalesRewardSummaryReportEndDate();
+
+            // sales status report
+            document.getElementById('SalesStatusReport_StartDate_data').value = defaultDate;
+            document.getElementById('SalesStatusReport_EndDate_data').value = defaultDate;
+
+            salesStatusReportStartDate = new wijmo.input.InputDate('#SalesStatusReport_StartDate');
+            salesStatusReportEndDate = new wijmo.input.InputDate('#SalesStatusReport_EndDate');
+
+            getSalesStatusReportStartDate();
+            getSalesStatusReportEndDate();
+
+            // sale summary report all fields
+            document.getElementById('SaleSummaryReportAllFields_StartDate_data').value = defaultDate;
+            document.getElementById('SaleSummaryReportAllFields_EndDate_data').value = defaultDate;
+
+            saleSummaryReportAllFieldsStartDate = new wijmo.input.InputDate('#SaleSummaryReportAllFields_StartDate');
+            saleSummaryReportAllFieldsEndDate = new wijmo.input.InputDate('#SaleSummaryReportAllFields_EndDate');
+
+            getSaleSummaryReportAllFieldsStartDate();
+            getSaleSummaryReportAllFieldsEndDate();
+
+            // sale consumption report all fields
+            document.getElementById('SaleConsumptionReport_StartDate_data').value = defaultDate;
+            document.getElementById('SaleConsumptionReport_EndDate_data').value = defaultDate;
+
+            saleConsumptionReportStartDate = new wijmo.input.InputDate('#SaleConsumptionReport_StartDate');
+            saleConsumptionReportEndDate = new wijmo.input.InputDate('#SaleConsumptionReport_EndDate');
+
+            getSaleConsumptionReportStartDate();
+            getSaleConsumptionReportEndDate();
+        });
+
+        $(window).scroll(function () {
+            // $('#left-wrap').toggleClass('scrolling', $(window).scrollTop() > $('#header').offset().top);
+
+            //can be rewritten long form as:
+            //var scrollPosition, headerOffset, isScrolling;
+            //scrollPosition = $(window).scrollTop();
+            //headerOffset = 145;
+            //isScrolling = scrollPosition > headerOffset;
+            //$('#AR').toggleClass('scrolling', isScrolling);
         });
     </script>
     <script type="text/javascript">
