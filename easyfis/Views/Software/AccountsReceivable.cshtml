@@ -46,7 +46,7 @@
                             <li class="reportDivider"></li>
                             <li><a data-toggle="pill" href="#SSRBSN">Sales Summary Report By Sales No.</a></li>
                             <li class="reportDivider"></li>
-                            <li><a data-toggle="pill" href="#CSR">Cancelled Sales Summary Report</a></li>
+                            <li><a data-toggle="pill" href="#CSSR">Cancelled Sales Summary Report</a></li>
                             <li><a data-toggle="pill" href="#SCSSR">Senior Citizen Sales Summary Report</a></li>
                             <li class="reportDivider"></li>
                             <li><a data-toggle="pill" href="#TSIR">Top Selling Items Report</a></li>
@@ -395,7 +395,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Sales Start No.</label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" class="form-control" id="SalesSummaryReportBySalesNo_StartDate_data" />
+                                                                <input type="text" class="form-control" id="SalesSummaryReportBySalesNoStart_data" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -405,7 +405,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Sales End No.</label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" class="form-control" id="SalesSummaryReportBySalesNo_EndDate_data" />
+                                                                <input type="text" class="form-control" id="SalesSummaryReportBySalesNoEnd_data" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -415,7 +415,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="CSR" class="tab-pane fade">
+                            <div id="CSSR" class="tab-pane fade">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
@@ -1991,6 +1991,49 @@
                     }, 50);
                 }
             });
+        }
+
+        function SalesDetailReportVatSalesView_OnClick() {
+            var startDate = document.getElementById('SalesDetailReportVatSales_StartDate_data').value;
+            var endDate = document.getElementById('SalesDetailReportVatSales_EndDate_data').value;
+
+            window.location.href = '/Software/SalesDetailReportVATSales?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
+        }
+
+        function SalesSummaryReportBySalesNoView_OnClick() {
+            var startNo = document.getElementById('SalesSummaryReportBySalesNoStart_data').value;
+            var endNo = document.getElementById('SalesSummaryReportBySalesNoEnd_data').value;
+
+            window.location.href = '/Software/SalesSummaryReportSalesNo?StartSalesNo=' + startNo + '&EndSalesNo=' + endNo;
+        }
+
+        function CancelledSalesSummaryReportView_OnClick() {
+            var startDate = document.getElementById('CancelledSalesSummaryReport_StartDate_data').value;
+            var endDate = document.getElementById('CancelledSalesSummaryReport_EndDate_data').value;
+
+            window.location.href = '/Software/CancelledSalesSummaryReport?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
+        }
+
+        function SeniorCitizenSalesSummaryReportView_OnClick() {
+            var startDate = document.getElementById('SeniorCitizenSalesSummaryReport_StartDate_data').value;
+            var endDate = document.getElementById('SeniorCitizenSalesSummaryReport_EndDate_data').value;
+
+            window.location.href = '/Software/SeniorCitizenSalesSummaryReport?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
+        }
+
+        function TopSellingItemsReportView_OnClick() {
+            var startDate = document.getElementById('TopSellingItemsReport_StartDate_data').value;
+            var endDate = document.getElementById('TopSellingItemsReport_EndDate_data').value;
+
+            window.location.href = '/Software/TopSellingItemReport?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
+
+        }
+
+        function SaleSummaryReportAllFieldsAllFieldsView_OnClick() {
+            var startDate = document.getElementById('SaleSummaryReportAllFields_StartDate_data').value;
+            var endDate = document.getElementById('SaleSummaryReportAllFields_EndDate_data').value;
+
+            window.location.href = '/Software/SalesSummaryReportAllFields?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
         }
 
         // ============

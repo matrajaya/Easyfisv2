@@ -53,7 +53,7 @@ namespace easyfis.Controllers
 
             return emptyPageName;
         }
-        
+
         public String accessToDetail(String page)
         {
             var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
@@ -122,7 +122,7 @@ namespace easyfis.Controllers
                 {
                     ViewData.Add("CanAccessToDetailPage", "False");
                 }
-               
+
                 return View();
             }
             else
@@ -331,7 +331,7 @@ namespace easyfis.Controllers
                 {
                     ViewData.Add("CanAccessToDetailPage", "False");
                 }
-               
+
                 return View();
             }
             else
@@ -577,7 +577,7 @@ namespace easyfis.Controllers
             {
                 return RedirectToAction("Forbidden", "Software");
             }
-        
+
         }
 
         [Authorize]
@@ -1026,6 +1026,39 @@ namespace easyfis.Controllers
             {
                 return RedirectToAction("Forbidden", "Software");
             }
+        }
+
+        // POS Integration Reports
+        // ================================
+        [Authorize]
+        public ActionResult SalesDetailReportVATSales()
+        {
+            return View();
+        }
+
+        public ActionResult SalesSummaryReportSalesNo()
+        {
+            return View();
+        }
+
+        public ActionResult CancelledSalesSummaryReport()
+        {
+            return View();
+        }
+
+        public ActionResult SeniorCitizenSalesSummaryReport()
+        {
+            return View();
+        }
+
+        public ActionResult TopSellingItemReport()
+        {
+            return View();
+        }
+
+        public ActionResult SalesSummaryReportAllFields()
+        {
+            return View();
         }
     }
 }
