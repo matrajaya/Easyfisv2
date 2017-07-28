@@ -41,7 +41,7 @@
                                 <td style="width: 1%"></td>
                                 <td style="width: 40%" align="right">
                                     @*<button onclick="salesSummaryReportCSV_OnClick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                    <button onclick="salesSummaryReportPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>*@
+                                        <button onclick="salesSummaryReportPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>*@
                                     <a href="/Software/AccountsReceivable" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
                                 </td>
                             </tr>
@@ -138,12 +138,12 @@
                                 PreparedBy: salesSummaryReportResult[i]["PreparedBy"],
                                 CheckedBy: salesSummaryReportResult[i]["CheckedBy"],
                                 ApprovedBy: salesSummaryReportResult[i]["ApprovedBy"],
-                                IsLocked: salesSummaryReportResult[i]["IsLocked"],
-                                CreatedBy: salesSummaryReportResult[i]["CreatedBy"],
-                                CreatedDateTime: salesSummaryReportResult[i]["CreatedDateTime"],
-                                UpdatedBy: salesSummaryReportResult[i]["UpdatedBy"],
-                                UpdatedDateTime: salesSummaryReportResult[i]["UpdatedDateTime"],
-
+                                Item: salesSummaryReportResult[i]["Item"],
+                                ItemInventory: salesSummaryReportResult[i]["ItemInventory"],
+                                Unit: salesSummaryReportResult[i]["Unit"],
+                                Quantity: salesSummaryReportResult[i]["Quantity"],
+                                SalesInvoiceItemAmount: salesSummaryReportResult[i]["SalesInvoiceItemAmount"],
+                                Price: salesSummaryReportResult[i]["Price"]
                             });
 
                             totalAmount += salesSummaryReportResult[i]["Amount"];
@@ -290,12 +290,12 @@
                         "allowSorting": true,
                         "width": 200
                     },
-                      {
-                          "header": "Sold By",
-                          "binding": "SoldBy",
-                          "allowSorting": true,
-                          "width": 200
-                      },
+                    {
+                        "header": "Sold By",
+                        "binding": "SoldBy",
+                        "allowSorting": true,
+                        "width": 200
+                    },
                     {
                         "header": "Term",
                         "binding": "Term",
@@ -363,16 +363,40 @@
                         "width": 150
                     },
                     {
-                        "header": "Approved By",
-                        "binding": "ApprovedBy",
+                        "header": "Item",
+                        "binding": "Item",
+                        "allowSorting": true,
+                        "width": 200
+                    },
+                    {
+                        "header": "InventoryCode",
+                        "binding": "ItemInventory",
+                        "allowSorting": true,
+                        "width": 200
+                    },
+                    {
+                        "header": "Unit",
+                        "binding": "Unit",
+                        "allowSorting": true,
+                        "width": 100
+                    },
+                    {
+                        "header": "Quantity",
+                        "binding": "Quantity",
                         "allowSorting": true,
                         "width": 150
                     },
                     {
-                        "header": "Locked",
-                        "binding": "IsLocked",
+                        "header": "Item Amount",
+                        "binding": "SalesInvoiceItemAmount",
                         "allowSorting": true,
-                        "width": 100
+                        "width": 150
+                    },
+                    {
+                        "header": "Price",
+                        "binding": "Price",
+                        "allowSorting": true,
+                        "width": 150
                     },
                 ],
                 autoGenerateColumns: false,

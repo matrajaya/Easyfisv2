@@ -11,7 +11,7 @@ namespace easyfis.ApiControllers
     public class ApiTopSellingItemsReportController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-        // current branch Id
+
         public Int32 currentBranchId()
         {
             var identityUserId = User.Identity.GetUserId();
@@ -26,31 +26,32 @@ namespace easyfis.ApiControllers
             return amount;
         }
 
-        // list account
         [Authorize]
         [HttpGet]
         [Route("api/topSellingItemsReport/list/{startDate}/{endDate}")]
-        public List<Models.TrnSalesInvoice> listSalesSummaryReport(String startDate, String endDate)
+        public List<Models.TrnSalesInvoiceItem> listTopSellingItemsReport(String startDate, String endDate)
         {
+            var salesInvoiceItem = from d in db.TrnSalesInvoiceItems.OrderByDescending(q => q.Quantity)
+                                   where d.TrnSalesInvoice.BranchId == currentBranchId()
+                                   && d.TrnSalesInvoice.SIDate >= Convert.ToDateTime(startDate)
+                                   && d.TrnSalesInvoice.SIDate <= Convert.ToDateTime(endDate)
+                                   && d.TrnSalesInvoice.IsLocked == true
+                                   select new Models.TrnSalesInvoiceItem
+                                   {
+                                       SIId = d.SIId,
+                                       Id = d.Id,
+                                       SI = d.TrnSalesInvoice.SINumber,
+                                       SIDate = d.TrnSalesInvoice.SIDate.ToShortDateString(),
+                                       Item = d.MstArticle.Article,
+                                       ItemInventory = d.MstArticleInventory.InventoryCode,
+                                       Unit = d.MstUnit.Unit,
+                                       Quantity = d.Quantity,
+                                       Amount = d.Amount,
+                                       Price = d.Price,
+                                       Customer = d.TrnSalesInvoice.MstArticle.Article
+                                   };
 
-            // purchase orders
-            var salesInvoices = from d in db.TrnSalesInvoiceItems.OrderByDescending(q => q.Quantity)
-                                where d.TrnSalesInvoice.BranchId == currentBranchId()
-                                && d.TrnSalesInvoice.SIDate >= Convert.ToDateTime(startDate)
-                                && d.TrnSalesInvoice.SIDate <= Convert.ToDateTime(endDate)
-                                select new Models.TrnSalesInvoice
-                                {
-                                    Id = d.Id,
-                                    Branch = d.TrnSalesInvoice.MstBranch.Branch,
-                                    SINumber = d.TrnSalesInvoice.SINumber,
-                                    SIDate = d.TrnSalesInvoice.SIDate.ToShortDateString(),
-                                    Customer = d.TrnSalesInvoice.MstArticle.Article,
-                                    Remarks = d.TrnSalesInvoice.Remarks,
-                                    SoldBy = d.TrnSalesInvoice.MstUser4.FullName,
-                                    Amount = d.TrnSalesInvoice.Amount
-                                };
-
-            return salesInvoices.ToList();
+            return salesInvoiceItem.ToList();
         }
     }
 }

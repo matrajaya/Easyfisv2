@@ -11,20 +11,18 @@ namespace easyfis.ApiControllers
     public class ApiSalesDetailReportVATSalesController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-        // current branch Id
+
         public Int32 currentBranchId()
         {
             var identityUserId = User.Identity.GetUserId();
             return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
         }
 
-        // list account
         [Authorize]
         [HttpGet]
         [Route("api/salesDetailReport/VATSales/list/{startDate}/{endDate}")]
-        public List<Models.TrnSalesInvoiceItem> listSalesDetailReport(String startDate, String endDate)
+        public List<Models.TrnSalesInvoiceItem> listSalesDetailReportVATSales(String startDate, String endDate)
         {
-            // purchase orders
             var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
                                     where d.TrnSalesInvoice.BranchId == currentBranchId()
                                     && d.TrnSalesInvoice.SIDate >= Convert.ToDateTime(startDate)

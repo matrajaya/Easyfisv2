@@ -11,7 +11,7 @@ namespace easyfis.ApiControllers
     public class ApiSalesSummaryReportSalesNoController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-        // current branch Id
+
         public Int32 currentBranchId()
         {
             var identityUserId = User.Identity.GetUserId();
@@ -26,14 +26,11 @@ namespace easyfis.ApiControllers
             return amount;
         }
 
-        // list account
         [Authorize]
         [HttpGet]
         [Route("api/salesSummaryReportSalesNo/list/{startSalesNo}/{endSalesNo}")]
         public List<Models.TrnSalesInvoice> listSalesSummaryReport(String startSalesNo, String endSalesNo)
         {
-
-            // purchase orders
             var salesInvoices = from d in db.TrnSalesInvoices
                                 where d.BranchId == currentBranchId()
                                 && Convert.ToInt32(d.SINumber) >= Convert.ToInt32(startSalesNo)

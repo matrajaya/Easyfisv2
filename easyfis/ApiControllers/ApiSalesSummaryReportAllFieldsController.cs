@@ -11,7 +11,7 @@ namespace easyfis.ApiControllers
     public class ApiSalesSummaryReportAllFieldsController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-        // current branch Id
+
         public Int32 currentBranchId()
         {
             var identityUserId = User.Identity.GetUserId();
@@ -26,18 +26,16 @@ namespace easyfis.ApiControllers
             return amount;
         }
 
-        // list account
         [Authorize]
         [HttpGet]
         [Route("api/salesSummaryReportAllFields/list/{startDate}/{endDate}")]
         public List<Models.TrnSalesInvoice> listSalesSummaryReport(String startDate, String endDate)
         {
-
-            // purchase orders
             var salesInvoices = from d in db.TrnSalesInvoiceItems
                                 where d.TrnSalesInvoice.BranchId == currentBranchId()
                                 && d.TrnSalesInvoice.SIDate >= Convert.ToDateTime(startDate)
                                 && d.TrnSalesInvoice.SIDate <= Convert.ToDateTime(endDate)
+                                && d.TrnSalesInvoice.IsLocked == true
                                 select new Models.TrnSalesInvoice
                                 {
                                     Id = d.Id,
@@ -57,11 +55,12 @@ namespace easyfis.ApiControllers
                                     PreparedBy = d.TrnSalesInvoice.MstUser3.FullName,
                                     CheckedBy = d.TrnSalesInvoice.MstUser1.FullName,
                                     ApprovedBy = d.TrnSalesInvoice.MstUser.FullName,
-                                    IsLocked = d.TrnSalesInvoice.IsLocked,
-                                    CreatedBy = d.TrnSalesInvoice.MstUser2.FullName,
-                                    CreatedDateTime = d.TrnSalesInvoice.CreatedDateTime.ToShortDateString(),
-                                    UpdatedBy = d.TrnSalesInvoice.MstUser5.FullName,
-                                    UpdatedDateTime = d.TrnSalesInvoice.UpdatedDateTime.ToShortDateString(),
+                                    Item = d.MstArticle.Article,
+                                    ItemInventory = d.MstArticleInventory.InventoryCode,
+                                    Unit = d.MstUnit.Unit,
+                                    Quantity = d.Quantity,
+                                    SalesInvoiceItemAmount = d.Amount,
+                                    Price = d.Price,
                                 };
 
             return salesInvoices.ToList();

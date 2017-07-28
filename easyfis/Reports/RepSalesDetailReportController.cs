@@ -81,7 +81,8 @@ namespace easyfis.Reports
                                         Unit = d.MstUnit.Unit,
                                         Quantity = d.Quantity,
                                         Amount = d.Amount,
-                                        Price = d.Price
+                                        Price = d.Price,
+                                        Customer = d.TrnSalesInvoice.MstArticle.Article
                                     };
 
             Decimal total = 0;
@@ -97,12 +98,13 @@ namespace easyfis.Reports
                 tableBranchHeader.AddCell(branchHeaderColspan);
                 document.Add(tableBranchHeader);
 
-                PdfPTable tableSIItemData = new PdfPTable(8);
-                float[] widthsCellsTableSIItemData = new float[] { 18f, 11f, 30f, 30f, 20f, 20f, 20f, 20f };
+                PdfPTable tableSIItemData = new PdfPTable(9);
+                float[] widthsCellsTableSIItemData = new float[] { 18f, 15f, 30f, 30f, 30f, 20f, 20f, 20f, 20f };
                 tableSIItemData.SetWidths(widthsCellsTableSIItemData);
                 tableSIItemData.WidthPercentage = 100;
                 tableSIItemData.AddCell(new PdfPCell(new Phrase("SI Number", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                 tableSIItemData.AddCell(new PdfPCell(new Phrase("SI Date", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableSIItemData.AddCell(new PdfPCell(new Phrase("Customer", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                 tableSIItemData.AddCell(new PdfPCell(new Phrase("Item", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                 tableSIItemData.AddCell(new PdfPCell(new Phrase("Inventory Code", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                 tableSIItemData.AddCell(new PdfPCell(new Phrase("Price", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
@@ -114,6 +116,7 @@ namespace easyfis.Reports
                 {
                     tableSIItemData.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.SI, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableSIItemData.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.SIDate, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableSIItemData.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Customer, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableSIItemData.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Item, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableSIItemData.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.ItemInventory, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableSIItemData.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Price.ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
@@ -127,10 +130,11 @@ namespace easyfis.Reports
                 document.Add(tableSIItemData);
                 document.Add(Chunk.NEWLINE);
 
-                PdfPTable tableSIItemTotalFooter = new PdfPTable(8);
-                float[] widthsCellsTableSIItemTotalFooter = new float[] { 18f, 11f, 30f, 30f, 20f, 20f, 20f, 20f };
+                PdfPTable tableSIItemTotalFooter = new PdfPTable(9);
+                float[] widthsCellsTableSIItemTotalFooter = new float[] { 18f, 15f, 30f, 30f, 30f, 20f, 20f, 20f, 20f };
                 tableSIItemTotalFooter.SetWidths(widthsCellsTableSIItemTotalFooter);
                 tableSIItemTotalFooter.WidthPercentage = 100;
+                tableSIItemTotalFooter.AddCell(new PdfPCell(new Phrase("", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
                 tableSIItemTotalFooter.AddCell(new PdfPCell(new Phrase("", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
                 tableSIItemTotalFooter.AddCell(new PdfPCell(new Phrase("", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
                 tableSIItemTotalFooter.AddCell(new PdfPCell(new Phrase("", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
@@ -142,7 +146,7 @@ namespace easyfis.Reports
 
                 document.Add(tableSIItemTotalFooter);
             }
-          
+
             // Document End
             document.Close();
 

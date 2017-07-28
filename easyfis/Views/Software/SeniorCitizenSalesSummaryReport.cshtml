@@ -12,7 +12,7 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body>
+<body class="">
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
@@ -40,8 +40,8 @@
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 40%" align="right">
-                                    @*<button onclick="salesSummaryReportCSV_OnClick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                    <button onclick="salesSummaryReportPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>*@
+                                    @*<button onclick="salesDetailReportCSV_OnClick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                        <button onclick="salesDetailReportPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>*@
                                     <a href="/Software/AccountsReceivable" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
                                 </td>
                             </tr>
@@ -63,7 +63,7 @@
                         </table>
                     </div>
                     <div class="panel-body">
-                        <div id="salesSummaryReportGrid" class="grid"></div>
+                        <div id="salesDetailReportGrid" class="grid"></div>
                     </div>
                 </div>
                 <div class="row">
@@ -100,39 +100,42 @@
                 return results[1];
         }
 
-        function salesSummaryReportPDF_OnClick() {
-            window.location.href = '/RepSalesSummaryReport/SalesSummaryReport?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate");
+        function salesDetailReportPDF_OnClick() {
+            window.location.href = '/RepSalesDetailReport/SalesDetailReport?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate");
         }
 
-        function getSalesSummaryReport() {
-            var salesSummaryReport = new wijmo.collections.ObservableArray;
+        function getSalesDetailReport() {
+            var salesDetailReport = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/seniorCitizenSalesSummaryReport/list/' + getParam("StartDate") + '/' + getParam("EndDate"),
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (salesSummaryReportResult) {
-                    if (salesSummaryReportResult.length > 0) {
+                success: function (salesDetailReportResult) {
+                    if (salesDetailReportResult.length > 0) {
                         var totalAmount = 0;
 
-                        for (i = 0; i < salesSummaryReportResult.length; i++) {
-                            var docLink = "/Software/SalesDetail?SalesId=" + salesSummaryReportResult[i]["Id"];
+                        for (i = 0; i < salesDetailReportResult.length; i++) {
+                            var docLink = "/Software/SalesDetail?SalesId=" + salesDetailReportResult[i]["SIId"];
                             // Array Push
-                            salesSummaryReport.push({
-                                Id: salesSummaryReportResult[i]["Id"],
-                                Branch: salesSummaryReportResult[i]["Branch"],
-                                SINumber: salesSummaryReportResult[i]["SINumber"],
-                                SINumberForCSV: "SI-" + salesSummaryReportResult[i]["SINumber"],
-                                SINumberButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + salesSummaryReportResult[i]["SINumber"],
-                                SIDate: salesSummaryReportResult[i]["SIDate"],
-                                Customer: salesSummaryReportResult[i]["Customer"],
-                                Remarks: salesSummaryReportResult[i]["Remarks"],
-                                SoldBy: salesSummaryReportResult[i]["SoldBy"],
-                                Amount: salesSummaryReportResult[i]["Amount"],
+                            salesDetailReport.push({
 
+                                SIId: salesDetailReportResult["SIId"],
+                                Id: salesDetailReportResult[i]["Id"],
+                                SI: salesDetailReportResult[i]["SI"],
+                                SIForCSV: "SI-" + salesDetailReportResult[i]["SI"],
+                                SIButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + salesDetailReportResult[i]["SI"],
+                                SIDate: salesDetailReportResult[i]["SIDate"],
+                                Item: salesDetailReportResult[i]["Item"],
+                                ItemInventory: salesDetailReportResult[i]["ItemInventory"] != null ? salesDetailReportResult[i]["ItemInventory"] : "",
+                                Unit: salesDetailReportResult[i]["Unit"],
+                                Quantity: salesDetailReportResult[i]["Quantity"],
+                                Price: salesDetailReportResult[i]["Price"],
+                                Amount: salesDetailReportResult[i]["Amount"],
+                                Customer: salesDetailReportResult[i]["Customer"],
                             });
 
-                            totalAmount += salesSummaryReportResult[i]["Amount"];
+                            totalAmount += salesDetailReportResult[i]["Amount"];
                         }
 
                         document.getElementById("total").innerHTML = totalAmount.toLocaleString();
@@ -141,26 +144,27 @@
                 }
             });
 
-            return salesSummaryReport;
+            return salesDetailReport;
         }
-        var salesSummaryReportCollection;
+        var salesDetailReportCollection;
 
-        function salesSummaryReportCSV_OnClick() {
+        function salesDetailReportCSV_OnClick() {
 
 
             var CSV = '';
-            var salesSummaryReport = [];
-            var fileName = 'SalesSummaryReport.CSV';
+            var salesDetailReport = [];
+            var fileName = 'SalesDetailReport.CSV';
 
-            for (i = 0; i < salesSummaryReportCollection.items.length; i++) {
-                salesSummaryReport.push({
-                    Branch: salesSummaryReportCollection.items[i].Branch,
-                    SIDate: salesSummaryReportCollection.items[i].SIDate,
-                    SINumber: salesSummaryReportCollection.items[i].SINumberForCSV,
-                    Customer: salesSummaryReportCollection.items[i].Customer,
-                    SoldBy: salesSummaryReportCollection.items[i].SoldBy,
-                    Remarks: salesSummaryReportCollection.items[i].Remarks,
-                    Amount: salesSummaryReportCollection.items[i].Amount,
+            for (i = 0; i < salesDetailReportCollection.items.length; i++) {
+                salesDetailReport.push({
+                    SI: salesDetailReportCollection.items[i].SIForCSV,
+                    SIDate: salesDetailReportCollection.items[i].SIDate,
+                    Item: salesDetailReportCollection.items[i].Item,
+                    ItemInventory: salesDetailReportCollection.items[i].ItemInventory,
+                    Price: salesDetailReportCollection.items[i].Price,
+                    Quantity: salesDetailReportCollection.items[i].Quantity,
+                    Unit: salesDetailReportCollection.items[i].Unit,
+                    Amount: salesDetailReportCollection.items[i].Amount,
 
 
                 });
@@ -171,15 +175,17 @@
             //}
 
             // Rows
+            // Rows
             var Headers = [];
             Headers.push({
 
-                Branch: "Branch",
+                SI: "SI Number",
                 SIDate: "SI Date",
-                SINumber: "SI Number",
-                Customer: "Customer",
-                SoldBy: "Sold By",
-                Remarks: "Remarks",
+                Item: "Item",
+                ItemInventory: "Inventory Code",
+                Price: "Price",
+                Quantity: "Quantity",
+                Unit: "Unit",
                 Amount: "Amount",
 
             });
@@ -189,10 +195,10 @@
                 header += '"' + Headers[0][b] + '",';
             }
             CSV = header + '\r\n';
-            for (var i = 0; i < salesSummaryReport.length; i++) {
+            for (var i = 0; i < salesDetailReport.length; i++) {
                 var row = '';
-                for (var a in salesSummaryReport[i]) {
-                    row += '"' + salesSummaryReport[i][a] + '",';
+                for (var a in salesDetailReport[i]) {
+                    row += '"' + salesDetailReport[i][a] + '",';
                 }
                 row.slice(0, row.length - 1);
                 CSV += row + '\r\n';
@@ -232,31 +238,32 @@
             NProgress.start();
             document.getElementById("dateFrom").value = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
-            salesSummaryReportCollection = new wijmo.collections.CollectionView(getSalesSummaryReport());
-            salesSummaryReportCollection.canFilter = true;
+            salesDetailReportCollection = new wijmo.collections.CollectionView(getSalesDetailReport());
+            salesDetailReportCollection.canFilter = true;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
-                salesSummaryReportCollection.refresh();
+                salesDetailReportCollection.refresh();
             });
-            salesSummaryReportCollection.filter = function (item) {
-                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1)
+            salesDetailReportCollection.filter = function (item) {
+                return !filterText || (item.SI.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
                     || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.SoldBy.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Remarks.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.ItemInventory.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1)
 
             }
             // Flex Grid
-            var salesSummaryReportGrid = new wijmo.grid.FlexGrid('#salesSummaryReportGrid');
-            salesSummaryReportGrid.initialize({
+            var salesDetailReportGrid = new wijmo.grid.FlexGrid('#salesDetailReportGrid');
+            salesDetailReportGrid.initialize({
                 columns: [
                     {
-                        "header": "Branch   ",
-                        "binding": "Branch",
+                        "header": "SI Number ",
+                        "binding": "SIButton",
+                        "isContentHtml": true,
                         "allowSorting": true,
-                        "width": 200
+                        "width": 110,
                     },
                     {
                         "header": "SI Date ",
@@ -265,29 +272,40 @@
                         "width": 100
                     },
                     {
-                        "header": "SI Number",
-                        "binding": "SINumberButton",
-                        "isContentHtml": true,
-                        "allowSorting": true,
-                        "width": 110
-                    },
-                    {
                         "header": "Customer",
                         "binding": "Customer",
                         "allowSorting": true,
                         "width": 200
                     },
                     {
-                        "header": "Sold By",
-                        "binding": "SoldBy",
+                        "header": "Item ",
+                        "binding": "Item",
                         "allowSorting": true,
                         "width": 200
                     },
                     {
-                        "header": "Remarks",
-                        "binding": "Remarks",
+                        "header": "Inventory Code ",
+                        "binding": "ItemInventory",
                         "allowSorting": true,
                         "width": 200
+                    },
+                    {
+                        "header": "Price",
+                        "binding": "Price",
+                        "allowSorting": true,
+                        "width": 150
+                    },
+                    {
+                        "header": "Quantity",
+                        "binding": "Quantity",
+                        "allowSorting": true,
+                        "width": 150
+                    },
+                    {
+                        "header": "Unit",
+                        "binding": "Unit",
+                        "allowSorting": true,
+                        "width": 120
                     },
                     {
                         "header": "Amount",
@@ -297,14 +315,14 @@
                     }
                 ],
                 autoGenerateColumns: false,
-                itemsSource: salesSummaryReportCollection,
+                itemsSource: salesDetailReportCollection,
                 isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
 
-            salesSummaryReportGrid.trackChanges = true;
+            salesDetailReportGrid.trackChanges = true;
         });
     </script>
     <script type="text/javascript">
