@@ -119,20 +119,10 @@
                             var docLink = "/Software/SalesDetail?SalesId=" + salesDetailReportResult[i]["SIId"];
                             // Array Push
                             salesDetailReport.push({
-
-                                SIId: salesDetailReportResult["SIId"],
-                                Id: salesDetailReportResult[i]["Id"],
-                                SI: salesDetailReportResult[i]["SI"],
-                                SIForCSV: "SI-" + salesDetailReportResult[i]["SI"],
-                                SIButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + salesDetailReportResult[i]["SI"],
-                                SIDate: salesDetailReportResult[i]["SIDate"],
                                 Item: salesDetailReportResult[i]["Item"],
-                                ItemInventory: salesDetailReportResult[i]["ItemInventory"] != null ? salesDetailReportResult[i]["ItemInventory"] : "",
-                                Unit: salesDetailReportResult[i]["Unit"],
-                                Quantity: salesDetailReportResult[i]["Quantity"],
-                                Price: salesDetailReportResult[i]["Price"],
-                                Amount: salesDetailReportResult[i]["Amount"],
-                                Customer: salesDetailReportResult[i]["Customer"],
+                                Unit: salesDetailReportResult[i]["BaseUnit"],
+                                Quantity: salesDetailReportResult[i]["BaseQuantity"],
+                                Amount: salesDetailReportResult[i]["Amount"]
                             });
 
                             totalAmount += salesDetailReportResult[i]["Amount"];
@@ -259,53 +249,22 @@
             salesDetailReportGrid.initialize({
                 columns: [
                     {
-                        "header": "SI Number ",
-                        "binding": "SIButton",
-                        "isContentHtml": true,
-                        "allowSorting": true,
-                        "width": 110,
-                    },
-                    {
-                        "header": "SI Date ",
-                        "binding": "SIDate",
-                        "allowSorting": true,
-                        "width": 100
-                    },
-                    {
-                        "header": "Customer",
-                        "binding": "Customer",
-                        "allowSorting": true,
-                        "width": 200
-                    },
-                    {
                         "header": "Item ",
                         "binding": "Item",
                         "allowSorting": true,
-                        "width": 200
+                        "width": 530
                     },
                     {
-                        "header": "Inventory Code ",
-                        "binding": "ItemInventory",
+                        "header": "Unit",
+                        "binding": "Unit",
                         "allowSorting": true,
-                        "width": 200
-                    },
-                    {
-                        "header": "Price",
-                        "binding": "Price",
-                        "allowSorting": true,
-                        "width": 150
+                        "width": 250
                     },
                     {
                         "header": "Quantity",
                         "binding": "Quantity",
                         "allowSorting": true,
                         "width": 150
-                    },
-                    {
-                        "header": "Unit",
-                        "binding": "Unit",
-                        "allowSorting": true,
-                        "width": 120
                     },
                     {
                         "header": "Amount",

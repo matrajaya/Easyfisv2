@@ -31,24 +31,22 @@ namespace easyfis.ApiControllers
         [Route("api/topSellingItemsReport/list/{startDate}/{endDate}")]
         public List<Models.TrnSalesInvoiceItem> listTopSellingItemsReport(String startDate, String endDate)
         {
-            var salesInvoiceItem = from d in db.TrnSalesInvoiceItems.OrderByDescending(q => q.Quantity)
+            var salesInvoiceItem = from d in db.TrnSalesInvoiceItems.OrderByDescending(q => q.BaseQuantity)
                                    where d.TrnSalesInvoice.BranchId == currentBranchId()
                                    && d.TrnSalesInvoice.SIDate >= Convert.ToDateTime(startDate)
                                    && d.TrnSalesInvoice.SIDate <= Convert.ToDateTime(endDate)
                                    && d.TrnSalesInvoice.IsLocked == true
+                                   group d by new
+                                   {
+                                       Item = d.MstArticle.Article,
+                                       BaseUnit = d.MstUnit1.Unit
+                                   } into g
                                    select new Models.TrnSalesInvoiceItem
                                    {
-                                       SIId = d.SIId,
-                                       Id = d.Id,
-                                       SI = d.TrnSalesInvoice.SINumber,
-                                       SIDate = d.TrnSalesInvoice.SIDate.ToShortDateString(),
-                                       Item = d.MstArticle.Article,
-                                       ItemInventory = d.MstArticleInventory.InventoryCode,
-                                       Unit = d.MstUnit.Unit,
-                                       Quantity = d.Quantity,
-                                       Amount = d.Amount,
-                                       Price = d.Price,
-                                       Customer = d.TrnSalesInvoice.MstArticle.Article
+                                       Item = g.Key.Item,
+                                       BaseUnit = g.Key.BaseUnit,
+                                       BaseQuantity = g.Sum(d => d.BaseQuantity),
+                                       Amount = g.Sum(d => d.Amount)
                                    };
 
             return salesInvoiceItem.ToList();
