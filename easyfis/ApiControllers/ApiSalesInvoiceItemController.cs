@@ -172,6 +172,7 @@ namespace easyfis.Controllers
                         {
                             newSaleInvoiceItemPackage.BasePrice = saleItem.Amount;
                         }
+                        newSaleInvoiceItemPackage.SalesItemTimeStamp = DateTime.Now;
                         db.TrnSalesInvoiceItems.InsertOnSubmit(newSaleInvoiceItemPackage);
                         db.SubmitChanges();
 
@@ -277,6 +278,7 @@ namespace easyfis.Controllers
                                 newSaleInvoiceItem.BasePrice = amount;
                             }
 
+                            newSaleInvoiceItem.SalesItemTimeStamp = DateTime.Now;
                             db.TrnSalesInvoiceItems.InsertOnSubmit(newSaleInvoiceItem);
                             db.SubmitChanges();
 
@@ -347,6 +349,7 @@ namespace easyfis.Controllers
                         newSaleInvoiceItem.BasePrice = saleItem.Amount;
                     }
 
+                    newSaleInvoiceItem.SalesItemTimeStamp = DateTime.Now;
                     db.TrnSalesInvoiceItems.InsertOnSubmit(newSaleInvoiceItem);
                     db.SubmitChanges();
 
@@ -428,6 +431,7 @@ namespace easyfis.Controllers
                         updateSalesInvoiceItem.BasePrice = saleItem.Amount;
                     }
 
+                    updateSalesInvoiceItem.SalesItemTimeStamp = DateTime.Now;
                     db.SubmitChanges();
 
                     var salesInvoces = from d in db.TrnSalesInvoices where d.Id == saleItem.SIId select d;

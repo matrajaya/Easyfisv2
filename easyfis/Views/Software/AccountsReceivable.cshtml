@@ -2029,6 +2029,13 @@
 
         }
 
+        function HourlyTopSellingItemsReportView_OnClick() {
+            var startDate = document.getElementById('HourlyTopSellingItemsReport_StartDate_data').value;
+            var endDate = document.getElementById('HourlyTopSellingItemsReport_EndDate_data').value;
+
+            window.location.href = '/Software/HourlyTopSellingItemsReport?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
+        }
+
         function SaleSummaryReportAllFieldsAllFieldsView_OnClick() {
             var startDate = document.getElementById('SaleSummaryReportAllFields_StartDate_data').value;
             var endDate = document.getElementById('SaleSummaryReportAllFields_EndDate_data').value;

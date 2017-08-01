@@ -39,6 +39,11 @@ namespace easyfis.Models
         public String BaseUnit { get; set; }
         public Decimal BaseQuantity { get; set; }
         public Decimal BasePrice { get; set; }
+        public String SalesItemTimeStampDate { get; set; }
+        public String SalesItemTimeStampHour { get; set; }
+        public String SalesItemTimeStampMinutes { get; set; }
+        public String SalesItemTimeStampSeconds { get; set; }
+        public String SalesItemTimeStamp { get; set; }
         public Int32 SalesAccountId { get; set; }
         public Int32 CostAccountId { get; set; }
         public Int32 AccountId { get; set; }

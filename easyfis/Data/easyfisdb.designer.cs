@@ -12994,7 +12994,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem", Storage="_TrnSalesInvoiceItems", ThisKey="Id", OtherKey="UnitId")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem", Storage="_TrnSalesInvoiceItems", ThisKey="Id", OtherKey="BaseUnitId")]
 		public EntitySet<TrnSalesInvoiceItem> TrnSalesInvoiceItems
 		{
 			get
@@ -13007,7 +13007,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem1", Storage="_TrnSalesInvoiceItems1", ThisKey="Id", OtherKey="BaseUnitId")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem1", Storage="_TrnSalesInvoiceItems1", ThisKey="Id", OtherKey="UnitId")]
 		public EntitySet<TrnSalesInvoiceItem> TrnSalesInvoiceItems1
 		{
 			get
@@ -27400,6 +27400,8 @@ namespace easyfis.Data
 		
 		private decimal _BasePrice;
 		
+		private System.Nullable<System.DateTime> _SalesItemTimeStamp;
+		
 		private EntityRef<MstArticle> _MstArticle;
 		
 		private EntityRef<MstArticleInventory> _MstArticleInventory;
@@ -27456,6 +27458,8 @@ namespace easyfis.Data
     partial void OnBaseQuantityChanged();
     partial void OnBasePriceChanging(decimal value);
     partial void OnBasePriceChanged();
+    partial void OnSalesItemTimeStampChanging(System.Nullable<System.DateTime> value);
+    partial void OnSalesItemTimeStampChanged();
     #endregion
 		
 		public TrnSalesInvoiceItem()
@@ -27593,7 +27597,7 @@ namespace easyfis.Data
 			{
 				if ((this._UnitId != value))
 				{
-					if (this._MstUnit.HasLoadedOrAssignedValue)
+					if (this._MstUnit1.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -27825,7 +27829,7 @@ namespace easyfis.Data
 			{
 				if ((this._BaseUnitId != value))
 				{
-					if (this._MstUnit1.HasLoadedOrAssignedValue)
+					if (this._MstUnit.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -27874,6 +27878,26 @@ namespace easyfis.Data
 					this._BasePrice = value;
 					this.SendPropertyChanged("BasePrice");
 					this.OnBasePriceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SalesItemTimeStamp", DbType="DateTime")]
+		public System.Nullable<System.DateTime> SalesItemTimeStamp
+		{
+			get
+			{
+				return this._SalesItemTimeStamp;
+			}
+			set
+			{
+				if ((this._SalesItemTimeStamp != value))
+				{
+					this.OnSalesItemTimeStampChanging(value);
+					this.SendPropertyChanging();
+					this._SalesItemTimeStamp = value;
+					this.SendPropertyChanged("SalesItemTimeStamp");
+					this.OnSalesItemTimeStampChanged();
 				}
 			}
 		}
@@ -28014,7 +28038,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem", Storage="_MstUnit", ThisKey="UnitId", OtherKey="Id", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem", Storage="_MstUnit", ThisKey="BaseUnitId", OtherKey="Id", IsForeignKey=true)]
 		public MstUnit MstUnit
 		{
 			get
@@ -28037,18 +28061,18 @@ namespace easyfis.Data
 					if ((value != null))
 					{
 						value.TrnSalesInvoiceItems.Add(this);
-						this._UnitId = value.Id;
+						this._BaseUnitId = value.Id;
 					}
 					else
 					{
-						this._UnitId = default(int);
+						this._BaseUnitId = default(int);
 					}
 					this.SendPropertyChanged("MstUnit");
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem1", Storage="_MstUnit1", ThisKey="BaseUnitId", OtherKey="Id", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem1", Storage="_MstUnit1", ThisKey="UnitId", OtherKey="Id", IsForeignKey=true)]
 		public MstUnit MstUnit1
 		{
 			get
@@ -28071,18 +28095,18 @@ namespace easyfis.Data
 					if ((value != null))
 					{
 						value.TrnSalesInvoiceItems1.Add(this);
-						this._BaseUnitId = value.Id;
+						this._UnitId = value.Id;
 					}
 					else
 					{
-						this._BaseUnitId = default(int);
+						this._UnitId = default(int);
 					}
 					this.SendPropertyChanged("MstUnit1");
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrnSalesInvoice_TrnSalesInvoiceItem", Storage="_TrnSalesInvoice", ThisKey="SIId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrnSalesInvoice_TrnSalesInvoiceItem", Storage="_TrnSalesInvoice", ThisKey="SIId", OtherKey="Id", IsForeignKey=true)]
 		public TrnSalesInvoice TrnSalesInvoice
 		{
 			get

@@ -511,8 +511,8 @@
       <Association Name="MstUnit_TrnPurchaseOrderItem1" Member="TrnPurchaseOrderItems1" ThisKey="Id" OtherKey="BaseUnitId" Type="TrnPurchaseOrderItem" />
       <Association Name="MstUnit_TrnReceivingReceiptItem" Member="TrnReceivingReceiptItems" ThisKey="Id" OtherKey="UnitId" Type="TrnReceivingReceiptItem" />
       <Association Name="MstUnit_TrnReceivingReceiptItem1" Member="TrnReceivingReceiptItems1" ThisKey="Id" OtherKey="BaseUnitId" Type="TrnReceivingReceiptItem" />
-      <Association Name="MstUnit_TrnSalesInvoiceItem" Member="TrnSalesInvoiceItems" ThisKey="Id" OtherKey="UnitId" Type="TrnSalesInvoiceItem" />
-      <Association Name="MstUnit_TrnSalesInvoiceItem1" Member="TrnSalesInvoiceItems1" ThisKey="Id" OtherKey="BaseUnitId" Type="TrnSalesInvoiceItem" />
+      <Association Name="MstUnit_TrnSalesInvoiceItem" Member="TrnSalesInvoiceItems" ThisKey="Id" OtherKey="BaseUnitId" Type="TrnSalesInvoiceItem" />
+      <Association Name="MstUnit_TrnSalesInvoiceItem1" Member="TrnSalesInvoiceItems1" ThisKey="Id" OtherKey="UnitId" Type="TrnSalesInvoiceItem" />
       <Association Name="MstUnit_TrnStockInItem" Member="TrnStockInItems" ThisKey="Id" OtherKey="UnitId" Type="TrnStockInItem" />
       <Association Name="MstUnit_TrnStockInItem1" Member="TrnStockInItems1" ThisKey="Id" OtherKey="BaseUnitId" Type="TrnStockInItem" />
       <Association Name="MstUnit_TrnStockOutItem" Member="TrnStockOutItems" ThisKey="Id" OtherKey="UnitId" Type="TrnStockOutItem" />
@@ -1073,13 +1073,14 @@
       <Column Name="BaseUnitId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="BaseQuantity" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
       <Column Name="BasePrice" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesItemTimeStamp" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="MstArticle_TrnSalesInvoiceItem" Member="MstArticle" ThisKey="ItemId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
       <Association Name="MstArticleInventory_TrnSalesInvoiceItem" Member="MstArticleInventory" ThisKey="ItemInventoryId" OtherKey="Id" Type="MstArticleInventory" IsForeignKey="true" />
       <Association Name="MstDiscount_TrnSalesInvoiceItem" Member="MstDiscount" ThisKey="DiscountId" OtherKey="Id" Type="MstDiscount" IsForeignKey="true" />
       <Association Name="MstTaxType_TrnSalesInvoiceItem" Member="MstTaxType" ThisKey="VATId" OtherKey="Id" Type="MstTaxType" IsForeignKey="true" />
-      <Association Name="MstUnit_TrnSalesInvoiceItem" Member="MstUnit" ThisKey="UnitId" OtherKey="Id" Type="MstUnit" IsForeignKey="true" />
-      <Association Name="MstUnit_TrnSalesInvoiceItem1" Member="MstUnit1" ThisKey="BaseUnitId" OtherKey="Id" Type="MstUnit" IsForeignKey="true" />
-      <Association Name="TrnSalesInvoice_TrnSalesInvoiceItem" Member="TrnSalesInvoice" ThisKey="SIId" OtherKey="Id" Type="TrnSalesInvoice" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="MstUnit_TrnSalesInvoiceItem" Member="MstUnit" ThisKey="BaseUnitId" OtherKey="Id" Type="MstUnit" IsForeignKey="true" />
+      <Association Name="MstUnit_TrnSalesInvoiceItem1" Member="MstUnit1" ThisKey="UnitId" OtherKey="Id" Type="MstUnit" IsForeignKey="true" />
+      <Association Name="TrnSalesInvoice_TrnSalesInvoiceItem" Member="TrnSalesInvoice" ThisKey="SIId" OtherKey="Id" Type="TrnSalesInvoice" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TrnStockCount" Member="TrnStockCounts">

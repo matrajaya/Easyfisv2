@@ -1036,27 +1036,38 @@ namespace easyfis.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult SalesSummaryReportSalesNo()
         {
             return View();
         }
 
+        [Authorize]
         public ActionResult CancelledSalesSummaryReport()
         {
             return View();
         }
 
+        [Authorize]
         public ActionResult SeniorCitizenSalesSummaryReport()
         {
             return View();
         }
 
+        [Authorize]
         public ActionResult TopSellingItemReport()
         {
             return View();
         }
 
+        [Authorize]
         public ActionResult SalesSummaryReportAllFields()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult HourlyTopSellingItemsReport()
         {
             return View();
         }
