@@ -1071,5 +1071,43 @@ namespace easyfis.Controllers
         {
             return View();
         }
+
+        // charts 
+
+        [Authorize]
+        public ActionResult ChartMonthlySalesTrend()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult ChartMonthlySalesComparison()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult ChartYearlySalesTrendComparison()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult ChartHourlySalesComparison()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult ChartHourlySalesComparisonAmount()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult ChartCategorySoldComparison()
+        {
+            return View();
+        }
     }
 }

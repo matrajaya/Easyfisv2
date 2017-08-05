@@ -27400,7 +27400,7 @@ namespace easyfis.Data
 		
 		private decimal _BasePrice;
 		
-		private System.Nullable<System.DateTime> _SalesItemTimeStamp;
+		private System.DateTime _SalesItemTimeStamp;
 		
 		private EntityRef<MstArticle> _MstArticle;
 		
@@ -27458,7 +27458,7 @@ namespace easyfis.Data
     partial void OnBaseQuantityChanged();
     partial void OnBasePriceChanging(decimal value);
     partial void OnBasePriceChanged();
-    partial void OnSalesItemTimeStampChanging(System.Nullable<System.DateTime> value);
+    partial void OnSalesItemTimeStampChanging(System.DateTime value);
     partial void OnSalesItemTimeStampChanged();
     #endregion
 		
@@ -27882,8 +27882,8 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SalesItemTimeStamp", DbType="DateTime")]
-		public System.Nullable<System.DateTime> SalesItemTimeStamp
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SalesItemTimeStamp", DbType="DateTime NOT NULL")]
+		public System.DateTime SalesItemTimeStamp
 		{
 			get
 			{

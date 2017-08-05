@@ -44,6 +44,7 @@ namespace easyfis.Models
         public String SalesItemTimeStampMinutes { get; set; }
         public String SalesItemTimeStampSeconds { get; set; }
         public String SalesItemTimeStamp { get; set; }
+        public DateTime SalesItemTimeStampDateTime { get; set; }
         public Int32 SalesAccountId { get; set; }
         public Int32 CostAccountId { get; set; }
         public Int32 AccountId { get; set; }

@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using System.Diagnostics;
 
 namespace easyfis.POSIntegrationApiControllers
 {
@@ -109,8 +110,10 @@ namespace easyfis.POSIntegrationApiControllers
                         addSaleInvoiceItemPackage.Amount = salesInvoiceItem.Amount;
                         addSaleInvoiceItemPackage.VATId = salesInvoiceItem.VATId;
                         addSaleInvoiceItemPackage.VATPercentage = salesInvoiceItem.VATPercentage;
-                        addSaleInvoiceItemPackage.VATAmount = salesInvoiceItem.VATAmount;
+                        addSaleInvoiceItemPackage.VATAmount = (salesInvoiceItem.Amount / (1 + (salesInvoiceItem.VATPercentage / 100))) * (salesInvoiceItem.VATPercentage / 100);
                         addSaleInvoiceItemPackage.BaseUnitId = articleComponents.FirstOrDefault().MstArticle.UnitId;
+
+                        Debug.WriteLine("Vat amount Package: " + addSaleInvoiceItemPackage.VATAmount);
 
                         // conversion unit from package item
                         var packageConversionUnit = from d in db.MstArticleUnits
@@ -139,6 +142,7 @@ namespace easyfis.POSIntegrationApiControllers
                             addSaleInvoiceItemPackage.BasePrice = salesInvoiceItem.Amount;
                         }
 
+                        addSaleInvoiceItemPackage.SalesItemTimeStamp = DateTime.Now;
                         db.TrnSalesInvoiceItems.InsertOnSubmit(addSaleInvoiceItemPackage);
                         db.SubmitChanges();
 
@@ -291,6 +295,11 @@ namespace easyfis.POSIntegrationApiControllers
                             // update the sales invoice amount
                             var updateSalesInvoiceAmount = salesInvoice.FirstOrDefault();
                             updateSalesInvoiceAmount.Amount = totalSalesInvoiceItemAmount;
+                            updateSalesInvoiceAmount.BalanceAmount = totalSalesInvoiceItemAmount;
+
+
+                            Debug.WriteLine("Sales Invoice Amount: " + totalSalesInvoiceItemAmount);
+
                             db.SubmitChanges();
                         }
 
@@ -318,7 +327,9 @@ namespace easyfis.POSIntegrationApiControllers
                     addSaleInvoiceItem.Amount = salesInvoiceItem.Amount;
                     addSaleInvoiceItem.VATId = salesInvoiceItem.VATId;
                     addSaleInvoiceItem.VATPercentage = salesInvoiceItem.VATPercentage;
-                    addSaleInvoiceItem.VATAmount = salesInvoiceItem.VATAmount;
+                    addSaleInvoiceItem.VATAmount = (salesInvoiceItem.Amount / (1 + (salesInvoiceItem.VATPercentage / 100))) * (salesInvoiceItem.VATPercentage / 100);
+
+                    Debug.WriteLine("2 Vat  Amount: " + addSaleInvoiceItem.VATAmount);
 
                     // get selected item
                     var item = from d in db.MstArticles
@@ -385,6 +396,10 @@ namespace easyfis.POSIntegrationApiControllers
                         // update the sales invoice amount
                         var updateSalesInvoiceAmount = salesInvoice.FirstOrDefault();
                         updateSalesInvoiceAmount.Amount = totalSalesInvoiceItemAmount;
+                        updateSalesInvoiceAmount.BalanceAmount = totalSalesInvoiceItemAmount;
+
+                        Debug.WriteLine("2 sales invoice Amount: " + totalSalesInvoiceItemAmount);
+
                         db.SubmitChanges();
                     }
 
@@ -488,6 +503,7 @@ namespace easyfis.POSIntegrationApiControllers
                         // update the sales invoice amount
                         var updateSalesInvoiceAmount = salesInvoice.FirstOrDefault();
                         updateSalesInvoiceAmount.Amount = totalSalesInvoiceItemAmount;
+                        updateSalesInvoiceAmount.BalanceAmount = totalSalesInvoiceItemAmount;
                         db.SubmitChanges();
                     }
 
@@ -553,6 +569,7 @@ namespace easyfis.POSIntegrationApiControllers
                         // update the sales invoice amount
                         var updateSalesInvoiceAmount = salesInvoice.FirstOrDefault();
                         updateSalesInvoiceAmount.Amount = totalSalesInvoiceItemAmount;
+                        updateSalesInvoiceAmount.BalanceAmount = totalSalesInvoiceItemAmount;
                         db.SubmitChanges();
                     }
 

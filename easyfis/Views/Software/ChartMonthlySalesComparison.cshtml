@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <!-- Title of the Page -->
+    <link rel="shortcut icon" href="~/Images/icon/easyfislogomini.ico">
+    <title> Chart Monthly Sales Comparison </title>
+
+    <!-- CSS StyleSheets-->
+    @Styles.Render("~/Content/Software-css")
+</head>
+<body class="">
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
+            <section class="content-header">
+                <div class="container">
+                    <h3>
+                        Chart Monthly Sales Comparison
+                    </h3>
+                    <p>
+                        <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
+                        <i class="fa fa-home fa-fw"></i> &nbsp; @ViewData["Branch"]
+                    </p>
+                </div>
+            </section>
+            <section class="container"></section>
+            @Html.Partial("_SoftwareFooter")
+        </main>
+    </div>
+
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
+    @Scripts.Render("~/Scripts/Software-js")
+    <script type="text/javascript">
+
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
+        });
+    </script>
+</body>
+</html>

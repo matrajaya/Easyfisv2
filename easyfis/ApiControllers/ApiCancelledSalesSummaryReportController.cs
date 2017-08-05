@@ -10,8 +10,8 @@ namespace easyfis.ApiControllers
 {
     public class ApiCancelledSalesSummaryReportController : ApiController
     {
-                // list account
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+
         // current branch Id
         public Int32 currentBranchId()
         {

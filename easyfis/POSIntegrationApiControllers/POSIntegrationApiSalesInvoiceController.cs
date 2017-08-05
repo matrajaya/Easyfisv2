@@ -188,7 +188,7 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                 addSaleInvoiceItemPackage.Amount = salesInvoiceItem.Amount;
                                                                                                 addSaleInvoiceItemPackage.VATId = taxes.FirstOrDefault().Id;
                                                                                                 addSaleInvoiceItemPackage.VATPercentage = taxes.FirstOrDefault().TaxRate;
-                                                                                                addSaleInvoiceItemPackage.VATAmount = salesInvoiceItem.VATAmount;
+                                                                                                addSaleInvoiceItemPackage.VATAmount = (salesInvoiceItem.Amount / (1 + (taxes.FirstOrDefault().TaxRate / 100))) * (taxes.FirstOrDefault().TaxRate / 100);
                                                                                                 addSaleInvoiceItemPackage.BaseUnitId = articleComponents.FirstOrDefault().MstArticle.UnitId;
 
                                                                                                 // conversion unit from package item
@@ -218,6 +218,8 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                     addSaleInvoiceItemPackage.BasePrice = salesInvoiceItem.Amount;
                                                                                                 }
 
+
+                                                                                                addSaleInvoiceItemPackage.SalesItemTimeStamp = DateTime.Now;
                                                                                                 db.TrnSalesInvoiceItems.InsertOnSubmit(addSaleInvoiceItemPackage);
                                                                                                 db.SubmitChanges();
 
@@ -353,6 +355,7 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                             addSaleInvoiceItem.BasePrice = amount;
                                                                                                         }
 
+                                                                                                        addSaleInvoiceItem.SalesItemTimeStamp = DateTime.Now;
                                                                                                         db.TrnSalesInvoiceItems.InsertOnSubmit(addSaleInvoiceItem);
                                                                                                         db.SubmitChanges();
                                                                                                     }
@@ -363,12 +366,13 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                     // check if exist
                                                                                                     if (salesInvoiceItems.Any())
                                                                                                     {
-                                                                                                        totalSalesInvoiceItemAmount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
+                                                                                                        totalSalesInvoiceItemAmount = salesInvoiceItems.Sum(d => d.Amount);
                                                                                                     }
 
                                                                                                     // update the sales invoice amount
                                                                                                     var updateSalesInvoiceAmount = salesInvoice.FirstOrDefault();
                                                                                                     updateSalesInvoiceAmount.Amount = totalSalesInvoiceItemAmount;
+                                                                                                    updateSalesInvoiceAmount.BalanceAmount = totalSalesInvoiceItemAmount;
                                                                                                     db.SubmitChanges();
                                                                                                 }
                                                                                             }
@@ -483,7 +487,7 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                             addSaleInvoiceItem.Amount = salesInvoiceItem.Amount;
                                                                                             addSaleInvoiceItem.VATId = taxes.FirstOrDefault().Id;
                                                                                             addSaleInvoiceItem.VATPercentage = taxes.FirstOrDefault().TaxRate;
-                                                                                            addSaleInvoiceItem.VATAmount = salesInvoiceItem.VATAmount;
+                                                                                            addSaleInvoiceItem.VATAmount = (salesInvoiceItem.Amount / (1 + (taxes.FirstOrDefault().TaxRate / 100))) * (taxes.FirstOrDefault().TaxRate / 100); ;
                                                                                             addSaleInvoiceItem.BaseUnitId = items.FirstOrDefault().UnitId;
 
                                                                                             // get selected item conversion unit 
@@ -511,6 +515,7 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                 addSaleInvoiceItem.BasePrice = salesInvoiceItem.Amount;
                                                                                             }
 
+                                                                                            addSaleInvoiceItem.SalesItemTimeStamp = DateTime.Now;
                                                                                             db.TrnSalesInvoiceItems.InsertOnSubmit(addSaleInvoiceItem);
                                                                                             db.SubmitChanges();
 
@@ -538,12 +543,13 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                 // check if exist
                                                                                                 if (salesInvoiceItems.Any())
                                                                                                 {
-                                                                                                    totalSalesInvoiceItemAmount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
+                                                                                                    totalSalesInvoiceItemAmount = salesInvoiceItems.Sum(d => d.Amount);
                                                                                                 }
 
                                                                                                 // update the sales invoice amount
                                                                                                 var updateSalesInvoiceAmount = salesInvoice.FirstOrDefault();
                                                                                                 updateSalesInvoiceAmount.Amount = totalSalesInvoiceItemAmount;
+                                                                                                updateSalesInvoiceAmount.BalanceAmount = totalSalesInvoiceItemAmount;
                                                                                                 db.SubmitChanges();
                                                                                             }
                                                                                         }
