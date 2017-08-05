@@ -60,20 +60,20 @@
                             <li><a data-toggle="pill" href="#CCSC">Chart Category Sold Comparison</a></li>
                             <li class="reportDivider"></li>
                             @*
-                            <li><a data-toggle="pill" href="#SRSR">Sales Reward Summary Report</a></li>*@
+                                <li><a data-toggle="pill" href="#SRSR">Sales Reward Summary Report</a></li>*@
                             @*
-                            <li class="reportDivider"></li>*@
+                                <li class="reportDivider"></li>*@
                             @*
-                            <li><a data-toggle="pill" href="#SSTR">Sales Status Report</a></li>*@
+                                <li><a data-toggle="pill" href="#SSTR">Sales Status Report</a></li>*@
                             @*
-                            <li><a data-toggle="pill" href="#SSTRBSN">Sales Status Report By Sales No.</a></li>*@
+                                <li><a data-toggle="pill" href="#SSTRBSN">Sales Status Report By Sales No.</a></li>*@
                             @*
-                            <li class="reportDivider"></li>*@
+                                <li class="reportDivider"></li>*@
                             <li><a data-toggle="pill" href="#SSRAF">Sales Summary Report (All Fields)</a></li>
                             @*
-                            <li class="reportDivider"></li>*@
+                                <li class="reportDivider"></li>*@
                             @*
-                            <li><a data-toggle="pill" href="#SCR">Sales Consumption Report</a></li>*@
+                                <li><a data-toggle="pill" href="#SCR">Sales Consumption Report</a></li>*@
                         </ul>
                     </div>
                     <div id="col" class="col-md-7">
@@ -1508,7 +1508,7 @@
                 data: {},
                 success: function (results) {
                     if (results.length > 0) {
-                        for (i = 0; i < results.length ; i++) {
+                        for (i = 0; i < results.length; i++) {
                             branch.push({
                                 Id: results[i]["Id"],
                                 Branch: results[i]["Branch"],
@@ -1580,7 +1580,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('salesSummaryReport_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#salesSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#salesSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#salesSummaryReport_Branch_data").val("");
+                                }
                             }
                         });
 
@@ -1642,7 +1646,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('salesDetailReport_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#salesDetailReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#salesDetailReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#salesDetailReport_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -1703,7 +1711,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('collectionSummaryReport_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#collectionSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#collectionSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#collectionSummaryReport_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -1764,7 +1776,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('collectionDetailReport_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#collectionDetailReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#collectionDetailReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#collectionDetailReport_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -1825,7 +1841,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('salesDetailReportVatSales_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#salesDetailReportVatSales_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#salesDetailReportVatSales_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#salesDetailReportVatSales_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -1886,7 +1906,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('salesSummaryReportBySalesNoEnd_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#salesSummaryReportBySalesNoEnd_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#salesSummaryReportBySalesNoEnd_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#salesSummaryReportBySalesNoEnd_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -1947,7 +1971,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('cancelledSalesSummaryReport_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#cancelledSalesSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#cancelledSalesSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#cancelledSalesSummaryReport_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -2008,7 +2036,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('seniorCitizenSalesSummaryReport_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#seniorCitizenSalesSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#seniorCitizenSalesSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#seniorCitizenSalesSummaryReport_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -2069,7 +2101,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('topSellingItemsReport_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#topSellingItemsReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#topSellingItemsReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#topSellingItemsReport_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -2130,7 +2166,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('hourlyTopSellingItemsReport_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#hourlyTopSellingItemsReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#hourlyTopSellingItemsReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#hourlyTopSellingItemsReport_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -2191,7 +2231,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('chartMonthlySalesTrend_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#chartMonthlySalesTrend_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#chartMonthlySalesTrend_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#chartMonthlySalesTrend_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -2252,7 +2296,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('chartMonthlySalesComparison_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#chartMonthlySalesComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#chartMonthlySalesComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#chartMonthlySalesComparison_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -2313,7 +2361,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('chartYearlySalesTrendComparison_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#chartYearlySalesTrendComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#chartYearlySalesTrendComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#chartYearlySalesTrendComparison_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -2374,7 +2426,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('chartHourlySalesComparison_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#chartHourlySalesComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#chartHourlySalesComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#chartHourlySalesComparison_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -2435,7 +2491,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('chartHourlySalesComparisonAmount_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#chartHourlySalesComparisonAmount_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#chartHourlySalesComparisonAmount_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#chartHourlySalesComparisonAmount_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -2496,7 +2556,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('chartCategorySoldComparison_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#chartCategorySoldComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#chartCategorySoldComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#chartCategorySoldComparison_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -2557,7 +2621,11 @@
                             displayMemberPath: "Branch",
                             selectedValue: document.getElementById('salesSummaryReportAllFields_Branch_selectedValue').value.toString(),
                             onSelectedIndexChanged: function () {
-                                $("#salesSummaryReportAllFields_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                if (branchCollection.items[this.selectedIndex] != null) {
+                                    $("#salesSummaryReportAllFields_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                                } else {
+                                    $("#salesSummaryReportAllFields_Branch_data").val("");
+                                }
                             }
                         });
                     }
@@ -2584,7 +2652,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('salesSummaryReport_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#salesSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#salesSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#salesSummaryReport_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2597,7 +2669,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('salesDetailReport_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#salesDetailReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#salesDetailReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#salesDetailReport_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2610,7 +2686,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('collectionSummaryReport_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#collectionSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#collectionSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#collectionSummaryReport_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2623,7 +2703,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('collectionDetailReport_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#collectionDetailReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#collectionDetailReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#collectionDetailReport_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2636,7 +2720,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('salesDetailReportVatSales_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#salesDetailReportVatSales_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#salesDetailReportVatSales_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#salesDetailReportVatSales_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2649,7 +2737,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('salesSummaryReportBySalesNoEnd_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#salesSummaryReportBySalesNoEnd_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#salesSummaryReportBySalesNoEnd_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#salesSummaryReportBySalesNoEnd_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2662,7 +2754,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('cancelledSalesSummaryReport_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#cancelledSalesSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#cancelledSalesSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#cancelledSalesSummaryReport_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2675,7 +2771,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('seniorCitizenSalesSummaryReport_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#seniorCitizenSalesSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#seniorCitizenSalesSummaryReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#seniorCitizenSalesSummaryReport_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2688,7 +2788,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('topSellingItemsReport_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#topSellingItemsReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#topSellingItemsReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#topSellingItemsReport_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2701,7 +2805,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('hourlyTopSellingItemsReport_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#hourlyTopSellingItemsReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#hourlyTopSellingItemsReport_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#hourlyTopSellingItemsReport_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2714,7 +2822,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('chartMonthlySalesTrend_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#chartMonthlySalesTrend_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#chartMonthlySalesTrend_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#chartMonthlySalesTrend_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2727,7 +2839,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('chartMonthlySalesComparison_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#chartMonthlySalesComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#chartMonthlySalesComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#chartMonthlySalesComparison_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2740,7 +2856,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('chartYearlySalesTrendComparison_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#chartYearlySalesTrendComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#chartYearlySalesTrendComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#chartYearlySalesTrendComparison_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2753,7 +2873,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('chartHourlySalesComparison_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#chartHourlySalesComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#chartHourlySalesComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#chartHourlySalesComparison_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2766,7 +2890,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('chartHourlySalesComparisonAmount_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#chartHourlySalesComparisonAmount_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#chartHourlySalesComparisonAmount_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#chartHourlySalesComparisonAmount_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2779,7 +2907,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('chartCategorySoldComparison_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#chartCategorySoldComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#chartCategorySoldComparison_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#chartCategorySoldComparison_Branch_data").val("");
+                    }
                 }
             });
 
@@ -2792,7 +2924,11 @@
                 displayMemberPath: "Branch",
                 selectedValue: document.getElementById('salesSummaryReportAllFields_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#salesSummaryReportAllFields_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    if (branchCollection.items[this.selectedIndex] != null) {
+                        $("#salesSummaryReportAllFields_Branch_data").val(branchCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#salesSummaryReportAllFields_Branch_data").val("");
+                    }
                 }
             });
         }
@@ -2849,7 +2985,11 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('accountReceivableReport_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#accountReceivableReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#accountReceivableReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#accountReceivableReport_Company_data").val("");
+                    }
                 }
             });
 
@@ -2862,7 +3002,11 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('accountReceivableSummaryReport_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#accountReceivableSummaryReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#accountReceivableSummaryReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#accountReceivableSummaryReport_Company_data").val("");
+                    }
                 }
             });
 
@@ -2875,7 +3019,11 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('StatementOfTheAccount_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#StatementOfTheAccount_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#StatementOfTheAccount_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                    } else {
+                        $("#StatementOfTheAccount_Company_data").val("");
+                    }
                 }
             });
 
@@ -2888,8 +3036,13 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('salesSummaryReport_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#salesSummaryReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    salesSummaryReportBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#salesSummaryReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        salesSummaryReportBranchListFunction();
+                    } else {
+                        $("#salesSummaryReport_Company_data").val("");
+                        salesSummaryReportBranchListFunction();
+                    }
                 }
             });
 
@@ -2902,8 +3055,13 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('salesDetailReport_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#salesDetailReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    salesDetailReporBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#salesDetailReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        salesDetailReporBranchListFunction();
+                    } else {
+                        $("#salesDetailReport_Company_data").val("");
+                        salesDetailReporBranchListFunction();
+                    }
                 }
             });
 
@@ -2916,8 +3074,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('collectionSummaryReport_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#collectionSummaryReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    collectionSummaryReportBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#collectionSummaryReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        collectionSummaryReportBranchListFunction();
+                    } else {
+                        collectionSummaryReportBranchListFunction();
+                    }
                 }
             });
 
@@ -2930,8 +3092,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('collectionDetailReport_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#collectionDetailReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    collectionDetailReportBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#collectionDetailReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        collectionDetailReportBranchListFunction();
+                    } else {
+                        collectionDetailReportBranchListFunction();
+                    }
                 }
             });
 
@@ -2944,8 +3110,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('salesDetailReportVatSales_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#salesDetailReportVatSales_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    salesDetailReportVatSalesBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#salesDetailReportVatSales_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        salesDetailReportVatSalesBranchListFunction();
+                    } else {
+                        salesDetailReportVatSalesBranchListFunction();
+                    }
                 }
             });
 
@@ -2958,8 +3128,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('salesSummaryReportBySalesNoEnd_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#salesSummaryReportBySalesNoEnd_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    salesSummaryReportBySalesNoEndBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#salesDetailReportVatSales_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        salesSummaryReportBySalesNoEndBranchListFunction();
+                    } else {
+                        salesSummaryReportBySalesNoEndBranchListFunction();
+                    }
                 }
             });
 
@@ -2972,8 +3146,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('cancelledSalesSummaryReport_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#cancelledSalesSummaryReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    cancelledSalesSummaryReportBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#cancelledSalesSummaryReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        cancelledSalesSummaryReportBranchListFunction();
+                    } else {
+                        cancelledSalesSummaryReportBranchListFunction();
+                    }
                 }
             });
 
@@ -2986,8 +3164,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('seniorCitizenSalesSummaryReport_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#seniorCitizenSalesSummaryReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    seniorCitizenSalesSummaryReportBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#seniorCitizenSalesSummaryReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        seniorCitizenSalesSummaryReportBranchListFunction();
+                    } else {
+                        seniorCitizenSalesSummaryReportBranchListFunction();
+                    }
                 }
             });
 
@@ -3000,8 +3182,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('topSellingItemsReport_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#topSellingItemsReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    topSellingItemsReportBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#topSellingItemsReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        topSellingItemsReportBranchListFunction();
+                    } else {
+                        topSellingItemsReportBranchListFunction();
+                    }
                 }
             });
 
@@ -3014,8 +3200,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('hourlyTopSellingItemsReport_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#hourlyTopSellingItemsReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    hourlyTopSellingItemsReportBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#hourlyTopSellingItemsReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        hourlyTopSellingItemsReportBranchListFunction();
+                    } else {
+                        hourlyTopSellingItemsReportBranchListFunction();
+                    }
                 }
             });
 
@@ -3028,8 +3218,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('chartMonthlySalesTrend_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#chartMonthlySalesTrend_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    chartMonthlySalesTrendBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#chartMonthlySalesTrend_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        chartMonthlySalesTrendBranchListFunction();
+                    } else {
+                        chartMonthlySalesTrendBranchListFunction();
+                    }
                 }
             });
 
@@ -3042,8 +3236,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('chartMonthlySalesComparison_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#chartMonthlySalesComparison_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    chartMonthlySalesComparisonBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#chartMonthlySalesComparison_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        chartMonthlySalesComparisonBranchListFunction();
+                    } else {
+                        chartMonthlySalesComparisonBranchListFunction();
+                    }
                 }
             });
 
@@ -3056,8 +3254,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('chartYearlySalesTrendComparison_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#chartYearlySalesTrendComparison_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    chartYearlySalesTrendComparisonBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#chartYearlySalesTrendComparison_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        chartYearlySalesTrendComparisonBranchListFunction();
+                    } else {
+                        chartYearlySalesTrendComparisonBranchListFunction();
+                    }
                 }
             });
 
@@ -3070,8 +3272,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('chartHourlySalesComparison_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#chartHourlySalesComparison_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    chartHourlySalesComparisonBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#chartHourlySalesComparison_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        chartHourlySalesComparisonBranchListFunction();
+                    } else {
+                        chartHourlySalesComparisonBranchListFunction();
+                    }
                 }
             });
 
@@ -3084,8 +3290,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('chartHourlySalesComparisonAmount_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#chartHourlySalesComparisonAmount_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    chartHourlySalesComparisonAmountBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#chartHourlySalesComparisonAmount_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        chartHourlySalesComparisonAmountBranchListFunction();
+                    } else {
+                        chartHourlySalesComparisonAmountBranchListFunction();
+                    }
                 }
             });
 
@@ -3098,8 +3308,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('chartCategorySoldComparison_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#chartCategorySoldComparison_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    chartCategorySoldComparisonBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#chartCategorySoldComparison_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        chartCategorySoldComparisonBranchListFunction();
+                    } else {
+                        chartCategorySoldComparisonBranchListFunction();
+                    }
                 }
             });
 
@@ -3112,8 +3326,12 @@
                 displayMemberPath: "Company",
                 selectedValue: document.getElementById('salesSummaryReportAllFields_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#salesSummaryReportAllFields_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                    salesSummaryReportAllFieldsBranchListFunction();
+                    if (companyCollection.items[this.selectedIndex] != null) {
+                        $("#salesSummaryReportAllFields_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        salesSummaryReportAllFieldsBranchListFunction();
+                    } else {
+                        salesSummaryReportAllFieldsBranchListFunction();
+                    }
                 }
             });
         }
@@ -3284,7 +3502,22 @@
             var saleSummaryReportStartDate = document.getElementById('SaleSummaryReport_StartDate_data').value;
             var saleSummaryReportEndDate = document.getElementById('SaleSummaryReport_EndDate_data').value;
 
-            window.location.href = '/Software/SalesSummaryReport?StartDate=' + convertDateToShortDateString(saleSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(saleSummaryReportEndDate);
+            var companyId = document.getElementById('salesSummaryReport_Company_data').value;
+            var branchId = document.getElementById('salesSummaryReport_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('salesSummaryReport_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('salesSummaryReport_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/Software/SalesSummaryReport?StartDate=' + convertDateToShortDateString(saleSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(saleSummaryReportEndDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('salesSummaryReport_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('salesSummaryReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         // get Sale Detail Report Start Date

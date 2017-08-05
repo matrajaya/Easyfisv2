@@ -29,12 +29,13 @@ namespace easyfis.ApiControllers
         // list account
         [Authorize]
         [HttpGet]
-        [Route("api/salesSummaryReport/list/{startDate}/{endDate}")]
-        public List<Models.TrnSalesInvoice> listSalesSummaryReport(String startDate, String endDate)
+        [Route("api/salesSummaryReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnSalesInvoice> listSalesSummaryReport(String startDate, String endDate, String companyId, String branchId)
         {
             // purchase orders
             var salesInvoices = from d in db.TrnSalesInvoices
-                                where d.BranchId == currentBranchId()
+                                where d.MstBranch.CompanyId == Convert.ToInt32(companyId)
+                                && d.BranchId == Convert.ToInt32(branchId)
                                 && d.SIDate >= Convert.ToDateTime(startDate)
                                 && d.SIDate <= Convert.ToDateTime(endDate)
                                 && d.IsLocked == true
