@@ -19,7 +19,7 @@
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Sales Summary Report 
+                        Sales Summary Report
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -86,18 +86,21 @@
         </main>
     </div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
+    <div id="c-mask" class="c-mask"></div>
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
+        var salesSummaryReportCollection;
+
         function getParam(name) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
             var regexS = "[\\?&]" + name + "=([^&#]*)";
             var regex = new RegExp(regexS);
             var results = regex.exec(window.location.href);
-            if (results == null)
+            if (results == null) {
                 return "";
-            else
+            } else {
                 return results[1];
+            }
         }
 
         function salesSummaryReportPDF_OnClick() {
@@ -117,10 +120,8 @@
 
                         for (i = 0; i < salesSummaryReportResult.length; i++) {
                             var docLink = "/Software/SalesDetail?SalesId=" + salesSummaryReportResult[i]["Id"];
-                            // Array Push
+
                             salesSummaryReport.push({
-
-
                                 Id: salesSummaryReportResult[i]["Id"],
                                 Branch: salesSummaryReportResult[i]["Branch"],
                                 SINumber: salesSummaryReportResult[i]["SINumber"],
@@ -130,9 +131,7 @@
                                 Customer: salesSummaryReportResult[i]["Customer"],
                                 Remarks: salesSummaryReportResult[i]["Remarks"],
                                 SoldBy: salesSummaryReportResult[i]["SoldBy"],
-
                                 Amount: salesSummaryReportResult[i]["Amount"],
-
                             });
 
                             totalAmount += salesSummaryReportResult[i]["Amount"];
@@ -140,17 +139,15 @@
 
                         document.getElementById("total").innerHTML = totalAmount.toLocaleString();
                     }
+
                     NProgress.done();
                 }
             });
 
             return salesSummaryReport;
         }
-        var salesSummaryReportCollection;
 
         function salesSummaryReportCSV_OnClick() {
-
-
             var CSV = '';
             var salesSummaryReport = [];
             var fileName = 'SalesSummaryReport.CSV';
@@ -164,19 +161,11 @@
                     SoldBy: salesSummaryReportCollection.items[i].SoldBy,
                     Remarks: salesSummaryReportCollection.items[i].Remarks,
                     Amount: salesSummaryReportCollection.items[i].Amount,
-
-
                 });
             }
 
-            //for (var i = 0; i < symbols.length; i++) {
-            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
-            //}
-
-            // Rows
             var Headers = [];
             Headers.push({
-
                 Branch: "Branch",
                 SIDate: "SI Date",
                 SINumber: "SI Number",
@@ -184,19 +173,21 @@
                 SoldBy: "Sold By",
                 Remarks: "Remarks",
                 Amount: "Amount",
-
             });
 
             var header = '';
             for (var b in Headers[0]) {
                 header += '"' + Headers[0][b] + '",';
             }
+
             CSV = header + '\r\n';
             for (var i = 0; i < salesSummaryReport.length; i++) {
                 var row = '';
+
                 for (var a in salesSummaryReport[i]) {
                     row += '"' + salesSummaryReport[i][a] + '",';
                 }
+
                 row.slice(0, row.length - 1);
                 CSV += row + '\r\n';
             }
@@ -231,8 +222,9 @@
             }
         }
 
-        $(document).ready(function () {
+        window.onload = function () {
             NProgress.start();
+
             document.getElementById("dateFrom").value = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
             salesSummaryReportCollection = new wijmo.collections.CollectionView(getSalesSummaryReport());
@@ -243,14 +235,15 @@
                 filterText = this.value.toLowerCase();
                 salesSummaryReportCollection.refresh();
             });
+
             salesSummaryReportCollection.filter = function (item) {
                 return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
                     || !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1)
                     || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
                     || !filterText || (item.SoldBy.toLowerCase().indexOf(filterText) > -1)
                     || !filterText || (item.Remarks.toLowerCase().indexOf(filterText) > -1)
-
             }
+
             // Flex Grid
             var salesSummaryReportGrid = new wijmo.grid.FlexGrid('#salesSummaryReportGrid');
             salesSummaryReportGrid.initialize({
@@ -308,7 +301,7 @@
             });
 
             salesSummaryReportGrid.trackChanges = true;
-        });
+        }
     </script>
     <script type="text/javascript">
         var slideLeft = new Menu({

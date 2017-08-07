@@ -107,7 +107,7 @@
         function getSalesDetailReport() {
             var salesDetailReport = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/seniorCitizenSalesSummaryReport/list/' + getParam("StartDate") + '/' + getParam("EndDate"),
+                url: '/api/seniorCitizenSalesSummaryReport/list/' + getParam("StartDate") + '/' + getParam("EndDate") + '/' + getParam("CompanyId") + '/' + getParam("BranchId"),
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',

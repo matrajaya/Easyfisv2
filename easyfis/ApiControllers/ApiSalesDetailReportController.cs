@@ -11,24 +11,13 @@ namespace easyfis.ApiControllers
     public class ApiSalesDetailReportController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-        // current branch Id
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
 
-       
-
-        // list account
-        [Authorize]
-        [HttpGet]
-        [Route("api/salesDetailReport/list/{startDate}/{endDate}")]
-        public List<Models.TrnSalesInvoiceItem> listSalesDetailReport(String startDate, String endDate)
+        [Authorize, HttpGet, Route("api/salesDetailReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnSalesInvoiceItem> listSalesDetailReport(String startDate, String endDate, String companyId, String branchId)
         {
-            // purchase orders
             var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
-                                    where d.TrnSalesInvoice.BranchId == currentBranchId()
+                                    where d.TrnSalesInvoice.BranchId == Convert.ToInt32(branchId)
+                                    && d.TrnSalesInvoice.MstBranch.CompanyId == Convert.ToInt32(companyId)
                                     && d.TrnSalesInvoice.SIDate >= Convert.ToDateTime(startDate)
                                     && d.TrnSalesInvoice.SIDate <= Convert.ToDateTime(endDate)
                                     && d.TrnSalesInvoice.IsLocked == true

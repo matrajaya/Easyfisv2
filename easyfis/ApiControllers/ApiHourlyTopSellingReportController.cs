@@ -10,24 +10,14 @@ namespace easyfis.ApiControllers
 {
     public class ApiHourlyTopSellingReportController : ApiController
     {
-        // data
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // current branch Id
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
-
-        // list hourly top items selling report
-        [Authorize]
-        [HttpGet]
-        [Route("api/hourlyTopItemsSellingReport/list/{startDate}/{endDate}")]
-        public List<Models.TrnSalesInvoiceItem> listHourlyTopItemsSellingReport(String startDate, String endDate)
+        [Authorize, HttpGet, Route("api/hourlyTopItemsSellingReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnSalesInvoiceItem> listHourlyTopItemsSellingReport(String startDate, String endDate, String companyId, String branchId)
         {
             var salesInvoiceItems = from d in db.TrnSalesInvoiceItems.OrderByDescending(d => d.Quantity)
-                                    where d.TrnSalesInvoice.BranchId == currentBranchId()
+                                    where d.TrnSalesInvoice.BranchId == Convert.ToInt32(branchId)
+                                    && d.TrnSalesInvoice.MstBranch.CompanyId == Convert.ToInt32(companyId)
                                     && d.TrnSalesInvoice.SIDate >= Convert.ToDateTime(startDate)
                                     && d.TrnSalesInvoice.SIDate <= Convert.ToDateTime(endDate)
                                     && d.TrnSalesInvoice.IsLocked == true

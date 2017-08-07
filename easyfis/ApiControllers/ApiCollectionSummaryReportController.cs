@@ -11,34 +11,28 @@ namespace easyfis.ApiControllers
     public class ApiCollectionSummaryReportController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-        // current branch Id
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
 
         public Decimal getAmount(Int32 id)
         {
-            var collectionLines = from d in db.TrnCollectionLines where d.ORId == id select d;
+            var collectionLines = from d in db.TrnCollectionLines
+                                  where d.ORId == id
+                                  select d;
+
             Decimal amount = 0;
             if (collectionLines.Any())
             {
                 amount = collectionLines.Sum(d => d.Amount);
             }
-            
+
             return amount;
         }
 
-        // list account
-        [Authorize]
-        [HttpGet]
-        [Route("api/collectionSummaryReport/list/{startDate}/{endDate}")]
-        public List<Models.TrnCollection> listCollectionSummaryReport(String startDate, String endDate)
+        [Authorize, HttpGet, Route("api/collectionSummaryReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnCollection> listCollectionSummaryReport(String startDate, String endDate, String companyId, String branchId)
         {
-            // purchase orders
             var collections = from d in db.TrnCollections
-                              where d.BranchId == currentBranchId()
+                              where d.BranchId == Convert.ToInt32(branchId)
+                              && d.MstBranch.CompanyId == Convert.ToInt32(companyId)
                               && d.ORDate >= Convert.ToDateTime(startDate)
                               && d.ORDate <= Convert.ToDateTime(endDate)
                               && d.IsLocked == true

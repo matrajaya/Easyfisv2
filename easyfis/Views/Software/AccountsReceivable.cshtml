@@ -3129,7 +3129,7 @@
                 selectedValue: document.getElementById('salesSummaryReportBySalesNoEnd_Company_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     if (companyCollection.items[this.selectedIndex] != null) {
-                        $("#salesDetailReportVatSales_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                        $("#salesSummaryReportBySalesNoEnd_Company_data").val(companyCollection.items[this.selectedIndex].Id);
                         salesSummaryReportBySalesNoEndBranchListFunction();
                     } else {
                         salesSummaryReportBySalesNoEndBranchListFunction();
@@ -3569,7 +3569,22 @@
             var saleDetailReportStartDate = document.getElementById('SaleDetailReport_StartDate_data').value;
             var saleDetailReportEndDate = document.getElementById('SaleDetailReport_EndDate_data').value;
 
-            window.location.href = '/Software/SalesDetailReport?StartDate=' + convertDateToShortDateString(saleDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(saleDetailReportEndDate);
+            var companyId = document.getElementById('salesDetailReport_Company_data').value;
+            var branchId = document.getElementById('salesDetailReport_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('salesDetailReport_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('salesDetailReport_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/Software/SalesDetailReport?StartDate=' + convertDateToShortDateString(saleDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(saleDetailReportEndDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('salesDetailReport_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('salesDetailReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         // get Collection Summary Report Start Date
@@ -3621,7 +3636,22 @@
             var collectionSummaryReportStartDate = document.getElementById('CollectionSummaryReport_StartDate_data').value;
             var collectionSummaryReportEndDate = document.getElementById('CollectionSummaryReport_EndDate_data').value;
 
-            window.location.href = '/Software/CollectionSummaryReport?StartDate=' + convertDateToShortDateString(collectionSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(collectionSummaryReportEndDate);
+            var companyId = document.getElementById('collectionSummaryReport_Company_data').value;
+            var branchId = document.getElementById('collectionSummaryReport_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('collectionSummaryReport_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('collectionSummaryReport_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/Software/CollectionSummaryReport?StartDate=' + convertDateToShortDateString(collectionSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(collectionSummaryReportEndDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('collectionSummaryReport_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('collectionSummaryReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         // get Collection Detail Report Start Date
@@ -3673,7 +3703,22 @@
             var collectionDetailReportStartDate = document.getElementById('CollectionDetailReport_StartDate_data').value;
             var collectionDetailReportEndDate = document.getElementById('CollectionDetailReport_EndDate_data').value;
 
-            window.location.href = '/Software/CollectionDetailReport?StartDate=' + convertDateToShortDateString(collectionDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(collectionDetailReportEndDate);
+            var companyId = document.getElementById('collectionDetailReport_Company_data').value;
+            var branchId = document.getElementById('collectionDetailReport_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('collectionDetailReport_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('collectionDetailReport_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/Software/CollectionDetailReport?StartDate=' + convertDateToShortDateString(collectionDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(collectionDetailReportEndDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('collectionDetailReport_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('collectionDetailReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         function convertDateToShortDateString(theDate) {
@@ -4226,50 +4271,154 @@
             var startDate = document.getElementById('SalesDetailReportVatSales_StartDate_data').value;
             var endDate = document.getElementById('SalesDetailReportVatSales_EndDate_data').value;
 
-            window.location.href = '/Software/SalesDetailReportVATSales?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
+            var companyId = document.getElementById('salesDetailReportVatSales_Company_data').value;
+            var branchId = document.getElementById('salesDetailReportVatSales_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('salesDetailReportVatSales_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('salesDetailReportVatSales_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/Software/SalesDetailReportVATSales?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('salesDetailReportVatSales_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('salesDetailReportVatSales_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         function SalesSummaryReportBySalesNoView_OnClick() {
             var startNo = document.getElementById('SalesSummaryReportBySalesNoStart_data').value;
             var endNo = document.getElementById('SalesSummaryReportBySalesNoEnd_data').value;
 
-            window.location.href = '/Software/SalesSummaryReportSalesNo?StartSalesNo=' + startNo + '&EndSalesNo=' + endNo;
+            var companyId = document.getElementById('salesSummaryReportBySalesNoEnd_Company_data').value;
+            var branchId = document.getElementById('salesSummaryReportBySalesNoEnd_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('salesSummaryReportBySalesNoEnd_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('salesSummaryReportBySalesNoEnd_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/Software/SalesSummaryReportSalesNo?StartSalesNo=' + startNo + '&EndSalesNo=' + endNo + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('salesSummaryReportBySalesNoEnd_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('salesSummaryReportBySalesNoEnd_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         function CancelledSalesSummaryReportView_OnClick() {
             var startDate = document.getElementById('CancelledSalesSummaryReport_StartDate_data').value;
             var endDate = document.getElementById('CancelledSalesSummaryReport_EndDate_data').value;
 
-            window.location.href = '/Software/CancelledSalesSummaryReport?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
+            var companyId = document.getElementById('cancelledSalesSummaryReport_Company_data').value;
+            var branchId = document.getElementById('cancelledSalesSummaryReport_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('cancelledSalesSummaryReport_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('cancelledSalesSummaryReport_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/Software/CancelledSalesSummaryReport?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('cancelledSalesSummaryReport_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('cancelledSalesSummaryReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         function SeniorCitizenSalesSummaryReportView_OnClick() {
             var startDate = document.getElementById('SeniorCitizenSalesSummaryReport_StartDate_data').value;
             var endDate = document.getElementById('SeniorCitizenSalesSummaryReport_EndDate_data').value;
 
-            window.location.href = '/Software/SeniorCitizenSalesSummaryReport?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
+            var companyId = document.getElementById('seniorCitizenSalesSummaryReport_Company_data').value;
+            var branchId = document.getElementById('seniorCitizenSalesSummaryReport_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('seniorCitizenSalesSummaryReport_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('seniorCitizenSalesSummaryReport_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/Software/SeniorCitizenSalesSummaryReport?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('seniorCitizenSalesSummaryReport_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('seniorCitizenSalesSummaryReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         function TopSellingItemsReportView_OnClick() {
             var startDate = document.getElementById('TopSellingItemsReport_StartDate_data').value;
             var endDate = document.getElementById('TopSellingItemsReport_EndDate_data').value;
 
-            window.location.href = '/Software/TopSellingItemReport?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
+            var companyId = document.getElementById('topSellingItemsReport_Company_data').value;
+            var branchId = document.getElementById('topSellingItemsReport_Branch_data').value;
 
+            if (companyId != "") {
+                document.getElementById('topSellingItemsReport_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('topSellingItemsReport_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/Software/TopSellingItemReport?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('topSellingItemsReport_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('topSellingItemsReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         function HourlyTopSellingItemsReportView_OnClick() {
             var startDate = document.getElementById('HourlyTopSellingItemsReport_StartDate_data').value;
             var endDate = document.getElementById('HourlyTopSellingItemsReport_EndDate_data').value;
 
-            window.location.href = '/Software/HourlyTopSellingItemsReport?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
+            var companyId = document.getElementById('hourlyTopSellingItemsReport_Company_data').value;
+            var branchId = document.getElementById('hourlyTopSellingItemsReport_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('hourlyTopSellingItemsReport_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('hourlyTopSellingItemsReport_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/Software/HourlyTopSellingItemsReport?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('hourlyTopSellingItemsReport_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('hourlyTopSellingItemsReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         function SaleSummaryReportAllFieldsAllFieldsView_OnClick() {
             var startDate = document.getElementById('SaleSummaryReportAllFields_StartDate_data').value;
             var endDate = document.getElementById('SaleSummaryReportAllFields_EndDate_data').value;
 
-            window.location.href = '/Software/SalesSummaryReportAllFields?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
+            var companyId = document.getElementById('salesSummaryReportAllFields_Company_data').value;
+            var branchId = document.getElementById('salesSummaryReportAllFields_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('salesSummaryReportAllFields_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('salesSummaryReportAllFields_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/Software/SalesSummaryReportAllFields?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('salesSummaryReportAllFields_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('salesSummaryReportAllFields_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         // charts

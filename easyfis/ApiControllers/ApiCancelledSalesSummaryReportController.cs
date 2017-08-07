@@ -12,34 +12,15 @@ namespace easyfis.ApiControllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // current branch Id
-        public Int32 currentBranchId()
+        [Authorize, HttpGet, Route("api/cancelledSalesSummaryReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnSalesInvoice> listSalesSummaryReport(String startDate, String endDate, String companyId, String branchId)
         {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
-
-        public Decimal getAmount(Int32 id)
-        {
-            var purchaseOrderItems = from d in db.TrnPurchaseOrderItems where d.POId == id select d;
-            Decimal amount = purchaseOrderItems.Sum(d => d.Amount);
-
-            return amount;
-        }
-
-        // list account
-        [Authorize]
-        [HttpGet]
-        [Route("api/cancelledSalesSummaryReport/list/{startDate}/{endDate}")]
-        public List<Models.TrnSalesInvoice> listSalesSummaryReport(String startDate, String endDate)
-        {
-
-            // purchase orders
             var salesInvoices = from d in db.TrnSalesInvoices
-                                where d.BranchId == currentBranchId()
+                                where d.BranchId == Convert.ToInt32(branchId)
+                                && d.MstBranch.CompanyId == Convert.ToInt32(companyId)
                                 && d.SIDate >= Convert.ToDateTime(startDate)
                                 && d.SIDate <= Convert.ToDateTime(endDate)
-                                && d.IsLocked != true 
+                                && d.IsLocked != true
                                 select new Models.TrnSalesInvoice
                                 {
                                     Id = d.Id,

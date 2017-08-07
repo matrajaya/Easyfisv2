@@ -11,28 +11,10 @@ namespace easyfis.ApiControllers
     public class ApiSalesSummaryReportController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-        // current branch Id
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
 
-        public Decimal getAmount(Int32 id)
-        {
-            var purchaseOrderItems = from d in db.TrnPurchaseOrderItems where d.POId == id select d;
-            Decimal amount = purchaseOrderItems.Sum(d => d.Amount);
-
-            return amount;
-        }
-
-        // list account
-        [Authorize]
-        [HttpGet]
-        [Route("api/salesSummaryReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        [Authorize, HttpGet, Route("api/salesSummaryReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
         public List<Models.TrnSalesInvoice> listSalesSummaryReport(String startDate, String endDate, String companyId, String branchId)
         {
-            // purchase orders
             var salesInvoices = from d in db.TrnSalesInvoices
                                 where d.MstBranch.CompanyId == Convert.ToInt32(companyId)
                                 && d.BranchId == Convert.ToInt32(branchId)

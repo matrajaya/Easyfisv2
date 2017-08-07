@@ -12,27 +12,12 @@ namespace easyfis.ApiControllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
-
-        public Decimal getAmount(Int32 id)
-        {
-            var purchaseOrderItems = from d in db.TrnPurchaseOrderItems where d.POId == id select d;
-            Decimal amount = purchaseOrderItems.Sum(d => d.Amount);
-
-            return amount;
-        }
-
-        [Authorize]
-        [HttpGet]
-        [Route("api/seniorCitizenSalesSummaryReport/list/{startDate}/{endDate}")]
-        public List<Models.TrnSalesInvoiceItem> listSalesSummaryReport(String startDate, String endDate)
+        [Authorize, HttpGet, Route("api/seniorCitizenSalesSummaryReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnSalesInvoiceItem> listSalesSummaryReport(String startDate, String endDate, String companyId, String branchId)
         {
             var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
-                                    where d.TrnSalesInvoice.BranchId == currentBranchId()
+                                    where d.TrnSalesInvoice.BranchId == Convert.ToInt32(branchId)
+                                    && d.TrnSalesInvoice.MstBranch.CompanyId == Convert.ToInt32(companyId)
                                     && d.TrnSalesInvoice.SIDate >= Convert.ToDateTime(startDate)
                                     && d.TrnSalesInvoice.SIDate <= Convert.ToDateTime(endDate)
                                     && d.MstDiscount.Discount.Equals("Senior Citizen Discount")

@@ -27,6 +27,7 @@ namespace easyfis.ApiControllers
                                     select new Models.TrnSalesInvoiceItem
                                     {
                                         SalesItemTimeStampDateTime = new DateTime(d.SalesItemTimeStamp.Year, d.SalesItemTimeStamp.Month, d.SalesItemTimeStamp.Day),
+                                        SalesItemTimeStamp = (d.SalesItemTimeStamp.Month + "/" + d.SalesItemTimeStamp.Year).ToString(),
                                         Amount = d.Amount
                                     };
 
@@ -35,7 +36,7 @@ namespace easyfis.ApiControllers
                                         && d.SalesItemTimeStampDateTime <= Convert.ToDateTime(endDate)
                                         group d by new
                                         {
-                                            SalesItemTimeStamp = d.SalesItemTimeStampDateTime.ToShortDateString()
+                                            SalesItemTimeStamp = d.SalesItemTimeStamp
                                         }
                                         into g
                                         select new Models.TrnSalesInvoiceItem

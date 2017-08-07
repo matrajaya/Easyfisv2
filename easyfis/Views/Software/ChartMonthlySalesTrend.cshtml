@@ -28,33 +28,65 @@
                 </div>
             </section>
             <section class="container">
-                <div id="chartTypes"></div>
-                <select id="typeMenu">
-                    <option value="0" selected="selected">Column</option>
-                    <option value="1">Bar</option>
-                    <option value="2">Scatter</option>
-                    <option value="3">Line</option>
-                    <option value="4">LineSymbols</option>
-                    <option value="5">Area</option>
-                    <option value="9">Spline</option>
-                    <option value="10">SplineSymbols</option>
-                    <option value="11">SplineArea</option>
-                </select>
-                <select id="stackingMenu">
-                    <option value="0" selected="selected">None</option>
-                    <option value="1">Stacked</option>
-                    <option value="2">Stacked 100%</option>
-                </select>
-                <select id="rotatedMenu">
-                    <option value="false" selected="selected">False</option>
-                    <option value="true">True</option>
-                </select>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 29%">
+                                    <select id="typeMenu">
+                                        <option value="0" selected="selected">Column</option>
+                                        <option value="1">Bar</option>
+                                        <option value="2">Scatter</option>
+                                        <option value="3">Line</option>
+                                        <option value="4">LineSymbols</option>
+                                        <option value="5">Area</option>
+                                        <option value="9">Spline</option>
+                                        <option value="10">SplineSymbols</option>
+                                        <option value="11">SplineArea</option>
+                                    </select>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 29%">
+                                    <select id="stackingMenu">
+                                        <option value="0" selected="selected">None</option>
+                                        <option value="1">Stacked</option>
+                                        <option value="2">Stacked 100%</option>
+                                    </select>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 29%">
+                                    <select id="rotatedMenu">
+                                        <option value="false" selected="selected">False</option>
+                                        <option value="true">True</option>
+                                    </select>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 10%" align="right">
+                                    <a href="/Software/AccountsReceivable" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <div id="chartTypes"></div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <b>
+                            Data
+                        </b>
+                    </div>
+                    <div class="panel-body">
+                        <div id="dataGrid"></div>
+                    </div>
+                </div>
             </section>
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         var salesItemCollectionView;
@@ -103,14 +135,44 @@
             return salesItemDataObservableArray;
         }
 
+        function updateMenuHeader(menu, prefix) {
+            menu.header = '<b>' + prefix + '</b>: ' + menu.text;
+        }
+
         window.onload = function () {
             salesItemCollectionView = new wijmo.collections.CollectionView(getSalesItemData());
+
+            var dataGrid = new wijmo.grid.FlexGrid('#dataGrid');
+            dataGrid.initialize({
+                columns: [
+                    {
+                        "header": "Month",
+                        "binding": "SalesItemTimeStamp",
+                        "allowSorting": true,
+                        "width": "*"
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "Amount",
+                        "allowSorting": true,
+                        "width": "*"
+                    }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: salesItemCollectionView,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            dataGrid.trackChanges = true;
 
             chartTypes.initialize({
                 itemsSource: salesItemCollectionView,
                 bindingX: 'SalesItemTimeStamp',
                 series: [
-                    { name: 'Amount', binding: 'Amount' },
+                    { name: 'Sales Amount', binding: 'Amount' },
                 ]
             });
 
@@ -121,10 +183,7 @@
 
             typeMenu.selectedIndexChanged.addHandler(function () {
                 if (typeMenu.selectedValue) {
-                    // update FlexChart's chartType
                     chartTypes.chartType = parseInt(typeMenu.selectedValue);
-
-                    // update menu header
                     updateMenuHeader(typeMenu, 'Chart Type');
                 }
             });
@@ -142,10 +201,6 @@
                     updateMenuHeader(rotatedMenu, 'Rotated');
                 }
             });
-
-            function updateMenuHeader(menu, prefix) {
-                menu.header = '<b>' + prefix + '</b>: ' + menu.text;
-            }
         }
     </script>
     <script type="text/javascript">

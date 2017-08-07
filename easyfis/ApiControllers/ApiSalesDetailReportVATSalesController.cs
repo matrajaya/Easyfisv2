@@ -12,19 +12,12 @@ namespace easyfis.ApiControllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
-
-        [Authorize]
-        [HttpGet]
-        [Route("api/salesDetailReport/VATSales/list/{startDate}/{endDate}")]
-        public List<Models.TrnSalesInvoiceItem> listSalesDetailReportVATSales(String startDate, String endDate)
+        [Authorize, HttpGet, Route("api/salesDetailReport/VATSales/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnSalesInvoiceItem> listSalesDetailReportVATSales(String startDate, String endDate, String companyId, String branchId)
         {
             var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
-                                    where d.TrnSalesInvoice.BranchId == currentBranchId()
+                                    where d.TrnSalesInvoice.BranchId == Convert.ToInt32(branchId)
+                                    && d.TrnSalesInvoice.MstBranch.CompanyId == Convert.ToInt32(companyId)
                                     && d.TrnSalesInvoice.SIDate >= Convert.ToDateTime(startDate)
                                     && d.TrnSalesInvoice.SIDate <= Convert.ToDateTime(endDate)
                                     && d.TrnSalesInvoice.IsLocked == true

@@ -108,7 +108,7 @@
         function getCollectionDetailReport() {
             var collectionDetailReport = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/collectionDetailReport/list/' + getParam("StartDate") + '/' + getParam("EndDate"),
+                url: '/api/collectionDetailReport/list/' + getParam("StartDate") + '/' + getParam("EndDate") + '/' + getParam("CompanyId") + '/' + getParam("BranchId"),
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
