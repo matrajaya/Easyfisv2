@@ -1,15 +1,10 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-    <!-- Title of the Page -->
     <link rel="shortcut icon" href="~/Images/icon/easyfislogomini.ico">
     <title>Accounts Receivable</title>
-
-    <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
 <body class="">
@@ -1406,12 +1401,9 @@
         </main>
     </div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
+    <div id="c-mask" class="c-mask"></div>
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
-        // ================
-        // Global Variables
-        // ================
         var accountsReceivableDateAsOf;
         var accountsReceivableSummaryDateAsOf;
         var StatementOfTheAccountDateAsOf;
@@ -1495,9 +1487,6 @@
         var saleConsumptionReportStartDate;
         var saleConsumptionReportEndDate;
 
-        // ===========
-        // Get Branch
-        // ===========
         function getBranch() {
             branch = new wijmo.collections.ObservableArray();
             $.ajax({
@@ -1524,9 +1513,6 @@
             });
         }
 
-        // ======================
-        // Recall Function Branch
-        // ======================
         function salesSummaryReportBranchListFunction() {
             branch = new wijmo.collections.ObservableArray();
             $.ajax({
@@ -2933,9 +2919,6 @@
             });
         }
 
-        // ===========
-        // Get company
-        // ===========
         function getCompanies() {
             companies = new wijmo.collections.ObservableArray();
             $.ajax({
@@ -2963,9 +2946,6 @@
             return companies;
         }
 
-        // ===================
-        // Company - Combo Box
-        // ===================
         function createCboComapny(companies) {
             var companyCollection = new wijmo.collections.CollectionView(companies);
             var companyList = new Array();
@@ -3336,9 +3316,6 @@
             });
         }
 
-        // ============
-        // GET Customer
-        // ============
         function getCustomers() {
             customers = new wijmo.collections.ObservableArray();
             $.ajax({
@@ -3362,9 +3339,6 @@
             return customers;
         }
 
-        // ======================
-        // Combo Box for Customer
-        // ======================
         function createCboCustomer(customers) {
             var customerCollection = new wijmo.collections.CollectionView(customers);
             var customerList = new Array();
@@ -3453,7 +3427,7 @@
             }
         }
 
-        // get Sale Summary Report Start Date
+        // get Sale Summary Report Dates
         function getSaleSummaryReportStartDate() {
             saleSummaryReportStartDate.dispose();
             saleSummaryReportStartDate = new wijmo.input.InputDate('#SaleSummaryReport_StartDate', {
@@ -3471,7 +3445,6 @@
             });
         }
 
-        // get Sale Summary Report End Date
         function getSaleSummaryReportEndDate() {
             saleSummaryReportEndDate.dispose();
             saleSummaryReportEndDate = new wijmo.input.InputDate('#SaleSummaryReport_EndDate', {
@@ -3489,7 +3462,7 @@
             });
         }
 
-        // sale summary report on click
+        // sale summary report - PDF & View
         function SaleSummaryReportPDF_OnClick() {
             var saleSummaryReportStartDate = document.getElementById('SaleSummaryReport_StartDate_data').value;
             var saleSummaryReportEndDate = document.getElementById('SaleSummaryReport_EndDate_data').value;
@@ -3512,7 +3485,6 @@
             }
         }
 
-        // sale summary report on click
         function SaleSummaryReportView_OnClick() {
             var saleSummaryReportStartDate = document.getElementById('SaleSummaryReport_StartDate_data').value;
             var saleSummaryReportEndDate = document.getElementById('SaleSummaryReport_EndDate_data').value;
@@ -3535,7 +3507,7 @@
             }
         }
 
-        // get Sale Detail Report Start Date
+        // get Sale Detail Report Dates
         function getSaleDetailReportStartDate() {
             saleDetailReportStartDate.dispose();
             saleDetailReportStartDate = new wijmo.input.InputDate('#SaleDetailReport_StartDate', {
@@ -3553,7 +3525,6 @@
             });
         }
 
-        // get Sale Detail Report End Date
         function getSaleDetailReportEndDate() {
             saleDetailReportEndDate.dispose();
             saleDetailReportEndDate = new wijmo.input.InputDate('#SaleDetailReport_EndDate', {
@@ -3571,7 +3542,7 @@
             });
         }
 
-        // sale detial report on click
+        // sale detial report - PDF & View
         function SaleDetailReportPDF_OnClick() {
             var saleDetailReportStartDate = document.getElementById('SaleDetailReport_StartDate_data').value;
             var saleDetailReportEndDate = document.getElementById('SaleDetailReport_EndDate_data').value;
@@ -3594,7 +3565,6 @@
             }
         }
 
-        // sale detail report on click
         function SaleDetailReportView_OnClick() {
             var saleDetailReportStartDate = document.getElementById('SaleDetailReport_StartDate_data').value;
             var saleDetailReportEndDate = document.getElementById('SaleDetailReport_EndDate_data').value;
@@ -3617,7 +3587,7 @@
             }
         }
 
-        // get Collection Summary Report Start Date
+        // get Collection Summary Report Dates
         function getCollectionSummaryReportStartDate() {
             collectionSummaryReportStartDate.dispose();
             collectionSummaryReportStartDate = new wijmo.input.InputDate('#CollectionSummaryReport_StartDate', {
@@ -3635,7 +3605,6 @@
             });
         }
 
-        // get Collection Summary Report End Date
         function getCollectionSummaryReportEndDate() {
             collectionSummaryReportEndDate.dispose();
             collectionSummaryReportEndDate = new wijmo.input.InputDate('#CollectionSummaryReport_EndDate', {
@@ -3653,7 +3622,7 @@
             });
         }
 
-        // collection summary report on click
+        // collection summary report - PDF & View
         function CollectionSummaryReportPDF_OnClick() {
             var collectionSummaryReportStartDate = document.getElementById('CollectionSummaryReport_StartDate_data').value;
             var collectionSummaryReportEndDate = document.getElementById('CollectionSummaryReport_EndDate_data').value;
@@ -3676,7 +3645,6 @@
             }
         }
 
-        // collection summary report on click
         function CollectionSummaryReportView_OnClick() {
             var collectionSummaryReportStartDate = document.getElementById('CollectionSummaryReport_StartDate_data').value;
             var collectionSummaryReportEndDate = document.getElementById('CollectionSummaryReport_EndDate_data').value;
@@ -3699,7 +3667,7 @@
             }
         }
 
-        // get Collection Detail Report Start Date
+        // get Collection Detail Report Dates
         function getCollectionDetailReportStartDate() {
             collectionDetailReportStartDate.dispose();
             collectionDetailReportStartDate = new wijmo.input.InputDate('#CollectionDetailReport_StartDate', {
@@ -3717,7 +3685,6 @@
             });
         }
 
-        // get Collection Detail Report End Date
         function getCollectionDetailReportEndDate() {
             collectionDetailReportEndDate.dispose();
             collectionDetailReportEndDate = new wijmo.input.InputDate('#CollectionDetailReport_EndDate', {
@@ -3735,7 +3702,7 @@
             });
         }
 
-        // collection detail report on click
+        // collection detail report - PDF & View
         function CollectionDetailReportPDF_OnClick() {
             var collectionDetailReportStartDate = document.getElementById('CollectionDetailReport_StartDate_data').value;
             var collectionDetailReportEndDate = document.getElementById('CollectionDetailReport_EndDate_data').value;
@@ -3758,7 +3725,6 @@
             }
         }
 
-        // collection detail report on click
         function CollectionDetailReportView_OnClick() {
             var collectionDetailReportStartDate = document.getElementById('CollectionDetailReport_StartDate_data').value;
             var collectionDetailReportEndDate = document.getElementById('CollectionDetailReport_EndDate_data').value;
@@ -3786,7 +3752,7 @@
             return [theDate.getFullYear(), theDate.getMonth() + 1, theDate.getDate()].join('-');
         }
 
-        // get Sales Detail Report Vat Sales Start Date
+        // get Sales Detail Report Vat Sales Dates
         function getSalesDetailReportVatSalesStartDate() {
             salesDetailReportVatSalesStartDate.dispose();
             salesDetailReportVatSalesStartDate = new wijmo.input.InputDate('#SalesDetailReportVatSales_StartDate', {
@@ -3804,7 +3770,6 @@
             });
         }
 
-        // get Sales Detail Report Vat Sales End Date
         function getSalesDetailReportVatSalesEndDate() {
             salesDetailReportVatSalesEndDate.dispose();
             salesDetailReportVatSalesEndDate = new wijmo.input.InputDate('#SalesDetailReportVatSales_EndDate', {
@@ -3822,7 +3787,7 @@
             });
         }
 
-        // get Cancelled Sales Summary Report Start Date
+        // get Cancelled Sales Summary Report Dates
         function getCancelledSalesSummaryReportStartDate() {
             cancelledSalesSummaryReportStartDate.dispose();
             cancelledSalesSummaryReportStartDate = new wijmo.input.InputDate('#CancelledSalesSummaryReport_StartDate', {
@@ -3840,7 +3805,6 @@
             });
         }
 
-        // get Cancelled Sales Summary Report End Date
         function getCancelledSalesSummaryReportEndDate() {
             cancelledSalesSummaryReportEndDate.dispose();
             cancelledSalesSummaryReportEndDate = new wijmo.input.InputDate('#CancelledSalesSummaryReport_EndDate', {
@@ -3858,7 +3822,7 @@
             });
         }
 
-        // get Senior Citizen Sales Summary Report Start Date
+        // get Senior Citizen Sales Summary Report Dates
         function getSeniorCitizenSalesSummaryReportStartDate() {
             seniorCitizenSalesSummaryReportStartDate.dispose();
             seniorCitizenSalesSummaryReportStartDate = new wijmo.input.InputDate('#SeniorCitizenSalesSummaryReport_StartDate', {
@@ -3876,7 +3840,6 @@
             });
         }
 
-        // get Senior Citizen Sales Summary Report End Date
         function getSeniorCitizenSalesSummaryReportEndDate() {
             seniorCitizenSalesSummaryReportEndDate.dispose();
             seniorCitizenSalesSummaryReportEndDate = new wijmo.input.InputDate('#SeniorCitizenSalesSummaryReport_EndDate', {
@@ -3894,8 +3857,7 @@
             });
         }
 
-
-        // get Top Selling Items Report Start Date
+        // get Top Selling Items Report Dates
         function getTopSellingItemsReportStartDate() {
             topSellingItemsReportStartDate.dispose();
             topSellingItemsReportStartDate = new wijmo.input.InputDate('#TopSellingItemsReport_StartDate', {
@@ -3913,7 +3875,6 @@
             });
         }
 
-        // get Top Selling Items Report End Date
         function getTopSellingItemsReportEndDate() {
             topSellingItemsReportEndDate.dispose();
             topSellingItemsReportEndDate = new wijmo.input.InputDate('#TopSellingItemsReport_EndDate', {
@@ -3931,7 +3892,7 @@
             });
         }
 
-        // get Hourly Top Selling Items Report Start Date
+        // get Hourly Top Selling Items Report Dates
         function getHourlyTopSellingItemsReportStartDate() {
             hourlyTopSellingItemsReportStartDate.dispose();
             hourlyTopSellingItemsReportStartDate = new wijmo.input.InputDate('#HourlyTopSellingItemsReport_StartDate', {
@@ -3949,7 +3910,6 @@
             });
         }
 
-        // get Hourly Top Selling Items Report End Date
         function getHourlyTopSellingItemsReportEndDate() {
             hourlyTopSellingItemsReportEndDate.dispose();
             hourlyTopSellingItemsReportEndDate = new wijmo.input.InputDate('#HourlyTopSellingItemsReport_EndDate', {
@@ -3967,7 +3927,7 @@
             });
         }
 
-        // get Chart Monthly Sales Trend Start Date
+        // get Chart Monthly Sales Trend Dates
         function getChartMonthlySalesTrendStartDate() {
             chartMonthlySalesTrendStartDate.dispose();
             chartMonthlySalesTrendStartDate = new wijmo.input.InputDate('#ChartMonthlySalesTrend_StartDate', {
@@ -3985,7 +3945,6 @@
             });
         }
 
-        // get Chart Monthly Sales Trend End Date
         function getChartMonthlySalesTrendEndDate() {
             chartMonthlySalesTrendEndDate.dispose();
             chartMonthlySalesTrendEndDate = new wijmo.input.InputDate('#ChartMonthlySalesTrend_EndDate', {
@@ -4003,7 +3962,7 @@
             });
         }
 
-        // get Chart Monthly Sales Comparison Start Date
+        // get Chart Monthly Sales Comparison Dates
         function getChartMonthlySalesComparisonStartDate() {
             chartMonthlySalesComparisonStartDate.dispose();
             chartMonthlySalesComparisonStartDate = new wijmo.input.InputDate('#ChartMonthlySalesComparison_StartDate', {
@@ -4021,7 +3980,6 @@
             });
         }
 
-        // get Chart Monthly Sales Comparison End Date
         function getChartMonthlySalesComparisonEndDate() {
             chartMonthlySalesComparisonEndDate.dispose();
             chartMonthlySalesComparisonEndDate = new wijmo.input.InputDate('#ChartMonthlySalesComparison_EndDate', {
@@ -4039,7 +3997,7 @@
             });
         }
 
-        // get Chart Yearly Sales Trend Comparison Start Date
+        // get Chart Yearly Sales Trend Comparison Dates
         function getChartYearlySalesTrendComparisonStartDate() {
             chartYearlySalesTrendComparisonStartDate.dispose();
             chartYearlySalesTrendComparisonStartDate = new wijmo.input.InputDate('#ChartYearlySalesTrendComparison_StartDate', {
@@ -4057,7 +4015,6 @@
             });
         }
 
-        // get Chart Yearly Sales Trend Comparison End Date
         function getChartYearlySalesTrendComparisonEndDate() {
             chartYearlySalesTrendComparisonEndDate.dispose();
             chartYearlySalesTrendComparisonEndDate = new wijmo.input.InputDate('#ChartYearlySalesTrendComparison_EndDate', {
@@ -4075,7 +4032,7 @@
             });
         }
 
-        // get Chart Hourly Sales Comparison Start Date
+        // get Chart Hourly Sales Comparison Dates
         function getChartHourlySalesComparisonStartDate() {
             chartHourlySalesComparisonStartDate.dispose();
             chartHourlySalesComparisonStartDate = new wijmo.input.InputDate('#ChartHourlySalesComparison_StartDate', {
@@ -4093,7 +4050,6 @@
             });
         }
 
-        // get Chart Hourly Sales Comparison End Date
         function getChartHourlySalesComparisonEndDate() {
             chartHourlySalesComparisonEndDate.dispose();
             chartHourlySalesComparisonEndDate = new wijmo.input.InputDate('#ChartHourlySalesComparison_EndDate', {
@@ -4111,7 +4067,7 @@
             });
         }
 
-        // get Chart Hourly Sales Comparison Amount Start Date
+        // get Chart Hourly Sales Comparison Amount Dates
         function getChartHourlySalesComparisonAmountStartDate() {
             chartHourlySalesComparisonAmountStartDate.dispose();
             chartHourlySalesComparisonAmountStartDate = new wijmo.input.InputDate('#ChartHourlySalesComparisonAmount_StartDate', {
@@ -4129,7 +4085,6 @@
             });
         }
 
-        // get Chart Hourly Sales Comparison Amount End Date
         function getChartHourlySalesComparisonAmountEndDate() {
             chartHourlySalesComparisonAmountEndDate.dispose();
             chartHourlySalesComparisonAmountEndDate = new wijmo.input.InputDate('#ChartHourlySalesComparisonAmount_EndDate', {
@@ -4147,7 +4102,7 @@
             });
         }
 
-        // get Chart Category Sold Comparison Amount Start Date
+        // get Chart Category Sold Comparison Amount Dates
         function getChartCategorySoldComparisonStartDate() {
             chartCategorySoldComparisonStartDate.dispose();
             chartCategorySoldComparisonStartDate = new wijmo.input.InputDate('#ChartCategorySoldComparison_StartDate', {
@@ -4165,7 +4120,6 @@
             });
         }
 
-        // get Chart Category Sold Comparison Amount End Date
         function getChartCategorySoldComparisonEndDate() {
             chartCategorySoldComparisonEndDate.dispose();
             chartCategorySoldComparisonEndDate = new wijmo.input.InputDate('#ChartCategorySoldComparison_EndDate', {
@@ -4183,7 +4137,7 @@
             });
         }
 
-        // get Sales Reward Summary Report Start Date
+        // get Sales Reward Summary Report Dates
         function getSalesRewardSummaryReportStartDate() {
             salesRewardSummaryReportStartDate.dispose();
             salesRewardSummaryReportStartDate = new wijmo.input.InputDate('#SalesRewardSummaryReport_StartDate', {
@@ -4201,7 +4155,6 @@
             });
         }
 
-        // get Sales Reward Summary Report End Date
         function getSalesRewardSummaryReportEndDate() {
             salesRewardSummaryReportEndDate.dispose();
             salesRewardSummaryReportEndDate = new wijmo.input.InputDate('#SalesRewardSummaryReport_EndDate', {
@@ -4219,7 +4172,7 @@
             });
         }
 
-        // get Sales Status Report Start Date
+        // get Sales Status Report Dates
         function getSalesStatusReportStartDate() {
             salesStatusReportStartDate.dispose();
             salesStatusReportStartDate = new wijmo.input.InputDate('#SalesStatusReport_StartDate', {
@@ -4237,7 +4190,6 @@
             });
         }
 
-        // get Sales Status Report End Date
         function getSalesStatusReportEndDate() {
             salesStatusReportEndDate.dispose();
             salesStatusReportEndDate = new wijmo.input.InputDate('#SalesStatusReport_EndDate', {
@@ -4255,7 +4207,7 @@
             });
         }
 
-        // get Sale Summary Report All Fields Start Date
+        // get Sale Summary Report All Fields Dates
         function getSaleSummaryReportAllFieldsStartDate() {
             saleSummaryReportAllFieldsStartDate.dispose();
             saleSummaryReportAllFieldsStartDate = new wijmo.input.InputDate('#SaleSummaryReportAllFields_StartDate', {
@@ -4273,7 +4225,6 @@
             });
         }
 
-        // get Sale Summary Report All Fields End Date
         function getSaleSummaryReportAllFieldsEndDate() {
             saleSummaryReportAllFieldsEndDate.dispose();
             saleSummaryReportAllFieldsEndDate = new wijmo.input.InputDate('#SaleSummaryReportAllFields_EndDate', {
@@ -4291,7 +4242,7 @@
             });
         }
 
-        // get Sale Consumption Report Start Date
+        // get Sale Consumption Report Dates
         function getSaleConsumptionReportStartDate() {
             saleConsumptionReportStartDate.dispose();
             saleConsumptionReportStartDate = new wijmo.input.InputDate('#SaleConsumptionReport_StartDate', {
@@ -4309,7 +4260,6 @@
             });
         }
 
-        // get Sale Consumption Report End Date
         function getSaleConsumptionReportEndDate() {
             saleConsumptionReportEndDate.dispose();
             saleConsumptionReportEndDate = new wijmo.input.InputDate('#SaleConsumptionReport_EndDate', {
@@ -4327,6 +4277,7 @@
             });
         }
 
+        // button views
         function SalesDetailReportVatSalesView_OnClick() {
             var startDate = document.getElementById('SalesDetailReportVatSales_StartDate_data').value;
             var endDate = document.getElementById('SalesDetailReportVatSales_EndDate_data').value;
@@ -4486,7 +4437,22 @@
             var startDate = document.getElementById('ChartMonthlySalesTrend_StartDate_data').value;
             var endDate = document.getElementById('ChartMonthlySalesTrend_EndDate_data').value;
 
-            window.location.href = '/Software/ChartMonthlySalesTrend?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
+            var companyId = document.getElementById('chartMonthlySalesTrend_Company_data').value;
+            var branchId = document.getElementById('chartMonthlySalesTrend_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('chartMonthlySalesTrend_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('chartMonthlySalesTrend_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/Software/ChartMonthlySalesTrend?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('chartMonthlySalesTrend_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('chartMonthlySalesTrend_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         function ChartMonthlySalesComparisonView_OnClick() {
@@ -4524,11 +4490,7 @@
             window.location.href = '/Software/ChartCategorySoldComparison?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
         }
 
-        // ============
-        // On Load Page
-        // ============
         $(document).ready(function () {
-            //COMPANY
             accountReceivableCboCompany = new wijmo.input.ComboBox('#accountReceivableReport_Company');
             accountReceivableSummaryCboCompany = new wijmo.input.ComboBox('#accountReceivableSummaryReport_Company');
             StatementOfTheAccountCboCompany = new wijmo.input.ComboBox('#StatementOfTheAccount_Company');
@@ -4550,7 +4512,6 @@
             chartCategorySoldComparisonCboCompany = new wijmo.input.ComboBox('#chartCategorySoldComparison_Company');
             salesSummaryReportAllFieldsCboCompany = new wijmo.input.ComboBox('#salesSummaryReportAllFields_Company');
 
-            //BRANCH
             salesSummaryReportCboBranch = new wijmo.input.ComboBox('#salesSummaryReport_Branch');
             salesDetailReportCboBranch = new wijmo.input.ComboBox('#salesDetailReport_Branch');
             collectionSummaryReportCboBranch = new wijmo.input.ComboBox('#collectionSummaryReport_Branch');
@@ -4569,10 +4530,10 @@
             chartCategorySoldComparisonCboBranch = new wijmo.input.ComboBox('#chartCategorySoldComparison_Branch');
             salesSummaryReportAllFieldsCboBranch = new wijmo.input.ComboBox('#salesSummaryReportAllFields_Branch');
 
-            //CUSTOMER
             cboCustomer = new wijmo.input.ComboBox('#StatementOfTheAccount_Customer');
             getCustomers();
             getCompanies();
+
             var newDate = new Date();
             var defaultDate = newDate;
 
@@ -4580,7 +4541,6 @@
             document.getElementById('accountReceivableSummaryReport_DateAsOf_data').value = convertDateToShortDateString(defaultDate);
             document.getElementById('StatementOfTheAccount_DateAsOf_data').value = convertDateToShortDateString(defaultDate);
 
-            // Accounts Receivable Date As Of
             accountsReceivableDateAsOf = new wijmo.input.InputDate('#accountReceivableReport_DateAsOf', {
                 format: 'MM-dd-yyyy',
                 value: new Date(),
@@ -4591,7 +4551,6 @@
                 }
             });
 
-            // Accounts Receivable Summary Date As Of
             accountsReceivableSummaryDateAsOf = new wijmo.input.InputDate('#accountReceivableSummaryReport_DateAsOf', {
                 format: 'MM/dd/yyyy',
                 value: new Date(),
@@ -4601,7 +4560,6 @@
                 }
             });
 
-            // Statement Of The Account Date As Of
             StatementOfTheAccountDateAsOf = new wijmo.input.InputDate('#StatementOfTheAccount_DateAsOf', {
                 format: 'MM/dd/yyyy',
                 value: new Date(),
@@ -4614,203 +4572,154 @@
             // sale summary report
             document.getElementById('SaleSummaryReport_StartDate_data').value = defaultDate;
             document.getElementById('SaleSummaryReport_EndDate_data').value = defaultDate;
-
             saleSummaryReportStartDate = new wijmo.input.InputDate('#SaleSummaryReport_StartDate');
             saleSummaryReportEndDate = new wijmo.input.InputDate('#SaleSummaryReport_EndDate');
-
             getSaleSummaryReportStartDate();
             getSaleSummaryReportEndDate();
 
             // sale detail report
             document.getElementById('SaleDetailReport_StartDate_data').value = defaultDate;
             document.getElementById('SaleDetailReport_EndDate_data').value = defaultDate;
-
             saleDetailReportStartDate = new wijmo.input.InputDate('#SaleDetailReport_StartDate');
             saleDetailReportEndDate = new wijmo.input.InputDate('#SaleDetailReport_EndDate');
-
             getSaleDetailReportStartDate();
             getSaleDetailReportEndDate();
 
             // collection summary report
             document.getElementById('CollectionSummaryReport_StartDate_data').value = defaultDate;
             document.getElementById('CollectionSummaryReport_EndDate_data').value = defaultDate;
-
             collectionSummaryReportStartDate = new wijmo.input.InputDate('#CollectionSummaryReport_StartDate');
             collectionSummaryReportEndDate = new wijmo.input.InputDate('#CollectionSummaryReport_EndDate');
-
             getCollectionSummaryReportStartDate();
             getCollectionSummaryReportEndDate();
 
             // collection detail report
             document.getElementById('CollectionDetailReport_StartDate_data').value = defaultDate;
             document.getElementById('CollectionDetailReport_EndDate_data').value = defaultDate;
-
             collectionDetailReportStartDate = new wijmo.input.InputDate('#CollectionDetailReport_StartDate');
             collectionDetailReportEndDate = new wijmo.input.InputDate('#CollectionDetailReport_EndDate');
-
             getCollectionDetailReportStartDate();
             getCollectionDetailReportEndDate();
 
             // sales detail report vat sales report
             document.getElementById('SalesDetailReportVatSales_StartDate_data').value = defaultDate;
             document.getElementById('SalesDetailReportVatSales_EndDate_data').value = defaultDate;
-
             salesDetailReportVatSalesStartDate = new wijmo.input.InputDate('#SalesDetailReportVatSales_StartDate');
             salesDetailReportVatSalesEndDate = new wijmo.input.InputDate('#SalesDetailReportVatSales_EndDate');
-
             getSalesDetailReportVatSalesStartDate();
             getSalesDetailReportVatSalesEndDate();
 
             // cancelled sales summary report
             document.getElementById('CancelledSalesSummaryReport_StartDate_data').value = defaultDate;
             document.getElementById('CancelledSalesSummaryReport_EndDate_data').value = defaultDate;
-
             cancelledSalesSummaryReportStartDate = new wijmo.input.InputDate('#CancelledSalesSummaryReport_StartDate');
             cancelledSalesSummaryReportEndDate = new wijmo.input.InputDate('#CancelledSalesSummaryReport_EndDate');
-
             getCancelledSalesSummaryReportStartDate();
             getCancelledSalesSummaryReportEndDate();
 
             // Senior Citizen sales summary report
             document.getElementById('SeniorCitizenSalesSummaryReport_StartDate_data').value = defaultDate;
             document.getElementById('SeniorCitizenSalesSummaryReport_EndDate_data').value = defaultDate;
-
             seniorCitizenSalesSummaryReportStartDate = new wijmo.input.InputDate('#SeniorCitizenSalesSummaryReport_StartDate');
             seniorCitizenSalesSummaryReportEndDate = new wijmo.input.InputDate('#SeniorCitizenSalesSummaryReport_EndDate');
-
             getSeniorCitizenSalesSummaryReportStartDate();
             getSeniorCitizenSalesSummaryReportEndDate();
 
             // top selling item report
             document.getElementById('TopSellingItemsReport_StartDate_data').value = defaultDate;
             document.getElementById('TopSellingItemsReport_EndDate_data').value = defaultDate;
-
             topSellingItemsReportStartDate = new wijmo.input.InputDate('#TopSellingItemsReport_StartDate');
             topSellingItemsReportEndDate = new wijmo.input.InputDate('#TopSellingItemsReport_EndDate');
-
             getTopSellingItemsReportStartDate();
             getTopSellingItemsReportEndDate();
 
             // Hourly top selling item report
             document.getElementById('HourlyTopSellingItemsReport_StartDate_data').value = defaultDate;
             document.getElementById('HourlyTopSellingItemsReport_EndDate_data').value = defaultDate;
-
             hourlyTopSellingItemsReportStartDate = new wijmo.input.InputDate('#HourlyTopSellingItemsReport_StartDate');
             hourlyTopSellingItemsReportEndDate = new wijmo.input.InputDate('#HourlyTopSellingItemsReport_EndDate');
-
             getHourlyTopSellingItemsReportStartDate();
             getHourlyTopSellingItemsReportEndDate();
 
             // chart monthly sales trend report
             document.getElementById('ChartMonthlySalesTrend_StartDate_data').value = defaultDate;
             document.getElementById('ChartMonthlySalesTrend_EndDate_data').value = defaultDate;
-
             chartMonthlySalesTrendStartDate = new wijmo.input.InputDate('#ChartMonthlySalesTrend_StartDate');
             chartMonthlySalesTrendEndDate = new wijmo.input.InputDate('#ChartMonthlySalesTrend_EndDate');
-
             getChartMonthlySalesTrendStartDate();
             getChartMonthlySalesTrendEndDate();
 
             // chart monthly sales comparison report
             document.getElementById('ChartMonthlySalesComparison_StartDate_data').value = defaultDate;
             document.getElementById('ChartMonthlySalesComparison_EndDate_data').value = defaultDate;
-
             chartMonthlySalesComparisonStartDate = new wijmo.input.InputDate('#ChartMonthlySalesComparison_StartDate');
             chartMonthlySalesComparisonEndDate = new wijmo.input.InputDate('#ChartMonthlySalesComparison_EndDate');
-
             getChartMonthlySalesComparisonStartDate();
             getChartMonthlySalesComparisonEndDate();
 
             // chart yearly sales trend comparison report
             document.getElementById('ChartYearlySalesTrendComparison_StartDate_data').value = defaultDate;
             document.getElementById('ChartYearlySalesTrendComparison_EndDate_data').value = defaultDate;
-
             chartYearlySalesTrendComparisonStartDate = new wijmo.input.InputDate('#ChartYearlySalesTrendComparison_StartDate');
             chartYearlySalesTrendComparisonEndDate = new wijmo.input.InputDate('#ChartYearlySalesTrendComparison_EndDate');
-
             getChartYearlySalesTrendComparisonStartDate();
             getChartYearlySalesTrendComparisonEndDate();
 
             // chart hourly sales comparison report
             document.getElementById('ChartHourlySalesComparison_StartDate_data').value = defaultDate;
             document.getElementById('ChartHourlySalesComparison_EndDate_data').value = defaultDate;
-
             chartHourlySalesComparisonStartDate = new wijmo.input.InputDate('#ChartHourlySalesComparison_StartDate');
             chartHourlySalesComparisonEndDate = new wijmo.input.InputDate('#ChartHourlySalesComparison_EndDate');
-
             getChartHourlySalesComparisonStartDate();
             getChartHourlySalesComparisonEndDate();
 
             // chart hourly sales comparison amount report
             document.getElementById('ChartHourlySalesComparisonAmount_StartDate_data').value = defaultDate;
             document.getElementById('ChartHourlySalesComparisonAmount_EndDate_data').value = defaultDate;
-
             chartHourlySalesComparisonAmountStartDate = new wijmo.input.InputDate('#ChartHourlySalesComparisonAmount_StartDate');
             chartHourlySalesComparisonAmountEndDate = new wijmo.input.InputDate('#ChartHourlySalesComparisonAmount_EndDate');
-
             getChartHourlySalesComparisonAmountStartDate();
             getChartHourlySalesComparisonAmountEndDate();
 
             // chart category sold comparison amount report
             document.getElementById('ChartCategorySoldComparison_StartDate_data').value = defaultDate;
             document.getElementById('ChartCategorySoldComparison_EndDate_data').value = defaultDate;
-
             chartCategorySoldComparisonStartDate = new wijmo.input.InputDate('#ChartCategorySoldComparison_StartDate');
             chartCategorySoldComparisonEndDate = new wijmo.input.InputDate('#ChartCategorySoldComparison_EndDate');
-
             getChartCategorySoldComparisonStartDate();
             getChartCategorySoldComparisonEndDate();
 
             // sales reward summary report
             document.getElementById('SalesRewardSummaryReport_StartDate_data').value = defaultDate;
             document.getElementById('SalesRewardSummaryReport_EndDate_data').value = defaultDate;
-
             salesRewardSummaryReportStartDate = new wijmo.input.InputDate('#SalesRewardSummaryReport_StartDate');
             salesRewardSummaryReportEndDate = new wijmo.input.InputDate('#SalesRewardSummaryReport_EndDate');
-
             getSalesRewardSummaryReportStartDate();
             getSalesRewardSummaryReportEndDate();
 
             // sales status report
             document.getElementById('SalesStatusReport_StartDate_data').value = defaultDate;
             document.getElementById('SalesStatusReport_EndDate_data').value = defaultDate;
-
             salesStatusReportStartDate = new wijmo.input.InputDate('#SalesStatusReport_StartDate');
             salesStatusReportEndDate = new wijmo.input.InputDate('#SalesStatusReport_EndDate');
-
             getSalesStatusReportStartDate();
             getSalesStatusReportEndDate();
 
             // sale summary report all fields
             document.getElementById('SaleSummaryReportAllFields_StartDate_data').value = defaultDate;
             document.getElementById('SaleSummaryReportAllFields_EndDate_data').value = defaultDate;
-
             saleSummaryReportAllFieldsStartDate = new wijmo.input.InputDate('#SaleSummaryReportAllFields_StartDate');
             saleSummaryReportAllFieldsEndDate = new wijmo.input.InputDate('#SaleSummaryReportAllFields_EndDate');
-
             getSaleSummaryReportAllFieldsStartDate();
             getSaleSummaryReportAllFieldsEndDate();
 
             // sale consumption report all fields
             document.getElementById('SaleConsumptionReport_StartDate_data').value = defaultDate;
             document.getElementById('SaleConsumptionReport_EndDate_data').value = defaultDate;
-
             saleConsumptionReportStartDate = new wijmo.input.InputDate('#SaleConsumptionReport_StartDate');
             saleConsumptionReportEndDate = new wijmo.input.InputDate('#SaleConsumptionReport_EndDate');
-
             getSaleConsumptionReportStartDate();
             getSaleConsumptionReportEndDate();
-        });
-
-        $(window).scroll(function () {
-            // $('#left-wrap').toggleClass('scrolling', $(window).scrollTop() > $('#header').offset().top);
-
-            //can be rewritten long form as:
-            //var scrollPosition, headerOffset, isScrolling;
-            //scrollPosition = $(window).scrollTop();
-            //headerOffset = 145;
-            //isScrolling = scrollPosition > headerOffset;
-            //$('#AR').toggleClass('scrolling', isScrolling);
         });
     </script>
     <script type="text/javascript">
@@ -4822,7 +4731,6 @@
         });
 
         var slideLeftBtn = document.querySelector('#c-button--slide-left');
-
         slideLeftBtn.addEventListener('click', function (e) {
             e.preventDefault;
             slideLeft.open();

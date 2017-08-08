@@ -120,9 +120,9 @@
                             // Array Push
                             salesDetailReport.push({
                                 Item: salesDetailReportResult[i]["Item"],
-                                Unit: salesDetailReportResult[i]["BaseUnit"],
-                                Quantity: salesDetailReportResult[i]["BaseQuantity"],
-                                Amount: salesDetailReportResult[i]["Amount"],
+                                BaseUnit: salesDetailReportResult[i]["BaseUnit"],
+                                BaseQuantity: salesDetailReportResult[i]["BaseQuantity"],
+                                BasePrice: salesDetailReportResult[i]["BasePrice"],
                                 SalesItemTimeStamp: salesDetailReportResult[i]["SalesItemTimeStamp"]
                             });
 
@@ -257,19 +257,19 @@
                     },
                     {
                         "header": "Unit",
-                        "binding": "Unit",
+                        "binding": "BaseUnit",
                         "allowSorting": true,
                         "width": 250
                     },
                     {
                         "header": "Quantity",
-                        "binding": "Quantity",
+                        "binding": "BaseQuantity",
                         "allowSorting": true,
                         "width": 150
                     },
                     {
-                        "header": "Amount",
-                        "binding": "Amount",
+                        "header": "Price",
+                        "binding": "BasePrice",
                         "allowSorting": true,
                         "width": 150
                     },

@@ -5,12 +5,27 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using System.Globalization;
 
 namespace easyfis.ApiControllers
 {
     public class ApiHourlyTopSellingReportController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+
+        public String timeStampFormat(String salesInvoiceItemTimeStamp)
+        {
+            CultureInfo cultureESUS = CultureInfo.CreateSpecificCulture("en-US");
+            if (!salesInvoiceItemTimeStamp.Equals(""))
+            {
+                DateTime dateToDisplay = new DateTime(0001, 1, 1, Convert.ToInt32(salesInvoiceItemTimeStamp), 0, 0);
+                return dateToDisplay.ToString("t", cultureESUS);
+            }
+            else
+            {
+                return "";
+            }
+        }
 
         [Authorize, HttpGet, Route("api/hourlyTopItemsSellingReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
         public List<Models.TrnSalesInvoiceItem> listHourlyTopItemsSellingReport(String startDate, String endDate, String companyId, String branchId)
@@ -24,18 +39,17 @@ namespace easyfis.ApiControllers
                                     group d by new
                                     {
                                         Item = d.MstArticle.Article,
-                                        BaseUnit = d.MstUnit1.Unit
+                                        BasePrice = d.MstArticle.Price,
+                                        BaseUnit = d.MstArticle.MstUnit.Unit,
+                                        SalesItemTimeStamp = d.SalesItemTimeStamp.Hour,
                                     } into g
                                     select new Models.TrnSalesInvoiceItem
                                     {
                                         Item = g.Key.Item,
                                         BaseUnit = g.Key.BaseUnit,
                                         BaseQuantity = g.Sum(d => d.BaseQuantity),
-                                        Amount = g.Sum(d => d.Amount),
-                                        SalesItemTimeStampHour = g.Average(d => Convert.ToInt64(Convert.ToDateTime(d.SalesItemTimeStamp).Hour)).ToString(),
-                                        SalesItemTimeStampMinutes = g.Average(d => Convert.ToInt64(Convert.ToDateTime(d.SalesItemTimeStamp).Minute)).ToString(),
-                                        SalesItemTimeStampSeconds = g.Average(d => Convert.ToInt64(Convert.ToDateTime(d.SalesItemTimeStamp).Second)).ToString(),
-                                        SalesItemTimeStamp = String.Format("{0:T}", Convert.ToDateTime(g.Average(d => Convert.ToInt64(Convert.ToDateTime(d.SalesItemTimeStamp).Hour)) + ":" + g.Average(d => Convert.ToInt64(Convert.ToDateTime(d.SalesItemTimeStamp).Minute)) + ":" + g.Average(d => Convert.ToInt64(Convert.ToDateTime(d.SalesItemTimeStamp).Second))))
+                                        BasePrice = g.Key.BasePrice,
+                                        SalesItemTimeStamp = timeStampFormat(g.Key.SalesItemTimeStamp.ToString())
                                     };
 
             return salesInvoiceItems.ToList();

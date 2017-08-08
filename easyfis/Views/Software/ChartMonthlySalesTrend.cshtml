@@ -113,7 +113,7 @@
             NProgress.start();
             var salesItemDataObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/chartMonthlySalesTrend/list/' + getParam("StartDate") + '/' + getParam("EndDate"),
+                url: '/api/chartMonthlySalesTrend/list/' + getParam("StartDate") + '/' + getParam("EndDate") + '/' + getParam("CompanyId") + '/' + getParam("BranchId"),
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',

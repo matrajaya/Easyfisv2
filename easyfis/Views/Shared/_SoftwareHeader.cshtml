@@ -30,6 +30,14 @@
     <div class="panel-group panel-group-menu" id="accordion">
         <div class="panel panel-default panel-side">
             <div class="panel-heading panel-heading-menu">
+                <div class="image-custom">
+                    @*<div id="photoDiv"></div>*@
+                    <img src="~/Images/abomar/abomar-logo.png" />
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default panel-side">
+            <div class="panel-heading panel-heading-menu">
                 <a href="#index" class="panel-link-menu c-menu__close">
                     <h4 class="panel-title">
                         <i class="fa fa-arrow-left fa-fw"></i> &nbsp; Close Menu
@@ -158,3 +166,54 @@
         </div>
     </div>
 </div>
+
+<script>
+    function displayCompanyImage() {
+        var url = window.location.href;
+        if (url == "http://abomar.easyfis.com") {
+            var imageElement = document.createElement("images");
+            var imageData = new Image();
+            imageData.src = "/Images/abomar/abomar-logo.png";
+            imageData.className = "img-custom-div";
+            imageElement.appendChild(imageData);
+            var photoDivElement = document.createElement("DIV");
+            var photoDiv = document.getElementById("photoDiv").appendChild(imageElement);
+            photoDiv.appendChild(photoDivElement);
+        } else {
+            if (url == "http://www.easyfis.com") {
+                var imageElement = document.createElement("images");
+                var imageData = new Image();
+                imageData.src = "/Images/innosoft/innosoft.png";
+                imageData.className = "img-custom-div";
+                imageElement.appendChild(imageData);
+                var photoDivElement = document.createElement("DIV");
+                var photoDiv = document.getElementById("photoDiv").appendChild(imageElement);
+                photoDiv.appendChild(photoDivElement);
+            } else {
+                if (url == "http://innosoft.easyfis.com") {
+                    var imageElement = document.createElement("images");
+                    var imageData = new Image();
+                    imageData.src = "/Images/innosoft/innosoft.png";
+                    imageData.className = "img-custom-div";
+                    imageElement.appendChild(imageData);
+                    var photoDivElement = document.createElement("DIV");
+                    var photoDiv = document.getElementById("photoDiv").appendChild(imageElement);
+                    photoDiv.appendChild(photoDivElement);
+                } else {
+                    var imageElement = document.createElement("images");
+                    var imageData = new Image();
+                    imageData.src = "/Images/innosoft/innosoft.png";
+                    imageData.className = "img-custom-div";
+                    imageElement.appendChild(imageData);
+                    var photoDivElement = document.createElement("DIV");
+                    var photoDiv = document.getElementById("photoDiv").appendChild(imageElement);
+                    photoDiv.appendChild(photoDivElement);
+                }
+            }
+        }
+    }
+
+    window.onload = function () {
+        displayCompanyImage();
+    }
+</script>

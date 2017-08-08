@@ -12,18 +12,13 @@ namespace easyfis.ApiControllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d).FirstOrDefault().BranchId;
-        }
-
-        [Authorize, HttpGet, Route("api/chartMonthlySalesTrend/list/{startDate}/{endDate}")]
-        public List<Models.TrnSalesInvoiceItem> listChartMonthlySalesTrend(String startDate, String endDate)
+        [Authorize, HttpGet, Route("api/chartMonthlySalesTrend/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnSalesInvoiceItem> listChartMonthlySalesTrend(String startDate, String endDate, String companyId, String branchId)
         {
             var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
                                     where d.TrnSalesInvoice.IsLocked == true
-                                    && d.TrnSalesInvoice.BranchId == currentBranchId()
+                                    && d.TrnSalesInvoice.BranchId == Convert.ToInt32(branchId)
+                                    && d.TrnSalesInvoice.MstBranch.CompanyId == Convert.ToInt32(companyId)
                                     select new Models.TrnSalesInvoiceItem
                                     {
                                         SalesItemTimeStampDateTime = new DateTime(d.SalesItemTimeStamp.Year, d.SalesItemTimeStamp.Month, d.SalesItemTimeStamp.Day),
