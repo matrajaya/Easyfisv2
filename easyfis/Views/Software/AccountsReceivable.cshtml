@@ -3494,7 +3494,22 @@
             var saleSummaryReportStartDate = document.getElementById('SaleSummaryReport_StartDate_data').value;
             var saleSummaryReportEndDate = document.getElementById('SaleSummaryReport_EndDate_data').value;
 
-            window.location.href = '/RepSalesSummaryReport/SalesSummaryReport?StartDate=' + convertDateToShortDateString(saleSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(saleSummaryReportEndDate);
+            var companyId = document.getElementById('salesSummaryReport_Company_data').value;
+            var branchId = document.getElementById('salesSummaryReport_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('salesSummaryReport_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('salesSummaryReport_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/RepSalesSummaryReport/SalesSummaryReport?StartDate=' + convertDateToShortDateString(saleSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(saleSummaryReportEndDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('salesSummaryReport_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('salesSummaryReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         // sale summary report on click
@@ -3561,7 +3576,22 @@
             var saleDetailReportStartDate = document.getElementById('SaleDetailReport_StartDate_data').value;
             var saleDetailReportEndDate = document.getElementById('SaleDetailReport_EndDate_data').value;
 
-            window.location.href = '/RepSalesDetailReport/SalesDetailReport?StartDate=' + convertDateToShortDateString(saleDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(saleDetailReportEndDate);
+            var companyId = document.getElementById('salesDetailReport_Company_data').value;
+            var branchId = document.getElementById('salesDetailReport_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('salesDetailReport_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('salesDetailReport_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/RepSalesDetailReport/SalesDetailReport?StartDate=' + convertDateToShortDateString(saleDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(saleDetailReportEndDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('salesDetailReport_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('salesDetailReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         // sale detail report on click
@@ -3628,7 +3658,22 @@
             var collectionSummaryReportStartDate = document.getElementById('CollectionSummaryReport_StartDate_data').value;
             var collectionSummaryReportEndDate = document.getElementById('CollectionSummaryReport_EndDate_data').value;
 
-            window.location.href = '/RepCollectionSummaryReport/CollectionSummaryReport?StartDate=' + convertDateToShortDateString(collectionSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(collectionSummaryReportEndDate);
+            var companyId = document.getElementById('collectionSummaryReport_Company_data').value;
+            var branchId = document.getElementById('collectionSummaryReport_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('collectionSummaryReport_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('collectionSummaryReport_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/RepCollectionSummaryReport/CollectionSummaryReport?StartDate=' + convertDateToShortDateString(collectionSummaryReportStartDate) + '&EndDate=' + convertDateToShortDateString(collectionSummaryReportEndDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('collectionSummaryReport_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('collectionSummaryReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         // collection summary report on click
@@ -3695,7 +3740,22 @@
             var collectionDetailReportStartDate = document.getElementById('CollectionDetailReport_StartDate_data').value;
             var collectionDetailReportEndDate = document.getElementById('CollectionDetailReport_EndDate_data').value;
 
-            window.location.href = '/RepCollectionDetailReport/CollectionDetailReport?StartDate=' + convertDateToShortDateString(collectionDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(collectionDetailReportEndDate);
+            var companyId = document.getElementById('collectionDetailReport_Company_data').value;
+            var branchId = document.getElementById('collectionDetailReport_Branch_data').value;
+
+            if (companyId != "") {
+                document.getElementById('collectionDetailReport_Company').style.border = "1px solid #ccc";
+                if (branchId != "") {
+                    document.getElementById('collectionDetailReport_Branch').style.border = "1px solid #ccc";
+                    window.location.href = '/RepCollectionDetailReport/CollectionDetailReport?StartDate=' + convertDateToShortDateString(collectionDetailReportStartDate) + '&EndDate=' + convertDateToShortDateString(collectionDetailReportEndDate) + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    document.getElementById('collectionDetailReport_Branch').style.border = "1px solid red";
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                document.getElementById('collectionDetailReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            }
         }
 
         // collection detail report on click
