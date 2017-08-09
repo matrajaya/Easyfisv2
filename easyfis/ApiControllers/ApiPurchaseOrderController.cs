@@ -15,8 +15,6 @@ using iTextSharp.text;
 using iTextSharp.text.html.simpleparser;
 using iTextSharp.text.pdf;
 
-
-
 namespace easyfis.Controllers
 {
     public class ApiPurchaseOrderController : ApiController
@@ -205,6 +203,7 @@ namespace easyfis.Controllers
         {
             var purchaseOrders = from d in db.TrnPurchaseOrders
                                  where d.SupplierId == Convert.ToInt32(supplierId)
+                                 && d.BranchId == currentBranchId()
                                  && d.IsLocked == true
                                  select new Models.TrnPurchaseOrder
                                  {
@@ -297,9 +296,8 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var lastPONumber = from d in db.TrnPurchaseOrders.OrderByDescending(d => d.Id) select d;
                 var PONumberResult = "0000000001";
-
+                var lastPONumber = from d in db.TrnPurchaseOrders.OrderByDescending(d => d.Id) where d.BranchId == currentBranchId() select d;
                 if (lastPONumber.Any())
                 {
                     var PONumber = Convert.ToInt32(lastPONumber.FirstOrDefault().PONumber) + 0000000001;

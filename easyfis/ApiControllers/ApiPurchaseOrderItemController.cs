@@ -142,23 +142,44 @@ namespace easyfis.Controllers
                 newPurchaseOrderItem.Cost = purchaseOrderItem.Cost;
                 newPurchaseOrderItem.Amount = purchaseOrderItem.Amount;
 
-                var mstArticleUnit = from d in db.MstArticles where d.Id == purchaseOrderItem.ItemId select d;
-                newPurchaseOrderItem.BaseUnitId = mstArticleUnit.First().UnitId;
+                var mstArticleUnit = from d in db.MstArticles
+                                     where d.Id == purchaseOrderItem.ItemId
+                                     select d;
 
-                var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == purchaseOrderItem.ItemId && d.UnitId == purchaseOrderItem.UnitId select d;
-                if (conversionUnit.First().Multiplier > 0)
+                newPurchaseOrderItem.BaseUnitId = mstArticleUnit.FirstOrDefault().UnitId;
+
+                var conversionUnit = from d in db.MstArticleUnits
+                                     where d.ArticleId == purchaseOrderItem.ItemId
+                                     && d.UnitId == purchaseOrderItem.UnitId
+                                     select d;
+
+                if (conversionUnit.Any())
                 {
-                    newPurchaseOrderItem.BaseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                    if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                    {
+                        newPurchaseOrderItem.BaseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                    }
+                    else
+                    {
+                        newPurchaseOrderItem.BaseQuantity = purchaseOrderItem.Quantity * 1;
+                    }
                 }
                 else
                 {
                     newPurchaseOrderItem.BaseQuantity = purchaseOrderItem.Quantity * 1;
                 }
 
-                var baseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.First().Multiplier);
-                if (baseQuantity > 0)
+                if (conversionUnit.Any())
                 {
-                    newPurchaseOrderItem.BaseCost = purchaseOrderItem.Amount / baseQuantity;
+                    var baseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                    if (baseQuantity > 0)
+                    {
+                        newPurchaseOrderItem.BaseCost = purchaseOrderItem.Amount / baseQuantity;
+                    }
+                    else
+                    {
+                        newPurchaseOrderItem.BaseCost = purchaseOrderItem.Amount;
+                    }
                 }
                 else
                 {
@@ -170,8 +191,9 @@ namespace easyfis.Controllers
 
                 return newPurchaseOrderItem.Id;
             }
-            catch
+            catch (Exception e)
             {
+                Debug.WriteLine(e);
                 return 0;
             }
         }

@@ -19,7 +19,7 @@
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Manage Settings  
+                        Manage Settings
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -51,9 +51,9 @@
                             <dt>Full Name:</dt>
                             <dd><input type="text" class="form-control  requiredUser" id="profileDetail_fullName" /></dd>
                             @*<dt>Address:</dt>
-                            <dd><input type="text" class="form-control  " /></dd>
-                            <dt>Email address:</dt>
-                            <dd><input type="text" class="form-control  " /></dd>*@
+                                <dd><input type="text" class="form-control  " /></dd>
+                                <dt>Email address:</dt>
+                                <dd><input type="text" class="form-control  " /></dd>*@
                             <dt>Username:</dt>
                             <dd><input type="text" class="form-control  requiredUser" id="profileDetail_userName" disabled readonly /></dd>
                         </dl>
@@ -329,9 +329,18 @@
                             });
                         }
 
+                        var disabled = false;
+                        var userName = "@ViewData["UserName"]";
+                        if (userName == "admin") {
+                            disabled = false;
+                        } else {
+                            disabled = true;
+                        }
+
                         var defaultBranch = "@ViewData["Branch"]";
                         cboDefaultBranch.dispose();
                         cboDefaultBranch = new wijmo.input.ComboBox('#defaultBranch', {
+                            disabled: disabled,
                             placeholder: "Select Branch",
                             itemsSource: branches,
                             displayMemberPath: "Branch",
@@ -392,9 +401,17 @@
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 success: function (resultInventory) {
+
                     var disabled = false;
+                    var userName = "@ViewData["UserName"]";
                     if (resultInventory != null) {
                         disabled = true;
+                    } else {
+                        if (userName == "admin") {
+                            disabled = false;
+                        } else {
+                            disabled = true;
+                        }
                     }
 
                     var InventoryTypes = new Array("Specific Identification", "Moving Average");
@@ -421,6 +438,16 @@
             createCboInventoryType();
 
             getBranch();
+
+            var userName = "@ViewData["UserName"]";
+            if (userName == "admin") {
+                document.getElementById("defaultOfficialReceiptName").disabled = false;
+            } else {
+                $('#btnDeleteAllTransaction').prop('disabled', true);
+                $('#btnIdSaveDefaults').prop('disabled', true);
+                document.getElementById("defaultOfficialReceiptName").disabled = true;
+            }
+
             //getBranchesForComboBox();
         });
     </script>

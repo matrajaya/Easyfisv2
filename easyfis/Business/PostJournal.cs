@@ -1036,214 +1036,124 @@ namespace easyfis.Business
         // RR Journal - Insertion and Deletion
         public void insertRRJournal(Int32 RRId)
         {
-            try
-            {
-                // header
+            try { 
+
                 var receivingReceipts = from d in db.TrnReceivingReceipts
                                         where d.Id == RRId
                                         select d;
 
                 if (receivingReceipts.Any())
                 {
-                    Decimal totalWTAXAmount = 0;
-                    var receivingReceiptItemsTotalWTAXAmount = from d in db.TrnReceivingReceiptItems
-                                                               where d.RRId == RRId
-                                                               select d;
 
-                    if (receivingReceiptItemsTotalWTAXAmount.Any())
-                    {
-                        totalWTAXAmount = receivingReceiptItemsTotalWTAXAmount.Sum(d => d.WTAXAmount);
-                    }
-
-                    // lines (Receiving Receipt Items)
+                    // ============
+                    // Debit - Item
+                    // ============
                     var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
                                                 where d.RRId == RRId
                                                 group d by new
                                                 {
-                                                    BranchId = d.BranchId,
-                                                    AccountId = getAccountId(d.MstArticle.ArticleGroupId, d.TrnReceivingReceipt.BranchId, "Account") != 0 ? getAccountId(d.MstArticle.ArticleGroupId, d.TrnReceivingReceipt.BranchId, "Account") : d.MstArticle.AccountId,
-                                                    VATId = d.VATId,
-                                                    RRId = d.RRId
+                                                    ReceivingReceipt = d.TrnReceivingReceipt,
+                                                    ArticleGroupId = d.MstArticle.ArticleGroupId
                                                 } into g
-                                                select new Models.TrnReceivingReceiptItem
+                                                select new 
                                                 {
-                                                    BranchId = g.Key.BranchId,
-                                                    ItemAccountId = g.Key.AccountId,
-                                                    VATId = g.Key.VATId,
-                                                    RRId = g.Key.RRId,
-                                                    VATAmount = g.Sum(d => d.VATAmount),
-                                                    WTAXAmount = g.Sum(d => d.WTAXAmount),
-                                                    Amount = g.Sum(d => d.Amount)
+                                                    ArticleGroupId = g.Key.ArticleGroupId,
+                                                    Particulars = g.Key.ReceivingReceipt.Remarks,
+                                                    Amount = g.Sum(d => d.Amount - d.VATAmount)
                                                 };
 
-                    // Receiving Receipt Items
                     if (receivingReceiptItems.Any())
                     {
                         foreach (var receivingReceiptItem in receivingReceiptItems)
                         {
-                            if (receivingReceiptItem.Amount > 0)
-                            {
-                                Decimal DebitAmount = receivingReceiptItem.Amount;
+                            Data.TrnJournal newRRItemJournal = new Data.TrnJournal();
 
-                                var taxTypes = from d in db.MstTaxTypes where d.Id == receivingReceiptItem.VATId select d;
-                                if (taxTypes.Any())
-                                {
-                                    if (taxTypes.FirstOrDefault().IsInclusive)
-                                    {
-                                        DebitAmount = receivingReceiptItem.Amount - receivingReceiptItem.VATAmount;
-                                    }
-                                }
+                            newRRItemJournal.JournalDate = receivingReceipts.FirstOrDefault().RRDate;
+                            newRRItemJournal.BranchId = receivingReceipts.FirstOrDefault().BranchId;
 
-                                Data.TrnJournal newRRDebitJournalAccount = new Data.TrnJournal();
-                                newRRDebitJournalAccount.JournalDate = receivingReceipts.FirstOrDefault().RRDate;
-                                newRRDebitJournalAccount.BranchId = receivingReceipts.FirstOrDefault().BranchId;
-                                newRRDebitJournalAccount.AccountId = receivingReceiptItem.ItemAccountId;
-                                newRRDebitJournalAccount.ArticleId = receivingReceipts.FirstOrDefault().SupplierId;
-                                newRRDebitJournalAccount.Particulars = "Items";
-                                newRRDebitJournalAccount.DebitAmount = DebitAmount;
-                                newRRDebitJournalAccount.CreditAmount = 0;
-                                newRRDebitJournalAccount.ORId = null;
-                                newRRDebitJournalAccount.CVId = null;
-                                newRRDebitJournalAccount.JVId = null;
-                                newRRDebitJournalAccount.RRId = RRId;
-                                newRRDebitJournalAccount.SIId = null;
-                                newRRDebitJournalAccount.INId = null;
-                                newRRDebitJournalAccount.OTId = null;
-                                newRRDebitJournalAccount.STId = null;
-                                newRRDebitJournalAccount.DocumentReference = "RR-" + receivingReceipts.FirstOrDefault().MstBranch.BranchCode + "-" + receivingReceipts.FirstOrDefault().RRNumber;
-                                newRRDebitJournalAccount.APRRId = null;
-                                newRRDebitJournalAccount.ARSIId = null;
-                                db.TrnJournals.InsertOnSubmit(newRRDebitJournalAccount);
-                            }
+                            newRRItemJournal.AccountId = getAccountId(receivingReceiptItem.ArticleGroupId, receivingReceipts.FirstOrDefault().BranchId, "Account");
+                            newRRItemJournal.ArticleId = receivingReceipts.FirstOrDefault().SupplierId;
+
+                            newRRItemJournal.Particulars = receivingReceiptItem.Particulars;
+
+                            newRRItemJournal.DebitAmount = receivingReceiptItem.Amount;
+                            newRRItemJournal.CreditAmount = 0;
+
+                            newRRItemJournal.RRId = RRId;
+
+                            newRRItemJournal.DocumentReference = "RR-" + receivingReceipts.FirstOrDefault().MstBranch.BranchCode + "-" + receivingReceipts.FirstOrDefault().RRNumber;
+
+                            db.TrnJournals.InsertOnSubmit(newRRItemJournal);
                         }
+                            
                     }
 
-                    var receivingReceiptItemsVATs = from d in db.TrnReceivingReceiptItems
-                                                    where d.RRId == RRId
-                                                    group d by new
-                                                    {
-                                                        BranchId = d.BranchId,
-                                                        VATId = d.VATId,
-                                                    } into g
-                                                    select new Models.TrnReceivingReceiptItem
-                                                    {
-                                                        BranchId = g.Key.BranchId,
-                                                        VATId = g.Key.VATId,
-                                                        VATAmount = g.Sum(d => d.VATAmount)
-                                                    };
+                    // =================
+                    // Debit - VAT (Tax)
+                    // =================
+                    var receivingReceiptTaxes = from d in db.TrnReceivingReceiptItems
+                                                where d.RRId == RRId
+                                                group d by new
+                                                {
+                                                    ReceivingReceipt = d.TrnReceivingReceipt,
+                                                    TaxAccountId = d.MstTaxType.AccountId
+                                                } into g
+                                                select new
+                                                {
+                                                    TaxAccountId = g.Key.TaxAccountId,
+                                                    Particulars = g.Key.ReceivingReceipt.Remarks,
+                                                    TaxAmount = g.Sum(d => d.VATAmount)
+                                                };
 
-                    // Receiving Receipt Items - VAT
-                    if (receivingReceiptItemsVATs.Any())
+
+
+                    if (receivingReceiptTaxes.Any())
                     {
-                        foreach (var receivingReceiptItemsVAT in receivingReceiptItemsVATs)
+                        foreach (var receivingReceiptTax in receivingReceiptTaxes)
                         {
-                            if (receivingReceiptItemsVAT.VATAmount > 0)
-                            {
-                                var taxTypes = from d in db.MstTaxTypes where d.Id == receivingReceiptItemsVAT.VATId select d;
-                                if (taxTypes.Any())
-                                {
-                                    Data.TrnJournal newRRDebitJournalVAT = new Data.TrnJournal();
-                                    newRRDebitJournalVAT.JournalDate = receivingReceipts.FirstOrDefault().RRDate;
-                                    newRRDebitJournalVAT.BranchId = receivingReceipts.FirstOrDefault().BranchId;
-                                    newRRDebitJournalVAT.AccountId = taxTypes.FirstOrDefault().AccountId;
-                                    newRRDebitJournalVAT.ArticleId = receivingReceipts.FirstOrDefault().SupplierId;
-                                    newRRDebitJournalVAT.Particulars = "VAT";
-                                    newRRDebitJournalVAT.DebitAmount = receivingReceiptItemsVAT.VATAmount;
-                                    newRRDebitJournalVAT.CreditAmount = 0;
-                                    newRRDebitJournalVAT.ORId = null;
-                                    newRRDebitJournalVAT.CVId = null;
-                                    newRRDebitJournalVAT.JVId = null;
-                                    newRRDebitJournalVAT.RRId = RRId;
-                                    newRRDebitJournalVAT.SIId = null;
-                                    newRRDebitJournalVAT.INId = null;
-                                    newRRDebitJournalVAT.OTId = null;
-                                    newRRDebitJournalVAT.STId = null;
-                                    newRRDebitJournalVAT.DocumentReference = "RR-" + receivingReceipts.FirstOrDefault().MstBranch.BranchCode + "-" + receivingReceipts.FirstOrDefault().RRNumber;
-                                    newRRDebitJournalVAT.APRRId = null;
-                                    newRRDebitJournalVAT.ARSIId = null;
-                                    db.TrnJournals.InsertOnSubmit(newRRDebitJournalVAT);
-                                }
-                            }
+                            Data.TrnJournal newRRItemTaxJournal = new Data.TrnJournal();
+
+                            newRRItemTaxJournal.JournalDate = receivingReceipts.FirstOrDefault().RRDate;
+                            newRRItemTaxJournal.BranchId = receivingReceipts.FirstOrDefault().BranchId;
+
+                            newRRItemTaxJournal.AccountId = receivingReceiptTax.TaxAccountId;
+                            newRRItemTaxJournal.ArticleId = receivingReceipts.FirstOrDefault().SupplierId;
+
+                            newRRItemTaxJournal.Particulars = receivingReceiptTax.Particulars;
+
+                            newRRItemTaxJournal.DebitAmount = receivingReceiptTax.TaxAmount;
+                            newRRItemTaxJournal.CreditAmount = 0;
+
+                            newRRItemTaxJournal.RRId = RRId;
+
+                            newRRItemTaxJournal.DocumentReference = "RR-" + receivingReceipts.FirstOrDefault().MstBranch.BranchCode + "-" + receivingReceipts.FirstOrDefault().RRNumber;
+
+                            db.TrnJournals.InsertOnSubmit(newRRItemTaxJournal);
                         }
+
                     }
 
-                    // Accounts Payable
-                    if (receivingReceipts.FirstOrDefault().Amount > 0)
-                    {
-                        var suppliers = from d in db.MstArticles where d.Id == receivingReceipts.FirstOrDefault().SupplierId select d;
-                        if (suppliers.Any())
-                        {
-                            Data.TrnJournal newRRCreditJournalAccountsPayable = new Data.TrnJournal();
-                            newRRCreditJournalAccountsPayable.JournalDate = receivingReceipts.FirstOrDefault().RRDate;
-                            newRRCreditJournalAccountsPayable.BranchId = receivingReceipts.FirstOrDefault().BranchId;
-                            newRRCreditJournalAccountsPayable.AccountId = suppliers.FirstOrDefault().AccountId;
-                            newRRCreditJournalAccountsPayable.ArticleId = receivingReceipts.FirstOrDefault().SupplierId;
-                            newRRCreditJournalAccountsPayable.Particulars = "AP";
-                            newRRCreditJournalAccountsPayable.DebitAmount = 0;
-                            newRRCreditJournalAccountsPayable.CreditAmount = receivingReceiptItems.Sum(d => d.Amount) - totalWTAXAmount;
-                            newRRCreditJournalAccountsPayable.ORId = null;
-                            newRRCreditJournalAccountsPayable.CVId = null;
-                            newRRCreditJournalAccountsPayable.JVId = null;
-                            newRRCreditJournalAccountsPayable.RRId = RRId;
-                            newRRCreditJournalAccountsPayable.SIId = null;
-                            newRRCreditJournalAccountsPayable.INId = null;
-                            newRRCreditJournalAccountsPayable.OTId = null;
-                            newRRCreditJournalAccountsPayable.STId = null;
-                            newRRCreditJournalAccountsPayable.DocumentReference = "RR-" + receivingReceipts.FirstOrDefault().MstBranch.BranchCode + "-" + receivingReceipts.FirstOrDefault().RRNumber;
-                            newRRCreditJournalAccountsPayable.APRRId = null;
-                            newRRCreditJournalAccountsPayable.ARSIId = null;
-                            db.TrnJournals.InsertOnSubmit(newRRCreditJournalAccountsPayable);
-                        }
-                    }
+                    // ======================
+                    // Credit - Supplier (AP)
+                    // ======================
+                    Data.TrnJournal newRRSupplierJournal = new Data.TrnJournal();
 
-                    var receivingReceiptItemsWTAXes = from d in db.TrnReceivingReceiptItems
-                                                      where d.RRId == RRId
-                                                      group d by new
-                                                      {
-                                                          BranchId = d.BranchId,
-                                                          WTAXId = d.WTAXId,
-                                                      } into g
-                                                      select new Models.TrnReceivingReceiptItem
-                                                      {
-                                                          BranchId = g.Key.BranchId,
-                                                          WTAXId = g.Key.WTAXId,
-                                                          VATAmount = g.Sum(d => d.WTAXAmount)
-                                                      };
+                    newRRSupplierJournal.JournalDate = receivingReceipts.FirstOrDefault().RRDate;
+                    newRRSupplierJournal.BranchId = receivingReceipts.FirstOrDefault().BranchId;
 
-                    // Receiving Receipt Items - WTAX
-                    if (receivingReceiptItemsWTAXes.Any())
-                    {
-                        foreach (var receivingReceiptItemsWTAX in receivingReceiptItemsWTAXes)
-                        {
-                            if (totalWTAXAmount > 0)
-                            {
-                                var taxTypes = from d in db.MstTaxTypes where d.Id == receivingReceiptItemsWTAX.WTAXId select d;
-                                if (taxTypes.Any())
-                                {
-                                    Data.TrnJournal newRRCreditJournalWTAX = new Data.TrnJournal();
-                                    newRRCreditJournalWTAX.JournalDate = receivingReceipts.FirstOrDefault().RRDate;
-                                    newRRCreditJournalWTAX.BranchId = receivingReceipts.FirstOrDefault().BranchId;
-                                    newRRCreditJournalWTAX.AccountId = taxTypes.FirstOrDefault().AccountId;
-                                    newRRCreditJournalWTAX.ArticleId = receivingReceipts.FirstOrDefault().SupplierId;
-                                    newRRCreditJournalWTAX.Particulars = "WTAX";
-                                    newRRCreditJournalWTAX.DebitAmount = 0;
-                                    newRRCreditJournalWTAX.CreditAmount = totalWTAXAmount;
-                                    newRRCreditJournalWTAX.ORId = null;
-                                    newRRCreditJournalWTAX.CVId = null;
-                                    newRRCreditJournalWTAX.JVId = null;
-                                    newRRCreditJournalWTAX.RRId = RRId;
-                                    newRRCreditJournalWTAX.SIId = null;
-                                    newRRCreditJournalWTAX.INId = null;
-                                    newRRCreditJournalWTAX.OTId = null;
-                                    newRRCreditJournalWTAX.STId = null;
-                                    newRRCreditJournalWTAX.DocumentReference = "RR-" + receivingReceipts.FirstOrDefault().MstBranch.BranchCode + "-" + receivingReceipts.FirstOrDefault().RRNumber;
-                                    newRRCreditJournalWTAX.APRRId = null;
-                                    newRRCreditJournalWTAX.ARSIId = null;
-                                    db.TrnJournals.InsertOnSubmit(newRRCreditJournalWTAX);
-                                }
-                            }
-                        }
-                    }
+                    newRRSupplierJournal.AccountId = receivingReceipts.FirstOrDefault().MstArticle.AccountId;
+                    newRRSupplierJournal.ArticleId = receivingReceipts.FirstOrDefault().SupplierId;
+
+                    newRRSupplierJournal.Particulars = receivingReceipts.FirstOrDefault().Remarks;
+
+                    newRRSupplierJournal.DebitAmount = 0;
+                    newRRSupplierJournal.CreditAmount = receivingReceipts.FirstOrDefault().Amount;
+
+                    newRRSupplierJournal.RRId = RRId;
+
+                    newRRSupplierJournal.DocumentReference = "RR-" + receivingReceipts.FirstOrDefault().MstBranch.BranchCode + "-" + receivingReceipts.FirstOrDefault().RRNumber;
+
+                    db.TrnJournals.InsertOnSubmit(newRRSupplierJournal);
 
                     db.SubmitChanges();
                 }
