@@ -797,7 +797,7 @@ namespace easyfis.Controllers
                     newArticle.Article = article.Article;
                     newArticle.Category = "NA";
                     newArticle.ArticleTypeId = Convert.ToInt32(articleTypeId);
-                    newArticle.ArticleGroupId = null;
+                    newArticle.ArticleGroupId = article.ArticleGroupId;
                     newArticle.AccountId = article.AccountId;
                     newArticle.SalesAccountId = article.AccountId;
                     newArticle.CostAccountId = article.AccountId;
@@ -873,7 +873,7 @@ namespace easyfis.Controllers
                     newArticle.Article = article.Article;
                     newArticle.Category = "NA";
                     newArticle.ArticleTypeId = Convert.ToInt32(articleTypeId);
-                    newArticle.ArticleGroupId = null;
+                    newArticle.ArticleGroupId = article.ArticleGroupId;
                     newArticle.AccountId = article.AccountId;
                     newArticle.SalesAccountId = article.AccountId;
                     newArticle.CostAccountId = article.AccountId;

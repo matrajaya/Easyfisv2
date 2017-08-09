@@ -16,7 +16,7 @@ namespace easyfis.Models
         public String Category { get; set; }
         public Int32 ArticleTypeId { get; set; }
         public String ArticleType { get; set; }
-        public Int32? ArticleGroupId { get; set; }
+        public Int32 ArticleGroupId { get; set; }
         public String ArticleGroup { get; set; }
         public Int32 AccountId { get; set; }
         public String AccountCode { get; set; }
