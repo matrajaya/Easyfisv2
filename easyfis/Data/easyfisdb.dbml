@@ -456,6 +456,7 @@
       <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedById" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="MstDiscount_MstUser" Member="MstUsers" ThisKey="Id" OtherKey="DefaultSalesInvoiceDiscountId" Type="MstUser" />
       <Association Name="MstDiscount_TrnSalesInvoiceItem" Member="TrnSalesInvoiceItems" ThisKey="Id" OtherKey="DiscountId" Type="TrnSalesInvoiceItem" />
       <Association Name="MstAccount_MstDiscount" Member="MstAccount" ThisKey="AccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
       <Association Name="MstUser_MstDiscount" Member="MstUser" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
@@ -561,6 +562,7 @@
       <Column Name="CustomerAdvancesAccountId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="OfficialReceiptName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="InventoryType" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DefaultSalesInvoiceDiscountId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="IsLocked" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="CreatedById" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
@@ -655,6 +657,7 @@
       <Association Name="MstAccount_MstUser2" Member="MstAccount2" ThisKey="CustomerAdvancesAccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
       <Association Name="MstBranch_MstUser" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
       <Association Name="MstCompany_MstUser" Member="MstCompany" ThisKey="CompanyId" OtherKey="Id" Type="MstCompany" IsForeignKey="true" />
+      <Association Name="MstDiscount_MstUser" Member="MstDiscount" ThisKey="DefaultSalesInvoiceDiscountId" OtherKey="Id" Type="MstDiscount" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.MstUserForm" Member="MstUserForms">

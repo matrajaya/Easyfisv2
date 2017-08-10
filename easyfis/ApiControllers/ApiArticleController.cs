@@ -417,6 +417,135 @@ namespace easyfis.Controllers
             return articles.ToList();
         }
 
+        // list article by article type Id filter by IsLocked == true
+        [Authorize]
+        [HttpGet]
+        [Route("api/listArticleByArticleTypeIdLocked/POItem/LastPurchasePrice/{articleTypeId}")]
+        public List<Models.MstArticle> listArticleByArticleTypeIdLockedLastPurchasePrice(String articleTypeId)
+        {
+            var articles = from d in db.MstArticles.OrderBy(d => d.Article)
+                           where d.ArticleTypeId == Convert.ToInt32(articleTypeId)
+                           && d.IsLocked == true
+                           select new
+                           {
+                               Id = d.Id,
+                               ArticleCode = d.ArticleCode,
+                               ManualArticleCode = d.ManualArticleCode,
+                               Article = d.Article,
+                               Category = d.Category,
+                               ArticleTypeId = d.ArticleTypeId,
+                               ArticleType = d.MstArticleType.ArticleType,
+                               ArticleGroupId = d.ArticleGroupId,
+                               ArticleGroup = d.MstArticleGroup.ArticleGroup,
+                               AccountId = d.AccountId,
+                               AccountCode = d.MstAccount.AccountCode,
+                               Account = d.MstAccount.Account,
+                               SalesAccountId = d.SalesAccountId,
+                               SalesAccount = d.MstAccount1.Account,
+                               CostAccountId = d.CostAccountId,
+                               CostAccount = d.MstAccount2.Account,
+                               AssetAccountId = d.AssetAccountId,
+                               AssetAccount = d.MstAccount3.Account,
+                               ExpenseAccountId = d.ExpenseAccountId,
+                               ExpenseAccount = d.MstAccount4.Account,
+                               UnitId = d.UnitId,
+                               Unit = d.MstUnit.Unit,
+                               InputTaxId = d.InputTaxId,
+                               InputTax = d.MstTaxType1.TaxType,
+                               OutputTaxId = d.OutputTaxId,
+                               OutputTax = d.MstTaxType.TaxType,
+                               WTaxTypeId = d.WTaxTypeId,
+                               WTaxType = d.MstTaxType2.TaxType,
+                               Price = d.Price,
+                               Cost = d.Cost,
+                               IsInventory = d.IsInventory,
+                               Particulars = d.Particulars,
+                               Address = d.Address,
+                               TermId = d.TermId,
+                               Term = d.MstTerm.Term,
+                               ContactNumber = d.ContactNumber,
+                               ContactPerson = d.ContactPerson,
+                               EmailAddress = d.EmailAddress,
+                               TaxNumber = d.TaxNumber,
+                               CreditLimit = d.CreditLimit,
+                               DateAcquired = d.DateAcquired.ToShortDateString(),
+                               UsefulLife = d.UsefulLife,
+                               SalvageValue = d.SalvageValue,
+                               ManualArticleOldCode = d.ManualArticleOldCode,
+                               Kitting = d.Kitting,
+                               IsLocked = d.IsLocked,
+                               CreatedById = d.CreatedById,
+                               CreatedBy = d.MstUser.FullName,
+                               CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                               UpdatedById = d.UpdatedById,
+                               UpdatedBy = d.MstUser1.FullName,
+                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                           };
+
+            var articlesWithLastPurchasePrice = from d in articles
+                                                where d.ArticleTypeId == Convert.ToInt32(articleTypeId)
+                                                && d.IsLocked == true
+                                                select new Models.MstArticle
+                                                {
+                                                    Id = d.Id,
+                                                    ArticleCode = d.ArticleCode,
+                                                    ManualArticleCode = d.ManualArticleCode,
+                                                    Article = d.Article,
+                                                    Category = d.Category,
+                                                    ArticleTypeId = d.ArticleTypeId,
+                                                    ArticleType = d.ArticleType,
+                                                    ArticleGroupId = d.ArticleGroupId,
+                                                    ArticleGroup = d.ArticleGroup,
+                                                    AccountId = d.AccountId,
+                                                    AccountCode = d.AccountCode,
+                                                    Account = d.Account,
+                                                    SalesAccountId = d.SalesAccountId,
+                                                    SalesAccount = d.SalesAccount,
+                                                    CostAccountId = d.CostAccountId,
+                                                    CostAccount = d.CostAccount,
+                                                    AssetAccountId = d.AssetAccountId,
+                                                    AssetAccount = d.AssetAccount,
+                                                    ExpenseAccountId = d.ExpenseAccountId,
+                                                    ExpenseAccount = d.ExpenseAccount,
+                                                    UnitId = d.UnitId,
+                                                    Unit = d.Unit,
+                                                    InputTaxId = d.InputTaxId,
+                                                    InputTax = d.InputTax,
+                                                    OutputTaxId = d.OutputTaxId,
+                                                    OutputTax = d.OutputTax,
+                                                    WTaxTypeId = d.WTaxTypeId,
+                                                    WTaxType = d.WTaxType,
+                                                    Price = d.Price,
+                                                    Cost = d.Cost,
+                                                    IsInventory = d.IsInventory,
+                                                    Particulars = d.Particulars,
+                                                    Address = d.Address,
+                                                    TermId = d.TermId,
+                                                    Term = d.Term,
+                                                    ContactNumber = d.ContactNumber,
+                                                    ContactPerson = d.ContactPerson,
+                                                    EmailAddress = d.EmailAddress,
+                                                    TaxNumber = d.TaxNumber,
+                                                    CreditLimit = d.CreditLimit,
+                                                    DateAcquired = d.DateAcquired,
+                                                    UsefulLife = d.UsefulLife,
+                                                    SalvageValue = d.SalvageValue,
+                                                    ManualArticleOldCode = d.ManualArticleOldCode,
+                                                    Kitting = d.Kitting,
+                                                    IsLocked = d.IsLocked,
+                                                    CreatedById = d.CreatedById,
+                                                    CreatedBy = d.CreatedBy,
+                                                    CreatedDateTime = d.CreatedDateTime,
+                                                    UpdatedById = d.UpdatedById,
+                                                    UpdatedBy = d.UpdatedBy,
+                                                    UpdatedDateTime = d.UpdatedDateTime,
+                                                    LastPurchasePrice = (from p in db.TrnPurchaseOrderItems.OrderByDescending(p => p.Id) where p.ItemId == d.Id select p).FirstOrDefault().Cost != null ? (from p in db.TrnPurchaseOrderItems.OrderByDescending(p => p.Id) where p.ItemId == d.Id select p).FirstOrDefault().Cost : 0
+                                                };
+
+            return articlesWithLastPurchasePrice.ToList();
+        }
+
+
         // get last ArticleCode by ArticleTypeId
         [Authorize]
         [HttpGet]

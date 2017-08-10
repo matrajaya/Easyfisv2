@@ -326,23 +326,41 @@ namespace easyfis.Controllers
                     newSaleInvoiceItem.VATPercentage = saleItem.VATPercentage;
                     newSaleInvoiceItem.VATAmount = saleItem.VATAmount;
 
-                    var item = from d in db.MstArticles where d.Id == saleItem.ItemId select d;
-                    newSaleInvoiceItem.BaseUnitId = item.First().UnitId;
+                    var item = from d in db.MstArticles
+                               where d.Id == saleItem.ItemId
+                               select d;
+
+                    newSaleInvoiceItem.BaseUnitId = item.FirstOrDefault().UnitId;
 
                     var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == saleItem.ItemId && d.UnitId == saleItem.UnitId select d;
-                    if (conversionUnit.First().Multiplier > 0)
+
+                    if (conversionUnit.Any())
                     {
-                        newSaleInvoiceItem.BaseQuantity = saleItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                        if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                        {
+                            newSaleInvoiceItem.BaseQuantity = saleItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                        }
+                        else
+                        {
+                            newSaleInvoiceItem.BaseQuantity = saleItem.Quantity * 1;
+                        }
                     }
                     else
                     {
                         newSaleInvoiceItem.BaseQuantity = saleItem.Quantity * 1;
                     }
 
-                    var baseQuantity = saleItem.Quantity * (1 / conversionUnit.First().Multiplier);
-                    if (baseQuantity > 0)
+                    if (conversionUnit.Any())
                     {
-                        newSaleInvoiceItem.BasePrice = saleItem.Amount / baseQuantity;
+                        var baseQuantity = saleItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                        if (baseQuantity > 0)
+                        {
+                            newSaleInvoiceItem.BasePrice = saleItem.Amount / baseQuantity;
+                        }
+                        else
+                        {
+                            newSaleInvoiceItem.BasePrice = saleItem.Amount;
+                        }
                     }
                     else
                     {

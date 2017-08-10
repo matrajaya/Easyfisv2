@@ -209,6 +209,7 @@ namespace easyfis.Controllers
                         var company = from d in db.MstCompanies select d;
                         var branch = from d in db.MstBranches where d.CompanyId == company.FirstOrDefault().Id select d;
                         var account = from d in db.MstAccounts select d;
+                        var discount = from d in db.MstDiscounts select d;
 
                         Data.MstUser newMstUser = new Data.MstUser();
                         newMstUser.UserId = user.Id;
@@ -222,6 +223,7 @@ namespace easyfis.Controllers
                         newMstUser.CustomerAdvancesAccountId = account.FirstOrDefault().Id;
                         newMstUser.OfficialReceiptName = "Official Receipt";
                         newMstUser.InventoryType = "Specific Identification";
+                        newMstUser.DefaultSalesInvoiceDiscountId = discount.FirstOrDefault().Id;
                         newMstUser.IsLocked = true;
                         newMstUser.CreatedById = 0;
                         newMstUser.CreatedDateTime = DateTime.Now;

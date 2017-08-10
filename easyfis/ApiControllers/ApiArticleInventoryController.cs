@@ -104,6 +104,34 @@ namespace easyfis.Controllers
             return articleInventories.ToList();
         }
 
+        // list article inventory by ArticleId
+        [Authorize]
+        [HttpGet]
+        [Route("api/listArticleInventoryByArticleId/items/{articleId}")]
+        public List<Models.MstArticleInventory> listArticleInventoryByArticleIdItems(String articleId)
+        {
+            var articleInventories = from d in db.MstArticleInventories
+                                     where d.BranchId == currentBranchId()
+                                     && d.ArticleId == Convert.ToInt32(articleId)
+                                     && d.MstArticle.IsInventory == true
+                                     && d.Quantity > 0
+                                     select new Models.MstArticleInventory
+                                     {
+                                         Id = d.Id,
+                                         BranchId = d.BranchId,
+                                         Branch = d.MstBranch.Branch,
+                                         ArticleId = d.ArticleId,
+                                         Article = d.MstArticle.Article,
+                                         InventoryCode = d.InventoryCode,
+                                         Quantity = d.Quantity,
+                                         Cost = d.Cost,
+                                         Amount = d.Amount,
+                                         Particulars = d.Particulars
+                                     };
+
+            return articleInventories.ToList();
+        }
+
         // list article inventory by BranchId and ArticleId
         [Authorize]
         [HttpGet]
@@ -176,22 +204,23 @@ namespace easyfis.Controllers
                                      && d.MstArticle.IsLocked == true
                                      && d.MstArticle.IsInventory == true
                                      && d.Quantity > 0
-                                     group d by new 
-                                     {
-                                         ArticleId = d.ArticleId,
-                                         Article = d.MstArticle.Article,
-                                         UnitId = d.MstArticle.UnitId,
-                                         Unit = d.MstArticle.MstUnit.Unit,
-                                         ManualArticleCode = d.MstArticle.ManualArticleCode
-                                     } into g
                                      select new Models.MstArticleInventory
                                      {
-                                         ArticleId = g.Key.ArticleId,
-                                         Article = g.Key.Article,
-                                         UnitId = g.Key.UnitId,
-                                         Unit = g.Key.Unit,
-                                         ManualArticleCode = g.Key.ManualArticleCode,
-                                         Cost = g.Sum(d => d.Cost),
+                                         Id = d.Id,
+                                         BranchId = d.BranchId,
+                                         Branch = d.MstBranch.Branch,
+                                         ArticleId = d.ArticleId,
+                                         Article = d.MstArticle.Article,
+                                         InventoryCode = d.InventoryCode,
+                                         Quantity = d.Quantity,
+                                         Cost = d.Cost,
+                                         Amount = d.Amount,
+                                         Particulars = d.Particulars,
+                                         ManualArticleCode = d.MstArticle.ManualArticleCode,
+                                         UnitId = d.MstArticle.UnitId,
+                                         Unit = d.MstArticle.MstUnit.Unit,
+                                         Inventory = d.MstArticle.IsInventory,
+                                         Price = d.MstArticle.Price
                                      };
 
             return articleInventories.ToList();

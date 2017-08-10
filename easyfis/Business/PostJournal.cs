@@ -612,121 +612,117 @@ namespace easyfis.Business
         {
             try
             {
-                // header
                 var disbursements = from d in db.TrnDisbursements
                                     where d.Id == CVId
                                     select d;
 
                 if (disbursements.Any())
                 {
-                    // lines (Accounts Payable)
-                    var disbursementLines = from d in db.TrnDisbursementLines
-                                            where d.CVId == CVId
-                                            group d by new
-                                            {
-                                                BranchId = d.BranchId,
-                                                AccountId = d.AccountId,
-                                                ArticleId = d.ArticleId
-                                            } into g
-                                            select new
-                                            {
-                                                BranchId = g.Key.BranchId,
-                                                AccountId = g.Key.AccountId,
-                                                ArticleId = g.Key.ArticleId,
-                                                Amount = g.Sum(d => d.Amount)
-                                            };
-
-                    if (disbursementLines.Any())
+                    // ============================
+                    // Debit - Line Positive Amount
+                    // ============================
+                    var disbursementPositiveLines = from d in db.TrnDisbursementLines
+                                                    where d.CVId == CVId && d.Amount > 0
+                                                    group d by new
+                                                    {
+                                                        BranchId = d.TrnDisbursement.BranchId,
+                                                        AccountId = d.AccountId,
+                                                        ArticleId = d.ArticleId
+                                                    } into g
+                                                    select new
+                                                    {
+                                                        BranchId = g.Key.BranchId,
+                                                        AccountId = g.Key.AccountId,
+                                                        ArticleId = g.Key.ArticleId,
+                                                        Amount = g.Sum(d => d.Amount)
+                                                    };
+                    if (disbursementPositiveLines.Any())
                     {
-                        foreach (var disbursementLine in disbursementLines)
+                        foreach (var disbursementPositiveLine in disbursementPositiveLines)
                         {
-                            // Accounts Payable
-                            // DEBIT
-                            if (disbursementLine.Amount > 0)
-                            {
-                                Data.TrnJournal newCVDebitJournal = new Data.TrnJournal();
-                                newCVDebitJournal.JournalDate = disbursements.FirstOrDefault().CVDate;
-                                newCVDebitJournal.BranchId = disbursementLine.BranchId;
-                                newCVDebitJournal.AccountId = disbursementLine.AccountId;
-                                newCVDebitJournal.ArticleId = disbursementLine.ArticleId;
-                                newCVDebitJournal.Particulars = "Disbursement";
-                                newCVDebitJournal.DebitAmount = disbursementLine.Amount;
-                                newCVDebitJournal.CreditAmount = 0;
-                                newCVDebitJournal.ORId = null;
-                                newCVDebitJournal.CVId = CVId;
-                                newCVDebitJournal.JVId = null;
-                                newCVDebitJournal.RRId = null;
-                                newCVDebitJournal.SIId = null;
-                                newCVDebitJournal.INId = null;
-                                newCVDebitJournal.OTId = null;
-                                newCVDebitJournal.STId = null;
-                                newCVDebitJournal.DocumentReference = "CV-" + disbursements.FirstOrDefault().MstBranch.BranchCode + "-" + disbursements.FirstOrDefault().CVNumber;
-                                newCVDebitJournal.APRRId = null;
-                                newCVDebitJournal.ARSIId = null;
-                                db.TrnJournals.InsertOnSubmit(newCVDebitJournal);
-                            }
-                            else
-                            {
-                                // Accounts Payable
-                                // CREDIT
-                                if (disbursementLine.Amount < 0)
-                                {
-                                    Data.TrnJournal newCVCreditJournal = new Data.TrnJournal();
-                                    newCVCreditJournal.JournalDate = disbursements.FirstOrDefault().CVDate;
-                                    newCVCreditJournal.BranchId = disbursementLine.BranchId;
-                                    newCVCreditJournal.AccountId = disbursementLine.AccountId;
-                                    newCVCreditJournal.ArticleId = disbursementLine.ArticleId;
-                                    newCVCreditJournal.Particulars = "Disbursement";
-                                    newCVCreditJournal.DebitAmount = 0;
-                                    newCVCreditJournal.CreditAmount = disbursementLine.Amount * -1;
-                                    newCVCreditJournal.ORId = null;
-                                    newCVCreditJournal.CVId = CVId;
-                                    newCVCreditJournal.JVId = null;
-                                    newCVCreditJournal.RRId = null;
-                                    newCVCreditJournal.SIId = null;
-                                    newCVCreditJournal.INId = null;
-                                    newCVCreditJournal.OTId = null;
-                                    newCVCreditJournal.STId = null;
-                                    newCVCreditJournal.DocumentReference = "CV-" + disbursements.FirstOrDefault().MstBranch.BranchCode + "-" + disbursements.FirstOrDefault().CVNumber;
-                                    newCVCreditJournal.APRRId = null;
-                                    newCVCreditJournal.ARSIId = null;
-                                    db.TrnJournals.InsertOnSubmit(newCVCreditJournal);
-                                }
-                            }
+                            Data.TrnJournal newDisbursementPositiveLineJournal = new Data.TrnJournal();
+
+                            newDisbursementPositiveLineJournal.JournalDate = disbursements.FirstOrDefault().CVDate;
+                            newDisbursementPositiveLineJournal.BranchId = disbursementPositiveLine.BranchId;
+
+                            newDisbursementPositiveLineJournal.AccountId = disbursementPositiveLine.AccountId;
+                            newDisbursementPositiveLineJournal.ArticleId = disbursementPositiveLine.ArticleId;
+                            newDisbursementPositiveLineJournal.Particulars = disbursements.FirstOrDefault().Particulars;
+
+                            newDisbursementPositiveLineJournal.DebitAmount = disbursementPositiveLine.Amount;
+                            newDisbursementPositiveLineJournal.CreditAmount = 0;
+
+                            newDisbursementPositiveLineJournal.CVId = CVId;
+
+                            newDisbursementPositiveLineJournal.DocumentReference = "CV-" + disbursements.FirstOrDefault().MstBranch.BranchCode + "-" + disbursements.FirstOrDefault().CVNumber;
+
+                            db.TrnJournals.InsertOnSubmit(newDisbursementPositiveLineJournal);
                         }
                     }
-
-                    // Collection Amount
-                    // CREDIT (header)
-                    if (disbursements.FirstOrDefault().Amount > 0)
+                    // =============================
+                    // Credit - Line Negative Amount
+                    // =============================
+                    var disbursementNegativeLines = from d in db.TrnDisbursementLines
+                                                    where d.CVId == CVId && d.Amount < 0
+                                                    group d by new
+                                                    {
+                                                        BranchId = d.TrnDisbursement.BranchId,
+                                                        AccountId = d.AccountId,
+                                                        ArticleId = d.ArticleId
+                                                    } into g
+                                                    select new
+                                                    {
+                                                        BranchId = g.Key.BranchId,
+                                                        AccountId = g.Key.AccountId,
+                                                        ArticleId = g.Key.ArticleId,
+                                                        Amount = g.Sum(d => d.Amount)
+                                                    };
+                    if (disbursementNegativeLines.Any())
                     {
-                        var accountArticle = from d in db.MstArticles where d.Id == disbursements.FirstOrDefault().BankId select d;
-
-                        if (accountArticle.Any())
+                        foreach (var disbursementNegativeLine in disbursementNegativeLines)
                         {
-                            Data.TrnJournal newCVAmountJournal = new Data.TrnJournal();
-                            newCVAmountJournal.JournalDate = disbursements.FirstOrDefault().CVDate;
-                            newCVAmountJournal.BranchId = disbursements.FirstOrDefault().BranchId;
-                            newCVAmountJournal.AccountId = accountArticle.FirstOrDefault().AccountId;
-                            newCVAmountJournal.ArticleId = disbursements.FirstOrDefault().BankId;
-                            newCVAmountJournal.Particulars = "Bank";
-                            newCVAmountJournal.DebitAmount = 0;
-                            newCVAmountJournal.CreditAmount = disbursements.FirstOrDefault().Amount;
-                            newCVAmountJournal.ORId = null;
-                            newCVAmountJournal.CVId = CVId;
-                            newCVAmountJournal.JVId = null;
-                            newCVAmountJournal.RRId = null;
-                            newCVAmountJournal.SIId = null;
-                            newCVAmountJournal.INId = null;
-                            newCVAmountJournal.OTId = null;
-                            newCVAmountJournal.STId = null;
-                            newCVAmountJournal.DocumentReference = "CV-" + disbursements.FirstOrDefault().MstBranch.BranchCode + "-" + disbursements.FirstOrDefault().CVNumber;
-                            newCVAmountJournal.APRRId = null;
-                            newCVAmountJournal.ARSIId = null;
-                            db.TrnJournals.InsertOnSubmit(newCVAmountJournal);
+                            Data.TrnJournal newDisbursementNegativeLineJournal = new Data.TrnJournal();
+
+                            newDisbursementNegativeLineJournal.JournalDate = disbursements.FirstOrDefault().CVDate;
+                            newDisbursementNegativeLineJournal.BranchId = disbursementNegativeLine.BranchId;
+
+                            newDisbursementNegativeLineJournal.AccountId = disbursementNegativeLine.AccountId;
+                            newDisbursementNegativeLineJournal.ArticleId = disbursementNegativeLine.ArticleId;
+                            newDisbursementNegativeLineJournal.Particulars = disbursements.FirstOrDefault().Particulars;
+
+                            newDisbursementNegativeLineJournal.DebitAmount = disbursementNegativeLine.Amount;
+                            newDisbursementNegativeLineJournal.CreditAmount = 0;
+
+                            newDisbursementNegativeLineJournal.CVId = CVId;
+
+                            newDisbursementNegativeLineJournal.DocumentReference = "CV-" + disbursements.FirstOrDefault().MstBranch.BranchCode + "-" + disbursements.FirstOrDefault().CVNumber;
+
+                            db.TrnJournals.InsertOnSubmit(newDisbursementNegativeLineJournal);
                         }
                     }
+                    // ======================
+                    // Credit - Header (Bank)
+                    // ======================
+                    Data.TrnJournal newDisbursementJournal = new Data.TrnJournal();
 
+                    newDisbursementJournal.JournalDate = disbursements.FirstOrDefault().CVDate;
+                    newDisbursementJournal.BranchId = disbursements.FirstOrDefault().BranchId;
+
+                    newDisbursementJournal.AccountId = getAccountId(disbursements.FirstOrDefault().MstArticle1.ArticleGroupId, disbursements.FirstOrDefault().BranchId, "Account");
+                    newDisbursementJournal.ArticleId = disbursements.FirstOrDefault().BankId;
+
+                    newDisbursementJournal.Particulars = disbursements.FirstOrDefault().Particulars;
+
+                    newDisbursementJournal.DebitAmount = 0;
+                    newDisbursementJournal.CreditAmount = disbursements.FirstOrDefault().Amount;
+
+                    newDisbursementJournal.CVId = CVId;
+
+                    newDisbursementJournal.DocumentReference = "CV-" + disbursements.FirstOrDefault().MstBranch.BranchCode + "-" + disbursements.FirstOrDefault().CVNumber;
+
+                    db.TrnJournals.InsertOnSubmit(newDisbursementJournal);
+
+                    // Save
                     db.SubmitChanges();
                 }
             }
@@ -768,241 +764,186 @@ namespace easyfis.Business
 
                 if (salesInvoices.Any())
                 {
-                    // DEBIT
-                    if (salesInvoices.FirstOrDefault().Amount > 0)
-                    {
-                        var accountCustomer = from d in db.MstArticles where d.Id == salesInvoices.FirstOrDefault().CustomerId select d;
-                        if (accountCustomer.Any())
-                        {
-                            Data.TrnJournal newSIDebitJournalAccount = new Data.TrnJournal();
-                            newSIDebitJournalAccount.JournalDate = salesInvoices.FirstOrDefault().SIDate;
-                            newSIDebitJournalAccount.BranchId = salesInvoices.FirstOrDefault().BranchId;
-                            newSIDebitJournalAccount.AccountId = accountCustomer.FirstOrDefault().AccountId;
-                            newSIDebitJournalAccount.ArticleId = salesInvoices.FirstOrDefault().CustomerId;
-                            newSIDebitJournalAccount.Particulars = "Customer";
-                            newSIDebitJournalAccount.DebitAmount = salesInvoices.FirstOrDefault().Amount;
-                            newSIDebitJournalAccount.CreditAmount = 0;
-                            newSIDebitJournalAccount.ORId = null;
-                            newSIDebitJournalAccount.CVId = null;
-                            newSIDebitJournalAccount.JVId = null;
-                            newSIDebitJournalAccount.RRId = null;
-                            newSIDebitJournalAccount.SIId = SIId;
-                            newSIDebitJournalAccount.INId = null;
-                            newSIDebitJournalAccount.OTId = null;
-                            newSIDebitJournalAccount.STId = null;
-                            newSIDebitJournalAccount.DocumentReference = "SI-" + salesInvoices.FirstOrDefault().MstBranch.BranchCode + "-" + salesInvoices.FirstOrDefault().SINumber;
-                            newSIDebitJournalAccount.APRRId = null;
-                            newSIDebitJournalAccount.ARSIId = null;
-                            db.TrnJournals.InsertOnSubmit(newSIDebitJournalAccount);
-                        }
-                    }
+                    // ============================
+                    // Debit - Header (Customer AR)
+                    // ============================
+                    Data.TrnJournal newSalesJournal = new Data.TrnJournal();
 
+                    newSalesJournal.JournalDate = salesInvoices.FirstOrDefault().SIDate;
+                    newSalesJournal.BranchId = salesInvoices.FirstOrDefault().BranchId;
+
+                    newSalesJournal.AccountId = getAccountId(salesInvoices.FirstOrDefault().MstArticle.ArticleGroupId, salesInvoices.FirstOrDefault().BranchId, "Account");
+                    newSalesJournal.ArticleId = salesInvoices.FirstOrDefault().CustomerId;
+
+                    newSalesJournal.Particulars = salesInvoices.FirstOrDefault().Remarks;
+
+                    newSalesJournal.DebitAmount = salesInvoices.FirstOrDefault().Amount;
+                    newSalesJournal.CreditAmount = 0;
+
+                    newSalesJournal.SIId = SIId;
+
+                    newSalesJournal.DocumentReference = "SI-" + salesInvoices.FirstOrDefault().MstBranch.BranchCode + "-" + salesInvoices.FirstOrDefault().SINumber;
+
+                    db.TrnJournals.InsertOnSubmit(newSalesJournal);
+
+                    // ====================
+                    // Credit - Sales Lines
+                    // ====================
                     var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
                                             where d.SIId == SIId
                                             group d by new
                                             {
-                                                SalesAccountId = getAccountId(d.MstArticle.ArticleGroupId, d.TrnSalesInvoice.BranchId, "Sales") != 0 ? getAccountId(d.MstArticle.ArticleGroupId, d.TrnSalesInvoice.BranchId, "Sales") : d.MstArticle.SalesAccountId,
-                                                VATId = d.VATId,
-                                                SIId = d.SIId
+                                                SalesInvoice = d.TrnSalesInvoice,
+                                                ArticleGroupId = d.MstArticle.ArticleGroupId
                                             } into g
                                             select new
                                             {
-                                                SalesAccountId = g.Key.SalesAccountId,
-                                                VATId = g.Key.VATId,
-                                                SIId = g.Key.SIId,
-                                                Amount = g.Sum(d => d.Amount),
-                                                VATAmount = g.Sum(d => d.VATAmount)
+                                                ArticleGroupId = g.Key.ArticleGroupId,
+                                                Amount = g.Sum(d => d.Amount - d.VATAmount)
                                             };
-
-                    // Sales (From Sales Invoice Item)
                     if (salesInvoiceItems.Any())
                     {
                         foreach (var salesInvoiceItem in salesInvoiceItems)
                         {
-                            // CREDIT
-                            if (salesInvoiceItem.Amount > 0)
-                            {
-                                var taxTypes = from d in db.MstTaxTypes where d.Id == salesInvoiceItem.VATId select d;
-                                if (taxTypes.Any())
-                                {
-                                    Decimal Amount = salesInvoiceItem.Amount;
-                                    if (taxTypes.Any())
-                                    {
-                                        if (taxTypes.FirstOrDefault().IsInclusive)
-                                        {
-                                            Amount = salesInvoiceItem.Amount - salesInvoiceItem.VATAmount;
-                                        }
-                                    }
+                            Data.TrnJournal newSalesInvoiceItemsJournal = new Data.TrnJournal();
 
-                                    Data.TrnJournal newSICreditJournalSales = new Data.TrnJournal();
-                                    newSICreditJournalSales.JournalDate = salesInvoices.FirstOrDefault().SIDate;
-                                    newSICreditJournalSales.BranchId = salesInvoices.FirstOrDefault().BranchId;
-                                    newSICreditJournalSales.AccountId = salesInvoiceItem.SalesAccountId;
-                                    newSICreditJournalSales.ArticleId = salesInvoices.FirstOrDefault().CustomerId;
-                                    newSICreditJournalSales.Particulars = "Sales";
-                                    newSICreditJournalSales.DebitAmount = 0;
-                                    newSICreditJournalSales.CreditAmount = Amount;
-                                    newSICreditJournalSales.ORId = null;
-                                    newSICreditJournalSales.CVId = null;
-                                    newSICreditJournalSales.JVId = null;
-                                    newSICreditJournalSales.RRId = null;
-                                    newSICreditJournalSales.SIId = SIId;
-                                    newSICreditJournalSales.INId = null;
-                                    newSICreditJournalSales.OTId = null;
-                                    newSICreditJournalSales.STId = null;
-                                    newSICreditJournalSales.DocumentReference = "SI-" + salesInvoices.FirstOrDefault().MstBranch.BranchCode + "-" + salesInvoices.FirstOrDefault().SINumber;
-                                    newSICreditJournalSales.APRRId = null;
-                                    newSICreditJournalSales.ARSIId = null;
-                                    db.TrnJournals.InsertOnSubmit(newSICreditJournalSales);
-                                }
-                            }
+                            newSalesInvoiceItemsJournal.JournalDate = salesInvoices.FirstOrDefault().SIDate;
+                            newSalesInvoiceItemsJournal.BranchId = salesInvoices.FirstOrDefault().BranchId;
+
+                            newSalesInvoiceItemsJournal.AccountId = getAccountId(salesInvoiceItem.ArticleGroupId, salesInvoices.FirstOrDefault().BranchId, "Sales");
+                            newSalesInvoiceItemsJournal.ArticleId = salesInvoices.FirstOrDefault().CustomerId;
+
+                            newSalesInvoiceItemsJournal.Particulars = salesInvoices.FirstOrDefault().Remarks;
+
+                            newSalesInvoiceItemsJournal.DebitAmount = 0;
+                            newSalesInvoiceItemsJournal.CreditAmount = salesInvoiceItem.Amount;
+
+                            newSalesInvoiceItemsJournal.SIId = SIId;
+
+                            newSalesInvoiceItemsJournal.DocumentReference = "SI-" + salesInvoices.FirstOrDefault().MstBranch.BranchCode + "-" + salesInvoices.FirstOrDefault().SINumber;
+
+                            db.TrnJournals.InsertOnSubmit(newSalesInvoiceItemsJournal);
                         }
                     }
-
-                    var salesInvoiceItemsForVAT = from d in db.TrnSalesInvoiceItems
-                                                  where d.SIId == SIId
-                                                  group d by new
-                                                  {
-                                                      VATId = d.VATId,
-                                                      SIId = d.SIId
-                                                  } into g
-                                                  select new
-                                                  {
-                                                      VATId = g.Key.VATId,
-                                                      SIId = g.Key.SIId,
-                                                      VATAmount = g.Sum(d => d.VATAmount)
-                                                  };
-
-                    // Sales Invoice Items - VAT
-                    if (salesInvoiceItemsForVAT.Any())
+                    // ============
+                    // Credit - VAT
+                    // ============
+                    var salesInvoiceVATItems = from d in db.TrnSalesInvoiceItems
+                                               where d.SIId == SIId
+                                               group d by new
+                                               {
+                                                   SalesInvoice = d.TrnSalesInvoice,
+                                                   AccountId = d.MstTaxType.AccountId
+                                               } into g
+                                               select new
+                                               {
+                                                   AccountId = g.Key.AccountId,
+                                                   Amount = g.Sum(d => d.VATAmount)
+                                               };
+                    if (salesInvoiceVATItems.Any())
                     {
-                        foreach (var salesInvoiceItemVAT in salesInvoiceItemsForVAT)
+                        foreach (var salesInvoiceVATItem in salesInvoiceVATItems)
                         {
-                            // CREDIT
-                            if (salesInvoiceItemVAT.VATAmount > 0)
-                            {
-                                var taxTypes = from d in db.MstTaxTypes where d.Id == salesInvoiceItemVAT.VATId select d;
-                                if (taxTypes.Any())
-                                {
-                                    Data.TrnJournal newSICreditJournaVAT = new Data.TrnJournal();
-                                    newSICreditJournaVAT.JournalDate = salesInvoices.FirstOrDefault().SIDate;
-                                    newSICreditJournaVAT.BranchId = salesInvoices.FirstOrDefault().BranchId;
-                                    newSICreditJournaVAT.AccountId = taxTypes.FirstOrDefault().AccountId;
-                                    newSICreditJournaVAT.ArticleId = salesInvoices.FirstOrDefault().CustomerId;
-                                    newSICreditJournaVAT.Particulars = "VAT Amount";
-                                    newSICreditJournaVAT.DebitAmount = 0;
-                                    newSICreditJournaVAT.CreditAmount = salesInvoiceItemVAT.VATAmount;
-                                    newSICreditJournaVAT.ORId = null;
-                                    newSICreditJournaVAT.CVId = null;
-                                    newSICreditJournaVAT.JVId = null;
-                                    newSICreditJournaVAT.RRId = null;
-                                    newSICreditJournaVAT.SIId = SIId;
-                                    newSICreditJournaVAT.INId = null;
-                                    newSICreditJournaVAT.OTId = null;
-                                    newSICreditJournaVAT.STId = null;
-                                    newSICreditJournaVAT.DocumentReference = "SI-" + salesInvoices.FirstOrDefault().MstBranch.BranchCode + "-" + salesInvoices.FirstOrDefault().SINumber;
-                                    newSICreditJournaVAT.APRRId = null;
-                                    newSICreditJournaVAT.ARSIId = null;
-                                    db.TrnJournals.InsertOnSubmit(newSICreditJournaVAT);
-                                }
-                            }
+                            Data.TrnJournal newSalesInvoiceVATItemsJournal = new Data.TrnJournal();
+
+                            newSalesInvoiceVATItemsJournal.JournalDate = salesInvoices.FirstOrDefault().SIDate;
+                            newSalesInvoiceVATItemsJournal.BranchId = salesInvoices.FirstOrDefault().BranchId;
+
+                            newSalesInvoiceVATItemsJournal.AccountId = salesInvoiceVATItem.AccountId;
+                            newSalesInvoiceVATItemsJournal.ArticleId = salesInvoices.FirstOrDefault().CustomerId;
+
+                            newSalesInvoiceVATItemsJournal.Particulars = salesInvoices.FirstOrDefault().Remarks;
+
+                            newSalesInvoiceVATItemsJournal.DebitAmount = 0;
+                            newSalesInvoiceVATItemsJournal.CreditAmount = salesInvoiceVATItem.Amount;
+
+                            newSalesInvoiceVATItemsJournal.SIId = SIId;
+
+                            newSalesInvoiceVATItemsJournal.DocumentReference = "SI-" + salesInvoices.FirstOrDefault().MstBranch.BranchCode + "-" + salesInvoices.FirstOrDefault().SINumber;
+
+                            db.TrnJournals.InsertOnSubmit(newSalesInvoiceVATItemsJournal);
                         }
                     }
+                    // ===========================
+                    // Debit - Cost of Sales Lines
+                    // ===========================
+                    var salesInvoiceCostItems = from d in db.TrnSalesInvoiceItems
+                                                where d.SIId == SIId && d.MstArticle.IsInventory == true && d.ItemInventoryId > 0
+                                                group d by new
+                                                {
+                                                    SalesInvoice = d.TrnSalesInvoice,
+                                                    ArticleGroupId = d.MstArticle.ArticleGroupId
+                                                } into g
+                                                select new
+                                                {
+                                                    ArticleGroupId = g.Key.ArticleGroupId,
+                                                    Amount = g.Sum(d => d.MstArticleInventory.Cost * d.Quantity)
+                                                };
+                    if (salesInvoiceCostItems.Any())
+                    {
+                        foreach (var salesInvoiceCostItem in salesInvoiceCostItems)
+                        {
+                            Data.TrnJournal newSalesInvoiceCostItemsJournal = new Data.TrnJournal();
 
-                    var salesInvoiceItemsForAmount = from d in db.TrnSalesInvoiceItems
-                                                     where d.SIId == SIId
-                                                     && d.MstArticle.IsInventory == true
+                            newSalesInvoiceCostItemsJournal.JournalDate = salesInvoices.FirstOrDefault().SIDate;
+                            newSalesInvoiceCostItemsJournal.BranchId = salesInvoices.FirstOrDefault().BranchId;
+
+                            newSalesInvoiceCostItemsJournal.AccountId = getAccountId(salesInvoiceCostItem.ArticleGroupId, salesInvoices.FirstOrDefault().BranchId, "Cost");
+                            newSalesInvoiceCostItemsJournal.ArticleId = salesInvoices.FirstOrDefault().CustomerId;
+
+                            newSalesInvoiceCostItemsJournal.Particulars = salesInvoices.FirstOrDefault().Remarks;
+
+                            newSalesInvoiceCostItemsJournal.DebitAmount = salesInvoiceCostItem.Amount;
+                            newSalesInvoiceCostItemsJournal.CreditAmount = 0;
+
+                            newSalesInvoiceCostItemsJournal.SIId = SIId;
+
+                            newSalesInvoiceCostItemsJournal.DocumentReference = "SI-" + salesInvoices.FirstOrDefault().MstBranch.BranchCode + "-" + salesInvoices.FirstOrDefault().SINumber;
+
+                            db.TrnJournals.InsertOnSubmit(newSalesInvoiceCostItemsJournal);
+                        }
+                    }
+                    // ==================
+                    // Credit - Inventory
+                    // ==================
+                    var salesInvoiceInventoryItems = from d in db.TrnSalesInvoiceItems
+                                                     where d.SIId == SIId && d.MstArticle.IsInventory == true && d.ItemInventoryId > 0
                                                      group d by new
                                                      {
-                                                         SIId = d.SIId,
-                                                         CostAccountId = getAccountId(d.MstArticle.ArticleGroupId, d.TrnSalesInvoice.BranchId, "Cost") != 0 ? getAccountId(d.MstArticle.ArticleGroupId, d.TrnSalesInvoice.BranchId, "Cost") : d.MstArticle.CostAccountId,
+                                                         SalesInvoice = d.TrnSalesInvoice,
+                                                         ArticleGroupId = d.MstArticle.ArticleGroupId
                                                      } into g
                                                      select new
                                                      {
-                                                         SIId = g.Key.SIId,
-                                                         CostAccountId = g.Key.CostAccountId,
-                                                         Amount = g.Sum(d => d.BaseQuantity * d.MstArticleInventory.Cost)
+                                                         ArticleGroupId = g.Key.ArticleGroupId,
+                                                         Amount = g.Sum(d => d.MstArticleInventory.Cost * d.Quantity)
                                                      };
-
-                    // SI Items - Amount
-                    // cost of goods
-                    if (salesInvoiceItemsForAmount.Any())
+                    if (salesInvoiceInventoryItems.Any())
                     {
-                        foreach (var salesInvoiceItemAmount in salesInvoiceItemsForAmount)
+                        foreach (var salesInvoiceInventoryItem in salesInvoiceInventoryItems)
                         {
-                            // DEBIT
-                            if (salesInvoiceItemAmount.Amount > 0)
-                            {
-                                Data.TrnJournal newSIDebitJournalAmount = new Data.TrnJournal();
-                                newSIDebitJournalAmount.JournalDate = salesInvoices.FirstOrDefault().SIDate;
-                                newSIDebitJournalAmount.BranchId = salesInvoices.FirstOrDefault().BranchId;
-                                newSIDebitJournalAmount.AccountId = salesInvoiceItemAmount.CostAccountId;
-                                newSIDebitJournalAmount.ArticleId = salesInvoices.FirstOrDefault().CustomerId;
-                                newSIDebitJournalAmount.Particulars = "Item Components";
-                                newSIDebitJournalAmount.DebitAmount = Math.Round((salesInvoiceItemAmount.Amount) * 100) / 100;
-                                newSIDebitJournalAmount.CreditAmount = 0;
-                                newSIDebitJournalAmount.ORId = null;
-                                newSIDebitJournalAmount.CVId = null;
-                                newSIDebitJournalAmount.JVId = null;
-                                newSIDebitJournalAmount.RRId = null;
-                                newSIDebitJournalAmount.SIId = SIId;
-                                newSIDebitJournalAmount.INId = null;
-                                newSIDebitJournalAmount.OTId = null;
-                                newSIDebitJournalAmount.STId = null;
-                                newSIDebitJournalAmount.DocumentReference = "SI-" + salesInvoices.FirstOrDefault().MstBranch.BranchCode + "-" + salesInvoices.FirstOrDefault().SINumber;
-                                newSIDebitJournalAmount.APRRId = null;
-                                newSIDebitJournalAmount.ARSIId = null;
-                                db.TrnJournals.InsertOnSubmit(newSIDebitJournalAmount);
-                            }
+                            Data.TrnJournal newSalesInvoiceInventoryItemsJournal = new Data.TrnJournal();
+
+                            newSalesInvoiceInventoryItemsJournal.JournalDate = salesInvoices.FirstOrDefault().SIDate;
+                            newSalesInvoiceInventoryItemsJournal.BranchId = salesInvoices.FirstOrDefault().BranchId;
+
+                            newSalesInvoiceInventoryItemsJournal.AccountId = getAccountId(salesInvoiceInventoryItem.ArticleGroupId, salesInvoices.FirstOrDefault().BranchId, "Account");
+                            newSalesInvoiceInventoryItemsJournal.ArticleId = salesInvoices.FirstOrDefault().CustomerId;
+
+                            newSalesInvoiceInventoryItemsJournal.Particulars = salesInvoices.FirstOrDefault().Remarks;
+
+                            newSalesInvoiceInventoryItemsJournal.DebitAmount = 0;
+                            newSalesInvoiceInventoryItemsJournal.CreditAmount = salesInvoiceInventoryItem.Amount;
+
+                            newSalesInvoiceInventoryItemsJournal.SIId = SIId;
+
+                            newSalesInvoiceInventoryItemsJournal.DocumentReference = "SI-" + salesInvoices.FirstOrDefault().MstBranch.BranchCode + "-" + salesInvoices.FirstOrDefault().SINumber;
+
+                            db.TrnJournals.InsertOnSubmit(newSalesInvoiceInventoryItemsJournal);
                         }
                     }
 
-                    var salesInvoiceItemsForInventory = from d in db.TrnSalesInvoiceItems
-                                                        where d.SIId == SIId
-                                                        && d.MstArticle.IsInventory == true
-                                                        group d by new
-                                                        {
-                                                            SIId = d.SIId,
-                                                            AccountId = getAccountId(d.MstArticle.ArticleGroupId, d.TrnSalesInvoice.BranchId, "Account") != 0 ? getAccountId(d.MstArticle.ArticleGroupId, d.TrnSalesInvoice.BranchId, "Account") : d.MstArticle.AccountId,
-                                                        } into g
-                                                        select new
-                                                        {
-                                                            SIId = g.Key.SIId,
-                                                            AccountId = g.Key.AccountId,
-                                                            Amount = g.Sum(d => d.BaseQuantity * d.MstArticleInventory.Cost)
-                                                        };
-
-                    // Sales Invoice Items - Inventory
-                    if (salesInvoiceItemsForInventory.Any())
-                    {
-                        foreach (var salesInvoiceItemInventory in salesInvoiceItemsForInventory)
-                        {
-                            // CREDIT
-                            if (salesInvoiceItemInventory.Amount > 0)
-                            {
-                                Data.TrnJournal newSICreditJournalInventory = new Data.TrnJournal();
-                                newSICreditJournalInventory.JournalDate = salesInvoices.FirstOrDefault().SIDate;
-                                newSICreditJournalInventory.BranchId = salesInvoices.FirstOrDefault().BranchId;
-                                newSICreditJournalInventory.AccountId = salesInvoiceItemInventory.AccountId;
-                                newSICreditJournalInventory.ArticleId = salesInvoices.FirstOrDefault().CustomerId;
-                                newSICreditJournalInventory.Particulars = "Item Components";
-                                newSICreditJournalInventory.DebitAmount = 0;
-                                newSICreditJournalInventory.CreditAmount = Math.Round((salesInvoiceItemInventory.Amount) * 100) / 100;
-                                newSICreditJournalInventory.ORId = null;
-                                newSICreditJournalInventory.CVId = null;
-                                newSICreditJournalInventory.JVId = null;
-                                newSICreditJournalInventory.RRId = null;
-                                newSICreditJournalInventory.SIId = SIId;
-                                newSICreditJournalInventory.INId = null;
-                                newSICreditJournalInventory.OTId = null;
-                                newSICreditJournalInventory.STId = null;
-                                newSICreditJournalInventory.DocumentReference = "SI-" + salesInvoices.FirstOrDefault().MstBranch.BranchCode + "-" + salesInvoices.FirstOrDefault().SINumber;
-                                newSICreditJournalInventory.APRRId = null;
-                                newSICreditJournalInventory.ARSIId = null;
-                                db.TrnJournals.InsertOnSubmit(newSICreditJournalInventory);
-                            }
-                        }
-                    }
+                    // Save
 
                     db.SubmitChanges();
                 }

@@ -477,7 +477,7 @@
         function getArticleItemForItemQuery() {
             var items = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticleByArticleTypeIdLocked/1',
+                url: '/api/listArticleByArticleTypeIdLocked/POItem/LastPurchasePrice/1',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -515,7 +515,7 @@
                             OutputTax: articleItemsResult[i]["OutputTax"],
                             WTaxTypeId: articleItemsResult[i]["WTaxTypeId"],
                             WTaxType: articleItemsResult[i]["WTaxType"],
-                            Price: articleItemsResult[i]["Price"],
+                            Price: articleItemsResult[i]["LastPurchasePrice"],
                             Cost: articleItemsResult[i]["Cost"],
                             IsInventory: articleItemsResult[i]["IsInventory"],
                             Particulars: articleItemsResult[i]["Particulars"],

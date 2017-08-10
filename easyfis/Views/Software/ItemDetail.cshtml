@@ -2742,7 +2742,7 @@
             NProgress.start();
             if (document.location.search.length > 0) {
                 $.ajax({
-                    url: '/api/listArticleInventoryByArticleId/' + itemId,
+                    url: '/api/listArticleInventoryByArticleId/items/' + itemId,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',

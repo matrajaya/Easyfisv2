@@ -213,7 +213,8 @@ namespace easyfis.Controllers
                     updateMstUsers.SupplierAdvancesAccountId = mstUser.SupplierAdvancesAccountId;
                     updateMstUsers.CustomerAdvancesAccountId = mstUser.CustomerAdvancesAccountId;
                     updateMstUsers.OfficialReceiptName = mstUser.OfficialReceiptName;
-
+                    updateMstUsers.InventoryType = mstUser.InventoryType;
+                    updateMstUsers.DefaultSalesInvoiceDiscountId = mstUser.DefaultSalesInvoiceDiscountId;
                     db.SubmitChanges();
 
                     if (aspUsers.Any())
@@ -280,6 +281,7 @@ namespace easyfis.Controllers
                     var updateUserDefaults = userDefaults.FirstOrDefault();
                     updateUserDefaults.BranchId = mstUser.BranchId;
                     updateUserDefaults.OfficialReceiptName = mstUser.OfficialReceiptName;
+                    updateUserDefaults.DefaultSalesInvoiceDiscountId = mstUser.DefaultSalesInvoiceDiscountId;
 
                     var inventory = from d in db.TrnInventories
                                     select d;

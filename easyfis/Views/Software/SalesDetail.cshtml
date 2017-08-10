@@ -3223,6 +3223,9 @@
             document.getElementById('saleItem_Quantity').value = 0;
             document.getElementById('saleItem_Unit_data').value = '';
             document.getElementById('saleItem_Unit_selectedValue').value = '';
+            var defaultDiscount = "@ViewData["DefaultSalesInvoiceDiscount"]";
+            document.getElementById('saleItem_Discont_selectedValue').value = defaultDiscount;
+
             //document.getElementById('saleItem_PriceExVAT').value = 0;
             //document.getElementById('saleItem_Discont_data').value = '';
             //document.getElementById('saleItem_Discont_selectedValue').value = '';
@@ -3472,6 +3475,7 @@
                                 itemGrid.trackChanges = true;
                             },
                             400: function () {
+                                document.getElementById('cmdSaveSaleItemsButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveSaleItemsButton").prop("disabled", false);
                                 $("#cmdSaleItemsDetailCloseButton").prop("disabled", false);
                                 toastr.error("Internal Server Error");

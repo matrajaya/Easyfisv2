@@ -11568,6 +11568,8 @@ namespace easyfis.Data
 		
 		private System.DateTime _UpdatedDateTime;
 		
+		private EntitySet<MstUser> _MstUsers;
+		
 		private EntitySet<TrnSalesInvoiceItem> _TrnSalesInvoiceItems;
 		
 		private EntityRef<MstAccount> _MstAccount;
@@ -11604,6 +11606,7 @@ namespace easyfis.Data
 		
 		public MstDiscount()
 		{
+			this._MstUsers = new EntitySet<MstUser>(new Action<MstUser>(this.attach_MstUsers), new Action<MstUser>(this.detach_MstUsers));
 			this._TrnSalesInvoiceItems = new EntitySet<TrnSalesInvoiceItem>(new Action<TrnSalesInvoiceItem>(this.attach_TrnSalesInvoiceItems), new Action<TrnSalesInvoiceItem>(this.detach_TrnSalesInvoiceItems));
 			this._MstAccount = default(EntityRef<MstAccount>);
 			this._MstUser = default(EntityRef<MstUser>);
@@ -11823,6 +11826,19 @@ namespace easyfis.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstDiscount_MstUser", Storage="_MstUsers", ThisKey="Id", OtherKey="DefaultSalesInvoiceDiscountId")]
+		public EntitySet<MstUser> MstUsers
+		{
+			get
+			{
+				return this._MstUsers;
+			}
+			set
+			{
+				this._MstUsers.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstDiscount_TrnSalesInvoiceItem", Storage="_TrnSalesInvoiceItems", ThisKey="Id", OtherKey="DiscountId")]
 		public EntitySet<TrnSalesInvoiceItem> TrnSalesInvoiceItems
 		{
@@ -11956,6 +11972,18 @@ namespace easyfis.Data
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_MstUsers(MstUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstDiscount = this;
+		}
+		
+		private void detach_MstUsers(MstUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstDiscount = null;
 		}
 		
 		private void attach_TrnSalesInvoiceItems(TrnSalesInvoiceItem entity)
@@ -14083,6 +14111,8 @@ namespace easyfis.Data
 		
 		private string _InventoryType;
 		
+		private int _DefaultSalesInvoiceDiscountId;
+		
 		private bool _IsLocked;
 		
 		private int _CreatedById;
@@ -14271,6 +14301,8 @@ namespace easyfis.Data
 		
 		private EntityRef<MstCompany> _MstCompany;
 		
+		private EntityRef<MstDiscount> _MstDiscount;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -14299,6 +14331,8 @@ namespace easyfis.Data
     partial void OnOfficialReceiptNameChanged();
     partial void OnInventoryTypeChanging(string value);
     partial void OnInventoryTypeChanged();
+    partial void OnDefaultSalesInvoiceDiscountIdChanging(int value);
+    partial void OnDefaultSalesInvoiceDiscountIdChanged();
     partial void OnIsLockedChanging(bool value);
     partial void OnIsLockedChanged();
     partial void OnCreatedByIdChanging(int value);
@@ -14402,6 +14436,7 @@ namespace easyfis.Data
 			this._MstAccount2 = default(EntityRef<MstAccount>);
 			this._MstBranch = default(EntityRef<MstBranch>);
 			this._MstCompany = default(EntityRef<MstCompany>);
+			this._MstDiscount = default(EntityRef<MstDiscount>);
 			OnCreated();
 		}
 		
@@ -14665,6 +14700,30 @@ namespace easyfis.Data
 					this._InventoryType = value;
 					this.SendPropertyChanged("InventoryType");
 					this.OnInventoryTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DefaultSalesInvoiceDiscountId", DbType="Int NOT NULL")]
+		public int DefaultSalesInvoiceDiscountId
+		{
+			get
+			{
+				return this._DefaultSalesInvoiceDiscountId;
+			}
+			set
+			{
+				if ((this._DefaultSalesInvoiceDiscountId != value))
+				{
+					if (this._MstDiscount.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDefaultSalesInvoiceDiscountIdChanging(value);
+					this.SendPropertyChanging();
+					this._DefaultSalesInvoiceDiscountId = value;
+					this.SendPropertyChanged("DefaultSalesInvoiceDiscountId");
+					this.OnDefaultSalesInvoiceDiscountIdChanged();
 				}
 			}
 		}
@@ -16048,6 +16107,40 @@ namespace easyfis.Data
 						this._CompanyId = default(int);
 					}
 					this.SendPropertyChanged("MstCompany");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstDiscount_MstUser", Storage="_MstDiscount", ThisKey="DefaultSalesInvoiceDiscountId", OtherKey="Id", IsForeignKey=true)]
+		public MstDiscount MstDiscount
+		{
+			get
+			{
+				return this._MstDiscount.Entity;
+			}
+			set
+			{
+				MstDiscount previousValue = this._MstDiscount.Entity;
+				if (((previousValue != value) 
+							|| (this._MstDiscount.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstDiscount.Entity = null;
+						previousValue.MstUsers.Remove(this);
+					}
+					this._MstDiscount.Entity = value;
+					if ((value != null))
+					{
+						value.MstUsers.Add(this);
+						this._DefaultSalesInvoiceDiscountId = value.Id;
+					}
+					else
+					{
+						this._DefaultSalesInvoiceDiscountId = default(int);
+					}
+					this.SendPropertyChanged("MstDiscount");
 				}
 			}
 		}

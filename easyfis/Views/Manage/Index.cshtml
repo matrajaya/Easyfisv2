@@ -112,6 +112,7 @@
         var branches;
         var cboBranch;
         var cboDefaultBranch;
+        var cboDiscounts;
 
         // =================
         // Modal User Detail
@@ -361,7 +362,7 @@
             userDefaultObject.BranchId = cboDefaultBranch.selectedItem["Id"];
             userDefaultObject.OfficialReceiptName = document.getElementById("defaultOfficialReceiptName").value;
             userDefaultObject.InventoryType = cboInventoryType.selectedValue;
-
+            userDefaultObject.DefaultSalesInvoiceDiscountId = cboDiscounts.selectedItem["Id"];
             var userDefaultData = JSON.stringify(userDefaultObject);
 
             var userId = "@ViewData["UserId"]";
@@ -426,6 +427,46 @@
             });
         }
 
+        function getDiscount() {
+            var discountsObservableArray = new wijmo.collections.ObservableArray;
+             $.ajax({
+                 url: '/api/listDiscount',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (resultDiscounts) {
+                    if (resultDiscounts.length > 0) {
+                        for (i = 0; i < resultDiscounts.length; i++) {
+                            discountsObservableArray.push({
+                                Id: resultDiscounts[i]["Id"],
+                                Discount: resultDiscounts[i]["Discount"]
+                            });
+                        }
+
+                        var disabled = false;
+                        var userName = "@ViewData["UserName"]";
+                        if (userName == "admin") {
+                            disabled = false;
+                        } else {
+                            disabled = true;
+                        }
+
+                        var defaultDiscount = "@ViewData["DefaultSalesInvoiceDiscount"]";
+                        cboDiscounts.dispose();
+                        cboDiscounts = new wijmo.input.ComboBox('#cboDiscounts', {
+                            disabled: disabled,
+                            placeholder: "Select Branch",
+                            itemsSource: discountsObservableArray,
+                            displayMemberPath: "Discount",
+                            selectedValuePath: "Discount",
+                            selectedValue: defaultDiscount.toString()
+                        });
+                        document.getElementById("defaultOfficialReceiptName").value = "@ViewData["OfficialReceiptName"]";
+                    }
+                }
+            });
+        }
+
         // =======
         // On Load
         // =======
@@ -435,6 +476,8 @@
             document.getElementById("profileDetail_fullName").value = "@ViewData["FullName"]";
             document.getElementById("profileDetail_userName").value = "@ViewData["UserName"]";
             cboInventoryType = new wijmo.input.ComboBox('#cboInventoryType');
+            cboDiscounts = new wijmo.input.ComboBox('#cboDiscounts');
+            getDiscount();
             createCboInventoryType();
 
             getBranch();
