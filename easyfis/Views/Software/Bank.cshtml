@@ -928,25 +928,7 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
-            // Bank Lock - IsLocked
-            $("#bank_Lock").click(function () {
-                if ($(this).is(':checked')) {
-                    document.getElementById('bank_bank').disabled = true;
-                    document.getElementById('bank_Address').disabled = true;
-                    document.getElementById('bank_ContactNumber').disabled = true;
-                    document.getElementById('branch_ContactPerson').disabled = true;
-                    getBankArticleGroupForComboBox();
-                    document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
-                } else {
-                    document.getElementById('bank_bank').disabled = false;
-                    document.getElementById('bank_Address').disabled = false;
-                    document.getElementById('bank_ContactNumber').disabled = false;
-                    document.getElementById('branch_ContactPerson').disabled = false;
-                    getBankArticleGroupForComboBox();
-                    document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
-                }
-            });
-
+           
             cboBankForAccountCode = new wijmo.input.ComboBox('#bank_AccountCode');
             cboBankForAccount = new wijmo.input.ComboBox('#bank_Account');
             cboArticleGroup = new wijmo.input.ComboBox('#bank_BankGroup');
@@ -1071,6 +1053,25 @@
             } else {
                 $("#cmdAddBank").prop("disabled", true)
             }
+
+            // Bank Lock - IsLocked
+            $("#bank_Lock").click(function () {
+                if ($(this).is(':checked')) {
+                    document.getElementById('bank_bank').disabled = true;
+                    document.getElementById('bank_Address').disabled = true;
+                    document.getElementById('bank_ContactNumber').disabled = true;
+                    document.getElementById('branch_ContactPerson').disabled = true;
+                    cboArticleGroup.disabled = true;
+                    document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+                } else {
+                    document.getElementById('bank_bank').disabled = false;
+                    document.getElementById('bank_Address').disabled = false;
+                    document.getElementById('bank_ContactNumber').disabled = false;
+                    document.getElementById('branch_ContactPerson').disabled = false;
+                    cboArticleGroup.disabled = false;
+                    document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+                }
+            });
         });
     </script>
     <script type="text/javascript">

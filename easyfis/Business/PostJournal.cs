@@ -105,7 +105,7 @@ namespace easyfis.Business
                                                      AccountId = getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockTransfer.BranchId, "Asset") != 0 ? getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockTransfer.BranchId, "Asset") : d.MstArticle.AccountId,
                                                      STId = d.STId
                                                  } into g
-                                                 select new Models.TrnStockTransferItem
+                                                 select new
                                                  {
                                                      AccountId = g.Key.AccountId,
                                                      STId = g.Key.STId,
@@ -212,7 +212,7 @@ namespace easyfis.Business
                                                            ExpenseAccountId = getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockOut.BranchId, "Expense") != 0 ? getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockOut.BranchId, "Expense") : d.ExpenseAccountId,
                                                            OTId = d.OTId
                                                        } into g
-                                                       select new Models.TrnStockOutItem
+                                                       select new
                                                        {
                                                            ExpenseAccountId = g.Key.ExpenseAccountId,
                                                            OTId = g.Key.OTId,
@@ -258,7 +258,7 @@ namespace easyfis.Business
                                                     AccountId = getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockOut.BranchId, "Account") != 0 ? getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockOut.BranchId, "Account") : d.MstArticle.AccountId,
                                                     OTId = d.OTId
                                                 } into g
-                                                select new Models.TrnStockOutItem
+                                                select new
                                                 {
                                                     AccountId = g.Key.AccountId,
                                                     OTId = g.Key.OTId,
@@ -346,7 +346,7 @@ namespace easyfis.Business
                                            AccountId = getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockIn.BranchId, "Account") != 0 ? getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockIn.BranchId, "Account") : d.MstArticle.AccountId,
                                            INId = d.INId
                                        } into g
-                                       select new Models.TrnStockInItem
+                                       select new
                                        {
                                            AccountId = g.Key.AccountId,
                                            INId = g.Key.INId,
@@ -497,7 +497,7 @@ namespace easyfis.Business
                                                     AccountId = d.MstPayType.AccountId,
                                                     ArticleId = d.ArticleId
                                                 } into g
-                                                select new Models.TrnCollectionLine
+                                                select new
                                                 {
                                                     BranchId = g.Key.BranchId,
                                                     AccountId = g.Key.AccountId,
@@ -542,7 +542,7 @@ namespace easyfis.Business
                                                      AccountId = d.AccountId,
                                                      ArticleId = d.ArticleId
                                                  } into g
-                                                 select new Models.TrnCollectionLine
+                                                 select new
                                                  {
                                                      BranchId = g.Key.BranchId,
                                                      AccountId = g.Key.AccountId,
@@ -628,7 +628,7 @@ namespace easyfis.Business
                                                 AccountId = d.AccountId,
                                                 ArticleId = d.ArticleId
                                             } into g
-                                            select new Models.TrnDisbursementLine
+                                            select new
                                             {
                                                 BranchId = g.Key.BranchId,
                                                 AccountId = g.Key.AccountId,
@@ -805,7 +805,7 @@ namespace easyfis.Business
                                                 VATId = d.VATId,
                                                 SIId = d.SIId
                                             } into g
-                                            select new Models.TrnSalesInvoiceItem
+                                            select new
                                             {
                                                 SalesAccountId = g.Key.SalesAccountId,
                                                 VATId = g.Key.VATId,
@@ -866,7 +866,7 @@ namespace easyfis.Business
                                                       VATId = d.VATId,
                                                       SIId = d.SIId
                                                   } into g
-                                                  select new Models.TrnSalesInvoiceItem
+                                                  select new
                                                   {
                                                       VATId = g.Key.VATId,
                                                       SIId = g.Key.SIId,
@@ -917,7 +917,7 @@ namespace easyfis.Business
                                                          SIId = d.SIId,
                                                          CostAccountId = getAccountId(d.MstArticle.ArticleGroupId, d.TrnSalesInvoice.BranchId, "Cost") != 0 ? getAccountId(d.MstArticle.ArticleGroupId, d.TrnSalesInvoice.BranchId, "Cost") : d.MstArticle.CostAccountId,
                                                      } into g
-                                                     select new Models.TrnSalesInvoiceItem
+                                                     select new
                                                      {
                                                          SIId = g.Key.SIId,
                                                          CostAccountId = g.Key.CostAccountId,
@@ -965,7 +965,7 @@ namespace easyfis.Business
                                                             SIId = d.SIId,
                                                             AccountId = getAccountId(d.MstArticle.ArticleGroupId, d.TrnSalesInvoice.BranchId, "Account") != 0 ? getAccountId(d.MstArticle.ArticleGroupId, d.TrnSalesInvoice.BranchId, "Account") : d.MstArticle.AccountId,
                                                         } into g
-                                                        select new Models.TrnSalesInvoiceItem
+                                                        select new
                                                         {
                                                             SIId = g.Key.SIId,
                                                             AccountId = g.Key.AccountId,
@@ -1036,7 +1036,8 @@ namespace easyfis.Business
         // RR Journal - Insertion and Deletion
         public void insertRRJournal(Int32 RRId)
         {
-            try { 
+            try
+            {
 
                 var receivingReceipts = from d in db.TrnReceivingReceipts
                                         where d.Id == RRId
@@ -1055,7 +1056,7 @@ namespace easyfis.Business
                                                     ReceivingReceipt = d.TrnReceivingReceipt,
                                                     ArticleGroupId = d.MstArticle.ArticleGroupId
                                                 } into g
-                                                select new 
+                                                select new
                                                 {
                                                     ArticleGroupId = g.Key.ArticleGroupId,
                                                     Particulars = g.Key.ReceivingReceipt.Remarks,
@@ -1085,7 +1086,7 @@ namespace easyfis.Business
 
                             db.TrnJournals.InsertOnSubmit(newRRItemJournal);
                         }
-                            
+
                     }
 
                     // =================
@@ -1204,7 +1205,7 @@ namespace easyfis.Business
                                                   AccountId = d.MstAccount.Id,
                                                   ArticleId = d.ArticleId,
                                               } into g
-                                              select new Models.TrnJournalVoucherLine
+                                              select new
                                               {
                                                   BranchId = g.Key.BranchId,
                                                   AccountId = g.Key.AccountId,

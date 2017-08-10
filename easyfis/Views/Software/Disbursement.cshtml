@@ -278,6 +278,9 @@
                         if (id > 0) {
                             window.location = '/Software/DisbursementDetail?DisbursementId=' + id;
                         } else {
+                            document.getElementById('btnAddDisbursement').innerHTML = "<i class='fa fa-plus'></i> Add";
+                            $('#btnAddDisbursement').prop('disabled', false);
+                            $('#btnCloseDisbursement').prop('disabled', false);
                             toastr.error("Internal Server Error");
                         }
                     }
