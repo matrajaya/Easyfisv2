@@ -1014,9 +1014,26 @@ textarea.form-control {
 }
 
 .wj-control[disabled] {
+    opacity: 10;
+    background-color: #eee;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.wj-control[disabled] {
     color: #000;
     opacity: 10;
+    cursor: not-allowed;
 }
+
+.wj-content .wj-input-group .wj-form-control[disabled] {
+    cursor: not-allowed;
+}
+
+input[disabled] {
+    cursor: not-allowed;
+}
+
 
 /* navbar custom */
 .navbar-default {

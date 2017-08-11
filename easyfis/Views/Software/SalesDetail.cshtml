@@ -2775,6 +2775,9 @@
                 backdrop: 'static'
             });
 
+            var defaultDiscount = "@ViewData["DefaultSalesInvoiceDiscount"]";
+            document.getElementById('saleItem_Discont_selectedValue').value = defaultDiscount;
+
             var branchId = document.getElementById("SI_Branch_data").value;
             document.getElementById("loadingItemQueryGrid").innerHTML = "<br/><b><i class='fa fa-spinner fa-spin'></i></b>";
             $('#SIItemInventoryGridItemQuery').hide();
