@@ -74,7 +74,9 @@ namespace easyfis.Controllers
                                          Amount = d.Amount,
                                          BaseUnit = d.MstUnit1.Unit,
                                          BaseQuantity = d.BaseQuantity,
-                                         BaseCost = d.BaseCost
+                                         BaseCost = d.BaseCost,
+                                         VATId = d.MstArticle.InputTaxId,
+                                         WTAXId = d.MstArticle.WTaxTypeId
                                      };
 
             return purchaseOrderItems.ToList();
@@ -95,17 +97,8 @@ namespace easyfis.Controllers
                                          ItemId = d.ItemId,
                                          Item = d.MstArticle.Article,
                                          ItemCode = d.MstArticle.ManualArticleCode,
-                                         //Particulars = d.Particulars,
-                                         //UnitId = d.UnitId,
-                                         //Unit = d.MstUnit.Unit,
-                                         //Quantity = d.Quantity,
-                                         //Received = getReceivedQuantity(Convert.ToInt32(POId), d.ItemId),
-                                         //Cost = d.Cost,
-                                         //Amount = d.Amount,
                                          BaseUnitId = d.BaseUnitId,
                                          BaseUnit = d.MstUnit1.Unit,
-                                         //BaseQuantity = d.BaseQuantity,
-                                         //BaseCost = d.BaseCost
                                      } into g
                                      select new Models.TrnPurchaseOrderItem
                                      {
@@ -219,22 +212,36 @@ namespace easyfis.Controllers
                     updatePurchaseOrderItem.Amount = purchaseOrderItem.Amount;
 
                     var mstArticleUnit = from d in db.MstArticles where d.Id == purchaseOrderItem.ItemId select d;
-                    updatePurchaseOrderItem.BaseUnitId = mstArticleUnit.First().UnitId;
+                    updatePurchaseOrderItem.BaseUnitId = mstArticleUnit.FirstOrDefault().UnitId;
 
                     var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == purchaseOrderItem.ItemId && d.UnitId == purchaseOrderItem.UnitId select d;
-                    if (conversionUnit.First().Multiplier > 0)
+                    if (conversionUnit.Any())
                     {
-                        updatePurchaseOrderItem.BaseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                        if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                        {
+                            updatePurchaseOrderItem.BaseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                        }
+                        else
+                        {
+                            updatePurchaseOrderItem.BaseQuantity = purchaseOrderItem.Quantity * 1;
+                        }
                     }
                     else
                     {
                         updatePurchaseOrderItem.BaseQuantity = purchaseOrderItem.Quantity * 1;
                     }
 
-                    var baseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.First().Multiplier);
-                    if (baseQuantity > 0)
+                    if (conversionUnit.Any())
                     {
-                        updatePurchaseOrderItem.BaseCost = purchaseOrderItem.Amount / baseQuantity;
+                        var baseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                        if (baseQuantity > 0)
+                        {
+                            updatePurchaseOrderItem.BaseCost = purchaseOrderItem.Amount / baseQuantity;
+                        }
+                        else
+                        {
+                            updatePurchaseOrderItem.BaseCost = purchaseOrderItem.Amount;
+                        }
                     }
                     else
                     {
@@ -267,7 +274,7 @@ namespace easyfis.Controllers
                 var purchaseOrderItems = from d in db.TrnPurchaseOrderItems where d.Id == Convert.ToInt32(id) select d;
                 if (purchaseOrderItems.Any())
                 {
-                    db.TrnPurchaseOrderItems.DeleteOnSubmit(purchaseOrderItems.First());
+                    db.TrnPurchaseOrderItems.DeleteOnSubmit(purchaseOrderItems.FirstOrDefault());
                     db.SubmitChanges();
 
                     return Request.CreateResponse(HttpStatusCode.OK);

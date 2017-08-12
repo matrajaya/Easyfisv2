@@ -221,26 +221,40 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.BranchId = receivingReceiptItem.BranchId;
 
                 var mstArticleUnit = from d in db.MstArticles where d.Id == receivingReceiptItem.ItemId select d;
-                newReceivingReceiptItem.BaseUnitId = mstArticleUnit.First().UnitId;
+                newReceivingReceiptItem.BaseUnitId = mstArticleUnit.FirstOrDefault().UnitId;
 
                 var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == receivingReceiptItem.ItemId && d.UnitId == receivingReceiptItem.BaseUnitId select d;
-                if (conversionUnit.First().Multiplier > 0)
+                if (conversionUnit.Any())
                 {
-                    newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.BaseQuantity * (1 / conversionUnit.First().Multiplier);
+                    if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                    {
+                        newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.BaseQuantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                    }
+                    else
+                    {
+                        newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.BaseQuantity * 1;
+                    }
                 }
                 else
                 {
                     newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.BaseQuantity * 1;
                 }
 
-                var baseQuantity = receivingReceiptItem.BaseQuantity * (1 / conversionUnit.First().Multiplier);
-                if (baseQuantity > 0)
+                if (conversionUnit.Any())
                 {
-                    newReceivingReceiptItem.BaseCost = ((receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost) - (computeVATAmount(receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost, vatPercentage.FirstOrDefault(), vatIsInclusive.FirstOrDefault()))) / baseQuantity;
+                    var baseQuantity = receivingReceiptItem.BaseQuantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                    if (baseQuantity > 0)
+                    {
+                        newReceivingReceiptItem.BaseCost = ((receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost) - (computeVATAmount(receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost, vatPercentage.FirstOrDefault(), vatIsInclusive.FirstOrDefault()))) / baseQuantity;
+                    }
+                    else
+                    {
+                        newReceivingReceiptItem.BaseCost = (receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost) - (computeVATAmount(receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost, vatPercentage.FirstOrDefault(), vatIsInclusive.FirstOrDefault()));
+                    }
                 }
                 else
                 {
-                    newReceivingReceiptItem.BaseCost = (receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost) -  (computeVATAmount(receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost, vatPercentage.FirstOrDefault(), vatIsInclusive.FirstOrDefault()));
+                    newReceivingReceiptItem.BaseCost = (receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost) - (computeVATAmount(receivingReceiptItem.BaseQuantity * receivingReceiptItem.BaseCost, vatPercentage.FirstOrDefault(), vatIsInclusive.FirstOrDefault()));
                 }
 
                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
@@ -248,7 +262,7 @@ namespace easyfis.Controllers
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
@@ -302,7 +316,7 @@ namespace easyfis.Controllers
                         var articleUnits = from d in db.MstArticleUnits where d.ArticleId == purchaseOrderItem.ItemId && d.UnitId == purchaseOrderItem.UnitId select d;
                         if (articleUnits.Any())
                         {
-                            multipier = articleUnits.First().Multiplier;
+                            multipier = articleUnits.FirstOrDefault().Multiplier;
                         }
 
                         newReceivingReceiptItem = new Data.TrnReceivingReceiptItem();
@@ -323,22 +337,36 @@ namespace easyfis.Controllers
                         newReceivingReceiptItem.BranchId = purchaseOrderItem.BranchId;
 
                         var mstArticleUnit = from d in db.MstArticles where d.Id == purchaseOrderItem.ItemId select d;
-                        newReceivingReceiptItem.BaseUnitId = mstArticleUnit.First().UnitId;
+                        newReceivingReceiptItem.BaseUnitId = mstArticleUnit.FirstOrDefault().UnitId;
 
                         var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == purchaseOrderItem.ItemId && d.UnitId == purchaseOrderItem.UnitId select d;
-                        if (conversionUnit.First().Multiplier > 0)
+                        if (conversionUnit.Any())
                         {
-                            newReceivingReceiptItem.BaseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                            if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                            {
+                                newReceivingReceiptItem.BaseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                            }
+                            else
+                            {
+                                newReceivingReceiptItem.BaseQuantity = purchaseOrderItem.Quantity * 1;
+                            }
                         }
                         else
                         {
                             newReceivingReceiptItem.BaseQuantity = purchaseOrderItem.Quantity * 1;
                         }
 
-                        var baseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.First().Multiplier);
-                        if (baseQuantity > 0)
+                        if (conversionUnit.Any())
                         {
-                            newReceivingReceiptItem.BaseCost = (purchaseOrderItem.Amount - purchaseOrderItem.VATAmount) / baseQuantity;
+                            var baseQuantity = purchaseOrderItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                            if (baseQuantity > 0)
+                            {
+                                newReceivingReceiptItem.BaseCost = (purchaseOrderItem.Amount - purchaseOrderItem.VATAmount) / baseQuantity;
+                            }
+                            else
+                            {
+                                newReceivingReceiptItem.BaseCost = purchaseOrderItem.Amount - purchaseOrderItem.VATAmount;
+                            }
                         }
                         else
                         {
@@ -406,22 +434,36 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.BranchId = receivingReceiptItem.BranchId;
 
                 var item = from d in db.MstArticles where d.Id == receivingReceiptItem.ItemId select d;
-                newReceivingReceiptItem.BaseUnitId = item.First().UnitId;
+                newReceivingReceiptItem.BaseUnitId = item.FirstOrDefault().UnitId;
 
                 var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == receivingReceiptItem.ItemId && d.UnitId == receivingReceiptItem.UnitId select d;
-                if (conversionUnit.First().Multiplier > 0)
+                if (conversionUnit.Any())
                 {
-                    newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                    if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                    {
+                        newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                    }
+                    else
+                    {
+                        newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.Quantity * 1;
+                    }
                 }
                 else
                 {
                     newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.Quantity * 1;
                 }
 
-                var baseQuantity = receivingReceiptItem.Quantity * (1 / conversionUnit.First().Multiplier);
-                if (baseQuantity > 0)
+                if (conversionUnit.Any())
                 {
-                    newReceivingReceiptItem.BaseCost = (receivingReceiptItem.Amount - receivingReceiptItem.VATAmount) / baseQuantity;
+                    var baseQuantity = receivingReceiptItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                    if (baseQuantity > 0)
+                    {
+                        newReceivingReceiptItem.BaseCost = (receivingReceiptItem.Amount - receivingReceiptItem.VATAmount) / baseQuantity;
+                    }
+                    else
+                    {
+                        newReceivingReceiptItem.BaseCost = receivingReceiptItem.Amount - receivingReceiptItem.VATAmount;
+                    }
                 }
                 else
                 {
@@ -441,14 +483,14 @@ namespace easyfis.Controllers
 
                     if (disbursementLineCVId.Any())
                     {
-                        var disbursementHeader = from d in db.TrnDisbursements where d.Id == disbursementLineCVId.First().CVId select d;
+                        var disbursementHeader = from d in db.TrnDisbursements where d.Id == disbursementLineCVId.FirstOrDefault().CVId select d;
 
                         // get disbursement line for paid amount
                         var disbursementLines = from d in db.TrnDisbursementLines where d.RRId == receivingReceiptItem.RRId select d;
 
                         if (disbursementLines.Any())
                         {
-                            if (disbursementHeader.First().IsLocked == true)
+                            if (disbursementHeader.FirstOrDefault().IsLocked == true)
                             {
                                 PaidAmount = disbursementLines.Sum(d => d.Amount);
                             }
@@ -513,22 +555,36 @@ namespace easyfis.Controllers
                     updateReceivingReceiptItem.BranchId = receivingReceiptItem.BranchId;
 
                     var item = from d in db.MstArticles where d.Id == receivingReceiptItem.ItemId select d;
-                    updateReceivingReceiptItem.BaseUnitId = item.First().UnitId;
+                    updateReceivingReceiptItem.BaseUnitId = item.FirstOrDefault().UnitId;
 
                     var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == receivingReceiptItem.ItemId && d.UnitId == receivingReceiptItem.UnitId select d;
-                    if (conversionUnit.First().Multiplier > 0)
+                    if (conversionUnit.Any())
                     {
-                        updateReceivingReceiptItem.BaseQuantity = receivingReceiptItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                        if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                        {
+                            updateReceivingReceiptItem.BaseQuantity = receivingReceiptItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                        }
+                        else
+                        {
+                            updateReceivingReceiptItem.BaseQuantity = receivingReceiptItem.Quantity * 1;
+                        }
                     }
                     else
                     {
                         updateReceivingReceiptItem.BaseQuantity = receivingReceiptItem.Quantity * 1;
                     }
 
-                    var baseQuantity = receivingReceiptItem.Quantity * (1 / conversionUnit.First().Multiplier);
-                    if (baseQuantity > 0)
+                    if (conversionUnit.Any())
                     {
-                        updateReceivingReceiptItem.BaseCost = (receivingReceiptItem.Amount - receivingReceiptItem.VATAmount) / baseQuantity;
+                        var baseQuantity = receivingReceiptItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                        if (baseQuantity > 0)
+                        {
+                            updateReceivingReceiptItem.BaseCost = (receivingReceiptItem.Amount - receivingReceiptItem.VATAmount) / baseQuantity;
+                        }
+                        else
+                        {
+                            updateReceivingReceiptItem.BaseCost = receivingReceiptItem.Amount - receivingReceiptItem.VATAmount;
+                        }
                     }
                     else
                     {
@@ -547,13 +603,13 @@ namespace easyfis.Controllers
 
                         if (disbursementLineCVId.Any())
                         {
-                            var disbursementHeader = from d in db.TrnDisbursements where d.Id == disbursementLineCVId.First().CVId select d;
+                            var disbursementHeader = from d in db.TrnDisbursements where d.Id == disbursementLineCVId.FirstOrDefault().CVId select d;
 
                             // get disbursement line for paid amount
                             var disbursementLines = from d in db.TrnDisbursementLines where d.RRId == receivingReceiptItem.RRId select d;
                             if (disbursementLines.Any())
                             {
-                                if (disbursementHeader.First().IsLocked == true)
+                                if (disbursementHeader.FirstOrDefault().IsLocked == true)
                                 {
                                     PaidAmount = disbursementLines.Sum(d => d.Amount);
                                 }
@@ -563,7 +619,7 @@ namespace easyfis.Controllers
                                 }
                             }
                         }
-                        
+
                         Decimal amount = 0;
 
                         var receivingReceiptItemsByRRId = from d in db.TrnReceivingReceiptItems where d.RRId == receivingReceiptItem.RRId select d;
@@ -604,7 +660,7 @@ namespace easyfis.Controllers
                 var receivingReceiptItems = from d in db.TrnReceivingReceiptItems where d.Id == Convert.ToInt32(id) select d;
                 if (receivingReceiptItems.Any())
                 {
-                    db.TrnReceivingReceiptItems.DeleteOnSubmit(receivingReceiptItems.First());
+                    db.TrnReceivingReceiptItems.DeleteOnSubmit(receivingReceiptItems.FirstOrDefault());
                     db.SubmitChanges();
 
                     var receivingReceipts = from d in db.TrnReceivingReceipts where d.Id == Convert.ToInt32(RRId) select d;
@@ -617,7 +673,7 @@ namespace easyfis.Controllers
                         {
                             amount = receivingReceiptItemsByRRId.Sum(d => d.Amount);
                         }
-                      
+
                         var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
 
                         updatereceivingReceipt.Amount = amount;

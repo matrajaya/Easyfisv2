@@ -180,7 +180,10 @@
                     <h4 class="modal-title" id="POLinesNameModalLabel">Purchase Order Item</h4>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <center>
+                        <span id="loadingModalItem"></span>
+                    </center>
+                    <div id="POItemContent">
                         <dl class="dl-horizontal">
                             <dt>Item</dt>
                             <dd>
@@ -209,7 +212,7 @@
                             <dt>Amount</dt>
                             <dd><input type="text" class="form-control numberField requiredPOLine" id="POLine_Amount" placeholder="0.00" disabled /></dd>
                         </dl>
-                    </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary " id="cmdSavePOLinesButton" onclick="cmdPOLinesSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
@@ -735,9 +738,9 @@
         // Purchase Order Line / Item
         // ==========================
         function getPurchaseOrderItem() {
+            var purchaseOrderItemsObservableArray = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
                 var id = getParam('PurchaseOrderId');
-                var purchaseOrderItemsObservableArray = new wijmo.collections.ObservableArray;
                 $.ajax({
                     url: '/api/listPurchaseOrderItemByPOId/' + id,
                     cache: false,
@@ -938,8 +941,12 @@
             $('#POLinesEdit').modal({ show: true, backdrop: 'static' });
 
             document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
-            $("#cmdSavePOLinesButton").prop("disabled", false);
+            $("#cmdSavePOLinesButton").prop("disabled", true);
             $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
+
+            $("#loadingModalItem").show();
+            document.getElementById("loadingModalItem").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#POItemContent").hide();
 
             getItem(0,0);
             document.getElementById('POLine_Particulars').value = "NA";
@@ -1034,6 +1041,10 @@
                         selectedValuePath: "UnitId",
                         selectedValue: articleUnitIdSelectedValue
                     });
+
+                    $("#loadingModalItem").hide();
+                    $("#cmdSavePOLinesButton").prop("disabled", false);
+                    $("#POItemContent").show();
                 }
             });
         }
@@ -1045,8 +1056,12 @@
             $('#POLinesEdit').modal({ show: true, backdrop: 'static' });
 
             document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
-            $("#cmdSavePOLinesButton").prop("disabled", false);
+            $("#cmdSavePOLinesButton").prop("disabled", true);
             $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
+
+            $("#loadingModalItem").show();
+            document.getElementById("loadingModalItem").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#POItemContent").hide();
 
             purchaseOrderItemCollectionView.editItem(purchaseOrderItemCollectionView.currentItem);
             var purchaseOrderItem = purchaseOrderItemCollectionView.currentEditItem;
@@ -1186,7 +1201,7 @@
                         url: '/api/updatePurchaseOrderItem/' + purchaseOrderItemId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
-                        data: POItemData,
+                        data: purchaserOrderItemData,
                         statusCode: {
                             200: function () {
                                 toastr.success("Update Successful");
@@ -1303,7 +1318,9 @@
             $("#loadingItemQuery").show();
             document.getElementById("loadingItemQuery").innerHTML = "<b><i class='fa fa-spinner fa-spin'></i></b>";
 
-            createItemQueryFlexGrid();
+            setTimeout(function () {
+                createItemQueryFlexGrid();
+            }, 500);
         }
 
         // get Items for Item Query
@@ -1383,10 +1400,12 @@
             $('#POLinesEdit').modal({ show: true, backdrop: 'static' });
 
             document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
-            $("#cmdSavePOLinesButton").prop("disabled", false);
+            $("#cmdSavePOLinesButton").prop("disabled", true);
             $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
 
-            getItem();
+            $("#loadingModalItem").show();
+            document.getElementById("loadingModalItem").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#POItemContent").hide();
 
             itemQueryItemsCollection.editItem(itemQueryItemsCollection.currentItem);
             var item = itemQueryItemsCollection.currentEditItem;
@@ -1411,7 +1430,7 @@
                 return !filterText || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1)
                     || (item.Article.toLowerCase().indexOf(filterText) > -1);
             }
-            
+
             itemQueryGrid.dispose();
             itemQueryGrid = new wijmo.grid.FlexGrid('#itemQueryGrid');
             itemQueryGrid.initialize({
@@ -1454,7 +1473,7 @@
 
             itemQueryGrid.trackChanges = true;
         }
-        
+
         // ===========
         // OnLoad Page
         // ===========

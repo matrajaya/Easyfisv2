@@ -926,7 +926,7 @@ namespace easyfis.Controllers
                     newArticle.Article = article.Article;
                     newArticle.Category = "NA";
                     newArticle.ArticleTypeId = Convert.ToInt32(articleTypeId);
-                    newArticle.ArticleGroupId = article.ArticleGroupId;
+                    newArticle.ArticleGroupId = db.MstArticleGroups.Where(d => d.ArticleTypeId == 6).Select(d => d.Id).FirstOrDefault();
                     newArticle.AccountId = article.AccountId;
                     newArticle.SalesAccountId = article.AccountId;
                     newArticle.CostAccountId = article.AccountId;
