@@ -183,7 +183,7 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var lastJVNumber = from d in db.TrnJournalVouchers.OrderByDescending(d => d.Id) select d;
+                var lastJVNumber = from d in db.TrnJournalVouchers.OrderByDescending(d => d.Id) where d.BranchId == currentBranchId() select d;
                 var JVNumberResult = "0000000001";
 
                 if (lastJVNumber.Any())

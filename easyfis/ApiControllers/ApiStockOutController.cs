@@ -199,7 +199,10 @@ namespace easyfis.Controllers
         {
             try
             {
-                var lastOTNumber = from d in db.TrnStockOuts.OrderByDescending(d => d.Id) select d;
+                var lastOTNumber = from d in db.TrnStockOuts.OrderByDescending(d => d.Id)
+                                   where d.BranchId == currentBranchId()
+                                   select d;
+
                 var OTNumberResult = "0000000001";
 
                 if (lastOTNumber.Any())

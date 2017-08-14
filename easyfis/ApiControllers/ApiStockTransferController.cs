@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using System.Diagnostics;
 
 namespace easyfis.Controllers
 {
@@ -51,6 +52,7 @@ namespace easyfis.Controllers
                                     STDate = d.STDate.ToShortDateString(),
                                     ToBranchId = d.ToBranchId,
                                     ToBranch = d.MstBranch1.Branch,
+                                    ArticleId = d.ArticleId,
                                     Particulars = d.Particulars,
                                     ManualSTNumber = d.ManualSTNumber,
                                     PreparedById = d.PreparedById,
@@ -88,6 +90,7 @@ namespace easyfis.Controllers
                                     STDate = d.STDate.ToShortDateString(),
                                     ToBranchId = d.ToBranchId,
                                     ToBranch = d.MstBranch1.Branch,
+                                    ArticleId = d.ArticleId,
                                     Particulars = d.Particulars,
                                     ManualSTNumber = d.ManualSTNumber,
                                     PreparedById = d.PreparedById,
@@ -127,6 +130,7 @@ namespace easyfis.Controllers
                                     STDate = d.STDate.ToShortDateString(),
                                     ToBranchId = d.ToBranchId,
                                     ToBranch = d.MstBranch1.Branch,
+                                    ArticleId = d.ArticleId,
                                     Particulars = d.Particulars,
                                     ManualSTNumber = d.ManualSTNumber,
                                     PreparedById = d.PreparedById,
@@ -163,6 +167,7 @@ namespace easyfis.Controllers
                                     STDate = d.STDate.ToShortDateString(),
                                     ToBranchId = d.ToBranchId,
                                     ToBranch = d.MstBranch1.Branch,
+                                    ArticleId = d.ArticleId,
                                     Particulars = d.Particulars,
                                     ManualSTNumber = d.ManualSTNumber,
                                     PreparedById = d.PreparedById,
@@ -193,7 +198,7 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var lastSTNumber = from d in db.TrnStockTransfers.OrderByDescending(d => d.Id) select d;
+                var lastSTNumber = from d in db.TrnStockTransfers.OrderByDescending(d => d.Id) where d.BranchId == currentBranchId() select d;
                 var STNumberResult = "0000000001";
 
                 if (lastSTNumber.Any())
@@ -204,12 +209,14 @@ namespace easyfis.Controllers
 
                 var users = from d in db.MstUsers where d.Id == userId select d;
                 var branches = from d in db.MstBranches where d.Id != currentBranchId() && d.CompanyId == users.FirstOrDefault().CompanyId select d;
+                var otherArticles = from d in db.MstArticles where d.ArticleTypeId == 6 select d;
 
                 Data.TrnStockTransfer newStockTransfer = new Data.TrnStockTransfer();
                 newStockTransfer.BranchId = currentBranchId();
                 newStockTransfer.STNumber = STNumberResult;
                 newStockTransfer.STDate = DateTime.Today;
                 newStockTransfer.ToBranchId = branches.FirstOrDefault().Id;
+                newStockTransfer.ArticleId = otherArticles.FirstOrDefault().Id;
                 newStockTransfer.Particulars = "NA";
                 newStockTransfer.ManualSTNumber = "NA";
                 newStockTransfer.PreparedById = userId;
@@ -252,6 +259,7 @@ namespace easyfis.Controllers
                     updateStockTransfer.STDate = Convert.ToDateTime(stockTransfer.STDate);
                     updateStockTransfer.ToBranchId = stockTransfer.ToBranchId;
                     updateStockTransfer.Particulars = stockTransfer.Particulars;
+                    updateStockTransfer.ArticleId = stockTransfer.ArticleId;
                     updateStockTransfer.ManualSTNumber = stockTransfer.ManualSTNumber;
                     updateStockTransfer.PreparedById = stockTransfer.PreparedById;
                     updateStockTransfer.CheckedById = stockTransfer.CheckedById;
@@ -272,8 +280,9 @@ namespace easyfis.Controllers
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }

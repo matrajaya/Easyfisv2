@@ -111,8 +111,7 @@ namespace easyfis.Controllers
         public List<Models.MstArticleInventory> listArticleInventoryByArticleIdItems(String articleId)
         {
             var articleInventories = from d in db.MstArticleInventories
-                                     where d.BranchId == currentBranchId()
-                                     && d.ArticleId == Convert.ToInt32(articleId)
+                                     where d.ArticleId == Convert.ToInt32(articleId)
                                      && d.MstArticle.IsInventory == true
                                      && d.Quantity > 0
                                      select new Models.MstArticleInventory

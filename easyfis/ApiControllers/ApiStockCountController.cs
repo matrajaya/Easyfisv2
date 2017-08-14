@@ -179,7 +179,7 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var lastSCNumber = from d in db.TrnStockCounts.OrderByDescending(d => d.Id) select d;
+                var lastSCNumber = from d in db.TrnStockCounts.OrderByDescending(d => d.Id) where d.BranchId == currentBranchId() select d;
                 var SCNumberResult = "0000000001";
 
                 if (lastSCNumber.Any())

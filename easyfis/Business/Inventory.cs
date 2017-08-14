@@ -95,302 +95,107 @@ namespace easyfis.Business
         // ========================
         public void InsertSTInventory(Int32 STId)
         {
-            // stock transfer header
-            var stockTransferHeaders = from d in db.TrnStockTransfers
-                                       where d.Id == STId
-                                       select new Models.TrnStockTransfer
-                                       {
-                                           Id = d.Id,
-                                           BranchId = d.BranchId,
-                                           Branch = d.MstBranch.Branch,
-                                           BranchCode = d.MstBranch1.BranchCode,
-                                           STNumber = d.STNumber,
-                                           STDate = d.STDate.ToShortDateString(),
-                                           ToBranchId = d.ToBranchId,
-                                           ToBranch = d.MstBranch1.Branch,
-                                           ToBranchCode = d.MstBranch1.BranchCode,
-                                           Particulars = d.Particulars,
-                                           ManualSTNumber = d.ManualSTNumber,
-                                           PreparedById = d.PreparedById,
-                                           PreparedBy = d.MstUser3.FullName,
-                                           CheckedById = d.CheckedById,
-                                           CheckedBy = d.MstUser1.FullName,
-                                           ApprovedById = d.ApprovedById,
-                                           ApprovedBy = d.MstUser.FullName,
-                                           IsLocked = d.IsLocked,
-                                           CreatedById = d.CreatedById,
-                                           CreatedBy = d.MstUser2.FullName,
-                                           CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                           UpdatedById = d.UpdatedById,
-                                           UpdatedBy = d.MstUser4.FullName,
-                                           UpdatedDateTime = d.UpdatedDateTime.ToShortDateString(),
-                                           InventoryType = d.MstUser4.InventoryType
-                                       };
-
-            // stock transfer items
-            var stockTransferItems = from d in db.TrnStockTransferItems
-                                     where d.STId == STId
-                                     select new Models.TrnStockTransferItem
-                                     {
-                                         Id = d.Id,
-                                         STId = d.STId,
-                                         ST = d.TrnStockTransfer.STNumber,
-                                         ItemId = d.ItemId,
-                                         ItemCode = d.MstArticle.ManualArticleCode,
-                                         Item = d.MstArticle.Article,
-                                         ItemInventoryId = d.ItemInventoryId,
-                                         ItemInventory = d.MstArticleInventory.InventoryCode,
-                                         Particulars = d.Particulars,
-                                         UnitId = d.UnitId,
-                                         Unit = d.MstUnit.Unit,
-                                         Quantity = d.Quantity,
-                                         Cost = d.Cost,
-                                         Amount = d.Amount,
-                                         BaseUnitId = d.BaseUnitId,
-                                         BaseUnit = d.MstUnit1.Unit,
-                                         BaseQuantity = d.BaseQuantity,
-                                         BaseCost = d.BaseCost
-                                     };
-
             try
             {
-                if (stockTransferHeaders.Any())
+                Int32 articleInventoryId;
+
+                var stockTransfers = from d in db.TrnStockTransfers
+                                     where d.Id == STId
+                                     && d.IsLocked == true
+                                     select d;
+
+                if (stockTransfers.Any())
                 {
-                    foreach (var stockTransferHeader in stockTransferHeaders)
+                    var stockTransferItems = from d in db.TrnStockTransferItems
+                                             where d.STId == stockTransfers.FirstOrDefault().Id
+                                             select d;
+
+                    foreach (var stockTransferItem in stockTransferItems)
                     {
-                        if (stockTransferItems.Any())
+                        // =========
+                        // Stock out
+                        // =========
+                        Data.TrnInventory newStockTransferItemStockOutInventory = new Data.TrnInventory();
+                        newStockTransferItemStockOutInventory.BranchId = stockTransfers.FirstOrDefault().BranchId;
+                        newStockTransferItemStockOutInventory.InventoryDate = Convert.ToDateTime(stockTransfers.FirstOrDefault().STDate);
+                        newStockTransferItemStockOutInventory.ArticleId = stockTransferItem.ItemId;
+                        newStockTransferItemStockOutInventory.ArticleInventoryId = stockTransferItem.ItemInventoryId;
+                        newStockTransferItemStockOutInventory.STId = STId;
+                        newStockTransferItemStockOutInventory.QuantityIn = 0;
+                        newStockTransferItemStockOutInventory.QuantityOut = stockTransferItem.BaseQuantity;
+                        newStockTransferItemStockOutInventory.Quantity = stockTransferItem.BaseQuantity * -1;
+                        newStockTransferItemStockOutInventory.Amount = stockTransferItem.Amount * -1;
+                        newStockTransferItemStockOutInventory.Particulars = stockTransfers.FirstOrDefault().Particulars;
+                        db.TrnInventories.InsertOnSubmit(newStockTransferItemStockOutInventory);
+                        db.SubmitChanges();
+
+                        UpdateArticleInventory(stockTransferItem.ItemInventoryId, stockTransfers.FirstOrDefault().MstUser4.InventoryType);
+
+                        // ========
+                        // Stock In
+                        // ========
+                        articleInventoryId = 0;
+                        var articleInventories = from d in db.MstArticleInventories
+                                                 where d.BranchId == stockTransfers.FirstOrDefault().ToBranchId &&
+                                                       d.ArticleId == stockTransferItem.ItemId
+                                                 select d;
+
+                        // Search for article inventory id
+                        if (articleInventories.Any())
                         {
-                            foreach (var stockTransferItem in stockTransferItems)
+                            if (stockTransfers.FirstOrDefault().MstUser4.InventoryType.Equals("Moving Average"))
                             {
-                                if (stockTransferItem.BaseQuantity > 0)
+                                articleInventoryId = articleInventories.FirstOrDefault().Id;
+                            }
+                            else
+                            {
+                                foreach (var articleInventory in articleInventories)
                                 {
-                                    if (stockTransferHeader.InventoryType.Equals("Moving Average"))
+                                    if (articleInventory.InventoryCode.Equals("ST-" + stockTransfers.FirstOrDefault().MstBranch1.BranchCode + "-" + stockTransfers.FirstOrDefault().STNumber))
                                     {
-                                        // stock transfer - out
-                                        Data.TrnInventory newInventoryForStockTransferStockOut = new Data.TrnInventory();
-
-                                        newInventoryForStockTransferStockOut.BranchId = stockTransferHeader.BranchId;
-                                        newInventoryForStockTransferStockOut.InventoryDate = Convert.ToDateTime(stockTransferHeader.STDate);
-                                        newInventoryForStockTransferStockOut.ArticleId = stockTransferItem.ItemId;
-                                        newInventoryForStockTransferStockOut.ArticleInventoryId = stockTransferItem.ItemInventoryId;
-                                        newInventoryForStockTransferStockOut.RRId = null;
-                                        newInventoryForStockTransferStockOut.SIId = null;
-                                        newInventoryForStockTransferStockOut.INId = null;
-                                        newInventoryForStockTransferStockOut.OTId = null;
-                                        newInventoryForStockTransferStockOut.STId = STId;
-                                        newInventoryForStockTransferStockOut.QuantityIn = 0;
-                                        newInventoryForStockTransferStockOut.QuantityOut = stockTransferItem.BaseQuantity;
-                                        newInventoryForStockTransferStockOut.Quantity = stockTransferItem.BaseQuantity * -1;
-                                        newInventoryForStockTransferStockOut.Amount = stockTransferItem.Amount * -1;
-                                        newInventoryForStockTransferStockOut.Particulars = "Stock Transfer - Out";
-
-                                        db.TrnInventories.InsertOnSubmit(newInventoryForStockTransferStockOut);
-                                        db.SubmitChanges();
-
-                                        // retrieve Artticle Inventory
-                                        var articleInventories = from d in db.MstArticleInventories
-                                                                 where d.BranchId == stockTransferHeader.ToBranchId
-                                                                 && d.ArticleId == stockTransferItem.ItemId
-                                                                 select new Models.MstArticleInventory
-                                                                 {
-                                                                     Id = d.Id,
-                                                                     BranchId = d.BranchId,
-                                                                     ArticleId = d.ArticleId,
-                                                                     InventoryCode = d.InventoryCode,
-                                                                     Quantity = d.Quantity,
-                                                                     Cost = d.Cost,
-                                                                     Amount = d.Amount,
-                                                                     Particulars = d.Particulars
-                                                                 };
-
-                                        if (articleInventories.Any())
-                                        {
-                                            Int32 articleInventoryId = articleInventories.FirstOrDefault().Id;
-
-                                            // stock transfer - In
-                                            Data.TrnInventory newInventoryForStockTransferStockIn = new Data.TrnInventory();
-
-                                            newInventoryForStockTransferStockIn.BranchId = stockTransferHeader.ToBranchId;
-                                            newInventoryForStockTransferStockIn.InventoryDate = Convert.ToDateTime(stockTransferHeader.STDate);
-                                            newInventoryForStockTransferStockIn.ArticleId = stockTransferItem.ItemId;
-                                            newInventoryForStockTransferStockIn.ArticleInventoryId = articleInventoryId;
-                                            newInventoryForStockTransferStockIn.RRId = null;
-                                            newInventoryForStockTransferStockIn.SIId = null;
-                                            newInventoryForStockTransferStockIn.INId = null;
-                                            newInventoryForStockTransferStockIn.OTId = null;
-                                            newInventoryForStockTransferStockIn.STId = STId;
-                                            newInventoryForStockTransferStockIn.QuantityIn = stockTransferItem.BaseQuantity;
-                                            newInventoryForStockTransferStockIn.QuantityOut = 0;
-                                            newInventoryForStockTransferStockIn.Quantity = stockTransferItem.BaseQuantity;
-                                            newInventoryForStockTransferStockIn.Amount = stockTransferItem.Amount;
-                                            newInventoryForStockTransferStockIn.Particulars = "Stock Transfer - In";
-
-                                            db.TrnInventories.InsertOnSubmit(newInventoryForStockTransferStockIn);
-                                            db.SubmitChanges();
-
-                                            UpdateArticleInventory(articleInventoryId, "Moving Average");
-                                        }
-                                        else
-                                        {
-                                            Int32 articleInventoryId = articleInventories.FirstOrDefault().Id;
-
-                                            // article Inventory
-                                            Data.MstArticleInventory newArticleInventory = new Data.MstArticleInventory();
-
-                                            newArticleInventory.BranchId = stockTransferHeader.ToBranchId;
-                                            newArticleInventory.ArticleId = stockTransferItem.ItemId;
-                                            newArticleInventory.InventoryCode = "ST-" + stockTransferHeader.ToBranchCode + "-" + stockTransferHeader.STNumber;
-                                            newArticleInventory.Quantity = stockTransferItem.Quantity;
-                                            newArticleInventory.Cost = stockTransferItem.Amount / stockTransferItem.Quantity;
-                                            newArticleInventory.Amount = stockTransferItem.Amount;
-                                            newArticleInventory.Particulars = stockTransferItem.Particulars;
-
-                                            db.MstArticleInventories.InsertOnSubmit(newArticleInventory);
-                                            db.SubmitChanges();
-
-                                            // retrieve Artticle Inventory - Id
-                                            var newArticleInventoryId = (from d in db.MstArticleInventories
-                                                                         where d.BranchId == stockTransferHeader.ToBranchId
-                                                                         && d.ArticleId == stockTransferItem.ItemId
-                                                                         select d.Id).SingleOrDefault();
-
-                                            // stock transfer - In
-                                            Data.TrnInventory newInventoryForStockTransferStockIn = new Data.TrnInventory();
-
-                                            newInventoryForStockTransferStockIn.BranchId = stockTransferHeader.ToBranchId;
-                                            newInventoryForStockTransferStockIn.InventoryDate = Convert.ToDateTime(stockTransferHeader.STDate);
-                                            newInventoryForStockTransferStockIn.ArticleId = stockTransferItem.ItemId;
-                                            newInventoryForStockTransferStockIn.ArticleInventoryId = newArticleInventoryId;
-                                            newInventoryForStockTransferStockIn.RRId = null;
-                                            newInventoryForStockTransferStockIn.SIId = null;
-                                            newInventoryForStockTransferStockIn.INId = null;
-                                            newInventoryForStockTransferStockIn.OTId = null;
-                                            newInventoryForStockTransferStockIn.STId = STId;
-                                            newInventoryForStockTransferStockIn.QuantityIn = stockTransferItem.BaseQuantity;
-                                            newInventoryForStockTransferStockIn.QuantityOut = 0;
-                                            newInventoryForStockTransferStockIn.Quantity = stockTransferItem.BaseQuantity;
-                                            newInventoryForStockTransferStockIn.Amount = stockTransferItem.Amount;
-                                            newInventoryForStockTransferStockIn.Particulars = "Stock Transfer - In";
-
-                                            db.TrnInventories.InsertOnSubmit(newInventoryForStockTransferStockIn);
-                                            db.SubmitChanges();
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // stock transfer - out
-                                        Data.TrnInventory newInventoryForStockTransferStockOut = new Data.TrnInventory();
-
-                                        newInventoryForStockTransferStockOut.BranchId = stockTransferHeader.BranchId;
-                                        newInventoryForStockTransferStockOut.InventoryDate = Convert.ToDateTime(stockTransferHeader.STDate);
-                                        newInventoryForStockTransferStockOut.ArticleId = stockTransferItem.ItemId;
-                                        newInventoryForStockTransferStockOut.ArticleInventoryId = stockTransferItem.ItemInventoryId;
-                                        newInventoryForStockTransferStockOut.RRId = null;
-                                        newInventoryForStockTransferStockOut.SIId = null;
-                                        newInventoryForStockTransferStockOut.INId = null;
-                                        newInventoryForStockTransferStockOut.OTId = null;
-                                        newInventoryForStockTransferStockOut.STId = STId;
-                                        newInventoryForStockTransferStockOut.QuantityIn = 0;
-                                        newInventoryForStockTransferStockOut.QuantityOut = stockTransferItem.BaseQuantity;
-                                        newInventoryForStockTransferStockOut.Quantity = stockTransferItem.BaseQuantity * -1;
-                                        newInventoryForStockTransferStockOut.Amount = stockTransferItem.Amount * -1;
-                                        newInventoryForStockTransferStockOut.Particulars = "Stock Transfer - Out";
-
-                                        db.TrnInventories.InsertOnSubmit(newInventoryForStockTransferStockOut);
-                                        db.SubmitChanges();
-
-                                        // retrieve Artticle Inventory
-                                        var articleInventories = from d in db.MstArticleInventories
-                                                                 where d.BranchId == stockTransferHeader.ToBranchId
-                                                                 && d.ArticleId == stockTransferItem.ItemId
-                                                                 && d.InventoryCode == "ST-" + stockTransferHeader.ToBranchCode + "-" + stockTransferHeader.STNumber
-                                                                 select new Models.MstArticleInventory
-                                                                 {
-                                                                     Id = d.Id,
-                                                                     BranchId = d.BranchId,
-                                                                     ArticleId = d.ArticleId,
-                                                                     InventoryCode = d.InventoryCode,
-                                                                     Quantity = d.Quantity,
-                                                                     Cost = d.Cost,
-                                                                     Amount = d.Amount,
-                                                                     Particulars = d.Particulars
-                                                                 };
-
-                                        if (articleInventories.Any())
-                                        {
-                                            Int32 articleInventoryId = articleInventories.FirstOrDefault().Id;
-
-                                            // stock transfer - In
-                                            Data.TrnInventory newInventoryForStockTransferStockIn = new Data.TrnInventory();
-
-                                            newInventoryForStockTransferStockIn.BranchId = stockTransferHeader.ToBranchId;
-                                            newInventoryForStockTransferStockIn.InventoryDate = Convert.ToDateTime(stockTransferHeader.STDate);
-                                            newInventoryForStockTransferStockIn.ArticleId = stockTransferItem.ItemId;
-                                            newInventoryForStockTransferStockIn.ArticleInventoryId = articleInventoryId;
-                                            newInventoryForStockTransferStockIn.RRId = null;
-                                            newInventoryForStockTransferStockIn.SIId = null;
-                                            newInventoryForStockTransferStockIn.INId = null;
-                                            newInventoryForStockTransferStockIn.OTId = null;
-                                            newInventoryForStockTransferStockIn.STId = STId;
-                                            newInventoryForStockTransferStockIn.QuantityIn = stockTransferItem.BaseQuantity;
-                                            newInventoryForStockTransferStockIn.QuantityOut = 0;
-                                            newInventoryForStockTransferStockIn.Quantity = stockTransferItem.BaseQuantity;
-                                            newInventoryForStockTransferStockIn.Amount = stockTransferItem.Amount;
-                                            newInventoryForStockTransferStockIn.Particulars = "Stock Transfer - In";
-
-                                            db.TrnInventories.InsertOnSubmit(newInventoryForStockTransferStockIn);
-                                            db.SubmitChanges();
-
-                                            UpdateArticleInventory(articleInventoryId, "");
-                                        }
-                                        else
-                                        {
-                                            // article Inventory
-                                            Data.MstArticleInventory newArticleInventory = new Data.MstArticleInventory();
-
-                                            newArticleInventory.BranchId = stockTransferHeader.ToBranchId;
-                                            newArticleInventory.ArticleId = stockTransferItem.ItemId;
-                                            newArticleInventory.InventoryCode = "ST-" + stockTransferHeader.ToBranchCode + "-" + stockTransferHeader.STNumber;
-                                            newArticleInventory.Quantity = stockTransferItem.Quantity;
-                                            newArticleInventory.Cost = stockTransferItem.Amount / stockTransferItem.Quantity;
-                                            newArticleInventory.Amount = stockTransferItem.Amount;
-                                            newArticleInventory.Particulars = stockTransferItem.Particulars;
-
-                                            db.MstArticleInventories.InsertOnSubmit(newArticleInventory);
-                                            db.SubmitChanges();
-
-                                            // retrieve Artticle Inventory - Id
-                                            var newArticleInventoryId = (from d in db.MstArticleInventories
-                                                                         where d.BranchId == stockTransferHeader.ToBranchId
-                                                                         && d.ArticleId == stockTransferItem.ItemId
-                                                                         && d.InventoryCode == "ST-" + stockTransferHeader.ToBranchCode + "-" + stockTransferHeader.STNumber
-                                                                         select d.Id).SingleOrDefault();
-
-                                            // stock transfer - In
-                                            Data.TrnInventory newInventoryForStockTransferStockIn = new Data.TrnInventory();
-
-                                            newInventoryForStockTransferStockIn.BranchId = stockTransferHeader.ToBranchId;
-                                            newInventoryForStockTransferStockIn.InventoryDate = Convert.ToDateTime(stockTransferHeader.STDate);
-                                            newInventoryForStockTransferStockIn.ArticleId = stockTransferItem.ItemId;
-                                            newInventoryForStockTransferStockIn.ArticleInventoryId = newArticleInventoryId;
-                                            newInventoryForStockTransferStockIn.RRId = null;
-                                            newInventoryForStockTransferStockIn.SIId = null;
-                                            newInventoryForStockTransferStockIn.INId = null;
-                                            newInventoryForStockTransferStockIn.OTId = null;
-                                            newInventoryForStockTransferStockIn.STId = STId;
-                                            newInventoryForStockTransferStockIn.QuantityIn = stockTransferItem.BaseQuantity;
-                                            newInventoryForStockTransferStockIn.QuantityOut = 0;
-                                            newInventoryForStockTransferStockIn.Quantity = stockTransferItem.BaseQuantity;
-                                            newInventoryForStockTransferStockIn.Amount = stockTransferItem.Amount;
-                                            newInventoryForStockTransferStockIn.Particulars = "Stock Transfer - In";
-
-                                            db.TrnInventories.InsertOnSubmit(newInventoryForStockTransferStockIn);
-                                            db.SubmitChanges();
-                                        }
+                                        articleInventoryId = articleInventory.Id;
+                                        break;
                                     }
                                 }
                             }
                         }
+
+                        // If no article inventory id
+                        if (articleInventoryId == 0)
+                        {
+                            Data.MstArticleInventory newArticleInventory = new Data.MstArticleInventory();
+                            newArticleInventory.BranchId = stockTransfers.FirstOrDefault().ToBranchId;
+                            newArticleInventory.ArticleId = stockTransferItem.ItemId;
+                            newArticleInventory.InventoryCode = "ST-" + stockTransfers.FirstOrDefault().MstBranch1.BranchCode + "-" + stockTransfers.FirstOrDefault().STNumber;
+                            newArticleInventory.Quantity = stockTransferItem.Quantity;
+                            newArticleInventory.Cost = stockTransferItem.BaseCost;
+                            newArticleInventory.Amount = stockTransferItem.Amount;
+                            newArticleInventory.Particulars = stockTransfers.FirstOrDefault().Particulars;
+                            db.MstArticleInventories.InsertOnSubmit(newArticleInventory);
+                            db.SubmitChanges();
+
+                            articleInventoryId = newArticleInventory.Id;
+                        }
+
+                        // Stock In Proper
+                        Data.TrnInventory newStockTransferItemStockInInventory = new Data.TrnInventory();
+                        newStockTransferItemStockInInventory.BranchId = stockTransfers.FirstOrDefault().ToBranchId;
+                        newStockTransferItemStockInInventory.InventoryDate = Convert.ToDateTime(stockTransfers.FirstOrDefault().STDate);
+                        newStockTransferItemStockInInventory.ArticleId = stockTransferItem.ItemId;
+                        newStockTransferItemStockInInventory.ArticleInventoryId = articleInventoryId;
+                        newStockTransferItemStockInInventory.STId = STId;
+                        newStockTransferItemStockInInventory.QuantityIn = stockTransferItem.BaseQuantity;
+                        newStockTransferItemStockInInventory.QuantityOut = 0;
+                        newStockTransferItemStockInInventory.Quantity = stockTransferItem.BaseQuantity;
+                        newStockTransferItemStockInInventory.Amount = stockTransferItem.Amount;
+                        newStockTransferItemStockInInventory.Particulars = stockTransfers.FirstOrDefault().Particulars;
+                        db.TrnInventories.InsertOnSubmit(newStockTransferItemStockInInventory);
+                        db.SubmitChanges();
+
+                        // ==========================================
+                        // Update article inventory quantity and cost
+                        // ==========================================
+                        UpdateArticleInventory(articleInventoryId, stockTransfers.FirstOrDefault().MstUser4.InventoryType);
                     }
                 }
             }
@@ -399,106 +204,67 @@ namespace easyfis.Business
                 Debug.WriteLine(e);
             }
         }
+
         // Delete Stock Transfer Inventory
         public void deleteSTInventory(Int32 STId)
         {
-            // stock transfer header
-            var stockTransferHeaders = from d in db.TrnStockTransfers
-                                       where d.Id == STId
-                                       select new Models.TrnStockTransfer
-                                       {
-                                           Id = d.Id,
-                                           BranchId = d.BranchId,
-                                           Branch = d.MstBranch.Branch,
-                                           STNumber = d.STNumber,
-                                           STDate = d.STDate.ToShortDateString(),
-                                           ToBranchId = d.ToBranchId,
-                                           ToBranch = d.MstBranch1.Branch,
-                                           Particulars = d.Particulars,
-                                           ManualSTNumber = d.ManualSTNumber,
-                                           PreparedById = d.PreparedById,
-                                           PreparedBy = d.MstUser3.FullName,
-                                           CheckedById = d.CheckedById,
-                                           CheckedBy = d.MstUser1.FullName,
-                                           ApprovedById = d.ApprovedById,
-                                           ApprovedBy = d.MstUser.FullName,
-                                           IsLocked = d.IsLocked,
-                                           CreatedById = d.CreatedById,
-                                           CreatedBy = d.MstUser2.FullName,
-                                           CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                           UpdatedById = d.UpdatedById,
-                                           UpdatedBy = d.MstUser4.FullName,
-                                           UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                       };
-
-            // stock transfer items
-            var stockTransferItems = from d in db.TrnStockTransferItems
-                                     where d.STId == STId
-                                     select new Models.TrnStockTransferItem
-                                     {
-                                         Id = d.Id,
-                                         STId = d.STId,
-                                         ST = d.TrnStockTransfer.STNumber,
-                                         ItemId = d.ItemId,
-                                         ItemCode = d.MstArticle.ManualArticleCode,
-                                         Item = d.MstArticle.Article,
-                                         ItemInventoryId = d.ItemInventoryId,
-                                         ItemInventory = d.MstArticleInventory.InventoryCode,
-                                         Particulars = d.Particulars,
-                                         UnitId = d.UnitId,
-                                         Unit = d.MstUnit.Unit,
-                                         Quantity = d.Quantity,
-                                         Cost = d.Cost,
-                                         Amount = d.Amount,
-                                         BaseUnitId = d.BaseUnitId,
-                                         BaseUnit = d.MstUnit1.Unit,
-                                         BaseQuantity = d.BaseQuantity,
-                                         BaseCost = d.BaseCost
-                                     };
-
             try
             {
-                var STInventories = db.TrnInventories.Where(d => d.STId == STId).ToList();
-                foreach (var STInventory in STInventories)
+                Int32 articleInventoryId;
+
+                var stockTransfers = from d in db.TrnStockTransfers
+                                     where d.Id == STId && d.IsLocked == true
+                                     select d;
+
+                if (stockTransfers.Any())
                 {
-                    db.TrnInventories.DeleteOnSubmit(STInventory);
+                    // Delete TrnInventory
+                    var deleteInventory = from d in db.TrnInventories
+                                          where d.STId == stockTransfers.FirstOrDefault().Id
+                                          select d;
+
+                    db.TrnInventories.DeleteAllOnSubmit(deleteInventory);
                     db.SubmitChanges();
-                }
 
-                if (stockTransferHeaders.Any())
-                {
-                    foreach (var stockTransferHeader in stockTransferHeaders)
+                    var stockTransferItems = from d in db.TrnStockTransferItems
+                                             where d.STId == stockTransfers.FirstOrDefault().Id
+                                             select d;
+
+                    // Update article inventory cost and quantity
+                    foreach (var stockTransferItem in stockTransferItems)
                     {
-                        if (stockTransferItems.Any())
+                        UpdateArticleInventory(stockTransferItem.ItemInventoryId, stockTransfers.FirstOrDefault().MstUser4.InventoryType);
+
+                        articleInventoryId = 0;
+
+                        var articleInventories = from d in db.MstArticleInventories
+                                                 where d.BranchId == stockTransfers.FirstOrDefault().ToBranchId
+                                                 && d.ArticleId == stockTransferItem.ItemId
+                                                 select d;
+
+                        // Search for article inventory id
+                        if (articleInventories.Any())
                         {
-                            foreach (var stockTransferItem in stockTransferItems)
+                            if (stockTransfers.FirstOrDefault().MstUser4.InventoryType.Equals("Moving Average"))
                             {
-                                UpdateArticleInventory(stockTransferItem.ItemInventoryId, "");
-
-                                // retrieve Artticle Inventory
-                                var articleInventories = from d in db.MstArticleInventories
-                                                         where d.BranchId == stockTransferHeader.BranchId
-                                                         && d.ArticleId == stockTransferItem.ItemId
-                                                         select new Models.MstArticleInventory
-                                                         {
-                                                             Id = d.Id,
-                                                             BranchId = d.BranchId,
-                                                             ArticleId = d.ArticleId,
-                                                             InventoryCode = d.InventoryCode,
-                                                             Quantity = d.Quantity,
-                                                             Cost = d.Cost,
-                                                             Amount = d.Amount,
-                                                             Particulars = d.Particulars
-                                                         };
-
-                                Int32 articleInventoryId = 0;
+                                articleInventoryId = articleInventories.FirstOrDefault().Id;
+                            }
+                            else
+                            {
                                 foreach (var articleInventory in articleInventories)
                                 {
-                                    articleInventoryId = articleInventory.Id;
+                                    if (articleInventory.InventoryCode.Equals("ST-" + stockTransfers.FirstOrDefault().MstBranch1.BranchCode + "-" + stockTransfers.FirstOrDefault().STNumber))
+                                    {
+                                        articleInventoryId = articleInventory.Id;
+                                        break;
+                                    }
                                 }
-
-                                UpdateArticleInventory(articleInventoryId, "");
                             }
+                        }
+
+                        if (articleInventoryId > 0)
+                        {
+                            UpdateArticleInventory(articleInventoryId, stockTransfers.FirstOrDefault().MstUser4.InventoryType);
                         }
                     }
                 }
@@ -514,96 +280,43 @@ namespace easyfis.Business
         // ===================
         public void InsertOTInventory(Int32 OTId)
         {
-            // stock headers
-            var stockOutHeaders = from d in db.TrnStockOuts
-                                  where d.Id == OTId
-                                  select new Models.TrnStockOut
-                                  {
-                                      Id = d.Id,
-                                      BranchId = d.BranchId,
-                                      Branch = d.MstBranch.Branch,
-                                      OTNumber = d.OTNumber,
-                                      OTDate = d.OTDate.ToShortDateString(),
-                                      AccountId = d.AccountId,
-                                      Account = d.MstAccount.Account,
-                                      ArticleId = d.ArticleId,
-                                      Article = d.MstArticle.Article,
-                                      Particulars = d.Particulars,
-                                      ManualOTNumber = d.ManualOTNumber,
-                                      PreparedById = d.PreparedById,
-                                      PreparedBy = d.MstUser3.FullName,
-                                      CheckedById = d.CheckedById,
-                                      CheckedBy = d.MstUser1.FullName,
-                                      ApprovedById = d.ApprovedById,
-                                      ApprovedBy = d.MstUser.FullName,
-                                      IsLocked = d.IsLocked,
-                                      CreatedById = d.CreatedById,
-                                      CreatedBy = d.MstUser2.FullName,
-                                      CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                      UpdatedById = d.UpdatedById,
-                                      UpdatedBy = d.MstUser4.FullName,
-                                      UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                  };
-
-            // stock out items
-            var stockOutItems = from d in db.TrnStockOutItems
-                                where d.OTId == OTId
-                                select new Models.TrnStockOutItem
-                                {
-                                    Id = d.Id,
-                                    OTId = d.OTId,
-                                    OT = d.TrnStockOut.OTNumber,
-                                    ExpenseAccountId = d.ExpenseAccountId,
-                                    ExpenseAccount = d.MstAccount.Account,
-                                    ItemId = d.ItemId,
-                                    ItemCode = d.MstArticle.ManualArticleCode,
-                                    Item = d.MstArticle.Article,
-                                    ItemInventoryId = d.ItemInventoryId,
-                                    ItemInventory = d.MstArticleInventory.InventoryCode,
-                                    Particulars = d.Particulars,
-                                    UnitId = d.UnitId,
-                                    Unit = d.MstUnit.Unit,
-                                    Quantity = d.Quantity,
-                                    Cost = d.Cost,
-                                    Amount = d.Amount,
-                                    BaseUnitId = d.BaseUnitId,
-                                    BaseUnit = d.MstUnit1.Unit,
-                                    BaseQuantity = d.BaseQuantity,
-                                    BaseCost = d.BaseCost
-                                };
-
             try
             {
+                // stock headers
+                var stockOutHeaders = from d in db.TrnStockOuts
+                                      where d.Id == OTId
+                                      && d.IsLocked == true
+                                      select d;
+
                 if (stockOutHeaders.Any())
                 {
-                    foreach (var stockOutHeader in stockOutHeaders)
+                    // stock out items
+                    var stockOutItems = from d in db.TrnStockOutItems
+                                        where d.OTId == OTId
+                                        select d;
+
+                    if (stockOutItems.Any())
                     {
-                        if (stockOutItems.Any())
+                        foreach (var stockOutItem in stockOutItems)
                         {
-                            foreach (var stockOutItem in stockOutItems)
-                            {
-                                Data.TrnInventory newInventoryForStockOut = new Data.TrnInventory();
+                            // ===================
+                            // Stock out Inventory
+                            // ===================
+                            Data.TrnInventory newStockOutInventory = new Data.TrnInventory();
+                            newStockOutInventory.BranchId = stockOutHeaders.FirstOrDefault().BranchId;
+                            newStockOutInventory.InventoryDate = Convert.ToDateTime(stockOutHeaders.FirstOrDefault().OTDate);
+                            newStockOutInventory.ArticleId = stockOutItem.ItemId;
+                            newStockOutInventory.ArticleInventoryId = stockOutItem.ItemInventoryId;
+                            newStockOutInventory.OTId = OTId;
+                            newStockOutInventory.QuantityIn = 0;
+                            newStockOutInventory.QuantityOut = stockOutItem.BaseQuantity;
+                            newStockOutInventory.Quantity = stockOutItem.BaseQuantity * -1;
+                            newStockOutInventory.Amount = stockOutItem.Amount * -1;
+                            newStockOutInventory.Particulars = stockOutHeaders.FirstOrDefault().Particulars;
+                            db.TrnInventories.InsertOnSubmit(newStockOutInventory);
+                            db.SubmitChanges();
 
-                                newInventoryForStockOut.BranchId = stockOutHeader.BranchId;
-                                newInventoryForStockOut.InventoryDate = Convert.ToDateTime(stockOutHeader.OTDate);
-                                newInventoryForStockOut.ArticleId = stockOutItem.ItemId;
-                                newInventoryForStockOut.ArticleInventoryId = stockOutItem.ItemInventoryId;
-                                newInventoryForStockOut.RRId = null;
-                                newInventoryForStockOut.SIId = null;
-                                newInventoryForStockOut.INId = null;
-                                newInventoryForStockOut.OTId = OTId;
-                                newInventoryForStockOut.STId = null;
-                                newInventoryForStockOut.QuantityIn = 0;
-                                newInventoryForStockOut.QuantityOut = stockOutItem.BaseQuantity;
-                                newInventoryForStockOut.Quantity = stockOutItem.BaseQuantity * -1;
-                                newInventoryForStockOut.Amount = stockOutItem.Amount * -1;
-                                newInventoryForStockOut.Particulars = "Stock Out";
-
-                                db.TrnInventories.InsertOnSubmit(newInventoryForStockOut);
-                                db.SubmitChanges();
-
-                                UpdateArticleInventory(stockOutItem.ItemInventoryId, "");
-                            }
+                            UpdateArticleInventory(stockOutItem.ItemInventoryId, stockOutHeaders.FirstOrDefault().MstUser4.InventoryType);
                         }
                     }
                 }
@@ -612,88 +325,38 @@ namespace easyfis.Business
             {
                 Debug.WriteLine(e);
             }
-
         }
+
         // Delete Stock Out Inventory
         public void deleteOTInventory(Int32 OTId)
         {
-            // stock headers
-            var stockOutHeaders = from d in db.TrnStockOuts
-                                  where d.Id == OTId
-                                  select new Models.TrnStockOut
-                                  {
-                                      Id = d.Id,
-                                      BranchId = d.BranchId,
-                                      Branch = d.MstBranch.Branch,
-                                      OTNumber = d.OTNumber,
-                                      OTDate = d.OTDate.ToShortDateString(),
-                                      AccountId = d.AccountId,
-                                      Account = d.MstAccount.Account,
-                                      ArticleId = d.ArticleId,
-                                      Article = d.MstArticle.Article,
-                                      Particulars = d.Particulars,
-                                      ManualOTNumber = d.ManualOTNumber,
-                                      PreparedById = d.PreparedById,
-                                      PreparedBy = d.MstUser3.FullName,
-                                      CheckedById = d.CheckedById,
-                                      CheckedBy = d.MstUser1.FullName,
-                                      ApprovedById = d.ApprovedById,
-                                      ApprovedBy = d.MstUser.FullName,
-                                      IsLocked = d.IsLocked,
-                                      CreatedById = d.CreatedById,
-                                      CreatedBy = d.MstUser2.FullName,
-                                      CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                      UpdatedById = d.UpdatedById,
-                                      UpdatedBy = d.MstUser4.FullName,
-                                      UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                  };
-
-            // stock out items
-            var stockOutItems = from d in db.TrnStockOutItems
-                                where d.OTId == OTId
-                                select new Models.TrnStockOutItem
-                                {
-                                    Id = d.Id,
-                                    OTId = d.OTId,
-                                    OT = d.TrnStockOut.OTNumber,
-                                    ExpenseAccountId = d.ExpenseAccountId,
-                                    ExpenseAccount = d.MstAccount.Account,
-                                    ItemId = d.ItemId,
-                                    ItemCode = d.MstArticle.ManualArticleCode,
-                                    Item = d.MstArticle.Article,
-                                    ItemInventoryId = d.ItemInventoryId,
-                                    ItemInventory = d.MstArticleInventory.InventoryCode,
-                                    Particulars = d.Particulars,
-                                    UnitId = d.UnitId,
-                                    Unit = d.MstUnit.Unit,
-                                    Quantity = d.Quantity,
-                                    Cost = d.Cost,
-                                    Amount = d.Amount,
-                                    BaseUnitId = d.BaseUnitId,
-                                    BaseUnit = d.MstUnit1.Unit,
-                                    BaseQuantity = d.BaseQuantity,
-                                    BaseCost = d.BaseCost
-                                };
-
             try
             {
-                var OTInventories = db.TrnInventories.Where(d => d.OTId == OTId).ToList();
-                foreach (var OTInventory in OTInventories)
-                {
-                    db.TrnInventories.DeleteOnSubmit(OTInventory);
-                    db.SubmitChanges();
-                }
+                // stock headers
+                var stockOutHeaders = from d in db.TrnStockOuts
+                                      where d.Id == OTId
+                                      && d.IsLocked == true
+                                      select d;
 
                 if (stockOutHeaders.Any())
                 {
-                    foreach (var stockOutHeader in stockOutHeaders)
+                    var deleteInventory = from d in db.TrnInventories
+                                          where d.OTId == stockOutHeaders.FirstOrDefault().Id
+                                          select d;
+
+                    db.TrnInventories.DeleteAllOnSubmit(deleteInventory);
+                    db.SubmitChanges();
+
+                    // stock out items
+                    var stockOutItems = from d in db.TrnStockOutItems
+                                        where d.OTId == OTId
+                                        select d;
+
+                    if (stockOutItems.Any())
                     {
-                        if (stockOutItems.Any())
+                        foreach (var stockOutItem in stockOutItems)
                         {
-                            foreach (var stockOutItem in stockOutItems)
-                            {
-                                UpdateArticleInventory(stockOutItem.ItemInventoryId, "");
-                            }
+                            UpdateArticleInventory(stockOutItem.ItemInventoryId, stockOutHeaders.FirstOrDefault().MstUser4.InventoryType);
                         }
                     }
                 }
@@ -709,479 +372,92 @@ namespace easyfis.Business
         // ==================
         public void insertINInventory(Int32 INId, Boolean isProduce)
         {
-            // Stock in header
-            var stockInHeaders = from d in db.TrnStockIns
-                                 where d.Id == INId
-                                 select new Models.TrnStockIn
-                                 {
-                                     Id = d.Id,
-                                     BranchId = d.BranchId,
-                                     Branch = d.MstBranch.Branch,
-                                     BranchCode = d.MstBranch.BranchCode,
-                                     INNumber = d.INNumber,
-                                     INDate = d.INDate.ToShortDateString(),
-                                     AccountId = d.AccountId,
-                                     Account = d.MstAccount.Account,
-                                     ArticleId = d.ArticleId,
-                                     Article = d.MstArticle.Article,
-                                     Particulars = d.Particulars,
-                                     ManualINNumber = d.ManualINNumber,
-                                     IsProduced = d.IsProduced,
-                                     PreparedById = d.PreparedById,
-                                     PreparedBy = d.MstUser3.FullName,
-                                     CheckedById = d.CheckedById,
-                                     CheckedBy = d.MstUser1.FullName,
-                                     ApprovedById = d.ApprovedById,
-                                     ApprovedBy = d.MstUser.FullName,
-                                     IsLocked = d.IsLocked,
-                                     CreatedById = d.CreatedById,
-                                     CreatedBy = d.MstUser2.FullName,
-                                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                     UpdatedById = d.UpdatedById,
-                                     UpdatedBy = d.MstUser4.FullName,
-                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString(),
-                                     InventoryType = d.MstUser4.InventoryType
-                                 };
-
-            // Stock in items
-            var stockInItems = from d in db.TrnStockInItems
-                               where d.INId == INId
-                               select new Models.TrnStockInItem
-                               {
-                                   Id = d.Id,
-                                   INId = d.INId,
-                                   IN = d.TrnStockIn.INNumber,
-                                   ItemId = d.ItemId,
-                                   ItemCode = d.MstArticle.ManualArticleCode,
-                                   Item = d.MstArticle.Article,
-                                   Particulars = d.Particulars,
-                                   UnitId = d.UnitId,
-                                   Unit = d.MstUnit.Unit,
-                                   Quantity = d.Quantity,
-                                   Cost = d.Cost,
-                                   Amount = d.Amount,
-                                   BaseUnitId = d.BaseUnitId,
-                                   BaseUnit = d.MstUnit1.Unit,
-                                   BaseQuantity = d.BaseQuantity,
-                                   BaseCost = d.BaseCost
-                               };
-
             try
             {
-                if (stockInHeaders.Any())
+                Int32 articleInventoryId;
+
+                // Stock in header
+                var stockIns = from d in db.TrnStockIns
+                               where d.Id == INId
+                               && d.IsLocked == true
+                               select d;
+
+                if (stockIns.Any())
                 {
-                    foreach (var stockInHeader in stockInHeaders)
+                    // ==============
+                    // Stock in items
+                    // ==============
+                    var stockInItems = from d in db.TrnStockInItems
+                                       where d.INId == INId
+                                       select d;
+
+                    if (stockInItems.Any())
                     {
-                        if (stockInItems.Any())
+                        foreach (var stockInItem in stockInItems)
                         {
-                            foreach (var stockInItem in stockInItems)
+                            // retrieve Artticle Inventory
+                            var articleInventories = from d in db.MstArticleInventories
+                                                     where d.BranchId == stockIns.FirstOrDefault().BranchId
+                                                     && d.ArticleId == stockInItem.ItemId
+                                                     select d;
+
+                            articleInventoryId = 0;
+                            if (articleInventories.Any())
                             {
-                                if (stockInHeader.InventoryType.Equals("Moving Average"))
+                                if (stockIns.FirstOrDefault().MstUser4.InventoryType.Equals("Moving Average"))
                                 {
-                                    // retrieve Artticle Inventory
-                                    var articleInventories = from d in db.MstArticleInventories
-                                                             where d.BranchId == stockInHeader.BranchId
-                                                             && d.ArticleId == stockInItem.ItemId
-                                                             select new Models.MstArticleInventory
-                                                             {
-                                                                 Id = d.Id,
-                                                                 BranchId = d.BranchId,
-                                                                 ArticleId = d.ArticleId,
-                                                                 InventoryCode = d.InventoryCode,
-                                                                 Quantity = d.Quantity,
-                                                                 Cost = d.Cost,
-                                                                 Amount = d.Amount,
-                                                                 Particulars = d.Particulars
-                                                             };
-
-                                    Data.TrnInventory newInventory = new Data.TrnInventory();
-
-                                    if (stockInItem.BaseQuantity >= 0)
-                                    {
-                                        if (articleInventories.Any())
-                                        {
-                                            Int32 articleInventoryId = articleInventories.FirstOrDefault().Id;
-
-                                            newInventory.BranchId = stockInHeader.BranchId;
-                                            newInventory.InventoryDate = Convert.ToDateTime(stockInHeader.INDate);
-                                            newInventory.ArticleId = stockInItem.ItemId;
-                                            newInventory.ArticleInventoryId = articleInventoryId;
-                                            newInventory.RRId = null;
-                                            newInventory.SIId = null;
-                                            newInventory.INId = INId;
-                                            newInventory.OTId = null;
-                                            newInventory.STId = null;
-                                            newInventory.QuantityIn = stockInItem.BaseQuantity;
-                                            newInventory.QuantityOut = 0;
-                                            newInventory.Quantity = stockInItem.BaseQuantity;
-                                            newInventory.Amount = stockInItem.Amount;
-                                            newInventory.Particulars = "Stock In";
-
-                                            db.TrnInventories.InsertOnSubmit(newInventory);
-                                            db.SubmitChanges();
-
-                                            var articleItem = from d in db.MstArticles where d.Id == stockInItem.ItemId select d;
-                                            if (articleItem.FirstOrDefault().Kitting == 1)
-                                            {
-                                                var articleComponents = from d in db.MstArticleComponents
-                                                                        where d.ArticleId == stockInItem.ItemId
-                                                                        select new Models.MstArticleComponent
-                                                                        {
-                                                                            Id = d.Id,
-                                                                            ArticleId = d.ArticleId,
-                                                                            ComponentArticleId = d.ComponentArticleId,
-                                                                            ComponentArticle = d.MstArticle1.Article,
-                                                                            Quantity = d.Quantity,
-                                                                            UnitId = d.MstArticle1.UnitId,
-                                                                            Cost = Convert.ToDecimal(d.MstArticle1.Cost),
-                                                                            Price = d.MstArticle1.Price,
-                                                                            ComponentArticleInventoryId = (from i in db.MstArticleInventories where i.BranchId == stockInHeader.BranchId && i.ArticleId == d.ComponentArticleId select i.Id).FirstOrDefault(),
-                                                                            Amount = d.Quantity * Convert.ToDecimal(d.MstArticle1.Cost),
-                                                                            Particulars = d.Particulars
-                                                                        };
-
-                                                if (Convert.ToBoolean(isProduce) == true)
-                                                {
-                                                    foreach (var articleComponent in articleComponents)
-                                                    {
-                                                        // retrieve component Artticle Inventory
-                                                        var componentArticleInventories = from d in db.MstArticleInventories
-                                                                                          where d.BranchId == stockInHeader.BranchId
-                                                                                          && d.ArticleId == articleComponent.ComponentArticleId
-                                                                                          select d;
-
-                                                        if (componentArticleInventories.Any())
-                                                        {
-                                                            Data.TrnInventory newComponentInventory = new Data.TrnInventory();
-                                                            newComponentInventory.BranchId = stockInHeader.BranchId;
-                                                            newComponentInventory.InventoryDate = Convert.ToDateTime(stockInHeader.INDate);
-                                                            newComponentInventory.ArticleId = articleComponent.ComponentArticleId;
-                                                            newComponentInventory.ArticleInventoryId = componentArticleInventories.FirstOrDefault().Id;
-                                                            newComponentInventory.RRId = null;
-                                                            newComponentInventory.SIId = null;
-                                                            newComponentInventory.INId = INId;
-                                                            newComponentInventory.OTId = null;
-                                                            newComponentInventory.STId = null;
-                                                            newComponentInventory.QuantityIn = (articleComponent.Quantity * stockInItem.Quantity) * -1;
-                                                            newComponentInventory.QuantityOut = 0;
-                                                            newComponentInventory.Quantity = (articleComponent.Quantity * stockInItem.Quantity) * -1;
-                                                            newComponentInventory.Amount = ((articleComponent.Quantity * stockInItem.Quantity) * -1) * articleComponent.Cost;
-                                                            newComponentInventory.Particulars = "Stock In";
-
-                                                            db.TrnInventories.InsertOnSubmit(newComponentInventory);
-                                                            db.SubmitChanges();
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                            UpdateArticleInventory(articleInventoryId, "Moving Average");
-                                        }
-                                        else
-                                        {
-                                            // InsertRRInventory article Inventory
-                                            Data.MstArticleInventory newArticleInventory = new Data.MstArticleInventory();
-
-                                            newArticleInventory.BranchId = stockInHeader.BranchId;
-                                            newArticleInventory.ArticleId = stockInItem.ItemId;
-                                            newArticleInventory.InventoryCode = "IN-" + stockInHeader.BranchCode + "-" + stockInHeader.INNumber;
-                                            newArticleInventory.Quantity = stockInItem.Quantity;
-                                            newArticleInventory.Cost = stockInItem.Amount / stockInItem.Quantity;
-                                            newArticleInventory.Amount = stockInItem.Amount;
-                                            newArticleInventory.Particulars = stockInItem.Particulars;
-
-                                            db.MstArticleInventories.InsertOnSubmit(newArticleInventory);
-                                            db.SubmitChanges();
-
-                                            // retrieve Artticle Inventory - Id
-                                            var newArticleInventoryId = (from d in db.MstArticleInventories
-                                                                         where d.BranchId == stockInHeader.BranchId
-                                                                         && d.ArticleId == stockInItem.ItemId
-                                                                         && d.InventoryCode == "IN-" + stockInHeader.BranchCode + "-" + stockInHeader.INNumber
-                                                                         select d.Id).SingleOrDefault();
-
-                                            newInventory.BranchId = stockInHeader.BranchId;
-                                            newInventory.InventoryDate = Convert.ToDateTime(stockInHeader.INDate);
-                                            newInventory.ArticleId = stockInItem.ItemId;
-                                            newInventory.ArticleInventoryId = newArticleInventoryId;
-                                            newInventory.RRId = null;
-                                            newInventory.SIId = null;
-                                            newInventory.INId = INId;
-                                            newInventory.OTId = null;
-                                            newInventory.STId = null;
-                                            newInventory.QuantityIn = stockInItem.BaseQuantity;
-                                            newInventory.QuantityOut = 0;
-                                            newInventory.Quantity = stockInItem.BaseQuantity;
-                                            newInventory.Amount = stockInItem.Amount;
-                                            newInventory.Particulars = "Stock In";
-
-                                            db.TrnInventories.InsertOnSubmit(newInventory);
-                                            db.SubmitChanges();
-
-                                            var articleItem = from d in db.MstArticles where d.Id == stockInItem.ItemId select d;
-                                            if (articleItem.FirstOrDefault().Kitting == 1)
-                                            {
-                                                var articleComponents = from d in db.MstArticleComponents
-                                                                        where d.ArticleId == stockInItem.ItemId
-                                                                        select new Models.MstArticleComponent
-                                                                        {
-                                                                            Id = d.Id,
-                                                                            ArticleId = d.ArticleId,
-                                                                            ComponentArticleId = d.ComponentArticleId,
-                                                                            ComponentArticle = d.MstArticle1.Article,
-                                                                            Quantity = d.Quantity,
-                                                                            UnitId = d.MstArticle1.UnitId,
-                                                                            Cost = Convert.ToDecimal(d.MstArticle1.Cost),
-                                                                            Price = d.MstArticle1.Price,
-                                                                            ComponentArticleInventoryId = (from i in db.MstArticleInventories where i.BranchId == stockInHeader.BranchId && i.ArticleId == d.ComponentArticleId select i.Id).FirstOrDefault(),
-                                                                            Amount = d.Quantity * Convert.ToDecimal(d.MstArticle1.Cost),
-                                                                            Particulars = d.Particulars
-                                                                        };
-
-                                                if (Convert.ToBoolean(isProduce) == true)
-                                                {
-                                                    foreach (var articleComponent in articleComponents)
-                                                    {
-                                                        // retrieve component Artticle Inventory
-                                                        var componentArticleInventories = from d in db.MstArticleInventories
-                                                                                          where d.BranchId == stockInHeader.BranchId
-                                                                                          && d.ArticleId == articleComponent.ComponentArticleId
-                                                                                          select d;
-
-                                                        if (componentArticleInventories.Any())
-                                                        {
-                                                            Data.TrnInventory newComponentInventory = new Data.TrnInventory();
-                                                            newComponentInventory.BranchId = stockInHeader.BranchId;
-                                                            newComponentInventory.InventoryDate = Convert.ToDateTime(stockInHeader.INDate);
-                                                            newComponentInventory.ArticleId = articleComponent.ComponentArticleId;
-                                                            newComponentInventory.ArticleInventoryId = componentArticleInventories.FirstOrDefault().Id;
-                                                            newComponentInventory.RRId = null;
-                                                            newComponentInventory.SIId = null;
-                                                            newComponentInventory.INId = INId;
-                                                            newComponentInventory.OTId = null;
-                                                            newComponentInventory.STId = null;
-                                                            newComponentInventory.QuantityIn = (articleComponent.Quantity * stockInItem.Quantity) * -1;
-                                                            newComponentInventory.QuantityOut = 0;
-                                                            newComponentInventory.Quantity = (articleComponent.Quantity * stockInItem.Quantity) * -1;
-                                                            newComponentInventory.Amount = ((articleComponent.Quantity * stockInItem.Quantity) * -1) * articleComponent.Cost;
-                                                            newComponentInventory.Particulars = "Stock In";
-
-                                                            db.TrnInventories.InsertOnSubmit(newComponentInventory);
-                                                            db.SubmitChanges();
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                                    articleInventoryId = articleInventories.FirstOrDefault().Id;
                                 }
                                 else
                                 {
-                                    // retrieve Artticle Inventory
-                                    var articleInventories = from d in db.MstArticleInventories
-                                                             where d.BranchId == stockInHeader.BranchId
-                                                             && d.ArticleId == stockInItem.ItemId
-                                                             && d.InventoryCode == "IN-" + stockInHeader.BranchCode + "-" + stockInHeader.INNumber
-                                                             select new Models.MstArticleInventory
-                                                             {
-                                                                 Id = d.Id,
-                                                                 BranchId = d.BranchId,
-                                                                 ArticleId = d.ArticleId,
-                                                                 InventoryCode = d.InventoryCode,
-                                                                 Quantity = d.Quantity,
-                                                                 Cost = d.Cost,
-                                                                 Amount = d.Amount,
-                                                                 Particulars = d.Particulars
-                                                             };
-
-                                    Data.TrnInventory newInventory = new Data.TrnInventory();
-
-                                    if (stockInItem.BaseQuantity >= 0)
+                                    foreach (var articleInventory in articleInventories)
                                     {
-                                        if (articleInventories.Any())
+                                        if (articleInventory.InventoryCode.Equals("ST-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber))
                                         {
-                                            Int32 articleInventoryId = articleInventories.FirstOrDefault().Id;
-
-                                            newInventory.BranchId = stockInHeader.BranchId;
-                                            newInventory.InventoryDate = Convert.ToDateTime(stockInHeader.INDate);
-                                            newInventory.ArticleId = stockInItem.ItemId;
-                                            newInventory.ArticleInventoryId = articleInventoryId;
-                                            newInventory.RRId = null;
-                                            newInventory.SIId = null;
-                                            newInventory.INId = INId;
-                                            newInventory.OTId = null;
-                                            newInventory.STId = null;
-                                            newInventory.QuantityIn = stockInItem.BaseQuantity;
-                                            newInventory.QuantityOut = 0;
-                                            newInventory.Quantity = stockInItem.BaseQuantity;
-                                            newInventory.Amount = stockInItem.Amount;
-                                            newInventory.Particulars = "Stock In";
-
-                                            db.TrnInventories.InsertOnSubmit(newInventory);
-                                            db.SubmitChanges();
-
-                                            var articleItem = from d in db.MstArticles where d.Id == stockInItem.ItemId select d;
-                                            if (articleItem.FirstOrDefault().Kitting == 1)
-                                            {
-                                                var articleComponents = from d in db.MstArticleComponents
-                                                                        where d.ArticleId == stockInItem.ItemId
-                                                                        select new Models.MstArticleComponent
-                                                                        {
-                                                                            Id = d.Id,
-                                                                            ArticleId = d.ArticleId,
-                                                                            ComponentArticleId = d.ComponentArticleId,
-                                                                            ComponentArticle = d.MstArticle1.Article,
-                                                                            Quantity = d.Quantity,
-                                                                            UnitId = d.MstArticle1.UnitId,
-                                                                            Cost = Convert.ToDecimal(d.MstArticle1.Cost),
-                                                                            Price = d.MstArticle1.Price,
-                                                                            ComponentArticleInventoryId = (from i in db.MstArticleInventories where i.BranchId == stockInHeader.BranchId && i.ArticleId == d.ComponentArticleId select i.Id).FirstOrDefault(),
-                                                                            Amount = d.Quantity * Convert.ToDecimal(d.MstArticle1.Cost),
-                                                                            Particulars = d.Particulars
-                                                                        };
-
-                                                if (Convert.ToBoolean(isProduce) == true)
-                                                {
-                                                    foreach (var articleComponent in articleComponents)
-                                                    {
-                                                        // retrieve component Artticle Inventory
-                                                        var componentArticleInventories = from d in db.MstArticleInventories
-                                                                                          where d.BranchId == stockInHeader.BranchId
-                                                                                          && d.ArticleId == articleComponent.ComponentArticleId
-                                                                                          select d;
-
-                                                        if (componentArticleInventories.Any())
-                                                        {
-                                                            Data.TrnInventory newComponentInventory = new Data.TrnInventory();
-                                                            newComponentInventory.BranchId = stockInHeader.BranchId;
-                                                            newComponentInventory.InventoryDate = Convert.ToDateTime(stockInHeader.INDate);
-                                                            newComponentInventory.ArticleId = articleComponent.ComponentArticleId;
-                                                            newComponentInventory.ArticleInventoryId = componentArticleInventories.FirstOrDefault().Id;
-                                                            newComponentInventory.RRId = null;
-                                                            newComponentInventory.SIId = null;
-                                                            newComponentInventory.INId = INId;
-                                                            newComponentInventory.OTId = null;
-                                                            newComponentInventory.STId = null;
-                                                            newComponentInventory.QuantityIn = (articleComponent.Quantity * stockInItem.Quantity) * -1;
-                                                            newComponentInventory.QuantityOut = 0;
-                                                            newComponentInventory.Quantity = (articleComponent.Quantity * stockInItem.Quantity) * -1;
-                                                            newComponentInventory.Amount = ((articleComponent.Quantity * stockInItem.Quantity) * -1) * articleComponent.Cost;
-                                                            newComponentInventory.Particulars = "Stock In";
-
-                                                            db.TrnInventories.InsertOnSubmit(newComponentInventory);
-                                                            db.SubmitChanges();
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                            UpdateArticleInventory(articleInventoryId, "");
-                                        }
-                                        else
-                                        {
-                                            // InsertRRInventory article Inventory
-                                            Data.MstArticleInventory newArticleInventory = new Data.MstArticleInventory();
-
-                                            newArticleInventory.BranchId = stockInHeader.BranchId;
-                                            newArticleInventory.ArticleId = stockInItem.ItemId;
-                                            newArticleInventory.InventoryCode = "IN-" + stockInHeader.BranchCode + "-" + stockInHeader.INNumber;
-                                            newArticleInventory.Quantity = stockInItem.Quantity;
-                                            newArticleInventory.Cost = stockInItem.Amount / stockInItem.Quantity;
-                                            newArticleInventory.Amount = stockInItem.Amount;
-                                            newArticleInventory.Particulars = "SPECIFIC IDENTIFICATION";
-
-                                            db.MstArticleInventories.InsertOnSubmit(newArticleInventory);
-                                            db.SubmitChanges();
-
-                                            // retrieve Artticle Inventory - Id
-                                            var newArticleInventoryId = (from d in db.MstArticleInventories
-                                                                         where d.BranchId == stockInHeader.BranchId
-                                                                         && d.ArticleId == stockInItem.ItemId
-                                                                         && d.InventoryCode == "IN-" + stockInHeader.BranchCode + "-" + stockInHeader.INNumber
-                                                                         select d.Id).SingleOrDefault();
-
-                                            newInventory.BranchId = stockInHeader.BranchId;
-                                            newInventory.InventoryDate = Convert.ToDateTime(stockInHeader.INDate);
-                                            newInventory.ArticleId = stockInItem.ItemId;
-                                            newInventory.ArticleInventoryId = newArticleInventoryId;
-                                            newInventory.RRId = null;
-                                            newInventory.SIId = null;
-                                            newInventory.INId = INId;
-                                            newInventory.OTId = null;
-                                            newInventory.STId = null;
-                                            newInventory.QuantityIn = stockInItem.BaseQuantity;
-                                            newInventory.QuantityOut = 0;
-                                            newInventory.Quantity = stockInItem.BaseQuantity;
-                                            newInventory.Amount = stockInItem.Amount;
-                                            newInventory.Particulars = "Stock In";
-
-                                            db.TrnInventories.InsertOnSubmit(newInventory);
-                                            db.SubmitChanges();
-
-                                            var articleItem = from d in db.MstArticles where d.Id == stockInItem.ItemId select d;
-                                            if (articleItem.FirstOrDefault().Kitting == 1)
-                                            {
-                                                var articleComponents = from d in db.MstArticleComponents
-                                                                        where d.ArticleId == stockInItem.ItemId
-                                                                        select new Models.MstArticleComponent
-                                                                        {
-                                                                            Id = d.Id,
-                                                                            ArticleId = d.ArticleId,
-                                                                            ComponentArticleId = d.ComponentArticleId,
-                                                                            ComponentArticle = d.MstArticle1.Article,
-                                                                            Quantity = d.Quantity,
-                                                                            UnitId = d.MstArticle1.UnitId,
-                                                                            Cost = Convert.ToDecimal(d.MstArticle1.Cost),
-                                                                            Price = d.MstArticle1.Price,
-                                                                            ComponentArticleInventoryId = (from i in db.MstArticleInventories where i.BranchId == stockInHeader.BranchId && i.ArticleId == d.ComponentArticleId select i.Id).FirstOrDefault(),
-                                                                            Amount = d.Quantity * Convert.ToDecimal(d.MstArticle1.Cost),
-                                                                            Particulars = d.Particulars
-                                                                        };
-
-                                                if (Convert.ToBoolean(isProduce) == true)
-                                                {
-                                                    foreach (var articleComponent in articleComponents)
-                                                    {
-                                                        // retrieve component Artticle Inventory
-                                                        var componentArticleInventories = from d in db.MstArticleInventories
-                                                                                          where d.BranchId == stockInHeader.BranchId
-                                                                                          && d.ArticleId == articleComponent.ComponentArticleId
-                                                                                          select d;
-
-                                                        if (componentArticleInventories.Any())
-                                                        {
-                                                            Data.TrnInventory newComponentInventory = new Data.TrnInventory();
-                                                            newComponentInventory.BranchId = stockInHeader.BranchId;
-                                                            newComponentInventory.InventoryDate = Convert.ToDateTime(stockInHeader.INDate);
-                                                            newComponentInventory.ArticleId = articleComponent.ComponentArticleId;
-                                                            newComponentInventory.ArticleInventoryId = componentArticleInventories.FirstOrDefault().Id;
-                                                            newComponentInventory.RRId = null;
-                                                            newComponentInventory.SIId = null;
-                                                            newComponentInventory.INId = INId;
-                                                            newComponentInventory.OTId = null;
-                                                            newComponentInventory.STId = null;
-                                                            newComponentInventory.QuantityIn = (articleComponent.Quantity * stockInItem.Quantity) * -1;
-                                                            newComponentInventory.QuantityOut = 0;
-                                                            newComponentInventory.Quantity = (articleComponent.Quantity * stockInItem.Quantity) * -1;
-                                                            newComponentInventory.Amount = ((articleComponent.Quantity * stockInItem.Quantity) * -1) * articleComponent.Cost;
-                                                            newComponentInventory.Particulars = "Stock In";
-
-                                                            db.TrnInventories.InsertOnSubmit(newComponentInventory);
-                                                            db.SubmitChanges();
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                            articleInventoryId = articleInventory.Id;
+                                            break;
                                         }
                                     }
                                 }
                             }
+
+                            if (articleInventoryId == 0)
+                            {
+                                // Insert article Inventory
+                                Data.MstArticleInventory newArticleInventory = new Data.MstArticleInventory();
+                                newArticleInventory.BranchId = stockIns.FirstOrDefault().BranchId;
+                                newArticleInventory.ArticleId = stockInItem.ItemId;
+                                newArticleInventory.InventoryCode = "IN-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber;
+                                newArticleInventory.Quantity = stockInItem.Quantity;
+                                newArticleInventory.Cost = stockInItem.Amount / stockInItem.Quantity;
+                                newArticleInventory.Amount = stockInItem.Amount;
+                                newArticleInventory.Particulars = stockIns.FirstOrDefault().Particulars;
+                                db.MstArticleInventories.InsertOnSubmit(newArticleInventory);
+                                db.SubmitChanges();
+
+                                articleInventoryId = newArticleInventory.Id;
+                            }
+
+                            Data.TrnInventory newInventory = new Data.TrnInventory();
+                            newInventory.BranchId = stockIns.FirstOrDefault().BranchId;
+                            newInventory.InventoryDate = Convert.ToDateTime(stockIns.FirstOrDefault().INDate);
+                            newInventory.ArticleId = stockInItem.ItemId;
+                            newInventory.ArticleInventoryId = articleInventoryId;
+                            newInventory.INId = INId;
+                            newInventory.QuantityIn = stockInItem.BaseQuantity;
+                            newInventory.QuantityOut = 0;
+                            newInventory.Quantity = stockInItem.BaseQuantity;
+                            newInventory.Amount = stockInItem.Amount;
+                            newInventory.Particulars = stockIns.FirstOrDefault().Particulars;
+                            db.TrnInventories.InsertOnSubmit(newInventory);
+                            db.SubmitChanges();
+
+                            // ==========================================
+                            // Update article inventory quantity and cost
+                            // ==========================================
+                            UpdateArticleInventory(articleInventoryId, stockIns.FirstOrDefault().MstUser4.InventoryType);
                         }
                     }
-                }
-                else
-                {
-                    Debug.WriteLine("Stock in header does not exist");
                 }
             }
             catch (Exception e)
@@ -1193,113 +469,72 @@ namespace easyfis.Business
         // Delete stock in Inventory
         public void deleteINInventory(Int32 INId)
         {
-            // Stock in header
-            var stockInHeaders = from d in db.TrnStockIns
-                                 where d.Id == INId
-                                 select new Models.TrnStockIn
-                                 {
-                                     Id = d.Id,
-                                     BranchId = d.BranchId,
-                                     Branch = d.MstBranch.Branch,
-                                     INNumber = d.INNumber,
-                                     INDate = d.INDate.ToShortDateString(),
-                                     AccountId = d.AccountId,
-                                     Account = d.MstAccount.Account,
-                                     ArticleId = d.ArticleId,
-                                     Article = d.MstArticle.Article,
-                                     Particulars = d.Particulars,
-                                     ManualINNumber = d.ManualINNumber,
-                                     IsProduced = d.IsProduced,
-                                     PreparedById = d.PreparedById,
-                                     PreparedBy = d.MstUser3.FullName,
-                                     CheckedById = d.CheckedById,
-                                     CheckedBy = d.MstUser1.FullName,
-                                     ApprovedById = d.ApprovedById,
-                                     ApprovedBy = d.MstUser.FullName,
-                                     IsLocked = d.IsLocked,
-                                     CreatedById = d.CreatedById,
-                                     CreatedBy = d.MstUser2.FullName,
-                                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                     UpdatedById = d.UpdatedById,
-                                     UpdatedBy = d.MstUser4.FullName,
-                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                 };
-
-            // Stock in items
-            var stockInItems = from d in db.TrnStockInItems
-                               where d.INId == INId
-                               select new Models.TrnStockInItem
-                               {
-                                   Id = d.Id,
-                                   INId = d.INId,
-                                   IN = d.TrnStockIn.INNumber,
-                                   ItemId = d.ItemId,
-                                   ItemCode = d.MstArticle.ManualArticleCode,
-                                   Item = d.MstArticle.Article,
-                                   Particulars = d.Particulars,
-                                   UnitId = d.UnitId,
-                                   Unit = d.MstUnit.Unit,
-                                   Quantity = d.Quantity,
-                                   Cost = d.Cost,
-                                   Amount = d.Amount,
-                                   BaseUnitId = d.BaseUnitId,
-                                   BaseUnit = d.MstUnit1.Unit,
-                                   BaseQuantity = d.BaseQuantity,
-                                   BaseCost = d.BaseCost
-                               };
-
-
             try
             {
-                var INInventories = db.TrnInventories.Where(d => d.INId == INId).ToList();
-                foreach (var INInventory in INInventories)
+                Int32 articleInventoryId;
+
+                // Stock in header
+                var stockIns = from d in db.TrnStockIns
+                               where d.Id == INId
+                               && d.IsLocked == true
+                               select d;
+
+                if (stockIns.Any())
                 {
-                    db.TrnInventories.DeleteOnSubmit(INInventory);
+                    var deleteInventory = from d in db.TrnInventories
+                                          where d.INId == stockIns.FirstOrDefault().Id
+                                          select d;
+
+                    db.TrnInventories.DeleteAllOnSubmit(deleteInventory);
                     db.SubmitChanges();
-                }
 
-                if (stockInHeaders.Any())
-                {
-                    foreach (var stockInHeader in stockInHeaders)
+                    // Stock in items
+                    var stockInItems = from d in db.TrnStockInItems
+                                       where d.INId == INId
+                                       select d;
+
+                    if (stockInItems.Any())
                     {
-                        if (stockInItems.Any())
+                        foreach (var stockInItem in stockInItems)
                         {
-                            foreach (var stockInItem in stockInItems)
+                            // retrieve Artticle Inventory
+                            var articleInventories = from d in db.MstArticleInventories
+                                                     where d.BranchId == stockIns.FirstOrDefault().BranchId
+                                                     && d.ArticleId == stockInItem.ItemId
+                                                     select d;
+
+                            articleInventoryId = 0;
+                            if (articleInventories.Any())
                             {
-                                // retrieve Artticle Inventory
-                                var articleInventories = from d in db.MstArticleInventories
-                                                         where d.BranchId == stockInHeader.BranchId && d.ArticleId == stockInItem.ItemId
-                                                         select new Models.MstArticleInventory
-                                                         {
-                                                             Id = d.Id,
-                                                             BranchId = d.BranchId,
-                                                             ArticleId = d.ArticleId,
-                                                             InventoryCode = d.InventoryCode,
-                                                             Quantity = d.Quantity,
-                                                             Cost = d.Cost,
-                                                             Amount = d.Amount,
-                                                             Particulars = d.Particulars
-                                                         };
-
-                                foreach (var articleInventory in articleInventories)
+                                if (stockIns.FirstOrDefault().MstUser4.InventoryType.Equals("Moving Average"))
                                 {
-                                    UpdateArticleInventory(articleInventory.Id, "");
+                                    articleInventoryId = articleInventories.FirstOrDefault().Id;
                                 }
+                                else
+                                {
+                                    foreach (var articleInventory in articleInventories)
+                                    {
+                                        if (articleInventory.InventoryCode.Equals("ST-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber))
+                                        {
+                                            articleInventoryId = articleInventory.Id;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
 
+                            if (articleInventoryId > 0)
+                            {
+                                UpdateArticleInventory(articleInventoryId, stockIns.FirstOrDefault().MstUser4.InventoryType);
                             }
                         }
                     }
-                }
-                else
-                {
-                    Debug.WriteLine("Stock in header does not exist");
                 }
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e);
             }
-
         }
 
         // =======================

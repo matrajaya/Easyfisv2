@@ -156,11 +156,7 @@
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <div class="row" align="left">
-                                    <div class="col-lg-12">
-                                        <div id="POItemGrid" class="grid"></div>
-                                    </div>
-                                </div>
+                                <div id="POItemGrid"></div>
                             </div>
                         </div>
                     </div>
@@ -224,7 +220,7 @@
 
     <!-- Modal for Item Query -->
     <div class="modal fade" id="POLinesItemQuery" role="dialog">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -515,7 +511,6 @@
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
-                    data: {},
                     success: function (Results) {
                         if (Results != null) {
                             // header data
@@ -834,19 +829,19 @@
                         "header": "Item",
                         "binding": "Item",
                         "allowSorting": true,
-                        "width": 190
+                        "width": 200
                     },
                     {
                         "header": "Particulars",
                         "binding": "Particulars",
                         "allowSorting": true,
-                        "width": 150
+                        "width": 200
                     },
                     {
                         "header": "Quantity",
                         "binding": "Quantity",
                         "allowSorting": true,
-                        "width": 120
+                        "width": 100
                     },
                     {
                         "header": "Unit",
@@ -937,7 +932,6 @@
         // ADD PO Lines
         // ============
         function cmdPOLineAddButton_OnClick() {
-            purchaseOrderItemId = 0;
             $('#POLinesEdit').modal({ show: true, backdrop: 'static' });
 
             document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
@@ -948,6 +942,7 @@
             document.getElementById("loadingModalItem").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
             $("#POItemContent").hide();
 
+            purchaseOrderItemId = 0;
             getItem(0,0);
             document.getElementById('POLine_Particulars').value = "NA";
             document.getElementById('POLine_Quantity').value = 1;
@@ -1409,6 +1404,7 @@
 
             itemQueryItemsCollection.editItem(itemQueryItemsCollection.currentItem);
             var item = itemQueryItemsCollection.currentEditItem;
+            purchaseOrderItemId = 0;
             getItem(item.Id, item.UnitId);
             document.getElementById('POLine_Particulars').value = item.Particulars;
             document.getElementById('POLine_Quantity').value = 1;

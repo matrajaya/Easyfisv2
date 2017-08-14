@@ -208,7 +208,10 @@ namespace easyfis.Controllers
         {
             try
             {
-                var lastINNumber = from d in db.TrnStockIns.OrderByDescending(d => d.Id) select d;
+                var lastINNumber = from d in db.TrnStockIns.OrderByDescending(d => d.Id)
+                                   where d.BranchId == currentBranchId()
+                                   select d;
+
                 var INNumberResult = "0000000001";
 
                 if (lastINNumber.Any())

@@ -442,7 +442,7 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var lastCVBNumber = from d in db.TrnDisbursements.OrderByDescending(d => d.Id) select d;
+                var lastCVBNumber = from d in db.TrnDisbursements.OrderByDescending(d => d.Id) where d.BranchId == currentBranchId() select d;
                 var CVNumberResult = "0000000001";
 
                 if (lastCVBNumber.Any())

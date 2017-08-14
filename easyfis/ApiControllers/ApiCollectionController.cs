@@ -340,7 +340,7 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var lastORNumber = from d in db.TrnCollections.OrderByDescending(d => d.Id) select d;
+                var lastORNumber = from d in db.TrnCollections.OrderByDescending(d => d.Id) where d.BranchId == currentBranchId() select d;
                 var ORNumberResult = "0000000001";
 
                 if (lastORNumber.Any())

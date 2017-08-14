@@ -16,6 +16,8 @@ namespace easyfis.Models
         public Int32 ToBranchId { get; set; }
         public String ToBranch { get; set; }
         public String ToBranchCode { get; set; }
+        public Int32 ArticleId { get; set; }
+        public String Article { get; set; }
         public String Particulars { get; set; }
         public String ManualSTNumber { get; set; }
         public String PreparedBy { get; set; }
