@@ -94,77 +94,69 @@ namespace easyfis.Business
 
                 if (stockTransfers.Any())
                 {
-                    var otherArticle = from d in db.MstArticles where d.ArticleTypeId == 6 select d;
-                    if (otherArticle.Any())
+                    var stockTransferItems = from d in db.TrnStockTransferItems
+                                             where d.STId == STId
+                                             group d by new
+                                             {
+                                                 ArticleGroup = d.MstArticle.MstArticleGroup
+                                             } into g
+                                             select new
+                                             {
+                                                 ArticleGroup = g.Key.ArticleGroup,
+                                                 Amount = g.Sum(d => d.Amount)
+                                             };
+
+                    if (stockTransferItems.Any())
                     {
-                        // lines (items)
-                        var stockTransferItems = from d in db.TrnStockTransferItems
-                                                 where d.STId == STId
-                                                 group d by new
-                                                 {
-                                                     AccountId = getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockTransfer.BranchId, "Asset") != 0 ? getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockTransfer.BranchId, "Asset") : d.MstArticle.AccountId,
-                                                     STId = d.STId
-                                                 } into g
-                                                 select new
-                                                 {
-                                                     AccountId = g.Key.AccountId,
-                                                     STId = g.Key.STId,
-                                                     Amount = g.Sum(d => d.Amount)
-                                                 };
-
-                        if (stockTransferItems.Any())
+                        foreach (var stockTransferItem in stockTransferItems)
                         {
-                            foreach (var stockTransferItem in stockTransferItems)
-                            {
-                                // DEBIT
-                                Data.TrnJournal newSTDebitJournal = new Data.TrnJournal();
-                                newSTDebitJournal.JournalDate = stockTransfers.FirstOrDefault().STDate;
-                                newSTDebitJournal.BranchId = stockTransfers.FirstOrDefault().ToBranchId;
-                                newSTDebitJournal.AccountId = stockTransferItem.AccountId;
-                                newSTDebitJournal.ArticleId = otherArticle.FirstOrDefault().Id;
-                                newSTDebitJournal.Particulars = "Item";
-                                newSTDebitJournal.DebitAmount = stockTransferItem.Amount;
-                                newSTDebitJournal.CreditAmount = 0;
-                                newSTDebitJournal.ORId = null;
-                                newSTDebitJournal.CVId = null;
-                                newSTDebitJournal.JVId = null;
-                                newSTDebitJournal.RRId = null;
-                                newSTDebitJournal.SIId = null;
-                                newSTDebitJournal.INId = null;
-                                newSTDebitJournal.OTId = null;
-                                newSTDebitJournal.STId = STId;
-                                newSTDebitJournal.DocumentReference = "ST-" + stockTransfers.FirstOrDefault().MstBranch.BranchCode + "-" + stockTransfers.FirstOrDefault().STNumber;
-                                newSTDebitJournal.APRRId = null;
-                                newSTDebitJournal.ARSIId = null;
-                                db.TrnJournals.InsertOnSubmit(newSTDebitJournal);
+                            // ================================
+                            // Debit: Lines (Items - Inventory)
+                            // ================================
+                            Data.TrnJournal newStockTransferItemDebitJournal = new Data.TrnJournal();
 
-                                // CREDIT
-                                Data.TrnJournal newSTCreditJournal = new Data.TrnJournal();
-                                newSTCreditJournal.JournalDate = stockTransfers.FirstOrDefault().STDate;
-                                newSTCreditJournal.BranchId = stockTransfers.FirstOrDefault().BranchId;
-                                newSTCreditJournal.AccountId = stockTransferItem.AccountId;
-                                newSTCreditJournal.ArticleId = otherArticle.FirstOrDefault().Id;
-                                newSTCreditJournal.Particulars = "Item";
-                                newSTCreditJournal.DebitAmount = 0;
-                                newSTCreditJournal.CreditAmount = stockTransferItem.Amount;
-                                newSTCreditJournal.ORId = null;
-                                newSTCreditJournal.CVId = null;
-                                newSTCreditJournal.JVId = null;
-                                newSTCreditJournal.RRId = null;
-                                newSTCreditJournal.SIId = null;
-                                newSTCreditJournal.INId = null;
-                                newSTCreditJournal.OTId = null;
-                                newSTCreditJournal.STId = STId;
-                                newSTCreditJournal.DocumentReference = "ST-" + stockTransfers.FirstOrDefault().MstBranch.BranchCode + "-" + stockTransfers.FirstOrDefault().STNumber;
-                                newSTCreditJournal.APRRId = null;
-                                newSTCreditJournal.ARSIId = null;
-                                db.TrnJournals.InsertOnSubmit(newSTCreditJournal);
-                            }
+                            newStockTransferItemDebitJournal.JournalDate = stockTransfers.FirstOrDefault().STDate;
+                            newStockTransferItemDebitJournal.BranchId = stockTransfers.FirstOrDefault().ToBranchId;
 
-                            db.SubmitChanges();
+                            newStockTransferItemDebitJournal.AccountId = getAccountId(stockTransferItem.ArticleGroup.Id, stockTransfers.FirstOrDefault().ToBranchId, "Account");
+
+                            newStockTransferItemDebitJournal.ArticleId = stockTransfers.FirstOrDefault().ArticleId;
+                            newStockTransferItemDebitJournal.Particulars = stockTransfers.FirstOrDefault().Particulars;
+
+                            newStockTransferItemDebitJournal.DebitAmount = stockTransferItem.Amount;
+                            newStockTransferItemDebitJournal.CreditAmount = 0;
+
+                            newStockTransferItemDebitJournal.STId = STId;
+
+                            newStockTransferItemDebitJournal.DocumentReference = "ST-" + stockTransfers.FirstOrDefault().MstBranch.BranchCode + "-" + stockTransfers.FirstOrDefault().STNumber;
+
+                            db.TrnJournals.InsertOnSubmit(newStockTransferItemDebitJournal);
+
+                            // =================================
+                            // Credit: Lines (Items - Inventory)
+                            // =================================
+                            Data.TrnJournal newStockTransferItemCreditJournal = new Data.TrnJournal();
+
+                            newStockTransferItemCreditJournal.JournalDate = stockTransfers.FirstOrDefault().STDate;
+                            newStockTransferItemCreditJournal.BranchId = stockTransfers.FirstOrDefault().BranchId;
+
+                            newStockTransferItemCreditJournal.AccountId = getAccountId(stockTransferItem.ArticleGroup.Id, stockTransfers.FirstOrDefault().BranchId, "Account");
+                            newStockTransferItemCreditJournal.ArticleId = stockTransfers.FirstOrDefault().ArticleId;
+
+                            newStockTransferItemCreditJournal.Particulars = stockTransfers.FirstOrDefault().Particulars;
+
+                            newStockTransferItemCreditJournal.DebitAmount = 0;
+                            newStockTransferItemCreditJournal.CreditAmount = stockTransferItem.Amount;
+
+                            newStockTransferItemCreditJournal.STId = STId;
+
+                            newStockTransferItemCreditJournal.DocumentReference = "ST-" + stockTransfers.FirstOrDefault().MstBranch.BranchCode + "-" + stockTransfers.FirstOrDefault().STNumber;
+
+                            db.TrnJournals.InsertOnSubmit(newStockTransferItemCreditJournal);
                         }
-                    }
 
+                        db.SubmitChanges();
+                    }
                 }
             }
             catch (Exception e)
@@ -205,95 +197,62 @@ namespace easyfis.Business
 
                 if (stockOuts.Any())
                 {
-                    var stockOutItemsExpenseAccounts = from d in db.TrnStockOutItems
-                                                       where d.OTId == OTId
-                                                       group d by new
-                                                       {
-                                                           ExpenseAccountId = getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockOut.BranchId, "Expense") != 0 ? getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockOut.BranchId, "Expense") : d.ExpenseAccountId,
-                                                           OTId = d.OTId
-                                                       } into g
-                                                       select new
-                                                       {
-                                                           ExpenseAccountId = g.Key.ExpenseAccountId,
-                                                           OTId = g.Key.OTId,
-                                                           Amount = g.Sum(d => d.Amount)
-                                                       };
+                    // ==============================
+                    // Debit: Lines (Expense Account)
+                    // ==============================
+                    Data.TrnJournal newStockOutDebitHeaderJournal = new Data.TrnJournal();
 
-                    if (stockOutItemsExpenseAccounts.Any())
+                    newStockOutDebitHeaderJournal.JournalDate = stockOuts.FirstOrDefault().OTDate;
+                    newStockOutDebitHeaderJournal.BranchId = stockOuts.FirstOrDefault().BranchId;
+
+                    newStockOutDebitHeaderJournal.AccountId = stockOuts.FirstOrDefault().AccountId;
+                    newStockOutDebitHeaderJournal.ArticleId = stockOuts.FirstOrDefault().ArticleId;
+
+                    newStockOutDebitHeaderJournal.Particulars = stockOuts.FirstOrDefault().Particulars;
+                    newStockOutDebitHeaderJournal.DebitAmount = stockOuts.FirstOrDefault().TrnStockOutItems.Sum(d => d.Amount);
+
+                    newStockOutDebitHeaderJournal.CreditAmount = 0;
+                    newStockOutDebitHeaderJournal.OTId = OTId;
+
+                    newStockOutDebitHeaderJournal.DocumentReference = "OT-" + stockOuts.FirstOrDefault().MstBranch.BranchCode + "-" + stockOuts.FirstOrDefault().OTNumber;
+
+                    db.TrnJournals.InsertOnSubmit(newStockOutDebitHeaderJournal);
+
+                    // =================================
+                    // Credit: Lines (Items - Inventory)
+                    // =================================
+                    var stockOutCreditItems = from d in db.TrnStockOutItems
+                                              where d.OTId == OTId
+                                              group d by new
+                                              {
+                                                  ArticleGroup = d.MstArticle.MstArticleGroup
+                                              } into g
+                                              select new
+                                              {
+                                                  ArticleGroup = g.Key.ArticleGroup,
+                                                  Amount = g.Sum(d => d.Amount)
+                                              };
+
+                    if (stockOutCreditItems.Any())
                     {
-                        foreach (var stockOutItemsExpenseAccount in stockOutItemsExpenseAccounts)
+                        foreach (var stockOutCreditItem in stockOutCreditItems)
                         {
-                            // Lines (items) - Expense Accounts
-                            // DEBIT
-                            if (stockOutItemsExpenseAccount.Amount > 0)
-                            {
-                                Data.TrnJournal newOTDebitJournal = new Data.TrnJournal();
-                                newOTDebitJournal.JournalDate = stockOuts.FirstOrDefault().OTDate;
-                                newOTDebitJournal.BranchId = stockOuts.FirstOrDefault().BranchId;
-                                newOTDebitJournal.AccountId = stockOutItemsExpenseAccount.ExpenseAccountId;
-                                newOTDebitJournal.ArticleId = stockOuts.FirstOrDefault().ArticleId;
-                                newOTDebitJournal.Particulars = "Item";
-                                newOTDebitJournal.DebitAmount = stockOutItemsExpenseAccount.Amount;
-                                newOTDebitJournal.CreditAmount = 0;
-                                newOTDebitJournal.ORId = null;
-                                newOTDebitJournal.CVId = null;
-                                newOTDebitJournal.JVId = null;
-                                newOTDebitJournal.RRId = null;
-                                newOTDebitJournal.SIId = null;
-                                newOTDebitJournal.INId = null;
-                                newOTDebitJournal.OTId = OTId;
-                                newOTDebitJournal.STId = null;
-                                newOTDebitJournal.DocumentReference = "OT-" + stockOuts.FirstOrDefault().MstBranch.BranchCode + "-" + stockOuts.FirstOrDefault().OTNumber;
-                                newOTDebitJournal.APRRId = null;
-                                newOTDebitJournal.ARSIId = null;
-                                db.TrnJournals.InsertOnSubmit(newOTDebitJournal);
-                            }
-                        }
-                    }
+                            Data.TrnJournal newStockOutCreditItemJournal = new Data.TrnJournal();
+                            newStockOutCreditItemJournal.JournalDate = stockOuts.FirstOrDefault().OTDate;
+                            newStockOutCreditItemJournal.BranchId = stockOuts.FirstOrDefault().BranchId;
 
-                    var stockOutItemsAccounts = from d in db.TrnStockOutItems
-                                                where d.OTId == OTId
-                                                group d by new
-                                                {
-                                                    AccountId = getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockOut.BranchId, "Account") != 0 ? getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockOut.BranchId, "Account") : d.MstArticle.AccountId,
-                                                    OTId = d.OTId
-                                                } into g
-                                                select new
-                                                {
-                                                    AccountId = g.Key.AccountId,
-                                                    OTId = g.Key.OTId,
-                                                    Amount = g.Sum(d => d.Amount)
-                                                };
+                            newStockOutCreditItemJournal.AccountId = getAccountId(stockOutCreditItem.ArticleGroup.Id, stockOuts.FirstOrDefault().BranchId, "Account");
+                            newStockOutCreditItemJournal.ArticleId = stockOuts.FirstOrDefault().ArticleId;
 
-                    if (stockOutItemsAccounts.Any())
-                    {
-                        foreach (var stockOutItemsAccount in stockOutItemsAccounts)
-                        {
-                            // lines (items) - Accounts
-                            // CREDIT
-                            if (stockOutItemsAccount.Amount > 0)
-                            {
-                                Data.TrnJournal newOTCreditJournal = new Data.TrnJournal();
-                                newOTCreditJournal.JournalDate = stockOuts.FirstOrDefault().OTDate;
-                                newOTCreditJournal.BranchId = stockOuts.FirstOrDefault().BranchId;
-                                newOTCreditJournal.AccountId = stockOutItemsAccount.AccountId;
-                                newOTCreditJournal.ArticleId = stockOuts.FirstOrDefault().ArticleId;
-                                newOTCreditJournal.Particulars = "Item";
-                                newOTCreditJournal.DebitAmount = 0;
-                                newOTCreditJournal.CreditAmount = stockOutItemsAccount.Amount;
-                                newOTCreditJournal.ORId = null;
-                                newOTCreditJournal.CVId = null;
-                                newOTCreditJournal.JVId = null;
-                                newOTCreditJournal.RRId = null;
-                                newOTCreditJournal.SIId = null;
-                                newOTCreditJournal.INId = null;
-                                newOTCreditJournal.OTId = OTId;
-                                newOTCreditJournal.STId = null;
-                                newOTCreditJournal.DocumentReference = "OT-" + stockOuts.FirstOrDefault().MstBranch.BranchCode + "-" + stockOuts.FirstOrDefault().OTNumber;
-                                newOTCreditJournal.APRRId = null;
-                                newOTCreditJournal.ARSIId = null;
-                                db.TrnJournals.InsertOnSubmit(newOTCreditJournal);
-                            }
+                            newStockOutCreditItemJournal.Particulars = stockOuts.FirstOrDefault().Particulars;
+
+                            newStockOutCreditItemJournal.DebitAmount = 0;
+                            newStockOutCreditItemJournal.CreditAmount = stockOutCreditItem.Amount;
+
+                            newStockOutCreditItemJournal.OTId = OTId;
+                            newStockOutCreditItemJournal.DocumentReference = "OT-" + stockOuts.FirstOrDefault().MstBranch.BranchCode + "-" + stockOuts.FirstOrDefault().OTNumber;
+
+                            db.TrnJournals.InsertOnSubmit(newStockOutCreditItemJournal);
                         }
                     }
 
@@ -338,116 +297,70 @@ namespace easyfis.Business
 
                 if (stockIns.Any())
                 {
-                    // lines (items)
-                    var stockInItems = from d in db.TrnStockInItems
-                                       where d.INId == INId
-                                       group d by new
-                                       {
-                                           AccountId = getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockIn.BranchId, "Account") != 0 ? getAccountId(d.MstArticle.ArticleGroupId, d.TrnStockIn.BranchId, "Account") : d.MstArticle.AccountId,
-                                           INId = d.INId
-                                       } into g
-                                       select new
-                                       {
-                                           AccountId = g.Key.AccountId,
-                                           INId = g.Key.INId,
-                                           Amount = g.Sum(d => d.Amount)
-                                       };
+                    // ================================
+                    // Debit: Lines (Items - Inventory)
+                    // ================================
+                    var stockInDebitItems = from d in db.TrnStockInItems
+                                            where d.INId == INId
+                                            group d by new
+                                            {
+                                                ArticleGroup = d.MstArticle.MstArticleGroup
+                                            } into g
+                                            select new
+                                            {
+                                                ArticleGroup = g.Key.ArticleGroup,
+                                                Amount = g.Sum(d => d.Amount)
+                                            };
 
-                    if (stockInItems.Any())
+                    if (stockInDebitItems.Any())
                     {
-                        foreach (var stockInItem in stockInItems)
+                        foreach (var stockInDebitItem in stockInDebitItems)
                         {
-                            // DEBIT
-                            if (stockInItem.Amount > 0)
-                            {
-                                Data.TrnJournal newINDebitJournal = new Data.TrnJournal();
-                                newINDebitJournal.JournalDate = stockIns.FirstOrDefault().INDate;
-                                newINDebitJournal.BranchId = stockIns.FirstOrDefault().BranchId;
-                                newINDebitJournal.AccountId = stockInItem.AccountId;
-                                newINDebitJournal.ArticleId = stockIns.FirstOrDefault().ArticleId;
-                                newINDebitJournal.Particulars = "Item";
-                                newINDebitJournal.DebitAmount = stockInItem.Amount;
-                                newINDebitJournal.CreditAmount = 0;
-                                newINDebitJournal.ORId = null;
-                                newINDebitJournal.CVId = null;
-                                newINDebitJournal.JVId = null;
-                                newINDebitJournal.RRId = null;
-                                newINDebitJournal.SIId = null;
-                                newINDebitJournal.INId = INId;
-                                newINDebitJournal.OTId = null;
-                                newINDebitJournal.STId = null;
-                                newINDebitJournal.DocumentReference = "IN-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber;
-                                newINDebitJournal.APRRId = null;
-                                newINDebitJournal.ARSIId = null;
-                                db.TrnJournals.InsertOnSubmit(newINDebitJournal);
-                            }
-                        }
+                            Data.TrnJournal newStockInDebitItemJournal = new Data.TrnJournal();
 
-                        if (stockIns.FirstOrDefault().IsProduced == true)
-                        {
-                            foreach (var stockInItem in stockInItems)
-                            {
-                                // Inventory
-                                // CREDIT
-                                if (stockInItem.Amount > 0)
-                                {
-                                    Data.TrnJournal newINCreditJournal = new Data.TrnJournal();
-                                    newINCreditJournal.JournalDate = stockIns.FirstOrDefault().INDate;
-                                    newINCreditJournal.BranchId = stockIns.FirstOrDefault().BranchId;
-                                    newINCreditJournal.AccountId = stockInItem.AccountId;
-                                    newINCreditJournal.ArticleId = stockIns.FirstOrDefault().ArticleId;
-                                    newINCreditJournal.Particulars = "Components";
-                                    newINCreditJournal.DebitAmount = 0;
-                                    newINCreditJournal.CreditAmount = stockInItem.Amount;
-                                    newINCreditJournal.ORId = null;
-                                    newINCreditJournal.CVId = null;
-                                    newINCreditJournal.JVId = null;
-                                    newINCreditJournal.RRId = null;
-                                    newINCreditJournal.SIId = null;
-                                    newINCreditJournal.INId = INId;
-                                    newINCreditJournal.OTId = null;
-                                    newINCreditJournal.STId = null;
-                                    newINCreditJournal.DocumentReference = "IN-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber;
-                                    newINCreditJournal.APRRId = null;
-                                    newINCreditJournal.ARSIId = null;
-                                    db.TrnJournals.InsertOnSubmit(newINCreditJournal);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            foreach (var stockInItem in stockInItems)
-                            {
-                                // Inventory
-                                // CREDIT
-                                if (stockInItem.Amount > 0)
-                                {
-                                    Data.TrnJournal newINCreditJournal = new Data.TrnJournal();
-                                    newINCreditJournal.JournalDate = stockIns.FirstOrDefault().INDate;
-                                    newINCreditJournal.BranchId = stockIns.FirstOrDefault().BranchId;
-                                    newINCreditJournal.AccountId = stockIns.FirstOrDefault().AccountId;
-                                    newINCreditJournal.ArticleId = stockIns.FirstOrDefault().ArticleId;
-                                    newINCreditJournal.Particulars = "Stock In";
-                                    newINCreditJournal.DebitAmount = 0;
-                                    newINCreditJournal.CreditAmount = stockInItem.Amount;
-                                    newINCreditJournal.ORId = null;
-                                    newINCreditJournal.CVId = null;
-                                    newINCreditJournal.JVId = null;
-                                    newINCreditJournal.RRId = null;
-                                    newINCreditJournal.SIId = null;
-                                    newINCreditJournal.INId = INId;
-                                    newINCreditJournal.OTId = null;
-                                    newINCreditJournal.STId = null;
-                                    newINCreditJournal.DocumentReference = "IN-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber;
-                                    newINCreditJournal.APRRId = null;
-                                    newINCreditJournal.ARSIId = null;
-                                    db.TrnJournals.InsertOnSubmit(newINCreditJournal);
-                                }
-                            }
-                        }
+                            newStockInDebitItemJournal.JournalDate = stockIns.FirstOrDefault().INDate;
+                            newStockInDebitItemJournal.BranchId = stockIns.FirstOrDefault().BranchId;
 
-                        db.SubmitChanges();
+                            newStockInDebitItemJournal.AccountId = getAccountId(stockInDebitItem.ArticleGroup.Id, stockIns.FirstOrDefault().BranchId, "Account");
+                            newStockInDebitItemJournal.ArticleId = stockIns.FirstOrDefault().ArticleId;
+
+                            newStockInDebitItemJournal.Particulars = stockIns.FirstOrDefault().Particulars;
+
+                            newStockInDebitItemJournal.DebitAmount = stockInDebitItem.Amount;
+                            newStockInDebitItemJournal.CreditAmount = 0;
+
+                            newStockInDebitItemJournal.INId = INId;
+                            newStockInDebitItemJournal.DocumentReference = "IN-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber;
+
+                            db.TrnJournals.InsertOnSubmit(newStockInDebitItemJournal);
+                        }
                     }
+
+                    // ========================================
+                    // Credit: Lines (Equity/Liability Account)
+                    // ========================================
+                    Data.TrnJournal newStockInCreditHeaderJournal = new Data.TrnJournal();
+
+                    newStockInCreditHeaderJournal.JournalDate = stockIns.FirstOrDefault().INDate;
+                    newStockInCreditHeaderJournal.BranchId = stockIns.FirstOrDefault().BranchId;
+
+                    newStockInCreditHeaderJournal.AccountId = stockIns.FirstOrDefault().AccountId;
+                    newStockInCreditHeaderJournal.ArticleId = stockIns.FirstOrDefault().ArticleId;
+
+                    newStockInCreditHeaderJournal.Particulars = stockIns.FirstOrDefault().Particulars;
+
+                    newStockInCreditHeaderJournal.DebitAmount = 0;
+                    newStockInCreditHeaderJournal.CreditAmount = stockIns.FirstOrDefault().TrnStockInItems.Sum(d => d.Amount);
+
+                    newStockInCreditHeaderJournal.INId = INId;
+                    newStockInCreditHeaderJournal.DocumentReference = "IN-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber;
+
+                    db.TrnJournals.InsertOnSubmit(newStockInCreditHeaderJournal);
+
+                    // Save
+
+                    db.SubmitChanges();
+
                 }
             }
             catch (Exception e)
@@ -488,95 +401,146 @@ namespace easyfis.Business
 
                 if (collections.Any())
                 {
-                    // lines (Collections) - Debits
-                    var collectionLinesDebits = from d in db.TrnCollectionLines
-                                                where d.ORId == ORId
-                                                group d by new
-                                                {
-                                                    BranchId = d.BranchId,
-                                                    AccountId = d.MstPayType.AccountId,
-                                                    ArticleId = d.ArticleId
-                                                } into g
-                                                select new
-                                                {
-                                                    BranchId = g.Key.BranchId,
-                                                    AccountId = g.Key.AccountId,
-                                                    ArticleId = g.Key.ArticleId,
-                                                    Amount = g.Sum(d => d.Amount)
-                                                };
+                    // =============================
+                    // Debit: Lines Pay Type Account
+                    // =============================
+                    var collectionLinesDebitPayTypes = from d in db.TrnCollectionLines
+                                                       where d.ORId == ORId && d.Amount > 0
+                                                       group d by new
+                                                       {
+                                                           AccountId = d.MstPayType.AccountId,
+                                                           ArticleId = d.ArticleId
+                                                       } into g
+                                                       select new
+                                                       {
+                                                           AccountId = g.Key.AccountId,
+                                                           ArticleId = g.Key.ArticleId,
+                                                           Amount = g.Sum(d => d.Amount)
+                                                       };
 
-                    if (collectionLinesDebits.Any())
+                    if (collectionLinesDebitPayTypes.Any())
                     {
-                        // DEBIT 
-                        foreach (var collectionLinesDebit in collectionLinesDebits)
+                        foreach (var collectionLinesDebitPayType in collectionLinesDebitPayTypes)
                         {
-                            Data.TrnJournal newORDebitJournal = new Data.TrnJournal();
-                            newORDebitJournal.JournalDate = collections.FirstOrDefault().ORDate;
-                            newORDebitJournal.BranchId = collectionLinesDebit.BranchId;
-                            newORDebitJournal.AccountId = collectionLinesDebit.AccountId;
-                            newORDebitJournal.ArticleId = collectionLinesDebit.ArticleId;
-                            newORDebitJournal.Particulars = "Payments";
-                            newORDebitJournal.DebitAmount = collectionLinesDebit.Amount;
-                            newORDebitJournal.CreditAmount = 0;
-                            newORDebitJournal.ORId = ORId;
-                            newORDebitJournal.CVId = null;
-                            newORDebitJournal.JVId = null;
-                            newORDebitJournal.RRId = null;
-                            newORDebitJournal.SIId = null;
-                            newORDebitJournal.INId = null;
-                            newORDebitJournal.OTId = null;
-                            newORDebitJournal.STId = null;
-                            newORDebitJournal.DocumentReference = "OR-" + collections.FirstOrDefault().MstBranch.BranchCode + "-" + collections.FirstOrDefault().ORNumber;
-                            newORDebitJournal.APRRId = null;
-                            newORDebitJournal.ARSIId = null;
-                            db.TrnJournals.InsertOnSubmit(newORDebitJournal);
+                            Data.TrnJournal newCollectionLinesDebitPayTypeJournal = new Data.TrnJournal();
+                            newCollectionLinesDebitPayTypeJournal.JournalDate = collections.FirstOrDefault().ORDate;
+                            newCollectionLinesDebitPayTypeJournal.BranchId = collections.FirstOrDefault().MstBranch.Id;
+                            newCollectionLinesDebitPayTypeJournal.AccountId = collectionLinesDebitPayType.AccountId;
+                            newCollectionLinesDebitPayTypeJournal.ArticleId = collectionLinesDebitPayType.ArticleId;
+                            newCollectionLinesDebitPayTypeJournal.Particulars = collections.FirstOrDefault().Particulars;
+                            newCollectionLinesDebitPayTypeJournal.DebitAmount = collectionLinesDebitPayType.Amount;
+                            newCollectionLinesDebitPayTypeJournal.CreditAmount = 0;
+                            newCollectionLinesDebitPayTypeJournal.ORId = ORId;
+                            newCollectionLinesDebitPayTypeJournal.DocumentReference = "OR-" + collections.FirstOrDefault().MstBranch.BranchCode + "-" + collections.FirstOrDefault().ORNumber;
+                            db.TrnJournals.InsertOnSubmit(newCollectionLinesDebitPayTypeJournal);
                         }
                     }
 
-                    // lines (Collections) - Credits
-                    var collectionLinesCredits = from d in db.TrnCollectionLines
-                                                 where d.ORId == ORId
-                                                 group d by new
-                                                 {
-                                                     BranchId = d.BranchId,
-                                                     AccountId = d.AccountId,
-                                                     ArticleId = d.ArticleId
-                                                 } into g
-                                                 select new
-                                                 {
-                                                     BranchId = g.Key.BranchId,
-                                                     AccountId = g.Key.AccountId,
-                                                     ArticleId = g.Key.ArticleId,
-                                                     Amount = g.Sum(d => d.Amount)
-                                                 };
+                    // ================================================
+                    // Credit: Lines Pay Type Account (Negative Amount)
+                    // ================================================
+                    var collectionLinesCreditPayTypes = from d in db.TrnCollectionLines
+                                                        where d.ORId == ORId && d.Amount < 0
+                                                        group d by new
+                                                        {
+                                                            AccountId = d.MstPayType.AccountId,
+                                                            ArticleId = d.ArticleId
+                                                        } into g
+                                                        select new
+                                                        {
+                                                            AccountId = g.Key.AccountId,
+                                                            ArticleId = g.Key.ArticleId,
+                                                            Amount = g.Sum(d => d.Amount)
+                                                        };
 
-                    if (collectionLinesCredits.Any())
+                    if (collectionLinesCreditPayTypes.Any())
                     {
-                        // CREDIT
-                        foreach (var collectionLinesCredit in collectionLinesCredits)
+                        foreach (var collectionLinesCreditPayType in collectionLinesCreditPayTypes)
                         {
-                            Data.TrnJournal newORCreditJournal = new Data.TrnJournal();
-                            newORCreditJournal.JournalDate = collections.FirstOrDefault().ORDate;
-                            newORCreditJournal.BranchId = collectionLinesCredit.BranchId;
-                            newORCreditJournal.AccountId = collectionLinesCredit.AccountId;
-                            newORCreditJournal.ArticleId = collectionLinesCredit.ArticleId;
-                            newORCreditJournal.Particulars = "Payments";
-                            newORCreditJournal.DebitAmount = 0;
-                            newORCreditJournal.CreditAmount = collectionLinesCredit.Amount;
-                            newORCreditJournal.ORId = ORId;
-                            newORCreditJournal.CVId = null;
-                            newORCreditJournal.JVId = null;
-                            newORCreditJournal.RRId = null;
-                            newORCreditJournal.SIId = null;
-                            newORCreditJournal.INId = null;
-                            newORCreditJournal.OTId = null;
-                            newORCreditJournal.STId = null;
-                            newORCreditJournal.DocumentReference = "OR-" + collections.FirstOrDefault().MstBranch.BranchCode + "-" + collections.FirstOrDefault().ORNumber;
-                            newORCreditJournal.APRRId = null;
-                            newORCreditJournal.ARSIId = null;
-                            db.TrnJournals.InsertOnSubmit(newORCreditJournal);
+                            Data.TrnJournal newCollectionLinesDebitPayTypeJournal = new Data.TrnJournal();
+                            newCollectionLinesDebitPayTypeJournal.JournalDate = collections.FirstOrDefault().ORDate;
+                            newCollectionLinesDebitPayTypeJournal.BranchId = collections.FirstOrDefault().MstBranch.Id;
+                            newCollectionLinesDebitPayTypeJournal.AccountId = collectionLinesCreditPayType.AccountId;
+                            newCollectionLinesDebitPayTypeJournal.ArticleId = collectionLinesCreditPayType.ArticleId;
+                            newCollectionLinesDebitPayTypeJournal.Particulars = collections.FirstOrDefault().Particulars;
+                            newCollectionLinesDebitPayTypeJournal.DebitAmount = 0;
+                            newCollectionLinesDebitPayTypeJournal.CreditAmount = collectionLinesCreditPayType.Amount * -1;
+                            newCollectionLinesDebitPayTypeJournal.ORId = ORId;
+                            newCollectionLinesDebitPayTypeJournal.DocumentReference = "OR-" + collections.FirstOrDefault().MstBranch.BranchCode + "-" + collections.FirstOrDefault().ORNumber;
+                            db.TrnJournals.InsertOnSubmit(newCollectionLinesDebitPayTypeJournal);
                         }
                     }
+
+                    // =====================
+                    // Credit: Lines Account
+                    // =====================
+                    var collectionLinesCreditAccounts = from d in db.TrnCollectionLines
+                                                        where d.ORId == ORId && d.Amount > 0
+                                                        group d by new
+                                                        {
+                                                            AccountId = d.AccountId,
+                                                            ArticleId = d.ArticleId
+                                                        } into g
+                                                        select new
+                                                        {
+                                                            AccountId = g.Key.AccountId,
+                                                            ArticleId = g.Key.ArticleId,
+                                                            Amount = g.Sum(d => d.Amount)
+                                                        };
+
+                    if (collectionLinesCreditAccounts.Any())
+                    {
+                        foreach (var collectionLinesCreditAccount in collectionLinesCreditAccounts)
+                        {
+                            Data.TrnJournal newCollectionLinesCreditAccountJournal = new Data.TrnJournal();
+                            newCollectionLinesCreditAccountJournal.JournalDate = collections.FirstOrDefault().ORDate;
+                            newCollectionLinesCreditAccountJournal.BranchId = collections.FirstOrDefault().MstBranch.Id;
+                            newCollectionLinesCreditAccountJournal.AccountId = collectionLinesCreditAccount.AccountId;
+                            newCollectionLinesCreditAccountJournal.ArticleId = collectionLinesCreditAccount.ArticleId;
+                            newCollectionLinesCreditAccountJournal.Particulars = collections.FirstOrDefault().Particulars;
+                            newCollectionLinesCreditAccountJournal.DebitAmount = 0;
+                            newCollectionLinesCreditAccountJournal.CreditAmount = collectionLinesCreditAccount.Amount;
+                            newCollectionLinesCreditAccountJournal.ORId = ORId;
+                            newCollectionLinesCreditAccountJournal.DocumentReference = "OR-" + collections.FirstOrDefault().MstBranch.BranchCode + "-" + collections.FirstOrDefault().ORNumber;
+                            db.TrnJournals.InsertOnSubmit(newCollectionLinesCreditAccountJournal);
+                        }
+                    }
+                    // ======================================
+                    // Debit: Lines Account (Negative Amount)
+                    // ======================================
+                    var collectionLinesDebitAccounts = from d in db.TrnCollectionLines
+                                                       where d.ORId == ORId && d.Amount < 0
+                                                       group d by new
+                                                       {
+                                                           AccountId = d.AccountId,
+                                                           ArticleId = d.ArticleId
+                                                       } into g
+                                                       select new
+                                                       {
+                                                           AccountId = g.Key.AccountId,
+                                                           ArticleId = g.Key.ArticleId,
+                                                           Amount = g.Sum(d => d.Amount)
+                                                       };
+
+                    if (collectionLinesDebitAccounts.Any())
+                    {
+                        foreach (var collectionLinesDebitAccount in collectionLinesDebitAccounts)
+                        {
+                            Data.TrnJournal newCollectionLinesDebitAccounJournal = new Data.TrnJournal();
+                            newCollectionLinesDebitAccounJournal.JournalDate = collections.FirstOrDefault().ORDate;
+                            newCollectionLinesDebitAccounJournal.BranchId = collections.FirstOrDefault().MstBranch.Id;
+                            newCollectionLinesDebitAccounJournal.AccountId = collectionLinesDebitAccount.AccountId;
+                            newCollectionLinesDebitAccounJournal.ArticleId = collectionLinesDebitAccount.ArticleId;
+                            newCollectionLinesDebitAccounJournal.Particulars = collections.FirstOrDefault().Particulars;
+                            newCollectionLinesDebitAccounJournal.DebitAmount = collectionLinesDebitAccount.Amount * -1;
+                            newCollectionLinesDebitAccounJournal.CreditAmount = 0;
+                            newCollectionLinesDebitAccounJournal.ORId = ORId;
+                            newCollectionLinesDebitAccounJournal.DocumentReference = "OR-" + collections.FirstOrDefault().MstBranch.BranchCode + "-" + collections.FirstOrDefault().ORNumber;
+                            db.TrnJournals.InsertOnSubmit(newCollectionLinesDebitAccounJournal);
+                        }
+                    }
+
+                    // Save
 
                     db.SubmitChanges();
                 }

@@ -5070,6 +5070,8 @@ namespace easyfis.Data
 		
 		private EntitySet<TrnStockOutItem> _TrnStockOutItems;
 		
+		private EntitySet<TrnStockTransfer> _TrnStockTransfers;
+		
 		private EntityRef<MstAccount> _MstAccount;
 		
 		private EntityRef<MstAccount> _MstAccount1;
@@ -5207,6 +5209,7 @@ namespace easyfis.Data
 			this._TrnStockInItems = new EntitySet<TrnStockInItem>(new Action<TrnStockInItem>(this.attach_TrnStockInItems), new Action<TrnStockInItem>(this.detach_TrnStockInItems));
 			this._TrnStockOuts = new EntitySet<TrnStockOut>(new Action<TrnStockOut>(this.attach_TrnStockOuts), new Action<TrnStockOut>(this.detach_TrnStockOuts));
 			this._TrnStockOutItems = new EntitySet<TrnStockOutItem>(new Action<TrnStockOutItem>(this.attach_TrnStockOutItems), new Action<TrnStockOutItem>(this.detach_TrnStockOutItems));
+			this._TrnStockTransfers = new EntitySet<TrnStockTransfer>(new Action<TrnStockTransfer>(this.attach_TrnStockTransfers), new Action<TrnStockTransfer>(this.detach_TrnStockTransfers));
 			this._MstAccount = default(EntityRef<MstAccount>);
 			this._MstAccount1 = default(EntityRef<MstAccount>);
 			this._MstAccount2 = default(EntityRef<MstAccount>);
@@ -6371,6 +6374,19 @@ namespace easyfis.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_TrnStockTransfer", Storage="_TrnStockTransfers", ThisKey="Id", OtherKey="ArticleId")]
+		public EntitySet<TrnStockTransfer> TrnStockTransfers
+		{
+			get
+			{
+				return this._TrnStockTransfers;
+			}
+			set
+			{
+				this._TrnStockTransfers.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstAccount_MstArticle", Storage="_MstAccount", ThisKey="AccountId", OtherKey="Id", IsForeignKey=true)]
 		public MstAccount MstAccount
 		{
@@ -7186,6 +7202,18 @@ namespace easyfis.Data
 		}
 		
 		private void detach_TrnStockOutItems(TrnStockOutItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle = null;
+		}
+		
+		private void attach_TrnStockTransfers(TrnStockTransfer entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle = this;
+		}
+		
+		private void detach_TrnStockTransfers(TrnStockTransfer entity)
 		{
 			this.SendPropertyChanging();
 			entity.MstArticle = null;
@@ -32612,6 +32640,8 @@ namespace easyfis.Data
 		
 		private int _ToBranchId;
 		
+		private int _ArticleId;
+		
 		private string _Particulars;
 		
 		private string _ManualSTNumber;
@@ -32637,6 +32667,8 @@ namespace easyfis.Data
 		private EntitySet<TrnInventory> _TrnInventories;
 		
 		private EntitySet<TrnJournal> _TrnJournals;
+		
+		private EntityRef<MstArticle> _MstArticle;
 		
 		private EntityRef<MstBranch> _MstBranch;
 		
@@ -32666,6 +32698,8 @@ namespace easyfis.Data
     partial void OnSTDateChanged();
     partial void OnToBranchIdChanging(int value);
     partial void OnToBranchIdChanged();
+    partial void OnArticleIdChanging(int value);
+    partial void OnArticleIdChanged();
     partial void OnParticularsChanging(string value);
     partial void OnParticularsChanged();
     partial void OnManualSTNumberChanging(string value);
@@ -32693,6 +32727,7 @@ namespace easyfis.Data
 			this._TrnStockTransferItems = new EntitySet<TrnStockTransferItem>(new Action<TrnStockTransferItem>(this.attach_TrnStockTransferItems), new Action<TrnStockTransferItem>(this.detach_TrnStockTransferItems));
 			this._TrnInventories = new EntitySet<TrnInventory>(new Action<TrnInventory>(this.attach_TrnInventories), new Action<TrnInventory>(this.detach_TrnInventories));
 			this._TrnJournals = new EntitySet<TrnJournal>(new Action<TrnJournal>(this.attach_TrnJournals), new Action<TrnJournal>(this.detach_TrnJournals));
+			this._MstArticle = default(EntityRef<MstArticle>);
 			this._MstBranch = default(EntityRef<MstBranch>);
 			this._MstBranch1 = default(EntityRef<MstBranch>);
 			this._MstUser = default(EntityRef<MstUser>);
@@ -32807,6 +32842,30 @@ namespace easyfis.Data
 					this._ToBranchId = value;
 					this.SendPropertyChanged("ToBranchId");
 					this.OnToBranchIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArticleId", DbType="Int NOT NULL")]
+		public int ArticleId
+		{
+			get
+			{
+				return this._ArticleId;
+			}
+			set
+			{
+				if ((this._ArticleId != value))
+				{
+					if (this._MstArticle.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnArticleIdChanging(value);
+					this.SendPropertyChanging();
+					this._ArticleId = value;
+					this.SendPropertyChanged("ArticleId");
+					this.OnArticleIdChanged();
 				}
 			}
 		}
@@ -33067,6 +33126,40 @@ namespace easyfis.Data
 			set
 			{
 				this._TrnJournals.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_TrnStockTransfer", Storage="_MstArticle", ThisKey="ArticleId", OtherKey="Id", IsForeignKey=true)]
+		public MstArticle MstArticle
+		{
+			get
+			{
+				return this._MstArticle.Entity;
+			}
+			set
+			{
+				MstArticle previousValue = this._MstArticle.Entity;
+				if (((previousValue != value) 
+							|| (this._MstArticle.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstArticle.Entity = null;
+						previousValue.TrnStockTransfers.Remove(this);
+					}
+					this._MstArticle.Entity = value;
+					if ((value != null))
+					{
+						value.TrnStockTransfers.Add(this);
+						this._ArticleId = value.Id;
+					}
+					else
+					{
+						this._ArticleId = default(int);
+					}
+					this.SendPropertyChanged("MstArticle");
+				}
 			}
 		}
 		

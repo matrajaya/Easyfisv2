@@ -234,16 +234,16 @@
                     <center>
                         <span id="loadingItemQuery"></span>
                     </center>
-                    <div class="panel panel-default" id="itemQueryPanel">
-                        <div class="panel-heading">
-                            <div class="input-group  ">
-                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                <input type="text" class="form-control " id="itemQueryFilter" placeholder="Search">
+                    <div id="itemQueryPanel">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="input-group  ">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control " id="itemQueryFilter" placeholder="Search">
+                                </div>
                             </div>
                         </div>
-                        <div class="panel-body">
-                            <div id="itemQueryGrid" class="grid" style="height: 250px;"></div>
-                        </div>
+                        <div id="itemQueryGrid" style="max-height: 300px;"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -858,31 +858,31 @@
                         "header": "Cost",
                         "binding": "Cost",
                         "allowSorting": true,
-                        "width": 120
+                        "width": 100
                     },
                     {
                         "header": "Amount",
                         "binding": "Amount",
                         "allowSorting": true,
-                        "width": 120
+                        "width": 100
                     },
                     {
-                        "header": "Base Unit",
+                        "header": "Unit",
                         "binding": "BaseUnit",
                         "allowSorting": true,
                         "width": 100
                     },
                     {
-                        "header": "Base Quantity",
+                        "header": "Quantity",
                         "binding": "BaseQuantity",
                         "allowSorting": true,
-                        "width": 120
+                        "width": 100
                     },
                     {
-                        "header": "Base Cost",
+                        "header": "Cost",
                         "binding": "BaseCost",
                         "allowSorting": true,
-                        "width": 120
+                        "width": 100
                     }
                 ],
                 autoGenerateColumns: false,

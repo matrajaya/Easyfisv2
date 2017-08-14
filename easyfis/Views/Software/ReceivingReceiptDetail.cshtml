@@ -180,29 +180,29 @@
                     <center>
                         <span id="loadingPOStatus"></span>
                     </center>
-                    <div class="panel panel-default" id="loadingPOPanel">
-                        <div class="panel-heading">
-                            <table style="width: 100%" border="0">
-                                <tr>
-                                    <td style="width: 60%">
-                                        <div class="input-group ">
-                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                            <input type="text" class="form-control " id="inputFilterPOItem" placeholder="Search">
-                                        </div>
-                                    </td>
-                                    <td style="width: 1%"></td>
-                                    <td style="width: 39%">
-                                        <div class="input-group ">
-                                            <span class="input-group-addon">PO Number</span>
-                                            <div class="comboBox-wide" id="cboPONumberPOStatus"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
+                    <div id="loadingPOPanel">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <table style="width: 100%" border="0">
+                                    <tr>
+                                        <td style="width: 60%">
+                                            <div class="input-group ">
+                                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                <input type="text" class="form-control " id="inputFilterPOItem" placeholder="Search">
+                                            </div>
+                                        </td>
+                                        <td style="width: 1%"></td>
+                                        <td style="width: 39%">
+                                            <div class="input-group ">
+                                                <span class="input-group-addon"><b>PO Number</b></span>
+                                                <div class="comboBox-wide" id="cboPONumberPOStatus"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
-                        <div class="panel-body">
-                            <div id="purchasrOrderStatusFlexGrid" class="grid statusGrid" align="left"></div>
-                        </div>
+                        <div id="purchasrOrderStatusFlexGrid" style="max-height: 300px;"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -820,64 +820,64 @@
                         "isContentHtml": true
                     },
                     {
-                        "header": "PO Number",
+                        "header": "PO No.",
                         "binding": "PO",
                         "allowSorting": true,
-                        "width": 110
+                        "width": 90
                     },
                     {
                         "header": "Code",
                         "binding": "ItemCode",
                         "allowSorting": true,
-                        "width": 110
+                        "width": 120
                     },
                     {
                         "header": "Item",
                         "binding": "Item",
                         "allowSorting": true,
-                        "width": 250
+                        "width": 170
                     },
                     {
                         "header": "Particulars",
                         "binding": "Particulars",
                         "allowSorting": true,
-                        "width": 300
+                        "width": 150
                     },
                     {
                         "header": "Quantity",
                         "binding": "Quantity",
                         "allowSorting": true,
-                        "width": 150
+                        "width": 100
                     },
                     {
                         "header": "Unit",
                         "binding": "Unit",
                         "allowSorting": true,
-                        "width": 120
+                        "width": 100
                     },
                     {
                         "header": "Cost",
                         "binding": "Cost",
                         "allowSorting": true,
-                        "width": 150
+                        "width": 100
                     },
                     {
                         "header": "Amount",
                         "binding": "Amount",
                         "allowSorting": true,
-                        "width": 150
+                        "width": 100
                     },
                     {
                         "header": "Branch",
                         "binding": "Branch",
                         "allowSorting": true,
-                        "width": 200
+                        "width": 150
                     },
                     {
                         "header": "VAT Rate",
                         "binding": "VATPercentage",
                         "allowSorting": true,
-                        "width": 150,
+                        "width": 100,
                         "align": "right",
                         "isContentHtml": true
                     },
@@ -885,13 +885,13 @@
                         "header": "VAT Amount",
                         "binding": "VATAmount",
                         "allowSorting": true,
-                        "width": 150
+                        "width": 100
                     },
                     {
                         "header": "WTAX Rate",
                         "binding": "WTAXPercentage",
                         "allowSorting": true,
-                        "width": 150,
+                        "width": 100,
                         "align": "right",
                         "isContentHtml": true
                     },
@@ -899,25 +899,25 @@
                         "header": "WTAX Amount",
                         "binding": "WTAXAmount",
                         "allowSorting": true,
-                        "width": 150
+                        "width": 100
                     },
                     {
                         "header": "Unit",
                         "binding": "BaseUnit",
                         "allowSorting": true,
-                        "width": 120
+                        "width": 100
                     },
                     {
                         "header": "Quantity",
                         "binding": "BaseQuantity",
                         "allowSorting": true,
-                        "width": 150
+                        "width": 100
                     },
                     {
                         "header": "Cost",
                         "binding": "BaseCost",
                         "allowSorting": true,
-                        "width": 150
+                        "width": 100
                     },
                 ],
                 autoGenerateColumns: false,
@@ -943,7 +943,7 @@
             receivingReceiptItemGrid.columnHeaders.setCellData(0, 1, 'Delete');
 
             receivingReceiptItemGrid.columnHeaders.columns[2].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 2, 'PO Number');
+            receivingReceiptItemGrid.columnHeaders.setCellData(0, 2, 'PO No.');
 
             receivingReceiptItemGrid.columnHeaders.columns[3].allowMerging = true;
             receivingReceiptItemGrid.columnHeaders.setCellData(0, 3, 'Code');
@@ -1252,7 +1252,7 @@
                                 "header": "Code",
                                 "binding": "ItemCode",
                                 "allowSorting": true,
-                                "width": 100,
+                                "width": "1.5*",
                                 "isReadOnly": true,
                             },
                             {
@@ -1260,40 +1260,40 @@
                                 "binding": "Item",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": 200
+                                "width": "2*"
                             },
                             {
                                 "header": "Unit",
                                 "binding": "BaseUnit",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": 120
+                                "width": "0.7*"
                             },
                             {
-                                "header": "PO",
+                                "header": "Purchased",
                                 "binding": "BaseQuantity",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": 120
+                                "width": "1*"
                             },
                             {
                                 "header": "Received",
                                 "binding": "Received",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": 120
+                                "width": "1*",
                             },
                             {
                                 "header": "Balance",
                                 "binding": "Balance",
                                 "allowSorting": true,
                                 "isReadOnly": true,
-                                "width": 120
+                                "width": "1*"
                             },
                             {
                                 "header": "Pick",
                                 "binding": "Pick",
-                                "width": 50,
+                                "width": "0.5*",
                                 "align": "center",
                                 "isReadOnly": true,
                                 "isContentHtml": true
@@ -1302,7 +1302,7 @@
                                 "header": "Quantity",
                                 "binding": "QuantityBalanceValue",
                                 "allowSorting": true,
-                                "width": 120,
+                                "width": "1*",
                                 "align": "right",
                                 "isReadOnly": false,
                                 "isContentHtml": true
