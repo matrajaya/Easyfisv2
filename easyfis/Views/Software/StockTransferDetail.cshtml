@@ -279,7 +279,7 @@
     <!-- Stock Transfer Item Query Modal -->
     <!-- =============================== -->
     <div class="modal fade" id="stockTransferItemsItemQuery" role="dialog">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -939,7 +939,7 @@
             var id = getParam("StockTransferId");
             stockTransferObject.BranchId = cboStockTransferBranch.selectedValue;
             stockTransferObject.STNumber = document.getElementById('stockTransferSTNumber').value;
-            stockTransferObject.STDate = cboStockTransferSTDate.value;
+            stockTransferObject.STDate = cboStockTransferSTDate.value.toLocaleDateString();
             stockTransferObject.ToBranchId = cboStockTransferToBranch.selectedValue;
             stockTransferObject.ArticleId = cboStockTransferArticle.selectedValue;
             stockTransferObject.Particulars = document.getElementById('stockTransfer_Particulars').value;

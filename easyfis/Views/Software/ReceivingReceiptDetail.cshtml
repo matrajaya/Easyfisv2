@@ -984,7 +984,7 @@
             var id = getParam('ReceivingReceiptId');
             var receivingReceiptObject = new Object();
             receivingReceiptObject.BranchId = cboRRbranch.selectedValue;
-            receivingReceiptObject.RRDate = cboRRDate.value;
+            receivingReceiptObject.RRDate = cboRRDate.value.toLocaleDateString();
             receivingReceiptObject.RRNumber = document.getElementById('RRNumber').value;
             receivingReceiptObject.SupplierId = cboRRSupplier.selectedValue;
             receivingReceiptObject.TermId = cboRRTerm.selectedValue;
