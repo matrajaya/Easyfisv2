@@ -113,7 +113,7 @@ namespace easyfis.Controllers
             var articleInventories = from d in db.MstArticleInventories
                                      where d.ArticleId == Convert.ToInt32(articleId)
                                      && d.MstArticle.IsInventory == true
-                                     && d.Quantity > 0
+                                     && d.Quantity != 0
                                      select new Models.MstArticleInventory
                                      {
                                          Id = d.Id,

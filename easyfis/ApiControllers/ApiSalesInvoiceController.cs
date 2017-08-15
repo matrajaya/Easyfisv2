@@ -394,9 +394,9 @@ namespace easyfis.Controllers
             try
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
-                var salesInvoces = from d in db.TrnSalesInvoices where d.Id == Convert.ToInt32(id) select d;
+                var salesInvoices = from d in db.TrnSalesInvoices where d.Id == Convert.ToInt32(id) select d;
 
-                if (salesInvoces.Any())
+                if (salesInvoices.Any())
                 {
                     Decimal PaidAmount = 0;
 
@@ -414,7 +414,8 @@ namespace easyfis.Controllers
                         }
                     }
 
-                    var updateSalesInvoice = salesInvoces.FirstOrDefault();
+                    var updateSalesInvoice = salesInvoices.FirstOrDefault();
+
                     updateSalesInvoice.BranchId = sales.BranchId;
                     updateSalesInvoice.SINumber = sales.SINumber;
                     updateSalesInvoice.SIDate = Convert.ToDateTime(sales.SIDate);
@@ -434,30 +435,45 @@ namespace easyfis.Controllers
                     updateSalesInvoice.IsLocked = true;
                     updateSalesInvoice.UpdatedById = userId;
                     updateSalesInvoice.UpdatedDateTime = DateTime.Now;
-
                     db.SubmitChanges();
 
-                    if (updateSalesInvoice.IsLocked == true)
+                    inventory.InsertSIInventory(Convert.ToInt32(id));
+                    journal.insertSIJournal(Convert.ToInt32(id));
+
+                    // Check for negative inventory
+                    bool foundNegativeQuantity = false;
+                    foreach (var salesInvoiceItem in updateSalesInvoice.TrnSalesInvoiceItems)
                     {
-                        inventory.InsertSIInventory(Convert.ToInt32(id));
-                        journal.insertSIJournal(Convert.ToInt32(id));
+                        if (salesInvoiceItem.MstArticleInventory.Quantity < 0)
+                        {
+                            foundNegativeQuantity = true;
+                            break;
+                        }
+                    }
+
+                    if (!foundNegativeQuantity)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK);
                     }
                     else
                     {
                         inventory.deleteSIInventory(Convert.ToInt32(id));
                         journal.deleteSIJournal(Convert.ToInt32(id));
-                    }
 
-                    return Request.CreateResponse(HttpStatusCode.OK);
+                        updateSalesInvoice.IsLocked = false;
+                        db.SubmitChanges();
+
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Negative Inventory Found!");
+                    }
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "No Sales Invoice Found!");
                 }
             }
             catch
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Internal Server Error!");
             }
         }
 

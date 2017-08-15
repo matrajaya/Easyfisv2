@@ -14,7 +14,7 @@ namespace easyfis.Controllers
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
         private Business.Inventory inventory = new Business.Inventory();
-        private Business.PostJournal journal = new Business.PostJournal();
+        private Business.PostJournal journal = new Business.PostJournal(); 
 
         // current branch Id
         public Int32 currentBranchId()
@@ -273,7 +273,31 @@ namespace easyfis.Controllers
                     inventory.InsertSTInventory(Convert.ToInt32(id));
                     journal.insertSTJournal(Convert.ToInt32(id));
 
-                    return Request.CreateResponse(HttpStatusCode.OK);
+                    // Check for negative inventory
+                    bool foundNegativeQuantity = false;
+                    foreach (var stockTransferItem in updateStockTransfer.TrnStockTransferItems)
+                    {
+                        if (stockTransferItem.MstArticleInventory.Quantity < 0)
+                        {
+                            foundNegativeQuantity = true;
+                            break;
+                        }
+                    }
+
+                    if (!foundNegativeQuantity)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK);
+                    }
+                    else
+                    {
+                        inventory.deleteSTInventory(Convert.ToInt32(id));
+                        journal.deleteSTJournal(Convert.ToInt32(id));
+
+                        updateStockTransfer.IsLocked = false;
+                        db.SubmitChanges();
+
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Negative Inventory Found!");
+                    }
                 }
                 else
                 {

@@ -274,7 +274,31 @@ namespace easyfis.Controllers
                     inventory.InsertOTInventory(Convert.ToInt32(id));
                     journal.insertOTJournal(Convert.ToInt32(id));
 
-                    return Request.CreateResponse(HttpStatusCode.OK);
+                    // Check for negative inventory
+                    bool foundNegativeQuantity = false;
+                    foreach (var stockOutItem in updateStockOut.TrnStockOutItems)
+                    {
+                        if (stockOutItem.MstArticleInventory.Quantity < 0)
+                        {
+                            foundNegativeQuantity = true;
+                            break;
+                        }
+                    }
+
+                    if (!foundNegativeQuantity)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK);
+                    }
+                    else
+                    {
+                        inventory.deleteOTInventory(Convert.ToInt32(id));
+                        journal.deleteOTJournal(Convert.ToInt32(id));
+
+                        updateStockOut.IsLocked = false;
+                        db.SubmitChanges();
+
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Negative Inventory Found!");
+                    }
                 }
                 else
                 {
