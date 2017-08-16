@@ -20,7 +20,7 @@ namespace easyfis.Controllers
         {
             return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
-        
+
         public String zeroFill(Int32 number, Int32 length)
         {
             var result = number.ToString();
@@ -268,7 +268,6 @@ namespace easyfis.Controllers
                     updateStockOut.IsLocked = true;
                     updateStockOut.UpdatedById = userId;
                     updateStockOut.UpdatedDateTime = DateTime.Now;
-
                     db.SubmitChanges();
 
                     inventory.InsertOTInventory(Convert.ToInt32(id));
@@ -276,12 +275,15 @@ namespace easyfis.Controllers
 
                     // Check for negative inventory
                     bool foundNegativeQuantity = false;
-                    foreach (var stockOutItem in updateStockOut.TrnStockOutItems)
+                    if (updateStockOut.TrnStockOutItems.Any())
                     {
-                        if (stockOutItem.MstArticleInventory.Quantity < 0)
+                        foreach (var stockOutItem in updateStockOut.TrnStockOutItems)
                         {
-                            foundNegativeQuantity = true;
-                            break;
+                            if (stockOutItem.MstArticleInventory.Quantity < 0)
+                            {
+                                foundNegativeQuantity = true;
+                                break;
+                            }
                         }
                     }
 

@@ -14,7 +14,7 @@ namespace easyfis.Controllers
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
         private Business.Inventory inventory = new Business.Inventory();
-        private Business.PostJournal journal = new Business.PostJournal(); 
+        private Business.PostJournal journal = new Business.PostJournal();
 
         // current branch Id
         public Int32 currentBranchId()
@@ -253,7 +253,6 @@ namespace easyfis.Controllers
                 if (stockTransfers.Any())
                 {
                     var updateStockTransfer = stockTransfers.FirstOrDefault();
-
                     updateStockTransfer.BranchId = stockTransfer.BranchId;
                     updateStockTransfer.STNumber = stockTransfer.STNumber;
                     updateStockTransfer.STDate = Convert.ToDateTime(stockTransfer.STDate);
@@ -267,7 +266,6 @@ namespace easyfis.Controllers
                     updateStockTransfer.IsLocked = true;
                     updateStockTransfer.UpdatedById = userId;
                     updateStockTransfer.UpdatedDateTime = DateTime.Now;
-
                     db.SubmitChanges();
 
                     inventory.InsertSTInventory(Convert.ToInt32(id));
@@ -275,12 +273,15 @@ namespace easyfis.Controllers
 
                     // Check for negative inventory
                     bool foundNegativeQuantity = false;
-                    foreach (var stockTransferItem in updateStockTransfer.TrnStockTransferItems)
+                    if (updateStockTransfer.TrnStockTransferItems.Any())
                     {
-                        if (stockTransferItem.MstArticleInventory.Quantity < 0)
+                        foreach (var stockTransferItem in updateStockTransfer.TrnStockTransferItems)
                         {
-                            foundNegativeQuantity = true;
-                            break;
+                            if (stockTransferItem.MstArticleInventory.Quantity < 0)
+                            {
+                                foundNegativeQuantity = true;
+                                break;
+                            }
                         }
                     }
 

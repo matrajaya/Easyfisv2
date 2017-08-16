@@ -1255,6 +1255,7 @@
                     url: '/api/updateSales/' + salesId,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
+                    data: data,
                     statusCode: {
                         200: function () {
                             toastr.success("Lock Successful");
@@ -1269,8 +1270,6 @@
                             $("#cmdSalesClose").prop("disabled", false);
                         },
                         400: function (message, d, s) {
-                            console.log(message);
-
                             toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Bad Request");
                             document.getElementById('cmdSalesSaveLock').innerHTML = "<i class='fa fa-lock'></i> Lock";
                             $("#cmdSalesSaveLock").prop("disabled", false);

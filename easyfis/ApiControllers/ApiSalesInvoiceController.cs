@@ -415,7 +415,6 @@ namespace easyfis.Controllers
                     }
 
                     var updateSalesInvoice = salesInvoices.FirstOrDefault();
-
                     updateSalesInvoice.BranchId = sales.BranchId;
                     updateSalesInvoice.SINumber = sales.SINumber;
                     updateSalesInvoice.SIDate = Convert.ToDateTime(sales.SIDate);
@@ -442,12 +441,15 @@ namespace easyfis.Controllers
 
                     // Check for negative inventory
                     bool foundNegativeQuantity = false;
-                    foreach (var salesInvoiceItem in updateSalesInvoice.TrnSalesInvoiceItems)
+                    if (updateSalesInvoice.TrnSalesInvoiceItems.Any())
                     {
-                        if (salesInvoiceItem.MstArticleInventory.Quantity < 0)
+                        foreach (var salesInvoiceItem in updateSalesInvoice.TrnSalesInvoiceItems)
                         {
-                            foundNegativeQuantity = true;
-                            break;
+                            if (salesInvoiceItem.MstArticleInventory.Quantity < 0)
+                            {
+                                foundNegativeQuantity = true;
+                                break;
+                            }
                         }
                     }
 
@@ -463,16 +465,20 @@ namespace easyfis.Controllers
                         updateSalesInvoice.IsLocked = false;
                         db.SubmitChanges();
 
+                        Debug.WriteLine("we");
+
                         return Request.CreateResponse(HttpStatusCode.BadRequest, "Negative Inventory Found!");
                     }
                 }
                 else
                 {
+                    Debug.WriteLine("we2");
                     return Request.CreateResponse(HttpStatusCode.NotFound, "No Sales Invoice Found!");
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Internal Server Error!");
             }
         }
