@@ -12,14 +12,14 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Receiving Receipt 
+                        Receiving Receipt
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -35,7 +35,7 @@
                                 <td style="width: 59%">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control " id="InputFilter" placeholder="Filter">
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search...">
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
@@ -52,16 +52,14 @@
                                 <td style="width: 29%">
                                     <div class="input-group">
                                         <span class="input-group-addon">Start Date</span>
-                                        <div id="filterDate"></div>
-                                        <input type="hidden" id="filterDate_data" />
+                                        <div id="cboStartDateFilter"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 29%">
                                     <div class="input-group">
                                         <span class="input-group-addon">End Date</span>
-                                        <div id="filterEndDate"></div>
-                                        <input type="hidden" id="filterEndDate_data" />
+                                        <div id="cboEndDateFilter"></div>
                                     </div>
                                 </td>
                                 <td style="width: 41%"></td>
@@ -69,11 +67,7 @@
                         </table>
                     </div>
                     <div class="panel-body">
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="RRGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
+                        <div id="RRGrid" class="grid" align="left"></div>
                     </div>
                     <div class="panel-footer">
                         <div class="row">
@@ -99,42 +93,22 @@
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
-    <!-- RR Delete -->
+    <!-- Receiving Receipt Delete Modal -->
     <div class="modal fade" id="deleteRRConfirm" role="dialog">
         <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Delete RR <i class="fa fa-trash"></i></h4>
+                    <h4 class="modal-title">Delete</h4>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this?
+                    Are you sure you want to delete this RR?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger " id="cmdConfirmDeleteRR" onclick="cmdRRConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteRR" class="btn btn-danger" onclick="cmdRRConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
                     <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Lock -->
-    <div class="modal fade" id="deleteRecordLock" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
-                </div>
-                <div class="modal-body">
-                    Sorry, the record is lock! It can't be deleted!
-                </div>
-                <div class="modal-footer">
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"> Okay</button>
                 </div>
             </div>
         </div>
@@ -145,8 +119,8 @@
         // ================
         // Global Variables
         // ================
-        var RRs;
-        var RRGrid;
+        var receivingReceiptCollectionView;
+        var receivingReceiptFlexGrid;
 
         var btnFirstPageGrid;
         var btnPreviousPageGrid;
@@ -154,119 +128,123 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
-        var isFirstSelect = true;
-        var isFirstSelectEndDate = true;
+        var cboStartDateFilter = new wijmo.input.InputDate('#cboStartDateFilter');
+        var cboEndDateFilter = new wijmo.input.InputDate('#cboEndDateFilter');
+        var isStartDateFirstSelect = true;
+        var isEndDateFirstSelect = true;
+
+        function cboDateFilters() {
+            cboStartDateFilter.dispose();
+            cboStartDateFilter = new wijmo.input.InputDate('#cboStartDateFilter', {
+                format: 'MM-dd-yyyy',
+                value: new Date(),
+                onValueChanged: function () {
+                    if (!isStartDateFirstSelect) {
+                        refreshReceivingReceiptFlexGrid();
+                    } else {
+                        isStartDateFirstSelect = false;
+                    }
+                }
+            });
+
+            cboEndDateFilter.dispose();
+            cboEndDateFilter = new wijmo.input.InputDate('#cboEndDateFilter', {
+                format: 'MM-dd-yyyy',
+                value: new Date(),
+                onValueChanged: function () {
+                    if (!isEndDateFirstSelect) {
+                        refreshReceivingReceiptFlexGrid();
+                    } else {
+                        isEndDateFirstSelect = false;
+                    }
+                }
+            });
+        }
 
         // ============================
         // GET RR List Filter By RRDate
         // ============================
         function getRRFilterByRRDate() {
-            var RRs = new wijmo.collections.ObservableArray;
-
-            var startDate = document.getElementById('filterDate_data').value;
-            var endDate = document.getElementById('filterEndDate_data').value;
-
             NProgress.start();
+            var startDate = cboStartDateFilter.value.toLocaleDateString().replace(/\//g, '-');
+            var endDate = cboEndDateFilter.value.toLocaleDateString().replace(/\//g, '-');
+
+            var receivingReceiptsObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/listReceivingReceiptFilterByRRDate/' + startDate + '/' + endDate,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (Results) {
-                    if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
+                success: function (receivingReceiptListResults) {
+                    if (receivingReceiptListResults.length > 0) {
+                        for (i = 0; i < receivingReceiptListResults.length; i++) {
 
                             var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled;
-
-                            if (canDelete == "True") {
-                                deleteDisabled = "";
-                            } else if (canDelete == "False") {
+                            var deleteDisabled = "";
+                            if (canDelete == "False") {
                                 deleteDisabled = "disabled";
-                            } else {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var btnDeleteId;
-                            if (Results[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' id='RRDeleteButton' onclick='cmdRRDeleteLockButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                            } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' id='RRDeleteButton' onclick='cmdRRDeleteButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             }
 
                             var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled;
-
-                            if (canEdit == "True") {
-                                editDisabled = "";
-                            } else if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            } else {
+                            var editDisabled = "";
+                            if (canEdit == "False") {
                                 editDisabled = "disabled";
                             }
 
-                            RRs.push({
+                            var RRDateResult = new Date(receivingReceiptListResults[i]["RRDate"])
+                            var RRDate = ('0' + (RRDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + RRDateResult.getDate()).slice(-2) + '-' + RRDateResult.getFullYear();
+
+                            receivingReceiptsObservableArray.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' id='RREditButton' onclick='cmdRREditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: btnDeleteId,
-                                Id: Results[i]["Id"],
-                                BranchId: Results[i]["BranchId"],
-                                Branch: Results[i]["Branch"],
-                                RRNumber: Results[i]["RRNumber"],
-                                RRDate: Results[i]["RRDate"],
-                                SupplierId: Results[i]["SupplierId"],
-                                Supplier: Results[i]["Supplier"],
-                                TermId: Results[i]["TermId"],
-                                Term: Results[i]["Term"],
-                                DocumentReference: Results[i]["DocumentReference"],
-                                ManualRRNumber: Results[i]["ManualRRNumber"],
-                                Remarks: Results[i]["Remarks"],
-                                Amount: Results[i]["Amount"],
-                                WTaxAmount: Results[i]["WTaxAmount"],
-                                PaidAmount: Results[i]["PaidAmount"],
-                                AdjustmentAmount: Results[i]["AdjustmentAmount"],
-                                BalanceAmount: Results[i]["BalanceAmount"],
-                                ReceivedById: Results[i]["ReceivedById"],
-                                ReceivedBy: Results[i]["ReceivedBy"],
-                                PreparedById: Results[i]["PreparedById"],
-                                PreparedBy: Results[i]["PreparedBy"],
-                                CheckedById: Results[i]["CheckedById"],
-                                CheckedBy: Results[i]["CheckedBy"],
-                                ApprovedById: Results[i]["ApprovedById"],
-                                ApprovedBy: Results[i]["ApprovedBy"],
-                                IsLocked: Results[i]["IsLocked"],
-                                CreatedById: Results[i]["CreatedById"],
-                                CreatedBy: Results[i]["CreatedBy"],
-                                CreatedDateTime: Results[i]["CreatedDateTime"],
-                                UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedBy: Results[i]["UpdatedBy"],
-                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='RRDeleteButton' onclick='cmdRRDeleteButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
+                                Id: receivingReceiptListResults[i]["Id"],
+                                BranchId: receivingReceiptListResults[i]["BranchId"],
+                                Branch: receivingReceiptListResults[i]["Branch"],
+                                RRNumber: receivingReceiptListResults[i]["RRNumber"],
+                                RRDate: RRDate,
+                                SupplierId: receivingReceiptListResults[i]["SupplierId"],
+                                Supplier: receivingReceiptListResults[i]["Supplier"],
+                                TermId: receivingReceiptListResults[i]["TermId"],
+                                Term: receivingReceiptListResults[i]["Term"],
+                                DocumentReference: receivingReceiptListResults[i]["DocumentReference"],
+                                ManualRRNumber: receivingReceiptListResults[i]["ManualRRNumber"],
+                                Remarks: receivingReceiptListResults[i]["Remarks"],
+                                Amount: receivingReceiptListResults[i]["Amount"],
+                                WTaxAmount: receivingReceiptListResults[i]["WTaxAmount"],
+                                PaidAmount: receivingReceiptListResults[i]["PaidAmount"],
+                                AdjustmentAmount: receivingReceiptListResults[i]["AdjustmentAmount"],
+                                BalanceAmount: receivingReceiptListResults[i]["BalanceAmount"],
+                                ReceivedById: receivingReceiptListResults[i]["ReceivedById"],
+                                ReceivedBy: receivingReceiptListResults[i]["ReceivedBy"],
+                                PreparedById: receivingReceiptListResults[i]["PreparedById"],
+                                PreparedBy: receivingReceiptListResults[i]["PreparedBy"],
+                                CheckedById: receivingReceiptListResults[i]["CheckedById"],
+                                CheckedBy: receivingReceiptListResults[i]["CheckedBy"],
+                                ApprovedById: receivingReceiptListResults[i]["ApprovedById"],
+                                ApprovedBy: receivingReceiptListResults[i]["ApprovedBy"],
+                                IsLocked: receivingReceiptListResults[i]["IsLocked"],
+                                CreatedById: receivingReceiptListResults[i]["CreatedById"],
+                                CreatedBy: receivingReceiptListResults[i]["CreatedBy"],
+                                CreatedDateTime: receivingReceiptListResults[i]["CreatedDateTime"],
+                                UpdatedById: receivingReceiptListResults[i]["UpdatedById"],
+                                UpdatedBy: receivingReceiptListResults[i]["UpdatedBy"],
+                                UpdatedDateTime: receivingReceiptListResults[i]["UpdatedDateTime"]
                             });
                         }
                     }
+
                     NProgress.done();
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
-            return RRs;
-        }
 
-        // =====================
-        // RR Delete Lock Button
-        // =====================
-        function cmdRRDeleteLockButton_OnClick() {
-            $('#deleteRecordLock').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            return receivingReceiptsObservableArray;
         }
 
         // ============================
         // Receiving Receipt Add Button
         // ============================
         function btnAddReceivingReceipt_OnClick() {
-            //window.location = '/Software/ReceivingReceiptDetail';
             document.getElementById('btnAddReceivingReceipt').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Adding";
             $('#btnAddReceivingReceipt').prop('disabled', true);
             $('#btnCloseReceivingReceipt').prop('disabled', true);
@@ -282,15 +260,16 @@
                             window.location = '/Software/ReceivingReceiptDetail?ReceivingReceiptId=' + id;
                         } else {
                             toastr.error("Internal Server Error");
+                            document.getElementById('btnAddReceivingReceipt').innerHTML = "<i class='fa fa-plus'></i> Add";
+                            $('#btnAddReceivingReceipt').prop('disabled', false);
+                            $('#btnCloseReceivingReceipt').prop('disabled', false);
                         }
                     }
                 });
-            } else if (canAccessToDetailPage == "False") {
-                window.location = '/Software/Forbidden';
-            } else {
-                document.getElementById('btnAddReceivingReceipt').innerHTML = "<i class='fa fa-plus'></i> Add";
-                $('#btnAddReceivingReceipt').prop('disabled', false);
-                $('#btnCloseReceivingReceipt').prop('disabled', false);
+            } else  {
+                if (canAccessToDetailPage == "False") {
+                    window.location = '/Software/Forbidden';
+                }
             }
         }
 
@@ -298,8 +277,8 @@
         // RR Edit Button
         // ==============
         function cmdRREditButton_OnClick() {
-            RRs.editItem(RRs.currentItem);
-            var RR = RRs.currentEditItem;
+            receivingReceiptCollectionView.editItem(receivingReceiptCollectionView.currentItem);
+            var RR = receivingReceiptCollectionView.currentEditItem;
             var ReceivingReceitId = RR.Id;
             window.location = '/Software/ReceivingReceiptDetail?ReceivingReceiptId=' + ReceivingReceitId;
         }
@@ -315,23 +294,30 @@
         // RR delete Button
         // ================
         function cmdRRDeleteButton_OnClick() {
-            $('#deleteRRConfirm').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            receivingReceiptCollectionView.editItem(receivingReceiptCollectionView.currentItem);
+            var RR = receivingReceiptCollectionView.currentEditItem;
+            if (RR.IsLocked) {
+                toastr.error("Delete not allowed when the selected record is locked!");
+            } else {
+                $('#deleteRRConfirm').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
 
-            document.getElementById('cmdConfirmDeleteRR').innerHTML = "<i class='fa fa-trash'></i> Delete";
-            $("#cmdConfirmDeleteRR").prop("disabled", false);
-            $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+                document.getElementById('cmdConfirmDeleteRR').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                $("#cmdConfirmDeleteRR").prop("disabled", false);
+                $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+            }
         }
+
         // RR Confirm Delete Button
         function cmdRRConfirmDeleteButton_OnClick() {
             document.getElementById('cmdConfirmDeleteRR').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $("#cmdConfirmDeleteRR").prop("disabled", true);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
 
-            RRs.editItem(RRs.currentItem);
-            var id = RRs.currentEditItem.Id;
+            receivingReceiptCollectionView.editItem(receivingReceiptCollectionView.currentItem);
+            var id = receivingReceiptCollectionView.currentEditItem.Id;
             $.ajax({
                 url: '/api/deleteRR/' + id,
                 type: "DELETE",
@@ -339,47 +325,21 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $("#deleteRRConfirm").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Delete Successful");
-
                         $('#deleteRRConfirm').modal('hide');
-
-                        var RRDateFilter = document.getElementById('filterDate_data').value;
-                        RRs = new wijmo.collections.CollectionView(getRRFilterByRRDate(RRDateFilter));
-                        RRs.canFilter = true;
-                        RRs.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            RRs.refresh();
-                        });
-                        RRs.filter = function (item) {
-                            return !filterText || (item.RRNumber.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        RRs.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsRR();
-                        });
-                        RRs.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        // Flex Grid
-                        RRGrid.itemsSource = RRs;
-                        RRGrid.trackChanges = true;
+                        refreshReceivingReceiptFlexGrid();
                     },
                     404: function () {
                         toastr.error("Not Found");
                         $('#deleteRRConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteRR').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteRR").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
                         $('#deleteRRConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteRR').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteRR").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     }
@@ -391,7 +351,7 @@
         // FlexGrid Selection
         // ==================
         function updateDetails() {
-            var item = RRs.currentItem;
+            var item = receivingReceiptCollectionView.currentItem;
             document.getElementById('createdBy').innerHTML = item.CreatedBy;
             document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
             document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
@@ -402,17 +362,17 @@
         // Navigation Buttons for RR
         // ==========================
         function updateNavigateButtonsRR() {
-            if (RRs.pageSize <= 0) {
+            if (receivingReceiptCollectionView.pageSize <= 0) {
                 document.getElementById('naviagtionPageGrid').style.display = 'none';
                 return;
             }
             document.getElementById('naviagtionPageGrid').style.display = 'block';
-            if (RRs.pageIndex === 0) {
+            if (receivingReceiptCollectionView.pageIndex === 0) {
                 btnFirstPageGrid.setAttribute('disabled', 'disabled');
                 btnPreviousPageGrid.setAttribute('disabled', 'disabled');
                 btnNextPageGrid.removeAttribute('disabled');
                 btnLastPageGrid.removeAttribute('disabled');
-            } else if (RRs.pageIndex === (RRs.pageCount - 1)) {
+            } else if (receivingReceiptCollectionView.pageIndex === (receivingReceiptCollectionView.pageCount - 1)) {
                 btnFirstPageGrid.removeAttribute('disabled');
                 btnPreviousPageGrid.removeAttribute('disabled');
                 btnLastPageGrid.setAttribute('disabled', 'disabled');
@@ -423,134 +383,72 @@
                 btnNextPageGrid.removeAttribute('disabled');
                 btnLastPageGrid.removeAttribute('disabled');
             }
-            btnCurrentPageGrid.innerHTML = (RRs.pageIndex + 1) + ' / ' + RRs.pageCount;
+            btnCurrentPageGrid.innerHTML = (receivingReceiptCollectionView.pageIndex + 1) + ' / ' + receivingReceiptCollectionView.pageCount;
         }
 
-        // ===========
-        // Onload Page
-        // ===========
-        $(document).ready(function () {
-            var RRDateFilter_Date = new Date();
-            document.getElementById("filterDate_data").value = [RRDateFilter_Date.getMonth() + 1, RRDateFilter_Date.getDate(), RRDateFilter_Date.getFullYear()].join('-');
-            document.getElementById("filterEndDate_data").value = [RRDateFilter_Date.getMonth() + 1, RRDateFilter_Date.getDate(), RRDateFilter_Date.getFullYear()].join('-');
-
-            var cboFilterDate;
-            cboFilterDate = new wijmo.input.InputDate('#filterDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                onValueChanged: function () {
-                    if (!isFirstSelect) {
-                        document.getElementById('filterDate_data').value = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
-                        var RRDateFilterValue = document.getElementById('filterDate_data').value;
-
-                        $('body').removeClass('modal-open');
-                        $(".modal-backdrop").remove();
-
-                        RRs = new wijmo.collections.CollectionView(getRRFilterByRRDate(RRDateFilterValue));
-                        RRs.canFilter = true;
-                        RRs.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            RRs.refresh();
-                        });
-                        RRs.filter = function (item) {
-                            return !filterText || (item.RRNumber.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        RRs.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsRR();
-                        });
-                        RRs.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        RRGrid.itemsSource = RRs;
-                        RRGrid.trackChanges = true;
-
-                        updateNavigateButtonsRR();
-                    }
-                    else {
-                        isFirstSelect = false;
-                    }
-                }
-            });
-
-
-            var cboFilterEndDate;
-            cboFilterEndDate = new wijmo.input.InputDate('#filterEndDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                onValueChanged: function () {
-                    if (!isFirstSelectEndDate) {
-                        document.getElementById('filterEndDate_data').value = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
-                        var RRDateFilterValue = document.getElementById('filterEndDate_data').value;
-
-                        $('body').removeClass('modal-open');
-                        $(".modal-backdrop").remove();
-
-                        RRs = new wijmo.collections.CollectionView(getRRFilterByRRDate());
-                        RRs.canFilter = true;
-                        RRs.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            RRs.refresh();
-                        });
-                        RRs.filter = function (item) {
-                            return !filterText || (item.RRNumber.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        RRs.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsRR();
-                        });
-                        RRs.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        RRGrid.itemsSource = RRs;
-                        RRGrid.trackChanges = true;
-
-                        updateNavigateButtonsRR();
-                    }
-                    else {
-                        isFirstSelectEndDate = false;
-                    }
-                }
-            });
-
-
-            var RRDateFilter = document.getElementById('filterDate_data').value;
-            RRs = new wijmo.collections.CollectionView(getRRFilterByRRDate());
-            RRs.canFilter = true;
-            RRs.pageSize = 15;
+        // ==================================
+        // Refresh Receiving Receipt FlexGrid
+        // ==================================
+        function refreshReceivingReceiptFlexGrid() {
+            receivingReceiptCollectionView = new wijmo.collections.CollectionView(getRRFilterByRRDate());
+            receivingReceiptCollectionView.canFilter = true;
+            receivingReceiptCollectionView.pageSize = 15;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
-                RRs.refresh();
+                receivingReceiptCollectionView.refresh();
             });
-            RRs.filter = function (item) {
+
+            receivingReceiptCollectionView.filter = function (item) {
+                return !filterText || (item.RRNumber.toLowerCase().indexOf(filterText) > -1)
+                    || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                    || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            receivingReceiptCollectionView.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsRR();
+            });
+
+            receivingReceiptCollectionView.currentChanged.addHandler(function (sender, args) {
+                updateDetails();
+            });
+
+            receivingReceiptFlexGrid.itemsSource = receivingReceiptCollectionView;
+            receivingReceiptFlexGrid.trackChanges = true;
+        }
+
+        // ==========================
+        // Receiving Receipt FlexGrid
+        // ==========================
+        function createReceivingReceiptFlexGrid() {
+            cboDateFilters();
+            receivingReceiptCollectionView = new wijmo.collections.CollectionView(getRRFilterByRRDate());
+            receivingReceiptCollectionView.canFilter = true;
+            receivingReceiptCollectionView.pageSize = 15;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                receivingReceiptCollectionView.refresh();
+            });
+
+            receivingReceiptCollectionView.filter = function (item) {
                 return !filterText || (item.RRNumber.toLowerCase().indexOf(filterText) > -1)
                                    || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
                                    || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
             }
-            RRs.collectionChanged.addHandler(function (sender, args) {
+
+            receivingReceiptCollectionView.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsRR();
             });
-            RRs.currentChanged.addHandler(function (sender, args) {
+
+            receivingReceiptCollectionView.currentChanged.addHandler(function (sender, args) {
                 updateDetails();
             });
 
-            // Flex Grid
-            RRGrid = new wijmo.grid.FlexGrid('#RRGrid');
-            RRGrid.initialize({
+            receivingReceiptFlexGrid = new wijmo.grid.FlexGrid('#RRGrid');
+            receivingReceiptFlexGrid.initialize({
                 columns: [
                             {
                                 "header": "Edit",
@@ -574,56 +472,55 @@
                                 "header": "RR Number",
                                 "binding": "RRNumber",
                                 "allowSorting": true,
-                                "width": 110,
+                                "width": "1.5*"
                             },
                             {
                                 "header": "RR Date",
                                 "binding": "RRDate",
                                 "allowSorting": true,
-                                "width": 100
+                                "width": "1.5*"
                             },
                             {
                                 "header": "Supplier",
                                 "binding": "Supplier",
                                 "allowSorting": true,
-                                "width": 300
+                                "width": "4*"
                             },
                             {
                                 "header": "Doc Reference",
                                 "binding": "DocumentReference",
                                 "allowSorting": true,
-                                "width": 200
+                                "width": "2.5*"
                             },
                             {
                                 "header": "Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
-                                "width": 170
+                                "width": "2*"
                             },
                             {
                                 "header": "Paid Amount",
                                 "binding": "PaidAmount",
                                 "allowSorting": true,
-                                "width": 170
+                                "width": "2*"
                             },
                             {
                                 "header": "L",
                                 "binding": "IsLocked",
                                 "allowSorting": true,
-                                "width": 50
+                                "width": "0.5*"
                             }
                 ],
                 autoGenerateColumns: false,
-                itemsSource: RRs,
+                itemsSource: receivingReceiptCollectionView,
                 isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
 
-            RRGrid.trackChanges = true;
+            receivingReceiptFlexGrid.trackChanges = true;
 
-            //Navigation button
             btnFirstPageGrid = document.getElementById('btnMoveToFirstPageGrid');
             btnPreviousPageGrid = document.getElementById('btnMoveToPreviousPageGrid');
             btnNextPageGrid = document.getElementById('btnMoveToNextPageGrid');
@@ -633,30 +530,36 @@
             updateNavigateButtonsRR();
 
             btnFirstPageGrid.addEventListener('click', function () {
-                RRs.moveToFirstPage();
+                receivingReceiptCollectionView.moveToFirstPage();
                 updateNavigateButtonsRR();
             });
+
             btnPreviousPageGrid.addEventListener('click', function () {
-                RRs.moveToPreviousPage();
+                receivingReceiptCollectionView.moveToPreviousPage();
                 updateNavigateButtonsRR();
             });
+
             btnNextPageGrid.addEventListener('click', function () {
-                RRs.moveToNextPage();
+                receivingReceiptCollectionView.moveToNextPage();
                 updateNavigateButtonsRR();
             });
+
             btnLastPageGrid.addEventListener('click', function () {
-                RRs.moveToLastPage();
+                receivingReceiptCollectionView.moveToLastPage();
                 updateNavigateButtonsRR();
             });
 
             var canAdd = "@ViewData["CanAdd"]";
-            if (canAdd == "True") {
-                $("#btnAddReceivingReceipt").prop("disabled", false)
-            } else if (canAdd == "False") {
-                $("#btnAddReceivingReceipt").prop("disabled", true)
-            } else {
-                $("#btnAddReceivingReceipt").prop("disabled", true)
+            if (canAdd == "False") {
+                $("#btnAddReceivingReceipt").prop("disabled", true);
             }
+        }
+
+        // ===========
+        // Onload Page
+        // ===========
+        $(document).ready(function () {
+            createReceivingReceiptFlexGrid();
         });
     </script>
     <script type="text/javascript">

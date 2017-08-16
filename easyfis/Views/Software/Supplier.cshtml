@@ -12,15 +12,14 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-
-<body class="">
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Supplier 
+                        Supplier
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -36,7 +35,7 @@
                                 <td style="width: 59%">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control" id="InputFilter" placeholder="Filter">
+                                        <input type="text" class="form-control" id="InputFilter" placeholder="Search...">
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
@@ -48,11 +47,7 @@
                         </table>
                     </div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div id="SupplierGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
+                        <div id="SupplierGrid" class="grid"></div>
                     </div>
                     <div class="panel-footer">
                         <div class="row">
@@ -78,40 +73,22 @@
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
-    <!-- Supplier Delete -->
+    <!-- Supplier Delete Modal -->
     <div class="modal fade" id="deleteSupplierConfirm" role="dialog">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Delete Supplier <i class="fa fa-trash"></i></h4>
+                    <h4 class="modal-title">Delete</h4>
                 </div>
                 <div class="modal-body">
-                    Delete Supplier?
+                    Are you sure you want to delete this supplier?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger" id="cmdConfirmDeleteSupplier" onclick="cmdSupplierConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteSupplier" class="btn btn-danger" onclick="cmdSupplierConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
                     <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Lock -->
-    <div class="modal fade" id="deleteRecordLock" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
-                </div>
-                <div class="modal-body">
-                    Sorry, the record is lock! It can't be deleted!
-                </div>
-                <div class="modal-footer">
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"> Okay</button>
                 </div>
             </div>
         </div>
@@ -122,8 +99,8 @@
         // ================
         // Global Variables
         // ================
-        var suppliers;
-        var supplierGrid;
+        var supplierCollectionView;
+        var supplierFlexGrid;
         var btnFirstPageGrid;
         var btnPreviousPageGrid;
         var btnNextPageGrid;
@@ -134,144 +111,119 @@
         // Get Data from MstArtcile Table
         // ==============================
         function getArtcileForSuppliers() {
-            var suppliers = new wijmo.collections.ObservableArray;
             NProgress.start();
+            var suppliersObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/listArticleByArticleTypeId/3',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (supplierResults) {
-                    if (supplierResults.length > 0) {
-                        for (i = 0; i < supplierResults.length; i++) {
+                success: function (supplierListResults) {
+                    if (supplierListResults.length > 0) {
+                        for (i = 0; i < supplierListResults.length; i++) {
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled = "";
+                            if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            }
 
                             var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled;
-
-                            if (canDelete == "True") {
-                                deleteDisabled = "";
-                            } else if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            } else {
+                            var deleteDisabled = "";
+                            if (canDelete == "False") {
                                 deleteDisabled = "disabled";
                             }
 
-                            var btnDeleteId;
-                            if (supplierResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdSupplierDeleteLockButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                            } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdSupplierDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                            }
-
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled;
-
-                            if (canEdit == "True") {
-                                editDisabled = "";
-                            } else if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            } else {
-                                editDisabled = "disabled";
-                            }
-
-                            suppliers.push({
+                            suppliersObservableArray.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdSupplierEditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: btnDeleteId,
-                                Id: supplierResults[i]["Id"],
-                                ArticleCode: supplierResults[i]["ArticleCode"],
-                                ManualArticleCode: supplierResults[i]["ManualArticleCode"],
-                                Article: supplierResults[i]["Article"],
-                                Category: supplierResults[i]["Category"],
-                                ArticleTypeId: supplierResults[i]["ArticleTypeId"],
-                                ArticleType: supplierResults[i]["ArticleType"],
-                                ArticleGroupId: supplierResults[i]["ArticleGroupId"],
-                                ArticleGroup: supplierResults[i]["ArticleGroup"],
-                                AccountId: supplierResults[i]["AccountId"],
-                                Account: supplierResults[i]["Account"],
-                                SalesAccountId: supplierResults[i]["SalesAccountId"],
-                                CostAccountId: supplierResults[i]["CostAccountId"],
-                                AssetAccountId: supplierResults[i]["AssetAccountId"],
-                                ExpenseAccountId: supplierResults[i]["ExpenseAccountId"],
-                                UnitId: supplierResults[i]["UnitId"],
-                                OutputTaxId: supplierResults[i]["OutputTaxId"],
-                                InputTaxId: supplierResults[i]["InputTaxId"],
-                                WTaxTypeId: supplierResults[i]["WTaxTypeId"],
-                                Price: supplierResults[i]["Price"],
-                                Cost: supplierResults[i]["Cost"],
-                                IsInventory: supplierResults[i]["IsInventory"],
-                                Particulars: supplierResults[i]["Particulars"],
-                                Address: supplierResults[i]["Address"],
-                                TermId: supplierResults[i]["TermId"],
-                                ContactNumber: supplierResults[i]["ContactNumber"],
-                                ContactPerson: supplierResults[i]["ContactPerson"],
-                                TaxNumber: supplierResults[i]["TaxNumber"],
-                                CreditLimit: supplierResults[i]["CreditLimit"],
-                                DateAcquired: supplierResults[i]["DateAcquired"],
-                                UsefulLife: supplierResults[i]["UsefulLife"],
-                                SalvageValue: supplierResults[i]["SalvageValue"],
-                                ManualArticleOldCode: supplierResults[i]["ManualArticleOldCode"],
-                                IsLocked: supplierResults[i]["IsLocked"],
-                                CreatedById: supplierResults[i]["CreatedById"],
-                                CreatedBy: supplierResults[i]["CreatedBy"],
-                                CreatedDateTime: supplierResults[i]["CreatedDateTime"],
-                                UpdatedById: supplierResults[i]["UpdatedById"],
-                                UpdatedBy: supplierResults[i]["UpdatedBy"],
-                                UpdatedDateTime: supplierResults[i]["UpdatedDateTime"]
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdSupplierDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
+                                Id: supplierListResults[i]["Id"],
+                                ArticleCode: supplierListResults[i]["ArticleCode"],
+                                ManualArticleCode: supplierListResults[i]["ManualArticleCode"],
+                                Article: supplierListResults[i]["Article"],
+                                Category: supplierListResults[i]["Category"],
+                                ArticleTypeId: supplierListResults[i]["ArticleTypeId"],
+                                ArticleType: supplierListResults[i]["ArticleType"],
+                                ArticleGroupId: supplierListResults[i]["ArticleGroupId"],
+                                ArticleGroup: supplierListResults[i]["ArticleGroup"],
+                                AccountId: supplierListResults[i]["AccountId"],
+                                Account: supplierListResults[i]["Account"],
+                                SalesAccountId: supplierListResults[i]["SalesAccountId"],
+                                CostAccountId: supplierListResults[i]["CostAccountId"],
+                                AssetAccountId: supplierListResults[i]["AssetAccountId"],
+                                ExpenseAccountId: supplierListResults[i]["ExpenseAccountId"],
+                                UnitId: supplierListResults[i]["UnitId"],
+                                OutputTaxId: supplierListResults[i]["OutputTaxId"],
+                                InputTaxId: supplierListResults[i]["InputTaxId"],
+                                WTaxTypeId: supplierListResults[i]["WTaxTypeId"],
+                                Price: supplierListResults[i]["Price"],
+                                Cost: supplierListResults[i]["Cost"],
+                                IsInventory: supplierListResults[i]["IsInventory"],
+                                Particulars: supplierListResults[i]["Particulars"],
+                                Address: supplierListResults[i]["Address"],
+                                TermId: supplierListResults[i]["TermId"],
+                                ContactNumber: supplierListResults[i]["ContactNumber"],
+                                ContactPerson: supplierListResults[i]["ContactPerson"],
+                                TaxNumber: supplierListResults[i]["TaxNumber"],
+                                CreditLimit: supplierListResults[i]["CreditLimit"],
+                                DateAcquired: supplierListResults[i]["DateAcquired"],
+                                UsefulLife: supplierListResults[i]["UsefulLife"],
+                                SalvageValue: supplierListResults[i]["SalvageValue"],
+                                ManualArticleOldCode: supplierListResults[i]["ManualArticleOldCode"],
+                                IsLocked: supplierListResults[i]["IsLocked"],
+                                CreatedById: supplierListResults[i]["CreatedById"],
+                                CreatedBy: supplierListResults[i]["CreatedBy"],
+                                CreatedDateTime: supplierListResults[i]["CreatedDateTime"],
+                                UpdatedById: supplierListResults[i]["UpdatedById"],
+                                UpdatedBy: supplierListResults[i]["UpdatedBy"],
+                                UpdatedDateTime: supplierListResults[i]["UpdatedDateTime"]
                             });
                         }
                     }
+
                     NProgress.done();
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
-            return suppliers;
-        }
 
-        // ===========================
-        // Supplier Delete Lock Button
-        // ===========================
-        function cmdSupplierDeleteLockButton_OnClick() {
-            toastr.error("Record Locked")
+            return suppliersObservableArray;
         }
 
         // =========================
         // Refresh Supplier Flexgrid
         // =========================
         function refreshSupplierFlexgrid() {
-            suppliers = new wijmo.collections.CollectionView(getArtcileForSuppliers());
-            suppliers.canFilter = true;
-            suppliers.pageSize = 15;
+            supplierCollectionView = new wijmo.collections.CollectionView(getArtcileForSuppliers());
+            supplierCollectionView.canFilter = true;
+            supplierCollectionView.pageSize = 15;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
-                suppliers.refresh();
+                supplierCollectionView.refresh();
             });
-            suppliers.filter = function (item) {
+
+            supplierCollectionView.filter = function (item) {
                 return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
-                                   || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1)
-                                   || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
-                                   || (item.ArticleGroup.toLowerCase().indexOf(filterText) > -1);
+                    || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1)
+                    || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
+                    || (item.ArticleGroup.toLowerCase().indexOf(filterText) > -1);
             }
-            suppliers.collectionChanged.addHandler(function (sender, args) {
+
+            supplierCollectionView.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsSupplier();
             });
-            suppliers.currentChanged.addHandler(function (sender, args) {
+
+            supplierCollectionView.currentChanged.addHandler(function (sender, args) {
                 updateDetails();
             });
 
-            // Flex Grid
-            supplierGrid.itemsSource = suppliers;
-            supplierGrid.trackChanges = true;
+            supplierFlexGrid.itemsSource = supplierCollectionView;
+            supplierFlexGrid.trackChanges = true;
         }
 
         // ===================
         // Supplier Add Button
         // ===================
         function btnAddSupplier_OnClick() {
-            //window.location = '/Software/SupplierDetail';
             document.getElementById('btnAddSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Adding";
             $('#btnAddSupplier').prop('disabled', true);
             $('#btnCloseSupplier').prop('disabled', true);
@@ -286,16 +238,17 @@
                         if (id > 0) {
                             window.location = '/Software/SupplierDetail?SupplierId=' + id;
                         } else {
-                            toastr.error("Internal Server Error");
+                            toastr.error("Something's went wrong.");
+                            document.getElementById('btnAddSupplier').innerHTML = "<i class='fa fa-plus'></i> Add";
+                            $('#btnAddSupplier').prop('disabled', false);
+                            $('#btnCloseSupplier').prop('disabled', false);
                         }
                     }
                 });
-            } else if (canAccessToDetailPage == "False") {
-                window.location = '/Software/Forbidden';
             } else {
-                document.getElementById('btnAddSupplier').innerHTML = "<i class='fa fa-plus'></i> Add";
-                $('#btnAddSupplier').prop('disabled', false);
-                $('#btnCloseSupplier').prop('disabled', false);
+                if (canAccessToDetailPage == "False") {
+                    window.location = '/Software/Forbidden';
+                }
             }
         }
 
@@ -310,9 +263,10 @@
         // Supplier Edit Button
         // ====================
         function cmdSupplierEditButton_OnClick() {
-            suppliers.editItem(suppliers.currentItem);
-            var supplier = suppliers.currentEditItem;
+            supplierCollectionView.editItem(supplierCollectionView.currentItem);
+            var supplier = supplierCollectionView.currentEditItem;
             var supplierId = supplier.Id;
+
             window.location = '/Software/SupplierDetail?SupplierId=' + supplierId;
         }
 
@@ -320,23 +274,30 @@
         // Supplier delete Button
         // =====================
         function cmdSupplierDeleteButton_OnClick() {
-            $('#deleteSupplierConfirm').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            supplierCollectionView.editItem(supplierCollectionView.currentItem);
+            var supplier = supplierCollectionView.currentEditItem;
+            if (supplier.IsLocked) {
+                toastr.error("Delete not allowed when the selected record is locked!");
+            } else {
+                $('#deleteSupplierConfirm').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
 
-            document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-trash'></i> Delete";
-            $('#cmdConfirmDeleteSupplier').prop('disabled', false);
-            $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
+                document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                $('#cmdConfirmDeleteSupplier').prop('disabled', false);
+                $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
+            }
         }
+
         // Supplier Confirm Delete Button
         function cmdSupplierConfirmDeleteButton_OnClick() {
             document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $('#cmdConfirmDeleteSupplier').prop('disabled', true);
             $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
 
-            suppliers.editItem(suppliers.currentItem);
-            var supplierId = suppliers.currentEditItem.Id;
+            supplierCollectionView.editItem(supplierCollectionView.currentItem);
+            var supplierId = supplierCollectionView.currentEditItem.Id;
             $.ajax({
                 url: '/api/deleteArticle/' + supplierId,
                 type: "DELETE",
@@ -344,7 +305,6 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
                         toastr.success("Delete Successful");
                         $('#deleteSupplierConfirm').modal('hide');
                         refreshSupplierFlexgrid();
@@ -352,10 +312,16 @@
                     404: function () {
                         toastr.error("Not Found");
                         $('#deleteSupplierConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#cmdConfirmDeleteSupplier').prop('disabled', false);
+                        $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
                         $('#deleteSupplierConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#cmdConfirmDeleteSupplier').prop('disabled', false);
+                        $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
                     }
                 }
             });
@@ -365,7 +331,8 @@
         // FlexGrid Selection
         // ===================
         function updateDetails() {
-            var supplier = suppliers.currentItem;
+            supplierCollectionView.editItem(supplierCollectionView.currentItem);
+            var supplier = supplierCollectionView.currentItem;
             document.getElementById('createdBy').innerHTML = supplier.CreatedBy;
             document.getElementById('createdDate').innerHTML = supplier.CreatedDateTime;
             document.getElementById('updatedBy').innerHTML = supplier.UpdatedBy;
@@ -376,17 +343,17 @@
         // Navigation Buttons for Supplier
         // ===============================
         function updateNavigateButtonsSupplier() {
-            if (suppliers.pageSize <= 0) {
+            if (supplierCollectionView.pageSize <= 0) {
                 document.getElementById('naviagtionPageGrid').style.display = 'none';
                 return;
             }
             document.getElementById('naviagtionPageGrid').style.display = 'block';
-            if (suppliers.pageIndex === 0) {
+            if (supplierCollectionView.pageIndex === 0) {
                 btnFirstPageGrid.setAttribute('disabled', 'disabled');
                 btnPreviousPageGrid.setAttribute('disabled', 'disabled');
                 btnNextPageGrid.removeAttribute('disabled');
                 btnLastPageGrid.removeAttribute('disabled');
-            } else if (suppliers.pageIndex === (suppliers.pageCount - 1)) {
+            } else if (supplierCollectionView.pageIndex === (supplierCollectionView.pageCount - 1)) {
                 btnFirstPageGrid.removeAttribute('disabled');
                 btnPreviousPageGrid.removeAttribute('disabled');
                 btnLastPageGrid.setAttribute('disabled', 'disabled');
@@ -397,44 +364,40 @@
                 btnNextPageGrid.removeAttribute('disabled');
                 btnLastPageGrid.removeAttribute('disabled');
             }
-            btnCurrentPageGrid.innerHTML = (suppliers.pageIndex + 1) + ' / ' + suppliers.pageCount;
+            btnCurrentPageGrid.innerHTML = (supplierCollectionView.pageIndex + 1) + ' / ' + supplierCollectionView.pageCount;
         }
 
-        function refreshGrids() {
-            setTimeout(function () {
-                suppliers.refresh();
-            }, 500)
-        }
-
-        // ============
-        // On Page Load
-        // ============
-        $(document).ready(function () {
-            suppliers = new wijmo.collections.CollectionView(getArtcileForSuppliers());
-            suppliers.canFilter = true;
-            suppliers.pageSize = 15;
+        // =================
+        // Supplier FlexGrid
+        // =================
+        function createSupplierFlexGrid() {
+            supplierCollectionView = new wijmo.collections.CollectionView(getArtcileForSuppliers());
+            supplierCollectionView.canFilter = true;
+            supplierCollectionView.pageSize = 15;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
-                suppliers.refresh();
+                supplierCollectionView.refresh();
             });
-            suppliers.filter = function (item) {
+
+            supplierCollectionView.filter = function (item) {
                 return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
                                    || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1)
                                    || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
                                    || (item.ArticleGroup.toLowerCase().indexOf(filterText) > -1);
             }
-            suppliers.collectionChanged.addHandler(function (sender, args) {
+
+            supplierCollectionView.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsSupplier();
             });
-            suppliers.currentChanged.addHandler(function (sender, args) {
+
+            supplierCollectionView.currentChanged.addHandler(function (sender, args) {
                 updateDetails();
             });
 
-            // Flex Grid
-            supplierGrid = new wijmo.grid.FlexGrid('#SupplierGrid');
-            supplierGrid.initialize({
+            supplierFlexGrid = new wijmo.grid.FlexGrid('#SupplierGrid');
+            supplierFlexGrid.initialize({
                 columns: [
                             {
                                 "header": "Edit",
@@ -458,43 +421,43 @@
                                 "header": "Code",
                                 "binding": "ArticleCode",
                                 "allowSorting": true,
-                                "width": 100,
+                                "width": "1.5*",
                             },
                             {
                                 "header": "Supplier",
                                 "binding": "Article",
                                 "allowSorting": true,
-                                "width": 365
+                                "width": "4*"
                             },
                             {
                                 "header": "Contact Number",
                                 "binding": "ContactNumber",
                                 "allowSorting": true,
-                                "width": 200
+                                "width": "3*"
                             },
                             {
                                 "header": "Group",
                                 "binding": "ArticleGroup",
                                 "allowSorting": true,
-                                "width": 220
+                                "width": "3*"
                             },
                             {
                                 "header": "L",
                                 "binding": "IsLocked",
                                 "allowSorting": true,
-                                "width": 50
+                                "width": "0.5*"
                             }
                 ],
                 autoGenerateColumns: false,
-                itemsSource: suppliers,
+                itemsSource: supplierCollectionView,
                 isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
-            supplierGrid.trackChanges = true;
 
-            //Navigation button
+            supplierFlexGrid.trackChanges = true;
+
             btnFirstPageGrid = document.getElementById('btnMoveToFirstPageGrid');
             btnPreviousPageGrid = document.getElementById('btnMoveToPreviousPageGrid');
             btnNextPageGrid = document.getElementById('btnMoveToNextPageGrid');
@@ -504,30 +467,36 @@
             updateNavigateButtonsSupplier();
 
             btnFirstPageGrid.addEventListener('click', function () {
-                suppliers.moveToFirstPage();
+                supplierCollectionView.moveToFirstPage();
                 updateNavigateButtonsSupplier();
             });
+
             btnPreviousPageGrid.addEventListener('click', function () {
-                suppliers.moveToPreviousPage();
+                supplierCollectionView.moveToPreviousPage();
                 updateNavigateButtonsSupplier();
             });
+
             btnNextPageGrid.addEventListener('click', function () {
-                suppliers.moveToNextPage();
+                supplierCollectionView.moveToNextPage();
                 updateNavigateButtonsSupplier();
             });
+
             btnLastPageGrid.addEventListener('click', function () {
-                suppliers.moveToLastPage();
+                supplierCollectionView.moveToLastPage();
                 updateNavigateButtonsSupplier();
             });
 
             var canAdd = "@ViewData["CanAdd"]";
-            if (canAdd == "True") {
-                $("#btnAddSupplier").prop("disabled", false)
-            } else if (canAdd == "False") {
-                $("#btnAddSupplier").prop("disabled", true)
-            } else {
-                $("#btnAddSupplier").prop("disabled", true)
+            if (canAdd == "False") {
+                $("#btnAddSupplier").prop("disabled", true);
             }
+        }
+
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            createSupplierFlexGrid();
         });
     </script>
     <script type="text/javascript">
