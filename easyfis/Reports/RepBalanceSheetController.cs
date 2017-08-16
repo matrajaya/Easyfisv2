@@ -401,7 +401,7 @@ namespace easyfis.Reports
                                AccountType = g.Key.MstAccountType.AccountType,
                                AccountCode = g.Key.AccountCode,
                                Account = g.Key.Account,
-                               DebitAmount = g.Sum(d => d.DebitAmount),
+                               DebitAmount = g.Sum(d => d.DebitAmount), 
                                CreditAmount = g.Sum(d => d.CreditAmount),
                                Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
                            };
@@ -423,7 +423,33 @@ namespace easyfis.Reports
                                        Balance = g.Sum(d => d.Balance),
                                    };
 
-            var equitiesWithRetainEarnings = equities.Union(retainedEarnings);
+            var unionEquitiesWithRetainEarnings = equities.Union(retainedEarnings);
+
+            var equitiesWithRetainEarnings = from d in unionEquitiesWithRetainEarnings
+                                             group d by new
+                                             {
+                                                 AccountCategoryCode = d.AccountCategoryCode,
+                                                 AccountCategory = d.AccountCategory,
+                                                 SubCategoryDescription = d.SubCategoryDescription,
+                                                 AccountTypeCode = d.AccountTypeCode,
+                                                 AccountType = d.AccountType,
+                                                 AccountCode = d.AccountCode,
+                                                 Account = d.Account
+                                             } into g
+                                             select new
+                                             {
+                                                 DocumentReference = "3 - Equity",
+                                                 AccountCategoryCode = g.Key.AccountCategoryCode,
+                                                 AccountCategory = g.Key.AccountCategory,
+                                                 SubCategoryDescription = g.Key.SubCategoryDescription,
+                                                 AccountTypeCode = g.Key.AccountTypeCode,
+                                                 AccountType = g.Key.AccountType,
+                                                 AccountCode = g.Key.AccountCode,
+                                                 Account = g.Key.Account,
+                                                 DebitAmount = g.Sum(d => d.DebitAmount),
+                                                 CreditAmount = g.Sum(d => d.CreditAmount),
+                                                 Balance = g.Sum(d => d.Balance),
+                                             };
 
             document.Add(Chunk.NEWLINE);
 
