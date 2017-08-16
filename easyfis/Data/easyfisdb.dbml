@@ -405,6 +405,7 @@
       <Association Name="MstBranch_MstArticleGroupBranch" Member="MstArticleGroupBranches" ThisKey="Id" OtherKey="BranchId" Type="MstArticleGroupBranch" />
       <Association Name="MstBranch_MstArticleInventory" Member="MstArticleInventories" ThisKey="Id" OtherKey="BranchId" Type="MstArticleInventory" />
       <Association Name="MstBranch_MstUser" Member="MstUsers" ThisKey="Id" OtherKey="BranchId" Type="MstUser" />
+      <Association Name="MstBranch_MstUserBranch" Member="MstUserBranches" ThisKey="Id" OtherKey="BranchId" Type="MstUserBranch" />
       <Association Name="MstBranch_TrnCollection" Member="TrnCollections" ThisKey="Id" OtherKey="BranchId" Type="TrnCollection" />
       <Association Name="MstBranch_TrnCollectionLine" Member="TrnCollectionLines" ThisKey="Id" OtherKey="BranchId" Type="TrnCollectionLine" />
       <Association Name="MstBranch_TrnDisbursement" Member="TrnDisbursements" ThisKey="Id" OtherKey="BranchId" Type="TrnDisbursement" />
@@ -597,6 +598,7 @@
       <Association Name="MstUser_MstTerm1" Member="MstTerms1" ThisKey="Id" OtherKey="UpdatedById" Type="MstTerm" />
       <Association Name="MstUser_MstUnit" Member="MstUnits" ThisKey="Id" OtherKey="CreatedById" Type="MstUnit" />
       <Association Name="MstUser_MstUnit1" Member="MstUnits1" ThisKey="Id" OtherKey="UpdatedById" Type="MstUnit" />
+      <Association Name="MstUser_MstUserBranch" Member="MstUserBranches" ThisKey="Id" OtherKey="UserId" Type="MstUserBranch" />
       <Association Name="MstUser_MstUserForm" Member="MstUserForms" ThisKey="Id" OtherKey="UserId" Type="MstUserForm" />
       <Association Name="MstUser_SysAuditTrail" Member="SysAuditTrails" ThisKey="Id" OtherKey="UserId" Type="SysAuditTrail" />
       <Association Name="MstUser_TrnCollection" Member="TrnCollections" ThisKey="Id" OtherKey="CheckedById" Type="TrnCollection" />
@@ -659,6 +661,15 @@
       <Association Name="MstBranch_MstUser" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
       <Association Name="MstCompany_MstUser" Member="MstCompany" ThisKey="CompanyId" OtherKey="Id" Type="MstCompany" IsForeignKey="true" />
       <Association Name="MstDiscount_MstUser" Member="MstDiscount" ThisKey="DefaultSalesInvoiceDiscountId" OtherKey="Id" Type="MstDiscount" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MstUserBranch" Member="MstUserBranches">
+    <Type Name="MstUserBranch">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BranchId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="MstBranch_MstUserBranch" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
+      <Association Name="MstUser_MstUserBranch" Member="MstUser" ThisKey="UserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.MstUserForm" Member="MstUserForms">

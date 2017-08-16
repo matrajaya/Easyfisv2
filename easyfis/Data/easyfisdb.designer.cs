@@ -114,6 +114,9 @@ namespace easyfis.Data
     partial void InsertMstUser(MstUser instance);
     partial void UpdateMstUser(MstUser instance);
     partial void DeleteMstUser(MstUser instance);
+    partial void InsertMstUserBranch(MstUserBranch instance);
+    partial void UpdateMstUserBranch(MstUserBranch instance);
+    partial void DeleteMstUserBranch(MstUserBranch instance);
     partial void InsertMstUserForm(MstUserForm instance);
     partial void UpdateMstUserForm(MstUserForm instance);
     partial void DeleteMstUserForm(MstUserForm instance);
@@ -439,6 +442,14 @@ namespace easyfis.Data
 			get
 			{
 				return this.GetTable<MstUser>();
+			}
+		}
+		
+		public System.Data.Linq.Table<MstUserBranch> MstUserBranches
+		{
+			get
+			{
+				return this.GetTable<MstUserBranch>();
 			}
 		}
 		
@@ -10181,6 +10192,8 @@ namespace easyfis.Data
 		
 		private EntitySet<MstUser> _MstUsers;
 		
+		private EntitySet<MstUserBranch> _MstUserBranches;
+		
 		private EntitySet<TrnCollection> _TrnCollections;
 		
 		private EntitySet<TrnCollectionLine> _TrnCollectionLines;
@@ -10256,6 +10269,7 @@ namespace easyfis.Data
 			this._MstArticleGroupBranches = new EntitySet<MstArticleGroupBranch>(new Action<MstArticleGroupBranch>(this.attach_MstArticleGroupBranches), new Action<MstArticleGroupBranch>(this.detach_MstArticleGroupBranches));
 			this._MstArticleInventories = new EntitySet<MstArticleInventory>(new Action<MstArticleInventory>(this.attach_MstArticleInventories), new Action<MstArticleInventory>(this.detach_MstArticleInventories));
 			this._MstUsers = new EntitySet<MstUser>(new Action<MstUser>(this.attach_MstUsers), new Action<MstUser>(this.detach_MstUsers));
+			this._MstUserBranches = new EntitySet<MstUserBranch>(new Action<MstUserBranch>(this.attach_MstUserBranches), new Action<MstUserBranch>(this.detach_MstUserBranches));
 			this._TrnCollections = new EntitySet<TrnCollection>(new Action<TrnCollection>(this.attach_TrnCollections), new Action<TrnCollection>(this.detach_TrnCollections));
 			this._TrnCollectionLines = new EntitySet<TrnCollectionLine>(new Action<TrnCollectionLine>(this.attach_TrnCollectionLines), new Action<TrnCollectionLine>(this.detach_TrnCollectionLines));
 			this._TrnDisbursements = new EntitySet<TrnDisbursement>(new Action<TrnDisbursement>(this.attach_TrnDisbursements), new Action<TrnDisbursement>(this.detach_TrnDisbursements));
@@ -10567,6 +10581,19 @@ namespace easyfis.Data
 			set
 			{
 				this._MstUsers.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstBranch_MstUserBranch", Storage="_MstUserBranches", ThisKey="Id", OtherKey="BranchId")]
+		public EntitySet<MstUserBranch> MstUserBranches
+		{
+			get
+			{
+				return this._MstUserBranches;
+			}
+			set
+			{
+				this._MstUserBranches.Assign(value);
 			}
 		}
 		
@@ -10944,6 +10971,18 @@ namespace easyfis.Data
 		}
 		
 		private void detach_MstUsers(MstUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstBranch = null;
+		}
+		
+		private void attach_MstUserBranches(MstUserBranch entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstBranch = this;
+		}
+		
+		private void detach_MstUserBranches(MstUserBranch entity)
 		{
 			this.SendPropertyChanging();
 			entity.MstBranch = null;
@@ -14207,6 +14246,8 @@ namespace easyfis.Data
 		
 		private EntitySet<MstUnit> _MstUnits1;
 		
+		private EntitySet<MstUserBranch> _MstUserBranches;
+		
 		private EntitySet<MstUserForm> _MstUserForms;
 		
 		private EntitySet<SysAuditTrail> _SysAuditTrails;
@@ -14403,6 +14444,7 @@ namespace easyfis.Data
 			this._MstTerms1 = new EntitySet<MstTerm>(new Action<MstTerm>(this.attach_MstTerms1), new Action<MstTerm>(this.detach_MstTerms1));
 			this._MstUnits = new EntitySet<MstUnit>(new Action<MstUnit>(this.attach_MstUnits), new Action<MstUnit>(this.detach_MstUnits));
 			this._MstUnits1 = new EntitySet<MstUnit>(new Action<MstUnit>(this.attach_MstUnits1), new Action<MstUnit>(this.detach_MstUnits1));
+			this._MstUserBranches = new EntitySet<MstUserBranch>(new Action<MstUserBranch>(this.attach_MstUserBranches), new Action<MstUserBranch>(this.detach_MstUserBranches));
 			this._MstUserForms = new EntitySet<MstUserForm>(new Action<MstUserForm>(this.attach_MstUserForms), new Action<MstUserForm>(this.detach_MstUserForms));
 			this._SysAuditTrails = new EntitySet<SysAuditTrail>(new Action<SysAuditTrail>(this.attach_SysAuditTrails), new Action<SysAuditTrail>(this.detach_SysAuditTrails));
 			this._TrnCollections = new EntitySet<TrnCollection>(new Action<TrnCollection>(this.attach_TrnCollections), new Action<TrnCollection>(this.detach_TrnCollections));
@@ -15217,6 +15259,19 @@ namespace easyfis.Data
 			set
 			{
 				this._MstUnits1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstUserBranch", Storage="_MstUserBranches", ThisKey="Id", OtherKey="UserId")]
+		public EntitySet<MstUserBranch> MstUserBranches
+		{
+			get
+			{
+				return this._MstUserBranches;
+			}
+			set
+			{
+				this._MstUserBranches.Assign(value);
 			}
 		}
 		
@@ -16529,6 +16584,18 @@ namespace easyfis.Data
 			entity.MstUser1 = null;
 		}
 		
+		private void attach_MstUserBranches(MstUserBranch entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_MstUserBranches(MstUserBranch entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
 		private void attach_MstUserForms(MstUserForm entity)
 		{
 			this.SendPropertyChanging();
@@ -17187,6 +17254,198 @@ namespace easyfis.Data
 		{
 			this.SendPropertyChanging();
 			entity.MstUser4 = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MstUserBranch")]
+	public partial class MstUserBranch : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private int _UserId;
+		
+		private int _BranchId;
+		
+		private EntityRef<MstBranch> _MstBranch;
+		
+		private EntityRef<MstUser> _MstUser;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnUserIdChanging(int value);
+    partial void OnUserIdChanged();
+    partial void OnBranchIdChanging(int value);
+    partial void OnBranchIdChanged();
+    #endregion
+		
+		public MstUserBranch()
+		{
+			this._MstBranch = default(EntityRef<MstBranch>);
+			this._MstUser = default(EntityRef<MstUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int NOT NULL")]
+		public int UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BranchId", DbType="Int NOT NULL")]
+		public int BranchId
+		{
+			get
+			{
+				return this._BranchId;
+			}
+			set
+			{
+				if ((this._BranchId != value))
+				{
+					if (this._MstBranch.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnBranchIdChanging(value);
+					this.SendPropertyChanging();
+					this._BranchId = value;
+					this.SendPropertyChanged("BranchId");
+					this.OnBranchIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstBranch_MstUserBranch", Storage="_MstBranch", ThisKey="BranchId", OtherKey="Id", IsForeignKey=true)]
+		public MstBranch MstBranch
+		{
+			get
+			{
+				return this._MstBranch.Entity;
+			}
+			set
+			{
+				MstBranch previousValue = this._MstBranch.Entity;
+				if (((previousValue != value) 
+							|| (this._MstBranch.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstBranch.Entity = null;
+						previousValue.MstUserBranches.Remove(this);
+					}
+					this._MstBranch.Entity = value;
+					if ((value != null))
+					{
+						value.MstUserBranches.Add(this);
+						this._BranchId = value.Id;
+					}
+					else
+					{
+						this._BranchId = default(int);
+					}
+					this.SendPropertyChanged("MstBranch");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstUserBranch", Storage="_MstUser", ThisKey="UserId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.MstUserBranches.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.MstUserBranches.Add(this);
+						this._UserId = value.Id;
+					}
+					else
+					{
+						this._UserId = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 	

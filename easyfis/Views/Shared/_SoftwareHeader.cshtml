@@ -167,30 +167,49 @@
     </div>
 </div>
 
+<div class="modal fade" id="userBranchesModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">User Branch</h4>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <span id="loadingUserBranches"></span>
+                </center>
+                <div id="userBranchContent">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="control-label col-sm-4">Branch</label>
+                            <div class="col-sm-8">
+                                <div class="comboBox-wide" id="cboUserBranches"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="updateUserBranch" onclick="updateUserBranchOnclick()"><i class="fa fa-save fa-fw"></i> Update</button>
+                <button class="btn btn-danger" id="closeUserBranch" data-dismiss="modal"><i class="fa fa-close fa-fw"></i> Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @*<script>
-    function displayCompanyImage() {
-        var url = window.location.href;
-        if (url == "http://abomar.easyfis.com") {
-            var imageElement = document.createElement("images");
-            var imageData = new Image();
-            imageData.src = "/Images/abomar/abomar-logo.png";
-            imageData.className = "img-custom-div";
-            imageElement.appendChild(imageData);
-            var photoDivElement = document.createElement("DIV");
-            var photoDiv = document.getElementById("photoDiv").appendChild(imageElement);
-            photoDiv.appendChild(photoDivElement);
-        } else {
-            if (url == "http://www.easyfis.com") {
+        function displayCompanyImage() {
+            var url = window.location.href;
+            if (url == "http://abomar.easyfis.com") {
                 var imageElement = document.createElement("images");
                 var imageData = new Image();
-                imageData.src = "/Images/innosoft/innosoft.png";
+                imageData.src = "/Images/abomar/abomar-logo.png";
                 imageData.className = "img-custom-div";
                 imageElement.appendChild(imageData);
                 var photoDivElement = document.createElement("DIV");
                 var photoDiv = document.getElementById("photoDiv").appendChild(imageElement);
                 photoDiv.appendChild(photoDivElement);
             } else {
-                if (url == "http://innosoft.easyfis.com") {
+                if (url == "http://www.easyfis.com") {
                     var imageElement = document.createElement("images");
                     var imageData = new Image();
                     imageData.src = "/Images/innosoft/innosoft.png";
@@ -200,20 +219,30 @@
                     var photoDiv = document.getElementById("photoDiv").appendChild(imageElement);
                     photoDiv.appendChild(photoDivElement);
                 } else {
-                    var imageElement = document.createElement("images");
-                    var imageData = new Image();
-                    imageData.src = "/Images/innosoft/innosoft.png";
-                    imageData.className = "img-custom-div";
-                    imageElement.appendChild(imageData);
-                    var photoDivElement = document.createElement("DIV");
-                    var photoDiv = document.getElementById("photoDiv").appendChild(imageElement);
-                    photoDiv.appendChild(photoDivElement);
+                    if (url == "http://innosoft.easyfis.com") {
+                        var imageElement = document.createElement("images");
+                        var imageData = new Image();
+                        imageData.src = "/Images/innosoft/innosoft.png";
+                        imageData.className = "img-custom-div";
+                        imageElement.appendChild(imageData);
+                        var photoDivElement = document.createElement("DIV");
+                        var photoDiv = document.getElementById("photoDiv").appendChild(imageElement);
+                        photoDiv.appendChild(photoDivElement);
+                    } else {
+                        var imageElement = document.createElement("images");
+                        var imageData = new Image();
+                        imageData.src = "/Images/innosoft/innosoft.png";
+                        imageData.className = "img-custom-div";
+                        imageElement.appendChild(imageData);
+                        var photoDivElement = document.createElement("DIV");
+                        var photoDiv = document.getElementById("photoDiv").appendChild(imageElement);
+                        photoDiv.appendChild(photoDivElement);
+                    }
                 }
             }
         }
-    }
 
-    window.onload = function () {
-        displayCompanyImage();
-    }
-</script>*@
+        window.onload = function () {
+            displayCompanyImage();
+        }
+    </script>*@
