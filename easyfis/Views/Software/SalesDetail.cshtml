@@ -3943,17 +3943,16 @@
             var netPrice = 0;
 
             // compute net price
-            if (document.getElementById('saleItem_DiscontInclusive').value == 'false') {
-                var price = priceExVATPrice / (1 + (VATPercentage / 100));
-                discountAmount = price * (discountRate / 100);
+            //if (document.getElementById('saleItem_DiscontInclusive').value == 'false') {
+                //var price = priceExVATPrice / (1 + (VATPercentage / 100));
+            discountAmount = priceExVATPrice * (discountRate / 100);
+            netPrice = priceExVATPrice - discountAmount;
+            //} else {
+                //discountAmount = priceExVATPrice * (discountRate / 100);
 
-                netPrice = price - discountAmount;
-            } else {
-                discountAmount = priceExVATPrice * (discountRate / 100);
-
-                netPrice = priceExVATPrice - discountAmount;
+                //netPrice = priceExVATPrice - discountAmount;
                 //netPrice = priceExVATPrice - (discountAmount / quantity);
-            }
+            //}
 
             var amount = netPrice * quantity;
             //var amount = (priceExVATPrice * quantity) - discountAmount;
@@ -3969,9 +3968,9 @@
             //document.getElementById('saleItem_Amount').value = amount.toLocaleString();
             //document.getElementById('saleItem_VATAmount').value = VATAmount.toLocaleString();
 
-            document.getElementById('saleItem_NetPrice').value = Math.round(netPrice).toLocaleString();
-            document.getElementById('saleItem_Amount').value = Math.round(amount).toLocaleString();
-            document.getElementById('saleItem_VATAmount').value = Math.round(VATAmount).toLocaleString();
+            document.getElementById('saleItem_NetPrice').value = netPrice.toLocaleString();
+            document.getElementById('saleItem_Amount').value = amount.toLocaleString();
+            document.getElementById('saleItem_VATAmount').value = VATAmount.toLocaleString();
         }
 
         // ====
