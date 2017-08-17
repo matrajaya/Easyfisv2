@@ -277,7 +277,7 @@
             customerCollectionView.editItem(customerCollectionView.currentItem);
             var customer = customerCollectionView.currentEditItem;
             if (customer.IsLocked) {
-                toastr.error("Delete not allowed when the selected record is locked!");
+                toastr.error("Delete is not allowed when the selected record is locked!");
             } else {
                 $('#deleteCustomerConfirm').modal({
                     show: true,
@@ -445,7 +445,7 @@
                                 "header": "L",
                                 "binding": "IsLocked",
                                 "allowSorting": true,
-                                "width": "0.5*"
+                                "width": 50
                             }
                 ],
                 autoGenerateColumns: false,

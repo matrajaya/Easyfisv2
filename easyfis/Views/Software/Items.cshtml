@@ -280,7 +280,7 @@
             itemCollectionView.editItem(itemCollectionView.currentItem);
             var item = itemCollectionView.currentEditItem;
             if (item.IsLocked) {
-                toastr.error("Delete not allowed when the selected record is locked!");
+                toastr.error("Delete is not allowed when the selected record is locked!");
             } else {
                 $('#deleteItemConfirm').modal({
                     show: true,
@@ -455,13 +455,13 @@
                                 "header": "I",
                                 "binding": "IsInventory",
                                 "allowSorting": true,
-                                "width": "0.5*"
+                                "width": 50
                             },
                             {
                                 "header": "L",
                                 "binding": "IsLocked",
                                 "allowSorting": true,
-                                "width": "0.5*"
+                                "width": 50
                             }
                 ],
                 autoGenerateColumns: false,

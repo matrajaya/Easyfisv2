@@ -165,11 +165,11 @@
     </div>
     <div id="c-mask" class="c-mask"></div>
 
+    <!-- PO Status -->
     <div class="modal fade" id="POStatus" role="dialog">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title" id="POStatusModalLabel">Purchase Order Status</h4>
                 </div>
                 <div class="modal-body">
@@ -202,61 +202,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary " id="cmdApplyPOStatusButton" onclick="cmdApplyAllPOStatusButton_OnClick()"><i class="fa fa-check"></i> Apply</button>
-                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button id="cmdApplyPOStatusButton"class="btn btn-primary" onclick="cmdApplyAllPOStatusButton_OnClick()"><i class="fa fa-check"></i> Apply</button>
+                    <button id="cmdPOStatusCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="journalDetail" role="dialog">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title" id="journalModalLabel"> Journal</h4>
-                </div>
-                <div class="modal-body">
-                    <center>
-                        <span id="loadingJournalGridList"></span>
-                    </center>
-                    <div id="journal_Content">
-                        <div id="journalFlexGrid" style="max-height: 250px;"></div>
-                        <br /><br />
-                        <div class="row">
-                            <div class="col-md-7"></div>
-                            <div class="col-md-5">
-                                <dl class="dl-horizontal">
-                                    <dt>
-                                        <b>Total Debit</b>
-                                    </dt>
-                                    <dd>
-                                        <input type="text" class="form-control  numberField  requiredStockTransferItem" id="totalDebitInJournal" placeholder="0.00" disabled />
-                                    </dd>
-                                    <dt>
-                                        <b>Total Credit</b>
-                                    </dt>
-                                    <dd>
-                                        <input type="text" class="form-control  numberField  requiredStockTransferItem" id="totalCreditInJournal" placeholder="0.00" disabled />
-                                    </dd>
-                                    <dt>
-                                        <b>Variance</b>
-                                    </dt>
-                                    <dd>
-                                        <input type="text" class="form-control  numberField  requiredStockTransferItem" id="variance" placeholder="0.00" disabled />
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button id="cmdJournalDetailCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <!-- RR Items -->
     <div class="modal fade" id="RRLinesEdit" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -328,8 +281,57 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary " id="cmdSaveRRLinesButton" onclick="cmdRRLinesSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button id="cmdRRLinesDetailCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button id="cmdSaveRRLinesButton" class="btn btn-primary" onclick="cmdRRLinesSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdRRLinesDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Journal -->
+    <div class="modal fade" id="journalDetail" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="journalModalLabel"> Journal</h4>
+                </div>
+                <div class="modal-body">
+                    <center>
+                        <span id="loadingJournalGridList"></span>
+                    </center>
+                    <div id="journal_Content">
+                        <div id="journalFlexGrid" style="max-height: 250px;"></div>
+                        <br /><br />
+                        <div class="row">
+                            <div class="col-md-7"></div>
+                            <div class="col-md-5">
+                                <dl class="dl-horizontal">
+                                    <dt>
+                                        <b>Total Debit</b>
+                                    </dt>
+                                    <dd>
+                                        <input type="text" class="form-control  numberField  requiredStockTransferItem" id="totalDebitInJournal" placeholder="0.00" disabled />
+                                    </dd>
+                                    <dt>
+                                        <b>Total Credit</b>
+                                    </dt>
+                                    <dd>
+                                        <input type="text" class="form-control  numberField  requiredStockTransferItem" id="totalCreditInJournal" placeholder="0.00" disabled />
+                                    </dd>
+                                    <dt>
+                                        <b>Variance</b>
+                                    </dt>
+                                    <dd>
+                                        <input type="text" class="form-control  numberField  requiredStockTransferItem" id="variance" placeholder="0.00" disabled />
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cmdJournalDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -342,54 +344,32 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Delete Item <i class="fa fa-trash"></i></h4>
+                    <h4 class="modal-title">Delete</h4>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this?
+                    Are you sure you want to delete this receiving receipt item?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger " id="cmdConfirmDeleteRRLines" onclick="cmdRRLinesConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteCloseButtonRRLines" class="btn btn-primary " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button id="cmdConfirmDeleteRRLines" class="btn btn-danger" onclick="cmdRRLinesConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButtonRRLines" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- RR Status PO Apply all? -->
+    <!-- RR Status PO Apply all -->
     <div class="modal fade" id="applyAllConfirmPOStatus" role="dialog">
         <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Apply <i class="fa fa-check"></i></h4>
                 </div>
                 <div class="modal-body">
-                    Are you sure that you want to apply?
+                    Are you sure that you want to apply all selected purchase order items?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary " id="cmdConfirmApplyAllPOStatusPOItems" onclick="btnConfrimApplyAllPOItems_OnClick()"><i class="fa fa-check"></i> Apply</button>
-                    <button id="cmdCloseButtonApplyAllPOStatusPOItems" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- RR Status PO Apply item? -->
-    <div class="modal fade" id="applyConfirmPOStatus" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Apply PO <i class="fa fa-check-square-o"></i></h4>
-                </div>
-                <div class="modal-body">
-                    Are you sure that you want to apply this Purchase Order Item?
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary " id="cmdConfirmApplyPOStatusPOItems" onclick="btnConfrimApplyPOItems_OnClick()"><i class="fa fa-check-square-o"></i> Apply</button>
-                    <button id="cmdCloseButtonApplyPOStatusPOItems" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button id="cmdConfirmApplyAllPOStatusPOItems" class="btn btn-primary" onclick="btnConfrimApplyAllPOItems_OnClick()"><i class="fa fa-check"></i> Apply</button>
+                    <button id="cmdCloseButtonApplyAllPOStatusPOItems" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -873,7 +853,7 @@
                         "isContentHtml": true
                     },
                     {
-                        "header": "VAT Amount",
+                        "header": "VAT Amt.",
                         "binding": "VATAmount",
                         "allowSorting": true,
                         "width": 100
@@ -887,7 +867,7 @@
                         "isContentHtml": true
                     },
                     {
-                        "header": "WTAX Amount",
+                        "header": "WTAX Amt.",
                         "binding": "WTAXAmount",
                         "allowSorting": true,
                         "width": 100
@@ -963,12 +943,12 @@
             receivingReceiptItemGrid.columnHeaders.setCellData(0, 11, 'VAT');
 
             receivingReceiptItemGrid.columnHeaders.columns[12].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 12, 'VAT Amount');
+            receivingReceiptItemGrid.columnHeaders.setCellData(0, 12, 'VAT Amt.');
 
             receivingReceiptItemGrid.columnHeaders.setCellData(0, 13, 'WTAX');
 
             receivingReceiptItemGrid.columnHeaders.columns[14].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 14, 'WTAX Amount');
+            receivingReceiptItemGrid.columnHeaders.setCellData(0, 14, 'WTAX Amt.');
 
             for (var columnBasicUnitConversion = 15; columnBasicUnitConversion <= 17; columnBasicUnitConversion++) {
                 receivingReceiptItemGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Basic Unit Conversion');

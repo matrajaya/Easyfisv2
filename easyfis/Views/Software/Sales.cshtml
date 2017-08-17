@@ -12,14 +12,14 @@
     <link rel="shortcut icon" href="~/Images/icon/easyfislogomini.ico">
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Sales Invoice 
+                        Sales Invoice
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -35,7 +35,7 @@
                                 <td style="width: 59%">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search">
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search...">
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
@@ -51,17 +51,15 @@
                             <tr>
                                 <td style="width: 29%">
                                     <div class="input-group">
-                                        <span class="input-group-addon">Start Date</span>
-                                        <div id="filterDate"></div>
-                                        <input type="hidden" id="filterDate_data" />
+                                        <span class="input-group-addon"><b>Start Date</b></span>
+                                        <div id="cboStartDateFilter"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 29%">
                                     <div class="input-group">
-                                        <span class="input-group-addon">End Date</span>
-                                        <div id="filterEndDate"></div>
-                                        <input type="hidden" id="filterEndDate_data" />
+                                        <span class="input-group-addon"><b>End Date</b></span>
+                                        <div id="cboEndDateFilter"></div>
                                     </div>
                                 </td>
                                 <td style="width: 41%"></td>
@@ -69,11 +67,7 @@
                         </table>
                     </div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div id="SalesGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
+                        <div id="salesFlexGrid" class="grid" align="left"></div>
                     </div>
                     <div class="panel-footer">
                         <div class="row">
@@ -99,42 +93,21 @@
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
-    <!-- Sales Delete -->
+    <!-- Sales Delete Modal -->
     <div class="modal fade" id="deleteSalesConfirm" role="dialog">
         <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Delete Sale <i class="fa fa-trash"></i></h4>
+                    <h4 class="modal-title">Delete</h4>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this?
+                    Are you sure you want to delete this sales invoice?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger " id="cmdConfirmDeleteSales" onclick="cmdSalesConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Lock -->
-    <div class="modal fade" id="deleteRecordLock" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
-                </div>
-                <div class="modal-body">
-                    Sorry, the record is lock! It can't be deleted!
-                </div>
-                <div class="modal-footer">
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"> Okay</button>
+                    <button id="cmdConfirmDeleteSales" class="btn btn-danger" onclick="cmdSalesConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -145,25 +118,58 @@
         // ================
         // Global Variables
         // ================
-        var sales;
-        var salesGrid;
+        var salesCollectionView;
+        var salesFlexGrid = new wijmo.grid.FlexGrid('#salesFlexGrid');
         var btnFirstPageGrid;
         var btnPreviousPageGrid;
         var btnNextPageGrid;
         var btnLastPageGrid;
         var btnCurrentPageGrid;
+        var cboStartDateFilter = new wijmo.input.InputDate('#cboStartDateFilter');
+        var cboEndDateFilter = new wijmo.input.InputDate('#cboEndDateFilter');
+        var isStartDateFirstSelect = true;
+        var isEndDateFirstSelect = true;
 
-        var isFirstSelect = true;
+        // ===========
+        // Date Filter
+        // ===========
+        function cboDateFilters() {
+            cboStartDateFilter.dispose();
+            cboStartDateFilter = new wijmo.input.InputDate('#cboStartDateFilter', {
+                format: 'MM-dd-yyyy',
+                value: new Date(),
+                onValueChanged: function () {
+                    if (!isStartDateFirstSelect) {
+                        createSalesFlexGrid();
+                    } else {
+                        isStartDateFirstSelect = false;
+                    }
+                }
+            });
+
+            cboEndDateFilter.dispose();
+            cboEndDateFilter = new wijmo.input.InputDate('#cboEndDateFilter', {
+                format: 'MM-dd-yyyy',
+                value: new Date(),
+                onValueChanged: function () {
+                    if (!isEndDateFirstSelect) {
+                        createSalesFlexGrid();
+                    } else {
+                        isEndDateFirstSelect = false;
+                    }
+                }
+            });
+        }
 
         // ==========================
         // GET Sales Filter By SIDate
         // ==========================
         function getSalesFilterBySIDate() {
-            var sales = new wijmo.collections.ObservableArray;
-            var startDate = document.getElementById('filterDate_data').value;
-            var endDate = document.getElementById('filterEndDate_data').value;
-
             NProgress.start();
+            var startDate = cboStartDateFilter.value.toLocaleDateString().replace(/\//g, '-');
+            var endDate = cboEndDateFilter.value.toLocaleDateString().replace(/\//g, '-');
+
+            var salesObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/listSalesInvoiceFilterBySIDate/' + startDate + '/' + endDate,
                 cache: false,
@@ -175,37 +181,20 @@
                         for (i = 0; i < Results.length; i++) {
 
                             var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled;
-
-                            if (canDelete == "True") {
-                                deleteDisabled = "";
-                            } else if (canDelete == "False") {
+                            var deleteDisabled = "";
+                            if (canDelete == "False") {
                                 deleteDisabled = "disabled";
-                            } else {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var btnDeleteId;
-                            if (Results[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdSalesDeleteLockButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                            } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdSalesDeleteButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             }
 
                             var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled;
-
-                            if (canEdit == "True") {
-                                editDisabled = "";
-                            } else if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            } else {
+                            var editDisabled = "";
+                            if (canEdit == "False") {
                                 editDisabled = "disabled";
                             }
 
-                            sales.push({
+                            salesObservableArray.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' id='salesEditButton' onclick='cmdSalesEditButton_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: btnDeleteId,
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdSalesDeleteButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 BranchId: Results[i]["BranchId"],
                                 Branch: Results[i]["Branch"],
@@ -240,26 +229,18 @@
                             });
                         }
                     }
+
                     NProgress.done();
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
-            return sales;
-        }
 
-        // ========================
-        // Sales Delete Lock Button
-        // ========================
-        function cmdSalesDeleteLockButton_OnClick() {
-            toastr.error("Record Locked");
+            return salesObservableArray;
         }
 
         // ================
         // Sales Add Button
         // ================
         function btnAddSales_OnClick() {
-            //window.location = '/Software/SalesDetail';
             document.getElementById('btnAddSales').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Adding";
             $('#btnAddSales').prop('disabled', true);
             $('#btnCloseSales').prop('disabled', true);
@@ -275,15 +256,16 @@
                             window.location = '/Software/SalesDetail?SalesId=' + id;
                         } else {
                             toastr.error("Internal Server Error");
+                            document.getElementById('btnAddSales').innerHTML = "<i class='fa fa-plus'></i> Add";
+                            $('#btnAddSales').prop('disabled', false);
+                            $('#btnCloseSales').prop('disabled', false);
                         }
                     }
                 });
-            } else if (canAccessToDetailPage == "False") {
-                window.location = '/Software/Forbidden';
             } else {
-                document.getElementById('btnAddSales').innerHTML = "<i class='fa fa-plus'></i> Add";
-                $('#btnAddSales').prop('disabled', false);
-                $('#btnCloseSales').prop('disabled', false);
+                if (canAccessToDetailPage == "False") {
+                    window.location = '/Software/Forbidden';
+                }
             }
         }
 
@@ -291,8 +273,8 @@
         // Sales Edit Button
         // =================
         function cmdSalesEditButton_OnClick() {
-            sales.editItem(sales.currentItem);
-            var sale = sales.currentEditItem;
+            salesCollectionView.editItem(salesCollectionView.currentItem);
+            var sale = salesCollectionView.currentEditItem;
             var saleId = sale.Id;
             window.location = '/Software/SalesDetail?SalesId=' + saleId;
         }
@@ -308,23 +290,30 @@
         // Sales delete Button
         // ===================
         function cmdSalesDeleteButton_OnClick() {
-            $('#deleteSalesConfirm').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            salesCollectionView.editItem(salesCollectionView.currentItem);
+            var sale = salesCollectionView.currentEditItem;
+            if (sale.IsLocked) {
+                toastr.error("Delete is not allowed when the selected record is locked!");
+            } else {
+                $('#deleteSalesConfirm').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
 
-            document.getElementById('cmdConfirmDeleteSales').innerHTML = "<i class='fa fa-trash'></i> Delete";
-            $("#cmdConfirmDeleteSales").prop("disabled", false);
-            $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+                document.getElementById('cmdConfirmDeleteSales').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                $("#cmdConfirmDeleteSales").prop("disabled", false);
+                $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+            }
         }
+
         // Sales Confirm Delete Button
         function cmdSalesConfirmDeleteButton_OnClick() {
             document.getElementById('cmdConfirmDeleteSales').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $("#cmdConfirmDeleteSales").prop("disabled", true);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
 
-            sales.editItem(sales.currentItem);
-            var id = sales.currentEditItem.Id;
+            salesCollectionView.editItem(salesCollectionView.currentItem);
+            var id = salesCollectionView.currentEditItem.Id;
             $.ajax({
                 url: '/api/deleteSales/' + id,
                 type: "DELETE",
@@ -332,47 +321,22 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $("#cmdConfirmDeleteSales").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Delete Successful");
-
                         $('#deleteSalesConfirm').modal('hide');
 
-                        var SIDateFilter = document.getElementById('filterDate_data').value;
-                        sales = new wijmo.collections.CollectionView(getSalesFilterBySIDate(SIDateFilter));
-                        sales.canFilter = true;
-                        sales.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            sales.refresh();
-                        });
-                        sales.filter = function (item) {
-                            return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Customer.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Branch.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        sales.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsSales();
-                        });
-                        sales.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        salesGrid.itemsSource = sales;
-                        salesGrid.trackChanges = true;
+                        createSalesFlexGrid();
                     },
                     404: function () {
                         toastr.error("Not Found");
                         $('#deleteSalesConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteSales').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteSales").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
                         $('#deleteSalesConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteSales').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteSales").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     }
@@ -384,7 +348,7 @@
         // FlexGrid Selection
         // ===================
         function updateDetails() {
-            var item = sales.currentItem;
+            var item = salesCollectionView.currentItem;
             document.getElementById('createdBy').innerHTML = item.CreatedBy;
             document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
             document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
@@ -395,17 +359,17 @@
         // Navigation Buttons for Sales
         // ============================
         function updateNavigateButtonsSales() {
-            if (sales.pageSize <= 0) {
+            if (salesCollectionView.pageSize <= 0) {
                 document.getElementById('naviagtionPageGrid').style.display = 'none';
                 return;
             }
             document.getElementById('naviagtionPageGrid').style.display = 'block';
-            if (sales.pageIndex === 0) {
+            if (salesCollectionView.pageIndex === 0) {
                 btnFirstPageGrid.setAttribute('disabled', 'disabled');
                 btnPreviousPageGrid.setAttribute('disabled', 'disabled');
                 btnNextPageGrid.removeAttribute('disabled');
                 btnLastPageGrid.removeAttribute('disabled');
-            } else if (sales.pageIndex === (sales.pageCount - 1)) {
+            } else if (salesCollectionView.pageIndex === (salesCollectionView.pageCount - 1)) {
                 btnFirstPageGrid.removeAttribute('disabled');
                 btnPreviousPageGrid.removeAttribute('disabled');
                 btnLastPageGrid.setAttribute('disabled', 'disabled');
@@ -416,135 +380,42 @@
                 btnNextPageGrid.removeAttribute('disabled');
                 btnLastPageGrid.removeAttribute('disabled');
             }
-            btnCurrentPageGrid.innerHTML = (sales.pageIndex + 1) + ' / ' + sales.pageCount;
+            btnCurrentPageGrid.innerHTML = (salesCollectionView.pageIndex + 1) + ' / ' + salesCollectionView.pageCount;
         }
 
-        // ===========
-        // Onload Page
-        // ===========
-        $(document).ready(function () {
-            var SIDateFilter_Date = new Date();
-            document.getElementById("filterDate_data").value = [SIDateFilter_Date.getMonth() + 1, SIDateFilter_Date.getDate(), SIDateFilter_Date.getFullYear()].join('-');
-            document.getElementById("filterEndDate_data").value = [SIDateFilter_Date.getMonth() + 1, SIDateFilter_Date.getDate(), SIDateFilter_Date.getFullYear()].join('-');
-
-            var cboFilterDate;
-            cboFilterDate = new wijmo.input.InputDate('#filterDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                onValueChanged: function () {
-                    if (!isFirstSelect) {
-                        document.getElementById('filterDate_data').value = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
-                        var SIDateFilterValue = document.getElementById('filterDate_data').value;
-
-                        $('body').removeClass('modal-open');
-                        $(".modal-backdrop").remove();
-
-                        sales = new wijmo.collections.CollectionView(getSalesFilterBySIDate(SIDateFilterValue));
-                        sales.canFilter = true;
-                        sales.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            sales.refresh();
-                        });
-                        sales.filter = function (item) {
-                            return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Customer.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Branch.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        sales.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsSales();
-                        });
-                        sales.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        salesGrid.itemsSource = sales;
-                        salesGrid.trackChanges = true;
-
-                        updateNavigateButtonsSales();
-                    }
-                    else {
-                        isFirstSelect = false;
-                    }
-                }
-            });
-
-            var cboFilterEndDate;
-            cboFilterEndDate = new wijmo.input.InputDate('#filterEndDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                onValueChanged: function () {
-                    if (!isFirstSelect) {
-                        document.getElementById('filterEndDate_data').value = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
-                        var SIDateFilterValue = document.getElementById('filterEndDate_data').value;
-
-                        $('body').removeClass('modal-open');
-                        $(".modal-backdrop").remove();
-
-                        sales = new wijmo.collections.CollectionView(getSalesFilterBySIDate());
-                        sales.canFilter = true;
-                        sales.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            sales.refresh();
-                        });
-                        sales.filter = function (item) {
-                            return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Customer.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Branch.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        sales.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsSales();
-                        });
-                        sales.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        salesGrid.itemsSource = sales;
-                        salesGrid.trackChanges = true;
-
-                        updateNavigateButtonsSales();
-                    }
-                    else {
-                        isFirstSelect = false;
-                    }
-                }
-            });
-
-            var SIDateFilter = document.getElementById('filterDate_data').value;
-            sales = new wijmo.collections.CollectionView(getSalesFilterBySIDate());
-            sales.canFilter = true;
-            sales.pageSize = 15;
+        // ==============
+        // Sales FlexGrid
+        // ==============
+        function createSalesFlexGrid() {
+            salesCollectionView = new wijmo.collections.CollectionView(getSalesFilterBySIDate());
+            salesCollectionView.canFilter = true;
+            salesCollectionView.pageSize = 15;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
-                sales.refresh();
+                salesCollectionView.refresh();
             });
-            sales.filter = function (item) {
+
+            salesCollectionView.filter = function (item) {
                 return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1)
                                    || (item.Customer.toLowerCase().indexOf(filterText) > -1)
                                    || (item.Branch.toLowerCase().indexOf(filterText) > -1)
                                    || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
             }
-            sales.collectionChanged.addHandler(function (sender, args) {
+
+            salesCollectionView.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsSales();
             });
-            sales.currentChanged.addHandler(function (sender, args) {
+
+            salesCollectionView.currentChanged.addHandler(function (sender, args) {
                 updateDetails();
             });
 
             // Flex Grid
-            salesGrid = new wijmo.grid.FlexGrid('#SalesGrid');
-            salesGrid.initialize({
+            salesFlexGrid.dispose();
+            salesFlexGrid = new wijmo.grid.FlexGrid('#salesFlexGrid');
+            salesFlexGrid.initialize({
                 columns: [
                             {
                                 "header": "Edit",
@@ -568,37 +439,37 @@
                                 "header": "SI Number",
                                 "binding": "SINumber",
                                 "allowSorting": true,
-                                "width": 110
+                                "width": "1.5*"
                             },
                             {
                                 "header": "SI Date",
                                 "binding": "SIDate",
                                 "allowSorting": true,
-                                "width": 100
+                                "width": "1.5*"
                             },
                             {
                                 "header": "Branch",
                                 "binding": "Branch",
                                 "allowSorting": true,
-                                "width": 150
+                                "width": "2.5*"
                             },
                             {
                                 "header": "Customer",
                                 "binding": "Customer",
                                 "allowSorting": true,
-                                "width": 210
+                                "width": "3*"
                             },
                             {
                                 "header": "Doc Reference",
                                 "binding": "DocumentReference",
                                 "allowSorting": true,
-                                "width": 150
+                                "width": "2*"
                             },
                             {
                                 "header": "Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
-                                "width": 170
+                                "width": "2*"
                             },
                             {
                                 "header": "L",
@@ -608,16 +479,15 @@
                             }
                 ],
                 autoGenerateColumns: false,
-                itemsSource: sales,
+                itemsSource: salesCollectionView,
                 isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
 
-            salesGrid.trackChanges = true;
+            salesFlexGrid.trackChanges = true;
 
-            //Navigation button
             btnFirstPageGrid = document.getElementById('btnMoveToFirstPageGrid');
             btnPreviousPageGrid = document.getElementById('btnMoveToPreviousPageGrid');
             btnNextPageGrid = document.getElementById('btnMoveToNextPageGrid');
@@ -627,30 +497,37 @@
             updateNavigateButtonsSales();
 
             btnFirstPageGrid.addEventListener('click', function () {
-                sales.moveToFirstPage();
+                salesCollectionView.moveToFirstPage();
                 updateNavigateButtonsSales();
             });
+
             btnPreviousPageGrid.addEventListener('click', function () {
-                sales.moveToPreviousPage();
+                salesCollectionView.moveToPreviousPage();
                 updateNavigateButtonsSales();
             });
+
             btnNextPageGrid.addEventListener('click', function () {
-                sales.moveToNextPage();
+                salesCollectionView.moveToNextPage();
                 updateNavigateButtonsSales();
             });
+
             btnLastPageGrid.addEventListener('click', function () {
-                sales.moveToLastPage();
+                salesCollectionView.moveToLastPage();
                 updateNavigateButtonsSales();
             });
 
             var canAdd = "@ViewData["CanAdd"]";
-            if (canAdd == "True") {
-                $("#btnAddSales").prop("disabled", false)
-            } else if (canAdd == "False") {
-                $("#btnAddSales").prop("disabled", true)
-            } else {
-                $("#btnAddSales").prop("disabled", true)
+            if (canAdd == "False") {
+                $("#btnAddSales").prop("disabled", true);
             }
+        }
+
+        // ===========
+        // Onload Page
+        // ===========
+        $(document).ready(function () {
+            cboDateFilters();
+            createSalesFlexGrid();
         });
     </script>
     <script type="text/javascript">

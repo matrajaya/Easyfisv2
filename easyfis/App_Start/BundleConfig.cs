@@ -11,6 +11,7 @@ namespace easyfis
             // Landing page | Home- css
             bundles.Add(new StyleBundle("~/Content/Home-css").Include(
                         "~/Content/bootstrap.min.css",
+                        "~/Content/bootstrap-theme.min.css",
                         "~/Content/toastr.css",
                         "~/Content/font-awesome.min.css",
                         "~/Content/wijmo.min.css",
@@ -33,6 +34,7 @@ namespace easyfis
             // Software - css
             bundles.Add(new StyleBundle("~/Content/Software-css").Include(
                       "~/Content/bootstrap.min.css",
+                      "~/Content/bootstrap-theme.min.css",
                       "~/Content/toastr.css",
                       "~/Content/font-awesome.min.css",
                       "~/Content/wijmo.min.css",
@@ -42,6 +44,7 @@ namespace easyfis
             // System - css
             bundles.Add(new StyleBundle("~/Content/System-css").Include(
                       "~/Content/bootstrap.min.css",
+                      "~/Content/bootstrap-theme.min.css",
                       "~/Content/toastr.css",
                       "~/Content/font-awesome.min.css",
                       "~/Content/wijmo.min.css",

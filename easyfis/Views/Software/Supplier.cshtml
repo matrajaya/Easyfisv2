@@ -277,7 +277,7 @@
             supplierCollectionView.editItem(supplierCollectionView.currentItem);
             var supplier = supplierCollectionView.currentEditItem;
             if (supplier.IsLocked) {
-                toastr.error("Delete not allowed when the selected record is locked!");
+                toastr.error("Delete is not allowed when the selected record is locked!");
             } else {
                 $('#deleteSupplierConfirm').modal({
                     show: true,
@@ -445,7 +445,7 @@
                                 "header": "L",
                                 "binding": "IsLocked",
                                 "allowSorting": true,
-                                "width": "0.5*"
+                                "width": 50
                             }
                 ],
                 autoGenerateColumns: false,
