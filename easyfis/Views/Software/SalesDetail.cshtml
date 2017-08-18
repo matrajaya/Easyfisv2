@@ -1947,11 +1947,15 @@
                     NProgress.done();
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
+
+                            var InventoryDateResult = new Date(Results[i]["InventoryDate"])
+                            var InventoryDate = ('0' + (InventoryDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + InventoryDateResult.getDate()).slice(-2) + '-' + InventoryDateResult.getFullYear();
+
                             inventoryObservableArray.push({
                                 Id: Results[i]["Id"],
                                 BranchId: Results[i]["BranchId"],
                                 Branch: Results[i]["Branch"],
-                                InventoryDate: Results[i]["InventoryDate"],
+                                InventoryDate: InventoryDate,
                                 ArticleId: Results[i]["ArticleId"],
                                 Article: Results[i]["Article"],
                                 ArticleInventoryId: Results[i]["ArticleInventoryId"],

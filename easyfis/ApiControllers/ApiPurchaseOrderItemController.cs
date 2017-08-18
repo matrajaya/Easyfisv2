@@ -92,8 +92,7 @@ namespace easyfis.Controllers
                                      where d.POId == Convert.ToInt32(POId)
                                      group d by new
                                      {
-                                         POId = d.POId,
-                                         PO = d.TrnPurchaseOrder.PONumber,
+                                         PO = d.TrnPurchaseOrder,
                                          ItemId = d.ItemId,
                                          Item = d.MstArticle.Article,
                                          ItemCode = d.MstArticle.ManualArticleCode,
@@ -102,8 +101,9 @@ namespace easyfis.Controllers
                                      } into g
                                      select new Models.TrnPurchaseOrderItem
                                      {
-                                         POId = g.Key.POId,
-                                         PO = g.Key.PO,
+                                         POId = g.Key.PO.Id,
+                                         PO = g.Key.PO.PONumber,
+                                         Particulars = g.Key.PO.TrnPurchaseOrderItems.Where(c => c.ItemId == g.Key.ItemId).Select(c=>c.Particulars).FirstOrDefault(),
                                          ItemId = g.Key.ItemId,
                                          Item = g.Key.Item,
                                          ItemCode = g.Key.ItemCode,

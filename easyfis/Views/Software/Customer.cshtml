@@ -203,7 +203,7 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (id) {
                         if (id > 0) {
-                            window.location = '/Software/CustomerDetail?CustomerId=' + id;
+                            window.location = '/Software/CustomerDetail?id=' + id;
                         } else {
                             toastr.error("Internal Server Error");
                             document.getElementById('btnAddCustomer').innerHTML = "<i class='fa fa-plus'></i> Add";
@@ -234,7 +234,7 @@
             var customer = customerCollectionView.currentEditItem;
             var customerId = customer.Id;
 
-            window.location = '/Software/CustomerDetail?CustomerId=' + customerId;
+            window.location = '/Software/CustomerDetail?id=' + customerId;
         }
 
         // =========================

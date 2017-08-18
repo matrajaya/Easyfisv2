@@ -1222,6 +1222,7 @@ namespace easyfis.Controllers
                     {
                         updateArticle.ArticleCode = article.ArticleCode;
                         updateArticle.Article = article.Article;
+                        updateArticle.ManualArticleCode = article.ManualArticleCode;
                         updateArticle.ArticleTypeId = Convert.ToInt32(articleTypeId);
                         updateArticle.ArticleGroupId = article.ArticleGroupId;
                         updateArticle.AccountId = article.AccountId;
@@ -1244,6 +1245,7 @@ namespace easyfis.Controllers
                     {
                         updateArticle.ArticleCode = article.ArticleCode;
                         updateArticle.Article = article.Article;
+                        updateArticle.ManualArticleCode = article.ManualArticleCode;
                         updateArticle.ArticleTypeId = Convert.ToInt32(articleTypeId);
                         updateArticle.ArticleGroupId = article.ArticleGroupId;
                         updateArticle.AccountId = article.AccountId;

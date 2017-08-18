@@ -236,7 +236,7 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (id) {
                         if (id > 0) {
-                            window.location = '/Software/SupplierDetail?SupplierId=' + id;
+                            window.location = '/Software/SupplierDetail?id=' + id;
                         } else {
                             toastr.error("Something's went wrong.");
                             document.getElementById('btnAddSupplier').innerHTML = "<i class='fa fa-plus'></i> Add";
@@ -267,7 +267,7 @@
             var supplier = supplierCollectionView.currentEditItem;
             var supplierId = supplier.Id;
 
-            window.location = '/Software/SupplierDetail?SupplierId=' + supplierId;
+            window.location = '/Software/SupplierDetail?id=' + supplierId;
         }
 
         // =====================

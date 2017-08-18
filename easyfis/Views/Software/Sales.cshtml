@@ -192,6 +192,9 @@
                                 editDisabled = "disabled";
                             }
 
+                            var SIDateResult = new Date(Results[i]["SIDate"])
+                            var SIDate = ('0' + (SIDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + SIDateResult.getDate()).slice(-2) + '-' + SIDateResult.getFullYear();
+
                             salesObservableArray.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' id='salesEditButton' onclick='cmdSalesEditButton_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdSalesDeleteButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
@@ -199,7 +202,7 @@
                                 BranchId: Results[i]["BranchId"],
                                 Branch: Results[i]["Branch"],
                                 SINumber: Results[i]["SINumber"],
-                                SIDate: Results[i]["SIDate"],
+                                SIDate: SIDate,
                                 CustomerId: Results[i]["CustomerId"],
                                 Customer: Results[i]["Customer"],
                                 TermId: Results[i]["TermId"],

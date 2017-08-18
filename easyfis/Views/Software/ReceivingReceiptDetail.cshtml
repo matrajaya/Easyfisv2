@@ -362,7 +362,7 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Apply <i class="fa fa-check"></i></h4>
+                    <h4 class="modal-title">Apply</h4>
                 </div>
                 <div class="modal-body">
                     Are you sure that you want to apply all selected purchase order items?
@@ -1197,6 +1197,7 @@
                                     BaseQuantity: Results[i]["BaseQuantity"],
                                     BaseCost: Results[i]["BaseCost"],
                                     BaseUnit: Results[i]["BaseUnit"],
+                                    Particulars: Results[i]["Particulars"]
                                 });
                             }
                         } else {
@@ -1392,7 +1393,7 @@
                     POItemObject.RRId = id;
                     POItemObject.POId = item.POId;
                     POItemObject.ItemId = item.ItemId;
-                    POItemObject.Particulars = "NA";
+                    POItemObject.Particulars = item.Particulars;
                     POItemObject.BaseUnitId = item.BaseUnitId;
                     POItemObject.BaseQuantity = item.QuantityBalanceValue;
                     POItemObject.BaseCost = item.BaseCost;
@@ -2092,11 +2093,15 @@
                 success: function (Results) {
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
+
+                            var InventoryDateResult = new Date(Results[i]["InventoryDate"])
+                            var InventoryDate = ('0' + (InventoryDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + InventoryDateResult.getDate()).slice(-2) + '-' + InventoryDateResult.getFullYear();
+
                             inventoryObservableArray.push({
                                 Id: Results[i]["Id"],
                                 BranchId: Results[i]["BranchId"],
                                 Branch: Results[i]["Branch"],
-                                InventoryDate: Results[i]["InventoryDate"],
+                                InventoryDate: InventoryDate,
                                 ArticleId: Results[i]["ArticleId"],
                                 Article: Results[i]["Article"],
                                 ArticleInventoryId: Results[i]["ArticleInventoryId"],
