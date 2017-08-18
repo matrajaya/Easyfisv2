@@ -142,7 +142,6 @@ namespace easyfis.Controllers
                                      && d.ArticleId == Convert.ToInt32(articleId)
                                      && d.MstArticle.IsLocked == true
                                      && d.MstArticle.IsInventory == true
-                                     && d.Quantity > 0
                                      select new Models.MstArticleInventory
                                      {
                                          Id = d.Id,

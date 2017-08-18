@@ -403,7 +403,7 @@
         var cboForWTAXTaxType = new wijmo.input.ComboBox('#cboForWTAXTaxType');
         var receivingReceiptId = 0;
         var inventoryCollectionView;
-        var inventoryFlexGrid = new wijmo.grid.FlexGrid('#inventoryFlexGrid')
+        var inventoryFlexGrid;
         var journalCollectionView;
         var journalFlexGrid = new wijmo.grid.FlexGrid('#journalFlexGrid');
 
@@ -675,6 +675,7 @@
                         }
 
                         createReceivingReceiptFlexGrid();
+                        createInventoryFlexGrid();
                     }
                 });
             } else {
@@ -760,6 +761,15 @@
             }
 
             return itemsObservableArray
+        }
+
+        // ========================
+        // Refresh RR Item Flexgrid
+        // ========================
+        function refreshReceivingReceiptFlexGrid() {
+            receivingReceiptItemsCollection = new wijmo.collections.CollectionView(getRecevingReceiptItem());
+            receivingReceiptItemGrid.itemsSource = receivingReceiptItemsCollection;
+            receivingReceiptItemGrid.trackChanges = true;
         }
 
         // ====================
@@ -1133,10 +1143,15 @@
                         }
                     }
 
+                    var disabled = true;
+                    if (purchaseOrderStatusListResults.length > 0) {
+                        disabled = false;
+                    }
+
                     cboPONumberPOStatus.dispose();
                     cboPONumberPOStatus = new wijmo.input.ComboBox('#cboPONumberPOStatus', {
+                        disabled: disabled,
                         isEditable: false,
-                        placeholder: "Select PO Number",
                         itemsSource: purchaseOrdertatusObservableArray,
                         displayMemberPath: "PODetails",
                         selectedValuePath: "Id",
@@ -1146,7 +1161,6 @@
                     });
 
                     setTimeout(function () { getPOBySupplierInPOStatus(); }, 1000);
-
                 }
             });
         }
@@ -1156,42 +1170,48 @@
         // ========================================
         function getPurchaseOrderItemForPOSTatus() {
             var purchaseOrderStatusObservableArray = new wijmo.collections.ObservableArray;
-            var POId = cboPONumberPOStatus.selectedValue;
-            $.ajax({
-                url: '/api/listPurchaseOrderItemForPOStatusByPOId/' + POId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    $('#cmdApplyPOStatusButton').prop("disabled", false);
-                    if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            purchaseOrderStatusObservableArray.push({
-                                Id: Results[i]["Id"],
-                                ItemId: Results[i]["ItemId"],
-                                Item: Results[i]["Item"],
-                                ItemCode: Results[i]["ItemCode"],
-                                POId: Results[i]["POId"],
-                                Received: Results[i]["Received"],
-                                Balance: Results[i]["BaseQuantity"] - Results[i]["Received"],
-                                QuantityBalanceValue: Results[i]["BaseQuantity"] - Results[i]["Received"],
-                                Amount: Results[i]["Amount"],
-                                Pick: (Results[i]["BaseQuantity"] - Results[i]["Received"]) == 0 ? "<button class='btn btn-primary btn-xs' onclick='pickQuantity_OnClick()'><i class='fa fa-hand-o-right'></i></button>" : "<button class='btn btn-warning btn-xs' onclick='pickReverseQuantity_OnClick()'><i class='fa fa-hand-o-left'></i></button>",
-                                BaseUnitId: Results[i]["BaseUnitId"],
-                                BaseQuantity: Results[i]["BaseQuantity"],
-                                BaseCost: Results[i]["BaseCost"],
-                                BaseUnit: Results[i]["BaseUnit"],
-                            });
+            if (cboPONumberPOStatus.selectedValue != null) {
+                var POId = cboPONumberPOStatus.selectedValue;
+                $.ajax({
+                    url: '/api/listPurchaseOrderItemForPOStatusByPOId/' + POId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        $('#cmdApplyPOStatusButton').prop("disabled", false);
+                        if (Results.length > 0) {
+                            for (i = 0; i < Results.length; i++) {
+                                purchaseOrderStatusObservableArray.push({
+                                    Id: Results[i]["Id"],
+                                    ItemId: Results[i]["ItemId"],
+                                    Item: Results[i]["Item"],
+                                    ItemCode: Results[i]["ItemCode"],
+                                    POId: Results[i]["POId"],
+                                    Received: Results[i]["Received"],
+                                    Balance: Results[i]["BaseQuantity"] - Results[i]["Received"],
+                                    QuantityBalanceValue: Results[i]["BaseQuantity"] - Results[i]["Received"],
+                                    Amount: Results[i]["Amount"],
+                                    Pick: (Results[i]["BaseQuantity"] - Results[i]["Received"]) == 0 ? "<button class='btn btn-primary btn-xs' onclick='pickQuantity_OnClick()'><i class='fa fa-hand-o-right'></i></button>" : "<button class='btn btn-warning btn-xs' onclick='pickReverseQuantity_OnClick()'><i class='fa fa-hand-o-left'></i></button>",
+                                    BaseUnitId: Results[i]["BaseUnitId"],
+                                    BaseQuantity: Results[i]["BaseQuantity"],
+                                    BaseCost: Results[i]["BaseCost"],
+                                    BaseUnit: Results[i]["BaseUnit"],
+                                });
+                            }
+                        } else {
+                            $('#cmdApplyPOStatusButton').prop("disabled", true);
                         }
-                    } else {
-                        $('#cmdApplyPOStatusButton').prop("disabled", true);
-                    }
 
-                    $('#loadingPOStatus').hide();
-                    $('#loadingPOPanel').show();
-                }
-            });
+                        $('#loadingPOStatus').hide();
+                        $('#loadingPOPanel').show();
+                    }
+                });
+            } else {
+                $('#cmdApplyPOStatusButton').prop("disabled", true);
+                $('#loadingPOStatus').hide();
+                $('#loadingPOPanel').show();
+            }
 
             return purchaseOrderStatusObservableArray;
         }
@@ -1394,9 +1414,7 @@
                                 $('#applyAllConfirmPOStatus').modal('hide');
                                 $('#POStatus').modal('hide');
 
-                                receivingReceiptItemsCollection = new wijmo.collections.CollectionView(getRecevingReceiptItem());
-                                receivingReceiptItemGrid.itemsSource = receivingReceiptItemsCollection;
-                                receivingReceiptItemGrid.trackChanges = true;
+                                refreshReceivingReceiptFlexGrid();
 
                                 purchaseOrderStatusCollectionView = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
                                 var filterText = '';
@@ -1500,10 +1518,18 @@
                         }
                     }
 
+                    var disabled = true;
+                    if (purchaseOrderListResults.length > 0) {
+                        disabled = false;
+                        $("#cmdSaveRRLinesButton").prop("disabled", false);
+                    } else {
+                        $("#cmdSaveRRLinesButton").prop("disabled", true);
+                    }
+
                     cboRRItemPONumber.dispose();
                     cboRRItemPONumber = new wijmo.input.ComboBox('#cboRRItemPONumber', {
+                        disabled: disabled,
                         isEditable: false,
-                        placeholder: "Select PO Number",
                         itemsSource: purchaseOrderObservableArray,
                         displayMemberPath: "PODetails",
                         selectedValuePath: "Id",
@@ -1524,90 +1550,126 @@
         // =================================
         function getPOItemForComboBox(ItemIdSelectedValue, VATIdSelectedValue, WTAXSelectedValue) {
             var purchaseOrderItemsObservableArray = new wijmo.collections.ObservableArray();
-            var POId = cboRRItemPONumber.selectedValue;
-            $.ajax({
-                url: '/api/listPurchaseOrderItemByPOId/' + POId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (purchaseOrderItemsResults) {
-                    if (purchaseOrderItemsResults.length > 0) {
-                        for (i = 0; i < purchaseOrderItemsResults.length; i++) {
-                            purchaseOrderItemsObservableArray.push({
-                                Id: purchaseOrderItemsResults[i]["Id"],
-                                POId: purchaseOrderItemsResults[i]["POId"],
-                                PO: purchaseOrderItemsResults[i]["PO"],
-                                ItemId: purchaseOrderItemsResults[i]["ItemId"],
-                                ItemCode: purchaseOrderItemsResults[i]["ItemCode"],
-                                ItemDescription: purchaseOrderItemsResults[i]["Item"],
-                                UnitId: purchaseOrderItemsResults[i]["UnitId"],
-                                Unit: purchaseOrderItemsResults[i]["Unit"],
-                                Quantity: purchaseOrderItemsResults[i]["Quantity"],
-                                Particulars: purchaseOrderItemsResults[i]["Particulars"],
-                                Cost: purchaseOrderItemsResults[i]["Cost"],
-                                Amount: purchaseOrderItemsResults[i]["Amount"],
-                                VATId: purchaseOrderItemsResults[i]["VATId"],
-                                WTAXId: purchaseOrderItemsResults[i]["WTAXId"]
-                            });
+            if (cboRRItemPONumber.selectedValue != null) {
+                var POId = cboRRItemPONumber.selectedValue;
+                $.ajax({
+                    url: '/api/listPurchaseOrderItemByPOId/' + POId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (purchaseOrderItemsResults) {
+                        if (purchaseOrderItemsResults.length > 0) {
+                            for (i = 0; i < purchaseOrderItemsResults.length; i++) {
+                                purchaseOrderItemsObservableArray.push({
+                                    Id: purchaseOrderItemsResults[i]["Id"],
+                                    POId: purchaseOrderItemsResults[i]["POId"],
+                                    PO: purchaseOrderItemsResults[i]["PO"],
+                                    ItemId: purchaseOrderItemsResults[i]["ItemId"],
+                                    ItemCode: purchaseOrderItemsResults[i]["ItemCode"],
+                                    ItemDescription: purchaseOrderItemsResults[i]["Item"],
+                                    UnitId: purchaseOrderItemsResults[i]["UnitId"],
+                                    Unit: purchaseOrderItemsResults[i]["Unit"],
+                                    Quantity: purchaseOrderItemsResults[i]["Quantity"],
+                                    Particulars: purchaseOrderItemsResults[i]["Particulars"],
+                                    Cost: purchaseOrderItemsResults[i]["Cost"],
+                                    Amount: purchaseOrderItemsResults[i]["Amount"],
+                                    VATId: purchaseOrderItemsResults[i]["VATId"],
+                                    WTAXId: purchaseOrderItemsResults[i]["WTAXId"]
+                                });
+                            }
                         }
-                    }
 
-                    var disabled = true;
-                    if (purchaseOrderItemsResults.length > 0) {
-                        disabled = false;
-                    } else {
-                        $("#cmdSaveRRLinesButton").prop("disabled", true);
-                    }
-
-                    cboRRLineItemCode.dispose();
-                    cboRRLineItemCode = new wijmo.input.ComboBox('#cboRRLineItemCode', {
-                        disabled: disabled,
-                        isEditable: false,
-                        itemsSource: purchaseOrderItemsObservableArray,
-                        displayMemberPath: "ItemCode",
-                        selectedValuePath: "ItemId",
-                        selectedValue: ItemIdSelectedValue,
-                        onSelectedIndexChanged: function () {
-                            $("#cmdSaveRRLinesButton").prop("disabled", false);
-                            cboRRLineItemDescription.selectedValue = this.selectedValue;
-                        }
-                    });
-
-                    cboRRLineItemDescription.dispose();
-                    cboRRLineItemDescription = new wijmo.input.ComboBox('#cboRRLineItemDescription', {
-                        disabled: disabled,
-                        isEditable: false,
-                        itemsSource: purchaseOrderItemsObservableArray,
-                        displayMemberPath: "ItemDescription",
-                        selectedValuePath: "ItemId",
-                        selectedValue: ItemIdSelectedValue,
-                        onSelectedIndexChanged: function () {
-                            $("#cmdSaveRRLinesButton").prop("disabled", false);
-                            cboRRLineItemCode.selectedValue = this.selectedValue;
-
-                            document.getElementById('RRLine_Quantity').value = (this.selectedItem["Quantity"]).toLocaleString();
-                            document.getElementById('RRLine_Cost').value = (this.selectedItem["Cost"]).toLocaleString();
-                            computeAmountAndTaxes();
-
-                            getUnitForComboBox(VATIdSelectedValue, WTAXSelectedValue);
-                        }
-                    });
-
-                    if (receivingReceiptId == 0) {
-                        if (cboRRLineItemDescription.selectedValue != null) {
-                            document.getElementById('RRLine_Quantity').value = (cboRRLineItemDescription.selectedItem["Quantity"]).toLocaleString();
-                            document.getElementById('RRLine_Cost').value = (cboRRLineItemDescription.selectedItem["Cost"]).toLocaleString();
-                            computeAmountAndTaxes();
+                        var disabled = true;
+                        if (purchaseOrderItemsResults.length > 0) {
+                            disabled = false;
                         } else {
-                            document.getElementById('RRLine_Quantity').value = 0;
-                            document.getElementById('RRLine_Cost').value = 0;
-                            computeAmountAndTaxes();
+                            $("#cmdSaveRRLinesButton").prop("disabled", true);
                         }
-                    }
 
-                    getUnitForComboBox(VATIdSelectedValue, WTAXSelectedValue);
+                        cboRRLineItemCode.dispose();
+                        cboRRLineItemCode = new wijmo.input.ComboBox('#cboRRLineItemCode', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: purchaseOrderItemsObservableArray,
+                            displayMemberPath: "ItemCode",
+                            selectedValuePath: "ItemId",
+                            selectedValue: ItemIdSelectedValue,
+                            onSelectedIndexChanged: function () {
+                                $("#cmdSaveRRLinesButton").prop("disabled", false);
+                                cboRRLineItemDescription.selectedValue = this.selectedValue;
+                            }
+                        });
+
+                        cboRRLineItemDescription.dispose();
+                        cboRRLineItemDescription = new wijmo.input.ComboBox('#cboRRLineItemDescription', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: purchaseOrderItemsObservableArray,
+                            displayMemberPath: "ItemDescription",
+                            selectedValuePath: "ItemId",
+                            selectedValue: ItemIdSelectedValue,
+                            onSelectedIndexChanged: function () {
+                                $("#cmdSaveRRLinesButton").prop("disabled", false);
+                                cboRRLineItemCode.selectedValue = this.selectedValue;
+
+                                document.getElementById('RRLine_Quantity').value = (this.selectedItem["Quantity"]).toLocaleString();
+                                document.getElementById('RRLine_Cost').value = (this.selectedItem["Cost"]).toLocaleString();
+                                computeAmountAndTaxes();
+
+                                getUnitForComboBox(VATIdSelectedValue, WTAXSelectedValue);
+                            }
+                        });
+
+                        if (receivingReceiptId == 0) {
+                            if (cboRRLineItemDescription.selectedValue != null) {
+                                document.getElementById('RRLine_Quantity').value = (cboRRLineItemDescription.selectedItem["Quantity"]).toLocaleString();
+                                document.getElementById('RRLine_Cost').value = (cboRRLineItemDescription.selectedItem["Cost"]).toLocaleString();
+                                computeAmountAndTaxes();
+                            } else {
+                                document.getElementById('RRLine_Quantity').value = 0;
+                                document.getElementById('RRLine_Cost').value = 0;
+                                computeAmountAndTaxes();
+                            }
+                        }
+
+                        getUnitForComboBox(VATIdSelectedValue, WTAXSelectedValue);
+                    }
+                });
+            } else {
+                cboRRLineItemCode.dispose();
+                cboRRLineItemCode = new wijmo.input.ComboBox('#cboRRLineItemCode', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: purchaseOrderItemsObservableArray,
+                    displayMemberPath: "ItemCode",
+                    selectedValuePath: "ItemId",
+                    selectedValue: ItemIdSelectedValue
+                });
+
+                cboRRLineItemDescription.dispose();
+                cboRRLineItemDescription = new wijmo.input.ComboBox('#cboRRLineItemDescription', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: purchaseOrderItemsObservableArray,
+                    displayMemberPath: "ItemDescription",
+                    selectedValuePath: "ItemId",
+                    selectedValue: ItemIdSelectedValue
+                });
+
+                if (receivingReceiptId == 0) {
+                    if (cboRRLineItemDescription.selectedValue != null) {
+                        document.getElementById('RRLine_Quantity').value = (cboRRLineItemDescription.selectedItem["Quantity"]).toLocaleString();
+                        document.getElementById('RRLine_Cost').value = (cboRRLineItemDescription.selectedItem["Cost"]).toLocaleString();
+                        computeAmountAndTaxes();
+                    } else {
+                        document.getElementById('RRLine_Quantity').value = 0;
+                        document.getElementById('RRLine_Cost').value = 0;
+                        computeAmountAndTaxes();
+                    }
                 }
-            });
+
+                getUnitForComboBox(VATIdSelectedValue, WTAXSelectedValue);
+            }
         }
 
         // =============
@@ -1871,12 +1933,8 @@
                         success: function (id) {
                             if (id > 0) {
                                 toastr.success("Save Successful");
-
                                 $('#RRLinesEdit').modal('hide');
-
-                                receivingReceiptItemsCollection = new wijmo.collections.CollectionView(getRecevingReceiptItem());
-                                receivingReceiptItemGrid.itemsSource = receivingReceiptItemsCollection;
-                                receivingReceiptItemGrid.trackChanges = true;
+                                refreshReceivingReceiptFlexGrid();
                             } else {
                                 toastr.error("Internal Server Error");
                                 document.getElementById('cmdSaveRRLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
@@ -1897,12 +1955,8 @@
                                 toastr.success("Update Successful");
                                 $("#cmdSaveRRLinesButton").prop("disabled", true);
                                 $("#cmdRRLinesDetailCloseButton").prop("disabled", true);
-
                                 $('#RRLinesEdit').modal('hide');
-
-                                receivingReceiptItemsCollection = new wijmo.collections.CollectionView(getRecevingReceiptItem());
-                                receivingReceiptItemGrid.itemsSource = receivingReceiptItemsCollection;
-                                receivingReceiptItemGrid.trackChanges = true;
+                                refreshReceivingReceiptFlexGrid();
                             },
                             404: function () {
                                 toastr.error("Not Found");
@@ -1954,12 +2008,8 @@
                 statusCode: {
                     200: function () {
                         toastr.success("Delete Successful");
-
                         $('#deleteRRLinesConfirm').modal('hide');
-
-                        receivingReceiptItemsCollection = new wijmo.collections.CollectionView(getRecevingReceiptItem());
-                        receivingReceiptItemGrid.itemsSource = receivingReceiptItemsCollection;
-                        receivingReceiptItemGrid.trackChanges = true;
+                        refreshReceivingReceiptFlexGrid();
                     },
                     404: function () {
                         toastr.error("Not Found");
@@ -2031,7 +2081,6 @@
         // GET Inventory Entries
         // =====================
         function getInventoryEntries() {
-            NProgress.start();
             var id = getParam('ReceivingReceiptId');
             var inventoryObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
@@ -2041,7 +2090,6 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
-                    NProgress.done();
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             inventoryObservableArray.push({
@@ -2067,18 +2115,29 @@
                             });
                         }
                     }
+
+                    NProgress.done();
                 }
             });
 
             return inventoryObservableArray;
         }
 
+        // ===========================
+        // Refresh Inventory Flex Grid
+        // ===========================
+        function refreshInventoryFlexGrid() {
+            inventoryCollectionView = new wijmo.collections.CollectionView(getInventoryEntries());
+            inventoryFlexGrid.itemsSource = inventoryCollectionView;
+            inventoryFlexGrid.trackChanges = true;
+        }
+
         // ================================
         // On Page Load for Inventory Entry
         // ================================
-        function inventoryEntryTab() {
+        function createInventoryFlexGrid() {
             inventoryCollectionView = new wijmo.collections.CollectionView(getInventoryEntries());
-            inventoryFlexGrid.dispose();
+
             inventoryFlexGrid = new wijmo.grid.FlexGrid('#inventoryFlexGrid');
             inventoryFlexGrid.initialize({
                 columns: [
@@ -2296,15 +2355,14 @@
             $('#Item').show();
             $('#InventoryEntry').hide();
             NProgress.start();
-            receivingReceiptItemsCollection = new wijmo.collections.CollectionView(getRecevingReceiptItem());
-            receivingReceiptItemGrid.itemsSource = receivingReceiptItemsCollection;
-            receivingReceiptItemGrid.trackChanges = true;
+            refreshReceivingReceiptFlexGrid();
         });
 
         $('#inventoryEntryTabId').click(function () {
             $('#Item').hide();
             $('#InventoryEntry').show();
-            inventoryEntryTab();
+            NProgress.start();
+            refreshInventoryFlexGrid();
         });
 
         $(document).ready(function () {

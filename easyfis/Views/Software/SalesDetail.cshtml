@@ -147,7 +147,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="InventoryEntries" class="tab-pane fade in"  style="margin-bottom: 15px;">
+                    <div id="InventoryEntries" class="tab-pane fade in" style="margin-bottom: 15px;">
                         <div id="inventoryFlexGrid"></div>
                     </div>
                 </div>
@@ -220,7 +220,7 @@
                                     <dt>Discount Amount</dt>
                                     <dd><input type="text" class="form-control  numberField  requiredSaleItem" id="saleItem_DiscountAmount" placeholder="0.00" /></dd>
                                     <dt>Net Price</dt>
-                                    <dd><input type="text" class="form-control  numberField  requiredSaleItem" id="saleItem_NetPrice" placeholder="0.00" /></dd>
+                                    <dd><input type="text" class="form-control  numberField  requiredSaleItem" id="saleItem_NetPrice" placeholder="0.00" disabled /></dd>
                                     <dt>Amount</dt>
                                     <dd><input type="text" class="form-control  numberField  requiredSaleItem" id="saleItem_Amount" placeholder="0.00" disabled /></dd>
                                 </dl>
@@ -405,7 +405,7 @@
         var cboSIApprovedBy = new wijmo.input.ComboBox('#cboSIApprovedBy');
         var cboSIDate = new wijmo.input.InputDate('#cboSIDate');
         var SIItemsCollectionView;
-        var SIItemFlexGrid = new wijmo.grid.FlexGrid('#ItemGrid');
+        var SIItemFlexGrid;
         var isLocked = false;
         var cboItemCode = new wijmo.input.ComboBox('#cboItemCode');
         var salesItemId = 0;
@@ -418,7 +418,13 @@
         var journalCollectionView;
         var journalFlexGrid = new wijmo.grid.FlexGrid('#journalFlexGrid');
         var inventoryCollectionView;
-        var inventoryFlexGrid = new wijmo.grid.FlexGrid('#inventoryFlexGrid')
+        var inventoryFlexGrid;
+        var itemInventoryCollectionView;
+        var itemInventoryFlexGrid = new wijmo.grid.FlexGrid('#itemInventoryFlexGrid');
+        var itemNonInventoryCollectionView;
+        var itemNonInventoryFlexGrid = new wijmo.grid.FlexGrid('#itemNonInventoryFlexGrid');
+        var itemPackageCollectionView;
+        var itemPackageFlexGrid = new wijmo.grid.FlexGrid('#itemPackageFlexGrid');
 
         // =======================
         // Get URL Parameter Value
@@ -684,6 +690,7 @@
                         }
 
                         createSalesItemFlexGrid();
+                        createInventoryFlexGrid();
                     }
                 });
             } else {
@@ -786,7 +793,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        toastr.success("Unlocked");
+                        toastr.success("Unlock Successful");
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);
@@ -899,13 +906,22 @@
             return itemsObservableArray;
         }
 
+        // ====================================
+        // Refresh Sales Invoice Item Flex Grid
+        // ====================================
+        function refreshSaleSItemFlexGrid() {
+            SIItemsCollectionView = new wijmo.collections.CollectionView(getItem());
+
+            SIItemFlexGrid.itemsSource = SIItemsCollectionView;
+            SIItemFlexGrid.trackChanges = true;
+        }
+
         // ================================
         // Get Sales Invoice Item Flex Grid
         // ================================
         function createSalesItemFlexGrid() {
             SIItemsCollectionView = new wijmo.collections.CollectionView(getItem());
 
-            SIItemFlexGrid.dispose();
             SIItemFlexGrid = new wijmo.grid.FlexGrid('#ItemGrid');
             SIItemFlexGrid.initialize({
                 columns: [
@@ -1670,7 +1686,7 @@
                             200: function () {
                                 toastr.success("Save Succesful");
                                 $('#saleItemsEdit').modal('hide');
-                                createSalesItemFlexGrid();
+                                refreshSaleSItemFlexGrid();
                             },
                             400: function () {
                                 toastr.error("Internal Server Error");
@@ -1691,7 +1707,7 @@
                             200: function () {
                                 toastr.success("Update Successful");
                                 $('#saleItemsEdit').modal('hide');
-                                createSalesItemFlexGrid();
+                                refreshSaleSItemFlexGrid();
                             },
                             404: function () {
                                 toastr.error("Can't Update");
@@ -1724,7 +1740,7 @@
                 backdrop: 'static'
             });
 
-            document.getElementById('cmdConfirmDeleteSaleItems').innerHTML = "<i class='fa fa-delete'></i> Delete";
+            document.getElementById('cmdConfirmDeleteSaleItems').innerHTML = "<i class='fa fa-trash'></i> Delete";
             $("#cmdConfirmDeleteSaleItems").prop("disabled", false);
             $("#cmdConfirmDeleteSaleItemsCloseButton").prop("disabled", false);
         }
@@ -1748,26 +1764,25 @@
                     200: function () {
                         toastr.success("Delete Successful");
                         $('#deletSaleItemsConfirm').modal('hide');
-                        createSalesItemFlexGrid();
+                        refreshSaleSItemFlexGrid();
                     },
                     404: function () {
                         toastr.error("Request Not Found");
                         $('#deletSaleItemsConfirm').modal('hide');
-                        document.getElementById('cmdConfirmDeleteSaleItems').innerHTML = "<i class='fa fa-delete'></i> Delete";
+                        document.getElementById('cmdConfirmDeleteSaleItems').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteSaleItems").prop("disabled", false);
                         $("#cmdConfirmDeleteSaleItemsCloseButton").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
                         $('#deletSaleItemsConfirm').modal('hide');
-                        document.getElementById('cmdConfirmDeleteSaleItems').innerHTML = "<i class='fa fa-delete'></i> Delete";
+                        document.getElementById('cmdConfirmDeleteSaleItems').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteSaleItems").prop("disabled", false);
                         $("#cmdConfirmDeleteSaleItemsCloseButton").prop("disabled", false);
                     }
                 }
             });
         }
-
 
         // ===========
         // Get Journal
@@ -1921,7 +1936,6 @@
         // GET Inventory Entries
         // =====================
         function getInventoryEntries() {
-            NProgress.start();
             var id = getParam('SalesId');
             var inventoryObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
@@ -1955,6 +1969,8 @@
                                 Unit: Results[i]["Unit"]
                             });
                         }
+
+                        NProgress.done();
                     }
                 }
             });
@@ -1962,12 +1978,22 @@
             return inventoryObservableArray;
         }
 
+        // ==========================
+        // Refresh Inventory FlexGrid
+        // ==========================
+        function refreshInventoryFlexGrid() {
+            inventoryCollectionView = new wijmo.collections.CollectionView(getInventoryEntries());
+
+            inventoryFlexGrid.itemsSource = inventoryCollectionView;
+            inventoryFlexGrid.trackChanges = true;
+        }
+
         // ================================
         // On Page Load for Inventory Entry
         // ================================
-        function inventoryEntryTab() {
+        function createInventoryFlexGrid() {
             inventoryCollectionView = new wijmo.collections.CollectionView(getInventoryEntries());
-            inventoryFlexGrid.dispose();
+
             inventoryFlexGrid = new wijmo.grid.FlexGrid('#inventoryFlexGrid');
             inventoryFlexGrid.initialize({
                 columns: [
@@ -2040,36 +2066,15 @@
             $('#Items').show();
             $('#InventoryEntries').hide();
             NProgress.start();
-            createSalesItemFlexGrid();
+            refreshSaleSItemFlexGrid();
         });
 
         $('#inventoryEntryTabId').click(function () {
             $('#Items').hide();
             $('#InventoryEntries').show();
-            inventoryEntryTab();
+            NProgress.start();
+            refreshInventoryFlexGrid();
         });
-
-        // ===========
-        // OnLoad Page
-        // ===========
-        $(document).ready(function () {
-            getBranchesForComboBox();
-        });
-    </script>
-
-    <!-- ============= -->
-    <!-- Items Scripts -->
-    <!-- ============= -->
-    <script type="text/javascript">
-        // ==========================
-        // Global Variables for Items
-        // ==========================
-        var itemInventoryCollectionView;
-        var itemInventoryFlexGrid = new wijmo.grid.FlexGrid('#itemInventoryFlexGrid');
-        var itemNonInventoryCollectionView;
-        var itemNonInventoryFlexGrid = new wijmo.grid.FlexGrid('#itemNonInventoryFlexGrid');
-        var itemPackageCollectionView;
-        var itemPackageFlexGrid = new wijmo.grid.FlexGrid('#itemPackageFlexGrid');
 
         function getInventoryItems() {
             var itemsObservableArray = new wijmo.collections.ObservableArray();
@@ -2581,6 +2586,13 @@
             document.getElementById('saleItem_Particulars').value = "NA";
             document.getElementById('saleItem_Quantity').value = 1;
         }
+
+        // ===========
+        // OnLoad Page
+        // ===========
+        $(document).ready(function () {
+            getBranchesForComboBox();
+        });
 
         $(document).on('show.bs.modal', '.modal', function (event) {
             var zIndex = 1040 + (10 * $('.modal:visible').length);

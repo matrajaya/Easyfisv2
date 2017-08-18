@@ -172,10 +172,10 @@ namespace easyfis.Controllers
             //string secretKey = "6LeMQhIUAAAAAGILgkPEdyV2wm6Jl9RDyxeOLMq7";
 
             // live abomar easyfis key
-            //string secretKey = "6Ld8JSwUAAAAAMNxLO4HigrdcgE_s9puaasKjp6A";
+            string secretKey = "6Ld8JSwUAAAAAMNxLO4HigrdcgE_s9puaasKjp6A";
 
             // live tambayan easyfis key
-            string secretKey = "6LcdCS0UAAAAANH_YY__9RYKl8tzpHYehdF5cdNK";
+            //string secretKey = "6LcdCS0UAAAAANH_YY__9RYKl8tzpHYehdF5cdNK";
 
             var client = new System.Net.WebClient();
             var verificationResultJson = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
