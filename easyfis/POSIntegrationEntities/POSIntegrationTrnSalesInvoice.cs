@@ -8,6 +8,7 @@ namespace easyfis.POSIntegrationEntities
     public class POSIntegrationTrnSalesInvoice
     {
         public Int32 Id { get; set; }
+        public String SIDate { get; set; }
         public String BranchCode { get; set; }
         public String CustomerManualArticleCode { get; set; }
         public String Term { get; set; }

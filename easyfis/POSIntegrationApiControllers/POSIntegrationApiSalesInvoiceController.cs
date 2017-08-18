@@ -88,7 +88,7 @@ namespace easyfis.POSIntegrationApiControllers
                                                 Data.TrnSalesInvoice addSalesInvoice = new Data.TrnSalesInvoice();
                                                 addSalesInvoice.BranchId = branches.FirstOrDefault().Id;
                                                 addSalesInvoice.SINumber = SINumberResult;
-                                                addSalesInvoice.SIDate = DateTime.Today;
+                                                addSalesInvoice.SIDate = Convert.ToDateTime(POSIntegrationTrnSalesInvoiceObject.SIDate);
                                                 addSalesInvoice.CustomerId = customers.FirstOrDefault().Id;
                                                 addSalesInvoice.TermId = terms.FirstOrDefault().Id;
                                                 addSalesInvoice.DocumentReference = POSIntegrationTrnSalesInvoiceObject.DocumentReference;
@@ -496,19 +496,33 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                                  && d.UnitId == items.FirstOrDefault().UnitId
                                                                                                                  select d;
 
-                                                                                            if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                                                                                            if (conversionUnit.Any())
                                                                                             {
-                                                                                                addSaleInvoiceItem.BaseQuantity = salesInvoiceItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                                                                                                if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                                                                                                {
+                                                                                                    addSaleInvoiceItem.BaseQuantity = salesInvoiceItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    addSaleInvoiceItem.BaseQuantity = salesInvoiceItem.Quantity * 1;
+                                                                                                }
                                                                                             }
                                                                                             else
                                                                                             {
                                                                                                 addSaleInvoiceItem.BaseQuantity = salesInvoiceItem.Quantity * 1;
                                                                                             }
 
-                                                                                            var baseQuantity = salesInvoiceItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
-                                                                                            if (baseQuantity > 0)
+                                                                                            if (conversionUnit.Any())
                                                                                             {
-                                                                                                addSaleInvoiceItem.BasePrice = salesInvoiceItem.Amount / baseQuantity;
+                                                                                                var baseQuantity = salesInvoiceItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                                                                                                if (baseQuantity > 0)
+                                                                                                {
+                                                                                                    addSaleInvoiceItem.BasePrice = salesInvoiceItem.Amount / baseQuantity;
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    addSaleInvoiceItem.BasePrice = salesInvoiceItem.Amount;
+                                                                                                }
                                                                                             }
                                                                                             else
                                                                                             {
