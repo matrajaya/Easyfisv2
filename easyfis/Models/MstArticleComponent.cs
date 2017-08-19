@@ -25,5 +25,6 @@ namespace easyfis.Models
         public Decimal Price { get; set; }
         public Decimal Amount { get; set; }
         public String Particulars { get; set; }
-   }
+        public String ComponentArticleCode { get; internal set; }
+    }
 }

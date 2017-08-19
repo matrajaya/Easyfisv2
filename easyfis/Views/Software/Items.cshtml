@@ -47,7 +47,7 @@
                         </table>
                     </div>
                     <div class="panel-body">
-                        <div id="ItemGrid" class="grid" align="left"></div>
+                        <div id="ItemGrid"></div>
                     </div>
                     <div class="panel-footer">
                         <div class="row">
@@ -78,10 +78,8 @@
     <!-- Item Delete Modal -->
     <div class="modal fade" id="deleteItemConfirm" role="dialog">
         <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Delete</h4>
                 </div>
                 <div class="modal-body">
@@ -206,7 +204,7 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (id) {
                         if (id > 0) {
-                            window.location = '/Software/ItemDetail?ItemId=' + id;
+                            window.location = '/Software/ItemDetail?id=' + id;
                         } else {
                             toastr.error("Internal Server Error");
                             document.getElementById('btnAddItem').innerHTML = "<i class='fa fa-plus'></i> Add";
@@ -236,7 +234,7 @@
             itemCollectionView.editItem(itemCollectionView.currentItem);
             var item = itemCollectionView.currentEditItem;
             var itemId = item.Id;
-            window.location = '/Software/ItemDetail?ItemId=' + itemId;
+            window.location = '/Software/ItemDetail?id=' + itemId;
         }
 
         // =====================
