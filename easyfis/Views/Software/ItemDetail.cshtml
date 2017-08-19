@@ -530,6 +530,8 @@
         var prices;
         var priceGrid;
         var priceId = 0;
+        var inventories;
+        var inventoryGrid;
 
         // =======================
         // Get URL Parameter Value
@@ -931,6 +933,7 @@
                             createUnitConversionFlexGrid();
                             createComponentFlexGrid();
                             createPriceFlexGrid();
+                            createInventoryFlexGrid();
                         }
                     }
                 });
@@ -1135,9 +1138,9 @@
                                     BaseUnit: cboUnit.selectedItem["Unit"],
                                 });
                             }
-
-                            NProgress.done();
                         }
+
+                        NProgress.done();
                     }
                 });
             }
@@ -2291,30 +2294,12 @@
             }
         }
 
-        // ===========
-        // Onload Page
-        // ===========
-        $(document).ready(function () {
-            getArticleItemGroupForComboBox();
-        });
-    </script>
-
-    <!-- ================= -->
-    <!-- Inventory Scripts -->
-    <!-- ================= -->
-    <script type="text/javascript">
-        // ==============================
-        // Global Variables for Inventory
-        // ==============================
-        var inventories;
-        var inventoryGrid;
 
         // ==================
         // GET Inventory List
         // ==================
         function getInventory() {
-            var inventories = new wijmo.collections.ObservableArray;
-            NProgress.start();
+            var inventoriesObservableArray = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
                 $.ajax({
                     url: '/api/listArticleInventoryByArticleId/items/' + itemId,
@@ -2323,10 +2308,9 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        NProgress.done();
                         if (Results.length > 0) {
                             for (i = 0; i < Results.length; i++) {
-                                inventories.push({
+                                inventoriesObservableArray.push({
                                     Id: Results[i]["Id"],
                                     BranchId: Results[i]["BranchId"],
                                     Branch: Results[i]["Branch"],
@@ -2340,20 +2324,28 @@
                                 });
                             }
                         }
+
+                        NProgress.done();
                     }
-                }).fail(function (xhr, textStatus, err) {
-                    alert(err);
                 });
-            } else {
-                NProgress.done();
             }
-            return inventories;
+
+            return inventoriesObservableArray;
+        }
+
+        // =================
+        // Refresh Inventory
+        // =================
+        function refreshInventoryFlexGrid() {
+            inventories = new wijmo.collections.CollectionView(getInventory());
+            inventoryGrid.itemsSource = inventories;
+            inventoryGrid.trackChanges = true;
         }
 
         // ==========
         //  Inventory
         // ==========
-        function inventoryTab() {
+        function createInventoryFlexGrid() {
             inventories = new wijmo.collections.CollectionView(getInventory());
 
             // Flex Grid for Inventory
@@ -2398,14 +2390,10 @@
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
+
             inventoryGrid.trackChanges = true;
         }
-    </script>
 
-    <!-- ================================ -->
-    <!-- Tab Current Page on Load Scripts -->
-    <!-- ================================ -->
-    <script type="text/javascript">
         // ====
         // TABS
         // ====
@@ -2449,15 +2437,9 @@
             $('#Inventory').show();
             $('#GLAccount').hide();
             $('#FixedAsset').hide();
-            inventoryTab();
-            window.inventoryTab = function () {
-                return true;
-            };
-
-            inventories = new wijmo.collections.CollectionView(getInventory());
-            inventoryGrid.itemsSource = inventories;
-            inventoryGrid.trackChanges = true;
+            refreshInventoryFlexGrid();
         });
+
         $('#glAccountTabId').click(function () {
             $('#UnitConversion').hide();
             $('#Component').hide();
@@ -2466,6 +2448,7 @@
             $('#GLAccount').show();
             $('#FixedAsset').hide();
         });
+
         $('#fixedAssetTabId').click(function () {
             $('#UnitConversion').hide();
             $('#Component').hide();
@@ -2475,12 +2458,12 @@
             $('#FixedAsset').show();
         });
 
-        function refreshGrids() {
-            setTimeout(function () {
-                unitConversions.refresh();
-                //contactInformations.refresh();
-            }, 500)
-        }
+        // ===========
+        // Onload Page
+        // ===========
+        $(document).ready(function () {
+            getArticleItemGroupForComboBox();
+        });
     </script>
     <script type="text/javascript">
         var cboUserBranches = new wijmo.input.ComboBox('#cboUserBranches');

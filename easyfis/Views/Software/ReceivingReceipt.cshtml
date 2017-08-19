@@ -257,7 +257,7 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (id) {
                         if (id > 0) {
-                            window.location = '/Software/ReceivingReceiptDetail?ReceivingReceiptId=' + id;
+                            window.location = '/Software/ReceivingReceiptDetail?id=' + id;
                         } else {
                             toastr.error("Internal Server Error");
                             document.getElementById('btnAddReceivingReceipt').innerHTML = "<i class='fa fa-plus'></i> Add";
@@ -280,7 +280,7 @@
             receivingReceiptCollectionView.editItem(receivingReceiptCollectionView.currentItem);
             var RR = receivingReceiptCollectionView.currentEditItem;
             var ReceivingReceitId = RR.Id;
-            window.location = '/Software/ReceivingReceiptDetail?ReceivingReceiptId=' + ReceivingReceitId;
+            window.location = '/Software/ReceivingReceiptDetail?id=' + ReceivingReceitId;
         }
 
         // ==============================

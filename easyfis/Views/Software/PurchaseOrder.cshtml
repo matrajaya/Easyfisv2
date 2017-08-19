@@ -254,7 +254,7 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (id) {
                         if (id > 0) {
-                            window.location = '/Software/PurchaseOrderDetail?PurchaseOrderId=' + id;
+                            window.location = '/Software/PurchaseOrderDetail?id=' + id;
                         } else {
                             toastr.error("Internal Server Error");
                             document.getElementById('btnAddPurchaseOrder').innerHTML = "<i class='fa fa-plus'></i> Add";
@@ -277,7 +277,7 @@
             purchaseOrderCollectionView.editItem(purchaseOrderCollectionView.currentItem);
             var PO = purchaseOrderCollectionView.currentEditItem;
             var PurchaseOrderId = PO.Id;
-            window.location = '/Software/PurchaseOrderDetail?PurchaseOrderId=' + PurchaseOrderId;
+            window.location = '/Software/PurchaseOrderDetail?id=' + PurchaseOrderId;
         }
 
         // ===========================

@@ -1191,6 +1191,8 @@ namespace easyfis.Controllers
                         updateArticle.IsLocked = article.IsLocked;
                         updateArticle.UpdatedById = userId;
                         updateArticle.UpdatedDateTime = DateTime.Now;
+                        db.SubmitChanges();
+                        return Request.CreateResponse(HttpStatusCode.OK);
                     }
                     else if (Convert.ToInt32(articleTypeId) == 5)
                     {
@@ -1205,6 +1207,8 @@ namespace easyfis.Controllers
                         updateArticle.IsLocked = article.IsLocked;
                         updateArticle.UpdatedById = userId;
                         updateArticle.UpdatedDateTime = DateTime.Now;
+                        db.SubmitChanges();
+                        return Request.CreateResponse(HttpStatusCode.OK);
                     }
                     else if (Convert.ToInt32(articleTypeId) == 4)
                     {
@@ -1217,6 +1221,8 @@ namespace easyfis.Controllers
                         updateArticle.IsLocked = article.IsLocked;
                         updateArticle.UpdatedById = userId;
                         updateArticle.UpdatedDateTime = DateTime.Now;
+                        db.SubmitChanges();
+                        return Request.CreateResponse(HttpStatusCode.OK);
                     }
                     else if (Convert.ToInt32(articleTypeId) == 3)
                     {
@@ -1240,6 +1246,8 @@ namespace easyfis.Controllers
                         updateArticle.IsLocked = true;
                         updateArticle.UpdatedById = userId;
                         updateArticle.UpdatedDateTime = DateTime.Now;
+                        db.SubmitChanges();
+                        return Request.CreateResponse(HttpStatusCode.OK);
                     }
                     else if (Convert.ToInt32(articleTypeId) == 2)
                     {
@@ -1265,46 +1273,61 @@ namespace easyfis.Controllers
                         updateArticle.IsLocked = true;
                         updateArticle.UpdatedById = userId;
                         updateArticle.UpdatedDateTime = DateTime.Now;
+                        db.SubmitChanges();
+                        return Request.CreateResponse(HttpStatusCode.OK);
                     }
                     else if (Convert.ToInt32(articleTypeId) == 1)
                     {
-                        updateArticle.ArticleCode = article.ArticleCode;
-                        updateArticle.ManualArticleCode = article.ManualArticleCode;
-                        updateArticle.Article = article.Article;
-                        updateArticle.Category = article.Category;
-                        updateArticle.ArticleTypeId = Convert.ToInt32(articleTypeId);
-                        updateArticle.ArticleGroupId = article.ArticleGroupId;
-                        updateArticle.AccountId = article.AccountId;
-                        updateArticle.SalesAccountId = article.SalesAccountId;
-                        updateArticle.CostAccountId = article.CostAccountId;
-                        updateArticle.AssetAccountId = article.AssetAccountId;
-                        updateArticle.ExpenseAccountId = article.ExpenseAccountId;
-                        updateArticle.UnitId = article.UnitId;
-                        updateArticle.OutputTaxId = article.OutputTaxId;
-                        updateArticle.InputTaxId = article.InputTaxId;
-                        updateArticle.WTaxTypeId = article.WTaxTypeId;
-                        updateArticle.Price = article.Price;
-                        updateArticle.Cost = article.Cost;
-                        updateArticle.IsInventory = article.IsInventory;
-                        updateArticle.Particulars = article.Particulars;
-                        updateArticle.TermId = db.MstTerms.FirstOrDefault().Id;
-                        updateArticle.CreditLimit = 0;
-                        updateArticle.DateAcquired = Convert.ToDateTime(article.DateAcquired);
-                        updateArticle.UsefulLife = article.UsefulLife;
-                        updateArticle.SalvageValue = article.SalvageValue;
-                        updateArticle.ManualArticleOldCode = article.ManualArticleOldCode;
-                        updateArticle.Kitting = article.Kitting;
-                        updateArticle.IsLocked = true;
-                        updateArticle.UpdatedById = userId;
-                        updateArticle.UpdatedDateTime = DateTime.Now;
+                        if (!updateArticle.MstArticleUnits.Any())
+                        {
+                            return Request.CreateResponse(HttpStatusCode.BadRequest);
+                        }
+                        else
+                        {
+                            if (!updateArticle.MstArticlePrices.Any())
+                            {
+                                return Request.CreateResponse(HttpStatusCode.BadRequest);
+                            }
+                            else
+                            {
+                                updateArticle.ArticleCode = article.ArticleCode;
+                                updateArticle.ManualArticleCode = article.ManualArticleCode;
+                                updateArticle.Article = article.Article;
+                                updateArticle.Category = article.Category;
+                                updateArticle.ArticleTypeId = Convert.ToInt32(articleTypeId);
+                                updateArticle.ArticleGroupId = article.ArticleGroupId;
+                                updateArticle.AccountId = article.AccountId;
+                                updateArticle.SalesAccountId = article.SalesAccountId;
+                                updateArticle.CostAccountId = article.CostAccountId;
+                                updateArticle.AssetAccountId = article.AssetAccountId;
+                                updateArticle.ExpenseAccountId = article.ExpenseAccountId;
+                                updateArticle.UnitId = article.UnitId;
+                                updateArticle.OutputTaxId = article.OutputTaxId;
+                                updateArticle.InputTaxId = article.InputTaxId;
+                                updateArticle.WTaxTypeId = article.WTaxTypeId;
+                                updateArticle.Price = article.Price;
+                                updateArticle.Cost = article.Cost;
+                                updateArticle.IsInventory = article.IsInventory;
+                                updateArticle.Particulars = article.Particulars;
+                                updateArticle.TermId = db.MstTerms.FirstOrDefault().Id;
+                                updateArticle.CreditLimit = 0;
+                                updateArticle.DateAcquired = Convert.ToDateTime(article.DateAcquired);
+                                updateArticle.UsefulLife = article.UsefulLife;
+                                updateArticle.SalvageValue = article.SalvageValue;
+                                updateArticle.ManualArticleOldCode = article.ManualArticleOldCode;
+                                updateArticle.Kitting = article.Kitting;
+                                updateArticle.IsLocked = true;
+                                updateArticle.UpdatedById = userId;
+                                updateArticle.UpdatedDateTime = DateTime.Now;
+                                db.SubmitChanges();
+                                return Request.CreateResponse(HttpStatusCode.OK);
+                            }
+                        }
                     }
                     else
                     {
-                        Debug.WriteLine("Not an Article Type Id");
+                        return Request.CreateResponse(HttpStatusCode.BadRequest);
                     }
-
-                    db.SubmitChanges();
-                    return Request.CreateResponse(HttpStatusCode.OK);
                 }
                 else
                 {

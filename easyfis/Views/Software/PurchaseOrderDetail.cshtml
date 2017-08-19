@@ -497,7 +497,7 @@
         // ==================
         function getPurchaseOrderById() {
             if (document.location.search.length > 0) {
-                var id = getParam('PurchaseOrderId');
+                var id = getParam('id');
                 $.ajax({
                     url: '/api/purchaseOrder/' + id,
                     cache: false,
@@ -599,7 +599,7 @@
         // ==============
         function btnLockPOOnclick() {
             var purchaseOrderObject = new Object();
-            var id = getParam('PurchaseOrderId');
+            var id = getParam('id');
             purchaseOrderObject.BranchId = cboPOBranch.selectedValue;
             purchaseOrderObject.PONumber = document.getElementById('PONumber').value;
             purchaseOrderObject.PODate = cboPODate.value.toLocaleDateString();
@@ -674,7 +674,7 @@
         // Edit PO - unlock
         // ================
         function btnUnlockPOOnclick() {
-            var id = getParam('PurchaseOrderId');
+            var id = getParam('id');
 
             document.getElementById("btnUnlockPO").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
             $("#btnLockPO").prop("disabled", true);
@@ -717,7 +717,7 @@
         // Print PO
         // ========
         function btnPrintPOOnclick() {
-            var PurchaseOrderId = getParam('PurchaseOrderId');
+            var PurchaseOrderId = getParam('id');
             window.location = "/RepPurchaseOrder/PurchaseOrder?POId=" + PurchaseOrderId;
         }
 
@@ -727,7 +727,7 @@
         function getPurchaseOrderItem() {
             var purchaseOrderItemsObservableArray = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
-                var id = getParam('PurchaseOrderId');
+                var id = getParam('id');
                 $.ajax({
                     url: '/api/listPurchaseOrderItemByPOId/' + id,
                     cache: false,
@@ -1121,7 +1121,7 @@
         // Save PO Lines
         // =============
         function cmdPOLinesSaveButton_OnClick() {
-            var id = getParam('PurchaseOrderId');
+            var id = getParam('id');
 
             var purchaserOrderItemObject = new Object();
             purchaserOrderItemObject.POId = id;

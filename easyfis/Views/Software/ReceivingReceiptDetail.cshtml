@@ -596,7 +596,7 @@
         // =================
         function getReecivingReceiptById() {
             if (document.location.search.length > 0) {
-                var id = getParam('ReceivingReceiptId');
+                var id = getParam('id');
                 $.ajax({
                     url: '/api/receivingReceipt/' + id,
                     cache: false,
@@ -690,7 +690,7 @@
         function getRecevingReceiptItem() {
             var itemsObservableArray = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
-                var id = getParam('ReceivingReceiptId');
+                var id = getParam('id');
                 $.ajax({
                     url: '/api/listReceivingReceiptItemByRRId/' + id,
                     cache: false,
@@ -971,7 +971,7 @@
         // Save RR - IsLocked
         // ==================
         function RRSaveSaveButton_OnClick() {
-            var id = getParam('ReceivingReceiptId');
+            var id = getParam('id');
             var receivingReceiptObject = new Object();
             receivingReceiptObject.BranchId = cboRRbranch.selectedValue;
             receivingReceiptObject.RRDate = cboRRDate.value.toLocaleDateString();
@@ -1046,7 +1046,7 @@
         // Edit RR - Unlock
         // ================
         function RREditButton_OnClick() {
-            var id = getParam('ReceivingReceiptId');
+            var id = getParam('id');
 
             document.getElementById('cmdRREdit').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
             $("#cmdRRJournal").prop("disabled", true);
@@ -1091,7 +1091,7 @@
         // Print RR
         // ========
         function RRPrintButton_OnClick() {
-            var id = getParam('ReceivingReceiptId');
+            var id = getParam('id');
             window.location = "/RepReceivingReceipt/ReceivingReceipt?RRId=" + id;
         }
 
@@ -1382,7 +1382,7 @@
             $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", true);
             $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", true);
 
-            var id = getParam('ReceivingReceiptId');
+            var id = getParam('id');
             var BranchId = cboRRbranch.selectedValue;
             var POId = cboPONumberPOStatus.selectedValue;
 
@@ -1886,7 +1886,7 @@
         // =============
         function cmdRRLinesSaveButton_OnClick() {
             var receivingReceiptItemObject = new Object();
-            var id = getParam('ReceivingReceiptId');
+            var id = getParam('id');
             receivingReceiptItemObject.RRId = id;
             receivingReceiptItemObject.POId = cboRRItemPONumber.selectedValue;
             receivingReceiptItemObject.ItemId = cboRRLineItemDescription.selectedValue;
@@ -2082,7 +2082,7 @@
         // GET Inventory Entries
         // =====================
         function getInventoryEntries() {
-            var id = getParam('ReceivingReceiptId');
+            var id = getParam('id');
             var inventoryObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/listInventoryByRRId/' + id,
@@ -2213,7 +2213,7 @@
         // ===========
         function getJournalListForRR() {
             var journalsObservableArray = new wijmo.collections.ObservableArray;
-            var id = getParam('ReceivingReceiptId');
+            var id = getParam('id');
             $.ajax({
                 url: '/api/listJournalByRRId/' + id,
                 cache: false,

@@ -614,7 +614,7 @@
         // ====================
         function getSalesById() {
             if (document.location.search.length > 0) {
-                var id = getParam('SalesId');
+                var id = getParam('id');
                 $.ajax({
                     url: '/api/salesInvoice/' + id,
                     cache: false,
@@ -704,7 +704,7 @@
         // =======================
         function btnSaveLockSales_OnClick() {
             var salesObject = new Object();
-            var id = getParam('SalesId');
+            var id = getParam('id');
             salesObject.BranchId = cboSIBranch.selectedValue;
             salesObject.SINumber = document.getElementById('SI_SINumber').value;
             salesObject.SIDate = cboSIDate.value.toLocaleDateString();
@@ -777,7 +777,7 @@
         // EDIT Sale - Lock Unlock
         // =======================
         function btnSalesEdit_OnClick() {
-            var id = getParam('SalesId');
+            var id = getParam('id');
 
             document.getElementById('cmdSalesEdit').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
             $("#cmdSalesJournal").prop("disabled", true);
@@ -822,7 +822,7 @@
         // Print SI
         // ========
         function btnSalesPrint_OnClick() {
-            var salesId = getParam('SalesId');
+            var salesId = getParam('id');
             window.location = "/RepSales/Sales?SalesId=" + salesId;
         }
 
@@ -832,7 +832,7 @@
         function getItem() {
             var itemsObservableArray = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
-                var id = getParam('SalesId');
+                var id = getParam('id');
                 $.ajax({
                     url: '/api/listSalesInvoiceItemBySIId/' + id,
                     cache: false,
@@ -1638,7 +1638,7 @@
         // ==============
         function cmdSaleItemsSaveButton_OnClick() {
             var saleItemObject = new Object();
-            var id = getParam('SalesId');
+            var id = getParam('id');
             saleItemObject.SIId = id;
             saleItemObject.ItemId = cboItemDescription.selectedValue;
             saleItemObject.ItemInventoryId = cboInventoryCode.selectedValue;
@@ -1788,7 +1788,7 @@
         // Get Journal
         // ===========
         function getJournalListForSales() {
-            var id = getParam('SalesId');
+            var id = getParam('id');
             var journalsObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/listJournalBySIId/' + id,
@@ -1936,7 +1936,7 @@
         // GET Inventory Entries
         // =====================
         function getInventoryEntries() {
-            var id = getParam('SalesId');
+            var id = getParam('id');
             var inventoryObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/listInventoryBySIId/' + id,

@@ -256,7 +256,7 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (id) {
                         if (id > 0) {
-                            window.location = '/Software/SalesDetail?SalesId=' + id;
+                            window.location = '/Software/SalesDetail?id=' + id;
                         } else {
                             toastr.error("Internal Server Error");
                             document.getElementById('btnAddSales').innerHTML = "<i class='fa fa-plus'></i> Add";
@@ -279,7 +279,7 @@
             salesCollectionView.editItem(salesCollectionView.currentItem);
             var sale = salesCollectionView.currentEditItem;
             var saleId = sale.Id;
-            window.location = '/Software/SalesDetail?SalesId=' + saleId;
+            window.location = '/Software/SalesDetail?id=' + saleId;
         }
 
         // ==================
