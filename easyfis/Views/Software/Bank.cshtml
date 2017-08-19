@@ -12,14 +12,14 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Bank 
+                        Bank
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -40,18 +40,14 @@
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 40%" align="right">
-                                    <button class="btn btn-primary " id="cmdAddBank" onclick="bankAddbutton_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <a href="/Software" class="btn btn-danger " id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                    <button class="btn btn-primary" id="cmdAddBank" onclick="bankAddbutton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    <a href="/Software" class="btn btn-danger" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
                                 </td>
                             </tr>
                         </table>
                     </div>
                     <div class="panel-body">
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="BankGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
+                        <div id="BankGrid"></div>
                     </div>
                     <div class="panel-footer">
                         <div class="row">
@@ -77,55 +73,43 @@
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- Bank Modal -->
     <div class="modal fade" id="BankModal" role="dialog">
         <div class="modal-dialog">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title" id="BankModalLabel">Bank Detail <span id="bankLockAndUnLock"></span></h4>
+                    <h4 class="modal-title" id="BankModalLabel">Bank <span id="bankLockAndUnLock"></span></h4>
                 </div>
                 <div class="modal-body">
-                    <form id="bankDetailForm">
-                        <input type="hidden" id="bank_Id" />
+                    <center>
+                        <span id="loadingBank"></span>
+                    </center>
+                    <div id="bankDetailForm">
                         <dl class="dl-horizontal">
-                            <dt>Code</dt>
-                            <dd><input type="text" class="form-control   requiredBank" id="bank_code" readonly /></dd>
+                            <dt id="code">Code</dt>
+                            <dd id="code_value"><input type="text" class="form-control" id="bank_code" disabled /></dd>
                             <dt>Bank</dt>
-                            <dd><input type="text" class="form-control  requiredBank" id="bank_bank" placeholder="Bank" /></dd>
+                            <dd><input type="text" class="form-control requiredBank" id="bank_bank" placeholder="Bank" /></dd>
                             <dt>Bank Group</dt>
-                            <dd>
-                                <div id="bank_BankGroup" class="comboBox-wide"></div>
-
-                                <input type="hidden" class="requiredBank" id="bank_BankGroup_data" />
-                                <input type="hidden" id="bank_BankGroup_selectedValue" />
-                            </dd>
+                            <dd><div id="cboBankGroup" class="comboBox-wide"></div></dd>
                             <dt>Account</dt>
                             <dd>
                                 <table style="width: 100%" border="0">
                                     <tr>
                                         <td style="width: 30%">
-                                            <div id="bank_AccountCode" class=""></div>
+                                            <div class="comboBox-wide" id="cboAccountCode"></div>
                                         </td>
                                         <td style="width: 1%"></td>
                                         <td style="width: 69%">
-                                            <div id="bank_Account" class=""></div>
-                                            <input type="hidden" class="requiredBank" id="bank_Account_data" />
-                                            <input type="hidden" id="bank_AccountCode_selectedValue" />
-                                            <input type="hidden" id="bank_Account_selectedValue" />
-                                            <input type="hidden" id="bank_SalesAccountId" />
-                                            <input type="hidden" id="bank_CostAccountId" />
-                                            <input type="hidden" id="bank_AssetAccountId" />
-                                            <input type="hidden" id="bank_ExpenseAccountId" />
+                                            <div class="comboBox-wide" id="cboAccount"></div>
                                         </td>
                                     </tr>
                                 </table>
                             </dd>
                             <dt>Address</dt>
-                            <dd><textarea class="form-control textarea-custom requiredBank" id="bank_Address" placeholder="Address"></textarea></dd>
+                            <dd><textarea class="form-control textarea-custom requiredBank" id="bank_Address" placeholder="Address" rows="5"></textarea></dd>
                             <dt>Contact Number</dt>
                             <dd><input type="text" class="form-control   requiredBank" id="bank_ContactNumber" placeholder="Contact Number" /></dd>
                             <dt>Contect Person</dt>
@@ -133,11 +117,11 @@
                             <dt>Lock</dt>
                             <dd><input type="checkbox" id="bank_Lock" /></dd>
                         </dl>
-                    </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary " id="cmdBankSave" onclick="btnAddBank_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button type="button" id="cmdBankCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button id="cmdBankSave" class="btn btn-primary" onclick="btnAddBank_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdBankCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -146,37 +130,16 @@
     <!-- Bank Delete -->
     <div class="modal fade" id="deleteBankConfirm" role="dialog">
         <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Delete Bank <i class="fa fa-trash"></i></h4>
+                    <h4 class="modal-title">Delete</h4>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this?
+                    Are you sure you want to delete this bank?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger " id="cmdDeleteBank" onclick="btnConfirmDeleteBank_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteBankCloseButton" class="btn btn-primary " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Lock -->
-    <div class="modal fade" id="deleteRecordLock" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
-                </div>
-                <div class="modal-body">
-                    Sorry, the record is lock! It can't be deleted!
-                </div>
-                <div class="modal-footer">
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"> Okay</button>
+                    <button id="cmdDeleteBank" class="btn btn-danger" onclick="btnConfirmDeleteBank_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteBankCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -189,65 +152,45 @@
         // ================
         var banks;
         var bankGrid;
-        var bankAccounts;
-        var bankArticleGroups;
-        var cboBankForAccountCode;
-        var cboBankForAccount;
-        var cboArticleGroup;
         var btnFirstPageGrid;
         var btnPreviousPageGrid;
         var btnNextPageGrid;
         var btnLastPageGrid;
         var btnCurrentPageGrid;
+        var bankId = 0;
+        var cboBankGroup = new wijmo.input.ComboBox('#cboBankGroup');
+        var cboAccountCode = new wijmo.input.ComboBox('#cboAccountCode');
+        var cboAccount = new wijmo.input.ComboBox('#cboAccount');
 
         // ==============================
         // Get Data from MstArtcile Table
         // ==============================
         function getArtcileForBank() {
-            var banks = new wijmo.collections.ObservableArray;
             NProgress.start();
+            var banks = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/listArticleByArticleTypeId/5',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                data: {},
                 success: function (Results) {
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled = "";
+                            if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            }
 
                             var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled;
-
-                            if (canDelete == "True") {
-                                deleteDisabled = "";
-                            } else if (canDelete == "False") {
+                            var deleteDisabled = "";
+                            if (canDelete == "False") {
                                 deleteDisabled = "disabled";
-                            } else {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var btnDeleteId;
-                            if (Results[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBankDeleteLockButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                            } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBankDeleteButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                            }
-
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled;
-
-                            if (canEdit == "True") {
-                                editDisabled = "";
-                            } else if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            } else {
-                                editDisabled = "disabled";
                             }
 
                             banks.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='cmdBankEditButton_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: btnDeleteId,
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBankDeleteButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 ArticleCode: Results[i]["ArticleCode"],
                                 ManualArticleCode: Results[i]["ManualArticleCode"],
@@ -292,597 +235,12 @@
                             });
                         }
                     }
+
                     NProgress.done();
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
+
             return banks;
-        }
-
-        // ==========================
-        // Company Delete Lock Button
-        // ==========================
-        function cmdBankDeleteLockButton_OnClick() {
-            $('#deleteRecordLock').modal({
-                show: true,
-                backdrop: 'static'
-            });
-        }
-
-        // =========================
-        // Get Artile Supplier Group
-        // =========================
-        function getBankArticleGroupForComboBox() {
-            bankArticleGroups = new wijmo.collections.ObservableArray();
-            $.ajax({
-                url: '/api/listArticleGroupByArticleTypeId/5',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            bankArticleGroups.push({
-                                ArticleGroupId: results[i]["Id"],
-                                ArticleGroupArticleGroup: results[i]["ArticleGroup"],
-                                ArticleGroupAccountId: results[i]["AccountId"],
-                                ArticleGroupAccount: results[i]["Account"],
-                                ArticleGroupSalesAccountId: results[i]["SalesAccountId"],
-                                ArticleGroupSalesAccount: results[i]["SalesAccount"],
-                                ArticleGroupSalesAccountCode: results[i]["SalesAccountCode"],
-                                ArticleGroupCostAccountId: results[i]["CostAccountId"],
-                                ArticleGroupCostAccount: results[i]["CostAccount"],
-                                ArticleGroupAssetAccountId: results[i]["AssetAccountId"],
-                                ArticleGroupAssetAccount: results[i]["AssetAccount"],
-                                ArticleGroupExpenseAccountId: results[i]["ExpenseAccountId"],
-                                ArticleGroupExpenseAccount: results[i]["ExpenseAccount"]
-                            });
-                        }
-                        createCboForBankArticleGroup(bankArticleGroups);
-                    }
-                }
-            });
-        }
-
-        // ======================
-        // CBO for Supplier Group
-        // ======================
-        function createCboForBankArticleGroup(bankArticleGroups) {
-            var bankArticleGroupCollection = new wijmo.collections.CollectionView(bankArticleGroups);
-            var articleGroupList = new Array();
-            for (var i = 0; i < bankArticleGroupCollection.items.length; i++) {
-                articleGroupList.push(bankArticleGroupCollection.items[i].ArticleGroupArticleGroup);
-            }
-
-            var disabledDropdown;
-            if (document.getElementById('bank_Lock').checked == true) {
-                disabledDropdown = true;
-            } else {
-                disabledDropdown = false;
-            }
-
-            cboArticleGroup.dispose();
-            cboArticleGroup = new wijmo.input.ComboBox('#bank_BankGroup', {
-                disabled: disabledDropdown,
-                placeholder: "Select Bank Group",
-                itemsSource: articleGroupList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('bank_BankGroup_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#bank_BankGroup_data").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupId);
-                    $("#bank_Account_data").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupAccountId);
-                    $("#bank_Account_selectedValue").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupAccount);
-                    $("#bank_AccountCode_selectedValue").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupSalesAccountCode);
-                    $("#bank_SalesAccountId").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupSalesAccountId);
-                    $("#bank_CostAccountId").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupCostAccountId);
-                    $("#bank_AssetAccountId").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccountId);
-                    $("#bank_ExpenseAccountId").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
-
-                    accounts = new wijmo.collections.ObservableArray();
-                    $.ajax({
-                        url: '/api/listAccount',
-                        cache: false,
-                        type: 'GET',
-                        contentType: 'application/json; charset=utf-8',
-                        data: {},
-                        success: function (results) {
-                            if (results.length > 0) {
-                                for (i = 0; i < results.length; i++) {
-                                    accounts.push({
-                                        AccountId: results[i]["Id"],
-                                        AccountAccount: results[i]["Account"]
-                                    });
-                                }
-
-                                createCboForBankAccountCode(bankAccounts);
-                                createCboForBankAccount(bankAccounts);
-                            }
-                        }
-                    });
-                }
-            });
-        }
-
-        // ===========
-        // Get Account
-        // ===========
-        function getBankAccountForComboBox() {
-            bankAccounts = new wijmo.collections.ObservableArray();
-            $.ajax({
-                url: '/api/listAccount',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            bankAccounts.push({
-                                AccountId: results[i]["Id"],
-                                AccountCode: results[i]["AccountCode"],
-                                AccountAccount: results[i]["Account"]
-                            });
-                        }
-                        createCboForBankAccountCode(bankAccounts);
-                        createCboForBankAccount(bankAccounts);
-                    }
-                }
-            });
-        }
-
-        // ====================
-        // CBO for Account Code
-        // ====================
-        function createCboForBankAccountCode(bankAccounts) {
-            var accountCollection = new wijmo.collections.CollectionView(bankAccounts);
-            var accountList = new Array();
-            for (var i = 0; i < accountCollection.items.length; i++) {
-                accountList.push(accountCollection.items[i].AccountCode);
-            }
-
-            cboBankForAccountCode.dispose();
-            cboBankForAccountCode = new wijmo.input.ComboBox('#bank_AccountCode', {
-                disabled: true,
-                placeholder: "Select Account Code",
-                itemsSource: accountList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('bank_AccountCode_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#bank_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                }
-            });
-        }
-
-
-        // ===============
-        // CBO for Account
-        // ===============
-        function createCboForBankAccount(bankAccounts) {
-            var accountCollection = new wijmo.collections.CollectionView(bankAccounts);
-            var accountList = new Array();
-            for (var i = 0; i < accountCollection.items.length; i++) {
-                accountList.push(accountCollection.items[i].AccountAccount);
-            }
-
-            cboBankForAccount.dispose();
-            cboBankForAccount = new wijmo.input.ComboBox('#bank_Account', {
-                disabled: true,
-                placeholder: "Select Account",
-                itemsSource: accountList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('bank_Account_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#bank_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                }
-            });
-        }
-
-        // ========================================================
-        // Function with leading zeroes to display the article code
-        // ========================================================
-        function zerofill(number, length) {
-            var result = number.toString();
-            var pad = length - result.length;
-            while (pad > 0) {
-                result = '0' + result;
-                pad--;
-            }
-            return result;
-        }
-
-        // ===============
-        // Bank ADD Button
-        // ===============
-        function bankAddbutton_OnClick() {
-            $('#BankModal').modal({
-                show: true,
-                backdrop: 'static'
-            });
-
-            $('.requiredBank').each(function () {
-                $(this).css({
-                    "border": "",
-                });
-            });
-
-            document.getElementById('cmdBankSave').innerHTML = "<i class='fa fa-save'></i> Save";
-            $("#cmdBankSave").prop("disabled", false);
-            $("#cmdBankCloseButton").prop("disabled", false);
-
-            getBankArticleGroupForComboBox();
-            getBankAccountForComboBox();
-
-            document.getElementById('bank_Id').value = 0;
-            //document.getElementById('bank_code').value = '';
-            var banks = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/articleLastArticleCodeByArticleTypeId/5',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    if (Results == null) {
-                        document.getElementById('bank_code').value = '0000000001';
-                    } else {
-                        var ArticleCode = parseInt(Results.ArticleCode);
-                        var ArticleCode_plusOne = 0000000001;
-                        var ArticleCode_Results = ArticleCode + ArticleCode_plusOne;
-
-                        document.getElementById('bank_code').value = zerofill(ArticleCode_Results, 10);
-                        console.log(zerofill(ArticleCode_Results, 10));
-
-                        //if (Results.length > 0) {
-                        //    banks.push({
-                        //        Id: Results.Id,
-                        //        BankArticleCode: Results.ArticleCode
-                        //    });
-                        //}
-                    }
-                }
-            });
-
-            document.getElementById('bank_bank').value = "NA";
-            document.getElementById('bank_BankGroup_data').value = "";
-            document.getElementById('bank_BankGroup_selectedValue').value = "";
-            document.getElementById('bank_Account_data').value = "";
-
-            document.getElementById('bank_SalesAccountId').value = "";
-            document.getElementById('bank_CostAccountId').value = "";
-            document.getElementById('bank_AssetAccountId').value = "";
-            document.getElementById('bank_ExpenseAccountId').value = "";
-
-            document.getElementById('bank_Account_selectedValue').value = "";
-            document.getElementById('bank_Address').value = "NA";
-            document.getElementById('bank_ContactNumber').value = "NA";
-            document.getElementById('branch_ContactPerson').value = "NA";
-
-            document.getElementById('bank_Lock').checked = false
-            if (document.getElementById('bank_Lock').checked == true) {
-                document.getElementById('bank_bank').disabled = true;
-                document.getElementById('bank_Address').disabled = true;
-                document.getElementById('bank_ContactNumber').disabled = true;
-                document.getElementById('branch_ContactPerson').disabled = true;
-                //getBankArticleGroupForComboBox();
-                document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
-            } else {
-                document.getElementById('bank_bank').disabled = false;
-                document.getElementById('bank_Address').disabled = false;
-                document.getElementById('bank_ContactNumber').disabled = false;
-                document.getElementById('branch_ContactPerson').disabled = false;
-                //getBankArticleGroupForComboBox();
-                document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
-            }
-
-
-        }
-
-        // ================
-        // Bank EDIT Button
-        // ================
-        function cmdBankEditButton_OnClick() {
-            banks.editItem(banks.currentItem);
-            $('#BankModal').modal({
-                show: true,
-                backdrop: 'static'
-            });
-
-            $('.requiredBank').each(function () {
-                $(this).css({
-                    "border": "",
-                });
-            });
-
-            document.getElementById('cmdBankSave').innerHTML = "<i class='fa fa-save'></i> Save";
-            $("#cmdBankSave").prop("disabled", false);
-            $("#cmdBankCloseButton").prop("disabled", false);
-
-            getBankArticleGroupForComboBox();
-            getBankAccountForComboBox();
-
-            var bank = banks.currentEditItem;
-            document.getElementById('bank_Id').value = bank.Id ? bank.Id : '';
-            document.getElementById('bank_code').value = bank.ArticleCode ? bank.ArticleCode : '';
-            document.getElementById('bank_bank').value = bank.Article ? bank.Article : '';
-            document.getElementById('bank_BankGroup_data').value = bank.ArticleGroupId ? bank.ArticleGroupId : '';
-            document.getElementById('bank_BankGroup_selectedValue').value = bank.ArticleGroup ? bank.ArticleGroup : '';
-            document.getElementById('bank_Account_data').value = bank.AccountId ? bank.AccountId : '';
-            document.getElementById('bank_Account_selectedValue').value = bank.Account ? bank.Account : '';
-            document.getElementById('bank_AccountCode_selectedValue').value = bank.AccountCode ? bank.AccountCode : '';
-
-            document.getElementById('bank_SalesAccountId').value = bank.SalesAccountId ? bank.SalesAccountId : '';
-            document.getElementById('bank_CostAccountId').value = bank.CostAccountId ? bank.CostAccountId : '';
-            document.getElementById('bank_AssetAccountId').value = bank.AssetAccountId ? bank.AssetAccountId : '';
-            document.getElementById('bank_ExpenseAccountId').value = bank.ExpenseAccountId ? bank.ExpenseAccountId : '';
-
-            document.getElementById('bank_Address').value = bank.Address ? bank.Address : '';
-            document.getElementById('bank_ContactNumber').value = bank.ContactNumber ? bank.ContactNumber : '';
-            document.getElementById('branch_ContactPerson').value = bank.ContactPerson ? bank.ContactPerson : '';
-            document.getElementById('bank_Lock').checked = bank.IsLocked;
-
-            if (document.getElementById('bank_Lock').checked == true) {
-                document.getElementById('bank_bank').disabled = true;
-                document.getElementById('bank_Address').disabled = true;
-                document.getElementById('bank_ContactNumber').disabled = true;
-                document.getElementById('branch_ContactPerson').disabled = true;
-                getBankArticleGroupForComboBox();
-                document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
-            } else {
-                document.getElementById('bank_bank').disabled = false;
-                document.getElementById('bank_Address').disabled = false;
-                document.getElementById('bank_ContactNumber').disabled = false;
-                document.getElementById('branch_ContactPerson').disabled = false;
-                getBankArticleGroupForComboBox();
-                document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
-            }
-        }
-
-        // ==================
-        // Bank Delete Button
-        // ==================
-        function cmdBankDeleteButton_OnClick() {
-            $('#deleteBankConfirm').modal({
-                show: true,
-                backdrop: 'static'
-            });
-
-            document.getElementById('cmdDeleteBank').innerHTML = "<i class='fa fa-trash'></i> Delete";
-            $("#cmdDeleteBank").prop("disabled", false);
-            $("#cmdConfirmDeleteBankCloseButton").prop("disabled", false);
-        }
-        // Employee Confirm Delete Button
-        function btnConfirmDeleteBank_OnClick() {
-            document.getElementById('cmdDeleteBank').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
-            $("#cmdDeleteBank").prop("disabled", true);
-            $("#cmdConfirmDeleteBankCloseButton").prop("disabled", true);
-
-            banks.editItem(banks.currentItem);
-            var id = banks.currentEditItem.Id;
-            $.ajax({
-                url: '/api/deleteArticle/' + id,
-                type: "DELETE",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                statusCode: {
-                    200: function () {
-                        $("#cmdDeleteBank").prop("disabled", true);
-                        $("#cmdConfirmDeleteBankCloseButton").prop("disabled", true);
-                        toastr.success("Successfully Deleted");
-
-                        $('#deleteBankConfirm').modal('hide');
-
-                        banks = new wijmo.collections.CollectionView(getArtcileForBank());
-                        banks.canFilter = true;
-                        banks.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            banks.refresh();
-                        });
-                        banks.filter = function (item) {
-                            return !filterText || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Article.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Address.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        banks.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsBank();
-                        });
-                        banks.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        bankGrid.itemsSource = banks;
-                        bankGrid.trackChanges = true;
-                    },
-                    404: function () {
-                        toastr.error("Request Not Found");
-                        $("#cmdDeleteBank").prop("disabled", false);
-                        $("#cmdConfirmDeleteBankCloseButton").prop("disabled", false);
-                        $('#deleteBankConfirm').modal('hide');
-
-                    },
-                    400: function () {
-                        toastr.error("Can't be deleted");
-                        $("#cmdDeleteBank").prop("disabled", false);
-                        $("#cmdConfirmDeleteBankCloseButton").prop("disabled", false);
-                        $('#deleteBankConfirm').modal('hide');
-                    }
-                }
-            });
-        }
-
-        // =========
-        // SAVE Bank
-        // =========
-        function btnAddBank_OnClick() {
-            var bankObject = new Object();
-            var bankId = document.getElementById('bank_Id').value;
-            bankObject.ArticleCode = document.getElementById('bank_code').value;
-            bankObject.Article = document.getElementById('bank_bank').value;
-            bankObject.ArticleGroupId = document.getElementById('bank_BankGroup_data').value;
-            if (bankId == 0) {
-                bankObject.AccountId = document.getElementById('bank_Account_data').value;
-                bankObject.SalesAccountId = document.getElementById('bank_SalesAccountId').value;
-                bankObject.CostAccountId = document.getElementById('bank_CostAccountId').value;
-                bankObject.AssetAccountId = document.getElementById('bank_AssetAccountId').value;
-                bankObject.ExpenseAccountId = document.getElementById('bank_ExpenseAccountId').value;
-            } else {
-                bankObject.AccountId = document.getElementById('bank_Account_data').value;
-            }
-            bankObject.Address = document.getElementById('bank_Address').value;
-            bankObject.ContactNumber = document.getElementById('bank_ContactNumber').value;
-            bankObject.ContactPerson = document.getElementById('branch_ContactPerson').value;
-            bankObject.IsLocked = document.getElementById('bank_Lock').checked;
-            var bankData = JSON.stringify(bankObject);
-
-            if (document.getElementById('bank_BankGroup_data').value == '') {
-                document.getElementById("bank_BankGroup").style.border = "1px solid red";
-            } else {
-                document.getElementById("bank_BankGroup").style.border = "1px solid #C8C8C8";
-            }
-
-            if (document.getElementById('bank_Account_data').value == '') {
-                document.getElementById("bank_Account").style.border = "1px solid red";
-            } else {
-                document.getElementById("bank_Account").style.border = "1px solid #C8C8C8";
-            }
-
-            var isValid = true;
-            $('.requiredBank').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "1px solid red"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
-            if (isValid == false) {
-                toastr.error("Invalid Entry");
-                e.preventDefault();
-            }
-            else {
-                document.getElementById('cmdBankSave').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
-                $("#cmdBankSave").prop("disabled", true);
-                $("#cmdBankCloseButton").prop("disabled", true);
-
-                if (bankId == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addArticle/5',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: bankData,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdBankSave").prop("disabled", true);
-                                $("#cmdBankCloseButton").prop("disabled", true);
-                                toastr.success("Save Successful");
-
-                                $('#BankModal').modal('hide');
-
-                                banks = new wijmo.collections.CollectionView(getArtcileForBank());
-                                banks.canFilter = true;
-                                banks.pageSize = 15;
-
-                                var filterText = '';
-                                $('#InputFilter').keyup(function () {
-                                    filterText = this.value.toLowerCase();
-                                    banks.refresh();
-                                });
-                                banks.filter = function (item) {
-                                    return !filterText || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
-                                                       || (item.Article.toLowerCase().indexOf(filterText) > -1)
-                                                       || (item.Address.toLowerCase().indexOf(filterText) > -1)
-                                                       || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1);
-                                }
-                                banks.collectionChanged.addHandler(function (sender, args) {
-                                    updateNavigateButtonsBank();
-                                });
-                                banks.currentChanged.addHandler(function (sender, args) {
-                                    updateDetails();
-                                });
-
-                                bankGrid.itemsSource = banks;
-                                bankGrid.trackChanges = true;
-                            },
-                            404: function () {
-                                toastr.error("Not Found");
-                                $("#cmdBankSave").prop("disabled", false);
-                                $("#cmdBankCloseButton").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdBankSave").prop("disabled", false);
-                                $("#cmdBankCloseButton").prop("disabled", false);
-                            }
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updateArticle/' + bankId + '/5',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: bankData,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdBankSave").prop("disabled", true);
-                                $("#cmdBankCloseButton").prop("disabled", true);
-                                toastr.success("Update Successful");
-
-                                $('#BankModal').modal('hide');
-
-                                banks = new wijmo.collections.CollectionView(getArtcileForBank());
-                                banks.canFilter = true;
-                                banks.pageSize = 15;
-
-                                var filterText = '';
-                                $('#InputFilter').keyup(function () {
-                                    filterText = this.value.toLowerCase();
-                                    banks.refresh();
-                                });
-                                banks.filter = function (item) {
-                                    return !filterText || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
-                                                       || (item.Article.toLowerCase().indexOf(filterText) > -1)
-                                                       || (item.Address.toLowerCase().indexOf(filterText) > -1)
-                                                       || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1);
-                                }
-                                banks.collectionChanged.addHandler(function (sender, args) {
-                                    updateNavigateButtonsBank();
-                                });
-                                banks.currentChanged.addHandler(function (sender, args) {
-                                    updateDetails();
-                                });
-
-                                bankGrid.itemsSource = banks;
-                                bankGrid.trackChanges = true;
-                            },
-                            404: function () {
-                                toastr.error("Not Found");
-                                $("#cmdBankSave").prop("disabled", false);
-                                $("#cmdBankCloseButton").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdBankSave").prop("disabled", false);
-                                $("#cmdBankCloseButton").prop("disabled", false);
-                            }
-                        }
-                    });
-                }
-            }
         }
 
         // ===================
@@ -924,15 +282,10 @@
             btnCurrentPageGrid.innerHTML = (banks.pageIndex + 1) + ' / ' + banks.pageCount;
         }
 
-        // ===========
-        // OnLoad Page
-        // ===========
-        $(document).ready(function () {
-           
-            cboBankForAccountCode = new wijmo.input.ComboBox('#bank_AccountCode');
-            cboBankForAccount = new wijmo.input.ComboBox('#bank_Account');
-            cboArticleGroup = new wijmo.input.ComboBox('#bank_BankGroup');
-
+        // =====================
+        // Refresh FlexGrid Bank
+        // =====================
+        function refreshBankFlexGrid() {
             banks = new wijmo.collections.CollectionView(getArtcileForBank());
             banks.canFilter = true;
             banks.pageSize = 15;
@@ -942,15 +295,52 @@
                 filterText = this.value.toLowerCase();
                 banks.refresh();
             });
+
+            banks.filter = function (item) {
+                return !filterText || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
+                    || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                    || (item.Address.toLowerCase().indexOf(filterText) > -1)
+                    || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            banks.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsBank();
+            });
+
+            banks.currentChanged.addHandler(function (sender, args) {
+                updateDetails();
+            });
+
+            // Flex Grid
+            bankGrid.itemsSource = banks;
+            bankGrid.trackChanges = true;
+        }
+
+        // =============
+        // FlexGrid Bank
+        // =============
+        function createBankFlexGrid() {
+            banks = new wijmo.collections.CollectionView(getArtcileForBank());
+            banks.canFilter = true;
+            banks.pageSize = 15;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                banks.refresh();
+            });
+
             banks.filter = function (item) {
                 return !filterText || (item.ArticleCode.toLowerCase().indexOf(filterText) > -1)
                                    || (item.Article.toLowerCase().indexOf(filterText) > -1)
                                    || (item.Address.toLowerCase().indexOf(filterText) > -1)
                                    || (item.ContactNumber.toLowerCase().indexOf(filterText) > -1);
             }
+
             banks.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsBank();
             });
+
             banks.currentChanged.addHandler(function (sender, args) {
                 updateDetails();
             });
@@ -981,25 +371,25 @@
                                 "header": "Code",
                                 "binding": "ArticleCode",
                                 "allowSorting": true,
-                                "width": 100,
+                                "width": "1.5*",
                             },
                             {
                                 "header": "Bank",
                                 "binding": "Article",
                                 "allowSorting": true,
-                                "width": 290
+                                "width": "3*"
                             },
                             {
                                 "header": "Address",
                                 "binding": "Address",
                                 "allowSorting": true,
-                                "width": 300
+                                "width": "3*"
                             },
                             {
                                 "header": "Contact No.",
                                 "binding": "ContactNumber",
                                 "allowSorting": true,
-                                "width": 200
+                                "width": "2*"
                             },
                             {
                                 "header": "L",
@@ -1011,7 +401,6 @@
                 autoGenerateColumns: false,
                 itemsSource: banks,
                 isReadOnly: true,
-                //frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -1019,7 +408,6 @@
 
             bankGrid.trackChanges = true;
 
-            //Navigation button
             btnFirstPageGrid = document.getElementById('btnMoveToFirstPageGrid');
             btnPreviousPageGrid = document.getElementById('btnMoveToPreviousPageGrid');
             btnNextPageGrid = document.getElementById('btnMoveToNextPageGrid');
@@ -1032,46 +420,450 @@
                 banks.moveToFirstPage();
                 updateNavigateButtonsBank();
             });
+
             btnPreviousPageGrid.addEventListener('click', function () {
                 banks.moveToPreviousPage();
                 updateNavigateButtonsBank();
             });
+
             btnNextPageGrid.addEventListener('click', function () {
                 banks.moveToNextPage();
                 updateNavigateButtonsBank();
             });
+
             btnLastPageGrid.addEventListener('click', function () {
                 banks.moveToLastPage();
                 updateNavigateButtonsBank();
             });
 
             var canAdd = "@ViewData["CanAdd"]";
-            if (canAdd == "True") {
-                $("#cmdAddBank").prop("disabled", false)
-            } else if (canAdd == "False") {
-                $("#cmdAddBank").prop("disabled", true)
-            } else {
-                $("#cmdAddBank").prop("disabled", true)
+            if (canAdd == "False") {
+                $("#cmdAddBank").prop("disabled", true);
             }
+        }
 
-            // Bank Lock - IsLocked
-            $("#bank_Lock").click(function () {
-                if ($(this).is(':checked')) {
-                    document.getElementById('bank_bank').disabled = true;
-                    document.getElementById('bank_Address').disabled = true;
-                    document.getElementById('bank_ContactNumber').disabled = true;
-                    document.getElementById('branch_ContactPerson').disabled = true;
-                    cboArticleGroup.disabled = true;
-                    document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
-                } else {
-                    document.getElementById('bank_bank').disabled = false;
-                    document.getElementById('bank_Address').disabled = false;
-                    document.getElementById('bank_ContactNumber').disabled = false;
-                    document.getElementById('branch_ContactPerson').disabled = false;
-                    cboArticleGroup.disabled = false;
-                    document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+        // =========================
+        // Get Artile Supplier Group
+        // =========================
+        function getBankArticleGroupForComboBox(bankGroupIdSelectedValue, accountIdSelectedValue, isLocked) {
+            var bankArticleGroupsObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleGroupByArticleTypeId/5',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            bankArticleGroupsObservableArray.push({
+                                Id: results[i]["Id"],
+                                ArticleGroup: results[i]["ArticleGroup"],
+                                AccountId: results[i]["AccountId"],
+                                Account: results[i]["Account"],
+                                SalesAccountId: results[i]["SalesAccountId"],
+                                SalesAccount: results[i]["SalesAccount"],
+                                CostAccountId: results[i]["CostAccountId"],
+                                CostAccount: results[i]["CostAccount"],
+                                AssetAccountId: results[i]["AssetAccountId"],
+                                AssetAccount: results[i]["AssetAccount"],
+                                ExpenseAccountId: results[i]["ExpenseAccountId"],
+                                ExpenseAccount: results[i]["ExpenseAccount"]
+                            });
+                        }
+                    }
+
+                    var disabled = true;
+                    if (isLocked) {
+                        disabled = true;
+                        if (results.length > 0) {
+                            $("#cmdBankSave").prop("disabled", false);
+                        }
+                    } else {
+                        if (results.length > 0) {
+                            disabled = false;
+                            $("#cmdBankSave").prop("disabled", false);
+                        } else {
+                            $("#cmdBankSave").prop("disabled", true);
+                        }
+                    }
+
+                    cboBankGroup.dispose();
+                    cboBankGroup = new wijmo.input.ComboBox('#cboBankGroup', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: bankArticleGroupsObservableArray,
+                        displayMemberPath: "ArticleGroup",
+                        selectedValuePath: "Id",
+                        selectedValue: bankGroupIdSelectedValue,
+                        onSelectedIndexChanged: function () {
+                            cboAccount.selectedValue = this.selectedItem["AccountId"];
+                        }
+                    });
+
+                    if (bankId == 0) {
+                        if (cboBankGroup.selectedValue != null) {
+                            getBankAccountForComboBox(cboBankGroup.selectedItem["AccountId"], isLocked);
+                        } else {
+                            getBankAccountForComboBox(accountIdSelectedValue, isLocked);
+                        }
+                    } else {
+                        getBankAccountForComboBox(accountIdSelectedValue, isLocked);
+                    }
                 }
             });
+        }
+
+        // ===========
+        // Get Account
+        // ===========
+        function getBankAccountForComboBox(accountIdSelectedValue, isLocked) {
+            var bankAccountsObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listAccount',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            bankAccountsObservableArray.push({
+                                Id: results[i]["Id"],
+                                AccountCode: results[i]["AccountCode"],
+                                Account: results[i]["Account"]
+                            });
+                        }
+                    }
+
+                    var disabled = true;
+                    if (isLocked) {
+                        disabled = true;
+                    } else {
+                        if (results.length > 0) {
+                            disabled = false;
+                        } else {
+                            $("#cmdBankSave").prop("disabled", true);
+                        }
+                    }
+
+                    var accountIdValue = accountIdSelectedValue;
+                    if (bankId == 0) {
+                        if (cboBankGroup.selectedValue != null) {
+                            accountIdValue = cboBankGroup.selectedItem["AccountId"];
+                        }
+                    }
+
+                    cboAccountCode.dispose();
+                    cboAccountCode = new wijmo.input.ComboBox('#cboAccountCode', {
+                        disabled: true,
+                        isEditable: false,
+                        itemsSource: bankAccountsObservableArray,
+                        displayMemberPath: "AccountCode",
+                        selectedValuePath: "Id",
+                        selectedValue: accountIdValue,
+                        onSelectedIndexChanged: function () {
+                            cboAccount.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboAccount.dispose();
+                    cboAccount = new wijmo.input.ComboBox('#cboAccount', {
+                        disabled: true,
+                        isEditable: false,
+                        itemsSource: bankAccountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id",
+                        selectedValue: accountIdValue,
+                        onSelectedIndexChanged: function () {
+                            cboAccountCode.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    setTimeout(function () {
+                        $("#loadingBank").hide();
+                        $("#bankDetailForm").show();
+                    }, 500);
+                }
+            });
+        }
+
+        // ===============
+        // Bank ADD Button
+        // ===============
+        function bankAddbutton_OnClick() {
+            $('#BankModal').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $('.requiredBank').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
+            $("#loadingBank").show();
+            document.getElementById("loadingBank").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#bankDetailForm").hide();
+
+            document.getElementById('cmdBankSave').innerHTML = "<i class='fa fa-save'></i> Save";
+            $("#cmdBankSave").prop("disabled", true);
+            $("#cmdBankCloseButton").prop("disabled", false);
+
+            $("#bank_code").hide();
+            $("#code").hide();
+            $("#code_value").hide();
+
+            bankId = 0;
+            document.getElementById('bank_bank').value = "NA";
+            getBankArticleGroupForComboBox(0,0, false);
+            document.getElementById('bank_Address').value = "NA";
+            document.getElementById('bank_ContactNumber').value = "NA";
+            document.getElementById('branch_ContactPerson').value = "NA";
+            document.getElementById('bank_Lock').checked = false;
+            document.getElementById('bank_bank').disabled = false;
+            document.getElementById('bank_Address').disabled = false;
+            document.getElementById('bank_ContactNumber').disabled = false;
+            document.getElementById('branch_ContactPerson').disabled = false;
+            document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+        }
+
+        // ================
+        // Bank EDIT Button
+        // ================
+        function cmdBankEditButton_OnClick() {
+            $('#BankModal').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $('.requiredBank').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
+            $("#loadingBank").show();
+            document.getElementById("loadingBank").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#bankDetailForm").hide();
+
+            document.getElementById('cmdBankSave').innerHTML = "<i class='fa fa-save'></i> Save";
+            $("#cmdBankSave").prop("disabled", true);
+            $("#cmdBankCloseButton").prop("disabled", false);
+
+            banks.editItem(banks.currentItem);
+            var bank = banks.currentEditItem;
+
+            bankId = bank.Id;
+            getBankArticleGroupForComboBox(bank.ArticleGroupId, bank.AccountId, bank.IsLocked);
+
+            $("#bank_code").show();
+            $("#code").show();
+            $("#code_value").show();
+
+            document.getElementById('bank_code').value = bank.ArticleCode;
+            document.getElementById('bank_bank').value = bank.Article;
+            document.getElementById('bank_Address').value = bank.Address;
+            document.getElementById('bank_ContactNumber').value = bank.ContactNumber;
+            document.getElementById('branch_ContactPerson').value = bank.ContactPerson;
+            document.getElementById('bank_Lock').checked = bank.IsLocked;
+
+            if (bank.IsLocked) {
+                document.getElementById('bank_bank').disabled = true;
+                document.getElementById('bank_Address').disabled = true;
+                document.getElementById('bank_ContactNumber').disabled = true;
+                document.getElementById('branch_ContactPerson').disabled = true;
+                document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('bank_bank').disabled = false;
+                document.getElementById('bank_Address').disabled = false;
+                document.getElementById('bank_ContactNumber').disabled = false;
+                document.getElementById('branch_ContactPerson').disabled = false;
+                document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
+        }
+
+        // Bank Lock - IsLocked
+        $("#bank_Lock").click(function () {
+            if ($(this).is(':checked')) {
+                document.getElementById('bank_bank').disabled = true;
+                document.getElementById('bank_Address').disabled = true;
+                document.getElementById('bank_ContactNumber').disabled = true;
+                document.getElementById('branch_ContactPerson').disabled = true;
+                cboBankGroup.disabled = true;
+                document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('bank_bank').disabled = false;
+                document.getElementById('bank_Address').disabled = false;
+                document.getElementById('bank_ContactNumber').disabled = false;
+                document.getElementById('branch_ContactPerson').disabled = false;
+                cboBankGroup.disabled = false;
+                document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
+        });
+
+        // ==================
+        // Bank Delete Button
+        // ==================
+        function cmdBankDeleteButton_OnClick() {
+            banks.editItem(banks.currentItem);
+            var bank = banks.currentEditItem;
+            if (bank.IsLocked) {
+                toastr.error("Delete is not allowed when the selected record is locked!");
+            } else {
+                $('#deleteBankConfirm').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
+
+                document.getElementById('cmdDeleteBank').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                $("#cmdDeleteBank").prop("disabled", false);
+                $("#cmdConfirmDeleteBankCloseButton").prop("disabled", false);
+            }
+        }
+
+        // Employee Confirm Delete Button
+        function btnConfirmDeleteBank_OnClick() {
+            document.getElementById('cmdDeleteBank').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
+            $("#cmdDeleteBank").prop("disabled", true);
+            $("#cmdConfirmDeleteBankCloseButton").prop("disabled", true);
+
+            banks.editItem(banks.currentItem);
+            var id = banks.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteArticle/' + id,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        toastr.success("Delete Successful");
+                        $('#deleteBankConfirm').modal('hide');
+                        refreshBankFlexGrid();
+                    },
+                    404: function () {
+                        toastr.error("Not Found");
+                        $('#deleteBankConfirm').modal('hide');
+                        document.getElementById('cmdDeleteBank').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $("#cmdDeleteBank").prop("disabled", false);
+                        $("#cmdConfirmDeleteBankCloseButton").prop("disabled", false);
+
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#deleteBankConfirm').modal('hide');
+                        document.getElementById('cmdDeleteBank').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $("#cmdDeleteBank").prop("disabled", false);
+                        $("#cmdConfirmDeleteBankCloseButton").prop("disabled", false);
+                    }
+                }
+            });
+        }
+
+        // =========
+        // SAVE Bank
+        // =========
+        function btnAddBank_OnClick() {
+            var bankObject = new Object();
+            bankObject.ArticleCode = document.getElementById('bank_code').value;
+            bankObject.Article = document.getElementById('bank_bank').value;
+            bankObject.ArticleGroupId = cboBankGroup.selectedValue;
+            bankObject.AccountId = cboBankGroup.selectedItem["AccountId"];
+            bankObject.SalesAccountId = cboBankGroup.selectedItem["SalesAccountId"];
+            bankObject.CostAccountId = cboBankGroup.selectedItem["CostAccountId"];
+            bankObject.AssetAccountId = cboBankGroup.selectedItem["AssetAccountId"];
+            bankObject.ExpenseAccountId = cboBankGroup.selectedItem["ExpenseAccountId"];
+            bankObject.Address = document.getElementById('bank_Address').value;
+            bankObject.ContactNumber = document.getElementById('bank_ContactNumber').value;
+            bankObject.ContactPerson = document.getElementById('branch_ContactPerson').value;
+            bankObject.IsLocked = document.getElementById('bank_Lock').checked;
+            var bankData = JSON.stringify(bankObject);
+
+            var isValid = true;
+            $('.requiredBank').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                } else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+
+            if (isValid) {
+                document.getElementById('cmdBankSave').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
+                $("#cmdBankSave").prop("disabled", true);
+                $("#cmdBankCloseButton").prop("disabled", true);
+
+                if (bankId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addArticle/5',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: bankData,
+                        statusCode: {
+                            200: function () {
+                                toastr.success("Save Successful");
+                                $('#BankModal').modal('hide');
+                                refreshBankFlexGrid();
+                            },
+                            404: function () {
+                                toastr.error("Not Found");
+                                document.getElementById('cmdBankSave').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdBankSave").prop("disabled", false);
+                                $("#cmdBankCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                document.getElementById('cmdBankSave').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdBankSave").prop("disabled", false);
+                                $("#cmdBankCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateArticle/' + bankId + '/5',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: bankData,
+                        statusCode: {
+                            200: function () {
+                                toastr.success("Update Successful");
+                                $('#BankModal').modal('hide');
+                                refreshBankFlexGrid();
+                            },
+                            404: function () {
+                                toastr.error("Not Found");
+                                $('#BankModal').modal('hide');
+                                document.getElementById('cmdBankSave').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdBankSave").prop("disabled", false);
+                                $("#cmdBankCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#BankModal').modal('hide');
+                                document.getElementById('cmdBankSave').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdBankSave").prop("disabled", false);
+                                $("#cmdBankCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                }
+            } else {
+                toastr.error("Invalid Entry");
+            }
+        }
+
+        // ===========
+        // OnLoad Page
+        // ===========
+        $(document).ready(function () {
+            createBankFlexGrid();
         });
     </script>
     <script type="text/javascript">

@@ -959,7 +959,7 @@ namespace easyfis.Controllers
                 }
                 else if (Convert.ToInt32(articleTypeId) == 5)
                 {
-                    newArticle.ArticleCode = article.ArticleCode;
+                    newArticle.ArticleCode = articleCodeResult;
                     newArticle.ManualArticleCode = "NULL";
                     newArticle.Article = article.Article;
                     newArticle.Category = "NA";
