@@ -365,7 +365,7 @@
                     <h4 class="modal-title">Apply</h4>
                 </div>
                 <div class="modal-body">
-                    Are you sure that you want to apply all selected purchase order items?
+                    Are you sure that you want to apply all picked purchase order items?
                 </div>
                 <div class="modal-footer">
                     <button id="cmdConfirmApplyAllPOStatusPOItems" class="btn btn-primary" onclick="btnConfrimApplyAllPOItems_OnClick()"><i class="fa fa-check"></i> Apply</button>
@@ -1192,7 +1192,7 @@
                                     Balance: Results[i]["BaseQuantity"] - Results[i]["Received"],
                                     QuantityBalanceValue: Results[i]["BaseQuantity"] - Results[i]["Received"],
                                     Amount: Results[i]["Amount"],
-                                    Pick: (Results[i]["BaseQuantity"] - Results[i]["Received"]) == 0 ? "<button class='btn btn-primary btn-xs' onclick='pickQuantity_OnClick()'><i class='fa fa-hand-o-right'></i></button>" : "<button class='btn btn-warning btn-xs' onclick='pickReverseQuantity_OnClick()'><i class='fa fa-hand-o-left'></i></button>",
+                                    Pick: (Results[i]["BaseQuantity"] - Results[i]["Received"]) == 0 ? "<button class='btn btn-primary btn-xs' onclick='pickQuantity_OnClick()'><i class='fa fa-arrow-right'></i></button>" : "<button class='btn btn-warning btn-xs' onclick='pickReverseQuantity_OnClick()'><i class='fa fa-arrow-left'></i></button>",
                                     BaseUnitId: Results[i]["BaseUnitId"],
                                     BaseQuantity: Results[i]["BaseQuantity"],
                                     BaseCost: Results[i]["BaseCost"],
@@ -1285,7 +1285,7 @@
                             {
                                 "header": "Pick",
                                 "binding": "Pick",
-                                "width": "0.5*",
+                                "width": 50,
                                 "align": "center",
                                 "isReadOnly": true,
                                 "isContentHtml": true
@@ -1344,7 +1344,7 @@
             var balance = purchaseOrderStatusItem.BaseQuantity - purchaseOrderStatusItem.Received;
             if (balance > 0) {
                 purchaseOrderStatusItem.QuantityBalanceValue = balance;
-                purchaseOrderStatusItem.Pick = "<button class='btn btn-warning btn-xs' onclick='pickReverseQuantity_OnClick()'><i class='fa fa-hand-o-left'></i></button>";
+                purchaseOrderStatusItem.Pick = "<button class='btn btn-warning btn-xs' onclick='pickReverseQuantity_OnClick()'><i class='fa fa-arrow-left'></i></button>";
                 purchaseOrderStatusCollectionView.refresh();
                 purchasrOrderStatusFlexGrid.refresh();
             }
@@ -1357,7 +1357,7 @@
             purchaseOrderStatusCollectionView.editItem(purchaseOrderStatusCollectionView.currentItem);
             var purchaseOrderStatusItem = purchaseOrderStatusCollectionView.currentEditItem;
             purchaseOrderStatusItem.QuantityBalanceValue = 0;
-            purchaseOrderStatusItem.Pick = "<button class='btn btn-primary btn-xs' onclick='pickQuantity_OnClick()'><i class='fa fa-hand-o-right'></i></button>";
+            purchaseOrderStatusItem.Pick = "<button class='btn btn-primary btn-xs' onclick='pickQuantity_OnClick()'><i class='fa fa-arrow-right'></i></button>";
             purchaseOrderStatusCollectionView.refresh();
             purchasrOrderStatusFlexGrid.refresh();
         }
@@ -1416,21 +1416,6 @@
                                 $('#POStatus').modal('hide');
 
                                 refreshReceivingReceiptFlexGrid();
-
-                                purchaseOrderStatusCollectionView = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
-                                var filterText = '';
-                                $('#inputFilterPOItem').keyup(function () {
-                                    filterText = this.value.toLowerCase();
-                                    purchaseOrderStatusCollectionView.refresh();
-                                });
-
-                                purchaseOrderStatusCollectionView.filter = function (item) {
-                                    return !filterText || (item.ItemCode.toLowerCase().indexOf(filterText) > -1)
-                                    || (item.Item.toLowerCase().indexOf(filterText) > -1);
-                                }
-
-                                purchasrOrderStatusFlexGrid.itemsSource = purchaseOrderStatusCollectionView;
-                                purchasrOrderStatusFlexGrid.trackChanges = true;
                             },
                             404: function () {
                                 toastr.error("Not Found");
@@ -1451,10 +1436,10 @@
                         }
                     });
                 } else {
+                    $('#applyAllConfirmPOStatus').modal('hide');
                     document.getElementById('cmdConfirmApplyAllPOStatusPOItems').innerHTML = "<i class='fa fa-check'></i> Apply";
                     $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", false);
                     $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", false);
-                    $('#applyAllConfirmPOStatus').modal('hide');
                 }
             }
         }

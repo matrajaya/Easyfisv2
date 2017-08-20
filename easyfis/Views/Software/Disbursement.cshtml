@@ -12,8 +12,7 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
-
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
@@ -41,8 +40,8 @@
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 40%" align="right">
-                                    <button class="btn btn-primary " id="btnAddDisbursement" onclick="btnAddDisbursement_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <button class="btn btn-danger " id="btnCloseDisbursement" onclick="btnCloseDisbursement_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                    <button class="btn btn-primary" id="btnAddDisbursement" onclick="btnAddDisbursement_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    <button class="btn btn-danger" id="btnCloseDisbursement" onclick="btnCloseDisbursement_OnClick()"><i class=" fa fa-times"></i> Close</button>
                                 </td>
                             </tr>
                         </table>
@@ -52,17 +51,15 @@
                             <tr>
                                 <td style="width: 29%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Start Date</span>
-                                        <div id="filterDate"></div>
-                                        <input type="hidden" id="filterDate_data" />
+                                        <span class="input-group-addon"><b>Start Date</b></span>
+                                        <div id="cboStartDateFilter"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 29%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">End Date</span>
-                                        <div id="filterEndDate"></div>
-                                        <input type="hidden" id="filterEndDate_data" />
+                                        <span class="input-group-addon"><b>End Date</b></span>
+                                        <div id="cboEndDateFilter"></div>
                                     </div>
                                 </td>
                                 <td style="width: 41%"></td>
@@ -70,11 +67,7 @@
                         </table>
                     </div>
                     <div class="panel-body">
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="DisbursementGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
+                        <div id="DisbursementGrid" class="grid" align="left"></div>
                     </div>
                     <div class="panel-footer">
                         <div class="row">
@@ -100,42 +93,21 @@
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- Disbursement Delete -->
     <div class="modal fade" id="deleteDisbursementConfirm" role="dialog">
         <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Delete Disbursement <i class="fa fa-trash"></i></h4>
+                    <h4 class="modal-title">Delete</h4>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this?
+                    Are you sure you want to delete this disbursement?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger " id="cmdConfirmDeleteDisbursement" onclick="cmdDisbursementConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Lock -->
-    <div class="modal fade" id="deleteRecordLock" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
-                </div>
-                <div class="modal-body">
-                    Sorry, the record is lock! It can't be deleted!
-                </div>
-                <div class="modal-footer">
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"> Okay</button>
+                    <button id="cmdConfirmDeleteDisbursement" class="btn btn-danger" onclick="cmdDisbursementConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -148,73 +120,87 @@
         // ================
         var disbursements;
         var disbursementGrid;
-
         var btnFirstPageGrid;
         var btnPreviousPageGrid;
         var btnNextPageGrid;
         var btnLastPageGrid;
         var btnCurrentPageGrid;
+        var cboStartDateFilter = new wijmo.input.InputDate('#cboStartDateFilter');
+        var cboEndDateFilter = new wijmo.input.InputDate('#cboEndDateFilter');
+        var isStartDateFirstSelect = true;
+        var isEndDateFirstSelect = true;
 
-        var isFirstSelect = true;
-        var isFirstSelectEndDate = true;
+        // ===========
+        // Date Filter
+        // ===========
+        function cboDateFilters() {
+            cboStartDateFilter.dispose();
+            cboStartDateFilter = new wijmo.input.InputDate('#cboStartDateFilter', {
+                format: 'MM-dd-yyyy',
+                value: new Date(),
+                onValueChanged: function () {
+                    if (!isStartDateFirstSelect) {
+                        refreshDisbursementFlexGrid();
+                    } else {
+                        isStartDateFirstSelect = false;
+                    }
+                }
+            });
+
+            cboEndDateFilter.dispose();
+            cboEndDateFilter = new wijmo.input.InputDate('#cboEndDateFilter', {
+                format: 'MM-dd-yyyy',
+                value: new Date(),
+                onValueChanged: function () {
+                    if (!isEndDateFirstSelect) {
+                        refreshDisbursementFlexGrid();
+                    } else {
+                        isEndDateFirstSelect = false;
+                    }
+                }
+            });
+        }
 
         // =======================================
         // GET Disbursement List Filter by CV Date
         // =======================================
         function getDisbursementFilterByCVDate() {
-            var disbursements = new wijmo.collections.ObservableArray;
             NProgress.start();
+            var startDate = cboStartDateFilter.value.toLocaleDateString().replace(/\//g, '-');
+            var endDate = cboEndDateFilter.value.toLocaleDateString().replace(/\//g, '-');
 
-            var startDate = document.getElementById('filterDate_data').value;
-            var endDate = document.getElementById('filterEndDate_data').value;
-
+            var disbursementsObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/listDisbursementFilterByCVDate/' + startDate + '/' + endDate,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                data: {},
                 success: function (Results) {
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-
                             var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled;
-
-                            if (canDelete == "True") {
-                                deleteDisabled = "";
-                            } else if (canDelete == "False") {
+                            var deleteDisabled = "";
+                            if (canDelete == "False") {
                                 deleteDisabled = "disabled";
-                            } else {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var btnDeleteId;
-                            if (Results[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdDisbursementDeleteLockButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                            } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdDisbursementDeleteButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             }
 
                             var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled;
-
-                            if (canEdit == "True") {
-                                editDisabled = "";
-                            } else if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            } else {
+                            var editDisabled = "";
+                            if (canEdit == "False") {
                                 editDisabled = "disabled";
                             }
 
-                            disbursements.push({
+                            var CVDateResult = new Date(Results[i]["CVDate"])
+                            var CVDate = ('0' + (CVDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + CVDateResult.getDate()).slice(-2) + '-' + CVDateResult.getFullYear();
+
+                            disbursementsObservableArray.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' id='disbursementEditButton' onclick='cmdDisbursementEditButton_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: btnDeleteId,
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdDisbursementDeleteButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 BranchId: Results[i]["BranchId"],
                                 Branch: Results[i]["Branch"],
                                 CVNumber: Results[i]["CVNumber"],
-                                CVDate: Results[i]["CVDate"],
+                                CVDate: CVDate,
                                 SupplierId: Results[i]["SupplierId"],
                                 Supplier: Results[i]["Supplier"],
                                 Payee: Results[i]["Payee"],
@@ -245,19 +231,12 @@
                             });
                         }
                     }
+
                     NProgress.done();
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
-            return disbursements;
-        }
 
-        // ===============================
-        // Disbursement Delete Lock Button
-        // ===============================
-        function cmdDisbursementDeleteLockButton_OnClick() {
-            toastr.error("Record Locked");
+            return disbursementsObservableArray;
         }
 
         // ========================
@@ -276,29 +255,20 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (id) {
                         if (id > 0) {
-                            window.location = '/Software/DisbursementDetail?DisbursementId=' + id;
+                            window.location = '/Software/DisbursementDetail?id=' + id;
                         } else {
+                            toastr.error("Internal Server Error");
                             document.getElementById('btnAddDisbursement').innerHTML = "<i class='fa fa-plus'></i> Add";
                             $('#btnAddDisbursement').prop('disabled', false);
                             $('#btnCloseDisbursement').prop('disabled', false);
-                            toastr.error("Internal Server Error");
                         }
                     }
                 });
-            } else if (canAccessToDetailPage == "False") {
-                window.location = '/Software/Forbidden';
             } else {
-                document.getElementById('btnAddDisbursement').innerHTML = "<i class='fa fa-plus'></i> Add";
-                $('#btnAddDisbursement').prop('disabled', false);
-                $('#btnCloseDisbursement').prop('disabled', false);
+                if (canAccessToDetailPage == "False") {
+                    window.location = '/Software/Forbidden';
+                }
             }
-        }
-
-        // ==========================
-        // Disbursements Close Button
-        // ==========================
-        function btnCloseDisbursement_OnClick() {
-            window.location = '/Software';
         }
 
         // =========================
@@ -308,22 +278,36 @@
             disbursements.editItem(disbursements.currentItem);
             var disbursement = disbursements.currentEditItem;
             var disbursementId = disbursement.Id;
-            window.location = '/Software/DisbursementDetail?DisbursementId=' + disbursementId;
+            window.location = '/Software/DisbursementDetail?id=' + disbursementId;
+        }
+
+        // ==========================
+        // Disbursements Close Button
+        // ==========================
+        function btnCloseDisbursement_OnClick() {
+            window.location = '/Software';
         }
 
         // ===========================
         // Disbursements delete Button
         // ===========================
         function cmdDisbursementDeleteButton_OnClick() {
-            $('#deleteDisbursementConfirm').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            disbursements.editItem(disbursements.currentItem);
+            var disbursement = disbursements.currentEditItem;
+            if (disbursement.IsLocked) {
+                toastr.error("Delete is not allowed when the selected record is locked!");
+            } else {
+                $('#deleteDisbursementConfirm').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
 
-            document.getElementById('cmdConfirmDeleteDisbursement').innerHTML = "<i class='fa fa-trash'></i> Delete";
-            $("#cmdConfirmDeleteDisbursement").prop("disabled", false);
-            $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+                document.getElementById('cmdConfirmDeleteDisbursement').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                $("#cmdConfirmDeleteDisbursement").prop("disabled", false);
+                $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+            }
         }
+
         // Disbursements Confirm Delete Button
         function cmdDisbursementConfirmDeleteButton_OnClick() {
             document.getElementById('cmdConfirmDeleteDisbursement').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
@@ -339,47 +323,19 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $("#cmdConfirmDeleteDisbursement").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Delete Successful");
-
                         $('#deleteDisbursementConfirm').modal('hide');
-
-                        var CVDateFilter = document.getElementById('filterDate_data').value;
-                        disbursements = new wijmo.collections.CollectionView(getDisbursementFilterByCVDate(CVDateFilter));
-                        disbursements.canFilter = true;
-                        disbursements.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            disbursements.refresh();
-                        });
-                        disbursements.filter = function (item) {
-                            return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.CheckNumber.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        disbursements.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsDisbursement();
-                        });
-                        disbursements.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        // Flex Grid
-                        disbursementGrid.itemsSource = disbursements;
-                        disbursementGrid.trackChanges = true;
+                        refreshDisbursementFlexGrid();
                     },
                     404: function () {
                         toastr.error("Not Found");
-                        $('#deleteDisbursementConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteDisbursement').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteDisbursement").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
-                        $('#deleteDisbursementConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteDisbursement').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteDisbursement").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     }
@@ -426,103 +382,10 @@
             btnCurrentPageGrid.innerHTML = (disbursements.pageIndex + 1) + ' / ' + disbursements.pageCount;
         }
 
-        // ===========
-        // OnLoad Page
-        // ===========
-        $(document).ready(function () {
-            var CVDateFilter_Date = new Date();
-            document.getElementById("filterDate_data").value = [CVDateFilter_Date.getMonth() + 1, CVDateFilter_Date.getDate(), CVDateFilter_Date.getFullYear()].join('-');
-            document.getElementById("filterEndDate_data").value = [CVDateFilter_Date.getMonth() + 1, CVDateFilter_Date.getDate(), CVDateFilter_Date.getFullYear()].join('-');
-
-            var cboFilterDate;
-            cboFilterDate = new wijmo.input.InputDate('#filterDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                onValueChanged: function () {
-                    if (!isFirstSelect) {
-                        document.getElementById('filterDate_data').value = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
-                        var CVDateFilterValue = document.getElementById('filterDate_data').value;
-
-                        $('body').removeClass('modal-open');
-                        $(".modal-backdrop").remove();
-
-                        disbursements = new wijmo.collections.CollectionView(getDisbursementFilterByCVDate());
-                        disbursements.canFilter = true;
-                        disbursements.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            disbursements.refresh();
-                        });
-                        disbursements.filter = function (item) {
-                            return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.CheckNumber.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        disbursements.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsDisbursement();
-                        });
-                        disbursements.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        disbursementGrid.itemsSource = disbursements;
-                        disbursementGrid.trackChanges = true;
-
-                        updateNavigateButtonsDisbursement();
-                    } else {
-                        isFirstSelect = false;
-                    }
-                }
-            });
-
-            var cboFilterEndDate;
-            cboFilterEndDate = new wijmo.input.InputDate('#filterEndDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                onValueChanged: function () {
-                    if (!isFirstSelectEndDate) {
-                        document.getElementById('filterEndDate_data').value = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
-                        var CVDateFilterValue = document.getElementById('filterEndDate_data').value;
-
-                        $('body').removeClass('modal-open');
-                        $(".modal-backdrop").remove();
-
-                        disbursements = new wijmo.collections.CollectionView(getDisbursementFilterByCVDate());
-                        disbursements.canFilter = true;
-                        disbursements.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            disbursements.refresh();
-                        });
-                        disbursements.filter = function (item) {
-                            return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.CheckNumber.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        disbursements.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsDisbursement();
-                        });
-                        disbursements.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        disbursementGrid.itemsSource = disbursements;
-                        disbursementGrid.trackChanges = true;
-
-                        updateNavigateButtonsDisbursement();
-                    } else {
-                        isFirstSelectEndDate = false;
-                    }
-                }
-            });
-
-            var CVDateFilter = document.getElementById('filterDate_data').value;
+        // ==============================
+        // refresh disbursement Flex grid
+        // ==============================
+        function refreshDisbursementFlexGrid() {
             disbursements = new wijmo.collections.CollectionView(getDisbursementFilterByCVDate());
             disbursements.canFilter = true;
             disbursements.pageSize = 15;
@@ -532,19 +395,54 @@
                 filterText = this.value.toLowerCase();
                 disbursements.refresh();
             });
+
+            disbursements.filter = function (item) {
+                return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1)
+                    || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                    || (item.CheckNumber.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            disbursements.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsDisbursement();
+            });
+
+            disbursements.currentChanged.addHandler(function (sender, args) {
+                updateDetails();
+            });
+
+            disbursementGrid.itemsSource = disbursements;
+            disbursementGrid.trackChanges = true;
+        }
+
+        // =====================
+        // Disbursement FlexGrid
+        // =====================
+        function createDisbursementFlexGrid() {
+            cboDateFilters();
+            disbursements = new wijmo.collections.CollectionView(getDisbursementFilterByCVDate());
+            disbursements.canFilter = true;
+            disbursements.pageSize = 15;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                disbursements.refresh();
+            });
+
             disbursements.filter = function (item) {
                 return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1)
                                    || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
                                    || (item.CheckNumber.toLowerCase().indexOf(filterText) > -1);
             }
+
             disbursements.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsDisbursement();
             });
+
             disbursements.currentChanged.addHandler(function (sender, args) {
                 updateDetails();
             });
 
-            // Flex Grid
             disbursementGrid = new wijmo.grid.FlexGrid('#DisbursementGrid');
             disbursementGrid.initialize({
                 columns: [
@@ -570,31 +468,31 @@
                                 "header": "CV Number",
                                 "binding": "CVNumber",
                                 "allowSorting": true,
-                                "width": 110,
+                                "width": "1.5*"
                             },
                             {
-                                "header": "Check Date",
+                                "header": "CV Date",
                                 "binding": "CVDate",
                                 "allowSorting": true,
-                                "width": 100,
+                                "width": "1.5*"
                             },
                             {
                                 "header": "Supplier",
                                 "binding": "Supplier",
                                 "allowSorting": true,
-                                "width": 270,
+                                "width": "3*"
                             },
                             {
                                 "header": "Check No.",
                                 "binding": "CheckNumber",
                                 "allowSorting": true,
-                                "width": 260,
+                                "width": "2*"
                             },
                             {
                                 "header": "Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
-                                "width": 150,
+                                "width": "2*"
                             },
                             {
                                 "header": "L",
@@ -606,7 +504,6 @@
                 autoGenerateColumns: false,
                 itemsSource: disbursements,
                 isReadOnly: true,
-                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -614,7 +511,6 @@
 
             disbursementGrid.trackChanges = true;
 
-            //Navigation button
             btnFirstPageGrid = document.getElementById('btnMoveToFirstPageGrid');
             btnPreviousPageGrid = document.getElementById('btnMoveToPreviousPageGrid');
             btnNextPageGrid = document.getElementById('btnMoveToNextPageGrid');
@@ -627,26 +523,33 @@
                 disbursements.moveToFirstPage();
                 updateNavigateButtonsDisbursement();
             });
+
             btnPreviousPageGrid.addEventListener('click', function () {
                 disbursements.moveToPreviousPage();
                 updateNavigateButtonsDisbursement();
             });
+
             btnNextPageGrid.addEventListener('click', function () {
                 disbursements.moveToNextPage();
                 updateNavigateButtonsDisbursement();
             });
+
             btnLastPageGrid.addEventListener('click', function () {
                 disbursements.moveToLastPage();
                 updateNavigateButtonsDisbursement();
             });
 
             var canAdd = "@ViewData["CanAdd"]";
-            if (canAdd == "True") {
-                $("#btnAddDisbursement").prop("disabled", false)
-            } else if (canAdd == "False") {
-                $("#btnAddDisbursement").prop("disabled", true)
-            } else {
+            if (canAdd == "False") {
+                $("#btnAddDisbursement").prop("disabled", true);
             }
+        }
+
+        // ===========
+        // OnLoad Page
+        // ===========
+        $(document).ready(function () {
+            createDisbursementFlexGrid();
         });
     </script>
     <script type="text/javascript">

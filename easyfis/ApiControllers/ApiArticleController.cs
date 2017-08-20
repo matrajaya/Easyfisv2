@@ -79,6 +79,43 @@ namespace easyfis.Controllers
         //    return articles.ToList();
         //}
 
+
+        // list article
+        [Authorize]
+        [HttpGet]
+        [Route("api/listArticle/byAccount/{accountId}")]
+        public List<Models.MstArticle> listArticleWithArticleTypes(String accountId)
+        {
+            List<Models.MstArticle> listArticle = new List<Models.MstArticle>();
+
+            var accountArticleTypes = from d in db.MstAccountArticleTypes
+                                      where d.AccountId == Convert.ToInt32(accountId)
+                                      select d;
+
+            if (accountArticleTypes.Any())
+            {
+                foreach (var accountArticleType in accountArticleTypes)
+                {
+                    var articles = from d in db.MstArticles
+                                   where d.ArticleTypeId == accountArticleType.ArticleTypeId
+                                   select d;
+
+                    if (articles.Any())
+                    {
+                        foreach (var article in articles)
+                        {
+                            listArticle.Add(new Models.MstArticle() {
+                                Id = article.Id,
+                                Article = article.Article
+                            });
+                        }
+                    }
+                }
+            }
+
+            return listArticle;
+        }
+
         // list article
         [Authorize]
         [HttpGet]

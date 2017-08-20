@@ -16,7 +16,7 @@ namespace easyfis.Controllers
         // get received quantity by POId and by ItemId
         public Decimal getReceivedQuantity(Int32 POId, Int32 ItemId)
         {
-            var receivingReceiptItems = from d in db.TrnReceivingReceiptItems where d.POId == POId && d.ItemId == ItemId select d;
+            var receivingReceiptItems = from d in db.TrnReceivingReceiptItems where d.POId == POId && d.ItemId == ItemId && d.TrnReceivingReceipt.IsLocked == true select d;
             return Convert.ToDecimal(receivingReceiptItems.Sum(d => (Decimal?)d.Quantity));
         }
 

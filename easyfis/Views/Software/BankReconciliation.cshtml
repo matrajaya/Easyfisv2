@@ -12,8 +12,7 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
-
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
@@ -33,72 +32,70 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-12" align="right">
-                                <button class="btn btn-primary " id="" onclick="btnBankReconciliationPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
+                                @*<button class="btn btn-primary " id="" onclick="btnBankReconciliationPrint_OnClick()"><i class="fa fa-print"></i> Print</button>*@
                                 <button class="btn btn-danger " id="" onclick="btnBankReconciliationClose_OnClick()"><i class=" fa fa-times"></i> Close</button>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
-                        <div class="">
-                            <form class="form-horizontal" role="form">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Bank</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="bankReconciliationBank"></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Date Start</label>
-                                            <div class="col-sm-8">
-                                                <div class="" id="bankReconciliationStartDate"></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Date End</label>
-                                            <div class="col-sm-8">
-                                                <div class="" id="bankReconciliationEndDate"></div>
-                                            </div>
+                        <form class="form-horizontal" role="form">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Bank</label>
+                                        <div class="col-sm-8">
+                                            <div class="comboBox-wide" id="bankReconciliationBank"></div>
                                         </div>
                                     </div>
-                                    <div class="col-md-7">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-6">Ending Balance as per Bank</label>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control  numberField " id="bankReconciliationEndingBalanceAsPerBank" placeholder="0.00" />
-                                                <input type="hidden" id="bankReconciliationEndingBalanceAsPerBankValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-6">Total Deposit in Transit</label>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control  numberField " id="bankReconciliationTotalDepositInTransit" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-6">Total Outstanding Withdrawals</label>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control  numberField " id="bankReconciliationTotalOutstandingWithdrawals" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-6">Total Adjustments</label>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control  numberField " id="bankReconciliationTotalAdjustments" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-6">Adjusted Ending Balance as per Bank</label>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control  numberField " id="bankReconciliationAdjustedEndingBalanceAsPerBank" />
-                                            </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Date Start</label>
+                                        <div class="col-sm-8">
+                                            <div class="" id="bankReconciliationStartDate"></div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6"></div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Date End</label>
+                                        <div class="col-sm-8">
+                                            <div class="" id="bankReconciliationEndDate"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </form>
-                        </div>
+                                <div class="col-md-7">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-6">Ending Balance as per Bank</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control  numberField " id="bankReconciliationEndingBalanceAsPerBank" placeholder="0.00" />
+                                            <input type="hidden" id="bankReconciliationEndingBalanceAsPerBankValue" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-6">Total Deposit in Transit</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control  numberField " id="bankReconciliationTotalDepositInTransit" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-6">Total Outstanding Withdrawals</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control  numberField " id="bankReconciliationTotalOutstandingWithdrawals" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-6">Total Adjustments</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control  numberField " id="bankReconciliationTotalAdjustments" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-6">Adjusted Ending Balance as per Bank</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control  numberField " id="bankReconciliationAdjustedEndingBalanceAsPerBank" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
@@ -108,13 +105,9 @@
                 </ul>
                 <br />
                 <div class="tab-content">
-                    <!-- Deposits -->
-                    <div id="deposits" class="tab-pane fade in active">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <div id="collectionLineGrid" class="grid"></div>
-                            </div>
-                        </div>
+                    <div id="deposits" class="tab-pane fade in active" style="margin-bottom: 15px;">
+                        <div id="collectionLineGrid"></div>
+                        <br /><br />
                         <div class="row">
                             <div class="col-lg-8"></div>
                             <div class="col-lg-4">
@@ -131,14 +124,9 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Withdrwals -->
-                    <div id="withdrwals" class="tab-pane fade in">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <div id="disbursementGrid" class="grid"></div>
-                            </div>
-                        </div>
+                    <div id="withdrwals" class="tab-pane fade in"  style="margin-bottom: 15px;">
+                        <div id="disbursementGrid"></div>
+                        <br /><br />
                         <div class="row">
                             <div class="col-lg-8"></div>
                             <div class="col-lg-4">
@@ -155,14 +143,9 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Adjustments -->
                     <div id="adjustments" class="tab-pane fade in">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <div id="adjustmentGrid" class="grid"></div>
-                            </div>
-                        </div>
+                        <div id="adjustmentGrid"></div>
+                        <br /><br />
                         <div class="row">
                             <div class="col-lg-8"></div>
                             <div class="col-lg-4">
@@ -184,8 +167,8 @@
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         // ================
@@ -408,14 +391,14 @@
 
                             if (typeof InTransitAmount[i] !== 'undefined' && InTransitAmount[i] !== 0) {
                                 btnColor = "warning";
-                                icon = "<i class='fa fa-hand-o-left'></i>";
+                                icon = "<i class='fa fa-arrow-left'></i>";
 
                                 totalInTransitValue += InTransitAmount[i];
 
                                 isCleard = true;
                             } else {
                                 btnColor = "primary";
-                                icon = "<i class='fa fa-hand-o-right'></i>";
+                                icon = "<i class='fa fa-arrow-right'></i>";
                             }
 
                             deposit = totalInTransitValue;
@@ -474,7 +457,7 @@
 
             if (collectionLineItem.InTransit > 0) {
                 collectionLineItem.InTransit = 0;
-                collectionLineItem.IsClearHtml = "<button class='btn btn-primary btn-xs' onclick='pickAmountIntransit_OnClick(" + isCleard + ")'><i class='fa fa-hand-o-right'></i></button>";
+                collectionLineItem.IsClearHtml = "<button class='btn btn-primary btn-xs' onclick='pickAmountIntransit_OnClick(" + isCleard + ")'><i class='fa fa-arrow-right'></i></button>";
 
                 collectionLines.onCollectionChanged(function () {
                     collectionLines.refresh();
@@ -483,9 +466,9 @@
                 collectionLineItem.InTransit = collectionLineItem.Amount;
 
                 if (collectionLineItem.Amount == 0) {
-                    collectionLineItem.IsClearHtml = "<button class='btn btn-primary btn-xs' onclick='pickAmountIntransit_OnClick(" + isCleard + ")'><i class='fa fa-hand-o-right'></i></button>";
+                    collectionLineItem.IsClearHtml = "<button class='btn btn-primary btn-xs' onclick='pickAmountIntransit_OnClick(" + isCleard + ")'><i class='fa fa-arrow-right'></i></button>";
                 } else {
-                    collectionLineItem.IsClearHtml = "<button class='btn btn-warning btn-xs' onclick='pickAmountIntransit_OnClick(" + isCleard + ")'><i class='fa fa-hand-o-left'></i></button>";
+                    collectionLineItem.IsClearHtml = "<button class='btn btn-warning btn-xs' onclick='pickAmountIntransit_OnClick(" + isCleard + ")'><i class='fa fa-arrow-left'></i></button>";
                 }
 
 
@@ -686,14 +669,14 @@
 
                             if (typeof outstandingAmount[i] !== 'undefined' && outstandingAmount[i] !== 0) {
                                 btnColor = "warning";
-                                icon = "<i class='fa fa-hand-o-left'></i>";
+                                icon = "<i class='fa fa-arrow-left'></i>";
 
                                 totalOutStandingAmount += outstandingAmount[i];
 
                                 isCleard = true;
                             } else {
                                 btnColor = "primary";
-                                icon = "<i class='fa fa-hand-o-right'></i>";
+                                icon = "<i class='fa fa-arrow-right'></i>";
                             }
 
                             withdrawal = totalOutStandingAmount;
@@ -762,7 +745,7 @@
 
             if (disbursementItem.OutstandingAmount > 0) {
                 disbursementItem.OutstandingAmount = 0;
-                disbursementItem.IsClearHtml = "<button class='btn btn-primary btn-xs' onclick='pickOutstandingAmount_OnClick(" + isCleard + ")'><i class='fa fa-hand-o-right'></i></button>";
+                disbursementItem.IsClearHtml = "<button class='btn btn-primary btn-xs' onclick='pickOutstandingAmount_OnClick(" + isCleard + ")'><i class='fa fa-arrow-right'></i></button>";
 
                 disbursements.onCollectionChanged(function () {
                     disbursements.refresh();
@@ -771,9 +754,9 @@
                 disbursementItem.OutstandingAmount = disbursementItem.Amount;
 
                 if (disbursementItem.Amount == 0) {
-                    disbursementItem.IsClearHtml = "<button class='btn btn-primary btn-xs' onclick='pickOutstandingAmount_OnClick(" + isCleard + ")'><i class='fa fa-hand-o-right'></i></button>";
+                    disbursementItem.IsClearHtml = "<button class='btn btn-primary btn-xs' onclick='pickOutstandingAmount_OnClick(" + isCleard + ")'><i class='fa fa-arrow-right'></i></button>";
                 } else {
-                    disbursementItem.IsClearHtml = "<button class='btn btn-warning btn-xs' onclick='pickOutstandingAmount_OnClick(" + isCleard + ")'><i class='fa fa-hand-o-left'></i></button>";
+                    disbursementItem.IsClearHtml = "<button class='btn btn-warning btn-xs' onclick='pickOutstandingAmount_OnClick(" + isCleard + ")'><i class='fa fa-arrow-left'></i></button>";
                 }
 
                 disbursements.onCollectionChanged(function () {
@@ -933,14 +916,14 @@
 
                             if (typeof adjustmentAmount[i] !== 'undefined' && adjustmentAmount[i] !== 0) {
                                 btnColor = "warning";
-                                icon = "<i class='fa fa-hand-o-left'></i>";
+                                icon = "<i class='fa fa-arrow-left'></i>";
 
                                 totalAdjustmentsAmount += adjustmentAmount[i];
 
                                 isCleard = true;
                             } else {
                                 btnColor = "primary";
-                                icon = "<i class='fa fa-hand-o-right'></i>";
+                                icon = "<i class='fa fa-arrow-right'></i>";
                             }
 
                             adjustment = totalAdjustmentsAmount;
@@ -999,7 +982,7 @@
 
             if (journalVoucherLineItem.Adjustments > 0) {
                 journalVoucherLineItem.Adjustments = 0;
-                journalVoucherLineItem.IsClearHtml = "<button class='btn btn-primary btn-xs' onclick='pickAdjustmentsAmount_OnClick(" + isCleard + ")'><i class='fa fa-hand-o-right'></i></button>";
+                journalVoucherLineItem.IsClearHtml = "<button class='btn btn-primary btn-xs' onclick='pickAdjustmentsAmount_OnClick(" + isCleard + ")'><i class='fa fa-arrow-right'></i></button>";
 
                 journalVoucherLines.onCollectionChanged(function () {
                     journalVoucherLines.refresh();
@@ -1008,9 +991,9 @@
                 journalVoucherLineItem.Adjustments = journalVoucherLineItem.DebitAmount - journalVoucherLineItem.CreditAmount;
 
                 if (journalVoucherLineItem.DebitAmount - journalVoucherLineItem.CreditAmount == 0) {
-                    journalVoucherLineItem.IsClearHtml = "<button class='btn btn-primary btn-xs' onclick='pickAdjustmentsAmount_OnClick(" + isCleard + ")'><i class='fa fa-hand-o-right'></i></button>";
+                    journalVoucherLineItem.IsClearHtml = "<button class='btn btn-primary btn-xs' onclick='pickAdjustmentsAmount_OnClick(" + isCleard + ")'><i class='fa fa-arrow-right'></i></button>";
                 } else {
-                    journalVoucherLineItem.IsClearHtml = "<button class='btn btn-warning btn-xs' onclick='pickAdjustmentsAmount_OnClick(" + isCleard + ")'><i class='fa fa-hand-o-left'></i></button>";
+                    journalVoucherLineItem.IsClearHtml = "<button class='btn btn-warning btn-xs' onclick='pickAdjustmentsAmount_OnClick(" + isCleard + ")'><i class='fa fa-arrow-left'></i></button>";
                 }
 
                 journalVoucherLines.onCollectionChanged(function () {

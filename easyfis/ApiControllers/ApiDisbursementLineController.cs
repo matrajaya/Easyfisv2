@@ -69,7 +69,7 @@ namespace easyfis.Controllers
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
@@ -258,7 +258,6 @@ namespace easyfis.Controllers
             try
             {
                 Data.TrnDisbursementLine newDisbursementLine = new Data.TrnDisbursementLine();
-
                 newDisbursementLine.CVId = disbursementLine.CVId;
                 newDisbursementLine.BranchId = disbursementLine.BranchId;
                 newDisbursementLine.AccountId = disbursementLine.AccountId;
@@ -266,9 +265,19 @@ namespace easyfis.Controllers
                 newDisbursementLine.RRId = disbursementLine.RRId;
                 newDisbursementLine.Particulars = disbursementLine.Particulars;
                 newDisbursementLine.Amount = disbursementLine.Amount;
-
                 db.TrnDisbursementLines.InsertOnSubmit(newDisbursementLine);
                 db.SubmitChanges();
+
+                var disbursement = from d in db.TrnDisbursements
+                                   where d.Id == disbursementLine.CVId
+                                   select d;
+
+                if (disbursement.Any())
+                {
+                    var updateDisbursement = disbursement.FirstOrDefault();
+                    updateDisbursement.Amount = disbursement.FirstOrDefault().TrnDisbursementLines.Sum(d => d.Amount);
+                    db.SubmitChanges();
+                }
 
                 return newDisbursementLine.Id;
             }
@@ -297,8 +306,18 @@ namespace easyfis.Controllers
                     updateDisbursementLine.RRId = disbursementLine.RRId;
                     updateDisbursementLine.Particulars = disbursementLine.Particulars;
                     updateDisbursementLine.Amount = disbursementLine.Amount;
-
                     db.SubmitChanges();
+
+                    var disbursement = from d in db.TrnDisbursements
+                                       where d.Id == disbursementLines.FirstOrDefault().CVId
+                                       select d;
+
+                    if (disbursement.Any())
+                    {
+                        var updateDisbursement = disbursement.FirstOrDefault();
+                        updateDisbursement.Amount = disbursement.FirstOrDefault().TrnDisbursementLines.Sum(d => d.Amount);
+                        db.SubmitChanges();
+                    }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -324,8 +343,21 @@ namespace easyfis.Controllers
                 var disbursementLines = from d in db.TrnDisbursementLines where d.Id == Convert.ToInt32(id) select d;
                 if (disbursementLines.Any())
                 {
+                    var CVId = disbursementLines.FirstOrDefault().CVId;
+
                     db.TrnDisbursementLines.DeleteOnSubmit(disbursementLines.First());
                     db.SubmitChanges();
+
+                    var disbursement = from d in db.TrnDisbursements
+                                       where d.Id == CVId
+                                       select d;
+
+                    if (disbursement.Any())
+                    {
+                        var updateDisbursement = disbursement.FirstOrDefault();
+                        updateDisbursement.Amount = disbursement.FirstOrDefault().TrnDisbursementLines.Sum(d => d.Amount);
+                        db.SubmitChanges();
+                    }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
