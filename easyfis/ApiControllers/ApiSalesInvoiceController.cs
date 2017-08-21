@@ -197,7 +197,6 @@ namespace easyfis.Controllers
         {
             var salesInvoices = from d in db.TrnSalesInvoices
                                 where d.CustomerId == Convert.ToInt32(customerId)
-                                && d.BalanceAmount > 0
                                 && d.IsLocked == true
                                 select new Models.TrnSalesInvoice
                                 {

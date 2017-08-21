@@ -39,33 +39,7 @@ namespace easyfis.Controllers
         {
             var collectionLines = from d in db.TrnCollectionLines
                                   where d.ORId == ORId
-                                  select new Models.TrnCollectionLine
-                                  {
-                                      Id = d.Id,
-                                      ORId = d.ORId,
-                                      OR = d.TrnCollection.ORNumber,
-                                      ORDate = d.TrnCollection.ORDate.ToShortDateString(),
-                                      Customer = d.TrnCollection.MstArticle.Article,
-                                      BranchId = d.BranchId,
-                                      Branch = d.MstBranch.Branch,
-                                      AccountId = d.AccountId,
-                                      Account = d.MstAccount.Account,
-                                      ArticleId = d.ArticleId,
-                                      Article = d.MstArticle.Article,
-                                      SIId = d.SIId,
-                                      SI = d.TrnSalesInvoice.SINumber,
-                                      Particulars = d.Particulars,
-                                      Amount = d.Amount,
-                                      PayTypeId = d.PayTypeId,
-                                      PayType = d.MstPayType.PayType,
-                                      CheckNumber = d.CheckNumber,
-                                      CheckDate = d.CheckDate.ToShortDateString(),
-                                      CheckBank = d.CheckBank,
-                                      DepositoryBankId = d.DepositoryBankId,
-                                      DepositoryBank = d.MstArticle1.Article,
-                                      IsClear = d.IsClear,
-                                      IsLocked = d.TrnCollection.IsLocked
-                                  };
+                                  select d;
 
             if (collectionLines.Any())
             {
@@ -109,50 +83,12 @@ namespace easyfis.Controllers
 
                             var salesInvoices = from d in db.TrnSalesInvoices
                                                 where d.Id == collectionLine.SIId
-                                                select new Models.TrnSalesInvoice
-                                                {
-                                                    Id = d.Id,
-                                                    BranchId = d.BranchId,
-                                                    Branch = d.MstBranch.Branch,
-                                                    SINumber = d.SINumber,
-                                                    SIDate = d.SIDate.ToShortDateString(),
-                                                    CustomerId = d.CustomerId,
-                                                    Customer = d.MstArticle.Article,
-                                                    TermId = d.TermId,
-                                                    Term = d.MstTerm.Term,
-                                                    DocumentReference = d.DocumentReference,
-                                                    ManualSINumber = d.ManualSINumber,
-                                                    Remarks = d.Remarks,
-                                                    Amount = d.Amount,
-                                                    PaidAmount = d.PaidAmount,
-                                                    AdjustmentAmount = d.AdjustmentAmount,
-                                                    BalanceAmount = d.BalanceAmount,
-                                                    SoldById = d.SoldById,
-                                                    SoldBy = d.MstUser4.FullName,
-                                                    PreparedById = d.PreparedById,
-                                                    PreparedBy = d.MstUser3.FullName,
-                                                    CheckedById = d.CheckedById,
-                                                    CheckedBy = d.MstUser1.FullName,
-                                                    ApprovedById = d.ApprovedById,
-                                                    ApprovedBy = d.MstUser.FullName,
-                                                    IsLocked = d.IsLocked,
-                                                    CreatedById = d.CreatedById,
-                                                    CreatedBy = d.MstUser2.FullName,
-                                                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                                    UpdatedById = d.UpdatedById,
-                                                    UpdatedBy = d.MstUser5.FullName,
-                                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                                };
+                                                select d;
 
                             if (salesInvoices.Any())
                             {
-                                Decimal SIAmount = 0;
-                                Decimal SIPaidAmount = 0;
-                                foreach (var salesInvoice in salesInvoices)
-                                {
-                                    SIAmount = salesInvoice.Amount;
-                                    SIPaidAmount = salesInvoice.PaidAmount;
-                                }
+                                Decimal SIAmount = salesInvoices.FirstOrDefault().Amount;
+                                Decimal SIPaidAmount = salesInvoices.FirstOrDefault().PaidAmount;
 
                                 updateSalesInvoice.BalanceAmount = (SIAmount - SIPaidAmount) + AdjustmentAmount;
                                 db.SubmitChanges();
