@@ -166,17 +166,28 @@ namespace easyfis.Controllers
         {
             try
             {
-                var mstUsers = from d in db.MstUsers where d.UserId == id select d;
-                if (mstUsers.Any())
+                var aspNetUSer = from d in db.AspNetUsers where d.Id == id select d;
+                if (aspNetUSer.Any())
                 {
-                    var updateMstUsers = mstUsers.FirstOrDefault();
+                    var mstUsers = from d in db.MstUsers where d.UserId == id select d;
+                    if (mstUsers.Any())
+                    {
+                        var updateAspNetUSer = aspNetUSer.FirstOrDefault();
+                        updateAspNetUSer.FullName = mstUser.FullName;
+                        db.SubmitChanges();
 
-                    updateMstUsers.FullName = mstUser.FullName;
-                    updateMstUsers.IsLocked = true;
+                        var updateMstUsers = mstUsers.FirstOrDefault();
+                        updateMstUsers.FullName = mstUser.FullName;
+                        updateMstUsers.IsLocked = true;
 
-                    db.SubmitChanges();
+                        db.SubmitChanges();
 
-                    return Request.CreateResponse(HttpStatusCode.OK);
+                        return Request.CreateResponse(HttpStatusCode.OK);
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.NotFound);
+                    }
                 }
                 else
                 {

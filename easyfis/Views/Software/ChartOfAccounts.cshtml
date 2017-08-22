@@ -817,7 +817,7 @@
                             if (id > 0) {
                                 toastr.success("Save Successful");
                                 $('#accountEdit').modal('hide');
-                                accountTab();
+                                refreshAccountFlexGrid();
                             } else {
                                 toastr.error("Internal Server Error");
                                 $('#accountEdit').modal('hide');
@@ -838,7 +838,7 @@
                             200: function () {
                                 toastr.success("Update Successful");
                                 $('#accountEdit').modal('hide');
-                                accountTab();
+                                refreshAccountFlexGrid();
                             },
                             404: function () {
                                 toastr.error("Not Found");
@@ -899,7 +899,7 @@
                     200: function () {
                         toastr.success("Delete Successful");
                         $('#deleteAccountConfirm').modal('hide');
-                        accountTab();
+                        refreshAccountFlexGrid();
                     },
                     404: function () {
                         toastr.error("Not Found");
@@ -1239,6 +1239,36 @@
             }
         }
 
+        function refreshAccountFlexGrid() {
+            accounts = new wijmo.collections.CollectionView(getAccount());
+            accounts.canFilter = true;
+            accounts.pageSize = 15;
+
+            var filterTextAccount = '';
+            $('#InputFilterAccount').keyup(function () {
+                filterTextAccount = this.value.toLowerCase();
+                accounts.refresh();
+            });
+
+            accounts.filter = function (item) {
+                return !filterTextAccount || (item.AccountCode.toLowerCase().indexOf(filterTextAccount) > -1)
+                    || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1)
+                    || (item.AccountType.toLowerCase().indexOf(filterTextAccount) > -1);
+            }
+
+            accounts.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsAccount();
+            });
+
+            accounts.currentChanged.addHandler(function (sender, args) {
+                updateDetailsAccount();
+            });
+
+            // Flex Grid for account
+            accountGrid.itemsSource = accounts;
+            accountGrid.trackChanges = true;
+        }
+
         // ========================
         // On Page Load for Account
         // ========================
@@ -1459,7 +1489,7 @@
             $('#AccountCashFlow').hide();
             $('#AccountCategory').hide();
 
-            accountTab();
+            refreshAccountFlexGrid();
         });
     </script>
 
@@ -1711,7 +1741,7 @@
                             if (id > 0) {
                                 toastr.success("Save Successful");
                                 $('#accountTypeEdit').modal('hide');
-                                accountTypeTab();
+                                refreshAccountType();
                             } else {
                                 toastr.error("Internal Server Error");
                                 $('#accountTypeEdit').modal('hide');
@@ -1732,7 +1762,7 @@
                             200: function () {
                                 toastr.success("Update Successful");
                                 $('#accountTypeEdit').modal('hide');
-                                accountTypeTab();
+                                refreshAccountType();
                             },
                             404: function () {
                                 toastr.error("Not Found");
@@ -1800,7 +1830,7 @@
                     200: function () {
                         toastr.success("Delete Successful");
                         $('#deleteAccountTypeConfirm').modal('hide');
-                        accountTypeTab();
+                        refreshAccountType();
                     },
                     404: function () {
                         toastr.error("Not Found");
@@ -1857,6 +1887,34 @@
                 btnLastPageGridAccountType.removeAttribute('disabled');
             }
             btnCurrentPageGridAccountType.innerHTML = (accountTypes.pageIndex + 1) + ' / ' + accountTypes.pageCount;
+        }
+
+        function refreshAccountType() {
+            accountTypes = new wijmo.collections.CollectionView(getAccountType());
+            accountTypes.canFilter = true;
+            accountTypes.pageSize = 15;
+
+            var filterTextAccountType = '';
+            $('#InputFilterAccountType').keyup(function () {
+                filterTextAccountType = this.value.toLowerCase();
+                accountTypes.refresh();
+            });
+            accountTypes.filter = function (item) {
+                return !filterTextAccountType || (item.AccountTypeCode.toLowerCase().indexOf(filterTextAccountType) > -1)
+                    || (item.AccountType.toLowerCase().indexOf(filterTextAccountType) > -1)
+                    || (item.AccountCategory.toLowerCase().indexOf(filterTextAccountType) > -1)
+                    || (item.SubCategoryDescription.toLowerCase().indexOf(filterTextAccountType) > -1);
+            }
+            accountTypes.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsAccountType();
+            });
+            accountTypes.currentChanged.addHandler(function (sender, args) {
+                updateDetailsAccountType();
+            });
+
+            // Flex Grid for account type
+            accountTypeGrid.itemsSource = accountTypes;
+            accountTypeGrid.trackChanges = true;
         }
 
         // =============================
@@ -1986,8 +2044,12 @@
             $('#AccountType').show();
             $('#AccountCashFlow').hide();
             $('#AccountCategory').hide();
-
             accountTypeTab();
+            window.accountTypeTab = function () {
+                return true;
+            }
+
+            refreshAccountType();
         });
 
         // Account Type Lock - IsLocked
@@ -2207,7 +2269,7 @@
                             if (id > 0) {
                                 toastr.success("Save Successful");
                                 $('#accountCashFlowEdit').modal('hide');
-                                accountCashFlowTab();
+                                refreshCashFlowFlexGrid();
                             } else {
                                 toastr.error("Internal Server Error");
                                 $('#accountCashFlowEdit').modal('hide');
@@ -2229,7 +2291,7 @@
                             200: function () {
                                 toastr.success("Update Successful");
                                 $('#accountCashFlowEdit').modal('hide');
-                                accountCashFlowTab();
+                                refreshCashFlowFlexGrid();
                             },
                             404: function () {
                                 toastr.error("Not Found");
@@ -2298,7 +2360,7 @@
                     200: function () {
                         toastr.success("Delete Successful");
                         $('#deleteAccountCashFlowConfirm').modal('hide');
-                        accountCashFlowTab();
+                        refreshCashFlowFlexGrid();
                     },
                     404: function () {
                         toastr.error("Not Found");
@@ -2355,6 +2417,32 @@
                 btnLastPageGridAccountCashFlow.removeAttribute('disabled');
             }
             btnCurrentPageGridAccountCashFlow.innerHTML = (accountCashFlows.pageIndex + 1) + ' / ' + accountCashFlows.pageCount;
+        }
+
+        function refreshCashFlowFlexGrid() {
+            accountCashFlows = new wijmo.collections.CollectionView(getAccountCashFlow());
+            accountCashFlows.canFilter = true;
+            accountCashFlows.pageSize = 15;
+
+            var filterTextAccountCashFlow = '';
+            $('#InputFilterAccountCashFlow').keyup(function () {
+                filterTextAccountCashFlow = this.value.toLowerCase();
+                accountCashFlows.refresh();
+            });
+            accountCashFlows.filter = function (item) {
+                return !filterTextAccountCashFlow || (item.AccountCashFlowCode.toLowerCase().indexOf(filterTextAccountCashFlow) > -1)
+                    || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
+            }
+            accountCashFlows.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsAccountCashFlow();
+            });
+            accountCashFlows.currentChanged.addHandler(function (sender, args) {
+                updateDetailsAccountCashFlow();
+            });
+
+            // Flex Grid for Account Cash Flow
+            accountCashFlowGrid.itemsSource = accountCashFlows;
+            accountCashFlowGrid.trackChanges = true;
         }
 
         // ===================================
@@ -2471,6 +2559,10 @@
             $('#AccountCashFlow').show();
             $('#AccountCategory').hide();
             accountCashFlowTab();
+            window.accountCashFlowTab = function () {
+                return true;
+            }
+            refreshCashFlowFlexGrid();
         });
 
         // Account Cash Flow Lock - IsLocked
@@ -2685,7 +2777,7 @@
                             if (id > 0) {
                                 toastr.success("Save Successful");
                                 $('#accountCategoryEdit').modal('hide');
-                                accountCategoryTab();
+                                refreshAccountCategory();
                             } else {
                                 toastr.error("Internal Server Error");
                                 $('#accountCategoryEdit').modal('hide');
@@ -2706,7 +2798,7 @@
                             200: function () {
                                 toastr.success("Update Successful");
                                 $('#accountCategoryEdit').modal('hide');
-                                accountCategoryTab();
+                                refreshAccountCategory();
                             },
                             404: function () {
                                 toastr.error("Not Found");
@@ -2774,7 +2866,7 @@
                     200: function () {
                         $('#deleteAccountCategoryConfirm').modal('hide');
                         toastr.success("Delete Successful");
-                        accountCategoryTab();
+                        refreshAccountCategory();
                     },
                     404: function () {
                         toastr.error("Not Found");
@@ -2831,6 +2923,32 @@
                 btnLastPageGridAccountCategory.removeAttribute('disabled');
             }
             btnCurrentPageGridAccountCategory.innerHTML = (accountCategories.pageIndex + 1) + ' / ' + accountCategories.pageCount;
+        }
+
+        function refreshAccountCategory() {
+            accountCategories = new wijmo.collections.CollectionView(getAccountCategory());
+            accountCategories.canFilter = true;
+            accountCategories.pageSize = 15;
+
+            var filterTextAccountCategory = '';
+            $('#InputFilterAccountCategory').keyup(function () {
+                filterTextAccountCategory = this.value.toLowerCase();
+                accountCategories.refresh();
+            });
+            accountCategories.filter = function (item) {
+                return !filterTextAccountCategory || (item.AccountCategoryCode.toLowerCase().indexOf(filterTextAccountCategory) > -1)
+                    || (item.AccountCategory.toLowerCase().indexOf(filterTextAccountCategory) > -1);
+            }
+            accountCategories.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsAccountCategory();
+            });
+            accountCategories.currentChanged.addHandler(function (sender, args) {
+                updateDetailsAccountCategory();
+            });
+
+            // Flex Grid for Account Category
+            accountCategoryGrid.itemsSource = accountCategories;
+            accountCategoryGrid.trackChanges = true;
         }
 
         // =================================
@@ -2946,6 +3064,10 @@
             $('#AccountCashFlow').hide();
             $('#AccountCategory').show();
             accountCategoryTab();
+            window.accountCategoryTab = function () {
+                return true;
+            }
+            refreshAccountCategory();
         });
 
         // Account Category Lock - IsLocked

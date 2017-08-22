@@ -162,20 +162,25 @@ namespace easyfis.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-
             var response = HttpContext.Request.Form["g-recaptcha-response"];
+            string host = Request.Url.Host;
+
+            string secretKey = "";
+            if (host.Equals("abomar.easyfis.com"))
+            {
+                secretKey = "6Ld8JSwUAAAAAMNxLO4HigrdcgE_s9puaasKjp6A";
+            }
+
+            if (host.Equals("tambayan.easyfis.com"))
+            {
+                secretKey = "6Ld8JSwUAAAAAMNxLO4HigrdcgE_s9puaasKjp6A";
+            }
 
             // live easyfis secret key
             //string secretKey = "6LeNBiMTAAAAAMZUdKMa_Q4_XRGLjOEjpVP96fge";
 
             // live innosoft easyfis key
             //string secretKey = "6LeMQhIUAAAAAGILgkPEdyV2wm6Jl9RDyxeOLMq7";
-
-            // live abomar easyfis key
-            //string secretKey = "6Ld8JSwUAAAAAMNxLO4HigrdcgE_s9puaasKjp6A";
-
-            // live tambayan easyfis key
-            string secretKey = "6LcdCS0UAAAAANH_YY__9RYKl8tzpHYehdF5cdNK";
 
             var client = new System.Net.WebClient();
             var verificationResultJson = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
