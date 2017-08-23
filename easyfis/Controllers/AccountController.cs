@@ -166,6 +166,12 @@ namespace easyfis.Controllers
             string host = Request.Url.Host;
 
             string secretKey = "";
+
+            if (host.Equals("innosoft.easyfis.com"))
+            {
+                secretKey = "6Ld-ACwUAAAAAN7eIeyjRupqGMTVIL-0QEtG1UXJ";
+            }
+
             if (host.Equals("abomar.easyfis.com"))
             {
                 secretKey = "6Ld8JSwUAAAAAMNxLO4HigrdcgE_s9puaasKjp6A";
@@ -178,9 +184,6 @@ namespace easyfis.Controllers
 
             // live easyfis secret key
             //string secretKey = "6LeNBiMTAAAAAMZUdKMa_Q4_XRGLjOEjpVP96fge";
-
-            // live innosoft easyfis key
-            //string secretKey = "6LeMQhIUAAAAAGILgkPEdyV2wm6Jl9RDyxeOLMq7";
 
             var client = new System.Net.WebClient();
             var verificationResultJson = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
