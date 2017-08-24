@@ -213,7 +213,7 @@ namespace easyfis.Business
                 Int32 articleInventoryId;
 
                 var stockTransfers = from d in db.TrnStockTransfers
-                                     where d.Id == STId && d.IsLocked == true
+                                     where d.Id == STId
                                      select d;
 
                 if (stockTransfers.Any())

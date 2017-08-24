@@ -51,6 +51,7 @@ namespace easyfis.Controllers
                                       Item = d.MstArticle.Article,
                                       Particulars = d.Particulars,
                                       Quantity = d.Quantity,
+                                      UnitId = d.MstArticle.UnitId,
                                       Unit = d.MstArticle.MstUnit.Unit
                                   };
 

@@ -168,6 +168,19 @@ namespace easyfis.Controllers
             return branches.ToList();
         }
 
+        public String zeroFill(Int32 number, Int32 length)
+        {
+            var result = number.ToString();
+            var pad = length - result.Length;
+            while (pad > 0)
+            {
+                result = '0' + result;
+                pad--;
+            }
+
+            return result;
+        }
+
         // add branch
         [Authorize]
         [HttpPost]
@@ -178,10 +191,31 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
+                var codeDefault = "101";
+                var lastBranch = from d in db.MstBranches.OrderByDescending(d => d.Id) select d;
+                if (lastBranch.Any())
+                {
+                    codeDefault = lastBranch.FirstOrDefault().BranchCode;
+                    var lastBranchByCompanyId = from d in db.MstBranches.OrderByDescending(d => d.Id) where d.CompanyId == branch.CompanyId select d;
+                    if (lastBranchByCompanyId.Any())
+                    {
+                        codeDefault = lastBranchByCompanyId.FirstOrDefault().BranchCode;
+                        var CVNumber = Convert.ToInt32(lastBranchByCompanyId.FirstOrDefault().BranchCode) + 001;
+                        codeDefault = zeroFill(CVNumber, 3);
+                    }
+                    else
+                    {
+                        var branchCodeIncrement = Convert.ToInt32(lastBranch.FirstOrDefault().BranchCode) + 100;
+                        var branchCode = Math.Round(Convert.ToDouble(branchCodeIncrement) / 100, 0) * 100;
+                        var CVNumber = branchCode + 001;
+                        codeDefault = zeroFill(Convert.ToInt32(CVNumber), 3);
+                    }
+                }
+
                 Data.MstBranch newBranch = new Data.MstBranch();
                 newBranch.CompanyId = branch.CompanyId;
                 newBranch.Branch = branch.Branch;
-                newBranch.BranchCode = branch.BranchCode;
+                newBranch.BranchCode = codeDefault;
                 newBranch.Address = branch.Address;
                 newBranch.ContactNumber = branch.ContactNumber;
                 newBranch.TaxNumber = branch.TaxNumber;
@@ -217,7 +251,6 @@ namespace easyfis.Controllers
                 {
                     var updateBranch = branches.FirstOrDefault();
                     updateBranch.CompanyId = branch.CompanyId;
-                    updateBranch.BranchCode = branch.BranchCode;
                     updateBranch.Branch = branch.Branch;
                     updateBranch.Address = branch.Address;
                     updateBranch.ContactNumber = branch.ContactNumber;
