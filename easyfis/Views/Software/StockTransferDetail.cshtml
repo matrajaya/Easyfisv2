@@ -503,7 +503,7 @@
         // =======================
         function getStockTransferById() {
             if (document.location.search.length > 0) {
-                var id = getParam("StockTransferId");
+                var id = getParam("id");
                 $.ajax({
                     url: '/api/stockTransfer/' + id,
                     cache: false,
@@ -581,7 +581,7 @@
         function getItem() {
             var itemsObservableArray = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
-                var id = getParam("StockTransferId");
+                var id = getParam("id");
                 $.ajax({
                     url: '/api/listStockTransferItemBySTId/' + id,
                     cache: false,
@@ -817,8 +817,17 @@
                         }
                     }
 
+                    var disabled = true;
+                    if (articleInventoryItemListResults.length > 0) {
+                        disabled = false;
+                        $("#cmdSaveStockTransferItemButton").prop("disabled", false);
+                    } else {
+                        $("#cmdSaveStockTransferItemButton").prop("disabled", true);
+                    }
+
                     cboStockTransferItemItemCode.dispose();
                     cboStockTransferItemItemCode = new wijmo.input.ComboBox('#cboStockTransferItemItemCode', {
+                        disabled: disabled,
                         isEditable: false,
                         placeholder: "Select Code",
                         itemsSource: articleInventoryItemsObservableArray,
@@ -832,6 +841,7 @@
 
                     cboStockTransferItemItemDescription.dispose();
                     cboStockTransferItemItemDescription = new wijmo.input.ComboBox('#cboStockTransferItemItemDescription', {
+                        disabled: disabled,
                         isEditable: false,
                         placeholder: "Select Item",
                         itemsSource: articleInventoryItemsObservableArray,
@@ -871,10 +881,16 @@
                         }
                     }
 
-                    var disabled = false;
-                    var InventoryType = "@ViewData["InventoryType"]";
-                    if(InventoryType == "Moving Average") {
-                        disabled = true;
+                    var disabled = true;
+                    if (articleInventoryListResults.length > 0) {
+                        var InventoryType = "@ViewData["InventoryType"]";
+                        if(InventoryType == "Moving Average") {
+                            disabled = true;
+                        } else {
+                            disabled = false;
+                        }
+                    } else {
+                        $("#cmdSaveStockTransferItemButton").prop("disabled", true);
                     }
 
                     cboStockTransferItemInventoryCode.dispose();
@@ -914,6 +930,13 @@
                         }
                     }
 
+                    var disabled = true;
+                    if (articleUnitListResults.length > 0) {
+                        disabled = false;
+                    } else {
+                        $("#cmdSaveStockTransferItemButton").prop("disabled", true);
+                    }
+
                     cboStockTransferItemUnit.dispose();
                     cboStockTransferItemUnit = new wijmo.input.ComboBox('#cboStockTransferItemUnit', {
                         isEditable: false,
@@ -926,7 +949,6 @@
 
                     $("#loadingModalItem").hide();
                     $("#STItemContent").show();
-                    $("#cmdSaveStockTransferItemButton").prop("disabled", false);
                 }
             });
         }
@@ -936,7 +958,7 @@
         // ==========================
         function btnStockTransferSaveLock_OnClick() {
             var stockTransferObject = new Object();
-            var id = getParam("StockTransferId");
+            var id = getParam("id");
             stockTransferObject.BranchId = cboStockTransferBranch.selectedValue;
             stockTransferObject.STNumber = document.getElementById('stockTransferSTNumber').value;
             stockTransferObject.STDate = cboStockTransferSTDate.value.toLocaleDateString();
@@ -1007,7 +1029,7 @@
         // Edit Stock Transfer - Unlock
         // ============================
         function btnStockTransferEdit_OnClick() {
-            var id = getParam("StockTransferId");
+            var id = getParam("id");
             document.getElementById('cmdStockTransferEdit').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
             $("#cmdStockTransferJournal").prop("disabled", true);
             $("#cmdStockTransferSaveLock").prop("disabled", true);
@@ -1051,7 +1073,7 @@
         // Print ST
         // ========
         function btnStockTransferPrint_OnClick() {
-            var stockTransferId = getParam("StockTransferId");
+            var stockTransferId = getParam("id");
             window.location = "/RepStockTransfer/StockTransfer?StockTransferId=" + stockTransferId;
         }
 
@@ -1296,7 +1318,7 @@
         // SAVE Stock Transfer Item
         // ========================
         function cmdStockTransferItemSaveButton_OnClick() {
-            var id = getParam("StockTransferId");
+            var id = getParam("id");
             var stockTransferItemObject = new Object();
             stockTransferItemObject.STId = id;
             stockTransferItemObject.ItemId = cboStockTransferItemItemDescription.selectedValue;
@@ -1448,7 +1470,7 @@
         // ==================
         function getInventoryEntries() {
             NProgress.start();
-            var id = getParam('StockTransferId');
+            var id = getParam('id');
             var inventoryObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/listInventoryBySTId/' + id,
@@ -1494,6 +1516,7 @@
         // ==================================
         function inventoryEntryTab() {
             inventoryCollectionView = new wijmo.collections.CollectionView(getInventoryEntries());
+
             inventoryFlexGrid.dispose();
             inventoryFlexGrid = new wijmo.grid.FlexGrid('#inventoryFlexGrid');
             inventoryFlexGrid.initialize({
@@ -1565,7 +1588,7 @@
         // ===========
         function getJournalListForStockTransfer() {
             var journalsObservableArray = new wijmo.collections.ObservableArray;
-            var id = getParam("StockTransferId");
+            var id = getParam("id");
             $.ajax({
                 url: '/api/listJournalBySTId/' + id,
                 cache: false,
@@ -1733,6 +1756,7 @@
         $('#inventoryEntryTabId').click(function () {
             $('#Items').hide();
             $('#InventoryEntries').show();
+            NProgress.start();
             inventoryEntryTab();
         });
 

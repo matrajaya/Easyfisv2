@@ -184,7 +184,7 @@ namespace easyfis.Controllers
 
             if (host.Equals("tambayan.easyfis.com"))
             {
-                secretKey = "6Ld8JSwUAAAAAMNxLO4HigrdcgE_s9puaasKjp6A";
+                secretKey = "6LcdCS0UAAAAANH_YY__9RYKl8tzpHYehdF5cdNK";
             }
 
             var client = new System.Net.WebClient();
