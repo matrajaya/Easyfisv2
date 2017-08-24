@@ -476,7 +476,7 @@ namespace easyfis.Business
                 // Stock in header
                 var stockIns = from d in db.TrnStockIns
                                where d.Id == INId
-                               && d.IsLocked == true
+                               //&& d.IsLocked == true
                                select d;
 
                 if (stockIns.Any())
