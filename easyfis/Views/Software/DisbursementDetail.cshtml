@@ -502,7 +502,10 @@
                         placeholder: "Select Supplier",
                         itemsSource: suppliersObservableArray,
                         displayMemberPath: "Supplier",
-                        selectedValuePath: "Id"
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            document.getElementById("disbursement_Payee").value = this.selectedItem["Supplier"];
+                        }
                     });
 
                     getPaytypeForComboBox();
@@ -1266,7 +1269,8 @@
             IsAccountChanged = false;
             disbursementLineId = 0;
             getDisbursementBranchesForComboBox(0, 0, 0, 0);
-            document.getElementById('disbursementLine_Particulars').value = 'NA';
+            var headerParticulars = document.getElementById("disbursement_Particulars").value;
+            document.getElementById('disbursementLine_Particulars').value = headerParticulars;
         }
 
         // ======================

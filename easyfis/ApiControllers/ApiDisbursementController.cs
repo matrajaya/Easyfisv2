@@ -405,7 +405,7 @@ namespace easyfis.Controllers
                 newDisbursement.CVNumber = CVNumberResult;
                 newDisbursement.CVDate = DateTime.Today;
                 newDisbursement.SupplierId = (from d in db.MstArticles where d.ArticleTypeId == 3 select d.Id).FirstOrDefault();
-                newDisbursement.Payee = "NA";
+                newDisbursement.Payee = (from d in db.MstArticles where d.ArticleTypeId == 3 select d.Article).FirstOrDefault();
                 newDisbursement.PayTypeId = (from d in db.MstPayTypes select d.Id).FirstOrDefault();
                 newDisbursement.BankId = (from d in db.MstArticles where d.ArticleTypeId == 5 select d.Id).FirstOrDefault();
                 newDisbursement.ManualCVNumber = "NA";

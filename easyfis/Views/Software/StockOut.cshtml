@@ -19,7 +19,7 @@
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Stock Out 
+                        Stock Out
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -40,8 +40,8 @@
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 40%" align="right">
-                                    <button class="btn btn-primary " id="btnAddStockOut" onclick="btnAddStockOut_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <button class="btn btn-danger " id="btnCloseStockOut" onclick="btnCloseStockOut_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                    <button class="btn btn-primary" id="btnAddStockOut" onclick="btnAddStockOut_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    <button class="btn btn-danger" id="btnCloseStockOut" onclick="btnCloseStockOut_OnClick()"><i class=" fa fa-times"></i> Close</button>
                                 </td>
                             </tr>
                         </table>
@@ -51,17 +51,15 @@
                             <tr>
                                 <td style="width: 29%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Start Date</span>
-                                        <div id="filterDate"></div>
-                                        <input type="hidden" id="filterDate_data" />
+                                        <span class="input-group-addon"><b>Start Date</b></span>
+                                        <div id="cboStartDateFilter"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 29%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">End Date</span>
-                                        <div id="filterEndDate"></div>
-                                        <input type="hidden" id="filterEndDate_data" />
+                                        <span class="input-group-addon"><b>End Date</b></span>
+                                        <div id="cboEndDateFilter"></div>
                                     </div>
                                 </td>
                                 <td style="width: 41%"></td>
@@ -69,11 +67,7 @@
                         </table>
                     </div>
                     <div class="panel-body">
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="StockOutGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
+                        <div id="StockOutGrid" class="grid" align="left"></div>
                     </div>
                     <div class="panel-footer">
                         <div class="row">
@@ -99,42 +93,21 @@
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- Stock Out Delete -->
     <div class="modal fade" id="deleteStockOutConfirm" role="dialog">
         <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Delete Stock <i class="fa fa-trash"></i></h4>
+                    <h4 class="modal-title">Delete</h4>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this?
+                    Are you sure you want to delete this stock out?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger " id="cmdConfirmDeleteStockOut" onclick="cmdStockOutConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Lock -->
-    <div class="modal fade" id="deleteRecordLock" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
-                </div>
-                <div class="modal-body">
-                    Sorry, the record is lock! It can't be deleted!
-                </div>
-                <div class="modal-footer">
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"> Okay</button>
+                    <button id="cmdConfirmDeleteStockOut" class="btn btn-danger" onclick="cmdStockOutConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -152,67 +125,82 @@
         var btnNextPageGrid;
         var btnLastPageGrid;
         var btnCurrentPageGrid;
+        var cboStartDateFilter = new wijmo.input.InputDate('#cboStartDateFilter');
+        var cboEndDateFilter = new wijmo.input.InputDate('#cboEndDateFilter');
+        var isStartDateFirstSelect = true;
+        var isEndDateFirstSelect = true;
 
-        var isFirstSelect = true;
-        var isFirstSelectEndDate = true;
+        // ===========
+        // Date Filter
+        // ===========
+        function cboDateFilters() {
+            cboStartDateFilter.dispose();
+            cboStartDateFilter = new wijmo.input.InputDate('#cboStartDateFilter', {
+                format: 'MM-dd-yyyy',
+                value: new Date(),
+                onValueChanged: function () {
+                    if (!isStartDateFirstSelect) {
+                        refreshStockOutFlexGrid();
+                    } else {
+                        isStartDateFirstSelect = false;
+                    }
+                }
+            });
+
+            cboEndDateFilter.dispose();
+            cboEndDateFilter = new wijmo.input.InputDate('#cboEndDateFilter', {
+                format: 'MM-dd-yyyy',
+                value: new Date(),
+                onValueChanged: function () {
+                    if (!isEndDateFirstSelect) {
+                        refreshStockOutFlexGrid();
+                    } else {
+                        isEndDateFirstSelect = false;
+                    }
+                }
+            });
+        }
 
         // ==================
         // GET Stock out List
         // ==================
         function getStockOutFilterByOUTdate() {
-            var stockOuts = new wijmo.collections.ObservableArray;
             NProgress.start();
+            var startDate = cboStartDateFilter.value.toLocaleDateString().replace(/\//g, '-');
+            var endDate = cboEndDateFilter.value.toLocaleDateString().replace(/\//g, '-');
 
-            var startDate = document.getElementById("filterDate_data").value;
-            var endDate = document.getElementById("filterEndDate_data").value;
-
+            var stockOutsObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/listStockOutFilterByOTDate/' + startDate + '/' + endDate,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                data: {},
                 success: function (Results) {
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-
                             var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled;
-
-                            if (canDelete == "True") {
-                                deleteDisabled = "";
-                            } else if (canDelete == "False") {
+                            var deleteDisabled = "";
+                            if (canDelete == "False") {
                                 deleteDisabled = "disabled";
-                            } else {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var btnDeleteId;
-                            if (Results[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdStockOutDeleteLockButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                            } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdStockOutDeleteButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             }
 
                             var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled;
-
-                            if (canEdit == "True") {
-                                editDisabled = "";
-                            } else if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            } else {
+                            var editDisabled = "";
+                            if (canEdit == "False") {
                                 editDisabled = "disabled";
                             }
 
-                            stockOuts.push({
+                            var OUTDateResult = new Date(Results[i]["OTDate"])
+                            var OUTDate = ('0' + (OUTDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + OUTDateResult.getDate()).slice(-2) + '-' + OUTDateResult.getFullYear();
+
+                            stockOutsObservableArray.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' id='stockOutEditButton' onclick='cmdStockOutEditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: btnDeleteId,
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdStockOutDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 BranchId: Results[i]["BranchId"],
                                 Branch: Results[i]["Branch"],
                                 OTNumber: Results[i]["OTNumber"],
-                                OTDate: Results[i]["OTDate"],
+                                OTDate: OUTDate,
                                 AccountId: Results[i]["AccountId"],
                                 Account: Results[i]["Account"],
                                 ArticleId: Results[i]["ArticleId"],
@@ -235,26 +223,18 @@
                             });
                         }
                     }
+
                     NProgress.done();
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
-            return stockOuts;
-        }
 
-        // ============================
-        // Stock Out Delete Lock Button
-        // ============================
-        function cmdStockOutDeleteLockButton_OnClick() {
-            toastr.error("Record Locked")
+            return stockOutsObservableArray;
         }
 
         // ====================
         // Stock Out Add Button
         // ====================
         function btnAddStockOut_OnClick() {
-            //window.location = '/Software/StockOutDetail';
             document.getElementById('btnAddStockOut').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Adding";
             $('#btnAddStockOut').prop('disabled', true);
             $('#btnCloseStockOut').prop('disabled', true);
@@ -267,18 +247,19 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (id) {
                         if (id > 0) {
-                            window.location = '/Software/StockOutDetail?StockOutId=' + id;
+                            window.location = '/Software/StockOutDetail?id=' + id;
                         } else {
                             toastr.error("Internal Server Error");
+                            document.getElementById('btnAddStockOut').innerHTML = "<i class='fa fa-plus'></i> Add";
+                            $('#btnAddStockOut').prop('disabled', false);
+                            $('#btnCloseStockOut').prop('disabled', false);
                         }
                     }
                 });
-            } else if (canAccessToDetailPage == "False") {
-                window.location = '/Software/Forbidden';
             } else {
-                document.getElementById('btnAddStockOut').innerHTML = "<i class='fa fa-plus'></i> Add";
-                $('#btnAddStockOut').prop('disabled', true);
-                $('#btnCloseStockOut').prop('disabled', true);
+                if (canAccessToDetailPage == "False") {
+                    window.location = '/Software/Forbidden';
+                }
             }
         }
 
@@ -296,22 +277,29 @@
             stockOuts.editItem(stockOuts.currentItem);
             var stockOut = stockOuts.currentEditItem;
             var stockOutId = stockOut.Id;
-            window.location = '/Software/StockOutDetail?StockOutId=' + stockOutId;
+            window.location = '/Software/StockOutDetail?id=' + stockOutId;
         }
 
         // =======================
         // Stock out delete Button
         // =======================
         function cmdStockOutDeleteButton_OnClick() {
-            $('#deleteStockOutConfirm').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            stockOuts.editItem(stockOuts.currentItem);
+            var stockOut = stockOuts.currentEditItem;
+            if (stockOut.IsLocked) {
+                toastr.error("Delete is not allowed when the selected record is locked!");
+            } else {
+                $('#deleteStockOutConfirm').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
 
-            document.getElementById('cmdConfirmDeleteStockOut').innerHTML = "<i class='fa fa-trash'></i> Delete";
-            $("#cmdConfirmDeleteStockOut").prop("disabled", false);
-            $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+                document.getElementById('cmdConfirmDeleteStockOut').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                $("#cmdConfirmDeleteStockOut").prop("disabled", false);
+                $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+            }
         }
+
         // Stock out Confirm Delete Button
         function cmdStockOutConfirmDeleteButton_OnClick() {
             document.getElementById('cmdConfirmDeleteStockOut').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
@@ -327,52 +315,28 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $("#cmdConfirmDeleteStockOut").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Delete Successful");
-
                         $('#deleteStockOutConfirm').modal('hide');
-
-                        var OUTdateFilter = document.getElementById('filterDate_data').value;
-                        stockOuts = new wijmo.collections.CollectionView(getStockOutFilterByOUTdate());
-                        stockOuts.canFilter = true;
-                        stockOuts.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            stockOuts.refresh();
-                        });
-                        stockOuts.filter = function (item) {
-                            return !filterText || (item.OTNumber.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Account.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        stockOuts.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsStockOut();
-                        });
-                        stockOuts.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        // Flex Grid
-                        stockOutGrid.itemsSource = stockOuts;
-                        stockOutGrid.trackChanges = true;
+                        refreshStockOutFlexGrid();
                     },
                     404: function () {
                         toastr.error("Not Found");
                         $('#deleteStockOutConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteStockOut').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteStockOut").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
                         $('#deleteStockOutConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteStockOut').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteStockOut").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     }
                 }
             });
         }
+
         // ===================
         // FlexGrid Selection
         // ===================
@@ -412,104 +376,42 @@
             btnCurrentPageGrid.innerHTML = (stockOuts.pageIndex + 1) + ' / ' + stockOuts.pageCount;
         }
 
-        // ===========
-        // Onload Page
-        // ===========
-        $(document).ready(function () {
-            var OUTDateFilter_Date = new Date();
-            document.getElementById("filterDate_data").value = [OUTDateFilter_Date.getMonth() + 1, OUTDateFilter_Date.getDate(), OUTDateFilter_Date.getFullYear()].join('-');
-            document.getElementById("filterEndDate_data").value = [OUTDateFilter_Date.getMonth() + 1, OUTDateFilter_Date.getDate(), OUTDateFilter_Date.getFullYear()].join('-');
+        // ==========================
+        // refresh stock Out FlexGrid
+        // ==========================
+        function refreshStockOutFlexGrid() {
+            stockOuts = new wijmo.collections.CollectionView(getStockOutFilterByOUTdate());
+            stockOuts.canFilter = true;
+            stockOuts.pageSize = 15;
 
-            var cboFilterDate;
-            cboFilterDate = new wijmo.input.InputDate('#filterDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                onValueChanged: function () {
-                    if (!isFirstSelect) {
-                        document.getElementById('filterDate_data').value = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
-                        var OUTDateFilterValue = document.getElementById('filterDate_data').value;
-
-                        $('body').removeClass('modal-open');
-                        $(".modal-backdrop").remove();
-
-                        stockOuts = new wijmo.collections.CollectionView(getStockOutFilterByOUTdate(OUTDateFilterValue));
-                        stockOuts.canFilter = true;
-                        stockOuts.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            stockOuts.refresh();
-                        });
-                        stockOuts.filter = function (item) {
-                            return !filterText || (item.OTNumber.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Account.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        stockOuts.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsStockOut();
-                        });
-                        stockOuts.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        stockOutGrid.itemsSource = stockOuts;
-                        stockOutGrid.trackChanges = true;
-
-                        updateNavigateButtonsStockOut();
-                    }
-                    else {
-                        isFirstSelect = false;
-                    }
-                }
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                stockOuts.refresh();
             });
 
-            var cboFilterEndDate;
-            cboFilterEndDate = new wijmo.input.InputDate('#filterEndDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                onValueChanged: function () {
-                    if (!isFirstSelectEndDate) {
-                        document.getElementById('filterEndDate_data').value = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
-                        var OUTDateFilterValue = document.getElementById('filterEndDate_data').value;
+            stockOuts.filter = function (item) {
+                return !filterText || (item.OTNumber.toLowerCase().indexOf(filterText) > -1)
+                    || (item.Account.toLowerCase().indexOf(filterText) > -1);
+            }
 
-                        $('body').removeClass('modal-open');
-                        $(".modal-backdrop").remove();
-
-                        stockOuts = new wijmo.collections.CollectionView(getStockOutFilterByOUTdate(OUTDateFilterValue));
-                        stockOuts.canFilter = true;
-                        stockOuts.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            stockOuts.refresh();
-                        });
-                        stockOuts.filter = function (item) {
-                            return !filterText || (item.OTNumber.toLowerCase().indexOf(filterText) > -1)
-                                               || (item.Account.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        stockOuts.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsStockOut();
-                        });
-                        stockOuts.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        stockOutGrid.itemsSource = stockOuts;
-                        stockOutGrid.trackChanges = true;
-
-                        updateNavigateButtonsStockOut();
-                    }
-                    else {
-                        isFirstSelectEndDate = false;
-                    }
-                }
+            stockOuts.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsStockOut();
             });
 
+            stockOuts.currentChanged.addHandler(function (sender, args) {
+                updateDetails();
+            });
 
-            var OUTdateFilter = document.getElementById('filterDate_data').value;
+            stockOutGrid.itemsSource = stockOuts;
+            stockOutGrid.trackChanges = true;
+        }
+
+        // ==================
+        // Stock Out FlexGrid
+        // ==================
+        function createStockOutFlexGrid() {
+            cboDateFilters();
             stockOuts = new wijmo.collections.CollectionView(getStockOutFilterByOUTdate());
             stockOuts.canFilter = true;
             stockOuts.pageSize = 15;
@@ -556,19 +458,25 @@
                                 "header": "OUT Number",
                                 "binding": "OTNumber",
                                 "allowSorting": true,
-                                "width": 120,
+                                "width": "1.5*"
                             },
                             {
                                 "header": "OUT Date",
                                 "binding": "OTDate",
                                 "allowSorting": true,
-                                "width": 100
+                                "width": "1.5*"
                             },
                             {
                                 "header": "Account",
                                 "binding": "Account",
                                 "allowSorting": true,
-                                "width": 670
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Particulars",
+                                "binding": "Particulars",
+                                "allowSorting": true,
+                                "width": "3*"
                             },
                             {
                                 "header": "L",
@@ -581,7 +489,6 @@
                 autoGenerateColumns: false,
                 itemsSource: stockOuts,
                 isReadOnly: true,
-                //frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -589,7 +496,6 @@
 
             stockOutGrid.trackChanges = true;
 
-            //Navigation button
             btnFirstPageGrid = document.getElementById('btnMoveToFirstPageGrid');
             btnPreviousPageGrid = document.getElementById('btnMoveToPreviousPageGrid');
             btnNextPageGrid = document.getElementById('btnMoveToNextPageGrid');
@@ -602,27 +508,33 @@
                 stockOuts.moveToFirstPage();
                 updateNavigateButtonsStockOut();
             });
+
             btnPreviousPageGrid.addEventListener('click', function () {
                 stockOuts.moveToPreviousPage();
                 updateNavigateButtonsStockOut();
             });
+
             btnNextPageGrid.addEventListener('click', function () {
                 stockOuts.moveToNextPage();
                 updateNavigateButtonsStockOut();
             });
+
             btnLastPageGrid.addEventListener('click', function () {
                 stockOuts.moveToLastPage();
                 updateNavigateButtonsStockOut();
             });
 
             var canAdd = "@ViewData["CanAdd"]";
-            if (canAdd == "True") {
-                $("#btnAddStockOut").prop("disabled", false)
-            } else if (canAdd == "False") {
-                $("#btnAddStockOut").prop("disabled", true)
-            } else {
-                $("#btnAddStockOut").prop("disabled", true)
+            if (canAdd == "False") {
+                $("#btnAddStockOut").prop("disabled", true);
             }
+        }
+
+        // ===========
+        // Onload Page
+        // ===========
+        $(document).ready(function () {
+            createStockOutFlexGrid();
         });
     </script>
     <script type="text/javascript">

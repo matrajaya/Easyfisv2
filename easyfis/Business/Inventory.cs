@@ -335,7 +335,6 @@ namespace easyfis.Business
                 // stock headers
                 var stockOutHeaders = from d in db.TrnStockOuts
                                       where d.Id == OTId
-                                      && d.IsLocked == true
                                       select d;
 
                 if (stockOutHeaders.Any())
