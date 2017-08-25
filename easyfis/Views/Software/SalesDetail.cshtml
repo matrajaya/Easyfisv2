@@ -318,7 +318,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button id="" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -329,7 +329,6 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title" id="journalModalLabel"> Journal</h4>
                 </div>
                 <div class="modal-body">
@@ -855,7 +854,7 @@
                             var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditSaleItem_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
                             var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteSaleItem_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             if (isLocked == true) {
-                                btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditSaleItem_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
+                                btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditSaleItem_OnClick()'><i class='fa fa-eye'></i> View</button>";
                                 btnDeleteId =  "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteSaleItem_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                             }
 
@@ -1141,8 +1140,10 @@
 
                     var disabled = true;
                     if (itemListResults.length > 0) {
-                        disabled = false;
-                        $("#cmdSaveSaleItemsButton").prop("disabled", false);
+                        if (!isLocked) {
+                            disabled = false;
+                            $("#cmdSaveSaleItemsButton").prop("disabled", false);
+                        } 
                     } else {
                         $("#cmdSaveSaleItemsButton").prop("disabled", true);
                     }
@@ -1216,7 +1217,9 @@
                             if (InventoryType == "Moving Average") {
                                 disabled = true;
                             } else {
-                                disabled = false;
+                                if (!isLocked) {
+                                    disabled = false;
+                                } 
                             }
                         }
 
@@ -1272,7 +1275,9 @@
 
                         var disabled = true;
                         if (itemUnitListResults.length > 0) {
-                            disabled = false;
+                            if (!isLocked) {
+                                disabled = false;
+                            } 
                         } else {
                             $("#cmdSaveSaleItemsButton").prop("disabled", true);
                         }
@@ -1334,7 +1339,9 @@
 
                         var disabled = true;
                         if (itemPriceListResults.length > 0) {
-                            disabled = false;
+                            if (!isLocked) {
+                                disabled = false;
+                            } 
                         } else {
                             $("#cmdSaveSaleItemsButton").prop("disabled", true);
                         }
@@ -1408,7 +1415,9 @@
 
                     var disabled = true;
                     if (discountListResults.length > 0) {
-                        disabled = false;
+                        if (!isLocked) {
+                            disabled = false;
+                        } 
                     } else {
                         $("#cmdSaveSaleItemsButton").prop("disabled", true);
                     }
@@ -1468,7 +1477,9 @@
 
                     var disabled = true;
                     if (taxTypeListResults.length > 0) {
-                        disabled = false;
+                        if (!isLocked) {
+                            disabled = false;
+                        } 
                     } else {
                         $("#cmdSaveSaleItemsButton").prop("disabled", true);
                     }
@@ -1631,6 +1642,22 @@
             document.getElementById('saleItem_Amount').value = item.Amount.toLocaleString();
             document.getElementById('saleItem_VATRate').value = item.VATRate.toLocaleString();
             document.getElementById('saleItem_VATAmount').value = item.VATAmount.toLocaleString();
+
+            if (isLocked) {
+                document.getElementById('saleItem_Particulars').disabled = true;
+                document.getElementById('saleItem_Quantity').disabled = true;
+                document.getElementById('saleItem_Price').disabled = true;
+                document.getElementById('saleItem_DiscountRate').disabled = true;
+                document.getElementById('saleItem_DiscountAmount').disabled = true;
+                document.getElementById('saleItem_NetPrice').disabled = true;
+                document.getElementById('saleItem_Amount').disabled = true;
+                document.getElementById('saleItem_VATRate').disabled = true;
+                document.getElementById('saleItem_VATAmount').disabled = true;
+                $("#cmdSaveSaleItemsButton").prop("disabled", true);
+                $("#cmdSaveSaleItemsButton").hide();
+            } else {
+                $("#cmdSaveSaleItemsButton").show();
+            }
         }
 
         // ==============
