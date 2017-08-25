@@ -3,7 +3,6 @@
 
 @if (Request.IsAuthenticated)
 {
-    <!-- Section -->
     <section class="container">
         <div class="row">
             <div class="col-md-3">
@@ -100,59 +99,6 @@
             </div>
         </div>
     </section>
-    @*<div class="jumbotron">
-            <div class="container">
-                <div class="form-group">
-                    <label>Choose branch to launch the application</label>
-                    <br /><br />
-                    <div class="input-group col-sm-6">
-                        <div id="branch_Id" class="comboBox-wide"></div>
-                    </div>
-                </div>
-            </div>
-        </div>*@
-    @*<div class="cover-login-photo-custom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">You Login as: </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="">
-                                            <h1>@ViewData["FullName"]</h1>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="btn btn-default " onclick="cmdEditProfileDetails_OnClickButton()"> Edit</button>
-                                <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default "> Change Your Password</a>
-                                <p class="change-password-success">@ViewBag.StatusMessage</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">Choose your branch to launch the application</div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div id="branch_Id" class="comboBox-wide"></div>
-                                        <input type="hidden" id="branch_Id_Data" class="requiredJournalVoucherLine" />
-                                    </div>
-                                </div>
-                                <br />
-                                <div class="row">
-                                    <div class="col-md-12" align="right">
-                                        <button id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()" class="btn btn-primary ">Launch Software</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>*@
 }
 else
 {

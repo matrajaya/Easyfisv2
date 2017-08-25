@@ -775,7 +775,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult InventoryReport()
         {
-            if (pageAccess("InventoryReport").Equals("InventoryReport"))
+            if (pageAccess("ViewInventoryReport").Equals("ViewInventoryReport"))
             {
                 return View();
             }
@@ -788,7 +788,14 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Inventory()
         {
-            return View();
+            if (pageAccess("InventoryReport").Equals("InventoryReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
 
         [Authorize]

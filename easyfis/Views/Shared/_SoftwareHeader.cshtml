@@ -161,7 +161,7 @@
                     <ul>
                         <li><a href="/Software/AccountsPayable"><img src="~/Images/svgIcons/print.svg" class="svg-icon-style-side-menu" /> Accounts Payable</a></li>
                         <li><a href="/Software/AccountsReceivable"><img src="~/Images/svgIcons/print.svg" class="svg-icon-style-side-menu" /> Accounts Receivable</a></li>
-                        <li><a href="/Software/InventoryReport"><img src="~/Images/svgIcons/print.svg" class="svg-icon-style-side-menu" /> Inventory Report</a></li>
+                        <li><a href="/Software/Inventory"><img src="~/Images/svgIcons/print.svg" class="svg-icon-style-side-menu" /> Inventory Report</a></li>
                         <li><a href="/Software/FinancialStatements"><img src="~/Images/svgIcons/print.svg" class="svg-icon-style-side-menu" /> Financial Statements</a></li>
                         <li><a href="/Software/BankReconciliation"><img src="~/Images/svgIcons/print.svg" class="svg-icon-style-side-menu" /> Bank Reconciliation</a></li>
                     </ul>
@@ -176,10 +176,10 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Logout </h4>
+                <h4 class="modal-title">Logout</h4>
             </div>
-            <div class="modal-body">
-                Logout?
+            <div class="modal-body">                
+                Are you sure you want to logout?
             </div>
             <div class="modal-footer">
                 <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-primary"><i class="fa fa-power-off fa-fw"></i> Logout</a>
@@ -217,54 +217,3 @@
         </div>
     </div>
 </div>
-
-@*<script>
-        function displayCompanyImage() {
-            var url = window.location.href;
-            if (url == "http://abomar.easyfis.com") {
-                var imageElement = document.createElement("images");
-                var imageData = new Image();
-                imageData.src = "/Images/abomar/abomar-logo.png";
-                imageData.className = "img-custom-div";
-                imageElement.appendChild(imageData);
-                var photoDivElement = document.createElement("DIV");
-                var photoDiv = document.getElementById("photoDiv").appendChild(imageElement);
-                photoDiv.appendChild(photoDivElement);
-            } else {
-                if (url == "http://www.easyfis.com") {
-                    var imageElement = document.createElement("images");
-                    var imageData = new Image();
-                    imageData.src = "/Images/innosoft/innosoft.png";
-                    imageData.className = "img-custom-div";
-                    imageElement.appendChild(imageData);
-                    var photoDivElement = document.createElement("DIV");
-                    var photoDiv = document.getElementById("photoDiv").appendChild(imageElement);
-                    photoDiv.appendChild(photoDivElement);
-                } else {
-                    if (url == "http://innosoft.easyfis.com") {
-                        var imageElement = document.createElement("images");
-                        var imageData = new Image();
-                        imageData.src = "/Images/innosoft/innosoft.png";
-                        imageData.className = "img-custom-div";
-                        imageElement.appendChild(imageData);
-                        var photoDivElement = document.createElement("DIV");
-                        var photoDiv = document.getElementById("photoDiv").appendChild(imageElement);
-                        photoDiv.appendChild(photoDivElement);
-                    } else {
-                        var imageElement = document.createElement("images");
-                        var imageData = new Image();
-                        imageData.src = "/Images/innosoft/innosoft.png";
-                        imageData.className = "img-custom-div";
-                        imageElement.appendChild(imageData);
-                        var photoDivElement = document.createElement("DIV");
-                        var photoDiv = document.getElementById("photoDiv").appendChild(imageElement);
-                        photoDiv.appendChild(photoDivElement);
-                    }
-                }
-            }
-        }
-
-        window.onload = function () {
-            displayCompanyImage();
-        }
-    </script>*@
