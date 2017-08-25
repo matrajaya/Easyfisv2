@@ -1014,8 +1014,8 @@
                             $('#item_LockButton').prop('disabled', false);
                             $('#item_CloseButton').prop('disabled', false);
                         },
-                        400: function () {
-                            toastr.error("Bad Request");
+                        400: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Save Failed!");
                             document.getElementById('item_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
                             $('#item_LockButton').prop('disabled', false);
                             $('#item_CloseButton').prop('disabled', false);

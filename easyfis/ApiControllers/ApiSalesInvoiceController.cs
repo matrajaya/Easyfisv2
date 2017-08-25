@@ -464,14 +464,11 @@ namespace easyfis.Controllers
                         updateSalesInvoice.IsLocked = false;
                         db.SubmitChanges();
 
-                        Debug.WriteLine("we");
-
                         return Request.CreateResponse(HttpStatusCode.BadRequest, "Negative Inventory Found!");
                     }
                 }
                 else
                 {
-                    Debug.WriteLine("we2");
                     return Request.CreateResponse(HttpStatusCode.NotFound, "No Sales Invoice Found!");
                 }
             }
