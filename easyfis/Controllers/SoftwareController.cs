@@ -668,7 +668,7 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult Items()
+        public ActionResult Item()
         {
             if (pageAccess("ItemList").Equals("ItemList"))
             {
