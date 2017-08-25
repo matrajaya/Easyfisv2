@@ -32,14 +32,37 @@
             var host = Request.Url.Host;
         }
 
+        @if (host.Equals("localhost"))
+        {
+            <div class="panel panel-default panel-side">
+                <div class="panel-heading panel-heading-menu">
+                    <div class="image-custom">
+                        <img src="~/Images/innosoft/innosoft.png" height="50" />
+                    </div>
+                </div>
+            </div>
+        }
+
         @if (host.Equals("www.easyfis.com"))
         {
-
+            <div class="panel panel-default panel-side">
+                <div class="panel-heading panel-heading-menu">
+                    <div class="image-custom">
+                        <img src="~/Images/logo/easyfislogo.png" height="50" />
+                    </div>
+                </div>
+            </div>
         }
 
         @if (host.Equals("innosoft.easyfis.com"))
         {
-
+            <div class="panel panel-default panel-side">
+                <div class="panel-heading panel-heading-menu">
+                    <div class="image-custom">
+                        <img src="~/Images/innosoft/innosoft.png" height="50" />
+                    </div>
+                </div>
+            </div>
         }
 
         @if (host.Equals("abomar.easyfis.com"))

@@ -11,14 +11,20 @@ namespace easyfis.POSIntegrationApiControllers
 {
     public class POSIntegrationApiSalesInvoiceController : ApiController
     {
-        // data
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // business folders
+        // ========
+        // BUSINESS
+        // ========
         private Business.Inventory inventory = new Business.Inventory();
         private Business.PostJournal journal = new Business.PostJournal();
 
-        // zero padding for auto increment and auto generated code in every table
+        // ============================
+        // Zero Fill - Document Numbers
+        // ============================
         public String zeroFill(Int32 number, Int32 length)
         {
             var result = number.ToString();
@@ -32,17 +38,15 @@ namespace easyfis.POSIntegrationApiControllers
             return result;
         }
 
-        // add sales invoice for POS Integration
+        // ===================================
+        // ADD Sales Invoice (POS Integration)
+        // ===================================
         [HttpPost]
         [Route("api/add/POSIntegration/salesInvoice")]
         public HttpResponseMessage addSalesInvoicePOSIntegration(POSIntegrationEntities.POSIntegrationTrnSalesInvoice POSIntegrationTrnSalesInvoiceObject)
         {
             try
             {
-                // current user  id
-                //var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d).FirstOrDefault().Id;
-
-                // get last SI Number
                 var lastSINumber = from d in db.TrnSalesInvoices.OrderByDescending(d => d.Id) select d;
                 var SINumberResult = "0000000001";
                 if (lastSINumber.Any())
@@ -51,7 +55,6 @@ namespace easyfis.POSIntegrationApiControllers
                     SINumberResult = zeroFill(SINumber, 10);
                 }
 
-                // customers and terms
                 var customers = from d in db.MstArticles
                                 where d.ManualArticleCode == POSIntegrationTrnSalesInvoiceObject.CustomerManualArticleCode
                                 select d;
@@ -84,7 +87,9 @@ namespace easyfis.POSIntegrationApiControllers
                                         {
                                             if (branches.Count() == 1)
                                             {
-                                                // add Sales invoice
+                                                // ====================
+                                                // Insert Sales Invoice
+                                                // ====================
                                                 Data.TrnSalesInvoice addSalesInvoice = new Data.TrnSalesInvoice();
                                                 addSalesInvoice.BranchId = branches.FirstOrDefault().Id;
                                                 addSalesInvoice.SINumber = SINumberResult;
@@ -110,24 +115,17 @@ namespace easyfis.POSIntegrationApiControllers
                                                 db.TrnSalesInvoices.InsertOnSubmit(addSalesInvoice);
                                                 db.SubmitChanges();
 
-                                                // from items
+                                                // =========================
+                                                // Insert Sales Invoice Item
+                                                // =========================
                                                 foreach (var salesInvoiceItem in POSIntegrationTrnSalesInvoiceObject.listPOSIntegrationTrnSalesInvoiceItem.ToList())
                                                 {
-                                                    Debug.WriteLine(salesInvoiceItem.Discount);
-
-                                                    // get article components
                                                     var articleComponents = from d in db.MstArticleComponents
                                                                             where d.MstArticle.ManualArticleCode == salesInvoiceItem.ItemManualArticleCode
                                                                             select d;
 
-                                                    // check if exist
                                                     if (articleComponents.Any())
                                                     {
-                                                        // check if kitting is package or equal 2
-                                                        // 2 is equals package
-                                                        // ===============================================
-
-                                                        // check if kitting is package
                                                         if (articleComponents.FirstOrDefault().MstArticle.Kitting == 2)
                                                         {
                                                             var items = from d in db.MstArticles
@@ -138,13 +136,11 @@ namespace easyfis.POSIntegrationApiControllers
                                                             {
                                                                 if (items.Count() == 1)
                                                                 {
-                                                                    // get article inventory 
                                                                     var articleInventory = from d in db.MstArticleInventories
                                                                                            where d.BranchId == branches.FirstOrDefault().Id
                                                                                            && d.ArticleId == items.FirstOrDefault().Id
                                                                                            select d;
 
-                                                                    // check if exist
                                                                     if (articleInventory.Any())
                                                                     {
                                                                         var units = from d in db.MstUnits
@@ -155,7 +151,6 @@ namespace easyfis.POSIntegrationApiControllers
                                                                         {
                                                                             if (units.Count() == 1)
                                                                             {
-
                                                                                 var discounts = from d in db.MstDiscounts
                                                                                                 where d.Discount == salesInvoiceItem.Discount
                                                                                                 select d;
@@ -172,7 +167,9 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                         {
                                                                                             if (taxes.Count() == 1)
                                                                                             {
-                                                                                                // add new sales invoice item package
+                                                                                                // ============================
+                                                                                                // Sales Invoice Item - Package
+                                                                                                // ============================
                                                                                                 Data.TrnSalesInvoiceItem addSaleInvoiceItemPackage = new Data.TrnSalesInvoiceItem();
                                                                                                 addSaleInvoiceItemPackage.SIId = addSalesInvoice.Id;
                                                                                                 addSaleInvoiceItemPackage.ItemId = items.FirstOrDefault().Id;
@@ -191,59 +188,63 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                 addSaleInvoiceItemPackage.VATAmount = (salesInvoiceItem.Amount / (1 + (taxes.FirstOrDefault().TaxRate / 100))) * (taxes.FirstOrDefault().TaxRate / 100);
                                                                                                 addSaleInvoiceItemPackage.BaseUnitId = articleComponents.FirstOrDefault().MstArticle.UnitId;
 
-                                                                                                // conversion unit from package item
                                                                                                 var packageConversionUnit = from d in db.MstArticleUnits
                                                                                                                             where d.ArticleId == items.FirstOrDefault().Id
                                                                                                                             && d.UnitId == items.FirstOrDefault().UnitId
                                                                                                                             select d;
 
-                                                                                                // check if multiplier greater than zero
-                                                                                                if (packageConversionUnit.FirstOrDefault().Multiplier > 0)
+                                                                                                if (packageConversionUnit.Any())
                                                                                                 {
-                                                                                                    addSaleInvoiceItemPackage.BaseQuantity = salesInvoiceItem.Quantity * (1 / packageConversionUnit.FirstOrDefault().Multiplier);
+                                                                                                    if (packageConversionUnit.FirstOrDefault().Multiplier > 0)
+                                                                                                    {
+                                                                                                        addSaleInvoiceItemPackage.BaseQuantity = salesInvoiceItem.Quantity * (1 / packageConversionUnit.FirstOrDefault().Multiplier);
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        addSaleInvoiceItemPackage.BaseQuantity = salesInvoiceItem.Quantity * 1;
+                                                                                                    }
                                                                                                 }
                                                                                                 else
                                                                                                 {
                                                                                                     addSaleInvoiceItemPackage.BaseQuantity = salesInvoiceItem.Quantity * 1;
                                                                                                 }
 
-                                                                                                // base unit from package item
-                                                                                                var packageBaseQuantity = salesInvoiceItem.Quantity * (1 / packageConversionUnit.FirstOrDefault().Multiplier);
-                                                                                                if (packageBaseQuantity > 0)
+                                                                                                if (packageConversionUnit.Any())
                                                                                                 {
-                                                                                                    addSaleInvoiceItemPackage.BasePrice = salesInvoiceItem.Amount / packageBaseQuantity;
+                                                                                                    var packageBaseQuantity = salesInvoiceItem.Quantity * (1 / packageConversionUnit.FirstOrDefault().Multiplier);
+                                                                                                    if (packageBaseQuantity > 0)
+                                                                                                    {
+                                                                                                        addSaleInvoiceItemPackage.BasePrice = salesInvoiceItem.Amount / packageBaseQuantity;
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        addSaleInvoiceItemPackage.BasePrice = salesInvoiceItem.Amount;
+                                                                                                    }
                                                                                                 }
                                                                                                 else
                                                                                                 {
                                                                                                     addSaleInvoiceItemPackage.BasePrice = salesInvoiceItem.Amount;
                                                                                                 }
 
-
                                                                                                 addSaleInvoiceItemPackage.SalesItemTimeStamp = DateTime.Now;
                                                                                                 db.TrnSalesInvoiceItems.InsertOnSubmit(addSaleInvoiceItemPackage);
                                                                                                 db.SubmitChanges();
 
-                                                                                                // this is to update the amount of sales invoice header
-                                                                                                // get total amount from sales invoice item
-                                                                                                // ===============================================================
-
-                                                                                                // sales invoice
+                                                                                                // ===========================
+                                                                                                // Update Sales Invoice Amount
+                                                                                                // ===========================
                                                                                                 var salesInvoice = from d in db.TrnSalesInvoices
                                                                                                                    where d.Id == addSalesInvoice.Id
                                                                                                                    select d;
 
-                                                                                                // check if exist
                                                                                                 if (salesInvoice.Any())
                                                                                                 {
-                                                                                                    // get sales invoice items for total amount
                                                                                                     var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
                                                                                                                             where d.SIId == addSalesInvoice.Id
                                                                                                                             select d;
 
-                                                                                                    // article component
                                                                                                     foreach (var articleComponent in articleComponents)
                                                                                                     {
-                                                                                                        // get discount
                                                                                                         var discount = from d in db.MstDiscounts
                                                                                                                        where d.Id == discounts.FirstOrDefault().Id
                                                                                                                        select d;
@@ -251,7 +252,6 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                         Decimal salesInvoiceItemDiscountAmount = 0;
                                                                                                         Decimal salesInvoiceItemNetPrice = 0;
 
-                                                                                                        // check if discount exist
                                                                                                         if (discount.Any())
                                                                                                         {
                                                                                                             if (discount.FirstOrDefault().IsInclusive == false)
@@ -272,27 +272,27 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                         Decimal VATAmount = 0;
 
                                                                                                         var taxTypeTAXIsInclusive = from d in db.MstTaxTypes where d.Id == taxes.FirstOrDefault().Id select d;
-
-                                                                                                        if (taxTypeTAXIsInclusive.FirstOrDefault().IsInclusive == true)
+                                                                                                        if (taxTypeTAXIsInclusive.Any())
                                                                                                         {
-                                                                                                            VATAmount = amount / (1 + (taxes.FirstOrDefault().TaxRate / 100)) * (taxes.FirstOrDefault().TaxRate / 100);
-                                                                                                        }
-                                                                                                        else
-                                                                                                        {
-                                                                                                            VATAmount = amount * (taxes.FirstOrDefault().TaxRate / 100);
+                                                                                                            if (taxTypeTAXIsInclusive.FirstOrDefault().IsInclusive)
+                                                                                                            {
+                                                                                                                VATAmount = amount / (1 + (taxes.FirstOrDefault().TaxRate / 100)) * (taxes.FirstOrDefault().TaxRate / 100);
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                VATAmount = amount * (taxes.FirstOrDefault().TaxRate / 100);
+                                                                                                            }
                                                                                                         }
 
                                                                                                         Data.TrnSalesInvoiceItem addSaleInvoiceItem = new Data.TrnSalesInvoiceItem();
                                                                                                         addSaleInvoiceItem.SIId = addSalesInvoice.Id;
                                                                                                         addSaleInvoiceItem.ItemId = articleComponent.ComponentArticleId;
 
-                                                                                                        // get component article inventory 
                                                                                                         var componentArticleInventory = from d in db.MstArticleInventories
                                                                                                                                         where d.BranchId == branches.FirstOrDefault().Id
                                                                                                                                         && d.ArticleId == articleComponent.ComponentArticleId
                                                                                                                                         select d;
 
-                                                                                                        // check if exist
                                                                                                         if (componentArticleInventory.Any())
                                                                                                         {
                                                                                                             addSaleInvoiceItem.ItemInventoryId = componentArticleInventory.FirstOrDefault().Id;
@@ -311,7 +311,6 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                         addSaleInvoiceItem.VATPercentage = taxes.FirstOrDefault().TaxRate;
                                                                                                         addSaleInvoiceItem.VATAmount = VATAmount;
 
-                                                                                                        // get the component item
                                                                                                         var componentItem = from d in db.MstArticles
                                                                                                                             where d.Id == articleComponent.ComponentArticleId
                                                                                                                             select d;
@@ -321,13 +320,11 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                             addSaleInvoiceItem.BaseUnitId = componentItem.FirstOrDefault().UnitId;
                                                                                                         }
 
-                                                                                                        // get component conversion unit
                                                                                                         var componentItemConversionUnit = from d in db.MstArticleUnits
                                                                                                                                           where d.ArticleId == articleComponent.ComponentArticleId
                                                                                                                                           && d.UnitId == articleComponent.MstArticle1.UnitId
                                                                                                                                           select d;
 
-                                                                                                        // check if exist
                                                                                                         if (componentItemConversionUnit.Any())
                                                                                                         {
                                                                                                             if (componentItemConversionUnit.FirstOrDefault().Multiplier > 0)
@@ -360,72 +357,26 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                         db.SubmitChanges();
                                                                                                     }
 
-                                                                                                    // total sales invoice item amount
                                                                                                     Decimal totalSalesInvoiceItemAmount = 0;
-
-                                                                                                    // check if exist
                                                                                                     if (salesInvoiceItems.Any())
                                                                                                     {
                                                                                                         totalSalesInvoiceItemAmount = salesInvoiceItems.Sum(d => d.Amount);
                                                                                                     }
 
-                                                                                                    // update the sales invoice amount
                                                                                                     var updateSalesInvoiceAmount = salesInvoice.FirstOrDefault();
                                                                                                     updateSalesInvoiceAmount.Amount = totalSalesInvoiceItemAmount;
                                                                                                     updateSalesInvoiceAmount.BalanceAmount = totalSalesInvoiceItemAmount;
                                                                                                     db.SubmitChanges();
                                                                                                 }
                                                                                             }
-                                                                                            else
-                                                                                            {
-
-                                                                                            }
                                                                                         }
-                                                                                        else
-                                                                                        {
-
-                                                                                        }
-
-                                                                                    }
-                                                                                    else
-                                                                                    {
-
                                                                                     }
                                                                                 }
-                                                                                else
-                                                                                {
-
-                                                                                }
-
-                                                                            }
-                                                                            else
-                                                                            {
-
                                                                             }
                                                                         }
-                                                                        else
-                                                                        {
-
-                                                                        }
-                                                                    }
-                                                                    else
-                                                                    {
-
                                                                     }
                                                                 }
-                                                                else
-                                                                {
-
-                                                                }
                                                             }
-                                                            else
-                                                            {
-
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-
                                                         }
                                                     }
                                                     else
@@ -438,13 +389,11 @@ namespace easyfis.POSIntegrationApiControllers
                                                         {
                                                             if (items.Count() == 1)
                                                             {
-                                                                // get article inventory 
                                                                 var articleInventory = from d in db.MstArticleInventories
                                                                                        where d.BranchId == branches.FirstOrDefault().Id
                                                                                        && d.ArticleId == items.FirstOrDefault().Id
                                                                                        select d;
 
-                                                                // check if exist
                                                                 if (articleInventory.Any())
                                                                 {
                                                                     var units = from d in db.MstUnits
@@ -455,7 +404,6 @@ namespace easyfis.POSIntegrationApiControllers
                                                                     {
                                                                         if (units.Count() == 1)
                                                                         {
-
                                                                             var discounts = from d in db.MstDiscounts
                                                                                             where d.Discount == salesInvoiceItem.Discount
                                                                                             select d;
@@ -472,6 +420,9 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                     {
                                                                                         if (taxes.Count() == 1)
                                                                                         {
+                                                                                            // ==================
+                                                                                            // Sales Invoice Item
+                                                                                            // ==================
                                                                                             Data.TrnSalesInvoiceItem addSaleInvoiceItem = new Data.TrnSalesInvoiceItem();
                                                                                             addSaleInvoiceItem.SIId = addSalesInvoice.Id;
                                                                                             addSaleInvoiceItem.ItemId = items.FirstOrDefault().Id;
@@ -490,7 +441,6 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                             addSaleInvoiceItem.VATAmount = (salesInvoiceItem.Amount / (1 + (taxes.FirstOrDefault().TaxRate / 100))) * (taxes.FirstOrDefault().TaxRate / 100); ;
                                                                                             addSaleInvoiceItem.BaseUnitId = items.FirstOrDefault().UnitId;
 
-                                                                                            // get selected item conversion unit 
                                                                                             var conversionUnit = from d in db.MstArticleUnits
                                                                                                                  where d.ArticleId == items.FirstOrDefault().Id
                                                                                                                  && d.UnitId == items.FirstOrDefault().UnitId
@@ -533,95 +483,52 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                             db.TrnSalesInvoiceItems.InsertOnSubmit(addSaleInvoiceItem);
                                                                                             db.SubmitChanges();
 
-
-                                                                                            // this is to update the amount of sales invoice header
-                                                                                            // get total amount from sales invoice item
-                                                                                            // ===============================================================
-
-                                                                                            // get sales invoice header
+                                                                                            // ===========================
+                                                                                            // Update Sales Invoice Amount
+                                                                                            // ===========================
                                                                                             var salesInvoice = from d in db.TrnSalesInvoices
                                                                                                                where d.Id == addSalesInvoice.Id
                                                                                                                select d;
 
-                                                                                            // check if exist
                                                                                             if (salesInvoice.Any())
                                                                                             {
-                                                                                                // get sales invoice items
                                                                                                 var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
                                                                                                                         where d.SIId == addSalesInvoice.Id
                                                                                                                         select d;
 
-                                                                                                // total sales invoice item amount
                                                                                                 Decimal totalSalesInvoiceItemAmount = 0;
 
-                                                                                                // check if exist
                                                                                                 if (salesInvoiceItems.Any())
                                                                                                 {
                                                                                                     totalSalesInvoiceItemAmount = salesInvoiceItems.Sum(d => d.Amount);
                                                                                                 }
 
-                                                                                                // update the sales invoice amount
                                                                                                 var updateSalesInvoiceAmount = salesInvoice.FirstOrDefault();
                                                                                                 updateSalesInvoiceAmount.Amount = totalSalesInvoiceItemAmount;
                                                                                                 updateSalesInvoiceAmount.BalanceAmount = totalSalesInvoiceItemAmount;
                                                                                                 db.SubmitChanges();
                                                                                             }
                                                                                         }
-                                                                                        else
-                                                                                        {
-
-                                                                                        }
-                                                                                    }
-                                                                                    else
-                                                                                    {
-
                                                                                     }
                                                                                 }
-                                                                                else
-                                                                                {
-
-                                                                                }
-                                                                            }
-                                                                            else
-                                                                            {
-
                                                                             }
                                                                         }
-                                                                        else
-                                                                        {
-
-                                                                        }
-                                                                    }
-                                                                    else
-                                                                    {
-
                                                                     }
                                                                 }
-                                                                else
-                                                                {
-
-                                                                }
                                                             }
-                                                            else
-                                                            {
-
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-
                                                         }
                                                     }
                                                 }
 
-                                                // sales invoice by Id
+                                                // =======================================
+                                                // Insert Journal and Inventory (Business)
+                                                // =======================================
                                                 var salesInvoiceForBusiness = from d in db.TrnSalesInvoices
                                                                               where d.Id == Convert.ToInt32(addSalesInvoice.Id)
                                                                               select d;
 
                                                 if (salesInvoiceForBusiness.Any())
                                                 {
-                                                    // business
                                                     inventory.InsertSIInventory(Convert.ToInt32(salesInvoiceForBusiness.FirstOrDefault().Id));
                                                     journal.insertSIJournal(Convert.ToInt32(salesInvoiceForBusiness.FirstOrDefault().Id));
                                                 }
@@ -630,47 +537,46 @@ namespace easyfis.POSIntegrationApiControllers
                                             }
                                             else
                                             {
-                                                return Request.CreateResponse(HttpStatusCode.BadRequest, "Duplicate record in easyfis branch table.");
+                                                return Request.CreateResponse(HttpStatusCode.BadRequest, "Easyfis: Duplicate Branch!");
                                             }
                                         }
                                         else
                                         {
-                                            return Request.CreateResponse(HttpStatusCode.BadRequest, "No branch found.");
+                                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Easyfis: Branch Not Found!");
                                         }
                                     }
                                     else
                                     {
-                                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Duplicate record in easyfis term table.");
+                                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Easyfis: Duplicate Term!");
                                     }
                                 }
                                 else
                                 {
-                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "No term found.");
+                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Easyfis: Term Not Found!");
                                 }
                             }
                             else
                             {
-                                return Request.CreateResponse(HttpStatusCode.BadRequest, "Duplicate record in easyfis user table.");
+                                return Request.CreateResponse(HttpStatusCode.BadRequest, "Easyfis: Duplicate User!");
                             }
                         }
                         else
                         {
-                            return Request.CreateResponse(HttpStatusCode.BadRequest, "No user found.");
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Easyfis: User Not Found!");
                         }
                     }
                     else
                     {
-                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Duplicate record in easyfis customer table.");
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Easyfis: Duplicate Customer!");
                     }
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, "No customer found.");
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Easyfis: Customer Not Found!");
                 }
             }
-            catch (Exception e)
+            catch
             {
-                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Something's went wrong from the server.");
             }
         }
