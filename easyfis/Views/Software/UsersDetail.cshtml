@@ -12,7 +12,7 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
@@ -32,36 +32,34 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-12" align="right">
-                                <button class="btn btn-primary " id="btnUserDetailLock" onclick="btnUserDetailLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                <button class="btn btn-primary " id="btnUserDetailUnLock" onclick="btnUserDetailUnLock_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                <button class="btn btn-danger " id="btnUserDetailClose" onclick="btnUserDetailClose_OnClick()"><i class="fa fa-times"></i> Close</button>
+                                <button class="btn btn-primary" id="btnUserDetailLock" onclick="btnUserDetailLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                                <button class="btn btn-primary" id="btnUserDetailUnLock" onclick="btnUserDetailUnLock_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                <button class="btn btn-danger" id="btnUserDetailClose" onclick="btnUserDetailClose_OnClick()"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
-                        <div class="">
-                            <form class="form-horizontal" role="form">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Username</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control " id="userDetail_Username" placeholder="Username" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Fullname</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control  requiredUser" id="userDetail_Fullname" placeholder="Fullname" />
-                                            </div>
+                        <form class="form-horizontal" role="form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Username</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control " id="userDetail_Username" placeholder="Username" disabled />
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Fullname</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control  requiredUser" id="userDetail_Fullname" placeholder="Fullname" />
+                                        </div>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
+                                <div class="col-md-6">
+
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <ul class="nav nav-tabs" role="tablist" id="myTab">
@@ -81,76 +79,68 @@
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <div class="row" align="left">
-                                    <div class="col-lg-12">
-                                        <div id="userDetailUserFormGrid" class="grid" align="left"></div>
-                                    </div>
-                                </div>
+                                <div id="userDetailUserFormGrid" class="grid" align="left"></div>
                             </div>
                         </div>
                     </div>
                     <div id="UserDefaults" class="tab-pane fade in">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <div class="">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-8">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Default Company</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="defaultCompany"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Default Branch</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="defaultBranch"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Default Income Account</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="defaultIncomeAccount"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Default Supplier Advances Account</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="defaultSupplierAdvancesAccount"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Default Customer Advances Account</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="defaultCustomerAdvancesAccount"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Default Official Receipt Name</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control " id="defaultOfficialReceiptName" />
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Default Inventory Type</label>
-                                                    <div class="col-sm-6">
-                                                        <div id="cboInventoryType"></div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Default Sales Invoice Discount</label>
-                                                    <div class="col-sm-6">
-                                                        <div id="cboDiscounts"></div>
-                                                    </div>
+                                <form class="form-horizontal" role="form">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-6">Default Company</label>
+                                                <div class="col-sm-6">
+                                                    <div class="comboBox-wide" id="defaultCompany"></div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4"></div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-6">Default Branch</label>
+                                                <div class="col-sm-6">
+                                                    <div class="comboBox-wide" id="defaultBranch"></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-6">Default Income Account</label>
+                                                <div class="col-sm-6">
+                                                    <div class="comboBox-wide" id="defaultIncomeAccount"></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-6">Default Supplier Advances Account</label>
+                                                <div class="col-sm-6">
+                                                    <div class="comboBox-wide" id="defaultSupplierAdvancesAccount"></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-6">Default Customer Advances Account</label>
+                                                <div class="col-sm-6">
+                                                    <div class="comboBox-wide" id="defaultCustomerAdvancesAccount"></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-6">Default Official Receipt Name</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control " id="defaultOfficialReceiptName" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-6">Default Inventory Type</label>
+                                                <div class="col-sm-6">
+                                                    <div id="cboInventoryType"></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-6">Default Sales Invoice Discount</label>
+                                                <div class="col-sm-6">
+                                                    <div id="cboDiscounts"></div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </form>
-                                </div>
+                                        <div class="col-md-4"></div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -159,25 +149,23 @@
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- User Form Edit Detail -->
     <div class="modal fade" id="userFormEdit" role="dialog">
         <div class="modal-dialog">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">User Form Detail</h4>
+                    <h4 class="modal-title">User Form</h4>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <input type="hidden" id="userForm_Id" />
+                    <center>
+                        <span id="loadingForms"></span>
+                    </center>
+                    <div id="formDetail">
                         <dl class="dl-horizontal">
                             <dt>Form</dt>
-                            <dd>
-                                <div class="comboBox-wide" id="userForm_FormName"></div>
-                            </dd>
+                            <dd><div class="comboBox-wide" id="userForm_FormName"></div></dd>
                             <dt>Add</dt>
                             <dd><input type="checkbox" id="userForm_CanAdd" /></dd>
                             <dt>Edit</dt>
@@ -191,11 +179,11 @@
                             <dt>Print</dt>
                             <dd><input type="checkbox" id="userForm_CanPrint" /></dd>
                         </dl>
-                    </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary " id="cmdSaveUserFormButton" onclick="cmdUserFormSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button id="cmdUserFormDetailCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button id="cmdSaveUserFormButton" class="btn btn-primary" onclick="cmdUserFormSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdUserFormDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -204,23 +192,19 @@
     <!-- Copy Rights Modal Detail -->
     <div class="modal fade" id="copyRightsModal" role="dialog">
         <div class="modal-dialog">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Copy rights</h4>
                 </div>
                 <div class="modal-body">
                     <dl class="dl-horizontal">
                         <dt>Copy the rights of </dt>
-                        <dd>
-                            <input type="text" class="form-control " id="usernameOrFullName" placeholder="Username" />
-                        </dd>
+                        <dd><input type="text" class="form-control " id="usernameOrFullName" placeholder="Username" /></dd>
                     </dl>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary " id="btnCopyUserRightsIdModal" onclick="btnCopyUserRights_OnClick()"><i class="fa fa-check"></i> Ok</button>
-                    <button id="btnCopyUserRightsIdModalClose" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button id="btnCopyUserRightsIdModal" class="btn btn-primary" onclick="btnCopyUserRights_OnClick()"><i class="fa fa-check"></i> Ok</button>
+                    <button id="btnCopyUserRightsIdModalClose" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -229,18 +213,16 @@
     <!-- User Form Delete Modal Confirmation -->
     <div class="modal fade" id="deleteUserFormConfirm" role="dialog">
         <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Delete Form <i class="fa fa-trash"></i></h4>
+                    <h4 class="modal-title">Delete</h4>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this?
+                    Are you sure you want to delete this form?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger " id="cmdConfirmDeleteUserForm" onclick="cmdUserFormConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteUserFormCloseButton" class="btn btn-primary " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button id="cmdConfirmDeleteUserForm" class="btn btn-danger" onclick="cmdUserFormConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteUserFormCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -251,44 +233,256 @@
         // ================
         // Global Variables
         // ================
+        var userId = getParam('id');
+        var IsLocked = false;
+        var cboForForm = new wijmo.input.ComboBox('#userForm_FormName');
+        var userFormId = 0;
+        var cboCompany = new wijmo.input.ComboBox('#defaultCompany');
+        var cboBranch = new wijmo.input.ComboBox('#defaultBranch');
+        var cboIncomeAccount = new wijmo.input.ComboBox('#defaultIncomeAccount');
+        var cboSupplierAvancesAccount = new wijmo.input.ComboBox('#defaultSupplierAdvancesAccount');
+        var cboCustomerAdvancesAccount = new wijmo.input.ComboBox('#defaultCustomerAdvancesAccount');
+        var cboInventoryType = new wijmo.input.ComboBox('#cboInventoryType');
+        var cboDiscounts = new wijmo.input.ComboBox('#cboDiscounts');
         var userForms;
         var userFormGrid;
-
-        var userId = getParam('UserId');
-        var IsLocked;
-
-        var cboForForm;
-        var formSelectedValue = "";
-
-        var cboCompany;
-        var cboBranch;
-        var cboIncomeAccount;
-        var cboSupplierAvancesAccount;
-        var cboCustomerAdvancesAccount;
-
-        var cboInventoryType;
-        var cboDiscounts;
-
-        var defaultCompanySelectedValue = "";
-        var defaultBranchSelectedValue = "";
-        var defaultIncomeAccountSelectedValue = "";
-        var defaultSupplierAdvancesAccountSelectedValue = "";
-        var defaultcustomerAdvancesAccountSelectedValue = "";
-        var defaultOfficialReceiptNameValue = "";
+        var isCompanyChanged = false;
+        var branchSelectedValue = 0;
 
         // =======================
         // Get URL Parameter Value
         // =======================
         function getParam(name) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+
             var regexS = "[\\?&]" + name + "=([^&#]*)";
             var regex = new RegExp(regexS);
+
             var results = regex.exec(window.location.href);
             if (results == null) {
                 return "";
             } else {
                 return results[1];
             }
+        }
+
+        // user defaults
+        // =============
+        function getCompany() {
+            var companies = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/company/list',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (companyResults) {
+                    if (companyResults.length > 0) {
+                        for (i = 0; i < companyResults.length; i++) {
+                            companies.push({
+                                Id: companyResults[i]["Id"],
+                                Company: companyResults[i]["Company"],
+                                Address: companyResults[i]["Address"],
+                                ContactNumber: companyResults[i]["ContactNumber"],
+                                TaxNumber: companyResults[i]["TaxNumber"],
+                                IsLocked: companyResults[i]["IsLocked"],
+                                CreatedById: companyResults[i]["CreatedById"],
+                                CreatedBy: companyResults[i]["CreatedBy"],
+                                CreatedDateTime: companyResults[i]["CreatedDateTime"],
+                                UpdatedById: companyResults[i]["UpdatedById"],
+                                UpdatedBy: companyResults[i]["UpdatedBy"],
+                                UpdatedDateTime: companyResults[i]["UpdatedDateTime"]
+                            });
+                        }
+                    }
+
+                    cboCompany.dispose();
+                    cboCompany = new wijmo.input.ComboBox('#defaultCompany', {
+                        isEditable: false,
+                        placeholder: "Select Company",
+                        itemsSource: companies,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCompanyChanged = true;
+                            getBranch();
+                        }
+                    });
+
+                    getBranch();
+                }
+            });
+        }
+
+        function getBranch() {
+            var branches = new wijmo.collections.ObservableArray;
+            if (cboCompany.selectedValue != null) {
+                $.ajax({
+                    url: '/api/listBranchByCompanyId/' + cboCompany.selectedValue,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branches.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Company: branchResults[i]["Company"],
+                                    Branch: branchResults[i]["Branch"],
+                                    BranchCode: branchResults[i]["BranchCode"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"],
+                                    IsLocked: branchResults[i]["IsLocked"],
+                                    CreatedById: branchResults[i]["CreatedById"],
+                                    CreatedBy: branchResults[i]["CreatedBy"],
+                                    CreatedDateTime: branchResults[i]["CreatedDateTime"],
+                                    UpdatedById: branchResults[i]["UpdatedById"],
+                                    UpdatedBy: branchResults[i]["UpdatedBy"],
+                                    UpdatedDateTime: branchResults[i]["UpdatedDateTime"]
+                                });
+                            }
+                        }
+
+                        var disabled = false;
+                        if (IsLocked) {
+                            disabled = true;
+                        }
+
+                        cboBranch.dispose();
+                        cboBranch = new wijmo.input.ComboBox('#defaultBranch', {
+                            disabled: disabled,
+                            isEditable: false,
+                            placeholder: "Branch",
+                            itemsSource: branches,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Id",
+                            selectedValue: branchSelectedValue
+                        });
+
+                        if (!isCompanyChanged) {
+                            getAccount();
+                        }
+                    }
+                });
+            }
+        }
+
+        function getAccount() {
+            var accounts = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/listAccount',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (accountResults) {
+                    if (accountResults.length > 0) {
+                        for (i = 0; i < accountResults.length; i++) {
+                            accounts.push({
+                                Id: accountResults[i]["Id"],
+                                AccountCode: accountResults[i]["AccountCode"],
+                                Account: accountResults[i]["Account"],
+                                AccountTypeId: accountResults[i]["AccountTypeId"],
+                                AccountType: accountResults[i]["AccountType"],
+                                AccountCashFlowId: accountResults[i]["AccountCashFlowId"],
+                                AccountCashFlow: accountResults[i]["AccountCashFlow"],
+                                IsLocked: accountResults[i]["IsLocked"],
+                                CreatedById: accountResults[i]["CreatedById"],
+                                CreatedBy: accountResults[i]["CreatedBy"],
+                                CreatedDateTime: accountResults[i]["CreatedDateTime"],
+                                UpdatedById: accountResults[i]["UpdatedById"],
+                                UpdatedBy: accountResults[i]["UpdatedBy"],
+                                UpdatedDateTime: accountResults[i]["UpdatedDateTime"]
+                            });
+                        }
+                    }
+
+                    cboIncomeAccount.dispose();
+                    cboIncomeAccount = new wijmo.input.ComboBox('#defaultIncomeAccount', {
+                        isEditable: false,
+                        placeholder: "Account",
+                        itemsSource: accounts,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id"
+                    });
+
+                    cboSupplierAvancesAccount.dispose();
+                    cboSupplierAvancesAccount = new wijmo.input.ComboBox('#defaultSupplierAdvancesAccount', {
+                        isEditable: false,
+                        placeholder: "Account",
+                        itemsSource: accounts,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id"
+                    });
+
+                    cboCustomerAdvancesAccount.dispose();
+                    cboCustomerAdvancesAccount = new wijmo.input.ComboBox('#defaultCustomerAdvancesAccount', {
+                        isEditable: false,
+                        placeholder: "Account",
+                        itemsSource: accounts,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id"
+                    });
+
+                    createCboInventoryType();
+                }
+            });
+        }
+
+        function createCboInventoryType() {
+            $.ajax({
+                url: '/api/first/inventory',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (resultInventory) {
+                    var disabled = false;
+                    if (resultInventory != null) {
+                        disabled = true;
+                    }
+
+                    var InventoryTypes = new Array("Specific Identification", "Moving Average");
+                    cboInventoryType.dispose();
+                    cboInventoryType = new wijmo.input.ComboBox('#cboInventoryType', {
+                        disabled: disabled,
+                        placeholder: "Select Inventory Type",
+                        itemsSource: InventoryTypes
+                    });
+
+                    getDiscount();
+                }
+            });
+        }
+
+        function getDiscount() {
+            var discountsObservableArray = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/listDiscount',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (resultDiscounts) {
+                    if (resultDiscounts.length > 0) {
+                        for (i = 0; i < resultDiscounts.length; i++) {
+                            discountsObservableArray.push({
+                                Id: resultDiscounts[i]["Id"],
+                                Discount: resultDiscounts[i]["Discount"]
+                            });
+                        }
+
+                        cboDiscounts.dispose();
+                        cboDiscounts = new wijmo.input.ComboBox('#cboDiscounts', {
+                            isEditable: false,
+                            placeholder: "Select Discount",
+                            itemsSource: discountsObservableArray,
+                            displayMemberPath: "Discount",
+                            selectedValuePath: "Id"
+                        });
+                    }
+
+                    getUserByUserId();
+                }
+            });
         }
 
         // ==============
@@ -302,165 +496,67 @@
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
-                    data: {},
                     success: function (userResults) {
                         if (userResults != null) {
-                            defaultCompanySelectedValue = userResults.Company;
-                            defaultBranchSelectedValue = userResults.Branch;
-                            defaultIncomeAccountSelectedValue = userResults.IncomeAccount;
-                            defaultSupplierAdvancesAccountSelectedValue = userResults.SupplierAdvancesAccount;
-                            defaultcustomerAdvancesAccountSelectedValue = userResults.CustomerAdvancesAccount;
-                            defaultOfficialReceiptNameValue = userResults.OfficialReceiptName;
-
                             document.getElementById("userDetail_Username").value = userResults.UserName;
                             document.getElementById("userDetail_Fullname").value = userResults.FullName;
-                            document.getElementById("defaultOfficialReceiptName").value = defaultOfficialReceiptNameValue;
-                            NProgress.done();
-                            if (userResults.IsLocked == true) {
+                            cboCompany.selectedValue = userResults.CompanyId;
+                            cboBranch.selectedValue = userResults.BranchId;
+                            branchSelectedValue = userResults.BranchId;
+                            cboIncomeAccount.selectedValue = userResults.IncomeAccountId;
+                            cboSupplierAvancesAccount.selectedValue = userResults.SupplierAdvancesAccountId;
+                            cboCustomerAdvancesAccount.selectedValue = userResults.CustomerAdvancesAccountId;
+                            cboInventoryType.selectedValue = userResults.InventoryType;
+                            cboDiscounts.selectedValue = userResults.DefaultSalesInvoiceDiscountId;
+                            document.getElementById("defaultOfficialReceiptName").value = userResults.OfficialReceiptName;
+
+                            if (userResults.IsLocked) {
                                 document.getElementById("userDetail_Fullname").disabled = true;
+                                cboCompany.disabled = true;
+                                cboBranch.disabled = true;
+                                cboIncomeAccount.disabled = true;
+                                cboSupplierAvancesAccount.disabled = true;
+                                cboCustomerAdvancesAccount.disabled = true;
+                                cboInventoryType.disabled = true;
+                                cboDiscounts.disabled = true;
                                 document.getElementById("defaultOfficialReceiptName").disabled = true;
+
                                 $("#btnUserDetailLock").prop("disabled", true);
                                 $("#btnAddUserForm").prop("disabled", true);
                                 $("#btnCopyUserRights").prop("disabled", true);
-                                cboDiscounts.disabled = true;
-
-                                IsLocked = true;
 
                                 var canUnLock = "@ViewData["CanUnlock"]";
-                                if (canUnLock == "True") {
-                                    $("#btnUserDetailUnLock").prop("disabled", false)
-                                } else if (canUnLock == "False") {
-                                    $("#btnUserDetailUnLock").prop("disabled", true)
-                                } else {
-                                    $("#btnUserDetailUnLock").prop("disabled", true)
+                                if (canUnLock == "False") {
+                                    $("#btnUserDetailUnLock").prop("disabled", true);
                                 }
-                            } else {
-                                document.getElementById("userDetail_Fullname").disabled = false;
-                                document.getElementById("defaultOfficialReceiptName").disabled = false;
-                                $("#btnUserDetailUnLock").prop("disabled", true);
-                                $("#btnAddUserForm").prop("disabled", false);
-                                $("#btnCopyUserRights").prop("disabled", false);
 
-                                IsLocked = false;
+                                IsLocked = true;
+                            } else {
+                                $("#btnUserDetailUnLock").prop("disabled", true);
 
                                 var canLock = "@ViewData["CanLock"]";
-                                if (canLock == "True") {
-                                    $("#btnUserDetailLock").prop("disabled", false)
-                                } else if (canLock == "False") {
-                                    $("#btnUserDetailLock").prop("disabled", true)
-                                } else {
-                                    $("#btnUserDetailLock").prop("disabled", true)
+                                if (canLock == "False") {
+                                    $("#btnUserDetailLock").prop("disabled", true);
                                 }
 
                                 var canAdd = "@ViewData["CanAdd"]";
-                                if (canAdd == "True") {
-                                    $("#btnAddUserForm").prop("disabled", false)
-                                    $("#btnCopyUserRights").prop("disabled", false)
-                                } else if (canAdd == "False") {
-                                    $("#btnAddUserForm").prop("disabled", true)
-                                    $("#btnCopyUserRights").prop("disabled", true)
-                                } else {
-                                    $("#btnAddUserForm").prop("disabled", true)
-                                    $("#btnCopyUserRights").prop("disabled", true)
+                                if (canAdd == "False") {
+                                    $("#btnAddUserForm").prop("disabled", true);
+                                    $("#btnCopyUserRights").prop("disabled", true);
                                 }
                             }
 
                             getUserForm();
-                            getCompany();
-                            getAccount();
-
                         } else {
                             confirm("No Data");
                             window.location = '/Software/Users';
                         }
                     }
-                }).fail(function () {
-                    confirm("URL Not Found");
-                    window.location = '/Software/Users';
                 });
             } else {
-                NProgress.done();
+                alert("No Id Parameter Value");
+                window.location = "/Software/Users";
             }
-
-        }
-
-        // ===================
-        // get Form by User Id
-        // ===================
-        function getUserFormByUserId() {
-            var userForms = new wijmo.collections.ObservableArray;
-            NProgress.start();
-            if (document.location.search.length > 0) {
-                $.ajax({
-                    url: '/api/listUserFormByUserId/' + userId,
-                    cache: false,
-                    type: 'GET',
-                    contentType: 'application/json; charset=utf-8',
-                    data: {},
-                    success: function (userFormResults) {
-                        if (userFormResults.length > 0) {
-                            for (i = 0; i < userFormResults.length; i++) {
-                                var canEdit = "@ViewData["CanEdit"]";
-                                var editDisabled = "disabled";
-
-                                if (canEdit == "True") {
-                                    editDisabled = "";
-                                } else if (canEdit == "False") {
-                                    editDisabled = "disabled";
-                                } else {
-                                    editDisabled = "disabled";
-                                }
-
-                                var canDelete = "@ViewData["CanDelete"]";
-                                var deleteDisabled = "disabled";
-
-                                if (canDelete == "True") {
-                                    deleteDisabled = "";
-                                } else if (canDelete == "False") {
-                                    deleteDisabled = "disabled";
-                                } else {
-                                    deleteDisabled = "disabled";
-                                }
-
-                                var btnEditId;
-                                var btnDeleteId;
-                                if (IsLocked == true) {
-                                    btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='cmdUserFormEditButton_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
-                                    btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdUserFormDeleteButton_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
-                                } else {
-                                    btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='cmdUserFormEditButton_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
-                                    btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdUserFormDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                                }
-
-                                userForms.push({
-                                    EditId: btnEditId,
-                                    DeleteId: btnDeleteId,
-                                    Id: userFormResults[i]["Id"],
-                                    UserId: userFormResults[i]["UserId"],
-                                    User: userFormResults[i]["User"],
-                                    FormId: userFormResults[i]["FormId"],
-                                    Form: userFormResults[i]["Form"],
-                                    Particulars: userFormResults[i]["Particulars"],
-                                    CanAdd: userFormResults[i]["CanAdd"],
-                                    CanEdit: userFormResults[i]["CanEdit"],
-                                    CanDelete: userFormResults[i]["CanDelete"],
-                                    CanLock: userFormResults[i]["CanLock"],
-                                    CanUnlock: userFormResults[i]["CanUnlock"],
-                                    CanPrint: userFormResults[i]["CanPrint"]
-                                });
-                            }
-                        }
-                        NProgress.done();
-                    }
-                }).fail(function (xhr, textStatus, err) {
-                    alert(err);
-                });
-            } else {
-                confirm("URL Not Found");
-                NProgress.done();
-                window.location = '/Software/Users';
-            }
-            return userForms;
         }
 
         // ===========
@@ -474,49 +570,29 @@
                     $(this).css({
                         "border": "1px solid red"
                     });
-                }
-                else {
+                } else {
                     $(this).css({
                         "border": "",
                     });
                 }
             });
 
-            if (isValid == false) {
-                toastr.error("Invalid Entry");
-            } else if (cboCompany.itemsSource == 0) {
-                document.getElementById("defaultCompany").style.border = "1px solid red";
-                toastr.error("Invalid Entry");
-            } else if (cboBranch.itemsSource == 0) {
-                document.getElementById("defaultBranch").style.border = "1px solid red";
-                toastr.error("Invalid Entry");
-            } else if (cboIncomeAccount.itemsSource == 0) {
-                document.getElementById("defaultIncomeAccount").style.border = "1px solid red";
-                toastr.error("Invalid Entry");
-            } else if (cboSupplierAvancesAccount.itemsSource == 0) {
-                document.getElementById("defaultSupplierAdvancesAccount").style.border = "1px solid red";
-                toastr.error("Invalid Entry");
-            } else if (cboCustomerAdvancesAccount.itemsSource == 0) {
-                document.getElementById("defaultCustomerAdvancesAccount").style.border = "1px solid red";
-                toastr.error("Invalid Entry");
-            } else {
+            if (isValid) {
+                document.getElementById('btnUserDetailLock').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
                 $('#btnUserDetailLock').prop('disabled', true);
                 $('#btnUserDetailUnLock').prop('disabled', true);
                 $('#btnUserDetailClose').prop('disabled', true);
-                document.getElementById('btnUserDetailLock').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
 
                 var userObject = new Object();
                 userObject.FullName = document.getElementById('userDetail_Fullname').value;
-                userObject.IsLocked = true;
-                userObject.CompanyId = cboCompany.selectedItem["Id"];
-                userObject.BranchId = cboBranch.selectedItem["Id"];
-                userObject.IncomeAccountId = cboIncomeAccount.selectedItem["Id"];
-                userObject.SupplierAdvancesAccountId = cboSupplierAvancesAccount.selectedItem["Id"];
-                userObject.CustomerAdvancesAccountId = cboCustomerAdvancesAccount.selectedItem["Id"];
+                userObject.CompanyId = cboCompany.selectedValue;
+                userObject.BranchId = cboBranch.selectedValue;
+                userObject.IncomeAccountId = cboIncomeAccount.selectedValue;
+                userObject.SupplierAdvancesAccountId = cboSupplierAvancesAccount.selectedValue;
+                userObject.CustomerAdvancesAccountId = cboCustomerAdvancesAccount.selectedValue;
                 userObject.OfficialReceiptName = document.getElementById("defaultOfficialReceiptName").value;
-                userObject.InventoryType = cboInventoryType.selectedValue.toString();
-                userObject.DefaultSalesInvoiceDiscountId = cboDiscounts.selectedItem["Id"];
-
+                userObject.InventoryType = cboInventoryType.selectedValue;
+                userObject.DefaultSalesInvoiceDiscountId = cboDiscounts.selectedValue;
                 var data = JSON.stringify(userObject);
 
                 $.ajax({
@@ -527,29 +603,28 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            $('#btnUserDetailLock').prop('disabled', true);
-                            $('#btnUserDetailUnLock').prop('disabled', true);
-                            $('#btnUserDetailClose').prop('disabled', true);
                             toastr.success("Lock Successful");
                             window.setTimeout(function () {
                                 location.reload();
                             }, 1000);
                         },
                         404: function () {
-                            $('#btnUserDetailLock').prop('disabled', true);
+                            toastr.error("Not found");
+                            document.getElementById('btnUserDetailLock').innerHTML = "<i class='fa fa-lock'></i> Lock";
                             $('#btnUserDetailUnLock').prop('disabled', false);
                             $('#btnUserDetailClose').prop('disabled', false);
-                            toastr.error("Not found");
                         },
                         400: function () {
-                            $('#btnUserDetailLock').prop('disabled', false);
-                            $('#btnUserDetailUnLock').prop('disabled', true);
-                            $('#btnUserDetailClose').prop('disabled', false);
                             toastr.error("Bad Request");
+                            document.getElementById('btnUserDetailLock').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $('#btnUserDetailUnLock').prop('disabled', false);
+                            $('#btnUserDetailClose').prop('disabled', false);
                         }
                     }
                 });
 
+            } else {
+                toastr.error("Invalid Entry");
             }
         }
 
@@ -606,8 +681,8 @@
         // ========
         // get Form
         // ========
-        function getForm() {
-            forms = new wijmo.collections.ObservableArray();
+        function getForm(formId) {
+            var formsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listForm',
                 cache: false,
@@ -617,32 +692,24 @@
                 success: function (formResults) {
                     if (formResults.length > 0) {
                         for (i = 0; i < formResults.length; i++) {
-                            forms.push({
+                            formsObservableArray.push({
                                 Id: formResults[i]["Id"],
                                 FormName: formResults[i]["FormName"],
                                 Particulars: formResults[i]["Particulars"]
                             });
                         }
-                        createCboForForm(forms);
-                    } else {
-                        createCboForForm(forms);
                     }
-                }
-            });
-        }
 
-        // =========================
-        // create combo box for form
-        // =========================
-        function createCboForForm(forms) {
-            cboForForm.dispose();
-            cboForForm = new wijmo.input.ComboBox('#userForm_FormName', {
-                placeholder: "Form Name",
-                itemsSource: forms,
-                displayMemberPath: "Particulars",
-                isEditable: false,
-                selectedValuePath: "Particulars",
-                selectedValue: formSelectedValue.toString()
+                    cboForForm.dispose();
+                    cboForForm = new wijmo.input.ComboBox('#userForm_FormName', {
+                        isEditable: false,
+                        itemsSource: forms,
+                        displayMemberPath: "Particulars",
+                        selectedValuePath: "Id",
+                        selectedValue: formId
+                    });
+
+                }
             });
         }
 
@@ -659,66 +726,14 @@
             $('#cmdSaveUserFormButton').prop('disabled', false);
             $('#cmdUserFormDetailCloseButton').prop('disabled', false);
 
-            document.getElementById('userForm_Id').value = 0
+            userFormId = 0;
+            getForm(0);
             document.getElementById('userForm_CanAdd').checked = false;
             document.getElementById('userForm_CanEdit').checked = false;
             document.getElementById('userForm_CanDelete').checked = false;
             document.getElementById('userForm_CanLock').checked = false;
             document.getElementById('userForm_CanUnlock').checked = false;
             document.getElementById('userForm_CanPrint').checked = false;
-
-            formSelectedValue = "";
-            getForm();
-        }
-
-        function cmdCopyRights_OnClick() {
-            $('#copyRightsModal').modal({
-                show: true,
-                backdrop: 'static'
-            });
-
-            document.getElementById('btnCopyUserRightsIdModal').innerHTML = "<i class='fa fa-copy'></i> Copy";
-            document.getElementById("usernameOrFullName").value = "";
-        }
-
-        function btnCopyUserRights_OnClick() {
-            document.getElementById('btnCopyUserRightsIdModal').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Copying";
-            $('#btnCopyUserRightsIdModal').prop('disabled', true);
-            $('#btnCopyUserRightsIdModalClose').prop('disabled', true);
-            var name = document.getElementById("usernameOrFullName").value;
-
-            $.ajax({
-                type: "POST",
-                url: '/api/userform/copyrights/' + name + '/' + userId,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                statusCode: {
-                    200: function () {
-                        $('#btnCopyUserRightsIdModal').prop('disabled', false);
-                        $('#btnCopyUserRightsIdModalClose').prop('disabled', false);
-
-                        toastr.success("Copy Successful");
-                        $('#copyRightsModal').modal('hide');
-
-                        refreshUserFormGrid();
-                    },
-                    404: function () {
-                        $('#btnCopyUserRightsIdModal').prop('disabled', false);
-                        $('#btnCopyUserRightsIdModalClose').prop('disabled', false);
-
-                        toastr.error("Not found");
-                    },
-                    400: function () {
-                        $('#btnCopyUserRightsIdModal').prop('disabled', false);
-                        $('#btnCopyUserRightsIdModalClose').prop('disabled', false);
-
-                        toastr.error("Bad Request");
-                        $('#copyRightsModal').modal('hide');
-
-                        refreshUserFormGrid();
-                    }
-                }
-            });
         }
 
         // ===============
@@ -736,16 +751,14 @@
 
             userForms.editItem(userForms.currentItem);
             var userForm = userForms.currentEditItem;
-            formSelectedValue = userForm.Particulars;
-            document.getElementById('userForm_Id').value = userForm.Id;
+            userFormId = userForm.Id;
+            getForm(userForm.FormId);
             document.getElementById('userForm_CanAdd').checked = userForm.CanAdd;
             document.getElementById('userForm_CanEdit').checked = userForm.CanEdit;
             document.getElementById('userForm_CanDelete').checked = userForm.CanDelete;
             document.getElementById('userForm_CanLock').checked = userForm.CanLock;
             document.getElementById('userForm_CanUnlock').checked = userForm.CanUnlock;
             document.getElementById('userForm_CanPrint').checked = userForm.CanPrint;
-
-            getForm();
         }
 
         // ====================
@@ -756,10 +769,9 @@
             $('#cmdSaveUserFormButton').prop('disabled', true);
             $('#cmdUserFormDetailCloseButton').prop('disabled', true);
 
-            var userFormId = document.getElementById('userForm_Id').value;
             var userFormObject = new Object();
             userFormObject.UserId = userId;
-            userFormObject.FormId = cboForForm.selectedItem["Id"];
+            userFormObject.FormId = cboForForm.selectedValue;
             userFormObject.CanAdd = document.getElementById('userForm_CanAdd').checked;
             userFormObject.CanEdit = document.getElementById('userForm_CanEdit').checked;
             userFormObject.CanDelete = document.getElementById('userForm_CanDelete').checked;
@@ -777,25 +789,23 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            $('#cmdSaveUserFormButton').prop('disabled', true);
-                            $('#cmdUserFormDetailCloseButton').prop('disabled', true);
                             toastr.success("Save Successful");
                             $('#userFormEdit').modal('hide');
                             refreshUserFormGrid();
                         },
                         404: function () {
-                            $('#cmdSaveUserFormButton').prop('disabled', false);
-                            $('#cmdUserFormDetailCloseButton').prop('disabled', false);
                             toastr.error("Not found");
                             $('#userFormEdit').modal('hide');
-                            refreshUserFormGrid();
-                        },
-                        400: function () {
+                            document.getElementById('cmdSaveUserFormButton').innerHTML = "<i class='fa fa-save'></i> Save";
                             $('#cmdSaveUserFormButton').prop('disabled', false);
                             $('#cmdUserFormDetailCloseButton').prop('disabled', false);
+                        },
+                        400: function () {
                             toastr.error("Bad Request");
                             $('#userFormEdit').modal('hide');
-                            refreshUserFormGrid();
+                            document.getElementById('cmdSaveUserFormButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                            $('#cmdSaveUserFormButton').prop('disabled', false);
+                            $('#cmdUserFormDetailCloseButton').prop('disabled', false);
                         }
                     }
                 });
@@ -808,39 +818,27 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            $('#cmdSaveUserFormButton').prop('disabled', true);
-                            $('#cmdUserFormDetailCloseButton').prop('disabled', true);
                             toastr.success("Update Successful");
                             $('#userFormEdit').modal('hide');
                             refreshUserFormGrid();
                         },
                         404: function () {
-                            $('#cmdSaveUserFormButton').prop('disabled', false);
-                            $('#cmdUserFormDetailCloseButton').prop('disabled', false);
                             toastr.error("Not found");
                             $('#userFormEdit').modal('hide');
-                            refreshUserFormGrid();
-                        },
-                        400: function () {
+                            document.getElementById('cmdSaveUserFormButton').innerHTML = "<i class='fa fa-save'></i> Save";
                             $('#cmdSaveUserFormButton').prop('disabled', false);
                             $('#cmdUserFormDetailCloseButton').prop('disabled', false);
+                        },
+                        400: function () {
                             toastr.error("Bad Request");
                             $('#userFormEdit').modal('hide');
-                            refreshUserFormGrid();
+                            document.getElementById('cmdSaveUserFormButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                            $('#cmdSaveUserFormButton').prop('disabled', false);
+                            $('#cmdUserFormDetailCloseButton').prop('disabled', false);
                         }
                     }
                 });
             }
-        }
-
-        // ==========================
-        // Refresh UserForm Flex Grid
-        // ==========================
-        function refreshUserFormGrid() {
-            userForms = new wijmo.collections.CollectionView(getUserFormByUserId());
-
-            userFormGrid.itemsSource = userForms;
-            userFormGrid.trackChanges = true;
         }
 
         // ==============================
@@ -856,14 +854,14 @@
             $('#cmdConfirmDeleteUserForm').prop('disabled', false);
             $('#cmdConfirmDeleteUserFormCloseButton').prop('disabled', false);
         }
+
         // delete Form
         function cmdUserFormConfirmDeleteButton_OnClick() {
-            userForms.editItem(userForms.currentItem);
-
             document.getElementById('cmdConfirmDeleteUserForm').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $('#cmdConfirmDeleteUserForm').prop('disabled', true);
             $('#cmdConfirmDeleteUserFormCloseButton').prop('disabled', true);
 
+            userForms.editItem(userForms.currentItem);
             var userForm = userForms.currentEditItem;
             var userFormId = userForm.Id;
             $.ajax({
@@ -871,228 +869,151 @@
                 url: '/api/deleteUserForm/' + userFormId,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                data: {},
                 statusCode: {
                     200: function () {
-                        $('#cmdConfirmDeleteUserForm').prop('disabled', true);
-                        $('#cmdConfirmDeleteUserFormCloseButton').prop('disabled', true);
-                        toastr.success("Successfully Deleted");
+                        toastr.success("Delete Successful");
                         $('#deleteUserFormConfirm').modal('hide');
                         refreshUserFormGrid();
                     },
                     404: function () {
+                        toastr.error("Not Found");
+                        $('#deleteUserFormConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteUserForm').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $('#cmdConfirmDeleteUserForm').prop('disabled', false);
                         $('#cmdConfirmDeleteUserFormCloseButton').prop('disabled', false);
-                        toastr.error("Delete request not found");
-                        $('#deleteUserFormConfirm').modal('hide');
-                        refreshUserFormGrid();
                     },
                     400: function () {
+                        toastr.error("Bad Request");
+                        $('#deleteUserFormConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteUserForm').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $('#cmdConfirmDeleteUserForm').prop('disabled', false);
                         $('#cmdConfirmDeleteUserFormCloseButton').prop('disabled', false);
-                        toastr.error("Cannot delete record");
-                        $('#deleteUserFormConfirm').modal('hide');
+                    }
+                }
+            });
+        }
+
+        function cmdCopyRights_OnClick() {
+            $('#copyRightsModal').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            document.getElementById('btnCopyUserRightsIdModal').innerHTML = "<i class='fa fa-copy'></i> Copy";
+            $('#btnCopyUserRightsIdModal').prop('disabled', false);
+            $('#btnCopyUserRightsIdModalClose').prop('disabled', false);
+            document.getElementById("usernameOrFullName").value = "";
+        }
+
+        function btnCopyUserRights_OnClick() {
+            document.getElementById('btnCopyUserRightsIdModal').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Copying";
+            $('#btnCopyUserRightsIdModal').prop('disabled', true);
+            $('#btnCopyUserRightsIdModalClose').prop('disabled', true);
+            var name = document.getElementById("usernameOrFullName").value;
+
+            $.ajax({
+                type: "POST",
+                url: '/api/userform/copyrights/' + name + '/' + userId,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        toastr.success("Copy Successful");
+                        $('#copyRightsModal').modal('hide');
                         refreshUserFormGrid();
+                    },
+                    404: function () {
+                        toastr.error("Not found");
+                        $('#copyRightsModal').modal('hide');
+                        document.getElementById('btnCopyUserRightsIdModal').innerHTML = "<i class='fa fa-copy'></i> Copy";
+                        $('#btnCopyUserRightsIdModal').prop('disabled', false);
+                        $('#btnCopyUserRightsIdModalClose').prop('disabled', false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#copyRightsModal').modal('hide');
+                        document.getElementById('btnCopyUserRightsIdModal').innerHTML = "<i class='fa fa-copy'></i> Copy";
+                        $('#btnCopyUserRightsIdModal').prop('disabled', false);
+                        $('#btnCopyUserRightsIdModalClose').prop('disabled', false);
                     }
                 }
             });
         }
 
-        // user defaults
-        // =============
-        function getCompany() {
-            var companies = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/company/list',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (companyResults) {
-                    var disabled;
-                    if (companyResults == 0) {
-                        disabled = true;
-                    } else {
-                        if (IsLocked == true) {
-                            disabled = true;
-                        } else {
-                            disabled = false;
+        // ===================
+        // get Form by User Id
+        // ===================
+        function getUserFormByUserId() {
+            var userForms = new wijmo.collections.ObservableArray;
+            if (document.location.search.length > 0) {
+                $.ajax({
+                    url: '/api/listUserFormByUserId/' + userId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (userFormResults) {
+                        if (userFormResults.length > 0) {
+                            for (i = 0; i < userFormResults.length; i++) {
+                                var canEdit = "@ViewData["CanEdit"]";
+                                var editDisabled = "";
+                                if (canEdit == "False") {
+                                    editDisabled = "disabled";
+                                }
+
+                                var canDelete = "@ViewData["CanDelete"]";
+                                var deleteDisabled = "";
+                                if (canDelete == "False") {
+                                    deleteDisabled = "disabled";
+                                }
+
+                                var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='cmdUserFormEditButton_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
+                                var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdUserFormDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                                if (IsLocked) {
+                                    btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='cmdUserFormEditButton_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
+                                    btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdUserFormDeleteButton_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
+                                }
+
+                                userForms.push({
+                                    EditId: btnEditId,
+                                    DeleteId: btnDeleteId,
+                                    Id: userFormResults[i]["Id"],
+                                    UserId: userFormResults[i]["UserId"],
+                                    User: userFormResults[i]["User"],
+                                    FormId: userFormResults[i]["FormId"],
+                                    Form: userFormResults[i]["Form"],
+                                    Particulars: userFormResults[i]["Particulars"],
+                                    CanAdd: userFormResults[i]["CanAdd"],
+                                    CanEdit: userFormResults[i]["CanEdit"],
+                                    CanDelete: userFormResults[i]["CanDelete"],
+                                    CanLock: userFormResults[i]["CanLock"],
+                                    CanUnlock: userFormResults[i]["CanUnlock"],
+                                    CanPrint: userFormResults[i]["CanPrint"]
+                                });
+                            }
                         }
+
+                        NProgress.done();
                     }
+                });
+            }
 
-                    if (companyResults.length > 0) {
-                        for (i = 0; i < companyResults.length; i++) {
-                            companies.push({
-                                Id: companyResults[i]["Id"],
-                                Company: companyResults[i]["Company"],
-                                Address: companyResults[i]["Address"],
-                                ContactNumber: companyResults[i]["ContactNumber"],
-                                TaxNumber: companyResults[i]["TaxNumber"],
-                                IsLocked: companyResults[i]["IsLocked"],
-                                CreatedById: companyResults[i]["CreatedById"],
-                                CreatedBy: companyResults[i]["CreatedBy"],
-                                CreatedDateTime: companyResults[i]["CreatedDateTime"],
-                                UpdatedById: companyResults[i]["UpdatedById"],
-                                UpdatedBy: companyResults[i]["UpdatedBy"],
-                                UpdatedDateTime: companyResults[i]["UpdatedDateTime"]
-                            });
-                        }
-                    }
-
-                    cboCompany.dispose();
-                    cboCompany = new wijmo.input.ComboBox('#defaultCompany', {
-                        disabled: disabled,
-                        placeholder: "Company",
-                        itemsSource: companies,
-                        displayMemberPath: "Company",
-                        isEditable: false,
-                        selectedValuePath: "Company",
-                        selectedValue: defaultCompanySelectedValue.toString(),
-                        onSelectedIndexChanged: function () {
-                            var companyId = this.selectedItem["Id"];
-                            getBranch(companyId);
-                        }
-                    });
-
-                    var companyId = cboCompany.selectedItem["Id"];
-                    getBranch(companyId);
-                }
-            });
+            return userForms;
         }
 
-        function getBranch(companyId) {
-            var branches = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/listBranchByCompanyId/' + companyId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (branchResults) {
-                    var disabled;
-                    if (branchResults == 0) {
-                        disabled = true;
-                    } else {
-                        if (IsLocked == true) {
-                            disabled = true;
-                        } else {
-                            disabled = false;
-                        }
-                    }
+        // ==========================
+        // Refresh UserForm Flex Grid
+        // ==========================
+        function refreshUserFormGrid() {
+            userForms = new wijmo.collections.CollectionView(getUserFormByUserId());
 
-                    if (branchResults.length > 0) {
-                        for (i = 0; i < branchResults.length; i++) {
-                            branches.push({
-                                Id: branchResults[i]["Id"],
-                                CompanyId: branchResults[i]["CompanyId"],
-                                Company: branchResults[i]["Company"],
-                                Branch: branchResults[i]["Branch"],
-                                BranchCode: branchResults[i]["BranchCode"],
-                                Address: branchResults[i]["Address"],
-                                ContactNumber: branchResults[i]["ContactNumber"],
-                                TaxNumber: branchResults[i]["TaxNumber"],
-                                IsLocked: branchResults[i]["IsLocked"],
-                                CreatedById: branchResults[i]["CreatedById"],
-                                CreatedBy: branchResults[i]["CreatedBy"],
-                                CreatedDateTime: branchResults[i]["CreatedDateTime"],
-                                UpdatedById: branchResults[i]["UpdatedById"],
-                                UpdatedBy: branchResults[i]["UpdatedBy"],
-                                UpdatedDateTime: branchResults[i]["UpdatedDateTime"]
-                            });
-                        }
-                    }
-
-                    cboBranch.dispose();
-                    cboBranch = new wijmo.input.ComboBox('#defaultBranch', {
-                        disabled: disabled,
-                        placeholder: "Branch",
-                        itemsSource: branches,
-                        displayMemberPath: "Branch",
-                        isEditable: false,
-                        selectedValuePath: "Branch",
-                        selectedValue: defaultBranchSelectedValue.toString(),
-                    });
-                }
-            });
-        }
-
-        function getAccount() {
-            var accounts = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/listAccount',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (accountResults) {
-                    var disabled;
-                    if (accountResults == 0) {
-                        disabled = true;
-                    } else {
-                        if (IsLocked == true) {
-                            disabled = true;
-                        } else {
-                            disabled = false;
-                        }
-                    }
-
-                    if (accountResults.length > 0) {
-                        for (i = 0; i < accountResults.length; i++) {
-                            accounts.push({
-                                Id: accountResults[i]["Id"],
-                                AccountCode: accountResults[i]["AccountCode"],
-                                Account: accountResults[i]["Account"],
-                                AccountTypeId: accountResults[i]["AccountTypeId"],
-                                AccountType: accountResults[i]["AccountType"],
-                                AccountCashFlowId: accountResults[i]["AccountCashFlowId"],
-                                AccountCashFlow: accountResults[i]["AccountCashFlow"],
-                                IsLocked: accountResults[i]["IsLocked"],
-                                CreatedById: accountResults[i]["CreatedById"],
-                                CreatedBy: accountResults[i]["CreatedBy"],
-                                CreatedDateTime: accountResults[i]["CreatedDateTime"],
-                                UpdatedById: accountResults[i]["UpdatedById"],
-                                UpdatedBy: accountResults[i]["UpdatedBy"],
-                                UpdatedDateTime: accountResults[i]["UpdatedDateTime"]
-                            });
-                        }
-                    }
-
-                    cboIncomeAccount.dispose();
-                    cboIncomeAccount = new wijmo.input.ComboBox('#defaultIncomeAccount', {
-                        disabled: disabled,
-                        placeholder: "Account",
-                        itemsSource: accounts,
-                        displayMemberPath: "Account",
-                        isEditable: false,
-                        selectedValuePath: "Account",
-                        selectedValue: defaultIncomeAccountSelectedValue.toString(),
-                    });
-
-                    cboSupplierAvancesAccount.dispose();
-                    cboSupplierAvancesAccount = new wijmo.input.ComboBox('#defaultSupplierAdvancesAccount', {
-                        disabled: disabled,
-                        placeholder: "Account",
-                        itemsSource: accounts,
-                        displayMemberPath: "Account",
-                        isEditable: false,
-                        selectedValuePath: "Account",
-                        selectedValue: defaultSupplierAdvancesAccountSelectedValue.toString(),
-                    });
-
-                    cboCustomerAdvancesAccount.dispose();
-                    cboCustomerAdvancesAccount = new wijmo.input.ComboBox('#defaultCustomerAdvancesAccount', {
-                        disabled: disabled,
-                        placeholder: "Account",
-                        itemsSource: accounts,
-                        displayMemberPath: "Account",
-                        isEditable: false,
-                        selectedValuePath: "Account",
-                        selectedValue: defaultcustomerAdvancesAccountSelectedValue.toString(),
-                    });
-                }
-            });
+            userFormGrid.itemsSource = userForms;
+            userFormGrid.trackChanges = true;
         }
 
         function getUserForm() {
             userForms = new wijmo.collections.CollectionView(getUserFormByUserId());
-            // Flex Grid for Contact Information
+
             userFormGrid = new wijmo.grid.FlexGrid('#userDetailUserFormGrid');
             userFormGrid.initialize({
                 columns: [
@@ -1126,37 +1047,37 @@
                                 "header": "Add",
                                 "binding": "CanAdd",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 80
                             },
                             {
                                 "header": "Edit",
                                 "binding": "CanEdit",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 80
                             },
                             {
                                 "header": "Delete",
                                 "binding": "CanDelete",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 80
                             },
                             {
                                 "header": "Lock",
                                 "binding": "CanLock",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 80
                             },
                             {
                                 "header": "Unlock",
                                 "binding": "CanUnlock",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 80
                             },
                             {
                                 "header": "Print",
                                 "binding": "CanPrint",
                                 "allowSorting": true,
-                                "width": 80,
+                                "width": 80
                             }
                 ],
                 autoGenerateColumns: false,
@@ -1169,125 +1090,23 @@
             userFormGrid.trackChanges = true;
         }
 
+        $('#userForm').click(function () {
+            $("#UserDefaults").hide();
+            $("#UserForm").show();
+            NProgress.start();
+            refreshUserFormGrid();
+        });
 
-        var inventoryTypeSelectedValue = "@ViewData["InventoryType"]";
-
-        function createCboInventoryType() {
-            $.ajax({
-                url: '/api/first/inventory',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (resultInventory) {
-
-                    var disabled = false;
-                    var userName = "@ViewData["UserName"]";
-                    if (resultInventory != null) {
-                        disabled = true;
-                    } else {
-                        if (userName == "admin") {
-                            if (IsLocked == true) {
-                                disabled = true;
-                            } else {
-                                disabled = false;
-                            }
-                        } else {
-                            disabled = true;
-                        }
-                    }
-
-                    var InventoryTypes = new Array("Specific Identification", "Moving Average");
-                    cboInventoryType.dispose();
-                    cboInventoryType = new wijmo.input.ComboBox('#cboInventoryType', {
-                        disabled: disabled,
-                        placeholder: "Select Inventory Type",
-                        itemsSource: InventoryTypes,
-                        selectedValue: inventoryTypeSelectedValue
-                    });
-                }
-            });
-        }
-
-        function getDiscount() {
-            var discountsObservableArray = new wijmo.collections.ObservableArray;
-             $.ajax({
-                 url: '/api/listDiscount',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (resultDiscounts) {
-                    if (resultDiscounts.length > 0) {
-                        for (i = 0; i < resultDiscounts.length; i++) {
-                            discountsObservableArray.push({
-                                Id: resultDiscounts[i]["Id"],
-                                Discount: resultDiscounts[i]["Discount"]
-                            });
-                        }
-
-                        var disabled = false;
-                        var userName = "@ViewData["UserName"]";
-                        if (userName == "admin") {
-                            if (IsLocked == true) {
-                                disabled = true;
-                            } else {
-                                disabled = false;
-                            }
-                        } else {
-                            disabled = true;
-                        }
-
-                        var defaultDiscount = "@ViewData["DefaultSalesInvoiceDiscount"]";
-                        cboDiscounts.dispose();
-                        cboDiscounts = new wijmo.input.ComboBox('#cboDiscounts', {
-                            disabled: disabled,
-                            placeholder: "Select Branch",
-                            itemsSource: discountsObservableArray,
-                            displayMemberPath: "Discount",
-                            selectedValuePath: "Discount",
-                            selectedValue: defaultDiscount.toString()
-                        });
-                        document.getElementById("defaultOfficialReceiptName").value = "@ViewData["OfficialReceiptName"]";
-                    }
-                }
-            });
-        }
-
+        $('#userDefaults').click(function () {
+            $("#UserDefaults").show();
+            $("#UserForm").hide();
+        });
 
         // ============
         // On Load Page
         // ============
         $(document).ready(function () {
-            document.getElementById("userDetail_Username").disabled = true;
-
-            getUserByUserId();
-
-            cboForForm = new wijmo.input.ComboBox('#userForm_FormName');
-            cboBranch = new wijmo.input.ComboBox('#defaultBranch');
-            cboCompany = new wijmo.input.ComboBox('#defaultCompany');
-            cboIncomeAccount = new wijmo.input.ComboBox('#defaultIncomeAccount');
-            cboSupplierAvancesAccount = new wijmo.input.ComboBox('#defaultSupplierAdvancesAccount');
-            cboCustomerAdvancesAccount = new wijmo.input.ComboBox('#defaultCustomerAdvancesAccount');
-
-            $('#userForm').click(function () {
-                $("#UserDefaults").hide();
-                $("#UserForm").show();
-                userForms = new wijmo.collections.CollectionView(getUserFormByUserId());
-                // Flex Grid for Contact Information
-
-                // Flex Grid for Account Category
-                userFormGrid.itemsSource = userForms;
-                userFormGrid.trackChanges = true;
-            });
-
-            $('#userDefaults').click(function () {
-                $("#UserDefaults").show();
-                $("#UserForm").hide();
-            });
-
-            cboInventoryType = new wijmo.input.ComboBox('#cboInventoryType');
-            cboDiscounts = new wijmo.input.ComboBox('#cboDiscounts');
-            getDiscount();
-            createCboInventoryType();
+            getCompany();
         });
     </script>
     <script type="text/javascript">

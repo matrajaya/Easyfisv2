@@ -97,6 +97,8 @@ namespace easyfis.Controllers
                             CustomerAdvancesAccountId = d.CustomerAdvancesAccountId,
                             CustomerAdvancesAccount = d.MstAccount2.Account,
                             OfficialReceiptName = d.OfficialReceiptName,
+                            InventoryType = d.InventoryType,
+                            DefaultSalesInvoiceDiscountId = d.DefaultSalesInvoiceDiscountId
                             //CreatedById = d.CreatedById,
                             //CreatedBy = d.MstUser1.FullName,
                             //CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
