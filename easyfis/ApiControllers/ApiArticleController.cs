@@ -891,12 +891,12 @@ namespace easyfis.Controllers
                 Data.MstArticle newArticle = new Data.MstArticle();
                 if (Convert.ToInt32(articleTypeId) == 6)
                 {
-                    newArticle.ArticleCode = article.ArticleCode;
+                    newArticle.ArticleCode = articleCodeResult;
                     newArticle.ManualArticleCode = "NULL";
                     newArticle.Article = article.Article;
                     newArticle.Category = "NA";
                     newArticle.ArticleTypeId = Convert.ToInt32(articleTypeId);
-                    newArticle.ArticleGroupId = db.MstArticleGroups.Where(d => d.ArticleTypeId == 6).Select(d => d.Id).FirstOrDefault();
+                    newArticle.ArticleGroupId = article.ArticleGroupId;
                     newArticle.AccountId = article.AccountId;
                     newArticle.SalesAccountId = article.AccountId;
                     newArticle.CostAccountId = article.AccountId;
@@ -913,7 +913,7 @@ namespace easyfis.Controllers
                     newArticle.Address = article.Address;
                     newArticle.TermId = db.MstTerms.FirstOrDefault().Id;
                     newArticle.ContactNumber = article.ContactNumber;
-                    newArticle.ContactPerson = "NA";
+                    newArticle.ContactPerson = article.ContactPerson;
                     newArticle.TaxNumber = "NA";
                     newArticle.CreditLimit = 0;
                     newArticle.DateAcquired = DateTime.Now;
@@ -967,8 +967,8 @@ namespace easyfis.Controllers
                 }
                 else if (Convert.ToInt32(articleTypeId) == 4)
                 {
-                    newArticle.ArticleCode = article.ArticleCode;
-                    newArticle.ManualArticleCode = "NA";
+                    newArticle.ArticleCode = articleCodeResult;
+                    newArticle.ManualArticleCode = "NULL";
                     newArticle.Article = article.Article;
                     newArticle.Category = "NA";
                     newArticle.ArticleTypeId = Convert.ToInt32(articleTypeId);
@@ -989,7 +989,7 @@ namespace easyfis.Controllers
                     newArticle.Address = article.Address;
                     newArticle.TermId = db.MstTerms.FirstOrDefault().Id;
                     newArticle.ContactNumber = article.ContactNumber;
-                    newArticle.ContactPerson = "NA";
+                    newArticle.ContactPerson = article.ContactPerson;
                     newArticle.TaxNumber = "NA";
                     newArticle.CreditLimit = 0;
                     newArticle.DateAcquired = DateTime.Now;
@@ -1155,9 +1155,11 @@ namespace easyfis.Controllers
                         updateArticle.ArticleCode = article.ArticleCode;
                         updateArticle.Article = article.Article;
                         updateArticle.ArticleTypeId = Convert.ToInt32(articleTypeId);
+                        updateArticle.ArticleGroupId = article.ArticleGroupId;
                         updateArticle.AccountId = article.AccountId;
                         updateArticle.Address = article.Address;
                         updateArticle.ContactNumber = article.ContactNumber;
+                        updateArticle.ContactPerson = article.ContactPerson;
                         updateArticle.IsLocked = article.IsLocked;
                         updateArticle.UpdatedById = userId;
                         updateArticle.UpdatedDateTime = DateTime.Now;
@@ -1185,9 +1187,11 @@ namespace easyfis.Controllers
                         updateArticle.ArticleCode = article.ArticleCode;
                         updateArticle.Article = article.Article;
                         updateArticle.ArticleTypeId = Convert.ToInt32(articleTypeId);
+                        updateArticle.ArticleGroupId = article.ArticleGroupId;
                         updateArticle.AccountId = article.AccountId;
                         updateArticle.Address = article.Address;
                         updateArticle.ContactNumber = article.ContactNumber;
+                        updateArticle.ContactPerson = article.ContactPerson;
                         updateArticle.IsLocked = article.IsLocked;
                         updateArticle.UpdatedById = userId;
                         updateArticle.UpdatedDateTime = DateTime.Now;

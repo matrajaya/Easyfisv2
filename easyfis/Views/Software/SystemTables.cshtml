@@ -19,7 +19,7 @@
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        System Tables 
+                        System Tables
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -33,10 +33,10 @@
                     <li role="presentation"><a data-toggle="tab" href="#PayType" id="payTypeTabId">Pay Type</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#Tax" id="taxTabId">Tax Type</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#Unit" id="unitTabId">Unit</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Term" id="termTabId">Terms</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#ArticleGroup" id="articleGroupTabId">Article Groups</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Employee" id="employeeTabId">Employees</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#OtherArticle" id="otherArticleTabId">Other Articles</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Term" id="termTabId">Term</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#ArticleGroup" id="articleGroupTabId">Article Group</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Employee" id="employeeTabId">Employee</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#OtherArticle" id="otherArticleTabId">Other Article</a></li>
                 </ul>
                 <br />
                 <div id="Discount" class="tab-pane fade in active">
@@ -346,7 +346,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Other Article -->
+                <!-- OtherArticles -->
                 <div id="OtherArticle" class="tab-pane fade">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -360,7 +360,7 @@
                                     </td>
                                     <td style="width: 1%"></td>
                                     <td style="width: 40%" align="right">
-                                        <button class="btn btn-primary " id="btnAddOtherArticle" onclick="btnAddArticle_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                        <button class="btn btn-primary " id="btnAddOtherArticle" onclick="btnOtherArticleAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                         <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
                                     </td>
                                 </tr>
@@ -834,26 +834,29 @@
                     <h4 class="modal-title" id="employeeModalLabel">Employee <span id="employeeLockAndUnLock"></span></h4>
                 </div>
                 <div class="modal-body">
+                    <center>
+                        <span id="loadingModalEmployee"></span>
+                    </center>
                     <form id="employeeDetailForm">
-                        <input type="hidden" id="employee_id" />
                         <dl class="dl-horizontal">
-                            <dt>Code</dt>
-                            <dd><input type="text" class="form-control  requiredEmployee" id="employee_Code" placeholder="Code" /></dd>
+                            <dt id="employee_Code_Label">Code</dt>
+                            <dd id="employee_Code_Input"><input type="text" class="form-control  requiredEmployee" id="employee_Code" placeholder="Code" disabled /></dd>
                             <dt>Employee</dt>
                             <dd><input type="text" class="form-control requiredEmployee" id="employee_Employee" placeholder="Employee" /></dd>
+                            <dt>Employee Group</dt>
+                            <dd>
+                                <div class="comboBox-wide" id="cboEmployeeGroup"></div>
+                            </dd>
                             <dt>Account</dt>
                             <dd>
                                 <table style="width: 100%" border="0">
                                     <tr>
                                         <td style="width: 30%">
-                                            <div id="employee_AccountCode" class=""></div>
+                                            <div class="comboBox-wide" id="cboEmployeeAccountCode"></div>
                                         </td>
                                         <td style="width: 1%"></td>
                                         <td style="width: 69%">
-                                            <div id="employee_Account" class=""></div>
-                                            <input type="hidden" class="requiredEmployee" id="employee_Account_data" />
-                                            <input type="hidden" id="employee_AccountCode_selectedValue" />
-                                            <input type="hidden" id="employee_Account_selectedValue" />
+                                            <div class="comboBox-wide" id="cboEmployeeAccount"></div>
                                         </td>
                                     </tr>
                                 </table>
@@ -862,6 +865,8 @@
                             <dd><textarea class="form-control textarea-custom requiredEmployee" id="employee_Address" rows="5" placeholder="Address"></textarea></dd>
                             <dt>Contact Number</dt>
                             <dd><input type="text" class="form-control  requiredEmployee" id="employee_ContactNumber" placeholder="Contact Number" /></dd>
+                            <dt>Contact Person</dt>
+                            <dd><input type="text" class="form-control  requiredEmployee" id="employee_ContactPerson" placeholder="Contact Person" /></dd>
                             <dt>Lock</dt>
                             <dd><input type="checkbox" id="employee_Lock" /></dd>
                         </dl>
@@ -895,89 +900,77 @@
         </div>
     </div>
 
-    <!-- =================== -->
-    <!-- Article Edit Detail -->
-    <!-- =================== -->
-    <div class="modal fade" id="articleEdit" role="dialog">
+    <!-- ========================= -->
+    <!-- Other Article Edit Detail -->
+    <!-- ========================= -->
+    <div class="modal fade" id="otherArticleEdit" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="articleModalLabel"> Other Article <span id="articleLockAndUnLock"></span></h4>
+                    <h4 class="modal-title" id="otherArticleModalLabel">Other Article <span id="otherArticleLockAndUnLock"></span></h4>
                 </div>
                 <div class="modal-body">
-                    <form id="articleDetailForm">
-                        <input type="hidden" id="article_id" />
+                    <center>
+                        <span id="loadingModalOtherArticle"></span>
+                    </center>
+                    <form id="otherArticleDetailForm">
                         <dl class="dl-horizontal">
-                            <dt>Code</dt>
-                            <dd><input type="text" class="form-control  requiredArticle" id="article_Code" placeholder="Code" /></dd>
+                            <dt id="otherArticle_Code_Label">Code</dt>
+                            <dd id="otherArticle_Code_Input"><input type="text" class="form-control  requiredOtherArticle" id="otherArticle_Code" placeholder="Code" disabled /></dd>
                             <dt>Article</dt>
-                            <dd><input type="text" class="form-control requiredArticle" id="article_Article" placeholder="Article" /></dd>
+                            <dd><input type="text" class="form-control requiredOtherArticle" id="otherArticle_OtherArticle" placeholder="OtherArticle" /></dd>
+                            <dt>Article Group</dt>
+                            <dd>
+                                <div class="comboBox-wide" id="cboOtherArticleGroup"></div>
+                            </dd>
                             <dt>Account</dt>
                             <dd>
                                 <table style="width: 100%" border="0">
                                     <tr>
                                         <td style="width: 30%">
-                                            <div id="article_AccountCode" class=""></div>
+                                            <div class="comboBox-wide" id="cboOtherArticleAccountCode"></div>
                                         </td>
                                         <td style="width: 1%"></td>
                                         <td style="width: 69%">
-                                            <div id="article_Account" class=""></div>
-                                            <input type="hidden" class="requiredArticle" id="article_Account_data" />
-                                            <input type="hidden" id="article_AccountCode_selectedValue" />
-                                            <input type="hidden" id="article_Account_selectedValue" />
+                                            <div class="comboBox-wide" id="cboOtherArticleAccount"></div>
                                         </td>
                                     </tr>
                                 </table>
                             </dd>
                             <dt>Address</dt>
-                            <dd><textarea class="form-control textarea-custom requiredArticle" id="article_Address" rows="5" placeholder="Address"></textarea></dd>
+                            <dd><textarea class="form-control textarea-custom requiredOtherArticle" id="otherArticle_Address" rows="5" placeholder="Address"></textarea></dd>
                             <dt>Contact Number</dt>
-                            <dd><input type="text" class="form-control  requiredArticle" id="article_ContactNumber" placeholder="Contact Number" /></dd>
+                            <dd><input type="text" class="form-control  requiredOtherArticle" id="otherArticle_ContactNumber" placeholder="Contact Number" /></dd>
+                            <dt>Contact Person</dt>
+                            <dd><input type="text" class="form-control  requiredOtherArticle" id="otherArticle_ContactPerson" placeholder="Contact Person" /></dd>
                             <dt>Lock</dt>
-                            <dd><input type="checkbox" id="article_Lock" /></dd>
+                            <dd><input type="checkbox" id="otherArticle_Lock" /></dd>
                         </dl>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdSaveArticleButton" class="btn btn-primary" onclick="btnArticleSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button id="cmdArticleDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button id="cmdSaveOtherArticleButton" class="btn btn-primary" onclick="btnOtherArticleSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdOtherArticleDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ============== -->
-    <!-- Article Delete -->
-    <!-- ============== -->
-    <div class="modal fade" id="deleteArticleConfirm" role="dialog">
+    <!-- ==================== -->
+    <!-- Other Article Delete -->
+    <!-- ==================== -->
+    <div class="modal fade" id="deleteOtherArticleConfirm" role="dialog">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Delete</h4>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this other article?
+                    Are you sure you want to delete this article?
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdConfirmDeleteArticle" class="btn btn-danger" onclick="cmdArticleConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteCloseButtonArticle" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Lock -->
-    <div class="modal fade" id="deleteRecordLock" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
-                </div>
-                <div class="modal-body">
-                    Sorry, the record is lock! It can't be deleted!
-                </div>
-                <div class="modal-footer">
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"> Okay</button>
+                    <button id="cmdConfirmDeleteOtherArticle" class="btn btn-danger" onclick="cmdOtherArticleConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButtonOtherArticle" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -1169,7 +1162,7 @@
                 }
             });
         }
-        
+
         // ================
         // Add new discount
         // ================
@@ -2795,7 +2788,7 @@
             document.getElementById("cmdSaveUnitButton").innerHTML = '<i class="fa fa-save"></i> Save';
             $('#cmdSaveUnitButton').prop('disabled', true);
             $('#cmdUnitDetailCloseButton').prop('disabled', false);
-            
+
             units.editItem(units.currentItem);
             var unit = units.currentEditItem;
             unitId = unit.Id ? unit.Id : '';
@@ -3555,696 +3548,6 @@
         }
     </script>
 
-    <!-- ================ -->
-    <!-- Employee Scripts -->
-    <!-- ================ -->
-    <script type="text/javascript">
-        // =============================
-        // Global Variables for Employee
-        // =============================
-        var employees;
-        var employeeGrid;
-        var employeeAccounts;
-        var cboEmployeeForAccountCode;
-        var cboEmployeeForAccount;
-        var btnFirstPageEmployee;
-        var btnPreviousPageGridEmployee;
-        var btnNextPageGridEmployee;
-        var btnLastPageGridEmployee;
-        var btnCurrentPageGridEmployee;
-
-        // =================
-        // GET Employee List
-        // =================
-        function getEmployee() {
-            var employees = new wijmo.collections.ObservableArray;
-            NProgress.start();
-            $.ajax({
-                url: '/api/listArticleByArticleTypeId/4',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (employeeResults) {
-                    if (employeeResults.length > 0) {
-                        for (i = 0; i < employeeResults.length; i++) {
-
-                            var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled;
-
-                            if (canDelete == "True") {
-                                deleteDisabled = "";
-                            } else if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            } else {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var btnDeleteId;
-                            if (employeeResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteEmployeeLock_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                            } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteEmployee_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                            }
-
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled;
-
-                            if (canEdit == "True") {
-                                editDisabled = "";
-                            } else if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            } else {
-                                editDisabled = "disabled";
-                            }
-
-                            employees.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditEmployee_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: btnDeleteId,
-                                Id: employeeResults[i]["Id"],
-                                ArticleCode: employeeResults[i]["ArticleCode"],
-                                ManualArticleCode: employeeResults[i]["ManualArticleCode"],
-                                Article: employeeResults[i]["Article"],
-                                Category: employeeResults[i]["Category"],
-                                ArticleTypeId: employeeResults[i]["ArticleTypeId"],
-                                ArticleType: employeeResults[i]["ArticleType"],
-                                ArticleGroupId: employeeResults[i]["ArticleGroupId"],
-                                ArticleGroup: employeeResults[i]["ArticleGroup"],
-                                AccountId: employeeResults[i]["AccountId"],
-                                AccountCode: employeeResults[i]["AccountCode"],
-                                Account: employeeResults[i]["Account"],
-                                SalesAccountId: employeeResults[i]["SalesAccountId"],
-                                CostAccountId: employeeResults[i]["CostAccountId"],
-                                AssetAccountId: employeeResults[i]["AssetAccountId"],
-                                ExpenseAccountId: employeeResults[i]["ExpenseAccountId"],
-                                UnitId: employeeResults[i]["UnitId"],
-                                Unit: employeeResults[i]["Unit"],
-                                OutputTaxId: employeeResults[i]["OutputTaxId"],
-                                InputTaxId: employeeResults[i]["InputTaxId"],
-                                WTaxTypeId: employeeResults[i]["WTaxTypeId"],
-                                Price: employeeResults[i]["Price"],
-                                Cost: employeeResults[i]["Cost"],
-                                IsInventory: employeeResults[i]["IsInventory"],
-                                Particulars: employeeResults[i]["Particulars"],
-                                Address: employeeResults[i]["Address"],
-                                TermId: employeeResults[i]["TermId"],
-                                ContactNumber: employeeResults[i]["ContactNumber"],
-                                ContactPerson: employeeResults[i]["ContactPerson"],
-                                TaxNumber: employeeResults[i]["TaxNumber"],
-                                CreditLimit: employeeResults[i]["CreditLimit"],
-                                DateAcquired: employeeResults[i]["DateAcquired"],
-                                UsefulLife: employeeResults[i]["UsefulLife"],
-                                SalvageValue: employeeResults[i]["SalvageValue"],
-                                ManualArticleOldCode: employeeResults[i]["ManualArticleOldCode"],
-                                IsLocked: employeeResults[i]["IsLocked"],
-                                CreatedById: employeeResults[i]["CreatedById"],
-                                CreatedBy: employeeResults[i]["CreatedBy"],
-                                CreatedDateTime: employeeResults[i]["CreatedDateTime"],
-                                UpdatedById: employeeResults[i]["UpdatedById"],
-                                UpdatedBy: employeeResults[i]["UpdatedBy"],
-                                UpdatedDateTime: employeeResults[i]["UpdatedDateTime"]
-                            });
-
-                        }
-                    }
-                    NProgress.done();
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
-            return employees;
-        }
-
-        // ===========================
-        // Employee Delete Lock Button
-        // ===========================
-        function btnDeleteEmployeeLock_OnClick() {
-            $('#deleteRecordLock').modal({
-                show: true,
-                backdrop: 'static'
-            });
-        }
-
-        // ===============================
-        // FlexGrid Selection for Employee
-        // ===============================
-        function updateDetailsEmployee() {
-            var item = employees.currentItem;
-            document.getElementById('createdBy').innerHTML = item.CreatedBy;
-            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
-            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
-            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
-        }
-
-        // ===============================
-        // Navigation Buttons for Employee
-        // ===============================
-        function updateNavigateButtonsEmployee() {
-            if (employees.pageSize <= 0) {
-                document.getElementById('navigationPageGridEmployee').style.display = 'none';
-                return;
-            }
-            document.getElementById('navigationPageGridEmployee').style.display = 'block';
-            if (employees.pageIndex === 0) {
-                btnFirstPageGridEmployee.setAttribute('disabled', 'disabled');
-                btnPreviousPageGridEmployee.setAttribute('disabled', 'disabled');
-                btnNextPageGridEmployee.removeAttribute('disabled');
-                btnLastPageGridEmployee.removeAttribute('disabled');
-            } else if (employees.pageIndex === (employees.pageCount - 1)) {
-                btnFirstPageGridEmployee.removeAttribute('disabled');
-                btnPreviousPageGridEmployee.removeAttribute('disabled');
-                btnLastPageGridEmployee.setAttribute('disabled', 'disabled');
-                btnNextPageGridEmployee.setAttribute('disabled', 'disabled');
-            } else {
-                btnFirstPageGridEmployee.removeAttribute('disabled');
-                btnPreviousPageGridEmployee.removeAttribute('disabled');
-                btnNextPageGridEmployee.removeAttribute('disabled');
-                btnLastPageGridEmployee.removeAttribute('disabled');
-            }
-            btnCurrentPageGridEmployee.innerHTML = (employees.pageIndex + 1) + ' / ' + employees.pageCount;
-        }
-
-        // ===========
-        // Get Account
-        // ===========
-        function getEmployeeAccountForComboBox() {
-            employeeAccounts = new wijmo.collections.ObservableArray();
-            $.ajax({
-                url: '/api/listAccount',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (employeeAccountResults) {
-                    if (employeeAccountResults.length > 0) {
-                        for (i = 0; i < employeeAccountResults.length; i++) {
-                            employeeAccounts.push({
-                                AccountId: employeeAccountResults[i]["Id"],
-                                AccountCode: employeeAccountResults[i]["AccountCode"],
-                                Account: employeeAccountResults[i]["Account"]
-                            });
-                        }
-                        createCboForEmployeeAccountCode(employeeAccounts);
-                        createCboForEmployeeAccount(employeeAccounts);
-                    } else {
-                        createCboForEmployeeAccountCode(employeeAccounts);
-                        createCboForEmployeeAccount(employeeAccounts);
-                    }
-                }
-            });
-        }
-
-        // ==========================================
-        // Create combo box for employee Account Code
-        // ==========================================
-        function createCboForEmployeeAccountCode(employeeAccounts) {
-            var accountCodeCollection = new wijmo.collections.CollectionView(employeeAccounts);
-            var accountCodeList = new Array();
-            for (var i = 0; i < accountCodeCollection.items.length; i++) {
-                accountCodeList.push(accountCodeCollection.items[i].AccountCode);
-            }
-
-            var disabled;
-            if (employeeAccounts == 0) {
-                disabled = true;
-            } else {
-                if (document.getElementById('employee_Lock').checked == true) {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
-
-            cboEmployeeForAccountCode.dispose();
-            cboEmployeeForAccountCode = new wijmo.input.ComboBox('#employee_AccountCode', {
-                disabled: disabled,
-                placeholder: "Code",
-                itemsSource: accountCodeList,
-                isEditable: false,
-                selectedValue: document.getElementById('employee_AccountCode_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#employee_Account_data').val(accountCodeCollection.items[this.selectedIndex].AccountId);
-                    $('#employee_Account_selectedValue').val(accountCodeCollection.items[this.selectedIndex].Account);
-                    $('#employee_AccountCode_selectedValue').val(accountCodeCollection.items[this.selectedIndex].AccountCode);
-
-                    createCboForEmployeeAccount(employeeAccounts);
-                }
-            });
-
-            document.getElementById('employee_Account_data').value = accountCodeCollection.items[cboEmployeeForAccountCode.selectedIndex].AccountId;
-            document.getElementById('employee_Account_selectedValue').value = accountCodeCollection.items[cboEmployeeForAccountCode.selectedIndex].Account;
-            document.getElementById('employee_AccountCode_selectedValue').value = accountCodeCollection.items[cboEmployeeForAccountCode.selectedIndex].AccountCode;
-        }
-
-        // =====================================
-        // Create combo box for employee Account
-        // =====================================
-        function createCboForEmployeeAccount(employeeAccounts) {
-            var accountCollection = new wijmo.collections.CollectionView(employeeAccounts);
-            var accountList = new Array();
-            for (var i = 0; i < accountCollection.items.length; i++) {
-                accountList.push(accountCollection.items[i].Account);
-            }
-
-            var disabled;
-            if (employeeAccounts == 0) {
-                disabled = true;
-            } else {
-                if (document.getElementById('employee_Lock').checked == true) {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
-
-            cboEmployeeForAccount.dispose();
-            cboEmployeeForAccount = new wijmo.input.ComboBox('#employee_Account', {
-                disabled: disabled,
-                placeholder: "Account",
-                itemsSource: accountList,
-                isEditable: false,
-                selectedValue: document.getElementById('employee_Account_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#employee_Account_data').val(accountCollection.items[this.selectedIndex].AccountId);
-                    $('#employee_AccountCode_selectedValue').val(accountCollection.items[this.selectedIndex].AccountCode);
-                    $('#employee_Account_selectedValue').val(accountCollection.items[this.selectedIndex].Account);
-
-                    createCboForEmployeeAccountCode(employeeAccounts);
-                }
-            });
-
-            document.getElementById('employee_Account_data').value = accountCollection.items[cboEmployeeForAccount.selectedIndex].AccountId;
-            document.getElementById('employee_AccountCode_selectedValue').value = accountCollection.items[cboEmployeeForAccount.selectedIndex].AccountCode;
-            document.getElementById('employee_Account_selectedValue').value = accountCollection.items[cboEmployeeForAccount.selectedIndex].Account;
-        }
-
-        // ========================================================
-        // Function with leading zeroes to display the article code
-        // ========================================================
-        function zerofill(number, length) {
-            var result = number.toString();
-            var pad = length - result.length;
-            while (pad > 0) {
-                result = '0' + result;
-                pad--;
-            }
-            return result;
-        }
-
-        // ================
-        // Add new Employee
-        // ================
-        function btnEmployeeAdd_OnClick() {
-            $('#employeeEdit').modal({
-                show: true,
-                backdrop: 'static'
-            });
-
-            $('.requiredEmployee').each(function () {
-                $(this).css({
-                    "border": "",
-                });
-            });
-
-            $('#cmdSaveEmployeeButton').prop('disabled', false);
-            $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
-
-            document.getElementById('employee_id').value = 0;
-            document.getElementById('employee_Code').value = "";
-            document.getElementById('employee_Employee').value = "NA";
-            document.getElementById('employee_Account_data').value = "";
-            document.getElementById('employee_AccountCode_selectedValue').value = "";
-            document.getElementById('employee_Account_selectedValue').value = "";
-            document.getElementById('employee_Address').value = "NA";
-            document.getElementById('employee_ContactNumber').value = "NA";
-            document.getElementById('employee_Lock').checked = false;
-
-            document.getElementById('employee_Employee').disabled = false;
-            document.getElementById('employee_Address').disabled = false;
-            document.getElementById('employee_ContactNumber').disabled = false;
-            document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
-
-            getEmployeeAccountForComboBox();
-
-            $.ajax({
-                url: '/api/articleLastArticleCodeByArticleTypeId/4',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (lastEmployeeResults) {
-                    if (lastEmployeeResults != null) {
-                        var articleCode = parseInt(lastEmployeeResults.ArticleCode);
-                        var articleCodeResults = articleCode + 0000000001;
-
-                        document.getElementById('employee_Code').value = zerofill(articleCodeResults, 10);
-                    } else {
-                        document.getElementById('employee_Code').value = "0000000001";
-                    }
-                }
-            });
-        }
-
-        // =============
-        // EDIT Employee
-        // =============
-        function btnEditEmployee_OnClick() {
-            employees.editItem(employees.currentItem);
-            $('#employeeEdit').modal({
-                show: true,
-                backdrop: 'static'
-            });
-
-            $('.requiredEmployee').each(function () {
-                $(this).css({
-                    "border": "",
-                });
-            });
-
-            $('#cmdSaveEmployeeButton').prop('disabled', false);
-            $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
-
-            var employee = employees.currentEditItem;
-            document.getElementById('employee_id').value = employee.Id ? employee.Id : '';
-            document.getElementById('employee_Code').value = employee.ArticleCode ? employee.ArticleCode : '';
-            document.getElementById('employee_Employee').value = employee.Article ? employee.Article : '';
-            document.getElementById('employee_Account_data').value = employee.AccountId ? employee.AccountId : '';
-            document.getElementById('employee_AccountCode_selectedValue').value = employee.AccountCode ? employee.AccountCode : '';
-            document.getElementById('employee_Account_selectedValue').value = employee.Account ? employee.Account : '';
-            document.getElementById('employee_Address').value = employee.Address ? employee.Address : '';
-            document.getElementById('employee_ContactNumber').value = employee.ContactNumber ? employee.ContactNumber : '';
-            document.getElementById('employee_Lock').checked = employee.IsLocked;
-
-            if (document.getElementById('employee_Lock').checked == true) {
-                document.getElementById('employee_Employee').disabled = true;
-                document.getElementById('employee_Address').disabled = true;
-                document.getElementById('employee_ContactNumber').disabled = true;
-                getEmployeeAccountForComboBox();
-                document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
-            } else {
-                document.getElementById('employee_Employee').disabled = false;
-                document.getElementById('employee_Address').disabled = false;
-                document.getElementById('employee_ContactNumber').disabled = false;
-                getEmployeeAccountForComboBox();
-                document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
-            }
-        }
-
-        // =========================
-        // Employee Entry Validation
-        // =========================
-        function employeeEntryValidation() {
-            var isValid = true;
-            $('.requiredEmployee').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "1px solid red"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
-
-            return isValid;
-        }
-
-        // =========================
-        // Refresh employee flexgrid
-        // =========================
-        function refreshEmployeeFlexgrid() {
-            employees = new wijmo.collections.CollectionView(getEmployee());
-            employees.canFilter = true;
-            employees.pageSize = 15;
-
-            var filterTextEmployee = '';
-            $('#InputFilterTerm').keyup(function () {
-                filterTextEmployee = this.value.toLowerCase();
-                employees.refresh();
-            });
-            employees.filter = function (item) {
-                return !filterTextEmployee || (item.Article.toLowerCase().indexOf(filterTextEmployee) > -1);
-            }
-            employees.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsEmployee();
-            });
-            employees.currentChanged.addHandler(function (sender, args) {
-                updateDetailsEmployee();
-            });
-
-            employeeGrid.itemsSource = employees;
-            employeeGrid.trackChanges = true;
-        }
-
-        // =============
-        // SAVE Employee
-        // =============
-        function btnEmployeeSaveButton_OnClick() {
-            var employeeObject = new Object();
-            var employeeId = document.getElementById('employee_id').value;
-            employeeObject.ArticleCode = document.getElementById('employee_Code').value;
-            employeeObject.Article = document.getElementById('employee_Employee').value;
-            employeeObject.AccountId = document.getElementById('employee_Account_data').value;
-            employeeObject.Address = document.getElementById('employee_Address').value;
-            employeeObject.ContactNumber = document.getElementById('employee_ContactNumber').value;
-            employeeObject.IsLocked = document.getElementById('employee_Lock').checked;
-            var employeeData = JSON.stringify(employeeObject);
-
-            if (document.getElementById('employee_Account_data').value == '') {
-                document.getElementById("employee_AccountCode").style.border = "1px solid red";
-                document.getElementById("employee_Account").style.border = "1px solid red";
-            } else {
-                document.getElementById("employee_AccountCode").style.border = "1px solid #C8C8C8";
-                document.getElementById("employee_Account").style.border = "1px solid #C8C8C8";
-            }
-
-            if (employeeEntryValidation() == false) {
-                toastr.error("Invalid entry");
-            } else {
-                $('#cmdSaveEmployeeButton').prop('disabled', true);
-                $('#cmdEmployeeDetailCloseButton').prop('disabled', true);
-
-                if (employeeId == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addArticle/4',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: employeeData,
-                        success: function (id) {
-                            if (id > 0) {
-                                $('#cmdSaveEmployeeButton').prop('disabled', true);
-                                $('#cmdEmployeeDetailCloseButton').prop('disabled', true);
-                                toastr.success("Save Successful");
-
-                                $('#employeeEdit').modal('hide');
-
-                                refreshEmployeeFlexgrid();
-                            } else {
-                                $('#cmdSaveEmployeeButton').prop('disabled', false);
-                                $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
-                                toastr.error("Internal Server Error");
-                            }
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updateArticle/' + employeeId + '/4',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: employeeData,
-                        statusCode: {
-                            200: function () {
-                                $('#cmdSaveEmployeeButton').prop('disabled', true);
-                                $('#cmdEmployeeDetailCloseButton').prop('disabled', true);
-                                toastr.success("Update Successful");
-
-                                $('#employeeEdit').modal('hide');
-
-                                refreshEmployeeFlexgrid();
-                            },
-                            404: function () {
-                                toastr.error("Not Found");
-                                $('#cmdSaveEmployeeButton').prop('disabled', false);
-                                $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $('#cmdSaveEmployeeButton').prop('disabled', false);
-                                $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
-                            }
-                        }
-                    });
-                }
-            }
-        }
-
-        // ===============
-        // DELETE Employee
-        // ===============
-        function btnDeleteEmployee_OnClick() {
-            $('#deleteEmployeeConfirm').modal({
-                show: true,
-                backdrop: 'static'
-            });
-
-            $('#cmdConfirmDeleteEmployee').prop('disabled', false);
-            $('#cmdConfirmDeleteCloseButtonEmployee').prop('disabled', false);
-        }
-        // Employee Confirm Delete Button
-        function cmdEmployeeConfirmDeleteButton_OnClick() {
-            $('#cmdConfirmDeleteEmployee').prop('disabled', true);
-            $('#cmdConfirmDeleteCloseButtonEmployee').prop('disabled', true);
-
-            employees.editItem(employees.currentItem);
-            var employeeId = employees.currentEditItem.Id;
-            $.ajax({
-                url: '/api/deleteArticle/' + employeeId,
-                type: "DELETE",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                statusCode: {
-                    200: function () {
-                        $('#cmdConfirmDeleteEmployee').prop('disabled', true);
-                        $('#cmdConfirmDeleteCloseButtonEmployee').prop('disabled', true);
-                        toastr.success("Delete Successful");
-
-                        $('#deleteEmployeeConfirm').modal('hide');
-
-                        refreshEmployeeFlexgrid();
-                    },
-                    404: function () {
-                        toastr.error("Not Found");
-                        $('#cmdConfirmDeleteEmployee').prop('disabled', false);
-                        $('#cmdConfirmDeleteCloseButtonEmployee').prop('disabled', false);
-                        $('#deleteEmployeeConfirm').modal('hide');
-                    },
-                    400: function () {
-                        toastr.error("Bad Request");
-                        $('#cmdConfirmDeleteEmployee').prop('disabled', false);
-                        $('#cmdConfirmDeleteCloseButtonEmployee').prop('disabled', false);
-                        $('#deleteEmployeeConfirm').modal('hide');
-                    }
-                }
-            });
-        }
-
-        // ========
-        // Employee
-        // ========
-        function employeeTab() {
-            cboEmployeeForAccountCode = new wijmo.input.ComboBox('#employee_AccountCode');
-            cboEmployeeForAccount = new wijmo.input.ComboBox('#employee_Account');
-            document.getElementById('employee_Code').disabled = true;
-
-            employees = new wijmo.collections.CollectionView(getEmployee());
-            employees.canFilter = true;
-            employees.pageSize = 15;
-
-            var filterTextEmployee = '';
-            $('#InputFilterEmployee').keyup(function () {
-                filterTextEmployee = this.value.toLowerCase();
-                employees.refresh();
-            });
-            employees.filter = function (item) {
-                return !filterTextEmployee || (item.Article.toLowerCase().indexOf(filterTextEmployee) > -1);
-            }
-            employees.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsEmployee();
-            });
-            employees.currentChanged.addHandler(function (sender, args) {
-                updateDetailsEmployee();
-            });
-
-            // Flex Grid for Employee
-            employeeGrid = new wijmo.grid.FlexGrid('#EmployeeGrid');
-            employeeGrid.initialize({
-                columns: [
-                            {
-                                "header": "Edit",
-                                "binding": "EditId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Delete",
-                                "binding": "DeleteId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Code",
-                                "binding": "ArticleCode",
-                                "allowSorting": true,
-                                "width": "1.5*"
-                            },
-                            {
-                                "header": "Employee",
-                                "binding": "Article",
-                                "allowSorting": true,
-                                "width": "3*"
-                            },
-                            {
-                                "header": "Account",
-                                "binding": "Account",
-                                "allowSorting": true,
-                                "width": "3*"
-                            },
-                            {
-                                "header": "L",
-                                "binding": "IsLocked",
-                                "allowSorting": true,
-                                "width": 50
-                            }
-                ],
-                autoGenerateColumns: false,
-                itemsSource: employees,
-                isReadOnly: true,
-                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                allowDragging: wijmo.grid.AllowDragging.None,
-                selectionMode: wijmo.grid.SelectionMode.Row
-            });
-
-            employeeGrid.trackChanges = true;
-
-            //Navigation button for Employee
-            btnFirstPageGridEmployee = document.getElementById('btnMoveToFirstPageGridEmployee');
-            btnPreviousPageGridEmployee = document.getElementById('btnMoveToPreviousPageGridEmployee');
-            btnNextPageGridEmployee = document.getElementById('btnMoveToNextPageGridEmployee');
-            btnLastPageGridEmployee = document.getElementById('btnMoveToLastPageGridEmployee');
-            btnCurrentPageGridEmployee = document.getElementById('btnCurrentPageGridEmployee');
-
-            updateNavigateButtonsEmployee();
-
-            btnFirstPageGridEmployee.addEventListener('click', function () {
-                employees.moveToFirstPage();
-                updateNavigateButtonsEmployee();
-            });
-            btnPreviousPageGridEmployee.addEventListener('click', function () {
-                employees.moveToPreviousPage();
-                updateNavigateButtonsEmployee();
-            });
-            btnNextPageGridEmployee.addEventListener('click', function () {
-                employees.moveToNextPage();
-                updateNavigateButtonsEmployee();
-            });
-            btnLastPageGridEmployee.addEventListener('click', function () {
-                employees.moveToLastPage();
-                updateNavigateButtonsEmployee();
-            });
-        }
-    </script>
-
     <!-- ===================== -->
     <!-- Article Group Scripts -->
     <!-- ===================== -->
@@ -4954,29 +4257,699 @@
         }
     </script>
 
+    <!-- ================ -->
+    <!-- Employee Scripts -->
+    <!-- ================ -->
+    <script type="text/javascript">
+        // =============================
+        // Global Variables for Employee
+        // =============================
+        var employees;
+        var employeeGrid;
+
+        var btnFirstPageEmployee;
+        var btnPreviousPageGridEmployee;
+        var btnNextPageGridEmployee;
+        var btnLastPageGridEmployee;
+        var btnCurrentPageGridEmployee;
+
+        var employeeId = 0;
+        var cboEmployeeGroup = new wijmo.input.ComboBox('#cboEmployeeGroup');
+        var cboEmployeeAccountCode = new wijmo.input.ComboBox('#cboEmployeeAccountCode');
+        var cboEmployeeAccount = new wijmo.input.ComboBox('#cboEmployeeAccount');
+
+        // =================
+        // GET Employee List
+        // =================
+        function getEmployee() {
+            var employees = new wijmo.collections.ObservableArray;
+            NProgress.start();
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/4',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (employeeResults) {
+                    if (employeeResults.length > 0) {
+                        for (i = 0; i < employeeResults.length; i++) {
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled = "";
+                            if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled = "";
+                            if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            }
+
+                            employees.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditEmployee_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteEmployee_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
+                                Id: employeeResults[i]["Id"],
+                                ArticleCode: employeeResults[i]["ArticleCode"],
+                                ManualArticleCode: employeeResults[i]["ManualArticleCode"],
+                                Article: employeeResults[i]["Article"],
+                                Category: employeeResults[i]["Category"],
+                                ArticleTypeId: employeeResults[i]["ArticleTypeId"],
+                                ArticleType: employeeResults[i]["ArticleType"],
+                                ArticleGroupId: employeeResults[i]["ArticleGroupId"],
+                                ArticleGroup: employeeResults[i]["ArticleGroup"],
+                                AccountId: employeeResults[i]["AccountId"],
+                                AccountCode: employeeResults[i]["AccountCode"],
+                                Account: employeeResults[i]["Account"],
+                                SalesAccountId: employeeResults[i]["SalesAccountId"],
+                                CostAccountId: employeeResults[i]["CostAccountId"],
+                                AssetAccountId: employeeResults[i]["AssetAccountId"],
+                                ExpenseAccountId: employeeResults[i]["ExpenseAccountId"],
+                                UnitId: employeeResults[i]["UnitId"],
+                                Unit: employeeResults[i]["Unit"],
+                                OutputTaxId: employeeResults[i]["OutputTaxId"],
+                                InputTaxId: employeeResults[i]["InputTaxId"],
+                                WTaxTypeId: employeeResults[i]["WTaxTypeId"],
+                                Price: employeeResults[i]["Price"],
+                                Cost: employeeResults[i]["Cost"],
+                                IsInventory: employeeResults[i]["IsInventory"],
+                                Particulars: employeeResults[i]["Particulars"],
+                                Address: employeeResults[i]["Address"],
+                                TermId: employeeResults[i]["TermId"],
+                                ContactNumber: employeeResults[i]["ContactNumber"],
+                                ContactPerson: employeeResults[i]["ContactPerson"],
+                                TaxNumber: employeeResults[i]["TaxNumber"],
+                                CreditLimit: employeeResults[i]["CreditLimit"],
+                                DateAcquired: employeeResults[i]["DateAcquired"],
+                                UsefulLife: employeeResults[i]["UsefulLife"],
+                                SalvageValue: employeeResults[i]["SalvageValue"],
+                                ManualArticleOldCode: employeeResults[i]["ManualArticleOldCode"],
+                                IsLocked: employeeResults[i]["IsLocked"],
+                                CreatedById: employeeResults[i]["CreatedById"],
+                                CreatedBy: employeeResults[i]["CreatedBy"],
+                                CreatedDateTime: employeeResults[i]["CreatedDateTime"],
+                                UpdatedById: employeeResults[i]["UpdatedById"],
+                                UpdatedBy: employeeResults[i]["UpdatedBy"],
+                                UpdatedDateTime: employeeResults[i]["UpdatedDateTime"]
+                            });
+
+                        }
+                    }
+
+                    NProgress.done();
+                }
+            });
+
+            return employees;
+        }
+
+        // ===============================
+        // FlexGrid Selection for Employee
+        // ===============================
+        function updateDetailsEmployee() {
+            var item = employees.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ===============================
+        // Navigation Buttons for Employee
+        // ===============================
+        function updateNavigateButtonsEmployee() {
+            if (employees.pageSize <= 0) {
+                document.getElementById('navigationPageGridEmployee').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridEmployee').style.display = 'block';
+            if (employees.pageIndex === 0) {
+                btnFirstPageGridEmployee.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridEmployee.setAttribute('disabled', 'disabled');
+                btnNextPageGridEmployee.removeAttribute('disabled');
+                btnLastPageGridEmployee.removeAttribute('disabled');
+            } else if (employees.pageIndex === (employees.pageCount - 1)) {
+                btnFirstPageGridEmployee.removeAttribute('disabled');
+                btnPreviousPageGridEmployee.removeAttribute('disabled');
+                btnLastPageGridEmployee.setAttribute('disabled', 'disabled');
+                btnNextPageGridEmployee.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridEmployee.removeAttribute('disabled');
+                btnPreviousPageGridEmployee.removeAttribute('disabled');
+                btnNextPageGridEmployee.removeAttribute('disabled');
+                btnLastPageGridEmployee.removeAttribute('disabled');
+            }
+            btnCurrentPageGridEmployee.innerHTML = (employees.pageIndex + 1) + ' / ' + employees.pageCount;
+        }
+
+
+        // =========================
+        // Get Artile Employee Group
+        // =========================
+        function getArticleEmployeeGroupForComboBox(employeeGroupId, accountId, isLocked) {
+            var articleEmployeeGroupsObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleGroupByArticleTypeId/4',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (articleEmployeeGroupResults) {
+                    if (articleEmployeeGroupResults.length > 0) {
+                        for (i = 0; i < articleEmployeeGroupResults.length; i++) {
+                            articleEmployeeGroupsObservableArray.push({
+                                Id: articleEmployeeGroupResults[i]["Id"],
+                                ArticleGroup: articleEmployeeGroupResults[i]["ArticleGroup"],
+                                AccountId: articleEmployeeGroupResults[i]["AccountId"],
+                                AccountCode: articleEmployeeGroupResults[i]["AccountCode"],
+                                Account: articleEmployeeGroupResults[i]["Account"],
+                                SalesAccountId: articleEmployeeGroupResults[i]["SalesAccountId"],
+                                SalesAccount: articleEmployeeGroupResults[i]["SalesAccount"],
+                                CostAccountId: articleEmployeeGroupResults[i]["CostAccountId"],
+                                CostAccount: articleEmployeeGroupResults[i]["CostAccount"],
+                                AssetAccountId: articleEmployeeGroupResults[i]["AssetAccountId"],
+                                AssetAccount: articleEmployeeGroupResults[i]["AssetAccount"],
+                                ExpenseAccountId: articleEmployeeGroupResults[i]["ExpenseAccountId"],
+                                ExpenseAccount: articleEmployeeGroupResults[i]["ExpenseAccount"]
+                            });
+                        }
+                    }
+
+                    var disabled = true;
+                    if (articleEmployeeGroupResults.length > 0) {
+                        if (!isLocked) {
+                            disabled = false;
+                        }
+                        $('#cmdSaveEmployeeButton').prop('disabled', false);
+                    } else {
+                        $('#cmdSaveEmployeeButton').prop('disabled', true);
+                    }
+
+                    cboEmployeeGroup.dispose();
+                    cboEmployeeGroup = new wijmo.input.ComboBox('#cboEmployeeGroup', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleEmployeeGroupsObservableArray,
+                        displayMemberPath: "ArticleGroup",
+                        selectedValuePath: "Id",
+                        selectedValue: employeeGroupId,
+                        onSelectedIndexChanged: function () {
+                            cboEmployeeAccountCode.selectedValue = this.selectedItem["AccountId"];
+                            cboEmployeeAccount.selectedValue = this.selectedItem["AccountId"];
+                        }
+                    });
+
+                    getEmployeeAccountForComboBox(accountId, isLocked);
+                }
+            });
+        }
+
+        // ===========
+        // Get Account
+        // ===========
+        function getEmployeeAccountForComboBox(accountId, isLocked) {
+            var accountsObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listAccount',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (accountResults) {
+                    if (accountResults.length > 0) {
+                        for (i = 0; i < accountResults.length; i++) {
+                            accountsObservableArray.push({
+                                Id: accountResults[i]["Id"],
+                                AccountCode: accountResults[i]["AccountCode"],
+                                Account: accountResults[i]["Account"]
+                            });
+                        }
+                    }
+
+                    var disabled = true;
+                    if (accountsObservableArray.length > 0) {
+                        if (!isLocked) {
+                            disabled = false;
+                        }
+                    } else {
+                        $('#cmdSaveEmployeeButton').prop('disabled', true);
+                    }
+
+                    var accountIdValue = accountId;
+                    if (cboEmployeeGroup.selectedValue != null) {
+                        if (accountId == 0) {
+                            accountIdValue = cboEmployeeGroup.selectedItem["AccountId"];
+                        }
+                    }
+
+                    cboEmployeeAccountCode.dispose();
+                    cboEmployeeAccountCode = new wijmo.input.ComboBox('#cboEmployeeAccountCode', {
+                        disabled: true,
+                        isEditable: false,
+                        itemsSource: accountsObservableArray,
+                        displayMemberPath: "AccountCode",
+                        selectedValuePath: "Id",
+                        selectedValue: accountIdValue,
+                        onSelectedIndexChanged: function () {
+                            cboEmployeeAccount.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboEmployeeAccount.dispose();
+                    cboEmployeeAccount = new wijmo.input.ComboBox('#cboEmployeeAccount', {
+                        disabled: true,
+                        isEditable: false,
+                        itemsSource: accountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id",
+                        selectedValue: accountIdValue,
+                        onSelectedIndexChanged: function () {
+                            cboEmployeeAccountCode.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    setTimeout(function () {
+                        $("#loadingModalEmployee").hide();
+                        $("#employeeDetailForm").show();
+                    }, 500);
+                }
+            });
+        }
+
+        // ================
+        // Add new Employee
+        // ================
+        function btnEmployeeAdd_OnClick() {
+            $('#employeeEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $('.requiredEmployee').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
+            $("#loadingModalEmployee").show();
+            document.getElementById("loadingModalEmployee").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#employeeDetailForm").hide();
+
+            document.getElementById("cmdSaveEmployeeButton").innerHTML = '<i class="fa fa-save"></i> Save';
+            $('#cmdSaveEmployeeButton').prop('disabled', true);
+            $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
+
+            $('#employee_Code').hide();
+            $('#employee_Code_Label').hide();
+            $('#employee_Code_Input').hide();
+
+            employeeId = 0;
+            document.getElementById('employee_Code').value = "NA";
+            document.getElementById('employee_ContactPerson').value = "NA";
+            document.getElementById('employee_Employee').value = "NA";
+            getArticleEmployeeGroupForComboBox(0, 0, false);
+            document.getElementById('employee_Address').value = "NA";
+            document.getElementById('employee_ContactNumber').value = "NA";
+            document.getElementById('employee_Lock').checked = false;
+
+            document.getElementById('employee_ContactPerson').disabled = false;
+            document.getElementById('employee_Employee').disabled = false;
+            document.getElementById('employee_Address').disabled = false;
+            document.getElementById('employee_ContactNumber').disabled = false;
+            document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+        }
+
+        // =============
+        // EDIT Employee
+        // =============
+        function btnEditEmployee_OnClick() {
+            $('#employeeEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $('.requiredEmployee').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
+            $("#loadingModalEmployee").show();
+            document.getElementById("loadingModalEmployee").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#employeeDetailForm").hide();
+
+            document.getElementById("cmdSaveEmployeeButton").innerHTML = '<i class="fa fa-save"></i> Save';
+            $('#cmdSaveEmployeeButton').prop('disabled', true);
+            $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
+
+            $('#employee_Code').show();
+            $('#employee_Code_Label').show();
+            $('#employee_Code_Input').show();
+
+            employees.editItem(employees.currentItem);
+            var employee = employees.currentEditItem;
+            employeeId = employee.Id;
+            document.getElementById('employee_Code').value = employee.ArticleCode;
+            document.getElementById('employee_Employee').value = employee.Article;
+            getArticleEmployeeGroupForComboBox(employee.ArticleGroupId, employee.AccountId, employee.IsLocked);
+            document.getElementById('employee_Address').value = employee.Address ? employee.Address : '';
+            document.getElementById('employee_ContactNumber').value = employee.ContactNumber ? employee.ContactNumber : '';
+            document.getElementById('employee_ContactPerson').value = employee.ContactPerson;
+            document.getElementById('employee_Lock').checked = employee.IsLocked;
+
+            if (document.getElementById('employee_Lock').checked == true) {
+                document.getElementById('employee_ContactPerson').disabled = true;
+                document.getElementById('employee_Employee').disabled = true;
+                document.getElementById('employee_Address').disabled = true;
+                document.getElementById('employee_ContactNumber').disabled = true;
+                document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('employee_ContactPerson').disabled = false;
+                document.getElementById('employee_Employee').disabled = false;
+                document.getElementById('employee_Address').disabled = false;
+                document.getElementById('employee_ContactNumber').disabled = false;
+                document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
+        }
+
+        // =========================
+        // Employee Entry Validation
+        // =========================
+        function employeeEntryValidation() {
+            var isValid = true;
+            $('.requiredEmployee').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+
+            return isValid;
+        }
+
+        // =========================
+        // Refresh employee flexgrid
+        // =========================
+        function refreshEmployeeFlexgrid() {
+            employees = new wijmo.collections.CollectionView(getEmployee());
+            employees.canFilter = true;
+            employees.pageSize = 15;
+
+            var filterTextEmployee = '';
+            $('#InputFilterTerm').keyup(function () {
+                filterTextEmployee = this.value.toLowerCase();
+                employees.refresh();
+            });
+            employees.filter = function (item) {
+                return !filterTextEmployee || (item.Article.toLowerCase().indexOf(filterTextEmployee) > -1);
+            }
+            employees.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsEmployee();
+            });
+            employees.currentChanged.addHandler(function (sender, args) {
+                updateDetailsEmployee();
+            });
+
+            employeeGrid.itemsSource = employees;
+            employeeGrid.trackChanges = true;
+        }
+
+        // =============
+        // SAVE Employee
+        // =============
+        function btnEmployeeSaveButton_OnClick() {
+            var employeeObject = new Object();
+            employeeObject.ArticleCode = document.getElementById('employee_Code').value;
+            employeeObject.Article = document.getElementById('employee_Employee').value;
+            employeeObject.ArticleGroupId = cboEmployeeGroup.selectedValue;
+            employeeObject.AccountId = cboEmployeeAccount.selectedValue;
+            employeeObject.Address = document.getElementById('employee_Address').value;
+            employeeObject.ContactNumber = document.getElementById('employee_ContactNumber').value;
+            employeeObject.ContactPerson = document.getElementById('employee_ContactPerson').value;
+            employeeObject.IsLocked = document.getElementById('employee_Lock').checked;
+            var employeeData = JSON.stringify(employeeObject);
+
+            if (employeeEntryValidation()) {
+                document.getElementById("cmdSaveEmployeeButton").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving';
+                $('#cmdSaveEmployeeButton').prop('disabled', true);
+                $('#cmdEmployeeDetailCloseButton').prop('disabled', true);
+
+                if (employeeId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addArticle/4',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: employeeData,
+                        success: function (id) {
+                            if (id > 0) {
+                                toastr.success("Save Successful");
+                                $('#employeeEdit').modal('hide');
+                                refreshEmployeeFlexgrid();
+                            } else {
+                                toastr.error("Internal Server Error");
+                                document.getElementById("cmdSaveEmployeeButton").innerHTML = '<i class="fa fa-save"></i> Save';
+                                $('#cmdSaveEmployeeButton').prop('disabled', false);
+                                $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateArticle/' + employeeId + '/4',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: employeeData,
+                        statusCode: {
+                            200: function () {
+                                toastr.success("Update Successful");
+                                $('#employeeEdit').modal('hide');
+                                refreshEmployeeFlexgrid();
+                            },
+                            404: function () {
+                                toastr.error("Not Found");
+                                document.getElementById("cmdSaveEmployeeButton").innerHTML = '<i class="fa fa-save"></i> Save';
+                                $('#cmdSaveEmployeeButton').prop('disabled', false);
+                                $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                document.getElementById("cmdSaveEmployeeButton").innerHTML = '<i class="fa fa-save"></i> Save';
+                                $('#cmdSaveEmployeeButton').prop('disabled', false);
+                                $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
+                            }
+                        }
+                    });
+                }
+            } else {
+                toastr.error("Invalid entry");
+            }
+        }
+
+        // ===============
+        // DELETE Employee
+        // ===============
+        function btnDeleteEmployee_OnClick() {
+            employees.editItem(employees.currentItem);
+            var employee = employees.currentEditItem;
+            if (employee.IsLocked) {
+                toastr.error("Delete is not allowed when the selected record is locked!");
+            } else {
+                $('#deleteEmployeeConfirm').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
+
+                document.getElementById("cmdConfirmDeleteEmployee").innerHTML = '<i class="fa fa-trash"></i> Delete';
+                $('#cmdConfirmDeleteEmployee').prop('disabled', false);
+                $('#cmdConfirmDeleteCloseButtonEmployee').prop('disabled', false);
+            }
+        }
+
+        // Employee Confirm Delete Button
+        function cmdEmployeeConfirmDeleteButton_OnClick() {
+            document.getElementById("cmdConfirmDeleteEmployee").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Deleting';
+            $('#cmdConfirmDeleteEmployee').prop('disabled', true);
+            $('#cmdConfirmDeleteCloseButtonEmployee').prop('disabled', true);
+
+            employees.editItem(employees.currentItem);
+            var employeeId = employees.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteArticle/' + employeeId,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        toastr.success("Delete Successful");
+                        $('#deleteEmployeeConfirm').modal('hide');
+                        refreshEmployeeFlexgrid();
+                    },
+                    404: function () {
+                        toastr.error("Not Found");
+                        $('#deleteEmployeeConfirm').modal('hide');
+                        document.getElementById("cmdConfirmDeleteEmployee").innerHTML = '<i class="fa fa-trash"></i> Delete';
+                        $('#cmdConfirmDeleteEmployee').prop('disabled', false);
+                        $('#cmdConfirmDeleteCloseButtonEmployee').prop('disabled', false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#deleteEmployeeConfirm').modal('hide');
+                        document.getElementById("cmdConfirmDeleteEmployee").innerHTML = '<i class="fa fa-trash"></i> Delete';
+                        $('#cmdConfirmDeleteEmployee').prop('disabled', false);
+                        $('#cmdConfirmDeleteCloseButtonEmployee').prop('disabled', false);
+                    }
+                }
+            });
+        }
+
+        // ========
+        // Employee
+        // ========
+        function employeeTab() {
+            document.getElementById('employee_Code').disabled = true;
+
+            employees = new wijmo.collections.CollectionView(getEmployee());
+            employees.canFilter = true;
+            employees.pageSize = 15;
+
+            var filterTextEmployee = '';
+            $('#InputFilterEmployee').keyup(function () {
+                filterTextEmployee = this.value.toLowerCase();
+                employees.refresh();
+            });
+            employees.filter = function (item) {
+                return !filterTextEmployee || (item.Article.toLowerCase().indexOf(filterTextEmployee) > -1);
+            }
+            employees.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsEmployee();
+            });
+            employees.currentChanged.addHandler(function (sender, args) {
+                updateDetailsEmployee();
+            });
+
+            // Flex Grid for Employee
+            employeeGrid = new wijmo.grid.FlexGrid('#EmployeeGrid');
+            employeeGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Code",
+                                "binding": "ArticleCode",
+                                "allowSorting": true,
+                                "width": "1.5*"
+                            },
+                            {
+                                "header": "Employee",
+                                "binding": "Article",
+                                "allowSorting": true,
+                                "width": "4*"
+                            },
+                            {
+                                "header": "Contact No.",
+                                "binding": "ContactNumber",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Group",
+                                "binding": "ArticleGroup",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "L",
+                                "binding": "IsLocked",
+                                "allowSorting": true,
+                                "width": 50
+                            }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: employees,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            employeeGrid.trackChanges = true;
+
+            //Navigation button for Employee
+            btnFirstPageGridEmployee = document.getElementById('btnMoveToFirstPageGridEmployee');
+            btnPreviousPageGridEmployee = document.getElementById('btnMoveToPreviousPageGridEmployee');
+            btnNextPageGridEmployee = document.getElementById('btnMoveToNextPageGridEmployee');
+            btnLastPageGridEmployee = document.getElementById('btnMoveToLastPageGridEmployee');
+            btnCurrentPageGridEmployee = document.getElementById('btnCurrentPageGridEmployee');
+
+            updateNavigateButtonsEmployee();
+
+            btnFirstPageGridEmployee.addEventListener('click', function () {
+                employees.moveToFirstPage();
+                updateNavigateButtonsEmployee();
+            });
+            btnPreviousPageGridEmployee.addEventListener('click', function () {
+                employees.moveToPreviousPage();
+                updateNavigateButtonsEmployee();
+            });
+            btnNextPageGridEmployee.addEventListener('click', function () {
+                employees.moveToNextPage();
+                updateNavigateButtonsEmployee();
+            });
+            btnLastPageGridEmployee.addEventListener('click', function () {
+                employees.moveToLastPage();
+                updateNavigateButtonsEmployee();
+            });
+        }
+    </script>
+
     <!-- ===================== -->
     <!-- Other Article Scripts -->
     <!-- ===================== -->
     <script type="text/javascript">
-        // ==================================
-        // Global Variables for Other Article
-        // ==================================
-        var otherarticles;
+        // =============================
+        // Global Variables for OtherArticle
+        // =============================
+        var otherArticles;
         var otherArticleGrid;
-        var articlesAccounts;
-        var cboArticleForAccountCode;
-        var cboArticleForAccount;
-        var btnFirstPageGridOtherArticle;
+
+        var btnFirstPageOtherArticle;
         var btnPreviousPageGridOtherArticle;
         var btnNextPageGridOtherArticle;
         var btnLastPageGridOtherArticle;
         var btnCurrentPageGridOtherArticle;
 
-        // ======================
-        // GET Other Article List
-        // ======================
+        var otherArticleId = 0;
+        var cboOtherArticleGroup = new wijmo.input.ComboBox('#cboOtherArticleGroup');
+        var cboOtherArticleAccountCode = new wijmo.input.ComboBox('#cboOtherArticleAccountCode');
+        var cboOtherArticleAccount = new wijmo.input.ComboBox('#cboOtherArticleAccount');
+
+        // =================
+        // GET OtherArticle List
+        // =================
         function getOtherArticle() {
-            var otherarticles = new wijmo.collections.ObservableArray;
+            var otherArticles = new wijmo.collections.ObservableArray;
             NProgress.start();
             $.ajax({
                 url: '/api/listArticleByArticleTypeId/6',
@@ -4987,39 +4960,21 @@
                 success: function (otherArticleResults) {
                     if (otherArticleResults.length > 0) {
                         for (i = 0; i < otherArticleResults.length; i++) {
-
                             var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled;
-
-                            if (canDelete == "True") {
-                                deleteDisabled = "";
-                            } else if (canDelete == "False") {
+                            var deleteDisabled = "";
+                            if (canDelete == "False") {
                                 deleteDisabled = "disabled";
-                            } else {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var btnDeleteId;
-                            if (otherArticleResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticleLock_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                            } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticle_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             }
 
                             var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled;
-
-                            if (canEdit == "True") {
-                                editDisabled = "";
-                            } else if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            } else {
+                            var editDisabled = "";
+                            if (canEdit == "False") {
                                 editDisabled = "disabled";
                             }
 
-                            otherarticles.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditArticle_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: btnDeleteId,
+                            otherArticles.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditOtherArticle_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteOtherArticle_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
                                 Id: otherArticleResults[i]["Id"],
                                 ArticleCode: otherArticleResults[i]["ArticleCode"],
                                 ManualArticleCode: otherArticleResults[i]["ManualArticleCode"],
@@ -5066,50 +5021,40 @@
 
                         }
                     }
+
                     NProgress.done();
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
-            return otherarticles;
+
+            return otherArticles;
         }
 
-        // ================================
-        // Other Article Delete Lock Button
-        // ================================
-        function btnDeleteArticleLock_OnClick() {
-            $('#deleteRecordLock').modal({
-                show: true,
-                backdrop: 'static'
-            });
-        }
-
-        // ====================================
-        // FlexGrid Selection for Other Article
-        // ====================================
+        // ===============================
+        // FlexGrid Selection for OtherArticle
+        // ===============================
         function updateDetailsOtherArticle() {
-            var item = otherarticles.currentItem;
+            var item = otherArticles.currentItem;
             document.getElementById('createdBy').innerHTML = item.CreatedBy;
             document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
             document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
             document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
         }
 
-        // ====================================
-        // Navigation Buttons for Other Article
-        // ====================================
+        // ===============================
+        // Navigation Buttons for OtherArticle
+        // ===============================
         function updateNavigateButtonsOtherArticle() {
-            if (otherarticles.pageSize <= 0) {
+            if (otherArticles.pageSize <= 0) {
                 document.getElementById('navigationPageGridOtherArticle').style.display = 'none';
                 return;
             }
             document.getElementById('navigationPageGridOtherArticle').style.display = 'block';
-            if (otherarticles.pageIndex === 0) {
+            if (otherArticles.pageIndex === 0) {
                 btnFirstPageGridOtherArticle.setAttribute('disabled', 'disabled');
                 btnPreviousPageGridOtherArticle.setAttribute('disabled', 'disabled');
                 btnNextPageGridOtherArticle.removeAttribute('disabled');
                 btnLastPageGridOtherArticle.removeAttribute('disabled');
-            } else if (otherarticles.pageIndex === (otherarticles.pageCount - 1)) {
+            } else if (otherArticles.pageIndex === (otherArticles.pageCount - 1)) {
                 btnFirstPageGridOtherArticle.removeAttribute('disabled');
                 btnPreviousPageGridOtherArticle.removeAttribute('disabled');
                 btnLastPageGridOtherArticle.setAttribute('disabled', 'disabled');
@@ -5120,268 +5065,243 @@
                 btnNextPageGridOtherArticle.removeAttribute('disabled');
                 btnLastPageGridOtherArticle.removeAttribute('disabled');
             }
-            btnCurrentPageGridOtherArticle.innerHTML = (otherarticles.pageIndex + 1) + ' / ' + otherarticles.pageCount;
+            btnCurrentPageGridOtherArticle.innerHTML = (otherArticles.pageIndex + 1) + ' / ' + otherArticles.pageCount;
         }
 
-        // ========================================================
-        // Function with leading zeroes to display the article code
-        // ========================================================
-        function zerofillArticle(number, length) {
-            var result = number.toString();
-            var pad = length - result.length;
-            while (pad > 0) {
-                result = '0' + result;
-                pad--;
-            }
-            return result;
+
+        // =========================
+        // Get Artile OtherArticle Group
+        // =========================
+        function getArticleOtherArticleGroupForComboBox(otherArticleGroupId, accountId, isLocked) {
+            var articleOtherArticleGroupsObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleGroupByArticleTypeId/6',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (articleOtherArticleGroupResults) {
+                    if (articleOtherArticleGroupResults.length > 0) {
+                        for (i = 0; i < articleOtherArticleGroupResults.length; i++) {
+                            articleOtherArticleGroupsObservableArray.push({
+                                Id: articleOtherArticleGroupResults[i]["Id"],
+                                ArticleGroup: articleOtherArticleGroupResults[i]["ArticleGroup"],
+                                AccountId: articleOtherArticleGroupResults[i]["AccountId"],
+                                AccountCode: articleOtherArticleGroupResults[i]["AccountCode"],
+                                Account: articleOtherArticleGroupResults[i]["Account"],
+                                SalesAccountId: articleOtherArticleGroupResults[i]["SalesAccountId"],
+                                SalesAccount: articleOtherArticleGroupResults[i]["SalesAccount"],
+                                CostAccountId: articleOtherArticleGroupResults[i]["CostAccountId"],
+                                CostAccount: articleOtherArticleGroupResults[i]["CostAccount"],
+                                AssetAccountId: articleOtherArticleGroupResults[i]["AssetAccountId"],
+                                AssetAccount: articleOtherArticleGroupResults[i]["AssetAccount"],
+                                ExpenseAccountId: articleOtherArticleGroupResults[i]["ExpenseAccountId"],
+                                ExpenseAccount: articleOtherArticleGroupResults[i]["ExpenseAccount"]
+                            });
+                        }
+                    }
+
+                    var disabled = true;
+                    if (articleOtherArticleGroupResults.length > 0) {
+                        if (!isLocked) {
+                            disabled = false;
+                        }
+                        $('#cmdSaveOtherArticleButton').prop('disabled', false);
+                    } else {
+                        $('#cmdSaveOtherArticleButton').prop('disabled', true);
+                    }
+
+                    cboOtherArticleGroup.dispose();
+                    cboOtherArticleGroup = new wijmo.input.ComboBox('#cboOtherArticleGroup', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleOtherArticleGroupsObservableArray,
+                        displayMemberPath: "ArticleGroup",
+                        selectedValuePath: "Id",
+                        selectedValue: otherArticleGroupId,
+                        onSelectedIndexChanged: function () {
+                            cboOtherArticleAccountCode.selectedValue = this.selectedItem["AccountId"];
+                            cboOtherArticleAccount.selectedValue = this.selectedItem["AccountId"];
+                        }
+                    });
+
+                    getOtherArticleAccountForComboBox(accountId, isLocked);
+                }
+            });
         }
 
-        // =======================================
-        // Get Account for other article combo box
-        // =======================================
-        function getArticleAccountForComboBox() {
-            articlesAccounts = new wijmo.collections.ObservableArray();
+        // ===========
+        // Get Account
+        // ===========
+        function getOtherArticleAccountForComboBox(accountId, isLocked) {
+            var accountsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listAccount',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (otherArticleAccountResults) {
-                    if (otherArticleAccountResults.length > 0) {
-                        for (i = 0; i < otherArticleAccountResults.length; i++) {
-                            articlesAccounts.push({
-                                AccountId: otherArticleAccountResults[i]["Id"],
-                                AccountCode: otherArticleAccountResults[i]["AccountCode"],
-                                Account: otherArticleAccountResults[i]["Account"]
+                success: function (accountResults) {
+                    if (accountResults.length > 0) {
+                        for (i = 0; i < accountResults.length; i++) {
+                            accountsObservableArray.push({
+                                Id: accountResults[i]["Id"],
+                                AccountCode: accountResults[i]["AccountCode"],
+                                Account: accountResults[i]["Account"]
                             });
                         }
-                        createCboForArticleAccountCode(articlesAccounts);
-                        createCboForArticleAccount(articlesAccounts);
-                    } else {
-                        createCboForArticleAccountCode(articlesAccounts);
-                        createCboForArticleAccount(articlesAccounts);
                     }
+
+                    var disabled = true;
+                    if (accountsObservableArray.length > 0) {
+                        if (!isLocked) {
+                            disabled = false;
+                        }
+                    } else {
+                        $('#cmdSaveOtherArticleButton').prop('disabled', true);
+                    }
+
+                    var accountIdValue = accountId;
+                    if (cboOtherArticleGroup.selectedValue != null) {
+                        if (accountId == 0) {
+                            accountIdValue = cboOtherArticleGroup.selectedItem["AccountId"];
+                        }
+                    }
+
+                    cboOtherArticleAccountCode.dispose();
+                    cboOtherArticleAccountCode = new wijmo.input.ComboBox('#cboOtherArticleAccountCode', {
+                        disabled: true,
+                        isEditable: false,
+                        itemsSource: accountsObservableArray,
+                        displayMemberPath: "AccountCode",
+                        selectedValuePath: "Id",
+                        selectedValue: accountIdValue,
+                        onSelectedIndexChanged: function () {
+                            cboOtherArticleAccount.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboOtherArticleAccount.dispose();
+                    cboOtherArticleAccount = new wijmo.input.ComboBox('#cboOtherArticleAccount', {
+                        disabled: true,
+                        isEditable: false,
+                        itemsSource: accountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id",
+                        selectedValue: accountIdValue,
+                        onSelectedIndexChanged: function () {
+                            cboOtherArticleAccountCode.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    setTimeout(function () {
+                        $("#loadingModalOtherArticle").hide();
+                        $("#otherArticleDetailForm").show();
+                    }, 500);
                 }
             });
         }
 
-        // ==============================================
-        // Create combo box for other aricle Account Code
-        // ==============================================
-        function createCboForArticleAccountCode(articlesAccounts) {
-            var accountCodeCollection = new wijmo.collections.CollectionView(articlesAccounts);
-            var accountCodeList = new Array();
-            for (var i = 0; i < accountCodeCollection.items.length; i++) {
-                accountCodeList.push(accountCodeCollection.items[i].AccountCode);
-            }
-
-            var disabled;
-            if (articlesAccounts == 0) {
-                disabled = true;
-            } else {
-                if (document.getElementById('article_Lock').checked == true) {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
-
-            cboArticleForAccountCode.dispose();
-            cboArticleForAccountCode = new wijmo.input.ComboBox('#article_AccountCode', {
-                disabled: disabled,
-                placeholder: "Select Account",
-                itemsSource: accountCodeList,
-                isEditable: false,
-                selectedValue: document.getElementById('article_AccountCode_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#article_Account_data').val(accountCodeCollection.items[this.selectedIndex].AccountId);
-                    $('#article_Account_selectedValue').val(accountCodeCollection.items[this.selectedIndex].Account);
-                    $('#article_AccountCode_selectedValue').val(accountCodeCollection.items[this.selectedIndex].AccountCode);
-
-                    createCboForArticleAccount(articlesAccounts);
-                }
-            });
-
-            document.getElementById('article_Account_data').value = accountCodeCollection.items[cboArticleForAccountCode.selectedIndex].AccountId;
-            document.getElementById('article_Account_selectedValue').value = accountCodeCollection.items[cboArticleForAccountCode.selectedIndex].Account;
-            document.getElementById('article_AccountCode_selectedValue').value = accountCodeCollection.items[cboArticleForAccountCode.selectedIndex].AccountCode;
-        }
-
-        // =========================================
-        // Create combo box for other aricle Account
-        // =========================================
-        function createCboForArticleAccount(articlesAccounts) {
-            var accountCollection = new wijmo.collections.CollectionView(articlesAccounts);
-            var accountList = new Array();
-            for (var i = 0; i < accountCollection.items.length; i++) {
-                accountList.push(accountCollection.items[i].Account);
-            }
-
-            var disabled;
-            if (articlesAccounts == 0) {
-                disabled = true;
-            } else {
-                if (document.getElementById('article_Lock').checked == true) {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
-
-            cboArticleForAccount.dispose();
-            cboArticleForAccount = new wijmo.input.ComboBox('#article_Account', {
-                disabled: disabled,
-                placeholder: "Select Account",
-                itemsSource: accountList,
-                isEditable: false,
-                selectedValue: document.getElementById('article_Account_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#article_Account_data').val(accountCollection.items[this.selectedIndex].AccountId);
-                    $('#article_AccountCode_selectedValue').val(accountCollection.items[this.selectedIndex].AccountCode);
-                    $('#article_Account_selectedValue').val(accountCollection.items[this.selectedIndex].Account);
-
-                    createCboForArticleAccountCode(articlesAccounts);
-                }
-            });
-
-            document.getElementById('article_Account_data').value = accountCollection.items[cboArticleForAccount.selectedIndex].AccountId;
-            document.getElementById('article_AccountCode_selectedValue').value = accountCollection.items[cboArticleForAccount.selectedIndex].AccountCode;
-            document.getElementById('article_Account_selectedValue').value = accountCollection.items[cboArticleForAccount.selectedIndex].Account;
-        }
-
-        // =================
-        // Add Other Article
-        // =================
-        function btnAddArticle_OnClick() {
-            $('#articleEdit').modal({
+        // ================
+        // Add new OtherArticle
+        // ================
+        function btnOtherArticleAdd_OnClick() {
+            $('#otherArticleEdit').modal({
                 show: true,
                 backdrop: 'static'
             });
 
-            $('.requiredArticle').each(function () {
+            $('.requiredOtherArticle').each(function () {
                 $(this).css({
                     "border": "",
                 });
             });
 
-            $('#cmdSaveArticleButton').prop('disabled', false);
-            $('#cmdArticleDetailCloseButton').prop('disabled', false);
+            $("#loadingModalOtherArticle").show();
+            document.getElementById("loadingModalOtherArticle").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#otherArticleDetailForm").hide();
 
-            document.getElementById('article_id').value = 0;
-            document.getElementById('article_Code').value = "";
-            document.getElementById('article_Article').value = "NA";
-            document.getElementById('article_Account_data').value = "";
-            document.getElementById('article_AccountCode_selectedValue').value = "";
-            document.getElementById('article_Account_selectedValue').value = "";
-            document.getElementById('article_Address').value = "NA";
-            document.getElementById('article_ContactNumber').value = "NA";
-            document.getElementById('article_Lock').checked = false;
+            document.getElementById("cmdSaveOtherArticleButton").innerHTML = '<i class="fa fa-save"></i> Save';
+            $('#cmdSaveOtherArticleButton').prop('disabled', true);
+            $('#cmdOtherArticleDetailCloseButton').prop('disabled', false);
 
-            document.getElementById('article_Article').disabled = false;
-            document.getElementById('article_Address').disabled = false;
-            document.getElementById('article_ContactNumber').disabled = false;
-            document.getElementById('articleLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
-            getArticleAccountForComboBox();
+            $('#otherArticle_Code').hide();
+            $('#otherArticle_Code_Label').hide();
+            $('#otherArticle_Code_Input').hide();
 
-            $.ajax({
-                url: '/api/articleLastArticleCodeByArticleTypeId/6',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (otherArticleCodeResults) {
-                    if (otherArticleCodeResults != null) {
-                        var articleCode = parseInt(otherArticleCodeResults.ArticleCode);
-                        var articleCodeResults = articleCode + 0000000001;
+            otherArticleId = 0;
+            document.getElementById('otherArticle_Code').value = "NA";
+            document.getElementById('otherArticle_ContactPerson').value = "NA";
+            document.getElementById('otherArticle_OtherArticle').value = "NA";
+            getArticleOtherArticleGroupForComboBox(0, 0, false);
+            document.getElementById('otherArticle_Address').value = "NA";
+            document.getElementById('otherArticle_ContactNumber').value = "NA";
+            document.getElementById('otherArticle_Lock').checked = false;
 
-                        document.getElementById('article_Code').value = zerofillArticle(articleCodeResults, 10);
-                    } else {
-                        document.getElementById('article_Code').value = "0000000001";
-                    }
-                }
-            });
-
+            document.getElementById('otherArticle_ContactPerson').disabled = false;
+            document.getElementById('otherArticle_OtherArticle').disabled = false;
+            document.getElementById('otherArticle_Address').disabled = false;
+            document.getElementById('otherArticle_ContactNumber').disabled = false;
+            document.getElementById('otherArticleLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
         }
 
-        // ==================
-        // Edit Other Article
-        // ==================
-        function btnEditArticle_OnClick() {
-            otherarticles.editItem(otherarticles.currentItem);
-            $('#articleEdit').modal({
+        // =============
+        // EDIT OtherArticle
+        // =============
+        function btnEditOtherArticle_OnClick() {
+            $('#otherArticleEdit').modal({
                 show: true,
                 backdrop: 'static'
             });
 
-            $('.requiredArticle').each(function () {
+            $('.requiredOtherArticle').each(function () {
                 $(this).css({
                     "border": "",
                 });
             });
 
-            $('#cmdSaveArticleButton').prop('disabled', false);
-            $('#cmdArticleDetailCloseButton').prop('disabled', false);
+            $("#loadingModalOtherArticle").show();
+            document.getElementById("loadingModalOtherArticle").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#otherArticleDetailForm").hide();
 
-            var otherarticle = otherarticles.currentEditItem;
-            document.getElementById('article_id').value = otherarticle.Id ? otherarticle.Id : '';
-            document.getElementById('article_Code').value = otherarticle.ArticleCode ? otherarticle.ArticleCode : '';
-            document.getElementById('article_Article').value = otherarticle.Article ? otherarticle.Article : '';
-            document.getElementById('article_Account_data').value = otherarticle.AccountId ? otherarticle.AccountId : '';
-            document.getElementById('article_AccountCode_selectedValue').value = otherarticle.AccountCode ? otherarticle.AccountCode : '';
-            document.getElementById('article_Account_selectedValue').value = otherarticle.Account ? otherarticle.Account : '';
-            document.getElementById('article_Address').value = otherarticle.Address ? otherarticle.Address : '';
-            document.getElementById('article_ContactNumber').value = otherarticle.ContactNumber ? otherarticle.ContactNumber : '';
-            document.getElementById('article_Lock').checked = otherarticle.IsLocked;
+            document.getElementById("cmdSaveOtherArticleButton").innerHTML = '<i class="fa fa-save"></i> Save';
+            $('#cmdSaveOtherArticleButton').prop('disabled', true);
+            $('#cmdOtherArticleDetailCloseButton').prop('disabled', false);
 
-            if (document.getElementById('article_Lock').checked == true) {
-                document.getElementById('article_Article').disabled = true;
-                document.getElementById('article_Address').disabled = true;
-                document.getElementById('article_ContactNumber').disabled = true;
-                document.getElementById('articleLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
-                getArticleAccountForComboBox();
+            $('#otherArticle_Code').show();
+            $('#otherArticle_Code_Label').show();
+            $('#otherArticle_Code_Input').show();
+
+            otherArticles.editItem(otherArticles.currentItem);
+            var otherArticle = otherArticles.currentEditItem;
+            otherArticleId = otherArticle.Id;
+            document.getElementById('otherArticle_Code').value = otherArticle.ArticleCode;
+            document.getElementById('otherArticle_OtherArticle').value = otherArticle.Article;
+            getArticleOtherArticleGroupForComboBox(otherArticle.ArticleGroupId, otherArticle.AccountId, otherArticle.IsLocked);
+            document.getElementById('otherArticle_Address').value = otherArticle.Address ? otherArticle.Address : '';
+            document.getElementById('otherArticle_ContactNumber').value = otherArticle.ContactNumber ? otherArticle.ContactNumber : '';
+            document.getElementById('otherArticle_ContactPerson').value = otherArticle.ContactPerson;
+            document.getElementById('otherArticle_Lock').checked = otherArticle.IsLocked;
+
+            if (document.getElementById('otherArticle_Lock').checked == true) {
+                document.getElementById('otherArticle_ContactPerson').disabled = true;
+                document.getElementById('otherArticle_OtherArticle').disabled = true;
+                document.getElementById('otherArticle_Address').disabled = true;
+                document.getElementById('otherArticle_ContactNumber').disabled = true;
+                document.getElementById('otherArticleLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
             } else {
-                document.getElementById('article_Article').disabled = false;
-                document.getElementById('article_Address').disabled = false;
-                document.getElementById('article_ContactNumber').disabled = false;
-                document.getElementById('articleLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
-                getArticleAccountForComboBox();
+                document.getElementById('otherArticle_ContactPerson').disabled = false;
+                document.getElementById('otherArticle_OtherArticle').disabled = false;
+                document.getElementById('otherArticle_Address').disabled = false;
+                document.getElementById('otherArticle_ContactNumber').disabled = false;
+                document.getElementById('otherArticleLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
             }
         }
 
-        // ==============================
-        // Refresh Other Article Flexgrid
-        // ==============================
-        function refreshOtherArticleFlexgrid() {
-            otherarticles = new wijmo.collections.CollectionView(getOtherArticle());
-            otherarticles.canFilter = true;
-            otherarticles.pageSize = 15;
-
-            var filterTextOtherArticle = '';
-            $('#InputFilterOtherArticle').keyup(function () {
-                filterTextOtherArticle = this.value.toLowerCase();
-                otherarticles.refresh();
-            });
-            otherarticles.filter = function (item) {
-                return !filterTextOtherArticle || (item.Article.toLowerCase().indexOf(filterTextOtherArticle) > -1);
-            }
-            otherarticles.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsOtherArticle();
-            });
-            otherarticles.currentChanged.addHandler(function (sender, args) {
-                updateDetailsOtherArticle();
-            });
-
-            otherArticleGrid.itemsSource = otherarticles;
-            otherArticleGrid.trackChanges = true;
-        }
-
-        // ==============================
-        // Other Article Entry Validation
-        // ==============================
+        // =========================
+        // OtherArticle Entry Validation
+        // =========================
         function otherArticleEntryValidation() {
             var isValid = true;
-            $('.requiredArticle').each(function () {
+            $('.requiredOtherArticle').each(function () {
                 if ($.trim($(this).val()) == '') {
                     isValid = false;
                     $(this).css({
@@ -5398,34 +5318,52 @@
             return isValid;
         }
 
-        // ==================
-        // Save Other Article
-        // ==================
-        function btnArticleSaveButton_OnClick() {
-            var otherArticleObject = new Object();
-            var otherArticleId = document.getElementById('article_id').value;
-            otherArticleObject.ArticleCode = document.getElementById('article_Code').value;
-            otherArticleObject.Article = document.getElementById('article_Article').value;
-            otherArticleObject.AccountId = document.getElementById('article_Account_data').value;
-            otherArticleObject.Address = document.getElementById('article_Address').value;
-            otherArticleObject.ContactNumber = document.getElementById('article_ContactNumber').value;
-            otherArticleObject.IsLocked = document.getElementById('article_Lock').checked;
+        // =========================
+        // Refresh otherArticle flexgrid
+        // =========================
+        function refreshOtherArticleFlexgrid() {
+            otherArticles = new wijmo.collections.CollectionView(getOtherArticle());
+            otherArticles.canFilter = true;
+            otherArticles.pageSize = 15;
 
+            var filterTextOtherArticle = '';
+            $('#InputFilterTerm').keyup(function () {
+                filterTextOtherArticle = this.value.toLowerCase();
+                otherArticles.refresh();
+            });
+            otherArticles.filter = function (item) {
+                return !filterTextOtherArticle || (item.Article.toLowerCase().indexOf(filterTextOtherArticle) > -1);
+            }
+            otherArticles.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsOtherArticle();
+            });
+            otherArticles.currentChanged.addHandler(function (sender, args) {
+                updateDetailsOtherArticle();
+            });
+
+            otherArticleGrid.itemsSource = otherArticles;
+            otherArticleGrid.trackChanges = true;
+        }
+
+        // =============
+        // SAVE OtherArticle
+        // =============
+        function btnOtherArticleSaveButton_OnClick() {
+            var otherArticleObject = new Object();
+            otherArticleObject.ArticleCode = document.getElementById('otherArticle_Code').value;
+            otherArticleObject.Article = document.getElementById('otherArticle_OtherArticle').value;
+            otherArticleObject.ArticleGroupId = cboOtherArticleGroup.selectedValue;
+            otherArticleObject.AccountId = cboOtherArticleAccount.selectedValue;
+            otherArticleObject.Address = document.getElementById('otherArticle_Address').value;
+            otherArticleObject.ContactNumber = document.getElementById('otherArticle_ContactNumber').value;
+            otherArticleObject.ContactPerson = document.getElementById('otherArticle_ContactPerson').value;
+            otherArticleObject.IsLocked = document.getElementById('otherArticle_Lock').checked;
             var otherArticleData = JSON.stringify(otherArticleObject);
 
-            if (document.getElementById('article_Account_data').value == '') {
-                document.getElementById("article_AccountCode").style.border = "1px solid red";
-                document.getElementById("article_Account").style.border = "1px solid red";
-            } else {
-                document.getElementById("article_AccountCode").style.border = "1px solid #C8C8C8";
-                document.getElementById("article_Account").style.border = "1px solid #C8C8C8";
-            }
-
-            if (otherArticleEntryValidation() == false) {
-                toastr.error("Invalid entry");
-            } else {
-                $('#cmdSaveArticleButton').prop('disabled', true);
-                $('#cmdArticleDetailCloseButton').prop('disabled', true);
+            if (otherArticleEntryValidation()) {
+                document.getElementById("cmdSaveOtherArticleButton").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving';
+                $('#cmdSaveOtherArticleButton').prop('disabled', true);
+                $('#cmdOtherArticleDetailCloseButton').prop('disabled', true);
 
                 if (otherArticleId == 0) {
                     $.ajax({
@@ -5436,17 +5374,14 @@
                         data: otherArticleData,
                         success: function (id) {
                             if (id > 0) {
-                                $('#cmdSaveArticleButton').prop('disabled', true);
-                                $('#cmdArticleDetailCloseButton').prop('disabled', true);
                                 toastr.success("Save Successful");
-
-                                $('#articleEdit').modal('hide');
-
+                                $('#otherArticleEdit').modal('hide');
                                 refreshOtherArticleFlexgrid();
                             } else {
-                                $('#cmdSaveArticleButton').prop('disabled', false);
-                                $('#cmdArticleDetailCloseButton').prop('disabled', false);
                                 toastr.error("Internal Server Error");
+                                document.getElementById("cmdSaveOtherArticleButton").innerHTML = '<i class="fa fa-save"></i> Save';
+                                $('#cmdSaveOtherArticleButton').prop('disabled', false);
+                                $('#cmdOtherArticleDetailCloseButton').prop('disabled', false);
                             }
                         }
                     });
@@ -5459,49 +5394,58 @@
                         data: otherArticleData,
                         statusCode: {
                             200: function () {
-                                $('#cmdSaveArticleButton').prop('disabled', true);
-                                $('#cmdArticleDetailCloseButton').prop('disabled', true);
                                 toastr.success("Update Successful");
-
-                                $('#articleEdit').modal('hide');
-
+                                $('#otherArticleEdit').modal('hide');
                                 refreshOtherArticleFlexgrid();
                             },
                             404: function () {
                                 toastr.error("Not Found");
-                                $('#cmdSaveArticleButton').prop('disabled', false);
-                                $('#cmdArticleDetailCloseButton').prop('disabled', false);
+                                document.getElementById("cmdSaveOtherArticleButton").innerHTML = '<i class="fa fa-save"></i> Save';
+                                $('#cmdSaveOtherArticleButton').prop('disabled', false);
+                                $('#cmdOtherArticleDetailCloseButton').prop('disabled', false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
-                                $('#cmdSaveArticleButton').prop('disabled', false);
-                                $('#cmdArticleDetailCloseButton').prop('disabled', false);
+                                document.getElementById("cmdSaveOtherArticleButton").innerHTML = '<i class="fa fa-save"></i> Save';
+                                $('#cmdSaveOtherArticleButton').prop('disabled', false);
+                                $('#cmdOtherArticleDetailCloseButton').prop('disabled', false);
                             }
                         }
                     });
                 }
+            } else {
+                toastr.error("Invalid entry");
             }
         }
 
-        // ====================
-        // Delete Other Article
-        // ====================
-        function btnDeleteArticle_OnClick() {
-            $('#deleteArticleConfirm').modal({
-                show: true,
-                backdrop: 'static'
-            });
+        // ===============
+        // DELETE OtherArticle
+        // ===============
+        function btnDeleteOtherArticle_OnClick() {
+            otherArticles.editItem(otherArticles.currentItem);
+            var otherArticle = otherArticles.currentEditItem;
+            if (otherArticle.IsLocked) {
+                toastr.error("Delete is not allowed when the selected record is locked!");
+            } else {
+                $('#deleteOtherArticleConfirm').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
 
-            $('#cmdConfirmDeleteArticle').prop('disabled', false);
-            $('#cmdConfirmDeleteCloseButtonArticle').prop('disabled', false);
+                document.getElementById("cmdConfirmDeleteOtherArticle").innerHTML = '<i class="fa fa-trash"></i> Delete';
+                $('#cmdConfirmDeleteOtherArticle').prop('disabled', false);
+                $('#cmdConfirmDeleteCloseButtonOtherArticle').prop('disabled', false);
+            }
         }
-        // Article Confirm Delete Button
-        function cmdArticleConfirmDeleteButton_OnClick() {
-            $('#cmdConfirmDeleteArticle').prop('disabled', true);
-            $('#cmdConfirmDeleteCloseButtonArticle').prop('disabled', true);
 
-            otherarticles.editItem(otherarticles.currentItem);
-            var otherArticleId = otherarticles.currentEditItem.Id;
+        // OtherArticle Confirm Delete Button
+        function cmdOtherArticleConfirmDeleteButton_OnClick() {
+            document.getElementById("cmdConfirmDeleteOtherArticle").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Deleting';
+            $('#cmdConfirmDeleteOtherArticle').prop('disabled', true);
+            $('#cmdConfirmDeleteCloseButtonOtherArticle').prop('disabled', true);
+
+            otherArticles.editItem(otherArticles.currentItem);
+            var otherArticleId = otherArticles.currentEditItem.Id;
             $.ajax({
                 url: '/api/deleteArticle/' + otherArticleId,
                 type: "DELETE",
@@ -5509,58 +5453,54 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $('#cmdConfirmDeleteArticle').prop('disabled', true);
-                        $('#cmdConfirmDeleteCloseButtonArticle').prop('disabled', true);
                         toastr.success("Delete Successful");
-
-                        $('#deleteArticleConfirm').modal('hide');
-
+                        $('#deleteOtherArticleConfirm').modal('hide');
                         refreshOtherArticleFlexgrid();
                     },
                     404: function () {
                         toastr.error("Not Found");
-                        $('#cmdConfirmDeleteArticle').prop('disabled', false);
-                        $('#cmdConfirmDeleteCloseButtonArticle').prop('disabled', false);
-                        $('#deleteArticleConfirm').modal('hide');
+                        $('#deleteOtherArticleConfirm').modal('hide');
+                        document.getElementById("cmdConfirmDeleteOtherArticle").innerHTML = '<i class="fa fa-trash"></i> Delete';
+                        $('#cmdConfirmDeleteOtherArticle').prop('disabled', false);
+                        $('#cmdConfirmDeleteCloseButtonOtherArticle').prop('disabled', false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
-                        $('#cmdConfirmDeleteArticle').prop('disabled', false);
-                        $('#cmdConfirmDeleteCloseButtonArticle').prop('disabled', false);
-                        $('#deleteArticleConfirm').modal('hide');
+                        $('#deleteOtherArticleConfirm').modal('hide');
+                        document.getElementById("cmdConfirmDeleteOtherArticle").innerHTML = '<i class="fa fa-trash"></i> Delete';
+                        $('#cmdConfirmDeleteOtherArticle').prop('disabled', false);
+                        $('#cmdConfirmDeleteCloseButtonOtherArticle').prop('disabled', false);
                     }
                 }
             });
         }
 
-        // =============
-        // Other Article
-        // =============
+        // ========
+        // OtherArticle
+        // ========
         function otherArticleTab() {
-            cboArticleForAccountCode = new wijmo.input.ComboBox('#article_AccountCode');
-            cboArticleForAccount = new wijmo.input.ComboBox('#article_Account');
-            document.getElementById('article_Code').disabled = true;
+            document.getElementById('otherArticle_Code').disabled = true;
 
-            otherarticles = new wijmo.collections.CollectionView(getOtherArticle());
-            otherarticles.canFilter = true;
-            otherarticles.pageSize = 15;
+            otherArticles = new wijmo.collections.CollectionView(getOtherArticle());
+            otherArticles.canFilter = true;
+            otherArticles.pageSize = 15;
 
             var filterTextOtherArticle = '';
             $('#InputFilterOtherArticle').keyup(function () {
                 filterTextOtherArticle = this.value.toLowerCase();
-                otherarticles.refresh();
+                otherArticles.refresh();
             });
-            otherarticles.filter = function (item) {
+            otherArticles.filter = function (item) {
                 return !filterTextOtherArticle || (item.Article.toLowerCase().indexOf(filterTextOtherArticle) > -1);
             }
-            otherarticles.collectionChanged.addHandler(function (sender, args) {
+            otherArticles.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsOtherArticle();
             });
-            otherarticles.currentChanged.addHandler(function (sender, args) {
+            otherArticles.currentChanged.addHandler(function (sender, args) {
                 updateDetailsOtherArticle();
             });
 
-            // Flex Grid for Other Article
+            // Flex Grid for OtherArticle
             otherArticleGrid = new wijmo.grid.FlexGrid('#OtherArticleGrid');
             otherArticleGrid.initialize({
                 columns: [
@@ -5589,14 +5529,14 @@
                                 "width": "1.5*"
                             },
                             {
-                                "header": "Article.",
+                                "header": "Article",
                                 "binding": "Article",
                                 "allowSorting": true,
-                                "width": "3*"
+                                "width": "4*"
                             },
                             {
-                                "header": "Account",
-                                "binding": "Account",
+                                "header": "Group",
+                                "binding": "ArticleGroup",
                                 "allowSorting": true,
                                 "width": "3*"
                             },
@@ -5608,7 +5548,7 @@
                             }
                 ],
                 autoGenerateColumns: false,
-                itemsSource: otherarticles,
+                itemsSource: otherArticles,
                 isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
@@ -5617,7 +5557,7 @@
 
             otherArticleGrid.trackChanges = true;
 
-            //Navigation button for Other Article
+            //Navigation button for OtherArticle
             btnFirstPageGridOtherArticle = document.getElementById('btnMoveToFirstPageGridOtherArticle');
             btnPreviousPageGridOtherArticle = document.getElementById('btnMoveToPreviousPageGridOtherArticle');
             btnNextPageGridOtherArticle = document.getElementById('btnMoveToNextPageGridOtherArticle');
@@ -5627,19 +5567,19 @@
             updateNavigateButtonsOtherArticle();
 
             btnFirstPageGridOtherArticle.addEventListener('click', function () {
-                otherarticles.moveToFirstPage();
+                otherArticles.moveToFirstPage();
                 updateNavigateButtonsOtherArticle();
             });
             btnPreviousPageGridOtherArticle.addEventListener('click', function () {
-                otherarticles.moveToPreviousPage();
+                otherArticles.moveToPreviousPage();
                 updateNavigateButtonsOtherArticle();
             });
             btnNextPageGridOtherArticle.addEventListener('click', function () {
-                otherarticles.moveToNextPage();
+                otherArticles.moveToNextPage();
                 updateNavigateButtonsOtherArticle();
             });
             btnLastPageGridOtherArticle.addEventListener('click', function () {
-                otherarticles.moveToLastPage();
+                otherArticles.moveToLastPage();
                 updateNavigateButtonsOtherArticle();
             });
         }
@@ -5649,9 +5589,9 @@
     <!-- Tab Current Page on Load Scripts -->
     <!-- ================================ -->
     <script type="text/javascript">
-        // ====
-        // TABS
-        // ====
+        // ============
+        // TABS - Event
+        // ============
         $('#discountTabId').click(function () {
             $('#Discount').show();
             $('#PayType').hide();
@@ -5667,6 +5607,7 @@
             };
             refreshDiscountFlexgrid();
         });
+
         $('#payTypeTabId').click(function () {
             $('#Discount').hide();
             $('#PayType').show();
@@ -5683,6 +5624,7 @@
             };
             refreshPayTypeFlexgrid();
         });
+
         $('#taxTabId').click(function () {
             $('#Discount').hide();
             $('#PayType').hide();
@@ -5699,6 +5641,7 @@
             };
             refreshTaxTypeFlexgrid();
         });
+
         $('#unitTabId').click(function () {
             $('#Discount').hide();
             $('#PayType').hide();
@@ -5715,6 +5658,7 @@
             };
             refreshUnitFlexgrid();
         });
+
         $('#termTabId').click(function () {
             $('#Discount').hide();
             $('#PayType').hide();
@@ -5731,6 +5675,7 @@
             };
             refreshTermFlexgrid();
         });
+
         $('#employeeTabId').click(function () {
             $('#Discount').hide();
             $('#PayType').hide();
@@ -5747,6 +5692,7 @@
             };
             refreshEmployeeFlexgrid();
         });
+
         $('#articleGroupTabId').click(function () {
             $('#Discount').hide();
             $('#PayType').hide();
@@ -5763,6 +5709,7 @@
             };
             refreshArticleGroupFlexgrid();
         });
+
         $('#otherArticleTabId').click(function () {
             $('#Discount').hide();
             $('#PayType').hide();
@@ -5779,6 +5726,7 @@
             };
             refreshOtherArticleFlexgrid();
         });
+
         $('#accountTypeTabId').click(function () {
             $('#Discount').hide();
             $('#PayType').hide();
@@ -5796,7 +5744,9 @@
         });
 
         $(document).ready(function () {
+            // ========================
             // Discount Lock - IsLocked
+            // ========================
             $('#discount_Lock').click(function () {
                 if ($(this).is(':checked')) {
                     document.getElementById('discount_Discount').disabled = true;
@@ -5815,7 +5765,9 @@
                 }
             });
 
+            // =======================
             // payType Lock - IsLocked
+            // =======================
             $('#payType_Lock').click(function () {
                 if ($(this).is(':checked')) {
                     document.getElementById('payType_PayType').disabled = true;
@@ -5830,7 +5782,9 @@
                 }
             });
 
+            // =======================
             // taxType Lock - IsLocked
+            // =======================
             $('#taxType_Lock').click(function () {
                 if ($(this).is(':checked')) {
                     document.getElementById('taxType_TaxType').disabled = true;
@@ -5849,7 +5803,9 @@
                 }
             });
 
+            // ====================
             // Unit Lock - IsLocked
+            // ====================
             $('#unit_Lock').click(function () {
                 if ($(this).is(':checked')) {
                     document.getElementById('unit_Unit').disabled = true;
@@ -5860,7 +5816,9 @@
                 }
             });
 
+            // ====================
             // term Lock - IsLocked
+            // ====================
             $('#term_Lock').click(function () {
                 if ($(this).is(':checked')) {
                     document.getElementById('term_Term').disabled = true;
@@ -5873,24 +5831,9 @@
                 }
             });
 
-            // employee Lock - IsLocked
-            $('#employee_Lock').click(function () {
-                if ($(this).is(':checked')) {
-                    document.getElementById('employee_Employee').disabled = true;
-                    document.getElementById('employee_Address').disabled = true;
-                    document.getElementById('employee_ContactNumber').disabled = true;
-                    document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
-                    getEmployeeAccountForComboBox();
-                } else {
-                    document.getElementById('employee_Employee').disabled = false;
-                    document.getElementById('employee_Address').disabled = false;
-                    document.getElementById('employee_ContactNumber').disabled = false;
-                    document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
-                    getEmployeeAccountForComboBox();
-                }
-            });
-
+            // ========================
             // article Group - IsLocked
+            // ========================
             $('#articleGroup_Lock').click(function () {
                 if ($(this).is(':checked')) {
                     document.getElementById('articleGroup_ArticleGroup').disabled = true;
@@ -5923,23 +5866,55 @@
                 }
             });
 
-            // article Lock - IsLocked
-            $('#article_Lock').click(function () {
+            // ========================
+            // employee Lock - IsLocked
+            // ========================
+            $('#employee_Lock').click(function () {
                 if ($(this).is(':checked')) {
-                    document.getElementById('article_Article').disabled = true;
-                    document.getElementById('article_Address').disabled = true;
-                    document.getElementById('article_ContactNumber').disabled = true;
-                    document.getElementById('articleLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
-                    getArticleAccountForComboBox();
+                    document.getElementById('employee_ContactPerson').disabled = true;
+                    document.getElementById('employee_Employee').disabled = true;
+                    document.getElementById('employee_Address').disabled = true;
+                    document.getElementById('employee_ContactNumber').disabled = true;
+                    document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+                    cboEmployeeGroup.disabled = true;
+                    cboEmployeeAccountCode.disabled = true;
+                    cboEmployeeAccount.disabled = true;
                 } else {
-                    document.getElementById('article_Article').disabled = false;
-                    document.getElementById('article_Address').disabled = false;
-                    document.getElementById('article_ContactNumber').disabled = false;
-                    document.getElementById('articleLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
-                    getArticleAccountForComboBox();
+                    document.getElementById('employee_ContactPerson').disabled = false;
+                    document.getElementById('employee_Employee').disabled = false;
+                    document.getElementById('employee_Address').disabled = false;
+                    document.getElementById('employee_ContactNumber').disabled = false;
+                    document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+                    cboEmployeeGroup.disabled = false;
                 }
             });
 
+            // =============================
+            // Other Article Lock - IsLocked
+            // =============================
+            $('#otherArticle_Lock').click(function () {
+                if ($(this).is(':checked')) {
+                    document.getElementById('otherArticle_ContactPerson').disabled = true;
+                    document.getElementById('otherArticle_OtherArticle').disabled = true;
+                    document.getElementById('otherArticle_Address').disabled = true;
+                    document.getElementById('otherArticle_ContactNumber').disabled = true;
+                    document.getElementById('otherArticleLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+                    cboOtherArticleGroup.disabled = true;
+                    cboOtherArticleAccountCode.disabled = true;
+                    cboOtherArticleAccount.disabled = true;
+                } else {
+                    document.getElementById('otherArticle_ContactPerson').disabled = false;
+                    document.getElementById('otherArticle_OtherArticle').disabled = false;
+                    document.getElementById('otherArticle_Address').disabled = false;
+                    document.getElementById('otherArticle_ContactNumber').disabled = false;
+                    document.getElementById('otherArticleLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+                    cboOtherArticleGroup.disabled = false;
+                }
+            });
+
+            // ==================
+            // On load - discount
+            // ==================
             $('#Discount').show();
             $('#PayType').hide();
             $('#Tax').hide();
@@ -5949,9 +5924,11 @@
             $('#ArticleGroup').hide();
             $('#OtherArticle').hide();
             $('#AccountType').hide();
-
             discountTab();
 
+            // ===========
+            // User Rights
+            // ===========
             var canAdd = "@ViewData["CanAdd"]";
             if (canAdd == "True") {
                 $("#btnAddDiscount").prop("disabled", false);
