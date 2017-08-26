@@ -606,8 +606,10 @@
                     <h4 class="modal-title" id="unitModalLabel">Unit <span id="unitLockAndUnLock"></span></h4>
                 </div>
                 <div class="modal-body">
+                    <center>
+                        <span id="loadingModalUnit"></span>
+                    </center>
                     <form id="UnitDetailForm">
-                        <input type="hidden" id="unit_id" />
                         <dl class="dl-horizontal">
                             <dt>Unit</dt>
                             <dd><input type="text" class="form-control requiredUnit" id="unit_Unit" placeholder="Unit" /></dd>
@@ -654,6 +656,9 @@
                     <h4 class="modal-title" id="termModalLabel">Term <span id="termLockAndUnLock"></span></h4>
                 </div>
                 <div class="modal-body">
+                    <center>
+                        <span id="loadingModalTerm"></span>
+                    </center>
                     <form id="TermDetailForm">
                         <input type="hidden" id="term_id" />
                         <dl class="dl-horizontal">
@@ -689,6 +694,131 @@
                 <div class="modal-footer">
                     <button id="cmdConfirmDeleteTerm" class="btn btn-danger" onclick="cmdTermConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
                     <button id="cmdConfirmDeleteCloseButtonTerm" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================= -->
+    <!-- Article Group Edit Detail -->
+    <!-- ========================= -->
+    <div class="modal fade" id="articleGroupEdit" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="articleGroupModalLabel">Article Group <span id="articleGroupLockAndUnLock"></span></h4>
+                </div>
+                <div class="modal-body">
+                    <center>
+                        <span id="loadingModalArticleGroup"></span>
+                    </center>
+                    <form id="articleGroupDetailForm">
+                        <input type="hidden" id="articleGroup_id" />
+                        <dl class="dl-horizontal">
+                            <dt>Article Group</dt>
+                            <dd><input type="text" class="form-control requiredArticleGroup" id="articleGroup_ArticleGroup" placeholder="Article Group" /></dd>
+                            <dt>Article Type:</dt>
+                            <dd>
+                                <div class="comboBox-wide" id="cboArticleType"></div>
+                            </dd>
+                            <dt>Account</dt>
+                            <dd>
+                                <table style="width: 100%" border="0">
+                                    <tr>
+                                        <td style="width: 30%">
+                                            <div class="comboBox-wide" id="cboArticleGroupAccountCode"></div>
+                                        </td>
+                                        <td style="width: 1%"></td>
+                                        <td style="width: 69%">
+                                            <div class="comboBox-wide" id="cboArticleGroupAccount"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </dd>
+                            <dt>Sales Account</dt>
+                            <dd>
+                                <table style="width: 100%" border="0">
+                                    <tr>
+                                        <td style="width: 30%">
+                                            <div class="comboBox-wide" id="cboArticleGroupSalesAccountCode"></div>
+                                        </td>
+                                        <td style="width: 1%"></td>
+                                        <td style="width: 69%">
+                                            <div class="comboBox-wide" id="cboArticleGroupSalesAccount"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </dd>
+                            <dt>Cost Account</dt>
+                            <dd>
+                                <table style="width: 100%" border="0">
+                                    <tr>
+                                        <td style="width: 30%">
+                                            <div class="comboBox-wide" id="cboArticleGroupCostAccountCode"></div>
+                                        </td>
+                                        <td style="width: 1%"></td>
+                                        <td style="width: 69%">
+                                            <div class="comboBox-wide" id="cboArticleGroupCostAccount"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </dd>
+                            <dt>Asset Account</dt>
+                            <dd>
+                                <table style="width: 100%" border="0">
+                                    <tr>
+                                        <td style="width: 30%">
+                                            <div class="comboBox-wide" id="cboArticleGroupAssetAccountCode"></div>
+                                        </td>
+                                        <td style="width: 1%"></td>
+                                        <td style="width: 69%">
+                                            <div class="comboBox-wide" id="cboArticleGroupAssetAccount"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </dd>
+                            <dt>Expense Account</dt>
+                            <dd>
+                                <table style="width: 100%" border="0">
+                                    <tr>
+                                        <td style="width: 30%">
+                                            <div class="comboBox-wide" id="cboArticleGroupExpenseAccountCode"></div>
+                                        </td>
+                                        <td style="width: 1%"></td>
+                                        <td style="width: 69%">
+                                            <div class="comboBox-wide" id="cboArticleGroupExpenseAccount"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </dd>
+                            <dt>Lock</dt>
+                            <dd><input type="checkbox" id="articleGroup_Lock" /></dd>
+                        </dl>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="cmdSaveArticleGroupButton" class="btn btn-primary" onclick="btnArticleGroupSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdArticleGroupDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== -->
+    <!-- Article Group Delete -->
+    <!-- ==================== -->
+    <div class="modal fade" id="deleteArticleGroupConfirm" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete</h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this article group?
+                </div>
+                <div class="modal-footer">
+                    <button id="cmdConfirmDeleteArticleGroup" class="btn btn-danger" onclick="cmdArticleGroupConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButtonArticleGroup" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -760,146 +890,6 @@
                 <div class="modal-footer">
                     <button id="cmdConfirmDeleteEmployee" class="btn btn-danger" onclick="cmdEmployeeConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
                     <button id="cmdConfirmDeleteCloseButtonEmployee" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================= -->
-    <!-- Article Group Edit Detail -->
-    <!-- ========================= -->
-    <div class="modal fade" id="articleGroupEdit" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="articleGroupModalLabel">Article Group <span id="articleGroupLockAndUnLock"></span></h4>
-                </div>
-                <div class="modal-body">
-                    <form id="articleGroupDetailForm">
-                        <input type="hidden" id="articleGroup_id" />
-                        <dl class="dl-horizontal">
-                            <dt>Article Group</dt>
-                            <dd><input type="text" class="form-control requiredArticleGroup" id="articleGroup_ArticleGroup" placeholder="Article Group" /></dd>
-                            <dt>Article Type:</dt>
-                            <dd>
-                                <div id="articleGroup_ArticleType" class="comboBox-wide"></div>
-
-                                <input type="hidden" class="requiredArticleGroup" id="articleGroup_ArticleType_data" />
-                                <input type="hidden" id="articleGroup_ArticleType_selectedValue" />
-                            </dd>
-                            <dt>Account</dt>
-                            <dd>
-                                <table style="width: 100%" border="0">
-                                    <tr>
-                                        <td style="width: 30%">
-                                            <div id="articleGroup_AccountCode" class=""></div>
-                                        </td>
-                                        <td style="width: 1%"></td>
-                                        <td style="width: 69%">
-                                            <div id="articleGroup_Account" class=""></div>
-                                            <input type="hidden" class="requiredArticleGroup" id="articleGroup_Account_data" />
-                                            <input type="hidden" id="articleGroup_AccountCode_selectedValue" />
-                                            <input type="hidden" id="articleGroup_Account_selectedValue" />
-                                        </td>
-                                    </tr>
-                                </table>
-                            </dd>
-                            <dt>Sales Account</dt>
-                            <dd>
-                                <table style="width: 100%" border="0">
-                                    <tr>
-                                        <td style="width: 30%">
-                                            <div id="articleGroup_SalesAccountCode" class=""></div>
-                                        </td>
-                                        <td style="width: 1%"></td>
-                                        <td style="width: 69%">
-                                            <div id="articleGroup_SalesAccount" class=""></div>
-                                            <input type="hidden" class="requiredArticleGroup" id="articleGroup_SalesAccount_data" />
-                                            <input type="hidden" id="articleGroup_SalesAccountCode_selectedValue" />
-                                            <input type="hidden" id="articleGroup_SalesAccount_selectedValue" />
-                                        </td>
-                                    </tr>
-                                </table>
-                            </dd>
-                            <dt>Cost Account</dt>
-                            <dd>
-                                <table style="width: 100%" border="0">
-                                    <tr>
-                                        <td style="width: 30%">
-                                            <div id="articleGroup_CostAccountCode" class=""></div>
-                                        </td>
-                                        <td style="width: 1%"></td>
-                                        <td style="width: 69%">
-                                            <div id="articleGroup_CostAccount" class=""></div>
-                                            <input type="hidden" class="requiredArticleGroup" id="articleGroup_CostAccount_data" />
-                                            <input type="hidden" id="articleGroup_CostAccountCode_selectedValue" />
-                                            <input type="hidden" id="articleGroup_CostAccount_selectedValue" />
-                                        </td>
-                                    </tr>
-                                </table>
-                            </dd>
-                            <dt>Asset Account</dt>
-                            <dd>
-                                <table style="width: 100%" border="0">
-                                    <tr>
-                                        <td style="width: 30%">
-                                            <div id="articleGroup_AssetAccountCode" class=""></div>
-                                        </td>
-                                        <td style="width: 1%"></td>
-                                        <td style="width: 69%">
-                                            <div id="articleGroup_AssetAccount" class=""></div>
-                                            <input type="hidden" class="requiredArticleGroup" id="articleGroup_AssetAccount_data" />
-                                            <input type="hidden" id="articleGroup_AssetAccountCode_selectedValue" />
-                                            <input type="hidden" id="articleGroup_AssetAccount_selectedValue" />
-                                        </td>
-                                    </tr>
-                                </table>
-                            </dd>
-                            <dt>Expense Account</dt>
-                            <dd>
-                                <table style="width: 100%" border="0">
-                                    <tr>
-                                        <td style="width: 30%">
-                                            <div id="articleGroup_ExpenseAccountCode" class=""></div>
-                                        </td>
-                                        <td style="width: 1%"></td>
-                                        <td style="width: 69%">
-                                            <div id="articleGroup_ExpenseAccount" class=""></div>
-                                            <input type="hidden" class="requiredArticleGroup" id="articleGroup_ExpenseAccount_data" />
-                                            <input type="hidden" id="articleGroup_ExpenseAccountCode_selectedValue" />
-                                            <input type="hidden" id="articleGroup_ExpenseAccount_selectedValue" />
-                                        </td>
-                                    </tr>
-                                </table>
-                            </dd>
-                            <dt>Lock</dt>
-                            <dd><input type="checkbox" id="articleGroup_Lock" /></dd>
-                        </dl>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button id="cmdSaveArticleGroupButton" class="btn btn-primary" onclick="btnArticleGroupSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button id="cmdArticleGroupDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==================== -->
-    <!-- Article Group Delete -->
-    <!-- ==================== -->
-    <div class="modal fade" id="deleteArticleGroupConfirm" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Delete</h4>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this article group?
-                </div>
-                <div class="modal-footer">
-                    <button id="cmdConfirmDeleteArticleGroup" class="btn btn-danger" onclick="cmdArticleGroupConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteCloseButtonArticleGroup" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -2657,6 +2647,7 @@
         var btnNextPageGridUnit;
         var btnLastPageGridUnit;
         var btnCurrentPageGridUnit;
+        var unitId = 0;
 
         // =============
         // GET Unit List
@@ -2669,43 +2660,24 @@
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                data: {},
                 success: function (unitResults) {
                     if (unitResults.length > 0) {
                         for (i = 0; i < unitResults.length; i++) {
-
                             var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled;
-
-                            if (canDelete == "True") {
-                                deleteDisabled = "";
-                            } else if (canDelete == "False") {
+                            var deleteDisabled = "";
+                            if (canDelete == "False") {
                                 deleteDisabled = "disabled";
-                            } else {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var btnDeleteId;
-                            if (unitResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletetUnitLock_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                            } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletetUnit_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             }
 
                             var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled;
-
-                            if (canEdit == "True") {
-                                editDisabled = "";
-                            } else if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            } else {
+                            var editDisabled = "";
+                            if (canEdit == "False") {
                                 editDisabled = "disabled";
                             }
 
                             units.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditUnit_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: btnDeleteId,
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletetUnit_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
                                 Id: unitResults[i]["Id"],
                                 Unit: unitResults[i]["Unit"],
                                 IsLocked: unitResults[i]["IsLocked"],
@@ -2716,25 +2688,14 @@
                                 UpdatedBy: unitResults[i]["UpdatedBy"],
                                 UpdatedDateTime: unitResults[i]["UpdatedDateTime"]
                             });
-
                         }
                     }
+
                     NProgress.done();
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
-            return units;
-        }
 
-        // =======================
-        // Unit Delete Lock Button
-        // =======================
-        function btnDeletetUnitLock_OnClick() {
-            $('#deleteRecordLock').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            return units;
         }
 
         // ===========================
@@ -2791,21 +2752,31 @@
                 });
             });
 
-            $('#cmdSaveUnitButton').prop('disabled', false);
+            $("#loadingModalUnit").show();
+            document.getElementById("loadingModalUnit").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#UnitDetailForm").hide();
+
+            document.getElementById("cmdSaveUnitButton").innerHTML = '<i class="fa fa-save"></i> Save';
+            $('#cmdSaveUnitButton').prop('disabled', true);
             $('#cmdUnitDetailCloseButton').prop('disabled', false);
 
-            document.getElementById('unit_id').value = 0;
+            unitId = 0;
             document.getElementById('unit_Unit').value = "NA";
             document.getElementById('unit_Lock').checked = false;
 
             document.getElementById('unit_Unit').disabled = false;
+
+            setTimeout(function () {
+                $("#loadingModalUnit").hide();
+                $("#UnitDetailForm").show();
+                $('#cmdSaveUnitButton').prop('disabled', false);
+            }, 500);
         }
 
         // =========
         // Edit Unit
         // =========
         function btnEditUnit_OnClick() {
-            units.editItem(units.currentItem);
             $('#unitEdit').modal({
                 show: true,
                 backdrop: 'static'
@@ -2817,11 +2788,17 @@
                 });
             });
 
-            $('#cmdSaveUnitButton').prop('disabled', false);
-            $('#cmdUnitDetailCloseButton').prop('disabled', false);
+            $("#loadingModalUnit").show();
+            document.getElementById("loadingModalUnit").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#UnitDetailForm").hide();
 
+            document.getElementById("cmdSaveUnitButton").innerHTML = '<i class="fa fa-save"></i> Save';
+            $('#cmdSaveUnitButton').prop('disabled', true);
+            $('#cmdUnitDetailCloseButton').prop('disabled', false);
+            
+            units.editItem(units.currentItem);
             var unit = units.currentEditItem;
-            document.getElementById('unit_id').value = unit.Id ? unit.Id : '';
+            unitId = unit.Id ? unit.Id : '';
             document.getElementById('unit_Unit').value = unit.Unit ? unit.Unit : '';
             document.getElementById('unit_Lock').checked = unit.IsLocked;
 
@@ -2830,6 +2807,12 @@
             } else {
                 document.getElementById('unit_Unit').disabled = false;
             }
+
+            setTimeout(function () {
+                $("#loadingModalUnit").hide();
+                $("#UnitDetailForm").show();
+                $('#cmdSaveUnitButton').prop('disabled', false);
+            }, 500);
         }
 
         // =====================
@@ -2843,8 +2826,7 @@
                     $(this).css({
                         "border": "1px solid red"
                     });
-                }
-                else {
+                } else {
                     $(this).css({
                         "border": "",
                     });
@@ -2886,14 +2868,12 @@
         // =========
         function btnUnitSaveButton_OnClick() {
             var unitObject = new Object();
-            var unitId = document.getElementById('unit_id').value;
             unitObject.Unit = document.getElementById('unit_Unit').value;
             unitObject.IsLocked = document.getElementById('unit_Lock').checked;
             var unitData = JSON.stringify(unitObject);
 
-            if (unitEntryValidation() == false) {
-                toastr.error("Invalid entry");
-            } else {
+            if (unitEntryValidation()) {
+                document.getElementById("cmdSaveUnitButton").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving';
                 $('#cmdSaveUnitButton').prop('disabled', true);
                 $('#cmdUnitDetailCloseButton').prop('disabled', true);
 
@@ -2906,17 +2886,14 @@
                         data: unitData,
                         success: function (id) {
                             if (id > 0) {
-                                $('#cmdSaveUnitButton').prop('disabled', true);
-                                $('#cmdUnitDetailCloseButton').prop('disabled', true);
                                 toastr.success("Save Successful");
-
                                 $('#unitEdit').modal('hide');
-
                                 refreshUnitFlexgrid();
                             } else {
+                                toastr.error("Internal Server Error");
+                                document.getElementById("cmdSaveUnitButton").innerHTML = '<i class="fa fa-save"></i> Save';
                                 $('#cmdSaveUnitButton').prop('disabled', false);
                                 $('#cmdUnitDetailCloseButton').prop('disabled', false);
-                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -2929,27 +2906,27 @@
                         data: unitData,
                         statusCode: {
                             200: function () {
-                                $('#cmdSaveUnitButton').prop('disabled', true);
-                                $('#cmdUnitDetailCloseButton').prop('disabled', true);
                                 toastr.success("Update Successful");
-
                                 $('#unitEdit').modal('hide');
-
                                 refreshUnitFlexgrid();
                             },
                             404: function () {
                                 toastr.error("Not Found");
+                                document.getElementById("cmdSaveUnitButton").innerHTML = '<i class="fa fa-save"></i> Save';
                                 $('#cmdSaveUnitButton').prop('disabled', false);
                                 $('#cmdUnitDetailCloseButton').prop('disabled', false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                document.getElementById("cmdSaveUnitButton").innerHTML = '<i class="fa fa-save"></i> Save';
                                 $('#cmdSaveUnitButton').prop('disabled', false);
                                 $('#cmdUnitDetailCloseButton').prop('disabled', false);
                             }
                         }
                     });
                 }
+            } else {
+                toastr.error("Invalid entry");
             }
         }
 
@@ -2957,16 +2934,25 @@
         // DELETE Unit
         // ===========
         function btnDeletetUnit_OnClick() {
-            $('#deleteUnitConfirm').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            units.editItem(units.currentItem);
+            var unit = units.currentEditItem;
+            if (unit.IsLocked) {
+                toastr.error("Delete is not allowed when the selected record is locked!");
+            } else {
+                $('#deleteUnitConfirm').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
 
-            $('#cmdConfirmDeleteUnit').prop('disabled', false);
-            $('#cmdConfirmDeleteCloseButtonUnit').prop('disabled', false);
+                document.getElementById("cmdConfirmDeleteUnit").innerHTML = '<i class="fa fa-trash"></i> Delete';
+                $('#cmdConfirmDeleteUnit').prop('disabled', false);
+                $('#cmdConfirmDeleteCloseButtonUnit').prop('disabled', false);
+            }
         }
+
         // Unit Confirm Delete Button
         function cmdUnitConfirmDeleteButton_OnClick() {
+            document.getElementById("cmdConfirmDeleteUnit").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Deleting';
             $('#cmdConfirmDeleteUnit').prop('disabled', true);
             $('#cmdConfirmDeleteCloseButtonUnit').prop('disabled', true);
 
@@ -2979,25 +2965,23 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $('#cmdConfirmDeleteUnit').prop('disabled', true);
-                        $('#cmdConfirmDeleteCloseButtonUnit').prop('disabled', true);
-                        toastr.success("Update Successful");
-
+                        toastr.success("Delete Successful");
                         $('#deleteUnitConfirm').modal('hide');
-
                         refreshUnitFlexgrid();
                     },
                     404: function () {
                         toastr.error("Not Found");
+                        $('#deleteUnitConfirm').modal('hide');
+                        document.getElementById("cmdConfirmDeleteUnit").innerHTML = '<i class="fa fa-trash"></i> Delete';
                         $('#cmdConfirmDeleteUnit').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonUnit').prop('disabled', false);
-                        $('#deleteUnitConfirm').modal('hide');
                     },
                     400: function () {
                         toastr.error("Bad Request");
+                        $('#deleteUnitConfirm').modal('hide');
+                        document.getElementById("cmdConfirmDeleteUnit").innerHTML = '<i class="fa fa-trash"></i> Delete';
                         $('#cmdConfirmDeleteUnit').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonUnit').prop('disabled', false);
-                        $('#deleteUnitConfirm').modal('hide');
                     }
                 }
             });
@@ -3071,7 +3055,6 @@
 
             unitGrid.trackChanges = true;
 
-            //Navigation button for Unit
             btnFirstPageGridUnit = document.getElementById('btnMoveToFirstPageGridUnit');
             btnPreviousPageGridUnit = document.getElementById('btnMoveToPreviousPageGridUnit');
             btnNextPageGridUnit = document.getElementById('btnMoveToNextPageGridUnit');
@@ -3084,14 +3067,17 @@
                 units.moveToFirstPage();
                 updateNavigateButtonsUnit();
             });
+
             btnPreviousPageGridUnit.addEventListener('click', function () {
                 units.moveToPreviousPage();
                 updateNavigateButtonsUnit();
             });
+
             btnNextPageGridUnit.addEventListener('click', function () {
                 units.moveToNextPage();
                 updateNavigateButtonsUnit();
             });
+
             btnLastPageGridUnit.addEventListener('click', function () {
                 units.moveToLastPage();
                 updateNavigateButtonsUnit();
@@ -3113,6 +3099,7 @@
         var btnNextPageGridTerm;
         var btnLastPageGridTerm;
         var btnCurrentPageGridTerm;
+        var termId = 0;
 
         // =============
         // GET Term List
@@ -3129,39 +3116,21 @@
                 success: function (termResults) {
                     if (termResults.length > 0) {
                         for (i = 0; i < termResults.length; i++) {
-
                             var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled;
-
-                            if (canDelete == "True") {
-                                deleteDisabled = "";
-                            } else if (canDelete == "False") {
+                            var deleteDisabled = "";
+                            if (canDelete == "False") {
                                 deleteDisabled = "disabled";
-                            } else {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var btnDeleteId;
-                            if (termResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteTermLock_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                            } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteTerm_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             }
 
                             var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled;
-
-                            if (canEdit == "True") {
-                                editDisabled = "";
-                            } else if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            } else {
+                            var editDisabled = "";
+                            if (canEdit == "False") {
                                 editDisabled = "disabled";
                             }
 
                             terms.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditTerm_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: btnDeleteId,
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteTerm_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
                                 Id: termResults[i]["Id"],
                                 Term: termResults[i]["Term"],
                                 NumberOfDays: termResults[i]["NumberOfDays"],
@@ -3176,22 +3145,12 @@
 
                         }
                     }
+
                     NProgress.done();
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
-            return terms;
-        }
 
-        // =======================
-        // Term Delete Lock Button
-        // =======================
-        function btnDeleteTermLock_OnClick() {
-            $('#deleteRecordLock').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            return terms;
         }
 
         // ===========================
@@ -3248,10 +3207,15 @@
                 });
             });
 
-            $('#cmdSaveTermButton').prop('disabled', false);
+            $("#loadingModalTerm").show();
+            document.getElementById("loadingModalTerm").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#TermDetailForm").hide();
+
+            document.getElementById("cmdSaveTermButton").innerHTML = '<i class="fa fa-save"></i> Save';
+            $('#cmdSaveTermButton').prop('disabled', true);
             $('#cmdTermDetailCloseButton').prop('disabled', false);
 
-            document.getElementById('term_id').value = 0;
+            termId = 0;
             document.getElementById('term_Term').value = "NA";
             document.getElementById('term_NoOfDays').value = "0";
             document.getElementById('term_Lock').checked = false;
@@ -3259,6 +3223,12 @@
             document.getElementById('term_Term').disabled = false;
             document.getElementById('term_NoOfDays').disabled = false;
             document.getElementById('termLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+
+            setTimeout(function () {
+                $("#loadingModalTerm").hide();
+                $("#TermDetailForm").show();
+                $('#cmdSaveTermButton').prop('disabled', false);
+            }, 500);
         }
 
         // =========
@@ -3277,11 +3247,16 @@
                 });
             });
 
-            $('#cmdSaveTermButton').prop('disabled', false);
+            $("#loadingModalTerm").show();
+            document.getElementById("loadingModalTerm").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#TermDetailForm").hide();
+
+            document.getElementById("cmdSaveTermButton").innerHTML = '<i class="fa fa-save"></i> Save';
+            $('#cmdSaveTermButton').prop('disabled', true);
             $('#cmdTermDetailCloseButton').prop('disabled', false);
 
             var term = terms.currentEditItem;
-            document.getElementById('term_id').value = term.Id ? term.Id : '';
+            termId = term.Id;
             document.getElementById('term_Term').value = term.Term ? term.Term : '';
             document.getElementById('term_NoOfDays').value = term.NumberOfDays;
             document.getElementById('term_Lock').checked = term.IsLocked;
@@ -3297,6 +3272,12 @@
 
                 document.getElementById('termLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
             }
+
+            setTimeout(function () {
+                $("#loadingModalTerm").hide();
+                $("#TermDetailForm").show();
+                $('#cmdSaveTermButton').prop('disabled', false);
+            }, 500);
         }
 
         // =====================
@@ -3310,8 +3291,7 @@
                     $(this).css({
                         "border": "1px solid red"
                     });
-                }
-                else {
+                } else {
                     $(this).css({
                         "border": "",
                     });
@@ -3353,15 +3333,13 @@
         // =========
         function btnTermSaveButton_OnClick() {
             var termObject = new Object();
-            var termId = document.getElementById('term_id').value;
             termObject.Term = document.getElementById('term_Term').value;
             termObject.NumberOfDays = document.getElementById('term_NoOfDays').value;
             termObject.IsLocked = document.getElementById('term_Lock').checked;
             var termData = JSON.stringify(termObject);
 
-            if (termEntryValidation() == false) {
-                toastr.error("Invalid entry");
-            } else {
+            if (termEntryValidation()) {
+                document.getElementById("cmdSaveTermButton").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving';
                 $('#cmdSaveTermButton').prop('disabled', true);
                 $('#cmdTermDetailCloseButton').prop('disabled', true);
 
@@ -3374,17 +3352,14 @@
                         data: termData,
                         success: function (id) {
                             if (id > 0) {
-                                $('#cmdSaveTermButton').prop('disabled', true);
-                                $('#cmdTermDetailCloseButton').prop('disabled', true);
                                 toastr.success("Save Successful");
-
                                 $('#termEdit').modal('hide');
-
                                 refreshTermFlexgrid();
                             } else {
+                                toastr.error("Internal Server Error");
+                                document.getElementById("cmdSaveTermButton").innerHTML = '<i class="fa fa-save"></i> Save';
                                 $('#cmdSaveTermButton').prop('disabled', false);
                                 $('#cmdTermDetailCloseButton').prop('disabled', false);
-                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -3397,27 +3372,27 @@
                         data: termData,
                         statusCode: {
                             200: function () {
-                                $('#cmdSaveTermButton').prop('disabled', true);
-                                $('#cmdTermDetailCloseButton').prop('disabled', true);
                                 toastr.success("Update Successful");
-
                                 $('#termEdit').modal('hide');
-
                                 refreshTermFlexgrid();
                             },
                             404: function () {
                                 toastr.error("Not Found");
+                                document.getElementById("cmdSaveTermButton").innerHTML = '<i class="fa fa-save"></i> Save';
                                 $('#cmdSaveTermButton').prop('disabled', false);
                                 $('#cmdTermDetailCloseButton').prop('disabled', false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                document.getElementById("cmdSaveTermButton").innerHTML = '<i class="fa fa-save"></i> Save';
                                 $('#cmdSaveTermButton').prop('disabled', false);
                                 $('#cmdTermDetailCloseButton').prop('disabled', false);
                             }
                         }
                     });
                 }
+            } else {
+                toastr.error("Invalid entry");
             }
         }
 
@@ -3425,16 +3400,25 @@
         // DELETE Term
         // ===========
         function btnDeleteTerm_OnClick() {
-            $('#deleteTermConfirm').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            terms.editItem(terms.currentItem);
+            var term = terms.currentEditItem;
+            if (term.IsLocked) {
+                toastr.error("Delete is not allowed when the selected record is locked!");
+            } else {
+                $('#deleteTermConfirm').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
 
-            $('#cmdConfirmDeleteTerm').prop('disabled', false);
-            $('#cmdConfirmDeleteCloseButtonTerm').prop('disabled', false);
+                document.getElementById("cmdConfirmDeleteTerm").innerHTML = '<i class="fa fa-trash"></i> Delete';
+                $('#cmdConfirmDeleteTerm').prop('disabled', false);
+                $('#cmdConfirmDeleteCloseButtonTerm').prop('disabled', false);
+            }
         }
+
         // Term Confirm Delete Button
         function cmdTermConfirmDeleteButton_OnClick() {
+            document.getElementById("cmdConfirmDeleteTerm").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Deleting';
             $('#cmdConfirmDeleteTerm').prop('disabled', true);
             $('#cmdConfirmDeleteCloseButtonTerm').prop('disabled', true);
 
@@ -3447,25 +3431,23 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $('#cmdConfirmDeleteTerm').prop('disabled', true);
-                        $('#cmdConfirmDeleteCloseButtonTerm').prop('disabled', true);
                         toastr.success("Delete Successful");
-
                         $('#deleteTermConfirm').modal('hide');
-
                         refreshTermFlexgrid();
                     },
                     404: function () {
                         toastr.error("Not Found");
+                        $('#deleteTermConfirm').modal('hide');
+                        document.getElementById("cmdConfirmDeleteTerm").innerHTML = '<i class="fa fa-trash"></i> Delete';
                         $('#cmdConfirmDeleteTerm').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonTerm').prop('disabled', false);
-                        $('#deleteTermConfirm').modal('hide');
                     },
                     400: function () {
                         toastr.error("Bad Request");
+                        $('#deleteTermConfirm').modal('hide');
+                        document.getElementById("cmdConfirmDeleteTerm").innerHTML = '<i class="fa fa-trash"></i> Delete';
                         $('#cmdConfirmDeleteTerm').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonTerm').prop('disabled', false);
-                        $('#deleteTermConfirm').modal('hide');
                     }
                 }
             });
@@ -4272,19 +4254,20 @@
         // ==================================
         var articlegroups;
         var articleGroupGrid;
-        var articleGroupAccounts;
-        var articleTypes;
-        var cboArticleType;
-        var cboArticleGroupAccountCode;
-        var cboArticleGroupAccount;
-        var cboArticleGroupSaleAccountCode;
-        var cboArticleGroupSaleAccount;
-        var cboArticleGroupCostAccountCode;
-        var cboArticleGroupCostAccount;
-        var cboArticleGroupAssetAccountCode;
-        var cboArticleGroupAssetAccount;
-        var cboArticleGroupExpenseAccountCode;
-        var cboArticleGroupExpenseAccount;
+
+        var articleGroupId = 0;
+        var cboArticleType = new wijmo.input.ComboBox('#cboArticleType');
+        var cboArticleGroupAccountCode = new wijmo.input.ComboBox('#cboArticleGroupAccountCode');
+        var cboArticleGroupSalesAccountCode = new wijmo.input.ComboBox('#cboArticleGroupSalesAccountCode');
+        var cboArticleGroupCostAccountCode = new wijmo.input.ComboBox('#cboArticleGroupCostAccountCode');
+        var cboArticleGroupAssetAccountCode = new wijmo.input.ComboBox('#cboArticleGroupAssetAccountCode');
+        var cboArticleGroupExpenseAccountCode = new wijmo.input.ComboBox('#cboArticleGroupExpenseAccountCode');
+        var cboArticleGroupAccount = new wijmo.input.ComboBox('#cboArticleGroupAccount');
+        var cboArticleGroupSalesAccount = new wijmo.input.ComboBox('#cboArticleGroupSalesAccount');
+        var cboArticleGroupCostAccount = new wijmo.input.ComboBox('#cboArticleGroupCostAccount');
+        var cboArticleGroupAssetAccount = new wijmo.input.ComboBox('#cboArticleGroupAssetAccount');
+        var cboArticleGroupExpenseAccount = new wijmo.input.ComboBox('#cboArticleGroupExpenseAccount');
+
         var btnFirstPageArticleGroup;
         var btnPreviousPageGridArticleGroup;
         var btnNextPageGridArticleGroup;
@@ -4302,43 +4285,24 @@
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                data: {},
                 success: function (articleGroupResults) {
                     if (articleGroupResults.length > 0) {
                         for (i = 0; i < articleGroupResults.length; i++) {
-
                             var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled;
-
-                            if (canDelete == "True") {
-                                deleteDisabled = "";
-                            } else if (canDelete == "False") {
+                            var deleteDisabled = "";
+                            if (canDelete == "False") {
                                 deleteDisabled = "disabled";
-                            } else {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var btnDeleteId;
-                            if (articleGroupResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticleGroupLock_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                            } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticleGroup_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             }
 
                             var canEdit = "@ViewData["CanEdit"]";
                             var editDisabled;
-
-                            if (canEdit == "True") {
-                                editDisabled = "";
-                            } else if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            } else {
+                            if (canEdit == "False") {
                                 editDisabled = "disabled";
                             }
 
                             articlegroups.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditArticleGroup_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: btnDeleteId,
+                                DeleteId: btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticleGroup_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
                                 Id: articleGroupResults[i]["Id"],
                                 ArticleGroup: articleGroupResults[i]["ArticleGroup"],
                                 ArticleTypeId: articleGroupResults[i]["ArticleTypeId"],
@@ -4369,22 +4333,12 @@
 
                         }
                     }
+
                     NProgress.done();
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
-            return articlegroups;
-        }
 
-        // ================================
-        // Article Group Delete Lock Button
-        // ================================
-        function btnDeleteArticleGroupLock_OnClick() {
-            $('#deleteRecordLock').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            return articlegroups;
         }
 
         // ====================================
@@ -4429,340 +4383,221 @@
         // ================
         // Get Article Type
         // ================
-        function getArticleType() {
-            articleTypes = new wijmo.collections.ObservableArray();
+        function getArticleType(articleTypeId, acccountId, salesAccountId, costAccountId, assetAccountId, expenseAccountId, isLocked) {
+            var articleTypesObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listArticleType',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                data: {},
                 success: function (articleTypeResults) {
                     if (articleTypeResults.length > 0) {
                         for (i = 0; i < articleTypeResults.length; i++) {
-                            articleTypes.push({
-                                ArticleTypeId: articleTypeResults[i]["Id"],
+                            articleTypesObservableArray.push({
+                                Id: articleTypeResults[i]["Id"],
                                 ArticleType: articleTypeResults[i]["ArticleType"]
                             });
                         }
-                        createCboForArticleType(articleTypes);
-                    } else {
-                        createCboForArticleType(articleTypes);
                     }
+
+                    var disabled = true;
+                    if (articleTypeResults.length > 0) {
+                        if (!isLocked) {
+                            disabled = false;
+                        }
+
+                        $('#cmdSaveArticleGroupButton').prop('disabled', false);
+                    } else {
+                        $('#cmdSaveArticleGroupButton').prop('disabled', true);
+                    }
+
+                    cboArticleType.dispose();
+                    cboArticleType = new wijmo.input.ComboBox('#cboArticleType', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleTypesObservableArray,
+                        displayMemberPath: "ArticleType",
+                        selectedValuePath: "Id",
+                        selectedValue: articleTypeId
+                    });
+
+                    getArticleGroupAccount(acccountId, salesAccountId, costAccountId, assetAccountId, expenseAccountId, isLocked);
                 }
             });
-        }
-
-        // ===================================================
-        // Create cbo for article group Article Type combo box
-        // ===================================================
-        function createCboForArticleType(articleTypes) {
-            var articleTypeCollection = new wijmo.collections.CollectionView(articleTypes);
-            var aeticleTypeList = new Array();
-            for (var i = 0; i < articleTypeCollection.items.length; i++) {
-                aeticleTypeList.push(articleTypeCollection.items[i].ArticleType);
-            }
-
-            var disabled;
-            if (articleTypes == 0) {
-                disabled = true;
-            } else {
-                if (document.getElementById('articleGroup_Lock').checked == true) {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
-
-            cboArticleType.dispose();
-            cboArticleType = new wijmo.input.ComboBox('#articleGroup_ArticleType', {
-                disabled: disabled,
-                placeholder: "Article Type",
-                itemsSource: aeticleTypeList,
-                isEditable: false,
-                selectedValue: document.getElementById('articleGroup_ArticleType_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#articleGroup_ArticleType_data").val(articleTypeCollection.items[this.selectedIndex].ArticleTypeId);
-                    $("#articleGroup_ArticleType_selectedValue").val(articleTypeCollection.items[this.selectedIndex].ArticleType);
-                }
-            });
-
-            document.getElementById('articleGroup_ArticleType_data').value = articleTypeCollection.items[cboArticleType.selectedIndex].ArticleTypeId;
-            document.getElementById('articleGroup_ArticleType_selectedValue').value = articleTypeCollection.items[cboArticleType.selectedIndex].ArticleType;
         }
 
         // ============================================
         // Get Account list for article group combo box
         // ============================================
-        function getArticleGroupAccount() {
-            articleGroupAccounts = new wijmo.collections.ObservableArray();
+        function getArticleGroupAccount(acccountId, salesAccountId, costAccountId, assetAccountId, expenseAccountId, isLocked) {
+            var articleGroupAccountsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listAccount',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                data: {},
                 success: function (articleGroupAccountResults) {
                     if (articleGroupAccountResults.length > 0) {
                         for (i = 0; i < articleGroupAccountResults.length; i++) {
-                            articleGroupAccounts.push({
-                                AccountId: articleGroupAccountResults[i]["Id"],
+                            articleGroupAccountsObservableArray.push({
+                                Id: articleGroupAccountResults[i]["Id"],
                                 AccountCode: articleGroupAccountResults[i]["AccountCode"],
                                 Account: articleGroupAccountResults[i]["Account"]
                             });
                         }
-                        createCboForArticleGroupAccountCode(articleGroupAccounts);
-                        createCboForArticleGroupAccount(articleGroupAccounts);
-                    } else {
-                        createCboForArticleGroupAccountCode(articleGroupAccounts);
-                        createCboForArticleGroupAccount(articleGroupAccounts);
                     }
+
+                    var disabled = true;
+                    if (articleGroupAccountResults.length > 0) {
+                        if (!isLocked) {
+                            disabled = false;
+                        }
+                    } else {
+                        $('#cmdSaveArticleGroupButton').prop('disabled', true);
+                    }
+
+                    // =============
+                    // Account Codes
+                    // =============
+                    cboArticleGroupAccountCode.dispose();
+                    cboArticleGroupAccountCode = new wijmo.input.ComboBox('#cboArticleGroupAccountCode', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupAccountsObservableArray,
+                        displayMemberPath: "AccountCode",
+                        selectedValuePath: "Id",
+                        selectedValue: acccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupAccount.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupSalesAccountCode.dispose();
+                    cboArticleGroupSalesAccountCode = new wijmo.input.ComboBox('#cboArticleGroupSalesAccountCode', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupAccountsObservableArray,
+                        displayMemberPath: "AccountCode",
+                        selectedValuePath: "Id",
+                        selectedValue: salesAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupSalesAccount.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupCostAccountCode.dispose();
+                    cboArticleGroupCostAccountCode = new wijmo.input.ComboBox('#cboArticleGroupCostAccountCode', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupAccountsObservableArray,
+                        displayMemberPath: "AccountCode",
+                        selectedValuePath: "Id",
+                        selectedValue: costAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupCostAccount.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupAssetAccountCode.dispose();
+                    cboArticleGroupAssetAccountCode = new wijmo.input.ComboBox('#cboArticleGroupAssetAccountCode', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupAccountsObservableArray,
+                        displayMemberPath: "AccountCode",
+                        selectedValuePath: "Id",
+                        selectedValue: assetAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupAssetAccount.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupExpenseAccountCode.dispose();
+                    cboArticleGroupExpenseAccountCode = new wijmo.input.ComboBox('#cboArticleGroupExpenseAccountCode', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupAccountsObservableArray,
+                        displayMemberPath: "AccountCode",
+                        selectedValuePath: "Id",
+                        selectedValue: expenseAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupExpenseAccount.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    // =======
+                    // Account
+                    // =======
+                    cboArticleGroupAccount.dispose();
+                    cboArticleGroupAccount = new wijmo.input.ComboBox('#cboArticleGroupAccount', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupAccountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id",
+                        selectedValue: acccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupAccountCode.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupSalesAccount.dispose();
+                    cboArticleGroupSalesAccount = new wijmo.input.ComboBox('#cboArticleGroupSalesAccount', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupAccountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id",
+                        selectedValue: salesAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupSalesAccountCode.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupCostAccount.dispose();
+                    cboArticleGroupCostAccount = new wijmo.input.ComboBox('#cboArticleGroupCostAccount', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupAccountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id",
+                        selectedValue: costAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupCostAccountCode.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupAssetAccount.dispose();
+                    cboArticleGroupAssetAccount = new wijmo.input.ComboBox('#cboArticleGroupAssetAccount', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupAccountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id",
+                        selectedValue: assetAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupAssetAccountCode.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupExpenseAccount.dispose();
+                    cboArticleGroupExpenseAccount = new wijmo.input.ComboBox('#cboArticleGroupExpenseAccount', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupAccountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id",
+                        selectedValue: expenseAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupExpenseAccountCode.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    setTimeout(function () {
+                        $("#loadingModalArticleGroup").hide();
+                        $("#articleGroupDetailForm").show();
+                    }, 500);
                 }
             });
-        }
-
-        // ===============================================
-        // Create combo box for article group Account Code
-        // ===============================================
-        function createCboForArticleGroupAccountCode(articleGroupAccounts) {
-            var accountCodeCollection = new wijmo.collections.CollectionView(articleGroupAccounts);
-            var accountCodeList = new Array();
-            for (var i = 0; i < accountCodeCollection.items.length; i++) {
-                accountCodeList.push(accountCodeCollection.items[i].AccountCode);
-            }
-
-            var disabled;
-            if (articleGroupAccounts == 0) {
-                disabled = true;
-            } else {
-                if (document.getElementById('articleGroup_Lock').checked == true) {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
-
-            cboArticleGroupAccountCode.dispose();
-            cboArticleGroupAccountCode = new wijmo.input.ComboBox('#articleGroup_AccountCode', {
-                disabled: disabled,
-                placeholder: "Code",
-                itemsSource: accountCodeList,
-                isEditable: false,
-                selectedValue: document.getElementById('articleGroup_AccountCode_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#articleGroup_Account_data').val(accountCodeCollection.items[this.selectedIndex].AccountId);
-                    $('#articleGroup_Account_selectedValue').val(accountCodeCollection.items[this.selectedIndex].Account);
-                    $('#articleGroup_AccountCode_selectedValue').val(accountCodeCollection.items[this.selectedIndex].AccountCode);
-
-                    createCboForArticleGroupAccount(articleGroupAccounts);
-                }
-            });
-
-            document.getElementById('articleGroup_Account_data').value = accountCodeCollection.items[cboArticleGroupAccountCode.selectedIndex].AccountId;
-            document.getElementById('articleGroup_Account_selectedValue').value = accountCodeCollection.items[cboArticleGroupAccountCode.selectedIndex].Account;
-            document.getElementById('articleGroup_AccountCode_selectedValue').value = accountCodeCollection.items[cboArticleGroupAccountCode.selectedIndex].AccountCode;
-
-            cboArticleGroupSaleAccountCode.dispose();
-            cboArticleGroupSaleAccountCode = new wijmo.input.ComboBox('#articleGroup_SalesAccountCode', {
-                disabled: disabled,
-                placeholder: "Code",
-                itemsSource: accountCodeList,
-                isEditable: false,
-                selectedValue: document.getElementById('articleGroup_SalesAccountCode_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#articleGroup_SalesAccount_data').val(accountCodeCollection.items[this.selectedIndex].AccountId);
-                    $('#articleGroup_SalesAccount_selectedValue').val(accountCodeCollection.items[this.selectedIndex].Account);
-                    $('#articleGroup_SalesAccountCode_selectedValue').val(accountCodeCollection.items[this.selectedIndex].AccountCode);
-
-                    createCboForArticleGroupAccount(articleGroupAccounts);
-                }
-            });
-
-            document.getElementById('articleGroup_SalesAccount_data').value = accountCodeCollection.items[cboArticleGroupSaleAccountCode.selectedIndex].AccountId;
-            document.getElementById('articleGroup_SalesAccount_selectedValue').value = accountCodeCollection.items[cboArticleGroupSaleAccountCode.selectedIndex].Account;
-            document.getElementById('articleGroup_SalesAccountCode_selectedValue').value = accountCodeCollection.items[cboArticleGroupSaleAccountCode.selectedIndex].AccountCode;
-
-            cboArticleGroupCostAccountCode.dispose();
-            cboArticleGroupCostAccountCode = new wijmo.input.ComboBox('#articleGroup_CostAccountCode', {
-                disabled: disabled,
-                placeholder: "Code",
-                itemsSource: accountCodeList,
-                isEditable: false,
-                selectedValue: document.getElementById('articleGroup_CostAccountCode_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#articleGroup_CostAccount_data').val(accountCodeCollection.items[this.selectedIndex].AccountId);
-                    $('#articleGroup_CostAccount_selectedValue').val(accountCodeCollection.items[this.selectedIndex].Account);
-                    $('#articleGroup_CostAccountCode_selectedValue').val(accountCodeCollection.items[this.selectedIndex].AccountCode);
-
-                    createCboForArticleGroupAccount(articleGroupAccounts);
-                }
-            });
-
-            document.getElementById('articleGroup_CostAccount_data').value = accountCodeCollection.items[cboArticleGroupCostAccountCode.selectedIndex].AccountId;
-            document.getElementById('articleGroup_CostAccount_selectedValue').value = accountCodeCollection.items[cboArticleGroupCostAccountCode.selectedIndex].Account;
-            document.getElementById('articleGroup_CostAccountCode_selectedValue').value = accountCodeCollection.items[cboArticleGroupCostAccountCode.selectedIndex].AccountCode;
-
-            cboArticleGroupAssetAccountCode.dispose();
-            cboArticleGroupAssetAccountCode = new wijmo.input.ComboBox('#articleGroup_AssetAccountCode', {
-                disabled: disabled,
-                placeholder: "Code",
-                itemsSource: accountCodeList,
-                isEditable: false,
-                selectedValue: document.getElementById('articleGroup_AssetAccountCode_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#articleGroup_AssetAccount_data').val(accountCodeCollection.items[this.selectedIndex].AccountId);
-                    $('#articleGroup_AssetAccount_selectedValue').val(accountCodeCollection.items[this.selectedIndex].Account);
-                    $('#articleGroup_AssetAccountCode_selectedValue').val(accountCodeCollection.items[this.selectedIndex].AccountCode);
-
-                    createCboForArticleGroupAccount(articleGroupAccounts);
-                }
-            });
-
-            document.getElementById('articleGroup_AssetAccount_data').value = accountCodeCollection.items[cboArticleGroupAssetAccountCode.selectedIndex].AccountId;
-            document.getElementById('articleGroup_AssetAccount_selectedValue').value = accountCodeCollection.items[cboArticleGroupAssetAccountCode.selectedIndex].Account;
-            document.getElementById('articleGroup_AssetAccountCode_selectedValue').value = accountCodeCollection.items[cboArticleGroupAssetAccountCode.selectedIndex].AccountCode;
-
-            cboArticleGroupExpenseAccountCode.dispose();
-            cboArticleGroupExpenseAccountCode = new wijmo.input.ComboBox('#articleGroup_ExpenseAccountCode', {
-                disabled: disabled,
-                placeholder: "Code",
-                itemsSource: accountCodeList,
-                isEditable: false,
-                selectedValue: document.getElementById('articleGroup_ExpenseAccountCode_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#articleGroup_ExpenseAccount_data').val(accountCodeCollection.items[this.selectedIndex].AccountId);
-                    $('#articleGroup_ExpenseAccount_selectedValue').val(accountCodeCollection.items[this.selectedIndex].Account);
-                    $('#articleGroup_ExpenseAccountCode_selectedValue').val(accountCodeCollection.items[this.selectedIndex].AccountCode);
-
-                    createCboForArticleGroupAccount(articleGroupAccounts);
-                }
-            });
-
-            document.getElementById('articleGroup_ExpenseAccount_data').value = accountCodeCollection.items[cboArticleGroupExpenseAccountCode.selectedIndex].AccountId;
-            document.getElementById('articleGroup_ExpenseAccount_selectedValue').value = accountCodeCollection.items[cboArticleGroupExpenseAccountCode.selectedIndex].Account;
-            document.getElementById('articleGroup_ExpenseAccountCode_selectedValue').value = accountCodeCollection.items[cboArticleGroupExpenseAccountCode.selectedIndex].AccountCode;
-        }
-
-        // ==========================================
-        // Create combo box for article group Account
-        // ==========================================
-        function createCboForArticleGroupAccount(articleGroupAccounts) {
-            var accountCollection = new wijmo.collections.CollectionView(articleGroupAccounts);
-            var accountList = new Array();
-            for (var i = 0; i < accountCollection.items.length; i++) {
-                accountList.push(accountCollection.items[i].Account);
-            }
-
-            var disabled;
-            if (articleGroupAccounts == 0) {
-                disabled = true;
-            } else {
-                if (document.getElementById('articleGroup_Lock').checked == true) {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
-
-            cboArticleGroupAccount.dispose();
-            cboArticleGroupAccount = new wijmo.input.ComboBox('#articleGroup_Account', {
-                disabled: disabled,
-                placeholder: "Account",
-                itemsSource: accountList,
-                isEditable: false,
-                selectedValue: document.getElementById('articleGroup_Account_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#articleGroup_Account_data').val(accountCollection.items[this.selectedIndex].AccountId);
-                    $('#articleGroup_AccountCode_selectedValue').val(accountCollection.items[this.selectedIndex].AccountCode);
-                    $('#articleGroup_Account_selectedValue').val(accountCollection.items[this.selectedIndex].Account);
-
-                    createCboForArticleGroupAccountCode(articleGroupAccounts);
-                }
-            });
-
-            document.getElementById('articleGroup_Account_data').value = accountCollection.items[cboArticleGroupAccount.selectedIndex].AccountId;
-            document.getElementById('articleGroup_AccountCode_selectedValue').value = accountCollection.items[cboArticleGroupAccount.selectedIndex].AccountCode;
-            document.getElementById('articleGroup_Account_selectedValue').value = accountCollection.items[cboArticleGroupAccount.selectedIndex].Account;
-
-            cboArticleGroupSaleAccount.dispose();
-            cboArticleGroupSaleAccount = new wijmo.input.ComboBox('#articleGroup_SalesAccount', {
-                disabled: disabled,
-                placeholder: "Sales Account",
-                itemsSource: accountList,
-                isEditable: false,
-                selectedValue: document.getElementById('articleGroup_SalesAccount_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#articleGroup_SalesAccount_data').val(accountCollection.items[this.selectedIndex].AccountId);
-                    $('#articleGroup_SalesAccountCode_selectedValue').val(accountCollection.items[this.selectedIndex].AccountCode);
-                    $('#articleGroup_SalesAccount_selectedValue').val(accountCollection.items[this.selectedIndex].Account);
-
-                    createCboForArticleGroupAccountCode(articleGroupAccounts);
-                }
-            });
-
-            document.getElementById('articleGroup_SalesAccount_data').value = accountCollection.items[cboArticleGroupSaleAccount.selectedIndex].AccountId;
-            document.getElementById('articleGroup_SalesAccountCode_selectedValue').value = accountCollection.items[cboArticleGroupSaleAccount.selectedIndex].AccountCode;
-            document.getElementById('articleGroup_SalesAccount_selectedValue').value = accountCollection.items[cboArticleGroupSaleAccount.selectedIndex].Account;
-
-            cboArticleGroupCostAccount.dispose();
-            cboArticleGroupCostAccount = new wijmo.input.ComboBox('#articleGroup_CostAccount', {
-                disabled: disabled,
-                placeholder: "Cost Account",
-                itemsSource: accountList,
-                isEditable: false,
-                selectedValue: document.getElementById('articleGroup_CostAccount_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#articleGroup_CostAccount_data').val(accountCollection.items[this.selectedIndex].AccountId);
-                    $('#articleGroup_CostAccountCode_selectedValue').val(accountCollection.items[this.selectedIndex].AccountCode);
-                    $('#articleGroup_CostAccount_selectedValue').val(accountCollection.items[this.selectedIndex].Account);
-
-                    createCboForArticleGroupAccountCode(articleGroupAccounts);
-                }
-            });
-
-            document.getElementById('articleGroup_CostAccount_data').value = accountCollection.items[cboArticleGroupCostAccount.selectedIndex].AccountId;
-            document.getElementById('articleGroup_CostAccountCode_selectedValue').value = accountCollection.items[cboArticleGroupCostAccount.selectedIndex].AccountCode;
-            document.getElementById('articleGroup_CostAccount_selectedValue').value = accountCollection.items[cboArticleGroupCostAccount.selectedIndex].Account;
-
-            cboArticleGroupAssetAccount.dispose();
-            cboArticleGroupAssetAccount = new wijmo.input.ComboBox('#articleGroup_AssetAccount', {
-                disabled: disabled,
-                placeholder: "Asset Account",
-                itemsSource: accountList,
-                isEditable: false,
-                selectedValue: document.getElementById('articleGroup_AssetAccount_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#articleGroup_AssetAccount_data').val(accountCollection.items[this.selectedIndex].AccountId);
-                    $('#articleGroup_AssetAccountCode_selectedValue').val(accountCollection.items[this.selectedIndex].AccountCode);
-                    $('#articleGroup_AssetAccount_selectedValue').val(accountCollection.items[this.selectedIndex].Account);
-
-                    createCboForArticleGroupAccountCode(articleGroupAccounts);
-                }
-            });
-
-            document.getElementById('articleGroup_AssetAccount_data').value = accountCollection.items[cboArticleGroupAssetAccount.selectedIndex].AccountId;
-            document.getElementById('articleGroup_AssetAccountCode_selectedValue').value = accountCollection.items[cboArticleGroupAssetAccount.selectedIndex].AccountCode;
-            document.getElementById('articleGroup_AssetAccount_selectedValue').value = accountCollection.items[cboArticleGroupAssetAccount.selectedIndex].Account;
-
-            cboArticleGroupExpenseAccount.dispose();
-            cboArticleGroupExpenseAccount = new wijmo.input.ComboBox('#articleGroup_ExpenseAccount', {
-                disabled: disabled,
-                placeholder: "Expense Account",
-                itemsSource: accountList,
-                isEditable: false,
-                selectedValue: document.getElementById('articleGroup_ExpenseAccount_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#articleGroup_ExpenseAccount_data').val(accountCollection.items[this.selectedIndex].AccountId);
-                    $('#articleGroup_ExpenseAccountCode_selectedValue').val(accountCollection.items[this.selectedIndex].AccountCode);
-                    $('#articleGroup_ExpenseAccount_selectedValue').val(accountCollection.items[this.selectedIndex].Account);
-
-                    createCboForArticleGroupAccountCode(articleGroupAccounts);
-                }
-            });
-
-            document.getElementById('articleGroup_ExpenseAccount_data').value = accountCollection.items[cboArticleGroupExpenseAccount.selectedIndex].AccountId;
-            document.getElementById('articleGroup_ExpenseAccountCode_selectedValue').value = accountCollection.items[cboArticleGroupExpenseAccount.selectedIndex].AccountCode;
-            document.getElementById('articleGroup_ExpenseAccount_selectedValue').value = accountCollection.items[cboArticleGroupExpenseAccount.selectedIndex].Account;
         }
 
         // =================
@@ -4780,42 +4615,27 @@
                 });
             });
 
-            $('#cmdSaveArticleGroupButton').prop('disabled', false);
+            $("#loadingModalArticleGroup").show();
+            document.getElementById("loadingModalArticleGroup").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#articleGroupDetailForm").hide();
+
+            document.getElementById("cmdSaveArticleGroupButton").innerHTML = '<i class="fa fa-save"></i> Save';
+            $('#cmdSaveArticleGroupButton').prop('disabled', true);
             $('#cmdArticleGroupDetailCloseButton').prop('disabled', false);
 
-            document.getElementById('articleGroup_id').value = 0;
+            articleGroupId = 0;
             document.getElementById('articleGroup_ArticleGroup').value = "NA";
-            document.getElementById('articleGroup_ArticleType_data').value = "";
-            document.getElementById('articleGroup_ArticleType_selectedValue').value = "";
-            document.getElementById('articleGroup_Account_data').value = "";
-            document.getElementById('articleGroup_AccountCode_selectedValue').value = "";
-            document.getElementById('articleGroup_Account_selectedValue').value = "";
-            document.getElementById('articleGroup_SalesAccount_data').value = "";
-            document.getElementById('articleGroup_SalesAccountCode_selectedValue').value = "";
-            document.getElementById('articleGroup_SalesAccount_selectedValue').value = "";
-            document.getElementById('articleGroup_CostAccount_data').value = "";
-            document.getElementById('articleGroup_CostAccountCode_selectedValue').value = "";
-            document.getElementById('articleGroup_CostAccount_selectedValue').value = "";
-            document.getElementById('articleGroup_AssetAccount_data').value = "";
-            document.getElementById('articleGroup_AssetAccountCode_selectedValue').value = "";
-            document.getElementById('articleGroup_AssetAccount_selectedValue').value = "";
-            document.getElementById('articleGroup_ExpenseAccount_data').value = "";
-            document.getElementById('articleGroup_ExpenseAccountCode_selectedValue').value = "";
-            document.getElementById('articleGroup_ExpenseAccount_selectedValue').value = "";
+            getArticleType(0, 0, 0, 0, 0, 0, false);
             document.getElementById('articleGroup_Lock').checked = false;
 
             document.getElementById('articleGroup_ArticleGroup').disabled = false;
             document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
-
-            getArticleType();
-            getArticleGroupAccount();
         }
 
         // ==================
         // Edit Article Group
         // ==================
         function btnEditArticleGroup_OnClick() {
-            articlegroups.editItem(articlegroups.currentItem);
             $('#articleGroupEdit').modal({
                 show: true,
                 backdrop: 'static'
@@ -4827,43 +4647,30 @@
                 });
             });
 
-            $('#cmdSaveArticleGroupButton').prop('disabled', false);
+            $("#loadingModalArticleGroup").show();
+            document.getElementById("loadingModalArticleGroup").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#articleGroupDetailForm").hide();
+
+            document.getElementById("cmdSaveArticleGroupButton").innerHTML = '<i class="fa fa-save"></i> Save';
+            $('#cmdSaveArticleGroupButton').prop('disabled', true);
             $('#cmdArticleGroupDetailCloseButton').prop('disabled', false);
 
+            articlegroups.editItem(articlegroups.currentItem);
             var articlegroup = articlegroups.currentEditItem;
-            document.getElementById('articleGroup_id').value = articlegroup.Id ? articlegroup.Id : '';
-            document.getElementById('articleGroup_ArticleGroup').value = articlegroup.ArticleGroup ? articlegroup.ArticleGroup : '';
-            document.getElementById('articleGroup_ArticleType_data').value = articlegroup.ArticleTypeId ? articlegroup.ArticleTypeId : '';
-            document.getElementById('articleGroup_ArticleType_selectedValue').value = articlegroup.ArticleType ? articlegroup.ArticleType : '';
-            document.getElementById('articleGroup_Account_data').value = articlegroup.AccountId ? articlegroup.AccountId : '';
-            document.getElementById('articleGroup_AccountCode_selectedValue').value = articlegroup.AccountCode ? articlegroup.AccountCode : '';
-            document.getElementById('articleGroup_Account_selectedValue').value = articlegroup.Account ? articlegroup.Account : '';
-            document.getElementById('articleGroup_SalesAccount_data').value = articlegroup.SalesAccountId ? articlegroup.SalesAccountId : '';
-            document.getElementById('articleGroup_SalesAccountCode_selectedValue').value = articlegroup.SalesAccountCode ? articlegroup.SalesAccountCode : '';
-            document.getElementById('articleGroup_SalesAccount_selectedValue').value = articlegroup.SalesAccount ? articlegroup.SalesAccount : '';
-            document.getElementById('articleGroup_CostAccount_data').value = articlegroup.CostAccountId ? articlegroup.CostAccountId : '';
-            document.getElementById('articleGroup_CostAccountCode_selectedValue').value = articlegroup.CostAccountCode ? articlegroup.CostAccountCode : '';
-            document.getElementById('articleGroup_CostAccount_selectedValue').value = articlegroup.CostAccount ? articlegroup.CostAccount : '';
-            document.getElementById('articleGroup_AssetAccount_data').value = articlegroup.AssetAccountId ? articlegroup.AssetAccountId : '';
-            document.getElementById('articleGroup_AssetAccountCode_selectedValue').value = articlegroup.AssetAccountCode ? articlegroup.AssetAccountCode : '';
-            document.getElementById('articleGroup_AssetAccount_selectedValue').value = articlegroup.AssetAccount ? articlegroup.AssetAccount : '';
-            document.getElementById('articleGroup_ExpenseAccount_data').value = articlegroup.ExpenseAccountId ? articlegroup.ExpenseAccountId : '';
-            document.getElementById('articleGroup_ExpenseAccountCode_selectedValue').value = articlegroup.ExpenseAccountCode ? articlegroup.ExpenseAccountCode : '';
-            document.getElementById('articleGroup_ExpenseAccount_selectedValue').value = articlegroup.ExpenseAccount ? articlegroup.ExpenseAccount : '';
+            articleGroupId = articlegroup.Id;
+            document.getElementById('articleGroup_ArticleGroup').value = articlegroup.ArticleGroup;
+            getArticleType(articlegroup.ArticleTypeId, articlegroup.AccountId, articlegroup.SalesAccountId, articlegroup.CostAccountId, articlegroup.AssetAccountId, articlegroup.ExpenseAccountId, articlegroup.IsLocked);
             document.getElementById('articleGroup_Lock').checked = articlegroup.IsLocked;
 
             if (document.getElementById('articleGroup_Lock').checked == true) {
                 document.getElementById('articleGroup_ArticleGroup').disabled = true;
                 document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
-                getArticleType();
-                getArticleGroupAccount();
             } else {
                 document.getElementById('articleGroup_ArticleGroup').disabled = false;
                 document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
-                getArticleType();
-                getArticleGroupAccount();
             }
         }
+
         // ==============================
         // Article Group Entry Validation
         // ==============================
@@ -4875,8 +4682,7 @@
                     $(this).css({
                         "border": "1px solid red"
                     });
-                }
-                else {
+                } else {
                     $(this).css({
                         "border": "",
                     });
@@ -4918,66 +4724,18 @@
         // ==================
         function btnArticleGroupSaveButton_OnClick() {
             var articleGroupObject = new Object();
-            var articleGroupId = document.getElementById('articleGroup_id').value;
             articleGroupObject.ArticleGroup = document.getElementById('articleGroup_ArticleGroup').value;
-            articleGroupObject.ArticleTypeId = document.getElementById('articleGroup_ArticleType_data').value;
-            articleGroupObject.AccountId = document.getElementById('articleGroup_Account_data').value;
-            articleGroupObject.SalesAccountId = document.getElementById('articleGroup_SalesAccount_data').value;
-            articleGroupObject.CostAccountId = document.getElementById('articleGroup_CostAccount_data').value;
-            articleGroupObject.AssetAccountId = document.getElementById('articleGroup_AssetAccount_data').value;
-            articleGroupObject.ExpenseAccountId = document.getElementById('articleGroup_ExpenseAccount_data').value;
+            articleGroupObject.ArticleTypeId = cboArticleType.selectedValue;
+            articleGroupObject.AccountId = cboArticleGroupAccount.selectedValue;
+            articleGroupObject.SalesAccountId = cboArticleGroupSalesAccount.selectedValue;
+            articleGroupObject.CostAccountId = cboArticleGroupCostAccount.selectedValue;
+            articleGroupObject.AssetAccountId = cboArticleGroupAssetAccount.selectedValue;
+            articleGroupObject.ExpenseAccountId = cboArticleGroupExpenseAccount.selectedValue;
             articleGroupObject.IsLocked = document.getElementById('articleGroup_Lock').checked;
             var articleGroupData = JSON.stringify(articleGroupObject);
 
-            if (document.getElementById('articleGroup_ArticleType_data').value == '') {
-                document.getElementById("articleGroup_ArticleType").style.border = "1px solid red";
-            } else {
-                document.getElementById("articleGroup_ArticleType").style.border = "1px solid #C8C8C8";
-            }
-
-            if (document.getElementById('articleGroup_Account_data').value == '') {
-                document.getElementById("articleGroup_AccountCode").style.border = "1px solid red";
-                document.getElementById("articleGroup_Account").style.border = "1px solid red";
-            } else {
-                document.getElementById("articleGroup_AccountCode").style.border = "1px solid #C8C8C8";
-                document.getElementById("articleGroup_Account").style.border = "1px solid #C8C8C8";
-            }
-
-            if (document.getElementById('articleGroup_SalesAccount_data').value == '') {
-                document.getElementById("articleGroup_SalesAccountCode").style.border = "1px solid red";
-                document.getElementById("articleGroup_SalesAccount").style.border = "1px solid red";
-            } else {
-                document.getElementById("articleGroup_SalesAccountCode").style.border = "1px solid #C8C8C8";
-                document.getElementById("articleGroup_SalesAccount").style.border = "1px solid #C8C8C8";
-            }
-
-            if (document.getElementById('articleGroup_CostAccount_data').value == '') {
-                document.getElementById("articleGroup_CostAccountCode").style.border = "1px solid red";
-                document.getElementById("articleGroup_CostAccount").style.border = "1px solid red";
-            } else {
-                document.getElementById("articleGroup_CostAccountCode").style.border = "1px solid #C8C8C8";
-                document.getElementById("articleGroup_CostAccount").style.border = "1px solid #C8C8C8";
-            }
-
-            if (document.getElementById('articleGroup_AssetAccount_data').value == '') {
-                document.getElementById("articleGroup_AssetAccountCode").style.border = "1px solid red";
-                document.getElementById("articleGroup_AssetAccount").style.border = "1px solid red";
-            } else {
-                document.getElementById("articleGroup_AssetAccountCode").style.border = "1px solid #C8C8C8";
-                document.getElementById("articleGroup_AssetAccount").style.border = "1px solid #C8C8C8";
-            }
-
-            if (document.getElementById('articleGroup_ExpenseAccount_data').value == '') {
-                document.getElementById("articleGroup_ExpenseAccountCode").style.border = "1px solid red";
-                document.getElementById("articleGroup_ExpenseAccount").style.border = "1px solid red";
-            } else {
-                document.getElementById("articleGroup_ExpenseAccountCode").style.border = "1px solid #C8C8C8";
-                document.getElementById("articleGroup_ExpenseAccount").style.border = "1px solid #C8C8C8";
-            }
-
-            if (articleGroupEntryValidation() == false) {
-                toastr.error("Invalid entry");
-            } else {
+            if (articleGroupEntryValidation()) {
+                document.getElementById("cmdSaveArticleGroupButton").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving';
                 $('#cmdSaveArticleGroupButton').prop('disabled', true);
                 $('#cmdArticleGroupDetailCloseButton').prop('disabled', true);
 
@@ -4990,17 +4748,14 @@
                         data: articleGroupData,
                         success: function (id) {
                             if (id > 0) {
-                                $('#cmdSaveArticleGroupButton').prop('disabled', true);
-                                $('#cmdArticleGroupDetailCloseButton').prop('disabled', true);
                                 toastr.success("Save Successful");
-
                                 $('#articleGroupEdit').modal('hide');
-
                                 refreshArticleGroupFlexgrid();
                             } else {
+                                toastr.error("Internal Server Error");
+                                document.getElementById("cmdSaveArticleGroupButton").innerHTML = '<i class="fa fa-save"></i> Save';
                                 $('#cmdSaveArticleGroupButton').prop('disabled', false);
                                 $('#cmdArticleGroupDetailCloseButton').prop('disabled', false);
-                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -5013,27 +4768,27 @@
                         data: articleGroupData,
                         statusCode: {
                             200: function () {
-                                $('#cmdSaveArticleGroupButton').prop('disabled', true);
-                                $('#cmdArticleGroupDetailCloseButton').prop('disabled', true);
                                 toastr.success("Update Successful");
-
                                 $('#articleGroupEdit').modal('hide');
-
                                 refreshArticleGroupFlexgrid();
                             },
                             404: function () {
                                 toastr.error("Not Found");
+                                document.getElementById("cmdSaveArticleGroupButton").innerHTML = '<i class="fa fa-save"></i> Save';
                                 $('#cmdSaveArticleGroupButton').prop('disabled', false);
                                 $('#cmdArticleGroupDetailCloseButton').prop('disabled', false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                document.getElementById("cmdSaveArticleGroupButton").innerHTML = '<i class="fa fa-save"></i> Save';
                                 $('#cmdSaveArticleGroupButton').prop('disabled', false);
                                 $('#cmdArticleGroupDetailCloseButton').prop('disabled', false);
                             }
                         }
                     });
                 }
+            } else {
+                toastr.error("Invalid entry");
             }
         }
 
@@ -5041,16 +4796,25 @@
         // DELETE Article Group
         // ====================
         function btnDeleteArticleGroup_OnClick() {
-            $('#deleteArticleGroupConfirm').modal({
-                show: true,
-                backdrop: 'static'
-            });
+            articlegroups.editItem(articlegroups.currentItem);
+            var articlegroup = articlegroups.currentEditItem;
+            if (articlegroup.IsLocked) {
+                toastr.error("Delete is not allowed when the selected record is locked!");
+            } else {
+                $('#deleteArticleGroupConfirm').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
 
-            $('#cmdConfirmDeleteArticleGroup').prop('disabled', false);
-            $('#cmdConfirmDeleteCloseButtonArticleGroup').prop('disabled', false);
+                document.getElementById("cmdConfirmDeleteArticleGroup").innerHTML = '<i class="fa fa-trash"></i> Delete';
+                $('#cmdConfirmDeleteArticleGroup').prop('disabled', false);
+                $('#cmdConfirmDeleteCloseButtonArticleGroup').prop('disabled', false);
+            }
         }
+
         // Article Group Confirm Delete Button
         function cmdArticleGroupConfirmDeleteButton_OnClick() {
+            document.getElementById("cmdConfirmDeleteArticleGroup").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Deleting';
             $('#cmdConfirmDeleteArticleGroup').prop('disabled', true);
             $('#cmdConfirmDeleteCloseButtonArticleGroup').prop('disabled', true);
 
@@ -5063,26 +4827,24 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $('#cmdConfirmDeleteArticleGroup').prop('disabled', true);
-                        $('#cmdConfirmDeleteCloseButtonArticleGroup').prop('disabled', true);
                         toastr.success("Delete Successful");
-
                         $('#deleteArticleGroupConfirm').modal('hide');
-
                         refreshArticleGroupFlexgrid();
                     },
                     404: function () {
                         toastr.error("Not Found");
+                        $('#deleteArticleGroupConfirm').modal('hide');
+                        document.getElementById("cmdConfirmDeleteArticleGroup").innerHTML = '<i class="fa fa-trash"></i> Delete';
                         $('#cmdConfirmDeleteArticleGroup').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonArticleGroup').prop('disabled', false);
-                        $('#deleteArticleGroupConfirm').modal('hide');
 
                     },
                     400: function () {
                         toastr.error("Bad Request");
+                        $('#deleteArticleGroupConfirm').modal('hide');
+                        document.getElementById("cmdConfirmDeleteArticleGroup").innerHTML = '<i class="fa fa-trash"></i> Delete';
                         $('#cmdConfirmDeleteArticleGroup').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonArticleGroup').prop('disabled', false);
-                        $('#deleteArticleGroupConfirm').modal('hide');
                     }
                 }
             });
@@ -5092,18 +4854,6 @@
         // Article Group
         // =============
         function articleGroupTab() {
-            cboArticleType = new wijmo.input.ComboBox('#articleGroup_ArticleType');
-            cboArticleGroupAccountCode = new wijmo.input.ComboBox('#articleGroup_AccountCode');
-            cboArticleGroupAccount = new wijmo.input.ComboBox('#articleGroup_Account');
-            cboArticleGroupSaleAccountCode = new wijmo.input.ComboBox('#articleGroup_SalesAccountCode');
-            cboArticleGroupSaleAccount = new wijmo.input.ComboBox('#articleGroup_SalesAccount');
-            cboArticleGroupCostAccountCode = new wijmo.input.ComboBox('#articleGroup_CostAccountCode');
-            cboArticleGroupCostAccount = new wijmo.input.ComboBox('#articleGroup_CostAccount');
-            cboArticleGroupAssetAccountCode = new wijmo.input.ComboBox('#articleGroup_AssetAccountCode');
-            cboArticleGroupAssetAccount = new wijmo.input.ComboBox('#articleGroup_AssetAccount');
-            cboArticleGroupExpenseAccountCode = new wijmo.input.ComboBox('#articleGroup_ExpenseAccountCode');
-            cboArticleGroupExpenseAccount = new wijmo.input.ComboBox('#articleGroup_ExpenseAccount');
-
             articlegroups = new wijmo.collections.CollectionView(getArticleGroup());
             articlegroups.canFilter = true;
             articlegroups.pageSize = 15;
@@ -5174,7 +4924,6 @@
 
             articleGroupGrid.trackChanges = true;
 
-            //Navigation button for Employee
             btnFirstPageGridArticleGroup = document.getElementById('btnMoveToFirstPageGridArticleGroup');
             btnPreviousPageGridArticleGroup = document.getElementById('btnMoveToPreviousPageGridArticleGroup');
             btnNextPageGridArticleGroup = document.getElementById('btnMoveToNextPageGridArticleGroup');
@@ -5187,14 +4936,17 @@
                 articlegroups.moveToFirstPage();
                 updateNavigateButtonsArticleGroup();
             });
+
             btnPreviousPageGridArticleGroup.addEventListener('click', function () {
                 articlegroups.moveToPreviousPage();
                 updateNavigateButtonsArticleGroup();
             });
+
             btnNextPageGridArticleGroup.addEventListener('click', function () {
                 articlegroups.moveToNextPage();
                 updateNavigateButtonsArticleGroup();
             });
+
             btnLastPageGridArticleGroup.addEventListener('click', function () {
                 articlegroups.moveToLastPage();
                 updateNavigateButtonsArticleGroup();
@@ -6143,13 +5895,31 @@
                 if ($(this).is(':checked')) {
                     document.getElementById('articleGroup_ArticleGroup').disabled = true;
                     document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
-                    getArticleType();
-                    getArticleGroupAccount();
+                    cboArticleType.disabled = true;
+                    cboArticleGroupAccountCode.disabled = true;
+                    cboArticleGroupSalesAccountCode.disabled = true;
+                    cboArticleGroupCostAccountCode.disabled = true;
+                    cboArticleGroupAssetAccountCode.disabled = true;
+                    cboArticleGroupExpenseAccountCode.disabled = true;
+                    cboArticleGroupAccount.disabled = true;
+                    cboArticleGroupSalesAccount.disabled = true;
+                    cboArticleGroupCostAccount.disabled = true;
+                    cboArticleGroupAssetAccount.disabled = true;
+                    cboArticleGroupExpenseAccount.disabled = true;
                 } else {
                     document.getElementById('articleGroup_ArticleGroup').disabled = false;
                     document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
-                    getArticleType();
-                    getArticleGroupAccount();
+                    cboArticleType.disabled = false;
+                    cboArticleGroupAccountCode.disabled = false;
+                    cboArticleGroupSalesAccountCode.disabled = false;
+                    cboArticleGroupCostAccountCode.disabled = false;
+                    cboArticleGroupAssetAccountCode.disabled = false;
+                    cboArticleGroupExpenseAccountCode.disabled = false;
+                    cboArticleGroupAccount.disabled = false;
+                    cboArticleGroupSalesAccount.disabled = false;
+                    cboArticleGroupCostAccount.disabled = false;
+                    cboArticleGroupAssetAccount.disabled = false;
+                    cboArticleGroupExpenseAccount.disabled = false;
                 }
             });
 
