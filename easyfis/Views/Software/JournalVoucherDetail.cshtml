@@ -1,7 +1,4 @@
-﻿@{
-    var userId = ViewData["UserId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -118,29 +115,28 @@
                             </div>
                             <div class="panel-body">
                                 <div id="JournalVoucherLineGrid"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-8"></div>
-                            <div class="col-lg-4">
-                                <table class="table table-responsive table-bordered">
-                                    <tr>
-                                        <td align="right">
-                                            <b>Total Debit: </b>
-                                        </td>
-                                        <td style="padding-left: 10px" align="right">
-                                            <span id="totalDebit">0.00</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">
-                                            <b>Total Credit: </b>
-                                        </td>
-                                        <td style="padding-left: 10px" align="right">
-                                            <span id="totalCredit">0.00</span>
-                                        </td>
-                                    </tr>
-                                </table>
+                                <br /><br />
+                                <div class="row">
+                                    <div class="col-md-7">
+
+                                    </div>
+                                    <div class="col-md-5">
+                                        <dl class="dl-horizontal">
+                                            <dt>
+                                                <b>Total Debit</b>
+                                            </dt>
+                                            <dd>
+                                                <input type="text" class="form-control  numberField" id="totalDebit" placeholder="0.00" disabled />
+                                            </dd>
+                                            <dt>
+                                                <b>Total Credit</b>
+                                            </dt>
+                                            <dd>
+                                                <input type="text" class="form-control  numberField" id="totalCredit" placeholder="0.00" disabled />
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -622,6 +618,8 @@
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     success: function (Results) {
+                        var debitAmountTotal = 0;
+                        var creditAmountTotal = 0;
                         if (Results.length > 0) {
                             var canEdit = "@ViewData["CanEdit"]";
                             var editDisabled = "";
@@ -642,8 +640,6 @@
                                 btnDeleteId =  "<button class='btn btn-danger btn-xs btn-block' onclick='cmdJournalVoucherLineDeleteButton_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                             }
 
-                            var debitAmountTotal = 0;
-                            var creditAmountTotal = 0;
                             for (i = 0; i < Results.length; i++) {
                                 journalVoucherLines.push({
                                     EditId: btnEditId,
@@ -671,10 +667,10 @@
                                 debitAmountTotal += Results[i]["DebitAmount"];
                                 creditAmountTotal += Results[i]["CreditAmount"];
                             }
-
-                            document.getElementById('totalDebit').innerHTML = debitAmountTotal.toLocaleString();
-                            document.getElementById('totalCredit').innerHTML = creditAmountTotal.toLocaleString();
                         }
+
+                        document.getElementById('totalDebit').value = debitAmountTotal.toLocaleString();
+                        document.getElementById('totalCredit').value = creditAmountTotal.toLocaleString();
 
                         NProgress.done();
                     }

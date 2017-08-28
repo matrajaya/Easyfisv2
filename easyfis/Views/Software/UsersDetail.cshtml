@@ -63,8 +63,9 @@
                     </div>
                 </div>
                 <ul class="nav nav-tabs" role="tablist" id="myTab">
-                    <li role="presentation" class="active"><a data-toggle="tab" href="#UserForm" id="userForm">User Form</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#UserDefaults" id="userDefaults">User Defaults</a></li>
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#UserForm" id="userForm">Forms</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#UserDefaults" id="userDefaults">Defaults</a></li>
+                    <!-- <li role="presentation"><a data-toggle="tab" href="#UserBranches" id="userBranches">Branches</a></li>-->
                 </ul>
                 <br />
                 <div class="tab-content">
@@ -90,49 +91,49 @@
                                     <div class="row">
                                         <div class="col-md-8">
                                             <div class="form-group">
-                                                <label class="control-label col-sm-6">Default Company</label>
+                                                <label class="control-label col-sm-6">Company</label>
                                                 <div class="col-sm-6">
                                                     <div class="comboBox-wide" id="defaultCompany"></div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-6">Default Branch</label>
+                                                <label class="control-label col-sm-6">Branch</label>
                                                 <div class="col-sm-6">
                                                     <div class="comboBox-wide" id="defaultBranch"></div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-6">Default Income Account</label>
+                                                <label class="control-label col-sm-6">Income Account</label>
                                                 <div class="col-sm-6">
                                                     <div class="comboBox-wide" id="defaultIncomeAccount"></div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-6">Default Supplier Advances Account</label>
+                                                <label class="control-label col-sm-6">Supplier Advances Account</label>
                                                 <div class="col-sm-6">
                                                     <div class="comboBox-wide" id="defaultSupplierAdvancesAccount"></div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-6">Default Customer Advances Account</label>
+                                                <label class="control-label col-sm-6">Customer Advances Account</label>
                                                 <div class="col-sm-6">
                                                     <div class="comboBox-wide" id="defaultCustomerAdvancesAccount"></div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-6">Default Official Receipt Name</label>
+                                                <label class="control-label col-sm-6">Official Receipt Name</label>
                                                 <div class="col-sm-6">
                                                     <input type="text" class="form-control " id="defaultOfficialReceiptName" />
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-6">Default Inventory Type</label>
+                                                <label class="control-label col-sm-6">Inventory Type</label>
                                                 <div class="col-sm-6">
                                                     <div id="cboInventoryType"></div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-6">Default Sales Invoice Discount</label>
+                                                <label class="control-label col-sm-6">Sales Invoice Discount</label>
                                                 <div class="col-sm-6">
                                                     <div id="cboDiscounts"></div>
                                                 </div>
@@ -141,6 +142,20 @@
                                         <div class="col-md-4"></div>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="UserBranches" class="tab-pane fade in">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-12" align="right">
+                                        <button class="btn btn-primary" id="btnAddBranches" onclick="btnAddBranches()"><i class="fa fa-plus"></i> Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div id="userBranchesFlexGrid" class="grid" align="left"></div>
                             </div>
                         </div>
                     </div>

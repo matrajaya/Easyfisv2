@@ -226,42 +226,50 @@
                     <h4 class="modal-title" id="accountModalLabel">Account <span id="accountLockAndUnLock"></span> </h4>
                 </div>
                 <div class="modal-body">
-                    <center>
-                        <span id="loadingModalAccount"></span>
-                    </center>
-                    <div id="AccountDetailForm">
-                        <dl class="dl-horizontal">
-                            <dt>Account Code</dt>
-                            <dd><input type="text" class="form-control requiredAccount" id="account_code" placeholder="Code" /></dd>
-                            <dt>Account</dt>
-                            <dd><input type="text" class="form-control requiredAccount" id="account_account" placeholder="Account" /></dd>
-                            <dt>Account Type</dt>
-                            <dd><div id="cboAccountType" class="comboBox-wide"></div></dd>
-                            <dt>Cash Flow</dt>
-                            <dd><div id="cboAccountCashFlow" class="comboBox-wide"></div></dd>
-                            <dt>Lock</dt>
-                            <dd><input type="checkbox" id="accountEdit_IsLocked" /></dd>
-                        </dl>
-                    </div>
-                    <center>
-                        <label id="loadingAccountArtitleType"></label>
-                    </center>
-                    <div id="accountArticleTypeDiv">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <label>Account Article Type</label>
-                                    </div>
-                                    <div class="col-lg-6" align="right">
-                                        <button class="btn btn-primary " id="btnAddACcountArticleType" onclick="btnAddAccountArticleType()"><i class="fa fa-plus"></i> Add</button>
-                                    </div>
-                                </div>
+                    <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
+                        <li role="presentation" class="active"><a data-toggle="tab" href="#accountDetailAccount" id="accountDetailAccountTab">Account</a></li>
+                        <li role="presentation"><a data-toggle="tab" href="#accountDetailArticleType" id="accountDetailArticleTypeTab">Article Type</a></li>
+                    </ul>
+                    <br />
+                    <div class="tab-content">
+                        <div id="accountDetailAccount" class="tab-pane fade in active">
+                            <center>
+                                <span id="loadingModalAccount"></span>
+                            </center>
+                            <div id="AccountDetailForm">
+                                <dl class="dl-horizontal">
+                                    <dt>Account Code</dt>
+                                    <dd><input type="text" class="form-control requiredAccount" id="account_code" placeholder="Code" /></dd>
+                                    <dt>Account</dt>
+                                    <dd><input type="text" class="form-control requiredAccount" id="account_account" placeholder="Account" /></dd>
+                                    <dt>Account Type</dt>
+                                    <dd><div id="cboAccountType" class="comboBox-wide"></div></dd>
+                                    <dt>Cash Flow</dt>
+                                    <dd><div id="cboAccountCashFlow" class="comboBox-wide"></div></dd>
+                                    <dt>Lock</dt>
+                                    <dd><input type="checkbox" id="accountEdit_IsLocked" /></dd>
+                                </dl>
                             </div>
-                            <div class="panel-body">
-                                <div class="row" align="left">
-                                    <div class="col-lg-12">
-                                        <div id="AccountArticleTypeGrid" style="max-height: 130px;"></div>
+                        </div>
+                        <div id="accountDetailArticleType" class="tab-pane fade in">
+                            <center>
+                                <label id="loadingAccountArtitleType"></label>
+                            </center>
+                            <div id="accountArticleTypeDiv">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button class="btn btn-primary" id="btnAddACcountArticleType" onclick="btnAddAccountArticleType()"><i class="fa fa-plus"></i> Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row" align="left">
+                                            <div class="col-lg-12">
+                                                <div id="AccountArticleTypeGrid" style="max-height: 300px"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -729,8 +737,9 @@
             getAccountTypeForComboBox(0, 0, false);
             document.getElementById('accountEdit_IsLocked').checked = false;
 
-            $('#AccountArticleTypeGrid').hide();
-            $('#accountArticleTypeDiv').hide();
+            $("#loadingAccountArtitleType").hide();
+            $("#accountArticleTypeDiv").hide();
+            $("#btnAddACcountArticleType").prop("disabled", true);
         }
 
         // ===================
@@ -778,16 +787,13 @@
                 $('#btnAddACcountArticleType').prop('disabled', false);
             }
 
-            document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i> ';
-            $('#loadingAccountArtitleType').show();
-            $('#AccountArticleTypeGrid').hide();
-            $('#accountArticleTypeDiv').hide();
+            $("#loadingAccountArtitleType").show();
+            document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#accountArticleTypeDiv").hide();
+
             setTimeout(function () {
-                $('#loadingAccountArtitleType').hide();
-                $('#AccountArticleTypeGrid').show();
-                $('#accountArticleTypeDiv').show();
                 createAccountArticleTypeGrid();
-            }, 1000);
+            }, 500);
         }
 
         // ===================
@@ -1008,6 +1014,9 @@
                             });
                         }
                     }
+
+                    $("#loadingAccountArtitleType").hide();
+                    $("#accountArticleTypeDiv").show();
                 }
             });
 
@@ -1448,14 +1457,11 @@
                 $('#btnAddACcountArticleType').prop('disabled', true);
 
                 if (accountId != 0) {
-                    document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i> ';
-                    $('#loadingAccountArtitleType').show();
-                    $('#AccountArticleTypeGrid').hide();
-                    $('#accountArticleTypeDiv').hide();
+                    $("#loadingAccountArtitleType").show();
+                    document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+                    $("#accountArticleTypeDiv").hide();
+
                     setTimeout(function () {
-                        $('#loadingAccountArtitleType').hide();
-                        $('#AccountArticleTypeGrid').show();
-                        $('#accountArticleTypeDiv').show();
                         createAccountArticleTypeGrid();
                     }, 500);
                 }
@@ -1469,14 +1475,11 @@
                 $('#btnAddACcountArticleType').prop('disabled', false);
 
                 if (accountId != 0) {
-                    document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i> ';
-                    $('#loadingAccountArtitleType').show();
-                    $('#AccountArticleTypeGrid').hide();
-                    $('#accountArticleTypeDiv').hide();
+                    $("#loadingAccountArtitleType").show();
+                    document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+                    $("#accountArticleTypeDiv").hide();
+
                     setTimeout(function () {
-                        $('#loadingAccountArtitleType').hide();
-                        $('#AccountArticleTypeGrid').show();
-                        $('#accountArticleTypeDiv').show();
                         createAccountArticleTypeGrid();
                     }, 500);
                 }
@@ -1490,6 +1493,35 @@
             $('#AccountCategory').hide();
 
             refreshAccountFlexGrid();
+        });
+
+        $('#accountDetailAccountTab').click(function () {
+            $('#accountDetailAccount').show();
+            $('#accountDetailArticleType').hide();
+
+            $("#loadingModalAccount").show();
+            document.getElementById("loadingModalAccount").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#AccountDetailForm").hide();
+
+            setTimeout(function () {
+                $("#loadingModalAccount").hide();
+                $("#AccountDetailForm").show();
+            }, 500);
+        });
+
+        $('#accountDetailArticleTypeTab').click(function () {
+            $('#accountDetailAccount').hide();
+            $('#accountDetailArticleType').show();
+
+            if (accountId != 0) {
+                $("#loadingAccountArtitleType").show();
+                document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+                $("#accountArticleTypeDiv").hide();
+
+                setTimeout(function () {
+                    createAccountArticleTypeGrid();
+                }, 500);
+            }
         });
     </script>
 
