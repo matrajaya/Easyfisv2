@@ -10,8 +10,14 @@ namespace easyfis.ApiControllers
 {
     public class ApiUserBranchController : ApiController
     {
+        // ====================
+        // Easyfis Data Context
+        // ====================
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // ====================
+        // User Branches (List)
+        // ====================
         [Authorize, HttpGet, Route("api/userBranch/list")]
         public List<Models.MstUserBranch> listUserBranch()
         {
@@ -26,6 +32,8 @@ namespace easyfis.ApiControllers
                                    Id = d.Id,
                                    UserId = d.UserId,
                                    User = d.MstUser.FullName,
+                                   CompanyId = d.MstBranch.CompanyId,
+                                   Company = d.MstBranch.MstCompany.Company,
                                    BranchId = d.BranchId,
                                    Branch = d.MstBranch.Branch
                                };
@@ -33,6 +41,9 @@ namespace easyfis.ApiControllers
             return userBranches.ToList();
         }
 
+        // ================================
+        // Update User Branch Default (Put)
+        // ================================
         [Authorize, HttpPut, Route("api/userBranch/update")]
         public HttpResponseMessage updateBranch(Models.MstUserBranch userBranch)
         {
@@ -55,6 +66,93 @@ namespace easyfis.ApiControllers
             catch
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        // ======================
+        // Add User Branch (Post)
+        // ======================
+        [Authorize, HttpPost, Route("api/userBranches/add")]
+        public HttpResponseMessage addUserBranches(Models.MstUserBranch userBranch)
+        {
+            try
+            {
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
+
+                Data.MstUserBranch newUserBranch = new Data.MstUserBranch();
+                newUserBranch.UserId = userBranch.UserId;
+                newUserBranch.BranchId = userBranch.BranchId;
+                db.MstUserBranches.InsertOnSubmit(newUserBranch);
+                db.SubmitChanges();
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        // ========================
+        // Update User Branch (Put)
+        // ========================
+        [Authorize, HttpPut, Route("api/userBranches/update/{id}")]
+        public HttpResponseMessage updateUserBranches(String id, Models.MstUserBranch userBranch)
+        {
+            try
+            {
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
+                var userBranches = from d in db.MstUserBranches
+                                   where d.Id == Convert.ToInt32(id)
+                                   select d;
+
+                if (userBranches.Any())
+                {
+                    var updateUserBranch = userBranches.FirstOrDefault();
+                    updateUserBranch.UserId = userBranch.UserId;
+                    updateUserBranch.BranchId = userBranch.BranchId;
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        // ===========================
+        // Delete User Branch (Delete)
+        // ===========================
+        [Authorize, HttpDelete, Route("api/userBranches/delete/{id}")]
+        public HttpResponseMessage deleteUserBranches(String id)
+        {
+            try
+            {
+                var userBranches = from d in db.MstUserBranches
+                                   where d.Id == Convert.ToInt32(id)
+                                   select d;
+
+                if (userBranches.Any())
+                {
+                    db.MstUserBranches.DeleteOnSubmit(userBranches.First());
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
     }

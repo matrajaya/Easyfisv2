@@ -12,5 +12,7 @@ namespace easyfis.Models
         public String User { get; set; }
         public Int32 BranchId { get; set; }
         public String Branch { get; set; }
+        public Int32 CompanyId { get; set; }
+        public String Company { get; set; }
     }
 }
