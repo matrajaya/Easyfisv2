@@ -214,7 +214,7 @@
                 <div class="modal-body">
                     <dl class="dl-horizontal">
                         <dt>Copy the rights of </dt>
-                        <dd><input type="text" class="form-control " id="usernameOrFullName" placeholder="Username" /></dd>
+                        <dd><input type="text" class="form-control" id="usernameOrFullName" placeholder="Username" /></dd>
                     </dl>
                 </div>
                 <div class="modal-footer">
@@ -252,7 +252,7 @@
                 </div>
                 <div class="modal-body">
                     <center>
-                        <span id="loadingUserBranches"></span>
+                        <span id="loadingUserDefaultBranches"></span>
                     </center>
                     <div id="userDefaultBranchesDetail">
                         <dl class="dl-horizontal">
@@ -767,8 +767,17 @@
                         }
                     }
 
+                    var disabled = true;
+                    if (formResults.length > 0) {
+                        disabled = false;
+                        $('#cmdSaveUserFormButton').prop('disabled', false);
+                    } else {
+                        $('#cmdSaveUserFormButton').prop('disabled', true);
+                    }
+
                     cboForForm.dispose();
                     cboForForm = new wijmo.input.ComboBox('#userForm_FormName', {
+                        disabled: disabled,
                         isEditable: false,
                         itemsSource: formsObservableArray,
                         displayMemberPath: "Particulars",
@@ -776,6 +785,10 @@
                         selectedValue: formId
                     });
 
+                    setTimeout(function () {
+                        $("#loadingForms").hide();
+                        $("#formDetail").show();
+                    }, 500);
                 }
             });
         }
@@ -789,8 +802,12 @@
                 backdrop: 'static'
             });
 
+            $("#loadingForms").show();
+            document.getElementById("loadingForms").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#formDetail").hide();
+
             document.getElementById('cmdSaveUserFormButton').innerHTML = "<i class='fa fa-save'></i> Save";
-            $('#cmdSaveUserFormButton').prop('disabled', false);
+            $('#cmdSaveUserFormButton').prop('disabled', true);
             $('#cmdUserFormDetailCloseButton').prop('disabled', false);
 
             userFormId = 0;
@@ -812,8 +829,12 @@
                 backdrop: 'static'
             });
 
+            $("#loadingForms").show();
+            document.getElementById("loadingForms").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#formDetail").hide();
+
             document.getElementById('cmdSaveUserFormButton').innerHTML = "<i class='fa fa-save'></i> Save";
-            $('#cmdSaveUserFormButton').prop('disabled', false);
+            $('#cmdSaveUserFormButton').prop('disabled', true);
             $('#cmdUserFormDetailCloseButton').prop('disabled', false);
 
             userForms.editItem(userForms.currentItem);
@@ -1293,8 +1314,9 @@
                     var disabled = true;
                     if (companyListResults.length > 0) {
                         disabled = false;
+                        $('#btnSaveUserDefaultBranches').prop('disabled', false);
                     } else {
-
+                        $('#btnSaveUserDefaultBranches').prop('disabled', true);
                     }
 
                     cboUserDefaultCompanies.dispose();
@@ -1340,7 +1362,7 @@
                         if (branchListResults.length > 0) {
                             disabled = false;
                         } else {
-
+                            $('#btnSaveUserDefaultBranches').prop('disabled', true);
                         }
 
                         cboUserDefaultBranches.dispose();
@@ -1352,6 +1374,11 @@
                             selectedValuePath: "Id",
                             selectedValue: branchId
                         });
+
+                        setTimeout(function () {
+                            $("#loadingUserDefaultBranches").hide();
+                            $("#userDefaultBranchesDetail").show();
+                        }, 500);
                     }
                 });
             } else {
@@ -1373,8 +1400,12 @@
                 backdrop: 'static'
             });
 
+            $("#loadingUserDefaultBranches").show();
+            document.getElementById("loadingUserDefaultBranches").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#userDefaultBranchesDetail").hide();
+
             document.getElementById('btnSaveUserDefaultBranches').innerHTML = "<i class='fa fa-save'></i> Save";
-            $('#btnSaveUserDefaultBranches').prop('disabled', false);
+            $('#btnSaveUserDefaultBranches').prop('disabled', true);
             $('#btnCloseModalUserDefaultBranches').prop('disabled', false);
 
             userBranchId = 0;
@@ -1390,8 +1421,12 @@
                 backdrop: 'static'
             });
 
+            $("#loadingUserDefaultBranches").show();
+            document.getElementById("loadingUserDefaultBranches").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#userDefaultBranchesDetail").hide();
+
             document.getElementById('btnSaveUserDefaultBranches').innerHTML = "<i class='fa fa-save'></i> Save";
-            $('#btnSaveUserDefaultBranches').prop('disabled', false);
+            $('#btnSaveUserDefaultBranches').prop('disabled', true);
             $('#btnCloseModalUserDefaultBranches').prop('disabled', false);
 
             userDefaultBranchesCollectionView.editItem(userDefaultBranchesCollectionView.currentItem);
@@ -1549,7 +1584,6 @@
             NProgress.start();
             refreshUserDefaultBranchesFlexGrid();
         });
-
 
         // ============
         // On Load Page
