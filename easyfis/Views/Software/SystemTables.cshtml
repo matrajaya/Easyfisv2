@@ -709,28 +709,161 @@
                     <h4 class="modal-title" id="articleGroupModalLabel">Article Group <span id="articleGroupLockAndUnLock"></span></h4>
                 </div>
                 <div class="modal-body">
+                    <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
+                        <li role="presentation" class="active"><a data-toggle="tab" href="#articleGroupDetailTarget" id="articleGroupDetailTab">Article Group</a></li>
+                        <li role="presentation"><a data-toggle="tab" href="#articleGroupBranchTarget" id="articleGroupBranchTab">Article Group Branch</a></li>
+                    </ul>
+                    <br />
+                    <div class="tab-content">
+                        <div id="articleGroupDetailTarget" class="tab-pane fade in active">
+                            <center>
+                                <span id="loadingModalArticleGroup"></span>
+                            </center>
+                            <form id="articleGroupDetailForm">
+                                <dl class="dl-horizontal">
+                                    <dt>Article Group</dt>
+                                    <dd><input type="text" class="form-control requiredArticleGroup" id="articleGroup_ArticleGroup" placeholder="Article Group" /></dd>
+                                    <dt>Article Type:</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="cboArticleType"></div>
+                                    </dd>
+                                    <dt>Account</dt>
+                                    <dd>
+                                        <table style="width: 100%" border="0">
+                                            <tr>
+                                                <td style="width: 30%">
+                                                    <div class="comboBox-wide" id="cboArticleGroupAccountCode"></div>
+                                                </td>
+                                                <td style="width: 1%"></td>
+                                                <td style="width: 69%">
+                                                    <div class="comboBox-wide" id="cboArticleGroupAccount"></div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </dd>
+                                    <dt>Sales Account</dt>
+                                    <dd>
+                                        <table style="width: 100%" border="0">
+                                            <tr>
+                                                <td style="width: 30%">
+                                                    <div class="comboBox-wide" id="cboArticleGroupSalesAccountCode"></div>
+                                                </td>
+                                                <td style="width: 1%"></td>
+                                                <td style="width: 69%">
+                                                    <div class="comboBox-wide" id="cboArticleGroupSalesAccount"></div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </dd>
+                                    <dt>Cost Account</dt>
+                                    <dd>
+                                        <table style="width: 100%" border="0">
+                                            <tr>
+                                                <td style="width: 30%">
+                                                    <div class="comboBox-wide" id="cboArticleGroupCostAccountCode"></div>
+                                                </td>
+                                                <td style="width: 1%"></td>
+                                                <td style="width: 69%">
+                                                    <div class="comboBox-wide" id="cboArticleGroupCostAccount"></div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </dd>
+                                    <dt>Asset Account</dt>
+                                    <dd>
+                                        <table style="width: 100%" border="0">
+                                            <tr>
+                                                <td style="width: 30%">
+                                                    <div class="comboBox-wide" id="cboArticleGroupAssetAccountCode"></div>
+                                                </td>
+                                                <td style="width: 1%"></td>
+                                                <td style="width: 69%">
+                                                    <div class="comboBox-wide" id="cboArticleGroupAssetAccount"></div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </dd>
+                                    <dt>Expense Account</dt>
+                                    <dd>
+                                        <table style="width: 100%" border="0">
+                                            <tr>
+                                                <td style="width: 30%">
+                                                    <div class="comboBox-wide" id="cboArticleGroupExpenseAccountCode"></div>
+                                                </td>
+                                                <td style="width: 1%"></td>
+                                                <td style="width: 69%">
+                                                    <div class="comboBox-wide" id="cboArticleGroupExpenseAccount"></div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </dd>
+                                    <dt>Lock</dt>
+                                    <dd><input type="checkbox" id="articleGroup_Lock" /></dd>
+                                </dl>
+                            </form>
+                        </div>
+                        <div id="articleGroupBranchTarget" class="tab-pane fade in">
+                            <center>
+                                <span id="loadingArticleGroupBranch"></span>
+                            </center>
+                            <div id="articleGroupBranchFlexGridDetail">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button class="btn btn-primary" id="btnAddArticleGroupBranch" onclick="btnAddArticleGroupBranchOnlick()"><i class="fa fa-plus"></i> Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="articleGroupBranchFlexGrid" style="max-height: 250px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cmdSaveArticleGroupButton" class="btn btn-primary" onclick="btnArticleGroupSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdArticleGroupDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================== -->
+    <!-- Article Group Branch Detail -->
+    <!-- =========================== -->
+    <div class="modal fade" id="articleGroupBranchEdit" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="articleGroupBranchModalLabel">Article Group Branch</h4>
+                </div>
+                <div class="modal-body">
                     <center>
-                        <span id="loadingModalArticleGroup"></span>
+                        <span id="loadingModalArticleGroupBranch"></span>
                     </center>
-                    <form id="articleGroupDetailForm">
-                        <input type="hidden" id="articleGroup_id" />
+                    <form id="articleGroupBranchDetailForm">
                         <dl class="dl-horizontal">
-                            <dt>Article Group</dt>
-                            <dd><input type="text" class="form-control requiredArticleGroup" id="articleGroup_ArticleGroup" placeholder="Article Group" /></dd>
-                            <dt>Article Type:</dt>
+                            <dt>Company</dt>
                             <dd>
-                                <div class="comboBox-wide" id="cboArticleType"></div>
+                                <div class="comboBox-wide" id="cboArticleGroupBranchCompany"></div>
+                            </dd>
+                            <dt>Branch</dt>
+                            <dd>
+                                <div class="comboBox-wide" id="cboArticleGroupBranch"></div>
                             </dd>
                             <dt>Account</dt>
                             <dd>
                                 <table style="width: 100%" border="0">
                                     <tr>
                                         <td style="width: 30%">
-                                            <div class="comboBox-wide" id="cboArticleGroupAccountCode"></div>
+                                            <div class="comboBox-wide" id="cboArticleGroupBranchAccountCode"></div>
                                         </td>
                                         <td style="width: 1%"></td>
                                         <td style="width: 69%">
-                                            <div class="comboBox-wide" id="cboArticleGroupAccount"></div>
+                                            <div class="comboBox-wide" id="cboArticleGroupBranchAccount"></div>
                                         </td>
                                     </tr>
                                 </table>
@@ -740,11 +873,11 @@
                                 <table style="width: 100%" border="0">
                                     <tr>
                                         <td style="width: 30%">
-                                            <div class="comboBox-wide" id="cboArticleGroupSalesAccountCode"></div>
+                                            <div class="comboBox-wide" id="cboArticleGroupBranchSalesAccountCode"></div>
                                         </td>
                                         <td style="width: 1%"></td>
                                         <td style="width: 69%">
-                                            <div class="comboBox-wide" id="cboArticleGroupSalesAccount"></div>
+                                            <div class="comboBox-wide" id="cboArticleGroupBranchSalesAccount"></div>
                                         </td>
                                     </tr>
                                 </table>
@@ -754,11 +887,11 @@
                                 <table style="width: 100%" border="0">
                                     <tr>
                                         <td style="width: 30%">
-                                            <div class="comboBox-wide" id="cboArticleGroupCostAccountCode"></div>
+                                            <div class="comboBox-wide" id="cboArticleGroupBranchCostAccountCode"></div>
                                         </td>
                                         <td style="width: 1%"></td>
                                         <td style="width: 69%">
-                                            <div class="comboBox-wide" id="cboArticleGroupCostAccount"></div>
+                                            <div class="comboBox-wide" id="cboArticleGroupBranchCostAccount"></div>
                                         </td>
                                     </tr>
                                 </table>
@@ -768,11 +901,11 @@
                                 <table style="width: 100%" border="0">
                                     <tr>
                                         <td style="width: 30%">
-                                            <div class="comboBox-wide" id="cboArticleGroupAssetAccountCode"></div>
+                                            <div class="comboBox-wide" id="cboArticleGroupBranchAssetAccountCode"></div>
                                         </td>
                                         <td style="width: 1%"></td>
                                         <td style="width: 69%">
-                                            <div class="comboBox-wide" id="cboArticleGroupAssetAccount"></div>
+                                            <div class="comboBox-wide" id="cboArticleGroupBranchAssetAccount"></div>
                                         </td>
                                     </tr>
                                 </table>
@@ -782,23 +915,21 @@
                                 <table style="width: 100%" border="0">
                                     <tr>
                                         <td style="width: 30%">
-                                            <div class="comboBox-wide" id="cboArticleGroupExpenseAccountCode"></div>
+                                            <div class="comboBox-wide" id="cboArticleGroupBranchExpenseAccountCode"></div>
                                         </td>
                                         <td style="width: 1%"></td>
                                         <td style="width: 69%">
-                                            <div class="comboBox-wide" id="cboArticleGroupExpenseAccount"></div>
+                                            <div class="comboBox-wide" id="cboArticleGroupBranchExpenseAccount"></div>
                                         </td>
                                     </tr>
                                 </table>
                             </dd>
-                            <dt>Lock</dt>
-                            <dd><input type="checkbox" id="articleGroup_Lock" /></dd>
                         </dl>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdSaveArticleGroupButton" class="btn btn-primary" onclick="btnArticleGroupSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button id="cmdArticleGroupDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button id="cmdSaveArticleGroupBranchButton" class="btn btn-primary" onclick="btnArticleGroupBranchSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdArticleGroupBranchDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -819,6 +950,26 @@
                 <div class="modal-footer">
                     <button id="cmdConfirmDeleteArticleGroup" class="btn btn-danger" onclick="cmdArticleGroupConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
                     <button id="cmdConfirmDeleteCloseButtonArticleGroup" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================== -->
+    <!-- Article Group Branch Delete -->
+    <!-- =========================== -->
+    <div class="modal fade" id="deleteArticleGroupBranchConfirm" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete</h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this article group branch?
+                </div>
+                <div class="modal-footer">
+                    <button id="cmdConfirmDeleteArticleGroupBranch" class="btn btn-danger" onclick="cmdArticleGroupBranchConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButtonArticleGroupBranch" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -3577,6 +3728,23 @@
         var btnLastPageGridArticleGroup;
         var btnCurrentPageGridArticleGroup;
 
+        var articleGroupBranchCollectionView;
+        var articleGroupBranchFlexGrid = new wijmo.grid.FlexGrid('#articleGroupBranchFlexGrid');
+        var articleGroupBranchId = 0;
+
+        var cboArticleGroupBranchCompany = new wijmo.input.ComboBox('#cboArticleGroupBranchCompany');
+        var cboArticleGroupBranch = new wijmo.input.ComboBox('#cboArticleGroupBranch');
+        var cboArticleGroupBranchAccountCode = new wijmo.input.ComboBox('#cboArticleGroupBranchAccountCode');
+        var cboArticleGroupBranchSalesAccountCode = new wijmo.input.ComboBox('#cboArticleGroupBranchSalesAccountCode');
+        var cboArticleGroupBranchCostAccountCode = new wijmo.input.ComboBox('#cboArticleGroupBranchCostAccountCode');
+        var cboArticleGroupBranchAssetAccountCode = new wijmo.input.ComboBox('#cboArticleGroupBranchAssetAccountCode');
+        var cboArticleGroupBranchExpenseAccountCode = new wijmo.input.ComboBox('#cboArticleGroupBranchExpenseAccountCode');
+        var cboArticleGroupBranchAccount = new wijmo.input.ComboBox('#cboArticleGroupBranchAccount');
+        var cboArticleGroupBranchSalesAccount = new wijmo.input.ComboBox('#cboArticleGroupBranchSalesAccount');
+        var cboArticleGroupBranchCostAccount = new wijmo.input.ComboBox('#cboArticleGroupBranchCostAccount');
+        var cboArticleGroupBranchAssetAccount = new wijmo.input.ComboBox('#cboArticleGroupBranchAssetAccount');
+        var cboArticleGroupBranchExpenseAccount = new wijmo.input.ComboBox('#cboArticleGroupBranchExpenseAccount');
+
         // ======================
         // GET Article Group List
         // ======================
@@ -3605,7 +3773,7 @@
 
                             articlegroups.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditArticleGroup_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticleGroup_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticleGroup_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
                                 Id: articleGroupResults[i]["Id"],
                                 ArticleGroup: articleGroupResults[i]["ArticleGroup"],
                                 ArticleTypeId: articleGroupResults[i]["ArticleTypeId"],
@@ -3933,6 +4101,8 @@
 
             document.getElementById('articleGroup_ArticleGroup').disabled = false;
             document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+
+            $('#btnAddArticleGroupBranch').prop('disabled', true);
         }
 
         // ==================
@@ -3968,10 +4138,20 @@
             if (document.getElementById('articleGroup_Lock').checked == true) {
                 document.getElementById('articleGroup_ArticleGroup').disabled = true;
                 document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+                $('#btnAddArticleGroupBranch').prop('disabled', true);
             } else {
                 document.getElementById('articleGroup_ArticleGroup').disabled = false;
                 document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+                $('#btnAddArticleGroupBranch').prop('disabled', false);
             }
+
+            $("#loadingArticleGroupBranch").show();
+            document.getElementById("loadingArticleGroupBranch").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#articleGroupBranchFlexGridDetail").hide();
+
+            setTimeout(function () {
+                createArticleGroupBranchFlexGrid();
+            }, 500);
         }
 
         // ==============================
@@ -4253,6 +4433,607 @@
             btnLastPageGridArticleGroup.addEventListener('click', function () {
                 articlegroups.moveToLastPage();
                 updateNavigateButtonsArticleGroup();
+            });
+        }
+
+        $('#articleGroupDetailTab').click(function () {
+            $('#articleGroupDetailTarget').show();
+            $('#articleGroupBranchTarget').hide();
+
+            $("#loadingModalArticleGroup").show();
+            document.getElementById("loadingModalArticleGroup").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#articleGroupDetailForm").hide();
+
+            setTimeout(function () {
+                $('#loadingModalArticleGroup').hide();
+                $('#articleGroupDetailForm').show();
+            }, 500);
+        });
+
+        $('#articleGroupBranchTab').click(function () {
+            $('#articleGroupDetailTarget').hide();
+            $('#articleGroupBranchTarget').show();
+
+            if (articleGroupId != 0) {
+                $("#loadingArticleGroupBranch").show();
+                document.getElementById("loadingArticleGroupBranch").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+                $("#articleGroupBranchFlexGridDetail").hide();
+
+                setTimeout(function () {
+                    createArticleGroupBranchFlexGrid();
+                }, 500);
+            } else {
+                $("#loadingArticleGroupBranch").hide();
+                $("#articleGroupBranchFlexGridDetail").hide();
+            }
+        });
+
+        // ==========================
+        // Get Article Group Branches
+        // ==========================
+        function getArticleGroupBranches() {
+            var articleGroupBranchesObservableArray = new wijmo.collections.ObservableArray;
+            if (articleGroupId > 0) {
+                $.ajax({
+                    url: '/api/articleGroupBranch/list/' + articleGroupId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (articleGroupBranchResults) {
+                        if (articleGroupBranchResults.length > 0) {
+                            for (i = 0; i < articleGroupBranchResults.length; i++) {
+                                var canDelete = "@ViewData["CanDelete"]";
+                                var deleteDisabled = "";
+                                if (canDelete == "False") {
+                                    deleteDisabled = "disabled";
+                                }
+
+                                var canEdit = "@ViewData["CanEdit"]";
+                                var editDisabled;
+                                if (canEdit == "False") {
+                                    editDisabled = "disabled";
+                                }
+
+
+                                var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditArticleGroupBranch_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
+                                var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticleGroupBranch_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                                if (document.getElementById('articleGroup_Lock').checked) {
+                                    btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditArticleGroupBranch_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
+                                    btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticleGroupBranch_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
+                                }
+
+                                articleGroupBranchesObservableArray.push({
+                                    EditId: btnEditId,
+                                    DeleteId: btnDeleteId,
+                                    Id: articleGroupBranchResults[i]["Id"],
+                                    ArticleGroupId: articleGroupBranchResults[i]["ArticleGroupId"],
+                                    ArticleGroup: articleGroupBranchResults[i]["ArticleGroup"],
+                                    BranchId: articleGroupBranchResults[i]["BranchId"],
+                                    Branch: articleGroupBranchResults[i]["Branch"],
+                                    AccountId: articleGroupBranchResults[i]["AccountId"],
+                                    AccountCode: articleGroupBranchResults[i]["AccountCode"],
+                                    Account: articleGroupBranchResults[i]["Account"],
+                                    SalesAccountId: articleGroupBranchResults[i]["SalesAccountId"],
+                                    SalesAccountCode: articleGroupBranchResults[i]["SalesAccountCode"],
+                                    SalesAccount: articleGroupBranchResults[i]["SalesAccount"],
+                                    CostAccountId: articleGroupBranchResults[i]["CostAccountId"],
+                                    CostAccountCode: articleGroupBranchResults[i]["CostAccountCode"],
+                                    CostAccount: articleGroupBranchResults[i]["CostAccount"],
+                                    AssetAccountId: articleGroupBranchResults[i]["AssetAccountId"],
+                                    AssetAccountCode: articleGroupBranchResults[i]["AssetAccountCode"],
+                                    AssetAccount: articleGroupBranchResults[i]["AssetAccount"],
+                                    ExpenseAccountId: articleGroupBranchResults[i]["ExpenseAccountId"],
+                                    ExpenseAccountCode: articleGroupBranchResults[i]["ExpenseAccountCode"],
+                                    ExpenseAccount: articleGroupBranchResults[i]["ExpenseAccount"]
+                                });
+
+                            }
+                        }
+
+                        $("#loadingArticleGroupBranch").hide();
+                        $("#articleGroupBranchFlexGridDetail").show();
+                    }
+                });
+            }
+
+            return articleGroupBranchesObservableArray;
+        }
+
+        // ==============================
+        // Article Group Branch Flex Grid
+        // ==============================
+        function createArticleGroupBranchFlexGrid() {
+            articleGroupBranchCollectionView = new wijmo.collections.CollectionView(getArticleGroupBranches());
+
+            articleGroupBranchFlexGrid.dispose();
+            articleGroupBranchFlexGrid = new wijmo.grid.FlexGrid('#articleGroupBranchFlexGrid');
+            articleGroupBranchFlexGrid.initialize({
+                columns: [
+                    {
+                        "header": "Edit",
+                        "binding": "EditId",
+                        "width": 70,
+                        "align": "center",
+                        "allowResizing": false,
+                        "allowSorting": false,
+                        "isContentHtml": true
+                    },
+                    {
+                        "header": "Delete",
+                        "binding": "DeleteId",
+                        "width": 70,
+                        "align": "center",
+                        "allowResizing": false,
+                        "allowSorting": false,
+                        "isContentHtml": true
+                    },
+                    {
+                        "header": "Branch",
+                        "binding": "Branch",
+                        "allowSorting": true,
+                        "width": "*"
+                    }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: articleGroupBranchCollectionView,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            articleGroupBranchFlexGrid.trackChanges = true;
+        }
+
+        var isArticleGroupCompanyChanged = false;
+
+        // ==============================
+        // Article Group Branch Companies
+        // ==============================
+        function createCboArticleGroupBranchesCompany(companyId, branchId, acccountId, salesAccountId, costAccountId, assetAccountId, expenseAccountId) {
+            var companiesObservableArray = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/company/list',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (companyListResults) {
+                    if (companyListResults.length > 0) {
+                        for (i = 0; i < companyListResults.length; i++) {
+                            companiesObservableArray.push({
+                                Id: companyListResults[i]["Id"],
+                                Company: companyListResults[i]["Company"]
+                            });
+                        }
+                    }
+
+                    var disabled = true;
+                    if (companyListResults.length > 0) {
+                        disabled = false;
+                        $('#cmdSaveArticleGroupBranchButton').prop('disabled', false);
+                    } else {
+                        $('#cmdSaveArticleGroupBranchButton').prop('disabled', true);
+                    }
+
+                    cboArticleGroupBranchCompany.dispose();
+                    cboArticleGroupBranchCompany = new wijmo.input.ComboBox('#cboArticleGroupBranchCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companiesObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        selectedValue: companyId,
+                        onSelectedIndexChanged: function () {
+                            isArticleGroupCompanyChanged = true;
+                            createCboArticleGroupBranches(branchId, acccountId, salesAccountId, costAccountId, assetAccountId, expenseAccountId);
+                        }
+                    });
+
+                    createCboArticleGroupBranches(branchId, acccountId, salesAccountId, costAccountId, assetAccountId, expenseAccountId);
+                }
+            });
+        }
+
+        // ===============================
+        // Article Group Branch - Branches
+        // ===============================
+        function createCboArticleGroupBranches(branchId, acccountId, salesAccountId, costAccountId, assetAccountId, expenseAccountId) {
+            var branchesObservableArray = new wijmo.collections.ObservableArray;
+            if (cboArticleGroupBranchCompany.selectedValue != null) {
+                $.ajax({
+                    url: '/api/listBranchByCompanyId/' + cboArticleGroupBranchCompany.selectedValue,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchListResults) {
+                        if (branchListResults.length > 0) {
+                            for (i = 0; i < branchListResults.length; i++) {
+                                branchesObservableArray.push({
+                                    Id: branchListResults[i]["Id"],
+                                    Branch: branchListResults[i]["Branch"]
+                                });
+                            }
+                        }
+
+                        var disabled = true;
+                        if (branchListResults.length > 0) {
+                            disabled = false;
+                        } else {
+                            $('#cmdSaveArticleGroupBranchButton').prop('disabled', true);
+                        }
+
+                        cboArticleGroupBranch.dispose();
+                        cboArticleGroupBranch = new wijmo.input.ComboBox('#cboArticleGroupBranch', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: branchesObservableArray,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Id",
+                            selectedValue: branchId
+                        });
+
+                        if (!isArticleGroupCompanyChanged) {
+                            getArticleGroupBranchAccount(acccountId, salesAccountId, costAccountId, assetAccountId, expenseAccountId);
+                        }
+                    }
+                });
+            } else {
+                cboArticleGroupBranch.dispose();
+                cboArticleGroupBranch = new wijmo.input.ComboBox('#cboArticleGroupBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchesObservableArray
+                });
+
+                if (!isArticleGroupCompanyChanged) {
+                    getArticleGroupBranchAccount(acccountId, salesAccountId, costAccountId, assetAccountId, expenseAccountId);
+                }
+            }
+        }
+
+        // ============================================
+        // Get Account list for article group combo box
+        // ============================================
+        function getArticleGroupBranchAccount(acccountId, salesAccountId, costAccountId, assetAccountId, expenseAccountId) {
+            var articleGroupBranchAccountsObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listAccount',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (articleGroupBranchListAccountResults) {
+                    if (articleGroupBranchListAccountResults.length > 0) {
+                        for (i = 0; i < articleGroupBranchListAccountResults.length; i++) {
+                            articleGroupBranchAccountsObservableArray.push({
+                                Id: articleGroupBranchListAccountResults[i]["Id"],
+                                AccountCode: articleGroupBranchListAccountResults[i]["AccountCode"],
+                                Account: articleGroupBranchListAccountResults[i]["Account"]
+                            });
+                        }
+                    }
+
+                    var disabled = true;
+                    if (articleGroupBranchListAccountResults.length > 0) {
+                        disabled = false;
+                    } else {
+                        $('#cmdSaveArticleGroupBranchButton').prop('disabled', true);
+                    }
+
+                    // =============
+                    // Account Codes
+                    // =============
+                    cboArticleGroupBranchAccountCode.dispose();
+                    cboArticleGroupBranchAccountCode = new wijmo.input.ComboBox('#cboArticleGroupBranchAccountCode', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupBranchAccountsObservableArray,
+                        displayMemberPath: "AccountCode",
+                        selectedValuePath: "Id",
+                        selectedValue: acccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupBranchAccount.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupBranchSalesAccountCode.dispose();
+                    cboArticleGroupBranchSalesAccountCode = new wijmo.input.ComboBox('#cboArticleGroupBranchSalesAccountCode', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupBranchAccountsObservableArray,
+                        displayMemberPath: "AccountCode",
+                        selectedValuePath: "Id",
+                        selectedValue: salesAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupBranchSalesAccount.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupBranchCostAccountCode.dispose();
+                    cboArticleGroupBranchCostAccountCode = new wijmo.input.ComboBox('#cboArticleGroupBranchCostAccountCode', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupBranchAccountsObservableArray,
+                        displayMemberPath: "AccountCode",
+                        selectedValuePath: "Id",
+                        selectedValue: costAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupBranchCostAccount.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupBranchAssetAccountCode.dispose();
+                    cboArticleGroupBranchAssetAccountCode = new wijmo.input.ComboBox('#cboArticleGroupBranchAssetAccountCode', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupBranchAccountsObservableArray,
+                        displayMemberPath: "AccountCode",
+                        selectedValuePath: "Id",
+                        selectedValue: assetAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupBranchAssetAccount.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupBranchExpenseAccountCode.dispose();
+                    cboArticleGroupBranchExpenseAccountCode = new wijmo.input.ComboBox('#cboArticleGroupBranchExpenseAccountCode', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupBranchAccountsObservableArray,
+                        displayMemberPath: "AccountCode",
+                        selectedValuePath: "Id",
+                        selectedValue: expenseAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupBranchExpenseAccount.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    // =======
+                    // Account
+                    // =======
+                    cboArticleGroupBranchAccount.dispose();
+                    cboArticleGroupBranchAccount = new wijmo.input.ComboBox('#cboArticleGroupBranchAccount', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupBranchAccountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id",
+                        selectedValue: acccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupBranchAccountCode.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupBranchSalesAccount.dispose();
+                    cboArticleGroupBranchSalesAccount = new wijmo.input.ComboBox('#cboArticleGroupBranchSalesAccount', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupBranchAccountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id",
+                        selectedValue: salesAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupBranchSalesAccountCode.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupBranchCostAccount.dispose();
+                    cboArticleGroupBranchCostAccount = new wijmo.input.ComboBox('#cboArticleGroupBranchCostAccount', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupBranchAccountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id",
+                        selectedValue: costAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupBranchCostAccountCode.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupBranchAssetAccount.dispose();
+                    cboArticleGroupBranchAssetAccount = new wijmo.input.ComboBox('#cboArticleGroupBranchAssetAccount', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupBranchAccountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id",
+                        selectedValue: assetAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupBranchAssetAccountCode.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    cboArticleGroupBranchExpenseAccount.dispose();
+                    cboArticleGroupBranchExpenseAccount = new wijmo.input.ComboBox('#cboArticleGroupBranchExpenseAccount', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: articleGroupBranchAccountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id",
+                        selectedValue: expenseAccountId,
+                        onSelectedIndexChanged: function () {
+                            cboArticleGroupBranchExpenseAccountCode.selectedValue = this.selectedValue;
+                        }
+                    });
+
+                    setTimeout(function () {
+                        $("#loadingModalArticleGroupBranch").hide();
+                        $("#articleGroupBranchDetailForm").show();
+
+                    }, 500);
+                }
+            });
+        }
+
+        // ========================
+        // Add Article Group Branch
+        // ========================
+        function btnAddArticleGroupBranchOnlick() {
+            $('#articleGroupBranchEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $("#loadingModalArticleGroupBranch").show();
+            document.getElementById("loadingModalArticleGroupBranch").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#articleGroupBranchDetailForm").hide();
+
+            document.getElementById("cmdSaveArticleGroupBranchButton").innerHTML = '<i class="fa fa-save"></i> Save';
+            $('#cmdSaveArticleGroupBranchButton').prop('disabled', true);
+            $('#cmdArticleGroupBranchDetailCloseButton').prop('disabled', false);
+
+            articleGroupBranchId = 0;
+            createCboArticleGroupBranchesCompany(0, 0, cboArticleGroupAccount.selectedValue, cboArticleGroupSalesAccount.selectedValue, cboArticleGroupCostAccount.selectedValue, cboArticleGroupAssetAccount.selectedValue, cboArticleGroupExpenseAccount.selectedValue);
+        }
+
+        // =========================
+        // Edit Article Group Branch
+        // =========================
+        function btnEditArticleGroupBranch_OnClick() {
+            $('#articleGroupBranchEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $("#loadingModalArticleGroupBranch").show();
+            document.getElementById("loadingModalArticleGroupBranch").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#articleGroupBranchDetailForm").hide();
+
+            document.getElementById("cmdSaveArticleGroupBranchButton").innerHTML = '<i class="fa fa-save"></i> Save';
+            $('#cmdSaveArticleGroupBranchButton').prop('disabled', true);
+            $('#cmdArticleGroupBranchDetailCloseButton').prop('disabled', false);
+
+            articleGroupBranchCollectionView.editItem(articleGroupBranchCollectionView.currentItem);
+            var articleGroupBranch = articleGroupBranchCollectionView.currentEditItem;
+            articleGroupBranchId = articleGroupBranch.Id;
+            createCboArticleGroupBranchesCompany(articleGroupBranch.CompanyId, articleGroupBranch.BranchId, articleGroupBranch.AccountId, articleGroupBranch.SalesAccountId, articleGroupBranch.CostAccountId, articleGroupBranch.AssetAccountId, articleGroupBranch.ExpenseAccountId);
+        }
+
+        // =========================
+        // Save Article Group Branch
+        // =========================
+        function btnArticleGroupBranchSaveButton_OnClick() {
+            var articleGroupObject = new Object();
+            articleGroupObject.ArticleGroupId = articleGroupId;
+            articleGroupObject.BranchId = cboArticleGroupBranch.selectedValue;
+            articleGroupObject.AccountId = cboArticleGroupBranchAccount.selectedValue;
+            articleGroupObject.SalesAccountId = cboArticleGroupBranchSalesAccount.selectedValue;
+            articleGroupObject.CostAccountId = cboArticleGroupBranchCostAccount.selectedValue;
+            articleGroupObject.AssetAccountId = cboArticleGroupBranchAssetAccount.selectedValue;
+            articleGroupObject.ExpenseAccountId = cboArticleGroupBranchExpenseAccount.selectedValue;
+            var articleGroupData = JSON.stringify(articleGroupObject);
+
+            document.getElementById("cmdSaveArticleGroupBranchButton").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving';
+            $('#cmdSaveArticleGroupBranchButton').prop('disabled', true);
+            $('#cmdArticleGroupBranchDetailCloseButton').prop('disabled', true);
+
+            if (articleGroupBranchId == 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '/api/articleGroupBranch/add',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: articleGroupData,
+                    statusCode: {
+                        200: function () {
+                            toastr.success("Save Successful");
+                            $('#articleGroupBranchEdit').modal('hide');
+                            createArticleGroupBranchFlexGrid();
+                        },
+                        404: function () {
+                            toastr.error("Not Found");
+                            document.getElementById("cmdSaveArticleGroupBranchButton").innerHTML = '<i class="fa fa-save"></i> Save';
+                            $('#cmdSaveArticleGroupBranchButton').prop('disabled', false);
+                            $('#cmdArticleGroupBranchDetailCloseButton').prop('disabled', false);
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                            document.getElementById("cmdSaveArticleGroupBranchButton").innerHTML = '<i class="fa fa-save"></i> Save';
+                            $('#cmdSaveArticleGroupBranchButton').prop('disabled', false);
+                            $('#cmdArticleGroupBranchDetailCloseButton').prop('disabled', false);
+                        }
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/articleGroupBranch/update/' + articleGroupBranchId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: articleGroupData,
+                    statusCode: {
+                        200: function () {
+                            toastr.success("Update Successful");
+                            $('#articleGroupBranchEdit').modal('hide');
+                            createArticleGroupBranchFlexGrid();
+                        },
+                        404: function () {
+                            toastr.error("Not Found");
+                            document.getElementById("cmdSaveArticleGroupBranchButton").innerHTML = '<i class="fa fa-save"></i> Save';
+                            $('#cmdSaveArticleGroupBranchButton').prop('disabled', false);
+                            $('#cmdArticleGroupBranchDetailCloseButton').prop('disabled', false);
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                            document.getElementById("cmdSaveArticleGroupBranchButton").innerHTML = '<i class="fa fa-save"></i> Save';
+                            $('#cmdSaveArticleGroupBranchButton').prop('disabled', false);
+                            $('#cmdArticleGroupBranchDetailCloseButton').prop('disabled', false);
+                        }
+                    }
+                });
+            }
+        }
+
+        // ===========================
+        // Delete Article Group Branch
+        // ===========================
+        function btnDeleteArticleGroupBranch_OnClick() {
+            $('#deleteArticleGroupBranchConfirm').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            document.getElementById("cmdConfirmDeleteArticleGroupBranch").innerHTML = '<i class="fa fa-save"></i> Save';
+            $('#cmdConfirmDeleteArticleGroupBranch').prop('disabled', false);
+            $('#cmdConfirmDeleteCloseButtonArticleGroupBranch').prop('disabled', false);
+        }
+
+        // ===================================
+        // Confirm Delete Article Group Branch
+        // ===================================
+        function cmdArticleGroupBranchConfirmDeleteButton_OnClick() {
+            document.getElementById("cmdConfirmDeleteArticleGroupBranch").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Deleting';
+            $('#cmdConfirmDeleteArticleGroupBranch').prop('disabled', true);
+            $('#cmdConfirmDeleteCloseButtonArticleGroupBranch').prop('disabled', true);
+
+            articleGroupBranchCollectionView.editItem(articleGroupBranchCollectionView.currentItem);
+            var articleGroupBranch = articleGroupBranchCollectionView.currentEditItem;
+            $.ajax({
+                url: '/api/articleGroupBranch/delete/' + articleGroupBranch.Id,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        toastr.success("Delete Successful");
+                        $('#deleteArticleGroupBranchConfirm').modal('hide');
+                        createArticleGroupBranchFlexGrid();
+                    },
+                    404: function () {
+                        toastr.error("Not Found");
+                        $('#deleteArticleGroupBranchConfirm').modal('hide');
+                        document.getElementById("cmdConfirmDeleteArticleGroupBranch").innerHTML = '<i class="fa fa-save"></i> Save';
+                        $('#cmdConfirmDeleteArticleGroupBranch').prop('disabled', false);
+                        $('#cmdConfirmDeleteCloseButtonArticleGroupBranch').prop('disabled', false);
+
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#deleteArticleGroupBranchConfirm').modal('hide');
+                        document.getElementById("cmdConfirmDeleteArticleGroupBranch").innerHTML = '<i class="fa fa-save"></i> Save';
+                        $('#cmdConfirmDeleteArticleGroupBranch').prop('disabled', false);
+                        $('#cmdConfirmDeleteCloseButtonArticleGroupBranch').prop('disabled', false);
+                    }
+                }
             });
         }
     </script>
@@ -5849,6 +6630,20 @@
                     cboArticleGroupCostAccount.disabled = true;
                     cboArticleGroupAssetAccount.disabled = true;
                     cboArticleGroupExpenseAccount.disabled = true;
+
+                    $('#btnAddArticleGroupBranch').prop('disabled', true);
+                    if (articleGroupId != 0) {
+                        $("#loadingArticleGroupBranch").show();
+                        document.getElementById("loadingArticleGroupBranch").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+                        $("#articleGroupBranchFlexGridDetail").hide();
+
+                        setTimeout(function () {
+                            createArticleGroupBranchFlexGrid();
+                        }, 500);
+                    } else {
+                        $("#loadingArticleGroupBranch").hide();
+                        $("#articleGroupBranchFlexGridDetail").hide();
+                    }
                 } else {
                     document.getElementById('articleGroup_ArticleGroup').disabled = false;
                     document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
@@ -5863,6 +6658,20 @@
                     cboArticleGroupCostAccount.disabled = false;
                     cboArticleGroupAssetAccount.disabled = false;
                     cboArticleGroupExpenseAccount.disabled = false;
+
+                    $('#btnAddArticleGroupBranch').prop('disabled', false);
+                    if (articleGroupId != 0) {
+                        $("#loadingArticleGroupBranch").show();
+                        document.getElementById("loadingArticleGroupBranch").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+                        $("#articleGroupBranchFlexGridDetail").hide();
+
+                        setTimeout(function () {
+                            createArticleGroupBranchFlexGrid();
+                        }, 500);
+                    } else {
+                        $("#loadingArticleGroupBranch").hide();
+                        $("#articleGroupBranchFlexGridDetail").hide();
+                    }
                 }
             });
 
@@ -5958,6 +6767,18 @@
                 $("#btnAddArticleGroup").prop("disabled", true);
                 $("#btnAddOtherArticle").prop("disabled", true);
             }
+
+            $(document).on('show.bs.modal', '.modal', function (event) {
+                var zIndex = 1040 + (10 * $('.modal:visible').length);
+                $(this).css('z-index', zIndex);
+                setTimeout(function () {
+                    $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+                }, 0);
+            });
+
+            $(document).on('hidden.bs.modal', '.modal', function () {
+                $('.modal:visible').length && $(document.body).addClass('modal-open');
+            });
         });
     </script>
     <script type="text/javascript">
