@@ -590,6 +590,7 @@
                                 $("#btnUserDetailLock").prop("disabled", true);
                                 $("#btnAddUserForm").prop("disabled", true);
                                 $("#btnCopyUserRights").prop("disabled", true);
+                                $("#btnAddBranches").prop("disabled", true);
 
                                 var canUnLock = "@ViewData["CanUnlock"]";
                                 if (canUnLock == "False") {
@@ -609,6 +610,7 @@
                                 if (canAdd == "False") {
                                     $("#btnAddUserForm").prop("disabled", true);
                                     $("#btnCopyUserRights").prop("disabled", true);
+                                    $("#btnAddBranches").prop("disabled", true);
                                 }
                             }
 
@@ -1184,7 +1186,7 @@
         function getUserDefaultBranches() {
             var userDefaultBranchesObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/userBranch/list',
+                url: '/api/userBranches/list/' + userId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',

@@ -69,6 +69,28 @@ namespace easyfis.ApiControllers
             }
         }
 
+        // ====================
+        // User Branches (List)
+        // ====================
+        [Authorize, HttpGet, Route("api/userBranches/list/{userId}")]
+        public List<Models.MstUserBranch> listUserBranches(String userId)
+        {
+            var userBranches = from d in db.MstUserBranches
+                               where d.UserId == Convert.ToInt32(userId)
+                               select new Models.MstUserBranch
+                               {
+                                   Id = d.Id,
+                                   UserId = d.UserId,
+                                   User = d.MstUser.FullName,
+                                   CompanyId = d.MstBranch.CompanyId,
+                                   Company = d.MstBranch.MstCompany.Company,
+                                   BranchId = d.BranchId,
+                                   Branch = d.MstBranch.Branch
+                               };
+
+            return userBranches.ToList();
+        }
+
         // ======================
         // Add User Branch (Post)
         // ======================
