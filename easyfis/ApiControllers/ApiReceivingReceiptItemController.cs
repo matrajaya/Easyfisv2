@@ -25,7 +25,7 @@ namespace easyfis.Controllers
                 VATAmount = Amount * (VATRate / 100);
             }
 
-            return Math.Round((VATAmount) * 100) / 100;
+            return VATAmount;
         }
 
         // cmmpte WTAX Amount
@@ -42,7 +42,7 @@ namespace easyfis.Controllers
                 WTAXAmount = Amount * (WTAXRate / 100);
             }
 
-            return Math.Round((WTAXAmount) * 100) / 100;
+            return WTAXAmount;
         }
 
         // cmmpte Base Cost Amount
@@ -80,7 +80,7 @@ namespace easyfis.Controllers
                 }
             }
 
-            return Math.Round((BaseCost) * 100) / 100;
+            return BaseCost;
         }
 
         // cmmpte Base Cost Amount
@@ -92,7 +92,7 @@ namespace easyfis.Controllers
                 return quantity = 0;
             }
 
-            return Math.Round((quantity) * 100) / 100;
+            return quantity;
         }
 
         // get received quantity

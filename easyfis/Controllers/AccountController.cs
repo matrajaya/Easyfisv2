@@ -224,19 +224,41 @@ namespace easyfis.Controllers
                         var account = from d in db.MstAccounts select d;
                         var discount = from d in db.MstDiscounts select d;
 
+                        var companyId = company.FirstOrDefault().Id;
+                        var branchId = branch.FirstOrDefault().Id;
+                        var incomeAccountId = account.FirstOrDefault().Id;
+                        var supplierAdvancesAccountId = account.FirstOrDefault().Id;
+                        var customerAdvancesAccountId = account.FirstOrDefault().Id;
+                        var officialReceiptName = "Official Receipt";
+                        var inventoryType = "Moving Average";
+                        var defaultSalesInvoiceDiscountId = discount.FirstOrDefault().Id;
+
+                        var adminUser = from d in db.MstUsers
+                                        where d.UserName.Equals("admin")
+                                        select d;
+
+                        if (adminUser.Any())
+                        {
+                            companyId = adminUser.FirstOrDefault().CompanyId;
+                            branchId = adminUser.FirstOrDefault().BranchId;
+                            incomeAccountId = adminUser.FirstOrDefault().IncomeAccountId;
+                            customerAdvancesAccountId = adminUser.FirstOrDefault().CustomerAdvancesAccountId;
+                            defaultSalesInvoiceDiscountId = adminUser.FirstOrDefault().DefaultSalesInvoiceDiscountId;
+                        }
+
                         Data.MstUser newMstUser = new Data.MstUser();
                         newMstUser.UserId = user.Id;
                         newMstUser.UserName = model.UserName;
                         newMstUser.Password = model.Password;
                         newMstUser.FullName = model.FullName;
-                        newMstUser.CompanyId = company.FirstOrDefault().Id;
-                        newMstUser.BranchId = branch.FirstOrDefault().Id;
-                        newMstUser.IncomeAccountId = account.FirstOrDefault().Id;
-                        newMstUser.SupplierAdvancesAccountId = account.FirstOrDefault().Id;
-                        newMstUser.CustomerAdvancesAccountId = account.FirstOrDefault().Id;
-                        newMstUser.OfficialReceiptName = "Official Receipt";
-                        newMstUser.InventoryType = "Specific Identification";
-                        newMstUser.DefaultSalesInvoiceDiscountId = discount.FirstOrDefault().Id;
+                        newMstUser.CompanyId = companyId;
+                        newMstUser.BranchId = branchId;
+                        newMstUser.IncomeAccountId = incomeAccountId;
+                        newMstUser.SupplierAdvancesAccountId = supplierAdvancesAccountId;
+                        newMstUser.CustomerAdvancesAccountId = customerAdvancesAccountId;
+                        newMstUser.OfficialReceiptName = officialReceiptName;
+                        newMstUser.InventoryType = inventoryType;
+                        newMstUser.DefaultSalesInvoiceDiscountId = defaultSalesInvoiceDiscountId;
                         newMstUser.IsLocked = true;
                         newMstUser.CreatedById = 0;
                         newMstUser.CreatedDateTime = DateTime.Now;
@@ -245,13 +267,12 @@ namespace easyfis.Controllers
                         db.MstUsers.InsertOnSubmit(newMstUser);
                         db.SubmitChanges();
 
-                        var mstUsersData = from d in db.MstUsers where d.UserId == user.Id select d;
+                        var mstUsersData = from d in db.MstUsers where d.Id == newMstUser.Id select d;
                         if (mstUsersData.Any())
                         {
-                            var mstUserId = (from d in db.MstUsers.OrderByDescending(d => d.Id) where d.UserId == user.Id select d.Id).FirstOrDefault();
                             var updateMstUsersData = mstUsersData.FirstOrDefault();
-                            updateMstUsersData.CreatedById = mstUserId;
-                            updateMstUsersData.UpdatedById = mstUserId;
+                            updateMstUsersData.CreatedById = newMstUser.Id;
+                            updateMstUsersData.UpdatedById = newMstUser.Id;
                             db.SubmitChanges();
                         }
 

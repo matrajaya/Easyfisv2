@@ -277,7 +277,19 @@ namespace easyfis.Controllers
                     {
                         foreach (var stockTransferItem in updateStockTransfer.TrnStockTransferItems)
                         {
-                            if (stockTransferItem.MstArticleInventory.Quantity < 0)
+                            var mstArticleInventory = from d in db.MstArticleInventories
+                                                      where d.TrnStockTransferItems.Contains(stockTransferItem)
+                                                      select d;
+
+                            if (mstArticleInventory.Any())
+                            {
+                                if (stockTransferItem.MstArticleInventory.Quantity < 0)
+                                {
+                                    foundNegativeQuantity = true;
+                                    break;
+                                }
+                            }
+                            else
                             {
                                 foundNegativeQuantity = true;
                                 break;
