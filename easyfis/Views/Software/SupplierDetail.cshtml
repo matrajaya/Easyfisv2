@@ -619,8 +619,8 @@
                                     ArticleId: Results[i]["ArticleId"],
                                     Article: Results[i]["Article"],
                                     Particulars: Results[i]["Particulars"],
-                                    DebitAmount: Results[i]["DebitAmount"],
-                                    CreditAmount: Results[i]["CreditAmount"],
+                                    DebitAmount: parseFloat(Results[i]["DebitAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    CreditAmount: parseFloat(Results[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     ORId: Results[i]["ORId"],
                                     CVId: Results[i]["CVId"],
                                     JVId: Results[i]["JVId"],
@@ -684,13 +684,15 @@
                         "header": "Debit",
                         "binding": "DebitAmount",
                         "allowSorting": true,
-                        "width": "2*"
+                        "width": "2*",
+                        "align": "right"
                     },
                     {
                         "header": "Credit",
                         "binding": "CreditAmount",
                         "allowSorting": true,
-                        "width": "2*"
+                        "width": "2*",
+                        "align": "right"
                     }
                 ],
                 autoGenerateColumns: false,

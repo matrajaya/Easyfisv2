@@ -853,7 +853,7 @@
                             cboExpenseAccount.selectedValue = itemResults.ExpenseAccountId;
                             document.getElementById('articleItem_category').value = itemResults.Category;
                             cboUnit.selectedValue = itemResults.UnitId;
-                            document.getElementById('articleItem_price').value = itemResults.Price.toLocaleString();
+                            document.getElementById('articleItem_price').value = parseFloat(itemResults.Price).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                             document.getElementById('articleItem_particulars').value = itemResults.Particulars;
                             cboInputTax.selectedValue = itemResults.InputTaxId;
                             cboOutputTax.selectedValue = itemResults.OutputTaxId;
@@ -871,7 +871,7 @@
                                 }
                             }
                             document.getElementById('articleItem_oldManualCode').value = itemResults.ManualArticleOldCode;
-                            document.getElementById('articleItem_manualCost').value = itemResults.Cost.toLocaleString();
+                            document.getElementById('articleItem_manualCost').value = parseFloat(itemResults.Cost).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                             cboDateAcquired.dispose();
                             cboDateAcquired = new wijmo.input.InputDate('#cboDateAcquired', {
                                 format: 'MM-dd-yyyy',

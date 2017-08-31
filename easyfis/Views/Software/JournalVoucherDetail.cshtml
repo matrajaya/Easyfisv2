@@ -115,7 +115,10 @@
                             </div>
                             <div class="panel-body">
                                 <div id="JournalVoucherLineGrid"></div>
-                                <br /><br />
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="padding-bottom: 0px;">
                                 <div class="row">
                                     <div class="col-md-7">
 
@@ -133,6 +136,12 @@
                                             </dt>
                                             <dd>
                                                 <input type="text" class="form-control  numberField" id="totalCredit" placeholder="0.00" disabled />
+                                            </dd>
+                                            <dt>
+                                                <b>Total Variance</b>
+                                            </dt>
+                                            <dd>
+                                                <input type="text" class="form-control  numberField" id="totalVariance" placeholder="0.00" disabled />
                                             </dd>
                                         </dl>
                                     </div>
@@ -655,6 +664,8 @@
                                     Particulars: Results[i]["Particulars"],
                                     DebitAmount: Results[i]["DebitAmount"],
                                     CreditAmount: Results[i]["CreditAmount"],
+                                    DebitAmountDisplay: parseFloat(Results[i]["DebitAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    CreditAmountDisplay: parseFloat(Results[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     APRRId: Results[i]["APRRId"],
                                     APRR: Results[i]["APRR"],
                                     APRRBranch: Results[i]["APRRBranch"],
@@ -669,8 +680,10 @@
                             }
                         }
 
-                        document.getElementById('totalDebit').value = debitAmountTotal.toLocaleString();
-                        document.getElementById('totalCredit').value = creditAmountTotal.toLocaleString();
+                        document.getElementById('totalDebit').value = parseFloat(debitAmountTotal).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById('totalCredit').value = parseFloat(creditAmountTotal).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                        document.getElementById('totalVariance').value = parseFloat((debitAmountTotal - creditAmountTotal)).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
                         NProgress.done();
                     }
@@ -743,13 +756,15 @@
                     },
                     {
                         "header": "Debit",
-                        "binding": "DebitAmount",
+                        "binding": "DebitAmountDisplay",
+                        "align": "right",
                         "allowSorting": true,
                         "width": 120
                     },
                     {
                         "header": "Credit",
-                        "binding": "CreditAmount",
+                        "binding": "CreditAmountDisplay",
+                        "align": "right",
                         "allowSorting": true,
                         "width": 120
                     },
@@ -1060,8 +1075,8 @@
             IsAccountChanged = false;
             getBranchesForComboBoxInJournalVoucherLine(0,0,0,0,0);
             document.getElementById('JVL_Particulars').value = 'NA';
-            document.getElementById('JVL_DebitAmount').value = 0;
-            document.getElementById('JVL_CreditAmount').value = 0;
+            document.getElementById('JVL_DebitAmount').value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('JVL_CreditAmount').value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             document.getElementById('JVL_IsClear').checked = false;
         }
 
@@ -1094,8 +1109,24 @@
             IsAccountChanged = false;
             getBranchesForComboBoxInJournalVoucherLine(journalVoucherLine.BranchId, journalVoucherLine.AccountId, journalVoucherLine.ArticleId, journalVoucherLine.APRRId, journalVoucherLine.ARSIId);
             document.getElementById('JVL_Particulars').value = journalVoucherLine.Particulars;
-            document.getElementById('JVL_DebitAmount').value = journalVoucherLine.DebitAmount;
-            document.getElementById('JVL_CreditAmount').value = journalVoucherLine.CreditAmount;
+
+            var debitAmount = journalVoucherLine.DebitAmount;
+            var creditAmount = journalVoucherLine.CreditAmount;
+
+            if (debitAmount % 1 != 0) {
+                document.getElementById('JVL_DebitAmount').value = journalVoucherLine.DebitAmount.toLocaleString(undefined, { maximumFractionDigits: 5 });
+            } else {
+                // if the number has no decimal places
+                document.getElementById('JVL_DebitAmount').value = parseFloat(journalVoucherLine.DebitAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            if (creditAmount % 1 != 0) {
+                document.getElementById('JVL_CreditAmount').value = journalVoucherLine.CreditAmount.toLocaleString(undefined, { maximumFractionDigits: 5 });
+            } else {
+                // if the number has no decimal places
+                document.getElementById('JVL_CreditAmount').value = parseFloat(journalVoucherLine.CreditAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
             document.getElementById('JVL_IsClear').checked = journalVoucherLine.IsClear;
         }
 
