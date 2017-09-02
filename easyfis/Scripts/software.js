@@ -19,6 +19,7 @@ $('input.numberField').on("blur", function (e) {
     var thisValue = (x1 + x2).replace(/\,/g, '');
     var returnValue = 0;
 
+    // if the field has decimal values
     if (thisValue % 1 != 0) {
         // count the number of decimal digits
         if ((realValue.split('.')[1] || []).length == 1) {
@@ -27,6 +28,7 @@ $('input.numberField').on("blur", function (e) {
             returnValue = realValue.toLocaleString(undefined, { maximumFractionDigits: 5 });
         }
     } else {
+        // if no decimal values, then fixed to two zero digits (0.00)
         returnValue = parseFloat(thisValue).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
@@ -56,3 +58,20 @@ $("input.numberField").keydown(function (e) {
         e.preventDefault();
     }
 });
+
+// =====================
+// Format Decimal Values
+// =====================
+function formatDecimalValues(decimalValue) {
+    var realValue = parseFloat(decimalValue).toString();
+    var replaceValue = parseFloat(decimalValue).toString().replace(/\,/g, '');
+    if (replaceValue % 1 != 0) {
+        if ((realValue.split('.')[1] || []).length == 1) {
+            return parseFloat(replaceValue).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        } else {
+            return parseFloat(realValue).toLocaleString(undefined, { maximumFractionDigits: 5 });
+        }
+    } else {
+        return parseFloat(replaceValue).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+}

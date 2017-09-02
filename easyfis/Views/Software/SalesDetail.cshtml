@@ -143,6 +143,37 @@
                                 <div id="ItemGrid"></div>
                             </div>
                         </div>
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="padding-bottom: 0px;">
+                                <div class="row">
+                                    <div class="col-md-7">
+
+                                    </div>
+                                    <div class="col-md-5">
+                                        <dl class="dl-horizontal">
+                                            <dt>
+                                                <b>Total Amount</b>
+                                            </dt>
+                                            <dd>
+                                                <input type="text" class="form-control numberField" id="totalSIAmount" placeholder="0.00" disabled />
+                                            </dd>
+                                            <dt>
+                                                <b>Total Discount Amount</b>
+                                            </dt>
+                                            <dd>
+                                                <input type="text" class="form-control numberField" id="totalSIDiscountAmount" placeholder="0.00" disabled />
+                                            </dd>
+                                            <dt>
+                                                <b>Total VAT Amount</b>
+                                            </dt>
+                                            <dd>
+                                                <input type="text" class="form-control numberField" id="totalSIVATAmount" placeholder="0.00" disabled />
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div id="InventoryEntries" class="tab-pane fade in" style="margin-bottom: 15px;">
                         <div id="inventoryFlexGrid"></div>
@@ -835,6 +866,9 @@
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     success: function (Results) {
+                        var totalAmount = 0;
+                        var totalDiscountAmount = 0;
+                        var totalVATAmount = 0;
                         if (Results.length > 0) {
                             var canEdit = "@ViewData["CanEdit"]";
                             var editDisabled = "";
@@ -871,26 +905,42 @@
                                     UnitId: Results[i]["UnitId"],
                                     Unit: Results[i]["Unit"],
                                     Quantity: Results[i]["Quantity"],
+                                    QuantityDisplay: parseFloat(Results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Price: Results[i]["Price"],
+                                    PriceDisplay: parseFloat(Results[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     DiscountId: Results[i]["DiscountId"],
                                     Discount: Results[i]["Discount"],
                                     DiscountRate: Results[i]["Discount"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + Results[i]["DiscountRate"],
                                     DiscountRateEdit: Results[i]["DiscountRate"],
                                     DiscountAmount: Results[i]["DiscountAmount"],
+                                    DiscountAmountDisplay: parseFloat(Results[i]["DiscountAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     NetPrice: Results[i]["NetPrice"],
+                                    NetPriceDisplay: parseFloat(Results[i]["NetPrice"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Amount: Results[i]["Amount"],
+                                    AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     VATId: Results[i]["VATId"],
                                     VAT: Results[i]["VAT"],
-                                    VATPercentage: Results[i]["VAT"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + Results[i]["VATPercentage"],
+                                    VATPercentage: Results[i]["VAT"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + parseFloat(Results[i]["VATPercentage"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     VATRate: Results[i]["VATPercentage"],
                                     VATAmount: Results[i]["VATAmount"],
+                                    VATAmountDisplay: parseFloat(Results[i]["VATAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     BaseUnitId: Results[i]["BaseUnitId"],
                                     BaseUnit: Results[i]["BaseUnit"],
                                     BaseQuantity: Results[i]["BaseQuantity"],
+                                    BaseQuantityDisplay: parseFloat(Results[i]["BaseQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     BasePrice: Results[i]["BasePrice"],
+                                    BasePriceDisplay: parseFloat(Results[i]["BasePrice"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 });
+
+                                totalAmount += Results[i]["Amount"];
+                                totalDiscountAmount += Results[i]["DiscountAmount"];
+                                totalVATAmount += Results[i]["VATAmount"];
                             }
                         }
+
+                        document.getElementById('totalSIAmount').value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById('totalSIDiscountAmount').value = parseFloat(totalDiscountAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById('totalSIVATAmount').value = parseFloat(totalVATAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
                         NProgress.done();
                     }
@@ -965,8 +1015,9 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "Quantity",
+                        "binding": "QuantityDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100,
                     },
                     {
@@ -977,8 +1028,9 @@
                     },
                     {
                         "header": "Price",
-                        "binding": "Price",
+                        "binding": "PriceDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100,
                     },
                     {
@@ -991,20 +1043,23 @@
                     },
                     {
                         "header": "Discount Amt.",
-                        "binding": "DiscountAmount",
+                        "binding": "DiscountAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 110,
                     },
                     {
                         "header": "Net Price",
-                        "binding": "NetPrice",
+                        "binding": "NetPriceDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100,
                     },
                     {
                         "header": "Amount",
-                        "binding": "Amount",
+                        "binding": "AmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100,
                     },
                     {
@@ -1017,8 +1072,9 @@
                     },
                     {
                         "header": "VAT Amt.",
-                        "binding": "VATAmount",
+                        "binding": "VATAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100,
                     },
                     {
@@ -1029,14 +1085,16 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "BaseQuantity",
+                        "binding": "BaseQuantityDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
                         "header": "Price",
-                        "binding": "BasePrice",
+                        "binding": "BasePriceDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                 ],
@@ -1352,15 +1410,15 @@
                             selectedValuePath: "Price",
                             selectedValue: priceValue,
                             onSelectedIndexChanged: function () {
-                                document.getElementById("saleItem_Price").value = this.selectedItem["Price"].toLocaleString();
+                                document.getElementById("saleItem_Price").value = formatDecimalValues(this.selectedItem["Price"]);
                                 computation();
                             }
                         });
 
                         if (cboItemPrice.selectedValue != null) {
-                            document.getElementById("saleItem_Price").value = cboItemPrice.selectedItem["Price"].toLocaleString();
+                            document.getElementById("saleItem_Price").value = formatDecimalValues(cboItemPrice.selectedItem["Price"]);
                         } else {
-                            document.getElementById("saleItem_Price").value = 0;
+                            document.getElementById("saleItem_Price").value = formatDecimalValues(0);
                         }
 
                         getDiscountForComboBox(discountId, VATId);
@@ -1377,7 +1435,7 @@
                     selectedValue: priceValue
                 });
 
-                document.getElementById("saleItem_Price").value = 0;
+                document.getElementById("saleItem_Price").value = formatDecimalValues(0);
 
                 getDiscountForComboBox(discountId, VATId);
                 $("#cmdSaveSaleItemsButton").prop("disabled", true);
@@ -1433,15 +1491,15 @@
                         selectedValuePath: "Id",
                         selectedValue: defaultDiscount,
                         onSelectedIndexChanged: function () {
-                            document.getElementById("saleItem_DiscountRate").value = this.selectedItem["DiscountRate"].toLocaleString();
+                            document.getElementById("saleItem_DiscountRate").value = formatDecimalValues(this.selectedItem["DiscountRate"]);
                             computation();
                         }
                     });
 
                     if (salesItemId == 0) {
-                        document.getElementById("saleItem_DiscountRate").value = 0;
+                        document.getElementById("saleItem_DiscountRate").value = formatDecimalValues(0);
                         if (cboItemDiscount.selectedValue != null) {
-                            document.getElementById("saleItem_DiscountRate").value = cboItemDiscount.selectedItem["DiscountRate"].toLocaleString();
+                            document.getElementById("saleItem_DiscountRate").value = formatDecimalValues(cboItemDiscount.selectedItem["DiscountRate"]);
                         }
                     }
 
@@ -1499,15 +1557,15 @@
                         selectedValuePath: "Id",
                         selectedValue: VATIdValue,
                         onSelectedIndexChanged: function () {
-                            document.getElementById("saleItem_VATRate").value = this.selectedItem["TaxRate"].toLocaleString();
+                            document.getElementById("saleItem_VATRate").value = formatDecimalValues(this.selectedItem["TaxRate"]);
                             computation();
                         }
                     });
 
                     if (salesItemId == 0) {
-                        document.getElementById("saleItem_VATRate").value = 0;
+                        document.getElementById("saleItem_VATRate").value = formatDecimalValues(0);
                         if (cboItemVAT.selectedValue != null) {
-                            document.getElementById("saleItem_VATRate").value = cboItemVAT.selectedItem["TaxRate"].toLocaleString();
+                            document.getElementById("saleItem_VATRate").value = formatDecimalValues(cboItemVAT.selectedItem["TaxRate"]);
                         }
                     }
 
@@ -1538,10 +1596,10 @@
                 VATAmount = amount * (VATPercentage / 100);
             }
 
-            document.getElementById('saleItem_NetPrice').value = netPrice.toLocaleString();
-            document.getElementById('saleItem_DiscountAmount').value = discountAmount.toLocaleString();
-            document.getElementById('saleItem_Amount').value = amount.toLocaleString();
-            document.getElementById('saleItem_VATAmount').value = VATAmount.toLocaleString();
+            document.getElementById('saleItem_NetPrice').value = formatDecimalValues(netPrice);
+            document.getElementById('saleItem_DiscountAmount').value = formatDecimalValues(discountAmount);
+            document.getElementById('saleItem_Amount').value = formatDecimalValues(amount);
+            document.getElementById('saleItem_VATAmount').value = formatDecimalValues(VATAmount);
         }
 
         $("#saleItem_Quantity").keyup(function (e) {
@@ -1568,10 +1626,10 @@
                 VATAmount = amount * (VATPercentage / 100);
             }
 
-            document.getElementById('saleItem_DiscountRate').value = discountRate.toLocaleString();
-            document.getElementById('saleItem_NetPrice').value = netPrice.toLocaleString();
-            document.getElementById('saleItem_Amount').value = amount.toLocaleString();
-            document.getElementById('saleItem_VATAmount').value = VATAmount.toLocaleString();
+            document.getElementById('saleItem_DiscountRate').value = formatDecimalValues(discountRate);
+            document.getElementById('saleItem_NetPrice').value = formatDecimalValues(netPrice);
+            document.getElementById('saleItem_Amount').value = formatDecimalValues(amount);
+            document.getElementById('saleItem_VATAmount').value = formatDecimalValues(VATAmount);
         });
 
         // =============
@@ -1600,7 +1658,7 @@
             salesItemId = 0;
             getArticleItemForManualCodeAndComponent(0,0,0,0,0,0,0);
             document.getElementById('saleItem_Particulars').value = "NA";
-            document.getElementById('saleItem_Quantity').value = 1;
+            document.getElementById('saleItem_Quantity').value = formatDecimalValues(1);
         }
 
         // ==============
@@ -1631,14 +1689,14 @@
             getArticleItemForManualCodeAndComponent(item.ItemId, item.ItemInventoryId, item.UnitId, item.Price, item.DiscountId, item.VATId);
             salesItemId = item.Id;
             document.getElementById('saleItem_Particulars').value = item.Particulars;
-            document.getElementById('saleItem_Quantity').value = item.Quantity.toLocaleString();
-            document.getElementById('saleItem_Price').value = item.Price.toLocaleString();
-            document.getElementById('saleItem_DiscountRate').value = item.DiscountRateEdit.toLocaleString();
-            document.getElementById('saleItem_DiscountAmount').value = item.DiscountAmount.toLocaleString();
-            document.getElementById('saleItem_NetPrice').value = item.NetPrice.toLocaleString();
-            document.getElementById('saleItem_Amount').value = item.Amount.toLocaleString();
-            document.getElementById('saleItem_VATRate').value = item.VATRate.toLocaleString();
-            document.getElementById('saleItem_VATAmount').value = item.VATAmount.toLocaleString();
+            document.getElementById('saleItem_Quantity').value = formatDecimalValues(item.Quantity);
+            document.getElementById('saleItem_Price').value = formatDecimalValues(item.Price);
+            document.getElementById('saleItem_DiscountRate').value = formatDecimalValues(item.DiscountRateEdit);
+            document.getElementById('saleItem_DiscountAmount').value = formatDecimalValues(item.DiscountAmount);
+            document.getElementById('saleItem_NetPrice').value = formatDecimalValues(item.NetPrice);
+            document.getElementById('saleItem_Amount').value = formatDecimalValues(item.Amount);
+            document.getElementById('saleItem_VATRate').value = formatDecimalValues(item.VATRate);
+            document.getElementById('saleItem_VATAmount').value = formatDecimalValues(item.VATAmount);
 
             if (isLocked) {
                 document.getElementById('saleItem_Particulars').disabled = true;
@@ -1834,8 +1892,8 @@
                                 ArticleId: Results[i]["ArticleId"],
                                 Article: Results[i]["Article"],
                                 Particulars: Results[i]["Particulars"],
-                                DebitAmount: Results[i]["DebitAmount"],
-                                CreditAmount: Results[i]["CreditAmount"],
+                                DebitAmountDisplay: parseFloat(Results[i]["DebitAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                CreditAmountDisplay: parseFloat(Results[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 ORId: Results[i]["ORId"],
                                 CVId: Results[i]["CVId"],
                                 JVId: Results[i]["JVId"],
@@ -1860,10 +1918,10 @@
                             }
                         }
 
-                        document.getElementById('totalDebitInJournal').value = debitAmountTotal.toLocaleString();
-                        document.getElementById('totalCreditInJournal').value = creditAmountTotal.toLocaleString();
+                        document.getElementById('totalDebitInJournal').value = debitAmountTotal.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById('totalCreditInJournal').value = creditAmountTotal.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         var variance = debitAmountTotal - creditAmountTotal;
-                        document.getElementById('variance').value = variance.toLocaleString();
+                        document.getElementById('variance').value = variance.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     }
 
                     $("#loadingJournalGridList").hide();
@@ -1934,14 +1992,16 @@
                     },
                     {
                         "header": "Debit",
-                        "binding": "DebitAmount",
+                        "binding": "DebitAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*",
                     },
                     {
                         "header": "Credit",
-                        "binding": "CreditAmount",
+                        "binding": "CreditAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     }
                 ],
@@ -1990,8 +2050,10 @@
                                 STId: Results[i]["STId"],
                                 QuantityIn: Results[i]["QuantityIn"],
                                 Quantity: Results[i]["Quantity"],
+                                QuantityDisplay: parseFloat(Results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 QuantityOut: Results[i]["QuantityOut"],
                                 Amount: Results[i]["Amount"],
+                                AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 Particulars: Results[i]["Particulars"],
                                 Code: Results[i]["Code"],
                                 Unit: Results[i]["Unit"]
@@ -2059,8 +2121,9 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "Quantity",
+                        "binding": "QuantityDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "1*",
                     },
                     {
@@ -2071,8 +2134,9 @@
                     },
                     {
                         "header": "Amount",
-                        "binding": "Amount",
+                        "binding": "AmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "1*",
                     },
                 ],
@@ -2104,6 +2168,9 @@
             refreshInventoryFlexGrid();
         });
 
+        // ===============
+        // Inventory Items
+        // ===============
         function getInventoryItems() {
             var itemsObservableArray = new wijmo.collections.ObservableArray();
             var branchId = cboSIBranch.selectedValue;
@@ -2124,7 +2191,9 @@
                                 Article: articleInventoriesResults[i]["Article"],
                                 InventoryCode: articleInventoriesResults[i]["InventoryCode"],
                                 Quantity: articleInventoriesResults[i]["Quantity"],
+                                QuantityDisplay: parseFloat(articleInventoriesResults[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 Price: articleInventoriesResults[i]["Price"],
+                                PriceDisplay: parseFloat(articleInventoriesResults[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 Cost: articleInventoriesResults[i]["Cost"],
                                 Amount: articleInventoriesResults[i]["Amount"],
                                 Particulars: articleInventoriesResults[i]["Particulars"],
@@ -2144,9 +2213,9 @@
             return itemsObservableArray;
         }
 
-        // ==============================
-        // Get Data from MstArtcile Table
-        // ==============================
+        // ===================
+        // Non Inventory Items
+        // ===================
         function getNonInventoryItems() {
             var itemsObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
@@ -2180,6 +2249,7 @@
                                 InputTaxId: itemResults[i]["InputTaxId"],
                                 WTaxTypeId: itemResults[i]["WTaxTypeId"],
                                 Price: itemResults[i]["Price"],
+                                PriceDisplay: parseFloat(itemResults[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 Cost: itemResults[i]["Cost"],
                                 IsInventory: itemResults[i]["IsInventory"],
                                 Particulars: itemResults[i]["Particulars"],
@@ -2212,9 +2282,9 @@
             return itemsObservableArray;
         }
 
-        // ==============================================
-        // Get Data from MstArtcile Table - Package Items
-        // ==============================================
+        // =============
+        // Package Items
+        // =============
         function getPackageItems() {
             var itemsObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
@@ -2248,6 +2318,7 @@
                                 InputTaxId: itemResults[i]["InputTaxId"],
                                 WTaxTypeId: itemResults[i]["WTaxTypeId"],
                                 Price: itemResults[i]["Price"],
+                                PriceDisplay: parseFloat(itemResults[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 Cost: itemResults[i]["Cost"],
                                 IsInventory: itemResults[i]["IsInventory"],
                                 Particulars: itemResults[i]["Particulars"],
@@ -2378,14 +2449,16 @@
                             },
                             {
                                 "header": "Price",
-                                "binding": "Price",
+                                "binding": "PriceDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "width": "2*",
                             },
                             {
                                 "header": "On Hand Quantity",
-                                "binding": "Quantity",
+                                "binding": "QuantityDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "width": "2*",
                             },
                             {
@@ -2448,8 +2521,9 @@
                     },
                     {
                         "header": "Price",
-                        "binding": "Price",
+                        "binding": "PriceDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     },
                     {
@@ -2506,8 +2580,9 @@
                             },
                             {
                                 "header": "Price",
-                                "binding": "Price",
+                                "binding": "PriceDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "width": "2*"
                             },
                             {
@@ -2556,7 +2631,7 @@
             salesItemId = 0;
             getArticleItemForManualCodeAndComponent(item.ArticleId, item.Id, 0, 0, 0, 0);
             document.getElementById('saleItem_Particulars').value = item.Particulars;
-            document.getElementById('saleItem_Quantity').value = 1;
+            document.getElementById('saleItem_Quantity').value = formatDecimalValues(1);
         }
 
         function cmdItemQueryPickNonInventory_Onclick() {
@@ -2584,7 +2659,7 @@
             salesItemId = 0;
             getArticleItemForManualCodeAndComponent(item.Id, null, 0, 0, 0, 0);
             document.getElementById('saleItem_Particulars').value = item.Particulars;
-            document.getElementById('saleItem_Quantity').value = 1;
+            document.getElementById('saleItem_Quantity').value = formatDecimalValues(1);
         }
 
         function cmdItemQueryPickPackage_Onclick() {
@@ -2607,12 +2682,12 @@
                 });
             });
 
-            itemNonInventoryCollectionView.editItem(itemNonInventoryCollectionView.currentItem);
-            var item = itemNonInventoryCollectionView.currentEditItem;
+            itemPackageCollectionView.editItem(itemPackageCollectionView.currentItem);
+            var item = itemPackageCollectionView.currentEditItem;
             salesItemId = 0;
             getArticleItemForManualCodeAndComponent(item.Id, null, 0, 0, 0, 0);
             document.getElementById('saleItem_Particulars').value = "NA";
-            document.getElementById('saleItem_Quantity').value = 1;
+            document.getElementById('saleItem_Quantity').value = formatDecimalValues(1);
         }
 
         // ===========

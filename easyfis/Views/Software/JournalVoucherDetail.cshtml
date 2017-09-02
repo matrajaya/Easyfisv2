@@ -129,19 +129,19 @@
                                                 <b>Total Debit</b>
                                             </dt>
                                             <dd>
-                                                <input type="text" class="form-control  numberField" id="totalDebit" placeholder="0.00" disabled />
+                                                <input type="text" class="form-control numberField" id="totalDebit" placeholder="0.00" disabled />
                                             </dd>
                                             <dt>
                                                 <b>Total Credit</b>
                                             </dt>
                                             <dd>
-                                                <input type="text" class="form-control  numberField" id="totalCredit" placeholder="0.00" disabled />
+                                                <input type="text" class="form-control numberField" id="totalCredit" placeholder="0.00" disabled />
                                             </dd>
                                             <dt>
                                                 <b>Total Variance</b>
                                             </dt>
                                             <dd>
-                                                <input type="text" class="form-control  numberField" id="totalVariance" placeholder="0.00" disabled />
+                                                <input type="text" class="form-control numberField" id="totalVariance" placeholder="0.00" disabled />
                                             </dd>
                                         </dl>
                                     </div>
@@ -252,19 +252,19 @@
                                         <b>Total Debit</b>
                                     </dt>
                                     <dd>
-                                        <input type="text" class="form-control  numberField  requiredStockTransferItem" id="totalDebitInJournal" placeholder="0.00" disabled />
+                                        <input type="text" class="form-control numberField requiredStockTransferItem" id="totalDebitInJournal" placeholder="0.00" disabled />
                                     </dd>
                                     <dt>
                                         <b>Total Credit</b>
                                     </dt>
                                     <dd>
-                                        <input type="text" class="form-control  numberField  requiredStockTransferItem" id="totalCreditInJournal" placeholder="0.00" disabled />
+                                        <input type="text" class="form-control numberField requiredStockTransferItem" id="totalCreditInJournal" placeholder="0.00" disabled />
                                     </dd>
                                     <dt>
                                         <b>Variance</b>
                                     </dt>
                                     <dd>
-                                        <input type="text" class="form-control  numberField  requiredStockTransferItem" id="variance" placeholder="0.00" disabled />
+                                        <input type="text" class="form-control numberField requiredStockTransferItem" id="variance" placeholder="0.00" disabled />
                                     </dd>
                                 </dl>
                             </div>
@@ -1075,8 +1075,8 @@
             IsAccountChanged = false;
             getBranchesForComboBoxInJournalVoucherLine(0,0,0,0,0);
             document.getElementById('JVL_Particulars').value = 'NA';
-            document.getElementById('JVL_DebitAmount').value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            document.getElementById('JVL_CreditAmount').value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('JVL_DebitAmount').value = formatDecimalValues(0);
+            document.getElementById('JVL_CreditAmount').value = formatDecimalValues(0);
             document.getElementById('JVL_IsClear').checked = false;
         }
 
@@ -1109,24 +1109,8 @@
             IsAccountChanged = false;
             getBranchesForComboBoxInJournalVoucherLine(journalVoucherLine.BranchId, journalVoucherLine.AccountId, journalVoucherLine.ArticleId, journalVoucherLine.APRRId, journalVoucherLine.ARSIId);
             document.getElementById('JVL_Particulars').value = journalVoucherLine.Particulars;
-
-            var debitAmount = journalVoucherLine.DebitAmount;
-            var creditAmount = journalVoucherLine.CreditAmount;
-
-            if (debitAmount % 1 != 0) {
-                document.getElementById('JVL_DebitAmount').value = journalVoucherLine.DebitAmount.toLocaleString(undefined, { maximumFractionDigits: 5 });
-            } else {
-                // if the number has no decimal places
-                document.getElementById('JVL_DebitAmount').value = parseFloat(journalVoucherLine.DebitAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-
-            if (creditAmount % 1 != 0) {
-                document.getElementById('JVL_CreditAmount').value = journalVoucherLine.CreditAmount.toLocaleString(undefined, { maximumFractionDigits: 5 });
-            } else {
-                // if the number has no decimal places
-                document.getElementById('JVL_CreditAmount').value = parseFloat(journalVoucherLine.CreditAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-
+            document.getElementById('JVL_DebitAmount').value = formatDecimalValues(journalVoucherLine.DebitAmount);
+            document.getElementById('JVL_CreditAmount').value = formatDecimalValues(journalVoucherLine.CreditAmount);
             document.getElementById('JVL_IsClear').checked = journalVoucherLine.IsClear;
         }
 
@@ -1298,8 +1282,8 @@
                                 ArticleId: Results[i]["ArticleId"],
                                 Article: Results[i]["Article"],
                                 Particulars: Results[i]["Particulars"],
-                                DebitAmount: Results[i]["DebitAmount"],
-                                CreditAmount: Results[i]["CreditAmount"],
+                                DebitAmountDisplay: parseFloat(Results[i]["DebitAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                CreditAmountDisplay: parseFloat(Results[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 ORId: Results[i]["ORId"],
                                 CVId: Results[i]["CVId"],
                                 JVId: Results[i]["JVId"],
@@ -1324,10 +1308,10 @@
                             }
                         }
 
-                        document.getElementById('totalDebitInJournal').value = debitAmountTotal.toLocaleString();
-                        document.getElementById('totalCreditInJournal').value = creditAmountTotal.toLocaleString();
+                        document.getElementById('totalDebitInJournal').value = debitAmountTotal.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById('totalCreditInJournal').value = creditAmountTotal.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         var variance = debitAmountTotal - creditAmountTotal;
-                        document.getElementById('variance').value = variance.toLocaleString();
+                        document.getElementById('variance').value = variance.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     }
 
                     $("#loadingJournalGridList").hide();
@@ -1395,14 +1379,16 @@
                     },
                     {
                         "header": "Debit",
-                        "binding": "DebitAmount",
+                        "binding": "DebitAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*",
                     },
                     {
                         "header": "Credit",
-                        "binding": "CreditAmount",
+                        "binding": "CreditAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     }
                 ],

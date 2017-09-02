@@ -154,6 +154,25 @@
                                 <div id="POItemGrid"></div>
                             </div>
                         </div>
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="padding-bottom: 0px;">
+                                <div class="row">
+                                    <div class="col-md-7">
+
+                                    </div>
+                                    <div class="col-md-5">
+                                        <dl class="dl-horizontal">
+                                            <dt>
+                                                <b>Total Amount</b>
+                                            </dt>
+                                            <dd>
+                                                <input type="text" class="form-control numberField" id="totalPOAmount" placeholder="0.00" disabled />
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -731,6 +750,7 @@
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     success: function (Results) {
+                        var totalAmount = 0;
                         if (Results.length > 0) {
                             var canEdit = "@ViewData["CanEdit"]";
                             var editDisabled = "";
@@ -761,18 +781,26 @@
                                     ItemCode: Results[i]["ItemCode"],
                                     POId: Results[i]["POId"],
                                     Quantity: Results[i]["Quantity"],
+                                    QuantityDisplay: parseFloat(Results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     UnitId: Results[i]["UnitId"],
                                     Unit: Results[i]["Unit"],
                                     Particulars: Results[i]["Particulars"],
                                     Cost: Results[i]["Cost"],
+                                    CostDisplay: parseFloat(Results[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Amount: Results[i]["Amount"],
+                                    AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     BaseUnit: Results[i]["BaseUnit"],
                                     BaseQuantity: Results[i]["BaseQuantity"],
-                                    BaseCost: Results[i]["BaseCost"]
+                                    BaseQuantityDisplay: parseFloat(Results[i]["BaseQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    BaseCost: Results[i]["BaseCost"],
+                                    BaseCostDisplay: parseFloat(Results[i]["BaseCost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                                 });
+
+                                totalAmount += Results[i]["Amount"];
                             }
                         }
 
+                        document.getElementById('totalPOAmount').value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         NProgress.done();
                     }
                 });
@@ -828,8 +856,9 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "Quantity",
+                        "binding": "QuantityDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
@@ -840,14 +869,16 @@
                     },
                     {
                         "header": "Cost",
-                        "binding": "Cost",
+                        "binding": "CostDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
                         "header": "Amount",
-                        "binding": "Amount",
+                        "binding": "AmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
@@ -858,14 +889,16 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "BaseQuantity",
+                        "binding": "BaseQuantityDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
                         "header": "Cost",
-                        "binding": "BaseCost",
+                        "binding": "BaseCostDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     }
                 ],
@@ -934,9 +967,9 @@
             purchaseOrderItemId = 0;
             getItem(0,0);
             document.getElementById('POLine_Particulars').value = "NA";
-            document.getElementById('POLine_Quantity').value = 1;
-            document.getElementById('POLine_Cost').value = 0;
-            document.getElementById('POLine_Amount').value = 0;
+            document.getElementById('POLine_Quantity').value = formatDecimalValues(1);
+            document.getElementById('POLine_Cost').value = formatDecimalValues(0);
+            document.getElementById('POLine_Amount').value = formatDecimalValues(0);
         }
 
         // =========
@@ -1052,9 +1085,9 @@
             purchaseOrderItemId = purchaseOrderItem.Id;
             getItem(purchaseOrderItem.ItemId, purchaseOrderItem.UnitId);
             document.getElementById('POLine_Particulars').value = purchaseOrderItem.Particulars;
-            document.getElementById('POLine_Quantity').value = purchaseOrderItem.Quantity;
-            document.getElementById('POLine_Cost').value = purchaseOrderItem.Cost;
-            document.getElementById('POLine_Amount').value = purchaseOrderItem.Amount;
+            document.getElementById('POLine_Quantity').value = formatDecimalValues(purchaseOrderItem.Quantity);
+            document.getElementById('POLine_Cost').value = formatDecimalValues(purchaseOrderItem.Cost);
+            document.getElementById('POLine_Amount').value = formatDecimalValues(purchaseOrderItem.Amount);
         }
 
         // ====================
@@ -1219,19 +1252,21 @@
             }
         }
 
+        // ==========
+        // Key Events
+        // ==========
         $('#POLine_Quantity').keyup(function () {
-            var inputQuantity = document.getElementById('POLine_Quantity').value;
-            var inputCost = document.getElementById('POLine_Cost').value;
-
-            var replacedCost = inputCost.replace(/\,/g, '');
-            var replacedQuantity = inputQuantity.replace(/\,/g, '');
-
-            var amount = replacedCost * replacedQuantity;
-
-            document.getElementById('POLine_Amount').value = amount.toLocaleString();
+            computePOItemAmount();
         });
 
         $('#POLine_Cost').keyup(function () {
+            computePOItemAmount();
+        });
+
+        // =============================
+        // Compute the Amount of PO Item
+        // =============================
+        function computePOItemAmount() {
             var inputQuantity = document.getElementById('POLine_Quantity').value;
             var inputCost = document.getElementById('POLine_Cost').value;
 
@@ -1240,8 +1275,8 @@
 
             var amount = replacedCost * replacedQuantity;
 
-            document.getElementById('POLine_Amount').value = amount.toLocaleString();
-        });
+            document.getElementById('POLine_Amount').value = formatDecimalValues(amount);
+        }
 
         $(document).on('show.bs.modal', '.modal', function (event) {
             var zIndex = 1040 + (10 * $('.modal:visible').length);
@@ -1304,7 +1339,9 @@
             }, 500);
         }
 
+        // ========================
         // get Items for Item Query
+        // ========================
         function getArticleItemForItemQuery() {
             var itemsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
@@ -1344,6 +1381,7 @@
                             WTaxTypeId: articleItemsResult[i]["WTaxTypeId"],
                             WTaxType: articleItemsResult[i]["WTaxType"],
                             Price: articleItemsResult[i]["LastPurchasePrice"],
+                            PriceDisplay: parseFloat(articleItemsResult[i]["LastPurchasePrice"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                             Cost: articleItemsResult[i]["Cost"],
                             IsInventory: articleItemsResult[i]["IsInventory"],
                             Particulars: articleItemsResult[i]["Particulars"],
@@ -1377,6 +1415,9 @@
             return itemsObservableArray;
         }
 
+        // ===============
+        // Item query Pick
+        // ===============
         function pickToApplyOnClick() {
             $('#POLinesEdit').modal({ show: true, backdrop: 'static' });
 
@@ -1393,11 +1434,14 @@
             purchaseOrderItemId = 0;
             getItem(item.Id, item.UnitId);
             document.getElementById('POLine_Particulars').value = item.Particulars;
-            document.getElementById('POLine_Quantity').value = 1;
-            document.getElementById('POLine_Cost').value = item.Price;
-            document.getElementById('POLine_Amount').value = item.Price * 1;
+            document.getElementById('POLine_Quantity').value = formatDecimalValues(1);
+            document.getElementById('POLine_Cost').value = formatDecimalValues(item.Price);
+            document.getElementById('POLine_Amount').value = formatDecimalValues(item.Price * 1);
         }
 
+        // ===================
+        // Item query FlexGrid
+        // ===================
         function createItemQueryFlexGrid() {
             itemQueryItemsCollection = new wijmo.collections.CollectionView(getArticleItemForItemQuery());
             itemQueryItemsCollection.canFilter = true;
@@ -1431,8 +1475,9 @@
                     },
                     {
                         "header": "Last Purchase Price",
-                        "binding": "Price",
+                        "binding": "PriceDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     },
                     {

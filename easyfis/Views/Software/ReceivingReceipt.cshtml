@@ -211,8 +211,10 @@
                                 ManualRRNumber: receivingReceiptListResults[i]["ManualRRNumber"],
                                 Remarks: receivingReceiptListResults[i]["Remarks"],
                                 Amount: receivingReceiptListResults[i]["Amount"],
+                                AmountDisplay: parseFloat(receivingReceiptListResults[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 WTaxAmount: receivingReceiptListResults[i]["WTaxAmount"],
                                 PaidAmount: receivingReceiptListResults[i]["PaidAmount"],
+                                PaidAmountDisplay: parseFloat(receivingReceiptListResults[i]["PaidAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 AdjustmentAmount: receivingReceiptListResults[i]["AdjustmentAmount"],
                                 BalanceAmount: receivingReceiptListResults[i]["BalanceAmount"],
                                 ReceivedById: receivingReceiptListResults[i]["ReceivedById"],
@@ -494,14 +496,16 @@
                             },
                             {
                                 "header": "Amount",
-                                "binding": "Amount",
+                                "binding": "AmountDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "width": "2*"
                             },
                             {
                                 "header": "Paid Amount",
-                                "binding": "PaidAmount",
+                                "binding": "PaidAmountDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "width": "2*"
                             },
                             {

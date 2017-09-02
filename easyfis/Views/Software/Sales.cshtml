@@ -211,6 +211,7 @@
                                 ManualSINumber: Results[i]["ManualSINumber"],
                                 Remarks: Results[i]["Remarks"],
                                 Amount: Results[i]["Amount"],
+                                AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 PaidAmount: Results[i]["PaidAmount"],
                                 AdjustmentAmount: Results[i]["AdjustmentAmount"],
                                 BalanceAmount: Results[i]["BalanceAmount"],
@@ -502,8 +503,9 @@
                             },
                             {
                                 "header": "Amount",
-                                "binding": "Amount",
+                                "binding": "AmountDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "width": "2*"
                             },
                             {

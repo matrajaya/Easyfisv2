@@ -151,6 +151,37 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="padding-bottom: 0px;">
+                                <div class="row">
+                                    <div class="col-md-7">
+
+                                    </div>
+                                    <div class="col-md-5">
+                                        <dl class="dl-horizontal">
+                                            <dt>
+                                                <b>Total Amount</b>
+                                            </dt>
+                                            <dd>
+                                                <input type="text" class="form-control numberField" id="totalRRAmount" placeholder="0.00" disabled />
+                                            </dd>
+                                            <dt>
+                                                <b>Total VAT Amount</b>
+                                            </dt>
+                                            <dd>
+                                                <input type="text" class="form-control numberField" id="totalRRVATAmount" placeholder="0.00" disabled />
+                                            </dd>
+                                            <dt>
+                                                <b>Total WTAX Amount</b>
+                                            </dt>
+                                            <dd>
+                                                <input type="text" class="form-control numberField" id="totalRRWTAXAmount" placeholder="0.00" disabled />
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div id="InventoryEntry" class="tab-pane fade in active" style="margin-bottom: 15px;">
                         <div id="inventoryFlexGrid"></div>
@@ -692,6 +723,9 @@
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     success: function (Results) {
+                        var totalAmount = 0;
+                        var totalVATAmount = 0;
+                        var totalWTAXAmount = 0;
                         if (Results.length > 0) {
                             var canEdit = "@ViewData["CanEdit"]";
                             var editDisabled = "";
@@ -728,27 +762,42 @@
                                     UnitId: Results[i]["UnitId"],
                                     Unit: Results[i]["Unit"],
                                     Quantity: Results[i]["Quantity"],
+                                    QuantityDisplay: parseFloat(Results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Cost: Results[i]["Cost"],
+                                    CostDisplay: parseFloat(Results[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Amount: Results[i]["Amount"],
+                                    AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     VATId: Results[i]["VATId"],
                                     VAT: Results[i]["VAT"],
-                                    VATPercentage: Results[i]["VAT"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + Results[i]["VATPercentage"],
+                                    VATPercentage: Results[i]["VAT"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + parseFloat(Results[i]["VATPercentage"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     VATRate: Results[i]["VATPercentage"],
                                     VATAmount: Results[i]["VATAmount"],
+                                    VATAmountDisplay: parseFloat(Results[i]["VATAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     WTAXId: Results[i]["WTAXId"],
                                     WTAX: Results[i]["WTAX"],
-                                    WTAXPercentage: Results[i]["WTAX"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + Results[i]["WTAXPercentage"],
+                                    WTAXPercentage: Results[i]["WTAX"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + parseFloat(Results[i]["WTAXPercentage"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     WTAXRate: Results[i]["WTAXPercentage"],
                                     WTAXAmount: Results[i]["WTAXAmount"],
+                                    WTAXAmountDisplay: parseFloat(Results[i]["WTAXAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     BranchId: Results[i]["BranchId"],
                                     Branch: Results[i]["Branch"],
                                     BaseUnitId: Results[i]["BaseUnitId"],
                                     BaseUnit: Results[i]["BaseUnit"],
                                     BaseQuantity: Results[i]["BaseQuantity"],
-                                    BaseCost: Results[i]["BaseCost"]
+                                    BaseQuantityDisplay: parseFloat(Results[i]["BaseQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    BaseCost: Results[i]["BaseCost"],
+                                    BaseCostDisplay: parseFloat(Results[i]["BaseCost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 });
+
+                                totalAmount += Results[i]["Amount"];
+                                totalVATAmount += Results[i]["VATAmount"];
+                                totalWTAXAmount += Results[i]["WTAXAmount"];
                             }
                         }
+
+                        document.getElementById('totalRRAmount').value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById('totalRRVATAmount').value = parseFloat(totalVATAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById('totalRRWTAXAmount').value = parseFloat(totalWTAXAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
                         NProgress.done();
                     }
@@ -821,8 +870,9 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "Quantity",
+                        "binding": "QuantityDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
@@ -833,14 +883,16 @@
                     },
                     {
                         "header": "Cost",
-                        "binding": "Cost",
+                        "binding": "CostDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
                         "header": "Amount",
-                        "binding": "Amount",
+                        "binding": "AmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
@@ -859,8 +911,9 @@
                     },
                     {
                         "header": "VAT Amt.",
-                        "binding": "VATAmount",
+                        "binding": "VATAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
@@ -873,8 +926,9 @@
                     },
                     {
                         "header": "WTAX Amt.",
-                        "binding": "WTAXAmount",
+                        "binding": "WTAXAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
@@ -885,14 +939,16 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "BaseQuantity",
+                        "binding": "BaseQuantityDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
                         "header": "Cost",
-                        "binding": "BaseCost",
+                        "binding": "BaseCostDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                 ],
@@ -1090,11 +1146,6 @@
             window.location = "/RepReceivingReceipt/ReceivingReceipt?RRId=" + id;
         }
 
-        var returnBool = false;
-        var emptyQuantity;
-
-        var index;
-
         // =========
         // PO Status
         // =========
@@ -1184,12 +1235,16 @@
                                     ItemCode: Results[i]["ItemCode"],
                                     POId: Results[i]["POId"],
                                     Received: Results[i]["Received"],
+                                    ReceivedDisplay: parseFloat(Results[i]["Received"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Balance: Results[i]["BaseQuantity"] - Results[i]["Received"],
+                                    BalanceDisplay: parseFloat(Results[i]["BaseQuantity"] - Results[i]["Received"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     QuantityBalanceValue: Results[i]["BaseQuantity"] - Results[i]["Received"],
+                                    QuantityBalanceValueDisplay: parseFloat(Results[i]["BaseQuantity"] - Results[i]["Received"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Amount: Results[i]["Amount"],
                                     Pick: (Results[i]["BaseQuantity"] - Results[i]["Received"]) == 0 ? "<button class='btn btn-primary btn-xs' onclick='pickQuantity_OnClick()'><i class='fa fa-arrow-right'></i></button>" : "<button class='btn btn-warning btn-xs' onclick='pickReverseQuantity_OnClick()'><i class='fa fa-arrow-left'></i></button>",
                                     BaseUnitId: Results[i]["BaseUnitId"],
                                     BaseQuantity: Results[i]["BaseQuantity"],
+                                    BaseQuantityDisplay: parseFloat(Results[i]["BaseQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     BaseCost: Results[i]["BaseCost"],
                                     BaseUnit: Results[i]["BaseUnit"],
                                     Particulars: Results[i]["Particulars"]
@@ -1258,22 +1313,25 @@
                             },
                             {
                                 "header": "Purchased",
-                                "binding": "BaseQuantity",
+                                "binding": "BaseQuantityDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "isReadOnly": true,
                                 "width": "1*"
                             },
                             {
                                 "header": "Received",
-                                "binding": "Received",
+                                "binding": "ReceivedDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "isReadOnly": true,
                                 "width": "1*",
                             },
                             {
                                 "header": "Balance",
-                                "binding": "Balance",
+                                "binding": "BalanceDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "isReadOnly": true,
                                 "width": "1*"
                             },
@@ -1287,7 +1345,7 @@
                             },
                             {
                                 "header": "Quantity",
-                                "binding": "QuantityBalanceValue",
+                                "binding": "QuantityBalanceValueDisplay",
                                 "allowSorting": true,
                                 "width": "1*",
                                 "align": "right",
@@ -1338,7 +1396,7 @@
             var purchaseOrderStatusItem = purchaseOrderStatusCollectionView.currentEditItem;
             var balance = purchaseOrderStatusItem.BaseQuantity - purchaseOrderStatusItem.Received;
             if (balance > 0) {
-                purchaseOrderStatusItem.QuantityBalanceValue = balance;
+                purchaseOrderStatusItem.QuantityBalanceValueDisplay = formatDecimalValues(balance);
                 purchaseOrderStatusItem.Pick = "<button class='btn btn-warning btn-xs' onclick='pickReverseQuantity_OnClick()'><i class='fa fa-arrow-left'></i></button>";
                 purchaseOrderStatusCollectionView.refresh();
                 purchasrOrderStatusFlexGrid.refresh();
@@ -1351,7 +1409,7 @@
         function pickReverseQuantity_OnClick() {
             purchaseOrderStatusCollectionView.editItem(purchaseOrderStatusCollectionView.currentItem);
             var purchaseOrderStatusItem = purchaseOrderStatusCollectionView.currentEditItem;
-            purchaseOrderStatusItem.QuantityBalanceValue = 0;
+            purchaseOrderStatusItem.QuantityBalanceValueDisplay = formatDecimalValues(0);
             purchaseOrderStatusItem.Pick = "<button class='btn btn-primary btn-xs' onclick='pickQuantity_OnClick()'><i class='fa fa-arrow-right'></i></button>";
             purchaseOrderStatusCollectionView.refresh();
             purchasrOrderStatusFlexGrid.refresh();
@@ -1593,8 +1651,8 @@
                                 $("#cmdSaveRRLinesButton").prop("disabled", false);
                                 cboRRLineItemCode.selectedValue = this.selectedValue;
 
-                                document.getElementById('RRLine_Quantity').value = (this.selectedItem["Quantity"]).toLocaleString();
-                                document.getElementById('RRLine_Cost').value = (this.selectedItem["Cost"]).toLocaleString();
+                                document.getElementById('RRLine_Quantity').value = formatDecimalValues(this.selectedItem["Quantity"]);
+                                document.getElementById('RRLine_Cost').value = formatDecimalValues(this.selectedItem["Cost"]);
                                 computeAmountAndTaxes();
 
                                 getUnitForComboBox(VATIdSelectedValue, WTAXSelectedValue);
@@ -1603,12 +1661,12 @@
 
                         if (receivingReceiptId == 0) {
                             if (cboRRLineItemDescription.selectedValue != null) {
-                                document.getElementById('RRLine_Quantity').value = (cboRRLineItemDescription.selectedItem["Quantity"]).toLocaleString();
-                                document.getElementById('RRLine_Cost').value = (cboRRLineItemDescription.selectedItem["Cost"]).toLocaleString();
+                                document.getElementById('RRLine_Quantity').value = formatDecimalValues(cboRRLineItemDescription.selectedItem["Quantity"]);
+                                document.getElementById('RRLine_Cost').value = formatDecimalValues(cboRRLineItemDescription.selectedItem["Cost"]);
                                 computeAmountAndTaxes();
                             } else {
-                                document.getElementById('RRLine_Quantity').value = 0;
-                                document.getElementById('RRLine_Cost').value = 0;
+                                document.getElementById('RRLine_Quantity').value = formatDecimalValues(0);
+                                document.getElementById('RRLine_Cost').value = formatDecimalValues(0);
                                 computeAmountAndTaxes();
                             }
                         }
@@ -1639,12 +1697,12 @@
 
                 if (receivingReceiptId == 0) {
                     if (cboRRLineItemDescription.selectedValue != null) {
-                        document.getElementById('RRLine_Quantity').value = (cboRRLineItemDescription.selectedItem["Quantity"]).toLocaleString();
-                        document.getElementById('RRLine_Cost').value = (cboRRLineItemDescription.selectedItem["Cost"]).toLocaleString();
+                        document.getElementById('RRLine_Quantity').value = formatDecimalValues(cboRRLineItemDescription.selectedItem["Quantity"]);
+                        document.getElementById('RRLine_Cost').value = formatDecimalValues(cboRRLineItemDescription.selectedItem["Cost"]);
                         computeAmountAndTaxes();
                     } else {
-                        document.getElementById('RRLine_Quantity').value = 0;
-                        document.getElementById('RRLine_Cost').value = 0;
+                        document.getElementById('RRLine_Quantity').value = formatDecimalValues(0);
+                        document.getElementById('RRLine_Cost').value = formatDecimalValues(0);
                         computeAmountAndTaxes();
                     }
                 }
@@ -1758,7 +1816,7 @@
                         selectedValuePath: "Id",
                         selectedValue: VATIdValue,
                         onSelectedIndexChanged: function () {
-                            document.getElementById('RRLine_VATRate').value = this.selectedItem["TaxRate"];
+                            document.getElementById('RRLine_VATRate').value = formatDecimalValues(this.selectedItem["TaxRate"]);
                             computeTAX();
                         }
                     });
@@ -1772,13 +1830,13 @@
                         selectedValuePath: "Id",
                         selectedValue: WTAXValue,
                         onSelectedIndexChanged: function () {
-                            document.getElementById('RRLine_WTAXRate').value = this.selectedItem["TaxRate"];
+                            document.getElementById('RRLine_WTAXRate').value = formatDecimalValues(this.selectedItem["TaxRate"]);
                             computeTAX();
                         }
                     });
 
-                    document.getElementById('RRLine_VATRate').value = cboRRItemVAT.selectedItem["TaxRate"];
-                    document.getElementById('RRLine_WTAXRate').value = cboForWTAXTaxType.selectedItem["TaxRate"];
+                    document.getElementById('RRLine_VATRate').value = formatDecimalValues(cboRRItemVAT.selectedItem["TaxRate"]);
+                    document.getElementById('RRLine_WTAXRate').value = formatDecimalValues(cboForWTAXTaxType.selectedItem["TaxRate"]);
 
                     computeTAX();
 
@@ -1814,13 +1872,13 @@
             getBranchesPOItemForComboBox(0,0,0,0,0);
             receivingReceiptId = 0;
             document.getElementById('RRLine_Particulars').value = "NA";
-            document.getElementById('RRLine_Quantity').value = 0;
-            document.getElementById('RRLine_Cost').value = 0;
-            document.getElementById('RRLine_Amount').value = 0;
-            document.getElementById('RRLine_VATRate').value = 0;
-            document.getElementById('RRLine_VATAmount').value = 0;
-            document.getElementById('RRLine_WTAXRate').value = 0;
-            document.getElementById('RRLine_WTAXAmount').value = 0;
+            document.getElementById('RRLine_Quantity').value = formatDecimalValues(0);
+            document.getElementById('RRLine_Cost').value = formatDecimalValues(0);
+            document.getElementById('RRLine_Amount').value = formatDecimalValues(0);
+            document.getElementById('RRLine_VATRate').value = formatDecimalValues(0);
+            document.getElementById('RRLine_VATAmount').value = formatDecimalValues(0);
+            document.getElementById('RRLine_WTAXRate').value = formatDecimalValues(0);
+            document.getElementById('RRLine_WTAXAmount').value = formatDecimalValues(0);
         }
 
         // ==================
@@ -1852,13 +1910,13 @@
             getBranchesPOItemForComboBox(item.BranchId, item.POId, item.ItemId, item.VATId, item.WTAXId);
             receivingReceiptId = item.Id;
             document.getElementById('RRLine_Particulars').value = "NA";
-            document.getElementById('RRLine_Quantity').value = (item.Quantity).toLocaleString();
-            document.getElementById('RRLine_Cost').value = (item.Cost).toLocaleString();
-            document.getElementById('RRLine_Amount').value = (item.Amount).toLocaleString();
-            document.getElementById('RRLine_VATRate').value = (item.VATRate).toLocaleString();
-            document.getElementById('RRLine_VATAmount').value = (item.VATAmount).toLocaleString();
-            document.getElementById('RRLine_WTAXRate').value = (item.WTAXRate).toLocaleString();
-            document.getElementById('RRLine_WTAXAmount').value = (item.WTAXAmount).toLocaleString();
+            document.getElementById('RRLine_Quantity').value = formatDecimalValues(item.Quantity);
+            document.getElementById('RRLine_Cost').value = formatDecimalValues(item.Cost);
+            document.getElementById('RRLine_Amount').value = formatDecimalValues(item.Amount);
+            document.getElementById('RRLine_VATRate').value = formatDecimalValues(item.VATRate);
+            document.getElementById('RRLine_VATAmount').value = formatDecimalValues(item.VATAmount);
+            document.getElementById('RRLine_WTAXRate').value = formatDecimalValues(item.WTAXRate);
+            document.getElementById('RRLine_WTAXAmount').value = formatDecimalValues(item.WTAXAmount);
         }
 
         // =============
@@ -2026,10 +2084,10 @@
             var WTAXRate = document.getElementById('RRLine_WTAXRate').value;
 
             var amount = replacedCost * replacedQuantity;
-            document.getElementById('RRLine_Amount').value = amount.toLocaleString();
+            document.getElementById('RRLine_Amount').value = formatDecimalValues(amount);
 
-            document.getElementById('RRLine_VATAmount').value = ((amount / (1 + VATRate / 100)) * (VATRate / 100)).toLocaleString();
-            document.getElementById('RRLine_WTAXAmount').value = ((amount / (1 + VATRate / 100)) * (WTAXRate / 100)).toLocaleString();
+            document.getElementById('RRLine_VATAmount').value = formatDecimalValues((amount / (1 + VATRate / 100)) * (VATRate / 100));
+            document.getElementById('RRLine_WTAXAmount').value = formatDecimalValues((amount / (1 + VATRate / 100)) * (WTAXRate / 100));
         }
 
         // ===========
@@ -2049,12 +2107,12 @@
             var replacedWTAXRate = inputedWTAXRate.replace(/\,/g, '');
 
             if (cboRRItemVAT.selectedItem["IsInclusive"]) {
-                document.getElementById('RRLine_VATAmount').value = ((replacedAmount / (1 + replacedVATRate / 100)) * (replacedVATRate / 100)).toLocaleString();
-                document.getElementById('RRLine_WTAXAmount').value = ((replacedAmount / (1 + replacedVATRate / 100)) * (replacedWTAXRate / 100)).toLocaleString();
+                document.getElementById('RRLine_VATAmount').value = formatDecimalValues((replacedAmount / (1 + replacedVATRate / 100)) * (replacedVATRate / 100));
+                document.getElementById('RRLine_WTAXAmount').value = formatDecimalValues((replacedAmount / (1 + replacedVATRate / 100)) * (replacedWTAXRate / 100));
             } else {
-                document.getElementById('RRLine_VATAmount').value = (replacedAmount * (replacedVATRate / 100)).toLocaleString();
-                document.getElementById('RRLine_WTAXAmount').value = (replacedAmount * (replacedWTAXRate / 100)).toLocaleString();
-                document.getElementById('RRLine_Amount').value = ((replacedCost * replacedQuantity) + (replacedAmount * (replacedVATRate / 100))).toLocaleString();
+                document.getElementById('RRLine_VATAmount').value = formatDecimalValues(replacedAmount * (replacedVATRate / 100));
+                document.getElementById('RRLine_WTAXAmount').value = formatDecimalValues(replacedAmount * (replacedWTAXRate / 100));
+                document.getElementById('RRLine_Amount').value = formatDecimalValues((replacedCost * replacedQuantity) + (replacedAmount * (replacedVATRate / 100)));
             }
         }
 
@@ -2092,8 +2150,10 @@
                                 STId: Results[i]["STId"],
                                 QuantityIn: Results[i]["QuantityIn"],
                                 Quantity: Results[i]["Quantity"],
+                                QuantityDisplay: parseFloat(Results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 QuantityOut: Results[i]["QuantityOut"],
                                 Amount: Results[i]["Amount"],
+                                AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 Particulars: Results[i]["Particulars"],
                                 Code: Results[i]["Code"],
                                 Unit: Results[i]["Unit"]
@@ -2160,8 +2220,9 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "Quantity",
+                        "binding": "QuantityDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "1*",
                     },
                     {
@@ -2172,8 +2233,9 @@
                     },
                     {
                         "header": "Amount",
-                        "binding": "Amount",
+                        "binding": "AmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "1*",
                     },
                 ],
@@ -2214,8 +2276,8 @@
                                 ArticleId: Results[i]["ArticleId"],
                                 Article: Results[i]["Article"],
                                 Particulars: Results[i]["Particulars"],
-                                DebitAmount: Results[i]["DebitAmount"],
-                                CreditAmount: Results[i]["CreditAmount"],
+                                DebitAmountDisplay: parseFloat(Results[i]["DebitAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                CreditAmountDisplay: parseFloat(Results[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 ORId: Results[i]["ORId"],
                                 CVId: Results[i]["CVId"],
                                 JVId: Results[i]["JVId"],
@@ -2240,10 +2302,10 @@
                             }
                         }
 
-                        document.getElementById('totalDebitInJournal').value = debitAmountTotal.toLocaleString();
-                        document.getElementById('totalCreditInJournal').value = creditAmountTotal.toLocaleString();
+                        document.getElementById('totalDebitInJournal').value = debitAmountTotal.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById('totalCreditInJournal').value = creditAmountTotal.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         var variance = debitAmountTotal - creditAmountTotal;
-                        document.getElementById('variance').value = variance.toLocaleString();
+                        document.getElementById('variance').value = variance.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     }
 
                     $("#loadingJournalGridList").hide();
@@ -2311,14 +2373,16 @@
                     },
                     {
                         "header": "Debit",
-                        "binding": "DebitAmount",
+                        "binding": "DebitAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*",
                     },
                     {
                         "header": "Credit",
-                        "binding": "CreditAmount",
+                        "binding": "CreditAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     }
                 ],

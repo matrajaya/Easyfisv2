@@ -212,6 +212,7 @@
                                 Remarks: purchaseOrderListResults[i]["Remarks"],
                                 IsClose: purchaseOrderListResults[i]["IsClose"],
                                 Amount: purchaseOrderListResults[i]["Amount"],
+                                AmountDisplay: parseFloat(purchaseOrderListResults[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 RequestedById: purchaseOrderListResults[i]["RequestedById"],
                                 RequestedBy: purchaseOrderListResults[i]["RequestedBy"],
                                 PreparedById: purchaseOrderListResults[i]["PreparedById"],
@@ -489,8 +490,9 @@
                             },
                             {
                                 "header": "Amount",
-                                "binding": "Amount",
+                                "binding": "AmountDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "width": "2*"
                             },
                             {

@@ -213,6 +213,7 @@
                                 CheckNumber: Results[i]["CheckNumber"],
                                 CheckDate: Results[i]["CheckDate"],
                                 Amount: Results[i]["Amount"],
+                                AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 IsCrossCheck: Results[i]["IsCrossCheck"],
                                 IsClear: Results[i]["IsClear"],
                                 PreparedById: Results[i]["PreparedById"],
@@ -490,8 +491,9 @@
                             },
                             {
                                 "header": "Amount",
-                                "binding": "Amount",
+                                "binding": "AmountDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "width": "2*"
                             },
                             {

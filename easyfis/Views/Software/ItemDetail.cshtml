@@ -853,7 +853,7 @@
                             cboExpenseAccount.selectedValue = itemResults.ExpenseAccountId;
                             document.getElementById('articleItem_category').value = itemResults.Category;
                             cboUnit.selectedValue = itemResults.UnitId;
-                            document.getElementById('articleItem_price').value = parseFloat(itemResults.Price).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            document.getElementById('articleItem_price').value = formatDecimalValues(itemResults.Price);
                             document.getElementById('articleItem_particulars').value = itemResults.Particulars;
                             cboInputTax.selectedValue = itemResults.InputTaxId;
                             cboOutputTax.selectedValue = itemResults.OutputTaxId;
@@ -871,14 +871,14 @@
                                 }
                             }
                             document.getElementById('articleItem_oldManualCode').value = itemResults.ManualArticleOldCode;
-                            document.getElementById('articleItem_manualCost').value = parseFloat(itemResults.Cost).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            document.getElementById('articleItem_manualCost').value = formatDecimalValues(itemResults.Cost);
                             cboDateAcquired.dispose();
                             cboDateAcquired = new wijmo.input.InputDate('#cboDateAcquired', {
                                 format: 'MM-dd-yyyy',
                                 value: new Date(itemResults.DateAcquired)
                             });
-                            document.getElementById('Item_UsefulLife').value = itemResults.UsefulLife;
-                            document.getElementById('Item_SalvageValue').value = itemResults.SalvageValue;
+                            document.getElementById('Item_UsefulLife').value = formatDecimalValues(itemResults.UsefulLife);
+                            document.getElementById('Item_SalvageValue').value = formatDecimalValues(itemResults.SalvageValue);
                             document.getElementById('createdBy').innerHTML = itemResults.CreatedBy;
                             document.getElementById('createdDate').innerHTML = itemResults.CreatedDateTime;
                             document.getElementById('updatedBy').innerHTML = itemResults.UpdatedBy;
@@ -1135,6 +1135,7 @@
                                     Unit: unitConversionResults[i]["Unit"],
                                     Equals: "=",
                                     Multiplier: unitConversionResults[i]["Multiplier"],
+                                    MultiplierDisplay: parseFloat(unitConversionResults[i]["Multiplier"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     IsCountUnit: unitConversionResults[i]["IsCountUnit"],
                                     BaseUnit: cboUnit.selectedItem["Unit"],
                                 });
@@ -1186,8 +1187,9 @@
                     },
                     {
                         "header": "Multiplier",
-                        "binding": "Multiplier",
+                        "binding": "MultiplierDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     },
                     {
@@ -1301,7 +1303,7 @@
             $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
 
             unitConversionId = 0;
-            document.getElementById('unitConversion_multiplier').value = 1;
+            document.getElementById('unitConversion_multiplier').value = formatDecimalValues(1);
             getUnitConversionUnit(cboUnit.selectedValue);
             document.getElementById('unitConversion_countUnit').checked = false;
         }
@@ -1326,7 +1328,7 @@
             unitConversions.editItem(unitConversions.currentItem);
             var unitConversion = unitConversions.currentEditItem;
             unitConversionId = unitConversion.Id;
-            document.getElementById('unitConversion_multiplier').value = unitConversion.Multiplier;
+            document.getElementById('unitConversion_multiplier').value = formatDecimalValues(unitConversion.Multiplier);
             getUnitConversionUnit(unitConversion.UnitId);
             document.getElementById('unitConversion_countUnit').checked = unitConversion.IsCountUnit;
         }
@@ -1517,10 +1519,13 @@
                                     ComponentArticleCode: componentResults[i]["ComponentArticleCode"],
                                     ComponentArticle: componentResults[i]["ComponentArticle"],
                                     Quantity: componentResults[i]["Quantity"],
+                                    QuantityDisplay: parseFloat(componentResults[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     UnitId: componentResults[i]["UnitId"],
                                     Unit: componentResults[i]["Unit"],
                                     Cost: componentResults[i]["Cost"],
+                                    CostDisplay: parseFloat(componentResults[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Amount: componentResults[i]["Quantity"] * componentResults[i]["Cost"],
+                                    AmountDisplay: parseFloat(componentResults[i]["Quantity"] * componentResults[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Particulars: componentResults[i]["Particulars"]
                                 });
                             }
@@ -1585,8 +1590,9 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "Quantity",
+                        "binding": "QuantityDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "1.5*"
                     },
                     {
@@ -1597,14 +1603,16 @@
                     },
                     {
                         "header": "Cost",
-                        "binding": "Cost",
+                        "binding": "CostDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "1.5*"
                     },
                     {
                         "header": "Amount",
-                        "binding": "Amount",
+                        "binding": "AmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "1.5*"
                     },
                     {
@@ -1685,14 +1693,14 @@
                         onSelectedIndexChanged: function () {
                             cboComponentItemCode.selectedValue = this.selectedValue;
                             cboComponentUnit.selectedValue = this.selectedItem["UnitId"];
-                            document.getElementById("component_cost").value = this.selectedItem["Cost"];
+                            document.getElementById("component_cost").value = formatDecimalValues(this.selectedItem["Cost"]);
                             computeComponentAmount();
                         }
                     });
 
                     if (componentId == 0) {
                         getComponentUnitForComboBox(cboComponentItem.selectedItem["UnitId"]);
-                        document.getElementById("component_cost").value = cboComponentItem.selectedItem["Cost"];
+                        document.getElementById("component_cost").value = formatDecimalValues(cboComponentItem.selectedItem["Cost"]);
                     } else {
                         getComponentUnitForComboBox(UnitId);
                     }
@@ -1777,7 +1785,7 @@
 
             componentId = 0;
             getArticleItemForManualCodeAndComponent(0, 0);
-            document.getElementById('component_Quantity').value = 1;
+            document.getElementById('component_Quantity').value = formatDecimalValues(1);
             document.getElementById('component_particulars').value = 'NA';
         }
 
@@ -1802,9 +1810,9 @@
             var component = components.currentEditItem;
             componentId = component.Id;
             getArticleItemForManualCodeAndComponent(component.ComponentArticleId, component.UnitId);
-            document.getElementById('component_Quantity').value = component.Quantity.toLocaleString();
-            document.getElementById('component_cost').value = component.Cost.toLocaleString();
-            document.getElementById('component_amount').value = component.Amount.toLocaleString();
+            document.getElementById('component_Quantity').value = formatDecimalValues(component.Quantity);
+            document.getElementById('component_cost').value = formatDecimalValues(component.Cost);
+            document.getElementById('component_amount').value = formatDecimalValues(component.Amount);
             document.getElementById('component_particulars').value = component.Particulars;
         }
 
@@ -1967,7 +1975,7 @@
             var replacedCost = cost.replace(/\,/g, '');
 
             var roundAmount = replacedQuantity * replacedCost;
-            document.getElementById('component_amount').value = roundAmount.toLocaleString();
+            document.getElementById('component_amount').value = formatDecimalValues(roundAmount);
         }
 
         // ==================
@@ -2011,6 +2019,7 @@
                                     Article: priceResults[i]["Article"],
                                     PriceDescription: priceResults[i]["PriceDescription"],
                                     Price: priceResults[i]["Price"],
+                                    PriceDisplay: parseFloat(priceResults[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Remarks: priceResults[i]["Remarks"]
                                 });
                             }
@@ -2069,8 +2078,9 @@
                     },
                     {
                         "header": "Price",
-                        "binding": "Price",
+                        "binding": "PriceDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     },
                     {
@@ -2131,7 +2141,7 @@
 
             priceId = 0;
             document.getElementById('price_PriceDescription').value = "NA";
-            document.getElementById('price_Price').value = 0;
+            document.getElementById('price_Price').value = formatDecimalValues(0);
             document.getElementById('price_Remarks').value = "NA";
 
             setTimeout(function () {
@@ -2162,7 +2172,7 @@
             var price = prices.currentEditItem;
             priceId = price.Id;
             document.getElementById('price_PriceDescription').value = price.PriceDescription;
-            document.getElementById('price_Price').value = price.Price;
+            document.getElementById('price_Price').value = formatDecimalValues(price.Price);
             document.getElementById('price_Remarks').value = price.Remarks;
 
             setTimeout(function () {
@@ -2319,8 +2329,11 @@
                                     Article: Results[i]["Article"],
                                     InventoryCode: Results[i]["InventoryCode"],
                                     Quantity: Results[i]["Quantity"],
+                                    QuantityDisplay: parseFloat(Results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Cost: Results[i]["Cost"],
+                                    CostDisplay: parseFloat(Results[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Amount: Results[i]["Amount"],
+                                    AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Particulars: Results[i]["Particulars"],
                                 });
                             }
@@ -2367,20 +2380,23 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "Quantity",
+                        "binding": "QuantityDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     },
                     {
                         "header": "Cost",
-                        "binding": "Cost",
+                        "binding": "CostDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     },
                     {
                         "header": "Amount",
-                        "binding": "Amount",
+                        "binding": "AmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     },
                 ],
