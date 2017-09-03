@@ -177,6 +177,25 @@
                                 <div id="DisbursementLineGrid"></div>
                             </div>
                         </div>
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="padding-bottom: 0px;">
+                                <div class="row">
+                                    <div class="col-md-7">
+
+                                    </div>
+                                    <div class="col-md-5">
+                                        <dl class="dl-horizontal">
+                                            <dt>
+                                                <b>Total Amount</b>
+                                            </dt>
+                                            <dd>
+                                                <input type="text" class="form-control numberField" id="totalCVAmount" placeholder="0.00" disabled />
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -381,7 +400,7 @@
                     Are you sure that you want to apply these advances?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" id="cmdConfirmApplyAdvances" onclick="btnConfrimApplyAdvances_OnClick()"><i class="fa fa-check-square-o"></i> Apply</button>
+                    <button class="btn btn-primary" id="cmdConfirmApplyAdvances" onclick="btnConfrimApplyAdvances_OnClick()"><i class="fa fa-check"></i> Apply</button>
                     <button class="btn btn-danger" id="cmdCloseButtonApplyAdvances" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
@@ -878,49 +897,53 @@
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     success: function (Results) {
-                        var canEdit = "@ViewData["CanEdit"]";
-                        var editDisabled = "";
-                        if (canEdit == "False") {
-                            editDisabled = "disabled";
+                        var totalAmount = 0;
+                        if (Results.length > 0) {
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled = "";
+                            if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            }
+
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled = "";
+                            if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            }
+
+                            var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditDisbursementLine_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
+                            var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteDisbursementLine_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            if (isLocked) {
+                                btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditDisbursementLine_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
+                                btnDeleteId =  "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteDisbursementLine_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            for (i = 0; i < Results.length; i++) {
+                                disbursementLinesObservableArray.push({
+                                    EditId: btnEditId,
+                                    DeleteId: btnDeleteId,
+                                    Id: Results[i]["Id"],
+                                    CVId: Results[i]["CVId"],
+                                    CV: Results[i]["CV"],
+                                    BranchId: Results[i]["BranchId"],
+                                    Branch: Results[i]["Branch"],
+                                    AccountId: Results[i]["AccountId"],
+                                    Account: Results[i]["Account"],
+                                    ArticleId: Results[i]["ArticleId"],
+                                    Article: Results[i]["Article"],
+                                    RRId: Results[i]["RRId"],
+                                    RR: Results[i]["RR"],
+                                    Particulars: Results[i]["Particulars"],
+                                    Amount: Results[i]["Amount"],
+                                    AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                });
+
+                                totalAmount += Results[i]["Amount"];
+                            }
                         }
 
-                        var canDelete = "@ViewData["CanDelete"]";
-                        var deleteDisabled = "";
-                        if (canDelete == "False") {
-                            deleteDisabled = "disabled";
-                        }
-
-                        var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditDisbursementLine_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
-                        var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteDisbursementLine_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
-                        if (isLocked) {
-                            btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditDisbursementLine_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
-                            btnDeleteId =  "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteDisbursementLine_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
-                        }
-
-                        var amount = 0;
-                        for (i = 0; i < Results.length; i++) {
-                            disbursementLinesObservableArray.push({
-                                EditId: btnEditId,
-                                DeleteId: btnDeleteId,
-                                Id: Results[i]["Id"],
-                                CVId: Results[i]["CVId"],
-                                CV: Results[i]["CV"],
-                                BranchId: Results[i]["BranchId"],
-                                Branch: Results[i]["Branch"],
-                                AccountId: Results[i]["AccountId"],
-                                Account: Results[i]["Account"],
-                                ArticleId: Results[i]["ArticleId"],
-                                Article: Results[i]["Article"],
-                                RRId: Results[i]["RRId"],
-                                RR: Results[i]["RR"],
-                                Particulars: Results[i]["Particulars"],
-                                Amount: Results[i]["Amount"]
-                            });
-
-                            amount += Results[i]["Amount"];
-                        }
-
-                        document.getElementById('disbursement_Amount').value = amount.toLocaleString();
+                        document.getElementById('totalCVAmount').value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById('disbursement_Amount').value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         NProgress.done();
                     }
                 });
@@ -997,8 +1020,9 @@
                     },
                     {
                         "header": "Amount",
-                        "binding": "Amount",
+                        "binding": "AmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     }
                 ],
@@ -1218,18 +1242,18 @@
                         selectedValue: RRId,
                         onSelectedIndexChanged: function () {
                             if (this.selectedValue != null) {
-                                document.getElementById("disbursementLine_Amount").value = this.selectedItem["BalanceAmount"].toLocaleString();
+                                document.getElementById("disbursementLine_Amount").value = formatDecimalValues(this.selectedItem["BalanceAmount"]);
                             } else {
-                                document.getElementById("disbursementLine_Amount").value = 0;
+                                document.getElementById("disbursementLine_Amount").value = formatDecimalValues(0);
                             }
                         }
                     });
 
                     if (disbursementLineId == 0) {
                         if (cboDisbursementLineRRNo.selectedValue != null) {
-                            document.getElementById("disbursementLine_Amount").value = cboDisbursementLineRRNo.selectedItem["BalanceAmount"].toLocaleString();
+                            document.getElementById("disbursementLine_Amount").value = formatDecimalValues(cboDisbursementLineRRNo.selectedItem["BalanceAmount"]);
                         } else {
-                            document.getElementById("disbursementLine_Amount").value = 0;
+                            document.getElementById("disbursementLine_Amount").value = formatDecimalValues(0);
                         }
                     }
 
@@ -1298,7 +1322,7 @@
             disbursementLineId = disbursementLine.Id;
             getDisbursementBranchesForComboBox(disbursementLine.BranchId, disbursementLine.AccountId, disbursementLine.ArticleId, disbursementLine.RRId);
             document.getElementById('disbursementLine_Particulars').value = 'NA';
-            document.getElementById('disbursementLine_Amount').value = disbursementLine.Amount.toLocaleString();
+            document.getElementById('disbursementLine_Amount').value = formatDecimalValues(disbursementLine.Amount);
         }
 
         // ======================
@@ -1467,8 +1491,8 @@
                                 ArticleId: Results[i]["ArticleId"],
                                 Article: Results[i]["Article"],
                                 Particulars: Results[i]["Particulars"],
-                                DebitAmount: Results[i]["DebitAmount"],
-                                CreditAmount: Results[i]["CreditAmount"],
+                                DebitAmountDisplay: parseFloat(Results[i]["DebitAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                CreditAmountDisplay: parseFloat(Results[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 ORId: Results[i]["ORId"],
                                 CVId: Results[i]["CVId"],
                                 JVId: Results[i]["JVId"],
@@ -1493,10 +1517,10 @@
                             }
                         }
 
-                        document.getElementById('totalDebitInJournal').value = debitAmountTotal.toLocaleString();
-                        document.getElementById('totalCreditInJournal').value = creditAmountTotal.toLocaleString();
+                        document.getElementById('totalDebitInJournal').value = debitAmountTotal.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById('totalCreditInJournal').value = creditAmountTotal.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         var variance = debitAmountTotal - creditAmountTotal;
-                        document.getElementById('variance').value = variance.toLocaleString();
+                        document.getElementById('variance').value = variance.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     }
 
                     $("#loadingJournalGridList").hide();
@@ -1564,14 +1588,16 @@
                     },
                     {
                         "header": "Debit",
-                        "binding": "DebitAmount",
+                        "binding": "DebitAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*",
                     },
                     {
                         "header": "Credit",
-                        "binding": "CreditAmount",
+                        "binding": "CreditAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     }
                 ],
@@ -1637,10 +1663,14 @@
                                 ManualRRNumber: receivingReceiptResults[i]["ManualRRNumber"],
                                 Remarks: receivingReceiptResults[i]["Remarks"],
                                 Amount: receivingReceiptResults[i]["Amount"],
+                                AmountDisplay: parseFloat(receivingReceiptResults[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 WTaxAmount: receivingReceiptResults[i]["WTaxAmount"],
                                 PaidAmount: receivingReceiptResults[i]["PaidAmount"],
+                                PaidAmountDisplay: parseFloat(receivingReceiptResults[i]["PaidAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 AdjustmentAmount: receivingReceiptResults[i]["AdjustmentAmount"],
+                                AdjustmentAmountDisplay: parseFloat(receivingReceiptResults[i]["AdjustmentAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 BalanceAmount: receivingReceiptResults[i]["BalanceAmount"],
+                                BalanceAmountDisplay: parseFloat(receivingReceiptResults[i]["BalanceAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 Balance: receivingReceiptResults[i]["BalanceAmount"],
                                 AccountId: receivingReceiptResults[i]["AccountId"],
                                 Pick: receivingReceiptResults[i]["BalanceAmount"] == 0 ? "<button class='btn btn-primary btn-xs' onclick='btnPickAmount()'><i class='fa fa-arrow-right'></i></button>" : "<button class='btn btn-warning btn-xs' onclick='btnUnpickAmountReverse()'><i class='fa fa-arrow-left'></i></button>",
@@ -1658,28 +1688,28 @@
             return receivingReceiptsObservableArray;
         }
 
-        // =============
-        // PICK quantity
-        // =============
+        // ============
+        // PICK Balance
+        // ============
         function btnPickAmount() {
             receivingReceipts.editItem(receivingReceipts.currentItem);
             var receivingReceipt = receivingReceipts.currentEditItem;
             var balance = receivingReceipt.Amount - receivingReceipt.PaidAmount;
             if (balance > 0) {
-                receivingReceipt.Balance = balance;
+                receivingReceipt.Balance = parseFloat(balance).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 receivingReceipt.Pick = "<button class='btn btn-warning btn-xs' onclick='btnUnpickAmountReverse()'><i class='fa fa-arrow-left'></i></button>";
                 receivingReceipts.refresh();
                 receivingStatusGrid.refresh();
             }
         }
 
-        // ===============
-        // REPICK quantity
-        // ===============
+        // ==============
+        // REPICK Balance
+        // ==============
         function btnUnpickAmountReverse() {
             receivingReceipts.editItem(receivingReceipts.currentItem);
             var receivingReceipt = receivingReceipts.currentEditItem;
-            receivingReceipt.Balance = 0;
+            receivingReceipt.Balance = formatDecimalValues(0);
             receivingReceipt.Pick = "<button class='btn btn-primary btn-xs' onclick='btnPickAmount()'><i class='fa fa-arrow-right'></i></button>";
             receivingReceipts.refresh();
             receivingStatusGrid.refresh();
@@ -1798,29 +1828,33 @@
                             },
                             {
                                 "header": "RR Amount",
-                                "binding": "Amount",
+                                "binding": "AmountDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "isReadOnly": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "Payments",
-                                "binding": "PaidAmount",
+                                "binding": "PaidAmountDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "isReadOnly": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "Adjustments",
-                                "binding": "AdjustmentAmount",
+                                "binding": "AdjustmentAmountDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "isReadOnly": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "Balance",
-                                "binding": "BalanceAmount",
+                                "binding": "BalanceAmountDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "isReadOnly": true,
                                 "width": "2*"
                             },
@@ -1897,6 +1931,8 @@
                                 Article: journalResults[i]["Article"],
                                 DebitAmount: journalResults[i]["DebitAmount"],
                                 CreditAmount: journalResults[i]["CreditAmount"],
+                                DebitAmountDisplay: parseFloat(journalResults[i]["DebitAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                CreditAmountDisplay: parseFloat(journalResults[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 Balance: journalResults[i]["Balance"],
                                 Pick: "<button class='btn btn-primary btn-xs' onclick='btnApplyAdvancesOnclick()'><i class='fa fa-check'></i> Apply </button>"
                             });
@@ -1959,14 +1995,16 @@
                     },
                     {
                         "header": "Debit",
-                        "binding": "DebitAmount",
+                        "binding": "DebitAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     },
                     {
                         "header": "Credit",
-                        "binding": "CreditAmount",
+                        "binding": "CreditAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     },
                     {
@@ -2003,7 +2041,7 @@
                 backdrop: 'static'
             });
 
-            document.getElementById('cmdConfirmApplyAdvances').innerHTML = "<i class='fa fa-check-square-o'></i> Apply";
+            document.getElementById('cmdConfirmApplyAdvances').innerHTML = "<i class='fa fa-check'></i> Apply";
             $("#cmdConfirmApplyAdvances").prop("disabled", false);
             $("#cmdCloseButtonApplyAdvances").prop("disabled", false);
         }
@@ -2030,14 +2068,14 @@
                     404: function () {
                         toastr.error("Not Found");
                         $('#applyConfirm').modal('hide');
-                        document.getElementById('cmdConfirmApplyAdvances').innerHTML = "<i class='fa fa-check-square-o'></i> Apply";
+                        document.getElementById('cmdConfirmApplyAdvances').innerHTML = "<i class='fa fa-check'></i> Apply";
                         $("#cmdConfirmApplyAdvances").prop("disabled", false);
                         $("#cmdCloseButtonApplyAdvances").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
                         $('#applyConfirm').modal('hide');
-                        document.getElementById('cmdConfirmApplyAdvances').innerHTML = "<i class='fa fa-check-square-o'></i> Apply";
+                        document.getElementById('cmdConfirmApplyAdvances').innerHTML = "<i class='fa fa-check'></i> Apply";
                         $("#cmdConfirmApplyAdvances").prop("disabled", false);
                         $("#cmdCloseButtonApplyAdvances").prop("disabled", false);
                     }

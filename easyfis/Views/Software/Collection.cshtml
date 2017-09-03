@@ -206,6 +206,7 @@
                                 Particulars: Results[i]["Particulars"],
                                 ManualORNumber: Results[i]["ManualORNumber"],
                                 Amount: Results[i]["Amount"],
+                                AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 PreparedById: Results[i]["PreparedById"],
                                 PreparedBy: Results[i]["PreparedBy"],
                                 CheckedById: Results[i]["CheckedById"],
@@ -484,8 +485,9 @@
                             },
                             {
                                 "header": "Amount",
-                                "binding": "Amount",
+                                "binding": "AmountDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "width": "2*"
                             },
                             {
