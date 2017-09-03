@@ -576,6 +576,7 @@
                                     Item: stockCountItemResults[i]["Item"],
                                     Particulars: stockCountItemResults[i]["Particulars"],
                                     Quantity: stockCountItemResults[i]["Quantity"],
+                                    QuantityDisplay: parseFloat(stockCountItemResults[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     UnitId: stockCountItemResults[i]["UnitId"],
                                     Unit: stockCountItemResults[i]["Unit"]
                                 });
@@ -648,8 +649,9 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "Quantity",
+                        "binding": "QuantityDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "1*"
                     },
                     {
@@ -837,7 +839,7 @@
             SCItemId = 0;
             getItemForComboBox(0, 0);
             document.getElementById("txtAreaIdStockCountItemParticulars").value = "NA";
-            document.getElementById("inputIdStockCountItemQuantity").value = 1;
+            document.getElementById("inputIdStockCountItemQuantity").value = formatDecimalValues(1);
         }
 
         // =====================
@@ -862,7 +864,7 @@
             SCItemId = stockCountItem.Id;
             getItemForComboBox(stockCountItem.ItemId, stockCountItem.UnitId);
             document.getElementById("txtAreaIdStockCountItemParticulars").value = stockCountItem.Particulars;
-            document.getElementById("inputIdStockCountItemQuantity").value = stockCountItem.Quantity.toLocaleString();
+            document.getElementById("inputIdStockCountItemQuantity").value = formatDecimalValues(stockCountItem.Quantity);
         }
 
         // ================================
@@ -1072,6 +1074,7 @@
                                 WTaxTypeId: articleItemsResult[i]["WTaxTypeId"],
                                 WTaxType: articleItemsResult[i]["WTaxType"],
                                 Price: articleItemsResult[i]["Price"],
+                                PriceDisplay: parseFloat(articleItemsResult[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 Cost: articleItemsResult[i]["Cost"],
                                 IsInventory: articleItemsResult[i]["IsInventory"],
                                 Particulars: articleItemsResult[i]["Particulars"],
@@ -1125,7 +1128,7 @@
             SCItemId = 0;
             getItemForComboBox(stockCountItem.Id, stockCountItem.UnitId);
             document.getElementById("txtAreaIdStockCountItemParticulars").value = "NA";
-            document.getElementById("inputIdStockCountItemQuantity").value = 1;
+            document.getElementById("inputIdStockCountItemQuantity").value = formatDecimalValues(1);
         }
 
         function createItemQueryFlexGrid() {
@@ -1161,8 +1164,9 @@
                     },
                     {
                         "header": "Price",
-                        "binding": "Price",
+                        "binding": "PriceDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     },
                     {

@@ -1178,6 +1178,7 @@
                                 Id: discountResults[i]["Id"],
                                 Discount: discountResults[i]["Discount"],
                                 DiscountRate: discountResults[i]["DiscountRate"],
+                                DiscountRateDisplay: parseFloat(discountResults[i]["DiscountRate"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 IsInclusive: discountResults[i]["IsInclusive"],
                                 AccountId: discountResults[i]["AccountId"],
                                 AccountCode: discountResults[i]["AccountCode"],
@@ -1339,7 +1340,7 @@
 
             discountId = 0;
             document.getElementById('discount_Discount').value = "NA";
-            document.getElementById('discount_DiscountRate').value = "0";
+            document.getElementById('discount_DiscountRate').value = formatDecimalValues(0);
             document.getElementById('discount_VATInclusive').checked = "";
             getDiscountAccountForComboBox(0, false);
             document.getElementById('discount_Lock').checked = false;
@@ -1377,7 +1378,7 @@
             var discount = discounts.currentEditItem;
             discountId = discount.Id;
             document.getElementById('discount_Discount').value = discount.Discount ? discount.Discount : '';
-            document.getElementById('discount_DiscountRate').value = discount.DiscountRate;
+            document.getElementById('discount_DiscountRate').value = formatDecimalValues(discount.DiscountRate);
             document.getElementById('discount_VATInclusive').checked = discount.IsInclusive ? discount.IsInclusive : '';
             getDiscountAccountForComboBox(discount.AccountId, discount.IsLocked);
             document.getElementById('discount_Lock').checked = discount.IsLocked;
@@ -1626,8 +1627,9 @@
                             },
                             {
                                 "header": "Rate.",
-                                "binding": "DiscountRate",
+                                "binding": "DiscountRateDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "width": "1*"
                             },
                             {
@@ -2270,6 +2272,7 @@
                                 Id: taxResults[i]["Id"],
                                 TaxType: taxResults[i]["TaxType"],
                                 TaxRate: taxResults[i]["TaxRate"],
+                                TaxRateDisplay: parseFloat(taxResults[i]["TaxRate"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 IsInclusive: taxResults[i]["IsInclusive"],
                                 AccountId: taxResults[i]["AccountId"],
                                 AccountCode: taxResults[i]["AccountCode"],
@@ -2432,7 +2435,7 @@
 
             taxTypeId = 0;
             document.getElementById('taxType_TaxType').value = "NA";
-            document.getElementById('taxType_TaxRate').value = "0";
+            document.getElementById('taxType_TaxRate').value = formatDecimalValues(0);
             document.getElementById('taxType_TaxVATInclusive').checked = false;
             getTaxAccountForComboBox(0, false);
             document.getElementById('taxType_Lock').checked = false;
@@ -2470,7 +2473,7 @@
             var tax = taxes.currentEditItem;
             taxTypeId = tax.Id;
             document.getElementById('taxType_TaxType').value = tax.TaxType ? tax.TaxType : '';
-            document.getElementById('taxType_TaxRate').value = tax.TaxRate;
+            document.getElementById('taxType_TaxRate').value = formatDecimalValues(tax.TaxRate);
             document.getElementById('taxType_TaxVATInclusive').checked = tax.IsInclusive ? tax.IsInclusive : '';
             getTaxAccountForComboBox(tax.AccountId, tax.IsLocked);
             document.getElementById('taxType_Lock').checked = tax.IsLocked;
@@ -2716,8 +2719,9 @@
                             },
                             {
                                 "header": "Rate",
-                                "binding": "TaxRate",
+                                "binding": "TaxRateDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "width": "1*"
                             },
                             {

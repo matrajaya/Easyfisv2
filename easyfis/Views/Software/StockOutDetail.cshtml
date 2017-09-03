@@ -141,6 +141,25 @@
                                 <div id="ItemGrid" class="grid"></div>
                             </div>
                         </div>
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="padding-bottom: 0px;">
+                                <div class="row">
+                                    <div class="col-md-7">
+
+                                    </div>
+                                    <div class="col-md-5">
+                                        <dl class="dl-horizontal">
+                                            <dt>
+                                                <b>Total Amount</b>
+                                            </dt>
+                                            <dd>
+                                                <input type="text" class="form-control numberField" id="totalOTAmount" placeholder="0.00" disabled />
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div id="InventoryEntries" class="tab-pane fade in " style="margin-bottom: 15px;">
                         <div id="InventoryEntryGrid"></div>
@@ -815,6 +834,7 @@
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     success: function (Results) {
+                        var totalAmount = 0;
                         if (Results.length > 0) {
                             var canEdit = "@ViewData["CanEdit"]";
                             var editDisabled = "";
@@ -854,16 +874,24 @@
                                     UnitId: Results[i]["UnitId"],
                                     Unit: Results[i]["Unit"],
                                     Quantity: Results[i]["Quantity"],
+                                    QuantityDisplay: parseFloat(Results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Cost: Results[i]["Cost"],
+                                    CostDisplay: parseFloat(Results[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     Amount: Results[i]["Amount"],
+                                    AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     BaseUnitId: Results[i]["BaseUnitId"],
                                     BaseUnit: Results[i]["BaseUnit"],
                                     BaseQuantity: Results[i]["BaseQuantity"],
-                                    BaseCost: Results[i]["BaseCost"]
+                                    BaseQuantityDisplay: parseFloat(Results[i]["BaseQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    BaseCost: Results[i]["BaseCost"],
+                                    BaseCostDisplay: parseFloat(Results[i]["BaseCost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 });
+
+                                totalAmount += Results[i]["Amount"];
                             }
                         }
 
+                        document.getElementById('totalOTAmount').value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         NProgress.done();
                     }
                 });
@@ -884,7 +912,7 @@
             var stockOut_Quantity = document.getElementById('stockOutItem_Quantity').value.replace(/\,/g, '');
             var stockOut_Cost = document.getElementById('stockOutItem_Cost').value.replace(/\,/g, '');
             var stocOutItemAmount = stockOut_Quantity * stockOut_Cost;
-            document.getElementById('stockOutItem_Amount').value = stocOutItemAmount.toLocaleString();
+            document.getElementById('stockOutItem_Amount').value = formatDecimalValues(stocOutItemAmount);
         }
 
         // ======================
@@ -949,8 +977,9 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "Quantity",
+                        "binding": "QuantityDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
@@ -961,14 +990,16 @@
                     },
                     {
                         "header": "Cost",
-                        "binding": "Cost",
+                        "binding": "CostDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
                         "header": "Amount",
-                        "binding": "Amount",
+                        "binding": "AmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
@@ -979,14 +1010,16 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "BaseQuantity",
+                        "binding": "BaseQuantityDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
                         "header": "Cost",
-                        "binding": "BaseCost",
+                        "binding": "BaseCostDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": 100
                     },
                     {
@@ -1167,23 +1200,27 @@
                             selectedValuePath: "Id",
                             selectedValue: InventoryCodeId,
                             onSelectedIndexChanged: function () {
-                                if (this.selectedValue != null) {
-                                    document.getElementById("stockOutItem_Cost").value = this.selectedItem["Cost"].toLocaleString();
-                                } else {
-                                    document.getElementById("stockOutItem_Cost").value = 0;
-                                }
+                                if (stockOutItemId == 0) {
+                                    if (cboOUTItemInventoryCode.selectedValue != null) {
+                                        document.getElementById("stockOutItem_Cost").value = formatDecimalValues(this.selectedItem["Cost"]);
+                                    } else {
+                                        document.getElementById("stockOutItem_Cost").value = formatDecimalValues(0);
+                                    }
 
-                                computeAmount();
+                                    computeAmount();
+                                }
                             }
                         });
 
-                        if (cboOUTItemInventoryCode.selectedValue != null) {
-                            document.getElementById("stockOutItem_Cost").value = cboOUTItemInventoryCode.selectedItem["Cost"].toLocaleString();
-                        } else {
-                            document.getElementById("stockOutItem_Cost").value = 0;
-                        }
+                        if (stockOutItemId == 0) {
+                            if (cboOUTItemInventoryCode.selectedValue != null) {
+                                document.getElementById("stockOutItem_Cost").value = formatDecimalValues(cboOUTItemInventoryCode.selectedItem["Cost"]);
+                            } else {
+                                document.getElementById("stockOutItem_Cost").value = formatDecimalValues(0);
+                            }
 
-                        computeAmount();
+                            computeAmount();
+                        }
 
                         getStockOutItemUnitForComboBox(UnitId, ExpenseAccountId);
                     }
@@ -1344,9 +1381,9 @@
             stockOutItemId = 0;
             getArticleItemForManualCodeAndComponent(0,0,0,0);
             document.getElementById('stockOutItem_Particulars').value = 'NA';
-            document.getElementById('stockOutItem_Quantity').value = 1;
-            document.getElementById('stockOutItem_Cost').value = 0;
-            document.getElementById('stockOutItem_Amount').value = 0;
+            document.getElementById('stockOutItem_Quantity').value = formatDecimalValues(1);
+            document.getElementById('stockOutItem_Cost').value = formatDecimalValues(0);
+            document.getElementById('stockOutItem_Amount').value = formatDecimalValues(0);
         }
 
         // ===================
@@ -1377,9 +1414,9 @@
             stockOutItemId = item.Id;
             getArticleItemForManualCodeAndComponent(item.ItemId, item.ItemInventoryId, item.UnitId, item.ExpenseAccountId);
             document.getElementById('stockOutItem_Particulars').value = item.Particulars;
-            document.getElementById('stockOutItem_Quantity').value = item.Quantity.toLocaleString();
-            document.getElementById('stockOutItem_Cost').value = item.Cost.toLocaleString();
-            document.getElementById('stockOutItem_Amount').value = item.Amount.toLocaleString();
+            document.getElementById('stockOutItem_Quantity').value = formatDecimalValues(item.Quantity);
+            document.getElementById('stockOutItem_Cost').value = formatDecimalValues(item.Cost);
+            document.getElementById('stockOutItem_Amount').value = formatDecimalValues(item.Amount);
         }
 
         // ===================
@@ -1548,8 +1585,8 @@
                                 ArticleId: Results[i]["ArticleId"],
                                 Article: Results[i]["Article"],
                                 Particulars: Results[i]["Particulars"],
-                                DebitAmount: Results[i]["DebitAmount"],
-                                CreditAmount: Results[i]["CreditAmount"],
+                                DebitAmountDisplay: parseFloat(Results[i]["DebitAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                CreditAmountDisplay: parseFloat(Results[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 ORId: Results[i]["ORId"],
                                 CVId: Results[i]["CVId"],
                                 JVId: Results[i]["JVId"],
@@ -1574,10 +1611,10 @@
                             }
                         }
 
-                        document.getElementById('totalDebitInJournal').value = debitAmountTotal.toLocaleString();
-                        document.getElementById('totalCreditInJournal').value = creditAmountTotal.toLocaleString();
+                        document.getElementById('totalDebitInJournal').value = debitAmountTotal.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById('totalCreditInJournal').value = creditAmountTotal.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         var variance = debitAmountTotal - creditAmountTotal;
-                        document.getElementById('variance').value = variance.toLocaleString();
+                        document.getElementById('variance').value = variance.toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     }
 
                     $("#loadingJournalGridList").hide();
@@ -1645,14 +1682,16 @@
                     },
                     {
                         "header": "Debit",
-                        "binding": "DebitAmount",
+                        "binding": "DebitAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*",
                     },
                     {
                         "header": "Credit",
-                        "binding": "CreditAmount",
+                        "binding": "CreditAmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "2*"
                     }
                 ],
@@ -1701,8 +1740,10 @@
                                 STId: Results[i]["STId"],
                                 QuantityIn: Results[i]["QuantityIn"],
                                 Quantity: Results[i]["Quantity"],
+                                QuantityDisplay: parseFloat(Results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 QuantityOut: Results[i]["QuantityOut"],
                                 Amount: Results[i]["Amount"],
+                                AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 Particulars: Results[i]["Particulars"],
                                 Code: Results[i]["Code"],
                                 Unit: Results[i]["Unit"]
@@ -1769,8 +1810,9 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "Quantity",
+                        "binding": "QuantityDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "1*",
                     },
                     {
@@ -1781,8 +1823,9 @@
                     },
                     {
                         "header": "Amount",
-                        "binding": "Amount",
+                        "binding": "AmountDisplay",
                         "allowSorting": true,
+                        "align": "right",
                         "width": "1*",
                     },
                 ],
@@ -1831,7 +1874,9 @@
                             Article: articleInventoryItemsResult[i]["Article"],
                             InventoryCode: articleInventoryItemsResult[i]["InventoryCode"],
                             Price: articleInventoryItemsResult[i]["Price"],
+                            PriceDisplay: parseFloat(articleInventoryItemsResult[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                             Quantity: articleInventoryItemsResult[i]["Quantity"],
+                            QuantityDisplay: parseFloat(articleInventoryItemsResult[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                             Cost: articleInventoryItemsResult[i]["Cost"],
                             Amount: articleInventoryItemsResult[i]["Amount"],
                             Particulars: articleInventoryItemsResult[i]["Particulars"],
@@ -1891,14 +1936,16 @@
                             },
                             {
                                 "header": "Price",
-                                "binding": "Price",
+                                "binding": "PriceDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "width": "2*"
                             },
                             {
                                 "header": "Quantity",
-                                "binding": "Quantity",
+                                "binding": "QuantityDisplay",
                                 "allowSorting": true,
+                                "align": "right",
                                 "width": "2*"
                             },
                             {
@@ -1954,9 +2001,9 @@
             stockOutItemId = 0;
             getArticleItemForManualCodeAndComponent(item.ArticleId, item.Id, item.UnitId, 0);
             document.getElementById('stockOutItem_Particulars').value = 'NA';
-            document.getElementById('stockOutItem_Quantity').value = item.Quantity.toLocaleString();
-            document.getElementById('stockOutItem_Cost').value = item.Cost.toLocaleString();
-            document.getElementById('stockOutItem_Amount').value = item.Amount.toLocaleString();
+            document.getElementById('stockOutItem_Quantity').value = formatDecimalValues(item.Quantity);
+            document.getElementById('stockOutItem_Cost').value = formatDecimalValues(item.Cost);
+            document.getElementById('stockOutItem_Amount').value = formatDecimalValues(item.Amount);
         }
 
         // ====
