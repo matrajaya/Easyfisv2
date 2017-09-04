@@ -62,14 +62,16 @@ namespace easyfis.ApiControllers
         // accounts payable list
         [Authorize]
         [HttpGet]
-        [Route("api/accountsPayable/list/{dateAsOf}/{companyId}/")]
-        public List<Models.TrnReceivingReceipt> listAccountsPayable(String dateAsOf, String companyId)
+        [Route("api/accountsPayable/list/{dateAsOf}/{companyId}/{branchId}/{accountId}")]
+        public List<Models.TrnReceivingReceipt> listAccountsPayable(String dateAsOf, String companyId, String branchId, String accountId)
         {
             try
             {
                 var receivingReceipts = from d in db.TrnReceivingReceipts
                                         where d.RRDate <= Convert.ToDateTime(dateAsOf)
                                         && d.MstBranch.CompanyId == Convert.ToInt32(companyId)
+                                        && d.BranchId == Convert.ToInt32(branchId)
+                                        && d.MstArticle.AccountId == Convert.ToInt32(accountId)
                                         && d.BalanceAmount > 0
                                         && d.IsLocked == true
                                         select new Models.TrnReceivingReceipt

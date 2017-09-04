@@ -12,6 +12,31 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // list article group account
+        [Authorize]
+        [HttpGet]
+        [Route("api/articleGroup/account/list")]
+        public List<Models.MstArticleGroup> listArticleGroupAccount()
+        {
+            var articleGroups = from d in db.MstArticleGroups.OrderBy(d => d.ArticleGroup)
+                                where d.ArticleTypeId == 3
+                                group d by new
+                                {
+                                    AccountId = d.AccountId,
+                                    AccountCode = d.MstAccount.AccountCode,
+                                    Account = d.MstAccount.Account
+                                } into g
+                                select new Models.MstArticleGroup
+                                {
+                                    AccountId = g.Key.AccountId,
+                                    AccountCode = g.Key.AccountCode,
+                                    Account = g.Key.Account
+                                };
+
+            return articleGroups.ToList();
+        }
+
+
         // list article group
         [Authorize]
         [HttpGet]
