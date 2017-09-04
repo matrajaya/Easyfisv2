@@ -71,6 +71,12 @@
                                                                 <div class="comboBox-wide" id="cboAPReportComapny"></div>
                                                             </div>
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboAPReportBranch"></div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -431,6 +437,8 @@
         var cboAPDisbursementDetailReportEndDate = new wijmo.input.InputDate('#cboAPDisbursementDetailReportEndDate');
         var cboAPReportComapny = new wijmo.input.ComboBox('#cboAPReportComapny');
         var cboAPVoucherReportRRNo = new wijmo.input.ComboBox('#cboAPVoucherReportRRNo');
+        var cboAPReportBranch = new wijmo.input.ComboBox('#cboAPReportBranch');
+        var isCompanySelected = false;
 
         // ===================
         // AP All Filter Dates
@@ -605,7 +613,11 @@
                         isEditable: false,
                         itemsSource: companyObservableArray,
                         displayMemberPath: "Company",
-                        selectedValuePath: "Id"
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCompanySelected = true;
+                            createCboAPAllBranchFilters();
+                        }
                     });
 
                     createCboAPAllBranchFilters();
@@ -618,28 +630,63 @@
         // =====================
         function createCboAPAllBranchFilters() {
             var branchObservableArray = new wijmo.collections.ObservableArray();
-            $.ajax({
-                url: '/api/branch/list',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (branchResults) {
-                    if (branchResults.length > 0) {
-                        for (i = 0; i < branchResults.length; i++) {
-                            branchObservableArray.push({
-                                Id: branchResults[i]["Id"],
-                                CompanyId: branchResults[i]["CompanyId"],
-                                Branch: branchResults[i]["Branch"],
-                                Address: branchResults[i]["Address"],
-                                ContactNumber: branchResults[i]["ContactNumber"],
-                                TaxNumber: branchResults[i]["TaxNumber"]
-                            });
+            if (cboAPReportComapny.selectedValue != null) {
+                var companyId = cboAPReportComapny.selectedValue;
+                $.ajax({
+                    url: '/api/branch/byCompanyId/list/locked/' + companyId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branchObservableArray.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Branch: branchResults[i]["Branch"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"]
+                                });
+                            }
+                        }
+
+                        var disabled = true;
+                        if (branchResults.length > 0) {
+                            disabled = false;
+                            $("#btnAPReportView").prop("disabled", false);
+                            $("#btnAPReportPrintPDF").prop("disabled", false);
+                        } else {
+                            $("#btnAPReportView").prop("disabled", true);
+                            $("#btnAPReportPrintPDF").prop("disabled", true);
+                        }
+
+                        cboAPReportBranch.dispose();
+                        cboAPReportBranch = new wijmo.input.ComboBox('#cboAPReportBranch', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: branchObservableArray,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Id"
+                        });
+
+                        if (!isCompanySelected) {
+                            createCboAPRRNoFilter();
                         }
                     }
+                });
+            } else {
+                cboAPReportBranch.dispose();
+                cboAPReportBranch = new wijmo.input.ComboBox('#cboAPReportBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
 
+                if (!isCompanySelected) {
                     createCboAPRRNoFilter();
                 }
-            });
+            }
         }
 
         // ================
@@ -687,10 +734,15 @@
         // ==============
         function btnAPReportViewOnclick() {
             if (cboAPReportComapny.selectedValue != null) {
-                var dateAsOf = cboAPReportDateAsOf.value.toLocaleDateString().replace(/\//g, '-');
-                var companyId = cboAPReportComapny.selectedValue;
+                if (cboAPReportBranch.selectedValue != null) {
+                    var dateAsOf = cboAPReportDateAsOf.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPReportComapny.selectedValue;
+                    var branchId = cboAPReportBranch.selectedValue;
 
-                window.location.href = '/Software/AccountsPayableReport?DateAsOf=' + dateAsOf + '&CompanyId=' + companyId;
+                    window.location.href = '/Software/AccountsPayableReport?DateAsOf=' + dateAsOf + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
             } else {
                 toastr.error("Lacking Information");
             }

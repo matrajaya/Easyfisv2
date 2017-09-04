@@ -7,8 +7,7 @@
     <title>Accounts Receivable</title>
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
-
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
@@ -54,21 +53,7 @@
                             <li><a data-toggle="pill" href="#CHSCA">Chart Hourly Sales Comparison (Amount)</a></li>
                             <li><a data-toggle="pill" href="#CCSC">Chart Category Sold Comparison</a></li>
                             <li class="reportDivider"></li>
-                            @*
-                                <li><a data-toggle="pill" href="#SRSR">Sales Reward Summary Report</a></li>*@
-                            @*
-                                <li class="reportDivider"></li>*@
-                            @*
-                                <li><a data-toggle="pill" href="#SSTR">Sales Status Report</a></li>*@
-                            @*
-                                <li><a data-toggle="pill" href="#SSTRBSN">Sales Status Report By Sales No.</a></li>*@
-                            @*
-                                <li class="reportDivider"></li>*@
                             <li><a data-toggle="pill" href="#SSRAF">Sales Summary Report (All Fields)</a></li>
-                            @*
-                                <li class="reportDivider"></li>*@
-                            @*
-                                <li><a data-toggle="pill" href="#SCR">Sales Consumption Report</a></li>*@
                         </ul>
                     </div>
                     <div id="col" class="col-md-7">
@@ -90,16 +75,19 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Date as of</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="accountReceivableReport_DateAsOf"></div>
-                                                                <input type="hidden" id="accountReceivableReport_DateAsOf_data" />
+                                                                <div class="comboBox-wide" id="cboARReportDateAsOf"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="accountReceivableReport_Company"></div>
-                                                                <input type="hidden" id="accountReceivableReport_Company_data" />
-                                                                <input type="hidden" id="accountReceivableReport_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARReportCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboARReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -125,16 +113,19 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Date as of</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="accountReceivableSummaryReport_DateAsOf"></div>
-                                                                <input type="hidden" id="accountReceivableSummaryReport_DateAsOf_data" />
+                                                                <div class="comboBox-wide" id="cboARSummaryReportDateAsOf"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="accountReceivableSummaryReport_Company"></div>
-                                                                <input type="hidden" id="accountReceivableSummaryReport_Company_data" />
-                                                                <input type="hidden" id="accountReceivableSummaryReport_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARSummaryReportCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboARSummaryReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -160,24 +151,19 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Date as of</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="StatementOfTheAccount_DateAsOf"></div>
-                                                                <input type="hidden" id="StatementOfTheAccount_DateAsOf_data" />
+                                                                <div class="comboBox-wide" id="cboARStatementOfAccountDateAsOf"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="StatementOfTheAccount_Company"></div>
-                                                                <input type="hidden" id="StatementOfTheAccount_Company_data" />
-                                                                <input type="hidden" id="StatementOfTheAccount_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARStatementOfAccountCompany"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Customer</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="StatementOfTheAccount_Customer"></div>
-                                                                <input type="hidden" id="StatementOfTheAccount_Customer_data" />
-                                                                <input type="hidden" id="StatementOfTheAccount_Customer_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARStatementOfAccountBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -204,8 +190,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SaleSummaryReport_StartDate"></div>
-                                                                <input type="hidden" id="SaleSummaryReport_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARSaleSummaryReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -215,8 +200,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SaleSummaryReport_EndDate"></div>
-                                                                <input type="hidden" id="SaleSummaryReport_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARSaleSummaryReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -226,9 +210,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="salesSummaryReport_Company"></div>
-                                                                <input type="hidden" id="salesSummaryReport_Company_data" />
-                                                                <input type="hidden" id="salesSummaryReport_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARSaleSummaryReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -238,9 +220,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="salesSummaryReport_Branch"></div>
-                                                                <input type="hidden" id="salesSummaryReport_Branch_data" />
-                                                                <input type="hidden" id="salesSummaryReport_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARSaleSummaryReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -267,8 +247,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SaleDetailReport_StartDate"></div>
-                                                                <input type="hidden" id="SaleDetailReport_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARSaleDetailReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -278,8 +257,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SaleDetailReport_EndDate"></div>
-                                                                <input type="hidden" id="SaleDetailReport_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARSaleDetailReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -289,9 +267,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="salesDetailReport_Company"></div>
-                                                                <input type="hidden" id="salesDetailReport_Company_data" />
-                                                                <input type="hidden" id="salesDetailReport_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARSaleDetailReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -301,9 +277,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="salesDetailReport_Branch"></div>
-                                                                <input type="hidden" id="salesDetailReport_Branch_data" />
-                                                                <input type="hidden" id="salesDetailReport_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARSaleDetailReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -330,8 +304,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="CollectionSummaryReport_StartDate"></div>
-                                                                <input type="hidden" id="CollectionSummaryReport_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARCollectionSummaryReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -341,8 +314,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="CollectionSummaryReport_EndDate"></div>
-                                                                <input type="hidden" id="CollectionSummaryReport_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARCollectionSummaryReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -352,9 +324,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="collectionSummaryReport_Company"></div>
-                                                                <input type="hidden" id="collectionSummaryReport_Company_data" />
-                                                                <input type="hidden" id="collectionSummaryReport_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARCollectionSummaryReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -364,9 +334,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="collectionSummaryReport_Branch"></div>
-                                                                <input type="hidden" id="collectionSummaryReport_Branch_data" />
-                                                                <input type="hidden" id="collectionSummaryReport_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARCollectionSummaryReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -393,8 +361,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="CollectionDetailReport_StartDate"></div>
-                                                                <input type="hidden" id="CollectionDetailReport_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARCollectionDetailReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -404,8 +371,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="CollectionDetailReport_EndDate"></div>
-                                                                <input type="hidden" id="CollectionDetailReport_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARCollectionDetailReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -415,9 +381,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="collectionDetailReport_Company"></div>
-                                                                <input type="hidden" id="collectionDetailReport_Company_data" />
-                                                                <input type="hidden" id="collectionDetailReport_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARCollectionDetailReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -427,9 +391,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="collectionDetailReport_Branch"></div>
-                                                                <input type="hidden" id="collectionDetailReport_Branch_data" />
-                                                                <input type="hidden" id="collectionDetailReport_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARCollectionDetailReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -455,8 +417,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SalesDetailReportVatSales_StartDate"></div>
-                                                                <input type="hidden" id="SalesDetailReportVatSales_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARSalesDetailVATSalesReportReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -466,8 +427,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SalesDetailReportVatSales_EndDate"></div>
-                                                                <input type="hidden" id="SalesDetailReportVatSales_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARSalesDetailVATSalesReportReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -477,9 +437,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="salesDetailReportVatSales_Company"></div>
-                                                                <input type="hidden" id="salesDetailReportVatSales_Company_data" />
-                                                                <input type="hidden" id="salesDetailReportVatSales_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARSalesDetailVATSalesReportReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -489,9 +447,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="salesDetailReportVatSales_Branch"></div>
-                                                                <input type="hidden" id="salesDetailReportVatSales_Branch_data" />
-                                                                <input type="hidden" id="salesDetailReportVatSales_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARSalesDetailVATSalesReportReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -517,7 +473,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Sales Start No.</label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" class="form-control" id="SalesSummaryReportBySalesNoStart_data" />
+                                                                <input type="text" class="form-control" id="ARSalesSummaryReportBySalesInvoiceStartNo" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -527,7 +483,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Sales End No.</label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" class="form-control" id="SalesSummaryReportBySalesNoEnd_data" />
+                                                                <input type="text" class="form-control" id="ARSalesSummaryReportBySalesInvoiceEndNo" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -537,9 +493,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="salesSummaryReportBySalesNoEnd_Company"></div>
-                                                                <input type="hidden" id="salesSummaryReportBySalesNoEnd_Company_data" />
-                                                                <input type="hidden" id="salesSummaryReportBySalesNoEnd_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARSalesSummaryReportBySalesInvoiceNoCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -549,9 +503,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="salesSummaryReportBySalesNoEnd_Branch"></div>
-                                                                <input type="hidden" id="salesSummaryReportBySalesNoEnd_Branch_data" />
-                                                                <input type="hidden" id="salesSummaryReportBySalesNoEnd_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARSalesSummaryReportBySalesInvoiceNoBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -577,8 +529,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="CancelledSalesSummaryReport_StartDate"></div>
-                                                                <input type="hidden" id="CancelledSalesSummaryReport_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARCancelledSalesSummaryReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -588,8 +539,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="CancelledSalesSummaryReport_EndDate"></div>
-                                                                <input type="hidden" id="CancelledSalesSummaryReport_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARCancelledSalesSummaryReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -599,9 +549,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cancelledSalesSummaryReport_Company"></div>
-                                                                <input type="hidden" id="cancelledSalesSummaryReport_Company_data" />
-                                                                <input type="hidden" id="cancelledSalesSummaryReport_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARCancelledSalesSummaryReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -611,9 +559,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cancelledSalesSummaryReport_Branch"></div>
-                                                                <input type="hidden" id="cancelledSalesSummaryReport_Branch_data" />
-                                                                <input type="hidden" id="cancelledSalesSummaryReport_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARCancelledSalesSummaryReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -639,8 +585,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SeniorCitizenSalesSummaryReport_StartDate"></div>
-                                                                <input type="hidden" id="SeniorCitizenSalesSummaryReport_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARSeniorCitizenSalesSummaryReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -650,8 +595,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SeniorCitizenSalesSummaryReport_EndDate"></div>
-                                                                <input type="hidden" id="SeniorCitizenSalesSummaryReport_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARSeniorCitizenSalesSummaryReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -661,9 +605,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="seniorCitizenSalesSummaryReport_Company"></div>
-                                                                <input type="hidden" id="seniorCitizenSalesSummaryReport_Company_data" />
-                                                                <input type="hidden" id="seniorCitizenSalesSummaryReport_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARSeniorCitizenSalesSummaryReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -673,9 +615,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="seniorCitizenSalesSummaryReport_Branch"></div>
-                                                                <input type="hidden" id="seniorCitizenSalesSummaryReport_Branch_data" />
-                                                                <input type="hidden" id="seniorCitizenSalesSummaryReport_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARSeniorCitizenSalesSummaryReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -701,8 +641,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="TopSellingItemsReport_StartDate"></div>
-                                                                <input type="hidden" id="TopSellingItemsReport_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARTopSellingItemsReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -712,8 +651,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="TopSellingItemsReport_EndDate"></div>
-                                                                <input type="hidden" id="TopSellingItemsReport_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARTopSellingItemsReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -723,9 +661,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="topSellingItemsReport_Company"></div>
-                                                                <input type="hidden" id="topSellingItemsReport_Company_data" />
-                                                                <input type="hidden" id="topSellingItemsReport_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARTopSellingItemsReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -735,9 +671,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="topSellingItemsReport_Branch"></div>
-                                                                <input type="hidden" id="topSellingItemsReport_Branch_data" />
-                                                                <input type="hidden" id="topSellingItemsReport_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARTopSellingItemsReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -763,8 +697,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="HourlyTopSellingItemsReport_StartDate"></div>
-                                                                <input type="hidden" id="HourlyTopSellingItemsReport_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARHourlyTopSellingItemsReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -774,8 +707,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="HourlyTopSellingItemsReport_EndDate"></div>
-                                                                <input type="hidden" id="HourlyTopSellingItemsReport_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARHourlyTopSellingItemsReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -785,9 +717,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="hourlyTopSellingItemsReport_Company"></div>
-                                                                <input type="hidden" id="hourlyTopSellingItemsReport_Company_data" />
-                                                                <input type="hidden" id="hourlyTopSellingItemsReport_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARHourlyTopSellingItemsReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -797,9 +727,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="hourlyTopSellingItemsReport_Branch"></div>
-                                                                <input type="hidden" id="hourlyTopSellingItemsReport_Branch_data" />
-                                                                <input type="hidden" id="hourlyTopSellingItemsReport_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARHourlyTopSellingItemsReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -825,8 +753,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ChartMonthlySalesTrend_StartDate"></div>
-                                                                <input type="hidden" id="ChartMonthlySalesTrend_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARChartMonthlySalesTrendReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -836,8 +763,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ChartMonthlySalesTrend_EndDate"></div>
-                                                                <input type="hidden" id="ChartMonthlySalesTrend_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARChartMonthlySalesTrendReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -847,9 +773,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="chartMonthlySalesTrend_Company"></div>
-                                                                <input type="hidden" id="chartMonthlySalesTrend_Company_data" />
-                                                                <input type="hidden" id="chartMonthlySalesTrend_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARChartMonthlySalesTrendReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -859,9 +783,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="chartMonthlySalesTrend_Branch"></div>
-                                                                <input type="hidden" id="chartMonthlySalesTrend_Branch_data" />
-                                                                <input type="hidden" id="chartMonthlySalesTrend_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARChartMonthlySalesTrendReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -887,8 +809,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ChartMonthlySalesComparison_StartDate"></div>
-                                                                <input type="hidden" id="ChartMonthlySalesComparison_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARChartMonthlySalesComparisonReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -898,8 +819,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ChartMonthlySalesComparison_EndDate"></div>
-                                                                <input type="hidden" id="ChartMonthlySalesComparison_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARChartMonthlySalesComparisonReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -909,9 +829,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="chartMonthlySalesComparison_Company"></div>
-                                                                <input type="hidden" id="chartMonthlySalesComparison_Company_data" />
-                                                                <input type="hidden" id="chartMonthlySalesComparison_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARChartMonthlySalesComparisonReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -921,9 +839,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="chartMonthlySalesComparison_Branch"></div>
-                                                                <input type="hidden" id="chartMonthlySalesComparison_Branch_data" />
-                                                                <input type="hidden" id="chartMonthlySalesComparison_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARChartMonthlySalesComparisonReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -949,8 +865,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ChartYearlySalesTrendComparison_StartDate"></div>
-                                                                <input type="hidden" id="ChartYearlySalesTrendComparison_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARChartYearlySalesTrendComparisonReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -960,8 +875,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ChartYearlySalesTrendComparison_EndDate"></div>
-                                                                <input type="hidden" id="ChartYearlySalesTrendComparison_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARChartYearlySalesTrendComparisonReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -971,9 +885,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="chartYearlySalesTrendComparison_Company"></div>
-                                                                <input type="hidden" id="chartYearlySalesTrendComparison_Company_data" />
-                                                                <input type="hidden" id="chartYearlySalesTrendComparison_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARChartYearlySalesTrendComparisonReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -983,9 +895,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="chartYearlySalesTrendComparison_Branch"></div>
-                                                                <input type="hidden" id="chartYearlySalesTrendComparison_Branch_data" />
-                                                                <input type="hidden" id="chartYearlySalesTrendComparison_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARChartYearlySalesTrendComparisonReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1011,8 +921,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ChartHourlySalesComparison_StartDate"></div>
-                                                                <input type="hidden" id="ChartHourlySalesComparison_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARChartHourlySalesComparisonReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1022,8 +931,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ChartHourlySalesComparison_EndDate"></div>
-                                                                <input type="hidden" id="ChartHourlySalesComparison_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARChartHourlySalesComparisonReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1033,9 +941,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="chartHourlySalesComparison_Company"></div>
-                                                                <input type="hidden" id="chartHourlySalesComparison_Company_data" />
-                                                                <input type="hidden" id="chartHourlySalesComparison_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARChartHourlySalesComparisonReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1045,9 +951,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="chartHourlySalesComparison_Branch"></div>
-                                                                <input type="hidden" id="chartHourlySalesComparison_Branch_data" />
-                                                                <input type="hidden" id="chartHourlySalesComparison_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARChartHourlySalesComparisonReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1073,8 +977,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ChartHourlySalesComparisonAmount_StartDate"></div>
-                                                                <input type="hidden" id="ChartHourlySalesComparisonAmount_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARChartHourlySalesComparisonAmountReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1084,8 +987,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ChartHourlySalesComparisonAmount_EndDate"></div>
-                                                                <input type="hidden" id="ChartHourlySalesComparisonAmount_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARChartHourlySalesComparisonAmountReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1095,9 +997,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="chartHourlySalesComparisonAmount_Company"></div>
-                                                                <input type="hidden" id="chartHourlySalesComparisonAmount_Company_data" />
-                                                                <input type="hidden" id="chartHourlySalesComparisonAmount_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARChartHourlySalesComparisonAmountReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1107,9 +1007,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="chartHourlySalesComparisonAmount_Branch"></div>
-                                                                <input type="hidden" id="chartHourlySalesComparisonAmount_Branch_data" />
-                                                                <input type="hidden" id="chartHourlySalesComparisonAmount_Branch_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARChartHourlySalesComparisonAmountReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1135,8 +1033,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ChartCategorySoldComparison_StartDate"></div>
-                                                                <input type="hidden" id="ChartCategorySoldComparison_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARChartCategorySoldComparisonReportStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1146,8 +1043,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ChartCategorySoldComparison_EndDate"></div>
-                                                                <input type="hidden" id="ChartCategorySoldComparison_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARChartCategorySoldComparisonReportEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1157,9 +1053,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="chartCategorySoldComparison_Company"></div>
-                                                                <input type="hidden" id="chartCategorySoldComparison_Company_data" />
-                                                                <input type="hidden" id="chartCategorySoldComparison_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARChartCategorySoldComparisonReportCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1169,121 +1063,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="chartCategorySoldComparison_Branch"></div>
-                                                                <input type="hidden" id="chartCategorySoldComparison_Branch_data" />
-                                                                <input type="hidden" id="chartCategorySoldComparison_Branch_selectedValue" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="SRSR" class="tab-pane fade">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <div align="right">
-                                            <button onclick="SalesRewardSummaryReportView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
-                                            <a href="@Url.Action("Index", "Software" )" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
-                                        </div>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="">
-                                            <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Start Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SalesRewardSummaryReport_StartDate"></div>
-                                                                <input type="hidden" id="SalesRewardSummaryReport_StartDate_data" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">End Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SalesRewardSummaryReport_EndDate"></div>
-                                                                <input type="hidden" id="SalesRewardSummaryReport_EndDate_data" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="SSTR" class="tab-pane fade">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <div align="right">
-                                            <button onclick="SalesStatusReportView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
-                                            <a href="@Url.Action("Index", "Software" )" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
-                                        </div>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="">
-                                            <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Start Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SalesStatusReport_StartDate"></div>
-                                                                <input type="hidden" id="SalesStatusReport_StartDate_data" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">End Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SalesStatusReport_EndDate"></div>
-                                                                <input type="hidden" id="SalesStatusReport_EndDate_data" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="SSTRBSN" class="tab-pane fade">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <div align="right">
-                                            <button onclick="SalesStatusReportBySalesNoView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
-                                            <a href="@Url.Action("Index", "Software" )" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
-                                        </div>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="">
-                                            <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Sales Start No.</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control" id="SalesStatusReportBySalesNo_StartDate_data" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Sales End No.</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control" id="SalesStatusReportBySalesNo_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARChartCategorySoldComparisonReportBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1309,8 +1089,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SaleSummaryReportAllFields_StartDate"></div>
-                                                                <input type="hidden" id="SaleSummaryReportAllFields_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboARSalesSummaryReportAllFieldsStartDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1320,8 +1099,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SaleSummaryReportAllFields_EndDate"></div>
-                                                                <input type="hidden" id="SaleSummaryReportAllFields_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARSalesSummaryReportAllFieldsEndDate"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1331,9 +1109,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="salesSummaryReportAllFields_Company"></div>
-                                                                <input type="hidden" id="salesSummaryReportAllFields_Company_data" />
-                                                                <input type="hidden" id="salesSummaryReportAllFields_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboARSalesSummaryReportAllFieldsCompany"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1343,47 +1119,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="salesSummaryReportAllFields_Branch"></div>
-                                                                <input type="hidden" id="salesSummaryReportAllFields_Branch_data" />
-                                                                <input type="hidden" id="salesSummaryReportAllFields_Branch_selectedValue" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="SCR" class="tab-pane fade">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <div align="right">
-                                            <button onclick="SaleConsumptionReportView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
-                                            <a href="@Url.Action("Index", "Software" )" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
-                                        </div>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="">
-                                            <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Start Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SaleConsumptionReport_StartDate"></div>
-                                                                <input type="hidden" id="SaleConsumptionReport_StartDate_data" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">End Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="SaleConsumptionReport_EndDate"></div>
-                                                                <input type="hidden" id="SaleConsumptionReport_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboARSalesSummaryReportAllFieldsBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1400,10 +1136,127 @@
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
-
     <div id="c-mask" class="c-mask"></div>
+
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var cboARReportDateAsOf = new wijmo.input.InputDate('#cboARReportDateAsOf');
+        var cboARReportCompany = new wijmo.input.ComboBox('#cboARReportCompany');
+        var cboARReportBranch = new wijmo.input.ComboBox('#cboARReportBranch');
+        var cboARSummaryReportDateAsOf = new wijmo.input.InputDate('#cboARSummaryReportDateAsOf');
+        var cboARSummaryReportCompany = new wijmo.input.ComboBox('#cboARSummaryReportCompany');
+        var cboARSummaryReportBranch = new wijmo.input.ComboBox('#cboARSummaryReportBranch');
+        var cboARStatementOfAccountDateAsOf = new wijmo.input.InputDate('#cboARStatementOfAccountDateAsOf');
+        var cboARStatementOfAccountCompany = new wijmo.input.ComboBox('#cboARStatementOfAccountCompany');
+        var cboARStatementOfAccountBranch = new wijmo.input.ComboBox('#cboARStatementOfAccountBranch');
+        var cboARSaleSummaryReportStartDate = new wijmo.input.InputDate('#cboARSaleSummaryReportStartDate');
+        var cboARSaleSummaryReportEndDate = new wijmo.input.InputDate('#cboARSaleSummaryReportEndDate');
+        var cboARSaleSummaryReportCompany = new wijmo.input.ComboBox('#cboARSaleSummaryReportCompany');
+        var cboARSaleSummaryReportBranch = new wijmo.input.ComboBox('#cboARSaleSummaryReportBranch');
+        var cboARSaleDetailReportStartDate = new wijmo.input.InputDate('#cboARSaleDetailReportStartDate');
+        var cboARSaleDetailReportEndDate = new wijmo.input.InputDate('#cboARSaleDetailReportEndDate');
+        var cboARSaleDetailReportCompany = new wijmo.input.ComboBox('#cboARSaleDetailReportCompany');
+        var cboARSaleDetailReportBranch = new wijmo.input.ComboBox('#cboARSaleDetailReportBranch');
+        var cboARCollectionSummaryReportStartDate = new wijmo.input.InputDate('#cboARCollectionSummaryReportStartDate');
+        var cboARCollectionSummaryReportEndDate = new wijmo.input.InputDate('#cboARCollectionSummaryReportEndDate');
+        var cboARCollectionSummaryReportCompany = new wijmo.input.ComboBox('#cboARCollectionSummaryReportCompany');
+        var cboARCollectionSummaryReportBranch = new wijmo.input.ComboBox('#cboARCollectionSummaryReportBranch');
+        var cboARCollectionDetailReportStartDate = new wijmo.input.InputDate('#cboARCollectionDetailReportStartDate');
+        var cboARCollectionDetailReportEndDate = new wijmo.input.InputDate('#cboARCollectionDetailReportEndDate');
+        var cboARCollectionDetailReportCompany = new wijmo.input.ComboBox('#cboARCollectionDetailReportCompany');
+        var cboARCollectionDetailReportBranch = new wijmo.input.ComboBox('#cboARCollectionDetailReportBranch');
+        var cboARSalesDetailVATSalesReportReportStartDate = new wijmo.input.InputDate('#cboARSalesDetailVATSalesReportReportStartDate');
+        var cboARSalesDetailVATSalesReportReportEndDate = new wijmo.input.InputDate('#cboARSalesDetailVATSalesReportReportEndDate');
+        var cboARSalesDetailVATSalesReportReportCompany = new wijmo.input.ComboBox('#cboARSalesDetailVATSalesReportReportCompany');
+        var cboARSalesDetailVATSalesReportReportBranch = new wijmo.input.ComboBox('#cboARSalesDetailVATSalesReportReportBranch');
+        var cboARSalesSummaryReportBySalesInvoiceNoCompany = new wijmo.input.ComboBox('#cboARSalesSummaryReportBySalesInvoiceNoCompany');
+        var cboARSalesSummaryReportBySalesInvoiceNoBranch = new wijmo.input.ComboBox('#cboARSalesSummaryReportBySalesInvoiceNoBranch');
+        var cboARCancelledSalesSummaryReportStartDate = new wijmo.input.InputDate('#cboARCancelledSalesSummaryReportStartDate');
+        var cboARCancelledSalesSummaryReportEndDate = new wijmo.input.InputDate('#cboARCancelledSalesSummaryReportEndDate');
+        var cboARCancelledSalesSummaryReportCompany = new wijmo.input.ComboBox('#cboARCancelledSalesSummaryReportCompany');
+        var cboARCancelledSalesSummaryReportBranch = new wijmo.input.ComboBox('#cboARCancelledSalesSummaryReportBranch');
+        var cboARSeniorCitizenSalesSummaryReportStartDate = new wijmo.input.InputDate('#cboARSeniorCitizenSalesSummaryReportStartDate');
+        var cboARSeniorCitizenSalesSummaryReportEndDate = new wijmo.input.InputDate('#cboARSeniorCitizenSalesSummaryReportEndDate');
+        var cboARSeniorCitizenSalesSummaryReportCompany = new wijmo.input.ComboBox('#cboARSeniorCitizenSalesSummaryReportCompany');
+        var cboARSeniorCitizenSalesSummaryReportBranch = new wijmo.input.ComboBox('#cboARSeniorCitizenSalesSummaryReportBranch');
+        var cboARTopSellingItemsReportStartDate = new wijmo.input.InputDate('#cboARTopSellingItemsReportStartDate');
+        var cboARTopSellingItemsReportEndDate = new wijmo.input.InputDate('#cboARTopSellingItemsReportEndDate');
+        var cboARTopSellingItemsReportCompany = new wijmo.input.ComboBox('#cboARTopSellingItemsReportCompany');
+        var cboARTopSellingItemsReportBranch = new wijmo.input.ComboBox('#cboARTopSellingItemsReportBranch');
+        var cboARHourlyTopSellingItemsReportStartDate = new wijmo.input.InputDate('#cboARHourlyTopSellingItemsReportStartDate');
+        var cboARHourlyTopSellingItemsReportEndDate = new wijmo.input.InputDate('#cboARHourlyTopSellingItemsReportEndDate');
+        var cboARHourlyTopSellingItemsReportCompany = new wijmo.input.ComboBox('#cboARHourlyTopSellingItemsReportCompany');
+        var cboARHourlyTopSellingItemsReportBranch = new wijmo.input.ComboBox('#cboARHourlyTopSellingItemsReportBranch');
+        var cboARChartMonthlySalesTrendReportStartDate = new wijmo.input.InputDate('#cboARChartMonthlySalesTrendReportStartDate');
+        var cboARChartMonthlySalesTrendReportEndDate = new wijmo.input.InputDate('#cboARChartMonthlySalesTrendReportEndDate');
+        var cboARChartMonthlySalesTrendReportCompany = new wijmo.input.ComboBox('#cboARChartMonthlySalesTrendReportCompany');
+        var cboARChartMonthlySalesTrendReportBranch = new wijmo.input.ComboBox('#cboARChartMonthlySalesTrendReportBranch');
+        var cboARChartMonthlySalesComparisonReportStartDate = new wijmo.input.InputDate('#cboARChartMonthlySalesComparisonReportStartDate');
+        var cboARChartMonthlySalesComparisonReportEndDate = new wijmo.input.InputDate('#cboARChartMonthlySalesComparisonReportEndDate');
+        var cboARChartMonthlySalesComparisonReportCompany = new wijmo.input.ComboBox('#cboARChartMonthlySalesComparisonReportCompany');
+        var cboARChartMonthlySalesComparisonReportBranch = new wijmo.input.ComboBox('#cboARChartMonthlySalesComparisonReportBranch');
+        var cboARChartYearlySalesTrendComparisonReportStartDate = new wijmo.input.InputDate('#cboARChartYearlySalesTrendComparisonReportStartDate');
+        var cboARChartYearlySalesTrendComparisonReportEndDate = new wijmo.input.InputDate('#cboARChartYearlySalesTrendComparisonReportEndDate');
+        var cboARChartYearlySalesTrendComparisonReportCompany = new wijmo.input.ComboBox('#cboARChartYearlySalesTrendComparisonReportCompany');
+        var cboARChartYearlySalesTrendComparisonReportBranch = new wijmo.input.ComboBox('#cboARChartYearlySalesTrendComparisonReportBranch');
+        var cboARChartHourlySalesComparisonReportStartDate = new wijmo.input.InputDate('#cboARChartHourlySalesComparisonReportStartDate');
+        var cboARChartHourlySalesComparisonReportEndDate = new wijmo.input.InputDate('#cboARChartHourlySalesComparisonReportEndDate');
+        var cboARChartHourlySalesComparisonReportCompany = new wijmo.input.ComboBox('#cboARChartHourlySalesComparisonReportCompany');
+        var cboARChartHourlySalesComparisonReportBranch = new wijmo.input.ComboBox('#cboARChartHourlySalesComparisonReportBranch');
+        var cboARChartHourlySalesComparisonAmountReportStartDate = new wijmo.input.InputDate('#cboARChartHourlySalesComparisonAmountReportStartDate');
+        var cboARChartHourlySalesComparisonAmountReportEndDate = new wijmo.input.InputDate('#cboARChartHourlySalesComparisonAmountReportEndDate');
+        var cboARChartHourlySalesComparisonAmountReportCompany = new wijmo.input.ComboBox('#cboARChartHourlySalesComparisonAmountReportCompany');
+        var cboARChartHourlySalesComparisonAmountReportBranch = new wijmo.input.ComboBox('#cboARChartHourlySalesComparisonAmountReportBranch');
+        var cboARChartCategorySoldComparisonReportStartDate = new wijmo.input.InputDate('#cboARChartCategorySoldComparisonReportStartDate');
+        var cboARChartCategorySoldComparisonReportEndDate = new wijmo.input.InputDate('#cboARChartCategorySoldComparisonReportEndDate');
+        var cboARChartCategorySoldComparisonReportCompany = new wijmo.input.ComboBox('#cboARChartCategorySoldComparisonReportCompany');
+        var cboARChartCategorySoldComparisonReportBranch = new wijmo.input.ComboBox('#cboARChartCategorySoldComparisonReportBranch');
+        var cboARSalesSummaryReportAllFieldsStartDate = new wijmo.input.InputDate('#cboARSalesSummaryReportAllFieldsStartDate');
+        var cboARSalesSummaryReportAllFieldsEndDate = new wijmo.input.InputDate('#cboARSalesSummaryReportAllFieldsEndDate');
+        var cboARSalesSummaryReportAllFieldsCompany = new wijmo.input.ComboBox('#cboARSalesSummaryReportAllFieldsCompany');
+        var cboARSalesSummaryReportAllFieldsBranch = new wijmo.input.ComboBox('#cboARSalesSummaryReportAllFieldsBranch');
+
+        // ===================
+        // AR All Date Filters
+        // ===================
+        function createCboAllARDateFilters() {
+            NProgress.start();
+
+
+
+            craeteCboAllARCompanyFilters();
+        }
+
+        // ======================
+        // AR All Company Filters
+        // ======================
+        function craeteCboAllARCompanyFilters() {
+
+            createCboAllARBranchFilters();
+        }
+
+        // =====================
+        // AR All Branch Filters
+        // =====================
+        function createCboAllARBranchFilters() {
+
+            createCboARCustomerFilter();
+        }
+
+        // ==================
+        // AR Customer Filter
+        // ==================
+        function createCboARCustomerFilter() {
+
+        }
+
+        $(document).ready(function () {
+            createCboAllARDateFilters();
+        });
+
         var accountsReceivableDateAsOf;
         var accountsReceivableSummaryDateAsOf;
         var StatementOfTheAccountDateAsOf;
@@ -4490,237 +4343,6 @@
             window.location.href = '/Software/ChartCategorySoldComparison?StartDate=' + convertDateToShortDateString(startDate) + '&EndDate=' + convertDateToShortDateString(endDate);
         }
 
-        $(document).ready(function () {
-            accountReceivableCboCompany = new wijmo.input.ComboBox('#accountReceivableReport_Company');
-            accountReceivableSummaryCboCompany = new wijmo.input.ComboBox('#accountReceivableSummaryReport_Company');
-            StatementOfTheAccountCboCompany = new wijmo.input.ComboBox('#StatementOfTheAccount_Company');
-            salesSummaryReportCboCompany = new wijmo.input.ComboBox('#salesSummaryReport_Company');
-            salesDetailReportCboCompany = new wijmo.input.ComboBox('#salesDetailReport_Company');
-            collectionSummaryReportCboCompany = new wijmo.input.ComboBox('#collectionSummaryReport_Company');
-            collectionDetailReportCboCompany = new wijmo.input.ComboBox('#collectionDetailReport_Company');
-            salesDetailReportVatSalesCboCompany = new wijmo.input.ComboBox('#salesDetailReportVatSales_Company');
-            salesSummaryReportBySalesNoEndCboCompany = new wijmo.input.ComboBox('#salesSummaryReportBySalesNoEnd_Company');
-            cancelledSalesSummaryReportCboCompany = new wijmo.input.ComboBox('#cancelledSalesSummaryReport_Company');
-            seniorCitizenSalesSummaryReportCboCompany = new wijmo.input.ComboBox('#seniorCitizenSalesSummaryReport_Company');
-            topSellingItemsReportCboCompany = new wijmo.input.ComboBox('#topSellingItemsReport_Company');
-            hourlyTopSellingItemsReportCboCompany = new wijmo.input.ComboBox('#hourlyTopSellingItemsReport_Company');
-            chartMonthlySalesTrendCboCompany = new wijmo.input.ComboBox('#chartMonthlySalesTrend_Company');
-            chartMonthlySalesComparisonCboCompany = new wijmo.input.ComboBox('#chartMonthlySalesComparison_Company');
-            chartYearlySalesTrendComparisonCboCompany = new wijmo.input.ComboBox('#chartYearlySalesTrendComparison_Company');
-            chartHourlySalesComparisonCboCompany = new wijmo.input.ComboBox('#chartHourlySalesComparison_Company');
-            chartHourlySalesComparisonAmountCboCompany = new wijmo.input.ComboBox('#chartHourlySalesComparisonAmount_Company');
-            chartCategorySoldComparisonCboCompany = new wijmo.input.ComboBox('#chartCategorySoldComparison_Company');
-            salesSummaryReportAllFieldsCboCompany = new wijmo.input.ComboBox('#salesSummaryReportAllFields_Company');
-
-            salesSummaryReportCboBranch = new wijmo.input.ComboBox('#salesSummaryReport_Branch');
-            salesDetailReportCboBranch = new wijmo.input.ComboBox('#salesDetailReport_Branch');
-            collectionSummaryReportCboBranch = new wijmo.input.ComboBox('#collectionSummaryReport_Branch');
-            collectionDetailReportCboBranch = new wijmo.input.ComboBox('#collectionDetailReport_Branch');
-            salesDetailReportVatSalesCboBranch = new wijmo.input.ComboBox('#salesDetailReportVatSales_Branch');
-            salesSummaryReportBySalesNoEndCboBranch = new wijmo.input.ComboBox('#salesSummaryReportBySalesNoEnd_Branch');
-            cancelledSalesSummaryReportCboBranch = new wijmo.input.ComboBox('#cancelledSalesSummaryReport_Branch');
-            seniorCitizenSalesSummaryReportCboBranch = new wijmo.input.ComboBox('#seniorCitizenSalesSummaryReport_Branch');
-            topSellingItemsReportCboBranch = new wijmo.input.ComboBox('#topSellingItemsReport_Branch');
-            hourlyTopSellingItemsReportCboBranch = new wijmo.input.ComboBox('#hourlyTopSellingItemsReport_Branch');
-            chartMonthlySalesTrendCboBranch = new wijmo.input.ComboBox('#chartMonthlySalesTrend_Branch');
-            chartMonthlySalesComparisonCboBranch = new wijmo.input.ComboBox('#chartMonthlySalesComparison_Branch');
-            chartYearlySalesTrendComparisonCboBranch = new wijmo.input.ComboBox('#chartYearlySalesTrendComparison_Branch');
-            chartHourlySalesComparisonCboBranch = new wijmo.input.ComboBox('#chartHourlySalesComparison_Branch');
-            chartHourlySalesComparisonAmountCboBranch = new wijmo.input.ComboBox('#chartHourlySalesComparisonAmount_Branch');
-            chartCategorySoldComparisonCboBranch = new wijmo.input.ComboBox('#chartCategorySoldComparison_Branch');
-            salesSummaryReportAllFieldsCboBranch = new wijmo.input.ComboBox('#salesSummaryReportAllFields_Branch');
-
-            cboCustomer = new wijmo.input.ComboBox('#StatementOfTheAccount_Customer');
-            getCustomers();
-            getCompanies();
-
-            var newDate = new Date();
-            var defaultDate = newDate;
-
-            document.getElementById('accountReceivableReport_DateAsOf_data').value = convertDateToShortDateString(defaultDate);
-            document.getElementById('accountReceivableSummaryReport_DateAsOf_data').value = convertDateToShortDateString(defaultDate);
-            document.getElementById('StatementOfTheAccount_DateAsOf_data').value = convertDateToShortDateString(defaultDate);
-
-            accountsReceivableDateAsOf = new wijmo.input.InputDate('#accountReceivableReport_DateAsOf', {
-                format: 'MM-dd-yyyy',
-                value: new Date(),
-                mask: '99-99-9999',
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('accountReceivableReport_DateAsOf_data').value = thisDateValue;
-                }
-            });
-
-            accountsReceivableSummaryDateAsOf = new wijmo.input.InputDate('#accountReceivableSummaryReport_DateAsOf', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                onValueChanged: function () {
-                    document.getElementById('accountReceivableSummaryReport_DateAsOf_data').value = this.value;
-                }
-            });
-
-            StatementOfTheAccountDateAsOf = new wijmo.input.InputDate('#StatementOfTheAccount_DateAsOf', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                onValueChanged: function () {
-                    document.getElementById('StatementOfTheAccount_DateAsOf_data').value = this.value;
-                }
-            });
-
-            // sale summary report
-            document.getElementById('SaleSummaryReport_StartDate_data').value = defaultDate;
-            document.getElementById('SaleSummaryReport_EndDate_data').value = defaultDate;
-            saleSummaryReportStartDate = new wijmo.input.InputDate('#SaleSummaryReport_StartDate');
-            saleSummaryReportEndDate = new wijmo.input.InputDate('#SaleSummaryReport_EndDate');
-            getSaleSummaryReportStartDate();
-            getSaleSummaryReportEndDate();
-
-            // sale detail report
-            document.getElementById('SaleDetailReport_StartDate_data').value = defaultDate;
-            document.getElementById('SaleDetailReport_EndDate_data').value = defaultDate;
-            saleDetailReportStartDate = new wijmo.input.InputDate('#SaleDetailReport_StartDate');
-            saleDetailReportEndDate = new wijmo.input.InputDate('#SaleDetailReport_EndDate');
-            getSaleDetailReportStartDate();
-            getSaleDetailReportEndDate();
-
-            // collection summary report
-            document.getElementById('CollectionSummaryReport_StartDate_data').value = defaultDate;
-            document.getElementById('CollectionSummaryReport_EndDate_data').value = defaultDate;
-            collectionSummaryReportStartDate = new wijmo.input.InputDate('#CollectionSummaryReport_StartDate');
-            collectionSummaryReportEndDate = new wijmo.input.InputDate('#CollectionSummaryReport_EndDate');
-            getCollectionSummaryReportStartDate();
-            getCollectionSummaryReportEndDate();
-
-            // collection detail report
-            document.getElementById('CollectionDetailReport_StartDate_data').value = defaultDate;
-            document.getElementById('CollectionDetailReport_EndDate_data').value = defaultDate;
-            collectionDetailReportStartDate = new wijmo.input.InputDate('#CollectionDetailReport_StartDate');
-            collectionDetailReportEndDate = new wijmo.input.InputDate('#CollectionDetailReport_EndDate');
-            getCollectionDetailReportStartDate();
-            getCollectionDetailReportEndDate();
-
-            // sales detail report vat sales report
-            document.getElementById('SalesDetailReportVatSales_StartDate_data').value = defaultDate;
-            document.getElementById('SalesDetailReportVatSales_EndDate_data').value = defaultDate;
-            salesDetailReportVatSalesStartDate = new wijmo.input.InputDate('#SalesDetailReportVatSales_StartDate');
-            salesDetailReportVatSalesEndDate = new wijmo.input.InputDate('#SalesDetailReportVatSales_EndDate');
-            getSalesDetailReportVatSalesStartDate();
-            getSalesDetailReportVatSalesEndDate();
-
-            // cancelled sales summary report
-            document.getElementById('CancelledSalesSummaryReport_StartDate_data').value = defaultDate;
-            document.getElementById('CancelledSalesSummaryReport_EndDate_data').value = defaultDate;
-            cancelledSalesSummaryReportStartDate = new wijmo.input.InputDate('#CancelledSalesSummaryReport_StartDate');
-            cancelledSalesSummaryReportEndDate = new wijmo.input.InputDate('#CancelledSalesSummaryReport_EndDate');
-            getCancelledSalesSummaryReportStartDate();
-            getCancelledSalesSummaryReportEndDate();
-
-            // Senior Citizen sales summary report
-            document.getElementById('SeniorCitizenSalesSummaryReport_StartDate_data').value = defaultDate;
-            document.getElementById('SeniorCitizenSalesSummaryReport_EndDate_data').value = defaultDate;
-            seniorCitizenSalesSummaryReportStartDate = new wijmo.input.InputDate('#SeniorCitizenSalesSummaryReport_StartDate');
-            seniorCitizenSalesSummaryReportEndDate = new wijmo.input.InputDate('#SeniorCitizenSalesSummaryReport_EndDate');
-            getSeniorCitizenSalesSummaryReportStartDate();
-            getSeniorCitizenSalesSummaryReportEndDate();
-
-            // top selling item report
-            document.getElementById('TopSellingItemsReport_StartDate_data').value = defaultDate;
-            document.getElementById('TopSellingItemsReport_EndDate_data').value = defaultDate;
-            topSellingItemsReportStartDate = new wijmo.input.InputDate('#TopSellingItemsReport_StartDate');
-            topSellingItemsReportEndDate = new wijmo.input.InputDate('#TopSellingItemsReport_EndDate');
-            getTopSellingItemsReportStartDate();
-            getTopSellingItemsReportEndDate();
-
-            // Hourly top selling item report
-            document.getElementById('HourlyTopSellingItemsReport_StartDate_data').value = defaultDate;
-            document.getElementById('HourlyTopSellingItemsReport_EndDate_data').value = defaultDate;
-            hourlyTopSellingItemsReportStartDate = new wijmo.input.InputDate('#HourlyTopSellingItemsReport_StartDate');
-            hourlyTopSellingItemsReportEndDate = new wijmo.input.InputDate('#HourlyTopSellingItemsReport_EndDate');
-            getHourlyTopSellingItemsReportStartDate();
-            getHourlyTopSellingItemsReportEndDate();
-
-            // chart monthly sales trend report
-            document.getElementById('ChartMonthlySalesTrend_StartDate_data').value = defaultDate;
-            document.getElementById('ChartMonthlySalesTrend_EndDate_data').value = defaultDate;
-            chartMonthlySalesTrendStartDate = new wijmo.input.InputDate('#ChartMonthlySalesTrend_StartDate');
-            chartMonthlySalesTrendEndDate = new wijmo.input.InputDate('#ChartMonthlySalesTrend_EndDate');
-            getChartMonthlySalesTrendStartDate();
-            getChartMonthlySalesTrendEndDate();
-
-            // chart monthly sales comparison report
-            document.getElementById('ChartMonthlySalesComparison_StartDate_data').value = defaultDate;
-            document.getElementById('ChartMonthlySalesComparison_EndDate_data').value = defaultDate;
-            chartMonthlySalesComparisonStartDate = new wijmo.input.InputDate('#ChartMonthlySalesComparison_StartDate');
-            chartMonthlySalesComparisonEndDate = new wijmo.input.InputDate('#ChartMonthlySalesComparison_EndDate');
-            getChartMonthlySalesComparisonStartDate();
-            getChartMonthlySalesComparisonEndDate();
-
-            // chart yearly sales trend comparison report
-            document.getElementById('ChartYearlySalesTrendComparison_StartDate_data').value = defaultDate;
-            document.getElementById('ChartYearlySalesTrendComparison_EndDate_data').value = defaultDate;
-            chartYearlySalesTrendComparisonStartDate = new wijmo.input.InputDate('#ChartYearlySalesTrendComparison_StartDate');
-            chartYearlySalesTrendComparisonEndDate = new wijmo.input.InputDate('#ChartYearlySalesTrendComparison_EndDate');
-            getChartYearlySalesTrendComparisonStartDate();
-            getChartYearlySalesTrendComparisonEndDate();
-
-            // chart hourly sales comparison report
-            document.getElementById('ChartHourlySalesComparison_StartDate_data').value = defaultDate;
-            document.getElementById('ChartHourlySalesComparison_EndDate_data').value = defaultDate;
-            chartHourlySalesComparisonStartDate = new wijmo.input.InputDate('#ChartHourlySalesComparison_StartDate');
-            chartHourlySalesComparisonEndDate = new wijmo.input.InputDate('#ChartHourlySalesComparison_EndDate');
-            getChartHourlySalesComparisonStartDate();
-            getChartHourlySalesComparisonEndDate();
-
-            // chart hourly sales comparison amount report
-            document.getElementById('ChartHourlySalesComparisonAmount_StartDate_data').value = defaultDate;
-            document.getElementById('ChartHourlySalesComparisonAmount_EndDate_data').value = defaultDate;
-            chartHourlySalesComparisonAmountStartDate = new wijmo.input.InputDate('#ChartHourlySalesComparisonAmount_StartDate');
-            chartHourlySalesComparisonAmountEndDate = new wijmo.input.InputDate('#ChartHourlySalesComparisonAmount_EndDate');
-            getChartHourlySalesComparisonAmountStartDate();
-            getChartHourlySalesComparisonAmountEndDate();
-
-            // chart category sold comparison amount report
-            document.getElementById('ChartCategorySoldComparison_StartDate_data').value = defaultDate;
-            document.getElementById('ChartCategorySoldComparison_EndDate_data').value = defaultDate;
-            chartCategorySoldComparisonStartDate = new wijmo.input.InputDate('#ChartCategorySoldComparison_StartDate');
-            chartCategorySoldComparisonEndDate = new wijmo.input.InputDate('#ChartCategorySoldComparison_EndDate');
-            getChartCategorySoldComparisonStartDate();
-            getChartCategorySoldComparisonEndDate();
-
-            // sales reward summary report
-            document.getElementById('SalesRewardSummaryReport_StartDate_data').value = defaultDate;
-            document.getElementById('SalesRewardSummaryReport_EndDate_data').value = defaultDate;
-            salesRewardSummaryReportStartDate = new wijmo.input.InputDate('#SalesRewardSummaryReport_StartDate');
-            salesRewardSummaryReportEndDate = new wijmo.input.InputDate('#SalesRewardSummaryReport_EndDate');
-            getSalesRewardSummaryReportStartDate();
-            getSalesRewardSummaryReportEndDate();
-
-            // sales status report
-            document.getElementById('SalesStatusReport_StartDate_data').value = defaultDate;
-            document.getElementById('SalesStatusReport_EndDate_data').value = defaultDate;
-            salesStatusReportStartDate = new wijmo.input.InputDate('#SalesStatusReport_StartDate');
-            salesStatusReportEndDate = new wijmo.input.InputDate('#SalesStatusReport_EndDate');
-            getSalesStatusReportStartDate();
-            getSalesStatusReportEndDate();
-
-            // sale summary report all fields
-            document.getElementById('SaleSummaryReportAllFields_StartDate_data').value = defaultDate;
-            document.getElementById('SaleSummaryReportAllFields_EndDate_data').value = defaultDate;
-            saleSummaryReportAllFieldsStartDate = new wijmo.input.InputDate('#SaleSummaryReportAllFields_StartDate');
-            saleSummaryReportAllFieldsEndDate = new wijmo.input.InputDate('#SaleSummaryReportAllFields_EndDate');
-            getSaleSummaryReportAllFieldsStartDate();
-            getSaleSummaryReportAllFieldsEndDate();
-
-            // sale consumption report all fields
-            document.getElementById('SaleConsumptionReport_StartDate_data').value = defaultDate;
-            document.getElementById('SaleConsumptionReport_EndDate_data').value = defaultDate;
-            saleConsumptionReportStartDate = new wijmo.input.InputDate('#SaleConsumptionReport_StartDate');
-            saleConsumptionReportEndDate = new wijmo.input.InputDate('#SaleConsumptionReport_EndDate');
-            getSaleConsumptionReportStartDate();
-            getSaleConsumptionReportEndDate();
-        });
     </script>
     <script type="text/javascript">
         var cboUserBranches = new wijmo.input.ComboBox('#cboUserBranches');

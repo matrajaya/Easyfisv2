@@ -52,12 +52,19 @@
                             <tr>
                                 <td style="width: 24%">
                                     <div class="input-group ">
+                                        <span class="input-group-addon"><b>Date as of</b></span>
+                                        <div class="comboBox-wide" id="cboAPReportDateAsOf" style="font-size: 12.5px;"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%" align="right">
+                                    <div class="input-group ">
                                         <span class="input-group-addon"><b>Company</b></span>
                                         <div class="comboBox-wide" id="cboAPReportComapny" style="font-size: 12.5px;"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 24%" align="right">
+                                <td style="width: 24%">
                                     <div class="input-group ">
                                         <span class="input-group-addon"><b>Branch</b></span>
                                         <div class="comboBox-wide" id="cboAPReportBranch" style="font-size: 12.5px;"></div>
@@ -68,13 +75,6 @@
                                     <div class="input-group ">
                                         <span class="input-group-addon"><b>Account</b></span>
                                         <div class="comboBox-wide" id="cboAPReportAccount" style="font-size: 12.5px;"></div>
-                                    </div>
-                                </td>
-                                <td style="width: 1%"></td>
-                                <td style="width: 24%">
-                                    <div class="input-group ">
-                                        <span class="input-group-addon"><b>Date as of</b></span>
-                                        <div class="comboBox-wide" id="cboAPReportDateAsOf" style="font-size: 12.5px;"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -174,7 +174,7 @@
                 format: 'MM-dd-yyyy',
                 value: new Date(getParam("DateAsOf")),
                 onValueChanged: function () {
-                    if (!isDateAsOfSelected) {
+                    if (isDateAsOfSelected) {
                         NProgress.start();
                         refreshAccountsPayableFlexGrid();
                     } else {
@@ -279,6 +279,7 @@
                             itemsSource: branchObservableArray,
                             displayMemberPath: "Branch",
                             selectedValuePath: "Id",
+                            selectedValue: getParam("BranchId"),
                             onSelectedIndexChanged: function () {
                                 NProgress.start();
                                 refreshAccountsPayableFlexGrid();
