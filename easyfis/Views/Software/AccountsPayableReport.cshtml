@@ -40,8 +40,8 @@
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 50%" align="right">
-                                    <button onclick="accountsPayableReportCSVOnclick()" class="btn btn-success "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                    <button onclick="accountsPayableReportPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="accountsPayableReportCSVOnclick()" id="btnCSV" class="btn btn-success "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    <button onclick="accountsPayableReportPDFOnclick()" id="btnPrintPDF" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                     <a href="/Software/AccountsPayable" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
                                 </td>
                             </tr>
@@ -146,6 +146,7 @@
         var cboAPReportAccount = new wijmo.input.ComboBox('#cboAPReportAccount');
         var accountsPayableCollections;
         var accountsPayableGrid;
+        var accountHasData = false;
 
         // ====================
         // Get Parameter Values
@@ -215,7 +216,8 @@
                     if (companyResults.length > 0) {
                         disabled = false;
                     } else {
-
+                        $("#btnCSV").prop("disabled", true);
+                        $("#btnPrintPDF").prop("disabled", true);
                     }
 
                     cboAPReportComapny.dispose();
@@ -228,6 +230,10 @@
                         selectedValue: getParam("CompanyId"),
                         onSelectedIndexChanged: function () {
                             NProgress.start();
+                            if (accountHasData) {
+                                $("#btnCSV").prop("disabled", false);
+                                $("#btnPrintPDF").prop("disabled", false);
+                            }
                             isCompanySelected = true;
                             createCboAPBranchFilter();
                         }
@@ -269,7 +275,8 @@
                         if (branchResults.length > 0) {
                             disabled = false;
                         } else {
-
+                            $("#btnCSV").prop("disabled", true);
+                            $("#btnPrintPDF").prop("disabled", true);
                         }
 
                         cboAPReportBranch.dispose();
@@ -329,8 +336,10 @@
                     var disabled = true;
                     if (accountResults.length > 0) {
                         disabled = false;
+                        accountHasData = true;
                     } else {
-                        $("#btnAPReportView").prop("disabled", true);
+                        $("#btnCSV").prop("disabled", true);
+                        $("#btnPrintPDF").prop("disabled", true);
                     }
 
                     cboAPReportAccount.dispose();
@@ -340,6 +349,7 @@
                         itemsSource: accountsObservableArray,
                         displayMemberPath: "Account",
                         selectedValuePath: "AccountId",
+                        selectedValue: getParam("AccountId"),
                         onSelectedIndexChanged: function () {
                             NProgress.start();
                             refreshAccountsPayableFlexGrid();
@@ -691,10 +701,24 @@
         // Print PDF
         // =========
         function accountsPayableReportPDFOnclick() {
-            var dateAsOf = cboAPReportDateAsOf.value.toLocaleDateString().replace(/\//g, '-');
-            var companyId = cboAPReportComapny.selectedValue;
+            if (cboAPReportComapny.selectedValue != null) {
+                if (cboAPReportBranch.selectedValue != null) {
+                    if (cboAPReportAccount.selectedValue != null) {
+                        var dateAsOf = cboAPReportDateAsOf.value.toLocaleDateString().replace(/\//g, '-');
+                        var companyId = cboAPReportComapny.selectedValue;
+                        var branchId = cboAPReportBranch.selectedValue;
+                        var accountId = cboAPReportAccount.selectedValue;
 
-            window.location.href = '/RepAccountsPayable/AccountsPayable?DateAsOf=' + dateAsOf + '&CompanyId=' + companyId;
+                        window.location.href = '/RepAccountsPayable/AccountsPayable?DateAsOf=' + dateAsOf + '&CompanyId=' + companyId + '&BranchId=' + branchId + '&AccountId=' + accountId;
+                    } else {
+                        toastr.error("Lacking Information");
+                    }
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // ============
