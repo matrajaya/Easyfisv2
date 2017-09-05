@@ -23,6 +23,7 @@
     <IISExpressUseClassicPipelineMode />
     <TypeScriptToolsVersion>2.2</TypeScriptToolsVersion>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -271,7 +272,9 @@
     <Compile Include="Models\MstArticleGroupBranch.cs" />
     <Compile Include="Models\MstUserBranch.cs" />
     <Compile Include="POSIntegrationApiControllers\POSIntegrationApiSalesInvoiceController.cs" />
+    <Compile Include="POSIntegrationApiControllers\POSIntegrationApiStockTransferController.cs" />
     <Compile Include="POSIntegrationEntities\POSIntegrationTrnSalesInvoice.cs" />
+    <Compile Include="POSIntegrationEntities\POSIntegrationTrnStockTransfer.cs" />
     <Compile Include="Reports\RepAccountLedgerController.cs" />
     <Compile Include="Reports\RepAccountsPayableController.cs" />
     <Compile Include="Reports\RepAccountsPayableVoucherController.cs" />
@@ -868,6 +871,8 @@
     <None Include="Properties\PublishProfiles\easyfiswebsite - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\easyfiswebsite-abomar - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\easyfiswebsite-abomar - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\easyfiswebsite-cmm - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\easyfiswebsite-cmm - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\easyfiswebsite-innosoft - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\easyfiswebsite-innosoft - FTP %283%29.pubxml" />
     <None Include="Properties\PublishProfiles\easyfiswebsite-innosoft - FTP %284%29.pubxml" />

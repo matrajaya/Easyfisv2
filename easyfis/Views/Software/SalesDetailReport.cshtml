@@ -101,13 +101,13 @@
         }
 
         function salesDetailReportPDF_OnClick() {
-            window.location.href = '/RepSalesDetailReport/SalesDetailReport?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate");
+            window.location.href = '/RepSalesDetailReport/SalesDetailReport?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&CompanyId=' + getParam("CompanyId") + '&BranchId=' + getParam("BranchId");
         }
 
         function getSalesDetailReport() {
             var salesDetailReport = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/salesDetailReport/list/' + getParam("StartDate") + '/' + getParam("EndDate"),
+                url: '/api/salesDetailReport/list/' + getParam("StartDate") + '/' + getParam("EndDate") + "/" + getParam("CompanyId") + "/" + getParam("BranchId"),
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -159,6 +159,7 @@
                 salesDetailReport.push({
                     SI: salesDetailReportCollection.items[i].SIForCSV,
                     SIDate: salesDetailReportCollection.items[i].SIDate,
+                    Customer: salesDetailReportCollection.items[i].Customer,
                     Item: salesDetailReportCollection.items[i].Item,
                     ItemInventory: salesDetailReportCollection.items[i].ItemInventory,
                     Price: salesDetailReportCollection.items[i].Price,
@@ -181,6 +182,7 @@
 
                 SI: "SI Number",
                 SIDate: "SI Date",
+                Customer: "Customer",
                 Item: "Item",
                 ItemInventory: "Inventory Code",
                 Price: "Price",

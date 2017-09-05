@@ -79,6 +79,11 @@ else
                                                 <div class="g-recaptcha" style="width: 100%" data-sitekey="6LcdCS0UAAAAADgQLGm59jhvhXaOUb3t_MzGlYYh"></div>
                                             }
 
+                                            @if (host.Equals("cmm.easyfis.com"))
+                                            {
+                                                <div class="g-recaptcha" style="width: 100%" data-sitekey="6LfVdi8UAAAAAJ1bYIpFaoRwkmfb9eoGosWmExO4"></div>
+                                            }
+
                                             @Html.ValidationMessage("CaptiaError", new { @class = "text-danger" })
                                         </div>
                                     </div>

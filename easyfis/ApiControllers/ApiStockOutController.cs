@@ -279,22 +279,20 @@ namespace easyfis.Controllers
                     {
                         foreach (var stockOutItem in updateStockOut.TrnStockOutItems)
                         {
-                            var mstArticleInventory = from d in db.MstArticleInventories
-                                                      where d.TrnStockOutItems.Contains(stockOutItem)
-                                                      select d;
+                            if (stockOutItem.MstArticle.IsInventory)
+                            {
+                                var mstArticleInventory = from d in db.MstArticleInventories
+                                                          where d.TrnStockOutItems.Contains(stockOutItem)
+                                                          select d;
 
-                            if (mstArticleInventory.Any())
-                            {
-                                if (stockOutItem.MstArticleInventory.Quantity < 0)
+                                if (mstArticleInventory.Any())
                                 {
-                                    foundNegativeQuantity = true;
-                                    break;
+                                    if (stockOutItem.MstArticleInventory.Quantity < 0)
+                                    {
+                                        foundNegativeQuantity = true;
+                                        break;
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                foundNegativeQuantity = true;
-                                break;
                             }
                         }
                     }

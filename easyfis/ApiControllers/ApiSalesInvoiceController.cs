@@ -444,22 +444,20 @@ namespace easyfis.Controllers
                     {
                         foreach (var salesInvoiceItem in updateSalesInvoice.TrnSalesInvoiceItems)
                         {
-                            var mstArticleInventory = from d in db.MstArticleInventories
-                                                      where d.TrnSalesInvoiceItems.Contains(salesInvoiceItem)
-                                                      select d;
+                            if (salesInvoiceItem.MstArticle.IsInventory)
+                            {
+                                var mstArticleInventory = from d in db.MstArticleInventories
+                                                          where d.TrnSalesInvoiceItems.Contains(salesInvoiceItem)
+                                                          select d;
 
-                            if (mstArticleInventory.Any())
-                            {
-                                if (salesInvoiceItem.MstArticleInventory.Quantity < 0)
+                                if (mstArticleInventory.Any())
                                 {
-                                    foundNegativeQuantity = true;
-                                    break;
+                                    if (salesInvoiceItem.MstArticleInventory.Quantity < 0)
+                                    {
+                                        foundNegativeQuantity = true;
+                                        break;
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                foundNegativeQuantity = true;
-                                break;
                             }
                         }
                     }
