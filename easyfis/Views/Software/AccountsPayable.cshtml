@@ -19,7 +19,7 @@
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Accounts Payable  
+                        Accounts Payable
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -50,7 +50,7 @@
                                     <div class="panel-heading">
                                         <div align="right">
                                             <button onclick="btnAPReportViewOnclick()" id="btnAPReportView" class="btn btn-primary"><i class="fa fa-table"></i> View</button>
-                                            <button onclick="btnAPReportPrintPDFOnclick()"id="btnAPReportPrintPDF" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                                            <button onclick="btnAPReportPrintPDFOnclick()" id="btnAPReportPrintPDF" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
@@ -219,13 +219,13 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-4">Company</label>
                                                     <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="cboAPWithHoldingTAXReportCompany"></div>
+                                                        <div class="comboBox-wide" id="cboAPPurchaseSummaryReportCompany"></div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-4">Branch</label>
                                                     <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="cboAPWithHoldingTAXReportBranch"></div>
+                                                        <div class="comboBox-wide" id="cboAPPurchaseSummaryReportBranch"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -245,24 +245,28 @@
                                     <div class="panel-body">
                                         <div class="">
                                             <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Start Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cboAPPurchaseDetailReportStartDate"></div>
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Start Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPPurchaseDetailReportStartDate"></div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">End Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cboAPPurchaseDetailReportEndDate"></div>
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">End Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPPurchaseDetailReportEndDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Company</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPPurchaseDetailReportCompany"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPPurchaseDetailReportBranch"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -282,24 +286,28 @@
                                     <div class="panel-body">
                                         <div class="">
                                             <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Start Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cboAPReceivingReceiptSummaryReportStartDate"></div>
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Start Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPReceivingReceiptSummaryReportStartDate"></div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">End Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cboAPReceivingReceiptSummaryReportEndDate"></div>
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">End Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPReceivingReceiptSummaryReportEndDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Company</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPReceivingReceiptSummaryReportCompany"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPReceivingReceiptSummaryReportBranch"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -319,24 +327,28 @@
                                     <div class="panel-body">
                                         <div class="">
                                             <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Start Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cboAPReceivingReceiptDetailReportStartDate"></div>
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Start Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPReceivingReceiptDetailReportStartDate"></div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">End Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cboAPReceivingReceiptDetailReportEndDate"></div>
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">End Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPReceivingReceiptDetailReportEndDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Company</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPReceivingReceiptDetailReportCompany"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPReceivingReceiptDetailReportBranch"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -356,24 +368,28 @@
                                     <div class="panel-body">
                                         <div class="">
                                             <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Start Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cboAPdisbursementSummaryReportStartDate"></div>
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Start Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPdisbursementSummaryReportStartDate"></div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">End Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cboAPdisbursementSummaryReportEndDate"></div>
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">End Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPdisbursementSummaryReportEndDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Company</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPdisbursementSummaryReportCompany"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPdisbursementSummaryReportBranch"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -393,24 +409,28 @@
                                     <div class="panel-body">
                                         <div class="">
                                             <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Start Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cboAPDisbursementDetailReportStartDate"></div>
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Start Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPDisbursementDetailReportStartDate"></div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">End Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cboAPDisbursementDetailReportEndDate"></div>
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">End Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPDisbursementDetailReportEndDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Company</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPDisbursementDetailReportCompany"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboAPDisbursementDetailReportBranch"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -452,8 +472,33 @@
         var cboAPReportComapny = new wijmo.input.ComboBox('#cboAPReportComapny');
         var cboAPVoucherReportRRNo = new wijmo.input.ComboBox('#cboAPVoucherReportRRNo');
         var cboAPReportBranch = new wijmo.input.ComboBox('#cboAPReportBranch');
-        var isCompanySelected = false;
         var cboAPReportAccount = new wijmo.input.ComboBox('#cboAPReportAccount');
+        var cboAPInputVATReportCompany = new wijmo.input.ComboBox('#cboAPInputVATReportCompany');
+        var cboAPInputVATReportBranch = new wijmo.input.ComboBox('#cboAPInputVATReportBranch');
+        var cboAPWithHoldingTAXReportCompany = new wijmo.input.ComboBox('#cboAPWithHoldingTAXReportCompany');
+        var cboAPWithHoldingTAXReportBranch = new wijmo.input.ComboBox('#cboAPWithHoldingTAXReportBranch');
+        var cboAPPurchaseSummaryReportCompany = new wijmo.input.ComboBox('#cboAPPurchaseSummaryReportCompany');
+        var cboAPPurchaseSummaryReportBranch = new wijmo.input.ComboBox('#cboAPPurchaseSummaryReportBranch');
+        var cboAPPurchaseDetailReportCompany = new wijmo.input.ComboBox('#cboAPPurchaseDetailReportCompany');
+        var cboAPPurchaseDetailReportBranch = new wijmo.input.ComboBox('#cboAPPurchaseDetailReportBranch');
+        var cboAPReceivingReceiptSummaryReportCompany = new wijmo.input.ComboBox('#cboAPReceivingReceiptSummaryReportCompany');
+        var cboAPReceivingReceiptSummaryReportBranch = new wijmo.input.ComboBox('#cboAPReceivingReceiptSummaryReportBranch');
+        var cboAPReceivingReceiptDetailReportCompany = new wijmo.input.ComboBox('#cboAPReceivingReceiptDetailReportCompany');
+        var cboAPReceivingReceiptDetailReportBranch = new wijmo.input.ComboBox('#cboAPReceivingReceiptDetailReportBranch');
+        var cboAPdisbursementSummaryReportCompany = new wijmo.input.ComboBox('#cboAPdisbursementSummaryReportCompany');
+        var cboAPdisbursementSummaryReportBranch = new wijmo.input.ComboBox('#cboAPdisbursementSummaryReportBranch');
+        var cboAPDisbursementDetailReportCompany = new wijmo.input.ComboBox('#cboAPDisbursementDetailReportCompany');
+        var cboAPDisbursementDetailReportBranch = new wijmo.input.ComboBox('#cboAPDisbursementDetailReportBranch');
+        var isARReportCompanySelected = true;
+        var isAPInputVATReportCompanySelected = true;
+        var isAPWithHoldingTAXReportCompanySelected = true;
+        var isAPPurchaseSummaryReportCompanySelected = true;
+        var isAPPurchaseDetailReportSelected = true;
+        var isAPReceivingReceiptSummaryReportCompanySelected = true;
+        var isAPReceivingReceiptDetailReportCompanySelected = true;
+        var isAPdisbursementSummaryReportCompanySelected = true;
+        var isAPDisbursementDetailReportCompanySelected = true;
+        var enableBranchSelect = false;
 
         // ===================
         // AP All Filter Dates
@@ -462,6 +507,7 @@
             // =========
             // AP report
             // =========
+            NProgress.start();
             cboAPReportDateAsOf.dispose();
             cboAPReportDateAsOf = new wijmo.input.InputDate('#cboAPReportDateAsOf', {
                 format: 'MM-dd-yyyy',
@@ -630,12 +676,156 @@
                         displayMemberPath: "Company",
                         selectedValuePath: "Id",
                         onSelectedIndexChanged: function () {
-                            isCompanySelected = true;
-                            createCboAPAllBranchFilters();
+                            isARReportCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboAPAllBranchFilters(this.selectedValue);
+                            } else {
+                                createCboAPAllBranchFilters(0);
+                            }
                         }
                     });
 
-                    createCboAPAllBranchFilters();
+                    cboAPInputVATReportCompany.dispose();
+                    cboAPInputVATReportCompany = new wijmo.input.ComboBox('#cboAPInputVATReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isAPInputVATReportCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboAPAllBranchFilters(this.selectedValue);
+                            } else {
+                                createCboAPAllBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboAPWithHoldingTAXReportCompany.dispose();
+                    cboAPWithHoldingTAXReportCompany = new wijmo.input.ComboBox('#cboAPWithHoldingTAXReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isAPWithHoldingTAXReportCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboAPAllBranchFilters(this.selectedValue);
+                            } else {
+                                createCboAPAllBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboAPPurchaseSummaryReportCompany.dispose();
+                    cboAPPurchaseSummaryReportCompany = new wijmo.input.ComboBox('#cboAPPurchaseSummaryReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isAPPurchaseSummaryReportCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboAPAllBranchFilters(this.selectedValue);
+                            } else {
+                                createCboAPAllBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboAPPurchaseDetailReportCompany.dispose();
+                    cboAPPurchaseDetailReportCompany = new wijmo.input.ComboBox('#cboAPPurchaseDetailReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isAPPurchaseDetailReportSelected = true;
+                            if (this.selectedValue != null) {
+                                createCboAPAllBranchFilters(this.selectedValue);
+                            } else {
+                                createCboAPAllBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboAPReceivingReceiptSummaryReportCompany.dispose();
+                    cboAPReceivingReceiptSummaryReportCompany = new wijmo.input.ComboBox('#cboAPReceivingReceiptSummaryReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isAPReceivingReceiptSummaryReportCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboAPAllBranchFilters(this.selectedValue);
+                            } else {
+                                createCboAPAllBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboAPReceivingReceiptDetailReportCompany.dispose();
+                    cboAPReceivingReceiptDetailReportCompany = new wijmo.input.ComboBox('#cboAPReceivingReceiptDetailReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isAPReceivingReceiptDetailReportCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboAPAllBranchFilters(this.selectedValue);
+                            } else {
+                                createCboAPAllBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboAPdisbursementSummaryReportCompany.dispose();
+                    cboAPdisbursementSummaryReportCompany = new wijmo.input.ComboBox('#cboAPdisbursementSummaryReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isAPdisbursementSummaryReportCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboAPAllBranchFilters(this.selectedValue);
+                            } else {
+                                createCboAPAllBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboAPDisbursementDetailReportCompany.dispose();
+                    cboAPDisbursementDetailReportCompany = new wijmo.input.ComboBox('#cboAPDisbursementDetailReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isAPDisbursementDetailReportCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboAPAllBranchFilters(this.selectedValue);
+                            } else {
+                                createCboAPAllBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    if (cboAPReportComapny.selectedValue != null) {
+                        createCboAPAllBranchFilters(cboAPReportComapny.selectedValue);
+                    } else {
+                        createCboAPAllBranchFilters(null);
+                    }
                 }
             });
         }
@@ -643,10 +833,9 @@
         // =====================
         // AP All Branch Filters
         // =====================
-        function createCboAPAllBranchFilters() {
+        function createCboAPAllBranchFilters(companyId) {
             var branchObservableArray = new wijmo.collections.ObservableArray();
-            if (cboAPReportComapny.selectedValue != null) {
-                var companyId = cboAPReportComapny.selectedValue;
+            if (companyId != null) {
                 $.ajax({
                     url: '/api/branch/byCompanyId/list/locked/' + companyId,
                     cache: false,
@@ -676,18 +865,119 @@
                             $("#btnAPReportPrintPDF").prop("disabled", true);
                         }
 
-                        cboAPReportBranch.dispose();
-                        cboAPReportBranch = new wijmo.input.ComboBox('#cboAPReportBranch', {
-                            disabled: disabled,
-                            isEditable: false,
-                            itemsSource: branchObservableArray,
-                            displayMemberPath: "Branch",
-                            selectedValuePath: "Id"
-                        });
+                        if (isARReportCompanySelected) {
+                            cboAPReportBranch.dispose();
+                            cboAPReportBranch = new wijmo.input.ComboBox('#cboAPReportBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
 
-                        if (!isCompanySelected) {
+                        if (isAPInputVATReportCompanySelected) {
+                            cboAPInputVATReportBranch.dispose();
+                            cboAPInputVATReportBranch = new wijmo.input.ComboBox('#cboAPInputVATReportBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isAPWithHoldingTAXReportCompanySelected) {
+                            cboAPWithHoldingTAXReportBranch.dispose();
+                            cboAPWithHoldingTAXReportBranch = new wijmo.input.ComboBox('#cboAPWithHoldingTAXReportBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isAPPurchaseSummaryReportCompanySelected) {
+                            cboAPPurchaseSummaryReportBranch.dispose();
+                            cboAPPurchaseSummaryReportBranch = new wijmo.input.ComboBox('#cboAPPurchaseSummaryReportBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isAPPurchaseDetailReportSelected) {
+                            cboAPPurchaseDetailReportBranch.dispose();
+                            cboAPPurchaseDetailReportBranch = new wijmo.input.ComboBox('#cboAPPurchaseDetailReportBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isAPReceivingReceiptSummaryReportCompanySelected) {
+                            cboAPReceivingReceiptSummaryReportBranch.dispose();
+                            cboAPReceivingReceiptSummaryReportBranch = new wijmo.input.ComboBox('#cboAPReceivingReceiptSummaryReportBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isAPReceivingReceiptDetailReportCompanySelected) {
+                            cboAPReceivingReceiptDetailReportBranch.dispose();
+                            cboAPReceivingReceiptDetailReportBranch = new wijmo.input.ComboBox('#cboAPReceivingReceiptDetailReportBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isAPdisbursementSummaryReportCompanySelected) {
+                            cboAPdisbursementSummaryReportBranch.dispose();
+                            cboAPdisbursementSummaryReportBranch = new wijmo.input.ComboBox('#cboAPdisbursementSummaryReportBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isAPDisbursementDetailReportCompanySelected) {
+                            cboAPDisbursementDetailReportBranch.dispose();
+                            cboAPDisbursementDetailReportBranch = new wijmo.input.ComboBox('#cboAPDisbursementDetailReportBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (!enableBranchSelect) {
+                            enableBranchSelect = true;
                             createCboAPRRNoFilter();
                         }
+
+                        isARReportCompanySelected = false;
+                        isAPInputVATReportCompanySelected = false;
+                        isAPWithHoldingTAXReportCompanySelected = false;
+                        isAPPurchaseSummaryReportCompanySelected = false;
+                        isAPPurchaseDetailReportSelected = false;
+                        isAPReceivingReceiptSummaryReportCompanySelected = false;
+                        isAPReceivingReceiptDetailReportCompanySelected = false;
+                        isAPdisbursementSummaryReportCompanySelected = false;
+                        isAPDisbursementDetailReportCompanySelected = false;
                     }
                 });
             } else {
@@ -698,9 +988,76 @@
                     itemsSource: branchObservableArray,
                 });
 
-                if (!isCompanySelected) {
+                cboAPInputVATReportBranch.dispose();
+                cboAPInputVATReportBranch = new wijmo.input.ComboBox('#cboAPInputVATReportBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboAPWithHoldingTAXReportBranch.dispose();
+                cboAPWithHoldingTAXReportBranch = new wijmo.input.ComboBox('#cboAPWithHoldingTAXReportBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboAPPurchaseSummaryReportBranch.dispose();
+                cboAPPurchaseSummaryReportBranch = new wijmo.input.ComboBox('#cboAPPurchaseSummaryReportBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboAPPurchaseDetailReportBranch.dispose();
+                cboAPPurchaseDetailReportBranch = new wijmo.input.ComboBox('#cboAPPurchaseDetailReportBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboAPReceivingReceiptSummaryReportBranch.dispose();
+                cboAPReceivingReceiptSummaryReportBranch = new wijmo.input.ComboBox('#cboAPReceivingReceiptSummaryReportBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboAPReceivingReceiptDetailReportBranch.dispose();
+                cboAPReceivingReceiptDetailReportBranch = new wijmo.input.ComboBox('#cboAPReceivingReceiptDetailReportBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboAPdisbursementSummaryReportBranch.dispose();
+                cboAPdisbursementSummaryReportBranch = new wijmo.input.ComboBox('#cboAPdisbursementSummaryReportBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboAPDisbursementDetailReportBranch.dispose();
+                cboAPDisbursementDetailReportBranch = new wijmo.input.ComboBox('#cboAPDisbursementDetailReportBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                if (!enableBranchSelect) {
+                    enableBranchSelect = true;
                     createCboAPRRNoFilter();
                 }
+
+                isARReportCompanySelected = false;
+                isAPInputVATReportCompanySelected = false;
+                isAPWithHoldingTAXReportCompanySelected = false;
+                isAPPurchaseSummaryReportCompanySelected = false;
+                isAPPurchaseDetailReportSelected = false;
+                isAPReceivingReceiptSummaryReportCompanySelected = false;
+                isAPReceivingReceiptDetailReportCompanySelected = false;
+                isAPdisbursementSummaryReportCompanySelected = false;
+                isAPDisbursementDetailReportCompanySelected = false;
             }
         }
 
@@ -786,12 +1143,14 @@
                         displayMemberPath: "Account",
                         selectedValuePath: "AccountId"
                     });
+
+                    NProgress.done();
                 }
             });
         }
 
         // ==============
-        // AP Report View 
+        // AP Report View
         // ==============
         function btnAPReportViewOnclick() {
             if (cboAPReportComapny.selectedValue != null) {
@@ -815,7 +1174,7 @@
         }
 
         // ===================
-        // AP Report Print PDF 
+        // AP Report Print PDF
         // ===================
         function btnAPReportPrintPDFOnclick() {
             if (cboAPReportComapny.selectedValue != null) {
@@ -874,20 +1233,40 @@
         // AP Purchase Summary Report View
         // ===============================
         function btnAPPurchaseSummaryReportViewOnClick() {
-            var startDate = cboAPPurchaseSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-            var endDate = cboAPPurchaseSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+            if (cboAPPurchaseSummaryReportCompany.selectedValue != null) {
+                if (cboAPPurchaseSummaryReportBranch.selectedValue != null) {
+                    var startDate = cboAPPurchaseSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPPurchaseSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPPurchaseSummaryReportCompany.selectedValue;
+                    var branchId = cboAPPurchaseSummaryReportBranch.selectedValue;
 
-            window.location.href = '/Software/PurchaseSummaryReport?StartDate=' + startDate + '&EndDate=' + endDate;
+                    window.location.href = '/Software/PurchaseSummaryReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // ====================================
         // AP Purchase Summary Report Print PDF
         // ====================================
         function btnAPPurchaseSummaryReportPrintPDFOnClick() {
-            var startDate = cboAPPurchaseSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-            var endDate = cboAPPurchaseSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+            if (cboAPPurchaseSummaryReportCompany.selectedValue != null) {
+                if (cboAPPurchaseSummaryReportBranch.selectedValue != null) {
+                    var startDate = cboAPPurchaseSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPPurchaseSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPPurchaseSummaryReportCompany.selectedValue;
+                    var branchId = cboAPPurchaseSummaryReportBranch.selectedValue;
 
-            window.location.href = '/RepPurchaseSummaryReport/PurchaseSummaryReport?StartDate=' + startDate + '&EndDate=' + endDate;
+                    window.location.href = '/RepPurchaseSummaryReport/PurchaseSummaryReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // ==============================

@@ -8,39 +8,24 @@ namespace easyfis.ApiControllers
 {
     public class ApiPurchaseSummaryReportController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // current branch Id
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
-
-        public Decimal getAmount(Int32 id)
-        {
-            Decimal amount = 0;
-
-            var purchaseOrderItems = from d in db.TrnPurchaseOrderItems where d.POId == id select d;
-            if (purchaseOrderItems.Any())
-            {
-                amount = purchaseOrderItems.Sum(d => d.Amount);
-            }
-
-            return amount;
-        }
-
-        // list account
+        // ===================
+        // Purchase Order List
+        // ===================
         [Authorize]
         [HttpGet]
-        [Route("api/purchaseSummaryReport/list/{startDate}/{endDate}")]
-        public List<Models.TrnPurchaseOrder> listPurchaseSummaryReport(String startDate, String endDate)
+        [Route("api/purchaseSummaryReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnPurchaseOrder> listPurchaseSummaryReport(String startDate, String endDate, String companyId, String branchId)
         {
-            // purchase orders
             var purchaseOrders = from d in db.TrnPurchaseOrders
-                                 where d.BranchId == currentBranchId()
-                                 && d.PODate >= Convert.ToDateTime(startDate)
+                                 where d.PODate >= Convert.ToDateTime(startDate)
                                  && d.PODate <= Convert.ToDateTime(endDate)
+                                 && d.MstBranch.CompanyId == Convert.ToInt32(companyId)
+                                 && d.BranchId == Convert.ToInt32(branchId)
                                  && d.IsLocked == true
                                  select new Models.TrnPurchaseOrder
                                  {
@@ -51,7 +36,7 @@ namespace easyfis.ApiControllers
                                      Supplier = d.MstArticle.Article,
                                      Remarks = d.Remarks,
                                      IsClose = d.IsClose,
-                                     Amount = getAmount(d.Id)
+                                     Amount = d.TrnPurchaseOrderItems.Sum(a => a.Amount)
                                  };
 
             return purchaseOrders.ToList();
