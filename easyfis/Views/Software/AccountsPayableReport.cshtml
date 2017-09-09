@@ -490,6 +490,38 @@
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
                 accountsPayableCollections.refresh();
+
+                if (accountsPayableCollections.items.length > 0) {
+                    var totalBalance = 0;
+                    var totalCurrentAmount = 0;
+                    var totalAge30Amount = 0;
+                    var totalAge60Amount = 0;
+                    var totalAge90Amount = 0;
+                    var totalAge120Amount = 0;
+
+                    for (var i = 0; i < accountsPayableCollections.items.length; i++) {
+                        totalBalance = totalBalance + accountsPayableCollections.items[i]["BalanceAmount"];
+                        totalCurrentAmount = totalCurrentAmount + accountsPayableCollections.items[i]["CurrentAmount"];
+                        totalAge30Amount = totalAge30Amount + accountsPayableCollections.items[i]["Age30Amount"];
+                        totalAge60Amount = totalAge60Amount + accountsPayableCollections.items[i]["Age60Amount"];
+                        totalAge90Amount = totalAge90Amount + accountsPayableCollections.items[i]["Age90Amount"];
+                        totalAge120Amount = totalAge120Amount + accountsPayableCollections.items[i]["Age120Amount"];
+                    }
+
+                    document.getElementById("totalBalance").value = parseFloat(totalBalance).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCurrentAmount").value = parseFloat(totalCurrentAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount30Days").value = parseFloat(totalAge30Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount60Days").value = parseFloat(totalAge60Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount90Days").value = parseFloat(totalAge90Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmountOver120Days").value = parseFloat(totalAge120Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalBalance").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCurrentAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount30Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount60Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount90Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmountOver120Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
             });
 
             accountsPayableCollections.filter = function (item) {
@@ -599,6 +631,38 @@
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
                 accountsPayableCollections.refresh();
+
+                if (accountsPayableCollections.items.length > 0) {
+                    var totalBalance = 0;
+                    var totalCurrentAmount = 0;
+                    var totalAge30Amount = 0;
+                    var totalAge60Amount = 0;
+                    var totalAge90Amount = 0;
+                    var totalAge120Amount = 0;
+
+                    for (var i = 0; i < accountsPayableCollections.items.length; i++) {
+                        totalBalance = totalBalance + accountsPayableCollections.items[i]["BalanceAmount"];
+                        totalCurrentAmount = totalCurrentAmount + accountsPayableCollections.items[i]["CurrentAmount"];
+                        totalAge30Amount = totalAge30Amount + accountsPayableCollections.items[i]["Age30Amount"];
+                        totalAge60Amount = totalAge60Amount + accountsPayableCollections.items[i]["Age60Amount"];
+                        totalAge90Amount = totalAge90Amount + accountsPayableCollections.items[i]["Age90Amount"];
+                        totalAge120Amount = totalAge120Amount + accountsPayableCollections.items[i]["Age120Amount"];
+                    }
+
+                    document.getElementById("totalBalance").value = parseFloat(totalBalance).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCurrentAmount").value = parseFloat(totalCurrentAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount30Days").value = parseFloat(totalAge30Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount60Days").value = parseFloat(totalAge60Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount90Days").value = parseFloat(totalAge90Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmountOver120Days").value = parseFloat(totalAge120Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalBalance").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCurrentAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount30Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount60Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount90Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmountOver120Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
             });
 
             accountsPayableCollections.filter = function (item) {

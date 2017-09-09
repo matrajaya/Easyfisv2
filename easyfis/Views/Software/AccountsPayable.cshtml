@@ -1213,20 +1213,40 @@
         // AP Input VAT Report Print PDF
         // =============================
         function btnAPInputVATReportPrintPDFOnclick() {
-            var startDate = cboAPInputVATReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-            var endDate = cboAPInputVATReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+            if (cboAPInputVATReportCompany.selectedValue != null) {
+                if (cboAPInputVATReportBranch.selectedValue != null) {
+                    var startDate = cboAPInputVATReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPInputVATReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPInputVATReportCompany.selectedValue;
+                    var branchId = cboAPInputVATReportBranch.selectedValue;
 
-            window.location.href = '/RepInputVATReport/InputVATReport?StartDate=' + startDate + '&EndDate=' + endDate;
+                    window.location.href = '/RepInputVATReport/InputVATReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // ====================================
         // AP With Holding Tax Report Print PDF
         // ====================================
         function btnAPWithHoldingTaxReportPrintPDFOnclick() {
-            var startDate = cboAPWithHoldingTAXReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-            var endDate = cboAPWithHoldingTAXReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+            if (cboAPWithHoldingTAXReportCompany.selectedValue != null) {
+                if (cboAPWithHoldingTAXReportBranch.selectedValue != null) {
+                    var startDate = cboAPWithHoldingTAXReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPWithHoldingTAXReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPWithHoldingTAXReportCompany.selectedValue;
+                    var branchId = cboAPWithHoldingTAXReportBranch.selectedValue;
 
-            window.location.href = '/RepWithholdingTaxReport/WithholdingTaxReport?StartDate=' + startDate + '&EndDate=' + endDate;
+                    window.location.href = '/RepWithholdingTaxReport/WithholdingTaxReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // ===============================
@@ -1273,100 +1293,200 @@
         // AP Purchase Detail Report View
         // ==============================
         function btnpAPPrchaseDetailReportViewOnClick() {
-            var startDate = cboAPPurchaseDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-            var endDate = cboAPPurchaseDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+            if (cboAPPurchaseDetailReportCompany.selectedValue != null) {
+                if (cboAPPurchaseDetailReportBranch.selectedValue != null) {
+                    var startDate = cboAPPurchaseDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPPurchaseDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPPurchaseSummaryReportCompany.selectedValue;
+                    var branchId = cboAPPurchaseSummaryReportBranch.selectedValue;
 
-            window.location.href = '/Software/PurchaseDetailReport?StartDate=' + startDate + '&EndDate=' + endDate;
+                    window.location.href = '/Software/PurchaseDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // ===================================
         // AP Purchase Detail Report Print PDF
         // ===================================
         function btnpAPPrchaseDetailReportPrintPDFOnClick() {
-            var startDate = cboAPPurchaseDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-            var endDate = cboAPPurchaseDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+            if (cboAPPurchaseDetailReportCompany.selectedValue != null) {
+                if (cboAPPurchaseDetailReportBranch.selectedValue != null) {
+                    var startDate = cboAPPurchaseDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPPurchaseDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPPurchaseSummaryReportCompany.selectedValue;
+                    var branchId = cboAPPurchaseSummaryReportBranch.selectedValue;
 
-            window.location.href = '/RepPurchaseDetailReport/PurchaseDetailReport?StartDate=' + startDate + '&EndDate=' + endDate;
+                    window.location.href = '/RepPurchaseDetailReport/PurchaseDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // ========================================
         // AP Receiving Receipt Summary Report View
         // ========================================
         function btnAPReceivingReceiptSummaryReportViewOnClick() {
-            var startDate = cboAPReceivingReceiptSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-            var endDate = cboAPReceivingReceiptSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+            if (cboAPReceivingReceiptSummaryReportCompany.selectedValue != null) {
+                if (cboAPReceivingReceiptSummaryReportBranch.selectedValue != null) {
+                    var startDate = cboAPReceivingReceiptSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPReceivingReceiptSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPReceivingReceiptSummaryReportCompany.selectedValue;
+                    var branchId = cboAPReceivingReceiptSummaryReportBranch.selectedValue;
 
-            window.location.href = '/Software/ReceivingReceiptSummaryReport?StartDate=' + startDate + '&EndDate=' + endDate;
+                    window.location.href = '/Software/ReceivingReceiptSummaryReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // =============================================
         // AP Receiving Receipt Summary Report Print PDF
         // =============================================
         function btnAPReceivingReceiptSummaryReportPrintPDFOnClick() {
-            var startDate = cboAPReceivingReceiptSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-            var endDate = cboAPReceivingReceiptSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+            if (cboAPReceivingReceiptSummaryReportCompany.selectedValue != null) {
+                if (cboAPReceivingReceiptSummaryReportBranch.selectedValue != null) {
+                    var startDate = cboAPReceivingReceiptSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPReceivingReceiptSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPReceivingReceiptSummaryReportCompany.selectedValue;
+                    var branchId = cboAPReceivingReceiptSummaryReportBranch.selectedValue;
 
-            window.location.href = '/RepReceivingReceiptSummaryReport/ReceivingReceiptSummaryReport?StartDate=' + startDate + '&EndDate=' + endDate;
+                    window.location.href = '/RepReceivingReceiptSummaryReport/ReceivingReceiptSummaryReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // =======================================
         // AP Receiving Receipt Detail Report View
         // =======================================
         function btnAPReceivingReceiptDetailReportViewOnClick() {
-            var startDate = cboAPReceivingReceiptDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-            var endDate = cboAPReceivingReceiptDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+            if (cboAPReceivingReceiptDetailReportCompany.selectedValue != null) {
+                if (cboAPReceivingReceiptDetailReportBranch.selectedValue != null) {
+                    var startDate = cboAPReceivingReceiptDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPReceivingReceiptDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPReceivingReceiptSummaryReportCompany.selectedValue;
+                    var branchId = cboAPReceivingReceiptSummaryReportBranch.selectedValue;
 
-            window.location.href = '/Software/ReceivingReceiptDetailReport?StartDate=' + startDate + '&EndDate=' + endDate;
+                    window.location.href = '/Software/ReceivingReceiptDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // ============================================
         // AP Receiving Receipt Detail Report Print PDF
         // ============================================
         function btnAPReceivingReceiptDetailReportPrintPDFOnClick() {
-            var startDate = cboAPReceivingReceiptDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-            var endDate = cboAPReceivingReceiptDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+            if (cboAPReceivingReceiptDetailReportCompany.selectedValue != null) {
+                if (cboAPReceivingReceiptDetailReportBranch.selectedValue != null) {
+                    var startDate = cboAPReceivingReceiptDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPReceivingReceiptDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPReceivingReceiptSummaryReportCompany.selectedValue;
+                    var branchId = cboAPReceivingReceiptSummaryReportBranch.selectedValue;
 
-            window.location.href = '/RepReceivingReceiptDetailReport/ReceivingReceiptDetailReport?StartDate=' + startDate + '&EndDate=' + endDate;
+                    window.location.href = '/RepReceivingReceiptDetailReport/ReceivingReceiptDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // ===================================
         // AP Disbursement Summary Report View
         // ===================================
         function btnAPDisbursementSummaryReportViewOnClick() {
-            var startDate = cboAPdisbursementSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-            var endDate = cboAPdisbursementSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+            if (cboAPdisbursementSummaryReportCompany.selectedValue != null) {
+                if (cboAPdisbursementSummaryReportBranch.selectedValue != null) {
+                    var startDate = cboAPdisbursementSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPdisbursementSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPReceivingReceiptSummaryReportCompany.selectedValue;
+                    var branchId = cboAPReceivingReceiptSummaryReportBranch.selectedValue;
 
-            window.location.href = '/Software/DisbursementSummaryReport?StartDate=' + startDate + '&EndDate=' + endDate;
+                    window.location.href = '/Software/DisbursementSummaryReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // ========================================
         // AP Disbursement Summary Report Print PDF
         // ========================================
         function btnAPDisbursementSummaryReportPrintPDFOnClick() {
-            var startDate = cboAPdisbursementSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-            var endDate = cboAPdisbursementSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+            if (cboAPdisbursementSummaryReportCompany.selectedValue != null) {
+                if (cboAPdisbursementSummaryReportBranch.selectedValue != null) {
+                    var startDate = cboAPdisbursementSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPdisbursementSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPReceivingReceiptSummaryReportCompany.selectedValue;
+                    var branchId = cboAPReceivingReceiptSummaryReportBranch.selectedValue;
 
-            window.location.href = '/RepDisbursementSummaryReport/DisbursementSummaryReport?StartDate=' + startDate + '&EndDate=' + endDate;
+                    window.location.href = '/RepDisbursementSummaryReport/DisbursementSummaryReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // ==================================
         // AP Disbursement Detail Report View
         // ==================================
         function btnAPDisbursementDetailReportViewOnClick() {
-            var startDate = cboAPDisbursementDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-            var endDate = cboAPDisbursementDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+            if (cboAPDisbursementDetailReportCompany.selectedValue != null) {
+                if (cboAPDisbursementDetailReportBranch.selectedValue != null) {
+                    var startDate = cboAPDisbursementDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPDisbursementDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPDisbursementDetailReportCompany.selectedValue;
+                    var branchId = cboAPDisbursementDetailReportBranch.selectedValue;
 
-            window.location.href = '/Software/DisbursementDetailReport?StartDate=' + startDate + '&EndDate=' + endDate;
+                    window.location.href = '/Software/DisbursementDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // =======================================
         // AP Disbursement Detail Report Print PDF
         // =======================================
         function btnAPDisbursementDetailReportPrintPDFOnClick() {
-            var startDate = cboAPDisbursementDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-            var endDate = cboAPDisbursementDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+            if (cboAPDisbursementDetailReportCompany.selectedValue != null) {
+                if (cboAPDisbursementDetailReportBranch.selectedValue != null) {
+                    var startDate = cboAPDisbursementDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPDisbursementDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPDisbursementDetailReportCompany.selectedValue;
+                    var branchId = cboAPDisbursementDetailReportBranch.selectedValue;
 
-            window.location.href = '/RepDisbursementDetailReport/DisbursementDetailReport?StartDate=' + startDate + '&EndDate=' + endDate;
+                    window.location.href = '/RepDisbursementDetailReport/DisbursementDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // ============

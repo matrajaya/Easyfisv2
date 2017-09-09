@@ -12,14 +12,14 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Purchase Detail Report 
+                        Purchase Detail Report
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -32,17 +32,17 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 59%">
-                                    <div class="input-group ">
+                                <td style="width: 49%">
+                                    <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                                         <input type="text" class="form-control " id="InputFilter" placeholder="Search">
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 40%" align="right">
-                                    <button onclick="purchaseDetailReportCSV_OnClick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                    <button onclick="purchaseDetailReportPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
-                                    <a href="/Software/AccountsPayable" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
+                                <td style="width: 50%" align="right">
+                                    <button onclick="btnPurchaseOrderDetailReportCSVOnclick()" id="btnPurchaseOrderDetailReportCSV" class="btn btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    <button onclick="btnPurchaseOrderDetailReportPrintPDFOnclick()" id="btnPurchaseOrderDetailReportPrintPDF" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                                    <a href="/Software/AccountsPayable" class="btn btn-danger"><i class="fa fa-close"></i> Close</a>
                                 </td>
                             </tr>
                         </table>
@@ -50,139 +50,481 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 59%">
+                                <td style="width: 24%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Date:</span>
-                                        <input type="text" class="form-control " id="dateFrom" placeholder="filter date" disabled>
+                                        <span class="input-group-addon"><b>Start Date</b></span>
+                                        <div class="comboBox-wide" id="cboAPPurchaseDetailReportStartDate"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 20%" align="right"></td>
-                                <td style="width: 20%"></td>
+                                <td style="width: 24%" align="right">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>End Date</b></span>
+                                        <div class="comboBox-wide" id="cboAPPurchaseDetailReportEndDate"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Company</b></span>
+                                        <div class="comboBox-wide" id="cboAPPurchaseDetailReportCompany"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Branch</b></span>
+                                        <div class="comboBox-wide" id="cboAPPurchaseDetailReportBranch"></div>
+                                    </div>
+                                </td>
                             </tr>
                         </table>
-                    </div>
-                    <div class="panel-body">
-                        <div id="purchaseDetailReportGrid" class="grid"></div>
                     </div>
                 </div>
+                <div id="purchaseDetailReportGrid" class="grid"></div>
+                <br /><br />
                 <div class="row">
-                    <div class="col-md-6"></div>
                     <div class="col-md-6">
-                        <table class="table table-responsive table-bordered">
-                            <tr>
-                                <td align="right">
-                                    <b>Total: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="total">NA</span>
-                                </td>
-                            </tr>
-                        </table>
+
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="dl-horizontal dl-custom">
+                            <dt>
+                                <b>Total Amount</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalAmount" placeholder="0.00" disabled />
+                            </dd>
+                        </dl>
                     </div>
                 </div>
             </section>
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
+    <div id="c-mask" class="c-mask"></div>
+
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var cboAPPurchaseDetailReportStartDate = new wijmo.input.InputDate('#cboAPPurchaseDetailReportStartDate');
+        var cboAPPurchaseDetailReportEndDate = new wijmo.input.InputDate('#cboAPPurchaseDetailReportEndDate');
+        var isAPPurchaseDetailReportStartDateSelected = false;
+        var isAPPurchaseDetailReportEndDateSelected = false;
+        var cboAPPurchaseDetailReportCompany = new wijmo.input.ComboBox('#cboAPPurchaseDetailReportCompany');
+        var cboAPPurchaseDetailReportBranch = new wijmo.input.ComboBox('#cboAPPurchaseDetailReportBranch');
+        var purchaseDetailReportCollections;
+        var purchaseDetailReportGrid;
+        var isAPPurchaseDetailReportCompanySelected = false;
+
+        // ===================
+        // Get Parameter Value
+        // ===================
         function getParam(name) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+
             var regexS = "[\\?&]" + name + "=([^&#]*)";
             var regex = new RegExp(regexS);
+
             var results = regex.exec(window.location.href);
-            if (results == null)
+            if (results == null) {
                 return "";
-            else
+            } else {
                 return results[1];
+            }
         }
 
-        function purchaseDetailReportPDF_OnClick() {
-            window.location.href = '/RepPurchaseDetailReport/PurchaseDetailReport?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate");
-        }
-
-        function getPurchaseDetailReport() {
-            var purchaseDetailReport = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/purchaseDetailReport/list/' + getParam("StartDate") + '/' + getParam("EndDate"),
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (purchaseDetailReportResults) {
-                    if (purchaseDetailReportResults.length > 0) {
-                        var totalAmount = 0;
-
-                        for (i = 0; i < purchaseDetailReportResults.length; i++) {
-                            var docLink = "/Software/PurchaseOrderDetail?PurchaseOrderId=" + purchaseDetailReportResults[i]["POId"];
-                            // Array Push
-                            purchaseDetailReport.push({
-
-                                POId: purchaseDetailReportResults[i]["POId"],
-                                PONumber: purchaseDetailReportResults[i]["PO"],
-                                PONumberForCSV: "PO-" + purchaseDetailReportResults[i]["PO"],
-                                PONumberButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + purchaseDetailReportResults[i]["PO"],
-                                PODate: purchaseDetailReportResults[i]["PODate"],
-                                Item: purchaseDetailReportResults[i]["Item"],
-                                Price: purchaseDetailReportResults[i]["Price"],
-                                Unit: purchaseDetailReportResults[i]["Unit"],
-                                Quantity: purchaseDetailReportResults[i]["Quantity"],
-                                Amount: purchaseDetailReportResults[i]["Amount"]
-                            });
-
-                            totalAmount += purchaseDetailReportResults[i]["Amount"];
-                        }
-
-                        document.getElementById("total").innerHTML = totalAmount.toLocaleString();
+        // ============
+        // Date Filters
+        // ============
+        function purchaseOrderDetailReportDateFilters() {
+            NProgress.start();
+            cboAPPurchaseDetailReportStartDate.dispose();
+            cboAPPurchaseDetailReportStartDate = new wijmo.input.InputDate('#cboAPPurchaseDetailReportStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("StartDate")),
+                onValueChanged: function () {
+                    if (!isAPPurchaseDetailReportStartDateSelected) {
+                        NProgress.start();
+                        refreshPurchaseOrderDetailReportFlexGrid();
+                    } else {
+                        isAPPurchaseDetailReportStartDateSelected = false;
                     }
-                    NProgress.done();
                 }
             });
 
-            return purchaseDetailReport;
+            cboAPPurchaseDetailReportEndDate.dispose();
+            cboAPPurchaseDetailReportEndDate = new wijmo.input.InputDate('#cboAPPurchaseDetailReportEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("EndDate")),
+                onValueChanged: function () {
+                    if (!isAPPurchaseDetailReportEndDateSelected) {
+                        NProgress.start();
+                        refreshPurchaseOrderDetailReportFlexGrid();
+                    } else {
+                        isAPPurchaseDetailReportEndDateSelected = false;
+                    }
+                }
+            });
+
+            createCboCompany();
         }
 
-        var purchaseDetailReportCollections;
+        // ==============
+        // Company Filter
+        // ==============
+        function createCboCompany() {
+            var companyObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/company/list',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (companyResults) {
+                    if (companyResults.length > 0) {
+                        for (i = 0; i < companyResults.length; i++) {
+                            companyObservableArray.push({
+                                Id: companyResults[i]["Id"],
+                                Company: companyResults[i]["Company"],
+                                Address: companyResults[i]["Address"],
+                                ContactNumber: companyResults[i]["ContactNumber"],
+                                TaxNumber: companyResults[i]["TaxNumber"],
+                            });
+                        }
+                    }
 
-        function purchaseDetailReportCSV_OnClick() {
+                    var disabled = true;
+                    if (companyResults.length > 0) {
+                        disabled = false;
+                    } else {
+                        $("#btnPurchaseOrderDetailReportCSV").prop("disabled", true);
+                        $("#btnPurchaseOrderDetailReportPrintPDF").prop("disabled", true);
+                    }
+
+                    cboAPPurchaseDetailReportCompany.dispose();
+                    cboAPPurchaseDetailReportCompany = new wijmo.input.ComboBox('#cboAPPurchaseDetailReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        selectedValue: getParam("CompanyId"),
+                        onSelectedIndexChanged: function () {
+                            NProgress.start();
+                            $("#btnPurchaseOrderDetailReportCSV").prop("disabled", false);
+                            $("#btnPurchaseOrderDetailReportPrintPDF").prop("disabled", false);
+                            isAPPurchaseDetailReportCompanySelected = true;
+                            createCboBranch();
+                        }
+                    });
+
+                    createCboBranch();
+                }
+            });
+        }
+
+        // =============
+        // Branch Filter
+        // =============
+        function createCboBranch() {
+            var branchObservableArray = new wijmo.collections.ObservableArray();
+            if (cboAPPurchaseDetailReportCompany.selectedValue != null) {
+                $.ajax({
+                    url: '/api/branch/byCompanyId/list/locked/' + cboAPPurchaseDetailReportCompany.selectedValue,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branchObservableArray.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Branch: branchResults[i]["Branch"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"]
+                                });
+                            }
+                        }
+
+                        var disabled = true;
+                        if (branchResults.length > 0) {
+                            disabled = false;
+                        } else {
+                            $("#btnPurchaseOrderDetailReportCSV").prop("disabled", true);
+                            $("#btnPurchaseOrderDetailReportPrintPDF").prop("disabled", true);
+                        }
+
+                        cboAPPurchaseDetailReportBranch.dispose();
+                        cboAPPurchaseDetailReportBranch = new wijmo.input.ComboBox('#cboAPPurchaseDetailReportBranch', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: branchObservableArray,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Id",
+                            selectedValue: getParam("BranchId"),
+                            onSelectedIndexChanged: function () {
+                                NProgress.start();
+                                refreshPurchaseOrderDetailReportFlexGrid();
+                            }
+                        });
+
+                        if (!isAPPurchaseDetailReportCompanySelected) {
+                            createPurchaseOrderDetailReportFlexGrid();
+                        } else {
+                            refreshPurchaseOrderDetailReportFlexGrid();
+                        }
+                    }
+                });
+            }
+        }
+
+        // ==============================
+        // Get Purchase Order Detail Data
+        // ==============================
+        function getPurchaseDetailReport() {
+            var purchaseDetailReports = new wijmo.collections.ObservableArray;
+            if (cboAPPurchaseDetailReportCompany.selectedValue != null) {
+                if (cboAPPurchaseDetailReportBranch.selectedValue != null) {
+                    var startDate = cboAPPurchaseDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPPurchaseDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPPurchaseDetailReportCompany.selectedValue;
+                    var branchId = cboAPPurchaseDetailReportBranch.selectedValue;
+
+                    $.ajax({
+                        url: '/api/purchaseDetailReport/list/' + startDate + '/' + endDate + '/' + + companyId + '/' + branchId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (purchaseDetailReportResults) {
+                            var totalAmount = 0;
+                            if (purchaseDetailReportResults.length > 0) {
+                                for (i = 0; i < purchaseDetailReportResults.length; i++) {
+                                    var docLink = "/Software/PurchaseOrderDetail?id=" + purchaseDetailReportResults[i]["POId"];
+
+                                    var PODateResult = new Date(purchaseDetailReportResults[i]["PODate"])
+                                    var PODate = ('0' + (PODateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + PODateResult.getDate()).slice(-2) + '-' + PODateResult.getFullYear();
+
+                                    purchaseDetailReports.push({
+                                        Id: purchaseDetailReportResults[i]["Id"],
+                                        Branch: purchaseDetailReportResults[i]["Branch"],
+                                        POId: purchaseDetailReportResults[i]["POId"],
+                                        PONumber: purchaseDetailReportResults[i]["PO"],
+                                        PONumberForCSV: "PO-" + purchaseDetailReportResults[i]["PO"],
+                                        PONumberButton: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block'>" + purchaseDetailReportResults[i]["PO"],
+                                        PODate: PODate,
+                                        Supplier: purchaseDetailReportResults[i]["Supplier"],
+                                        Item: purchaseDetailReportResults[i]["Item"],
+                                        Price: purchaseDetailReportResults[i]["Price"],
+                                        PriceDisplay: parseFloat(purchaseDetailReportResults[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        Unit: purchaseDetailReportResults[i]["Unit"],
+                                        Quantity: purchaseDetailReportResults[i]["Quantity"],
+                                        QuantityDisplay: parseFloat(purchaseDetailReportResults[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        Amount: purchaseDetailReportResults[i]["Amount"],
+                                        AmountDisplay: parseFloat(purchaseDetailReportResults[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                    });
+
+                                    totalAmount += purchaseDetailReportResults[i]["Amount"];
+                                }
+                            }
+
+                            document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            NProgress.done();
+                        }
+                    });
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    NProgress.done();
+                }
+            } else {
+                document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                NProgress.done();
+            }
+
+            return purchaseDetailReports;
+        }
+
+        // =================
+        // Refresh Flex Grid
+        // =================
+        function refreshPurchaseOrderDetailReportFlexGrid() {
+            purchaseDetailReportCollections = new wijmo.collections.CollectionView(getPurchaseDetailReport());
+            purchaseDetailReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                purchaseDetailReportCollections.refresh();
+
+                if (purchaseDetailReportCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    for (var i = 0; i < purchaseDetailReportCollections.items.length; i++) {
+                        totalAmount += purchaseDetailReportCollections.items[i].Amount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            purchaseDetailReportCollections.filter = function (item) {
+                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.PONumber.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
+
+            }
+
+            purchaseDetailReportGrid.itemsSource = purchaseDetailReportCollections;
+            purchaseDetailReportGrid.trackChanges = true;
+        }
+
+        // =========
+        // Flex Grid
+        // =========
+        function createPurchaseOrderDetailReportFlexGrid() {
+            purchaseDetailReportCollections = new wijmo.collections.CollectionView(getPurchaseDetailReport());
+            purchaseDetailReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                purchaseDetailReportCollections.refresh();
+
+                if (purchaseDetailReportCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    for (var i = 0; i < purchaseDetailReportCollections.items.length; i++) {
+                        totalAmount += purchaseDetailReportCollections.items[i].Amount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            purchaseDetailReportCollections.filter = function (item) {
+                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.PONumber.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            purchaseDetailReportGrid = new wijmo.grid.FlexGrid('#purchaseDetailReportGrid');
+            purchaseDetailReportGrid.initialize({
+                columns: [
+                    {
+                        "header": "Branch",
+                        "binding": "Branch",
+                        "allowSorting": true,
+                        "width": "1.5*"
+                    },
+                    {
+                        "header": "PO Number",
+                        "binding": "PONumberButton",
+                        "isContentHtml": true,
+                        "allowSorting": true,
+                        "width": "1*"
+                    },
+                    {
+                        "header": "PO Date",
+                        "binding": "PODate",
+                        "allowSorting": true,
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Supplier",
+                        "binding": "Supplier",
+                        "allowSorting": true,
+                        "width": "1.5*"
+                    },
+                    {
+                        "header": "Item",
+                        "binding": "Item",
+                        "allowSorting": true,
+                        "width": "1.5*"
+                    },
+                    {
+                        "header": "Price",
+                        "binding": "PriceDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Unit",
+                        "binding": "Unit",
+                        "allowSorting": true,
+                        "width": "0.7*"
+                    },
+                    {
+                        "header": "Quantity",
+                        "binding": "QuantityDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "AmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: purchaseDetailReportCollections,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            purchaseDetailReportGrid.trackChanges = true;
+        }
+
+        // ============
+        // Download CSV
+        // ============
+        function btnPurchaseOrderDetailReportCSVOnclick() {
             var CSV = '';
             var purchaseDetailReport = [];
             var fileName = 'PurchaseDetailReport.CSV';
 
             for (i = 0; i < purchaseDetailReportCollections.items.length; i++) {
                 purchaseDetailReport.push({
+                    Branch: purchaseDetailReportCollections.items[i].Branch,
                     PONumber: purchaseDetailReportCollections.items[i].PONumberForCSV,
                     PODate: purchaseDetailReportCollections.items[i].PODate,
+                    Supplier: purchaseDetailReportCollections.items[i].Supplier,
                     Item: purchaseDetailReportCollections.items[i].Item,
                     Price: purchaseDetailReportCollections.items[i].Price,
                     Unit: purchaseDetailReportCollections.items[i].Unit,
                     Quantity: purchaseDetailReportCollections.items[i].Quantity,
                     Amount: purchaseDetailReportCollections.items[i].Amount,
-
-
                 });
             }
 
-            //for (var i = 0; i < symbols.length; i++) {
-            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
-            //}
-
             var Headers = [];
             Headers.push({
-
+                Branch: "Branch",
                 PONumber: "PO Number",
                 PODate: "PO Date",
+                Supplier: "Supplier",
                 Item: "Item",
                 Price: "Price",
                 Unit: "Unit",
                 Quantity: "Quantity",
                 Amount: "Amount",
-
             });
 
             var header = '';
-            // Rows
             for (var b in Headers[0]) {
                 header += '"' + Headers[0][b] + '",';
             }
@@ -202,7 +544,6 @@
                 toastr.error("No data.");
             } else {
                 var link = document.createElement("a");
-
                 if (link.download !== undefined) {
                     var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
                     var url = URL.createObjectURL(blob);
@@ -228,82 +569,31 @@
             }
         }
 
+        // =====================
+        // Preview and Print PDF
+        // =====================
+        function btnPurchaseOrderDetailReportPrintPDFOnclick() {
+            if (cboAPPurchaseDetailReportCompany.selectedValue != null) {
+                if (cboAPPurchaseDetailReportBranch.selectedValue != null) {
+                    var startDate = cboAPPurchaseDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPPurchaseDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPPurchaseDetailReportCompany.selectedValue;
+                    var branchId = cboAPPurchaseDetailReportBranch.selectedValue;
 
-        $(document).ready(function () {
-            NProgress.start();
-            document.getElementById("dateFrom").value = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
-
-            purchaseDetailReportCollections = new wijmo.collections.CollectionView(getPurchaseDetailReport());
-            purchaseDetailReportCollections.canFilter = true;
-
-            var filterText = '';
-            $('#InputFilter').keyup(function () {
-                filterText = this.value.toLowerCase();
-                purchaseDetailReportCollections.refresh();
-            });
-            purchaseDetailReportCollections.filter = function (item) {
-                return !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.PONumber.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1)
-
+                    window.location.href = '/RepPurchaseDetailReport/PurchaseDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
             }
-            // Flex Grid
-            var purchaseDetailReportGrid = new wijmo.grid.FlexGrid('#purchaseDetailReportGrid');
-            purchaseDetailReportGrid.initialize({
-                columns: [
-                    {
-                        "header": "PO Number",
-                        "binding": "PONumberButton",
-                        "isContentHtml": true,
-                        "allowSorting": true,
-                        "width": 110,
-                    },
-                    {
-                        "header": "PO Date",
-                        "binding": "PODate",
-                        "allowSorting": true,
-                        "width": 100
-                    },
-                    {
-                        "header": "Item ",
-                        "binding": "Item",
-                        "allowSorting": true,
-                        "width": 300
-                    },
-                    {
-                        "header": "Price",
-                        "binding": "Price",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Unit",
-                        "binding": "Unit",
-                        "allowSorting": true,
-                        "width": 120
-                    },
-                    {
-                        "header": "Quantity",
-                        "binding": "Quantity",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Amount",
-                        "binding": "Amount",
-                        "allowSorting": true,
-                        "width": 150
-                    }
-                ],
-                autoGenerateColumns: false,
-                itemsSource: purchaseDetailReportCollections,
-                isReadOnly: true,
-                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                allowDragging: wijmo.grid.AllowDragging.None,
-                selectionMode: wijmo.grid.SelectionMode.Row
-            });
+        }
 
-            purchaseDetailReportGrid.trackChanges = true;
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            purchaseOrderDetailReportDateFilters();
         });
     </script>
     <script type="text/javascript">

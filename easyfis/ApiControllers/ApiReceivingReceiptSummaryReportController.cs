@@ -10,32 +10,26 @@ namespace easyfis.ApiControllers
 {
     public class ApiReceivingReceiptSummaryReportController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-        
-        // current branch Id
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
 
-      
-
-        // list account
-        [Authorize]
-        [HttpGet]
-        [Route("api/ReceivingReceiptSummaryReport/list/{startDate}/{endDate}")]
-        public List<Models.TrnReceivingReceipt> listReceivingReceiptSummaryReport(String startDate, String endDate)
+        // =====================================
+        // Receiving Receipt Summary Report List
+        // =====================================
+        [Authorize, HttpGet, Route("api/ReceivingReceiptSummaryReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnReceivingReceipt> ListReceivingReceiptSummaryReport(String startDate, String endDate, String companyId, String branchId)
         {
-            // purchase orders
             var receivingReceipts = from d in db.TrnReceivingReceipts
-                                    where d.BranchId == currentBranchId()
-                                    && d.RRDate >= Convert.ToDateTime(startDate)
+                                    where d.RRDate >= Convert.ToDateTime(startDate)
                                     && d.RRDate <= Convert.ToDateTime(endDate)
+                                    && d.MstBranch.CompanyId == Convert.ToInt32(companyId)
+                                    && d.BranchId == Convert.ToInt32(branchId)
                                     && d.IsLocked == true
                                     select new Models.TrnReceivingReceipt
                                     {
-                                       
+
                                         Id = d.Id,
                                         Branch = d.MstBranch.Branch,
                                         RRDate = d.RRDate.ToShortDateString(),
@@ -51,4 +45,3 @@ namespace easyfis.ApiControllers
     }
 }
 
-   

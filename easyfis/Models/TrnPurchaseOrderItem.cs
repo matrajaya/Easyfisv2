@@ -8,8 +8,6 @@ namespace easyfis.Models
 {
     public class TrnPurchaseOrderItem
     {
-        [Key]
-
         public Int32 Id { get; set; }
         public Int32 POId { get; set; }
         public String PO { get; set; }
@@ -40,5 +38,7 @@ namespace easyfis.Models
         public String BaseUnit { get; set; }
         public Decimal BaseQuantity { get; set; }
         public Decimal BaseCost { get; set; }
+        public String Supplier { get; set; }
+        public String Branch { get; set; }
     }
 }

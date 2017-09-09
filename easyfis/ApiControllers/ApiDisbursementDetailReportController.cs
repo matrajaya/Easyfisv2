@@ -10,26 +10,22 @@ namespace easyfis.ApiControllers
 {
     public class ApiDisbursementDetailReportController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-        // current branch Id
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
 
-
-        // list account
-        [Authorize]
-        [HttpGet]
-        [Route("api/disbursementDetailReport/list/{startDate}/{endDate}")]
-        public List<Models.TrnDisbursementLine> listDisbursementDetailReport(String startDate, String endDate)
+        // ===============================
+        // Disbursement Detail Report List
+        // ===============================
+        [Authorize, HttpGet, Route("api/disbursementDetailReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnDisbursementLine> ListDisbursementDetailReport(String startDate, String endDate, String companyId, String branchId)
         {
-            // purchase orders
             var disbursementLines = from d in db.TrnDisbursementLines
-                                    where d.TrnDisbursement.BranchId == currentBranchId()
-                                    && d.TrnDisbursement.CVDate >= Convert.ToDateTime(startDate)
+                                    where d.TrnDisbursement.CVDate >= Convert.ToDateTime(startDate)
                                     && d.TrnDisbursement.CVDate <= Convert.ToDateTime(endDate)
+                                    && d.TrnDisbursement.MstBranch.CompanyId == Convert.ToInt32(companyId)
+                                    && d.TrnDisbursement.BranchId == Convert.ToInt32(branchId)
                                     && d.TrnDisbursement.IsLocked == true
                                     select new Models.TrnDisbursementLine
                                     {
@@ -37,6 +33,7 @@ namespace easyfis.ApiControllers
                                         Id = d.Id,
                                         CV = d.TrnDisbursement.CVNumber,
                                         CVDate = d.TrnDisbursement.CVDate.ToShortDateString(),
+                                        Supplier = d.TrnDisbursement.MstArticle.Article,
                                         Branch = d.MstBranch.Branch,
                                         Account = d.MstAccount.Account,
                                         Article = d.MstArticle.Article,
@@ -44,6 +41,7 @@ namespace easyfis.ApiControllers
                                         Particulars = d.Particulars,
                                         Amount = d.Amount
                                     };
+
             return disbursementLines.ToList();
         }
     }

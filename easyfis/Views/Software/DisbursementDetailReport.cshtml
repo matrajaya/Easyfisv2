@@ -19,7 +19,7 @@
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Disbursement Detail Report 
+                        Disbursement Detail Report
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -32,17 +32,17 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 59%">
-                                    <div class="input-group ">
+                                <td style="width: 49%">
+                                    <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                                         <input type="text" class="form-control " id="InputFilter" placeholder="Search">
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 40%" align="right">
-                                    <button onclick="disbursementDetailReportCSV_OnClick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                    <button onclick="disbursementDetailReportPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
-                                    <a href="/Software/AccountsPayable" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
+                                <td style="width: 50%" align="right">
+                                    <button onclick="btnDisbursementDetailReportCSVOnclick()" id="btnDisbursementDetailReportCSV" class="btn btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    <button onclick="btnDisbursementDetailReportPrintPDFOnclick()" id="btnDisbursementDetailReportPrintPDF" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                                    <a href="/Software/AccountsPayable" class="btn btn-danger"><i class="fa fa-close"></i> Close</a>
                                 </td>
                             </tr>
                         </table>
@@ -50,144 +50,492 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 59%">
+                                <td style="width: 24%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Date:</span>
-                                        <input type="text" class="form-control " id="dateFrom" placeholder="filter date" disabled>
+                                        <span class="input-group-addon"><b>Start Date</b></span>
+                                        <div class="comboBox-wide" id="cboAPDisbursementDetailReportStartDate"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 20%" align="right"></td>
-                                <td style="width: 20%"></td>
+                                <td style="width: 24%" align="right">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>End Date</b></span>
+                                        <div class="comboBox-wide" id="cboAPDisbursementDetailReportEndDate"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Company</b></span>
+                                        <div class="comboBox-wide" id="cboAPDisbursementDetailReportCompany"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Branch</b></span>
+                                        <div class="comboBox-wide" id="cboAPDisbursementDetailReportBranch"></div>
+                                    </div>
+                                </td>
                             </tr>
                         </table>
-                    </div>
-                    <div class="panel-body">
-                        <div id="disbursementDetailReportGrid" class="grid"></div>
                     </div>
                 </div>
+                <div id="disbursementDetailReportGrid" style="font-size: 13px;"></div>
+                <br /><br />
                 <div class="row">
-                    <div class="col-md-6"></div>
                     <div class="col-md-6">
-                        <table class="table table-responsive table-bordered">
-                            <tr>
-                                <td align="right">
-                                    <b>Total: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="total">NA</span>
-                                </td>
-                            </tr>
-                        </table>
+
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="dl-horizontal dl-custom">
+                            <dt>
+                                <b>Total Amount</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalAmount" placeholder="0.00" disabled />
+                            </dd>
+                        </dl>
                     </div>
                 </div>
             </section>
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var cboAPDisbursementDetailReportStartDate = new wijmo.input.InputDate('#cboAPDisbursementDetailReportStartDate');
+        var cboAPDisbursementDetailReportEndDate = new wijmo.input.InputDate('#cboAPDisbursementDetailReportEndDate');
+        var isAPDisbursementDetailReportStartDateSelected = false;
+        var isAPDisbursementDetailReportEndDateSelected = false;
+        var cboAPDisbursementDetailReportCompany = new wijmo.input.ComboBox('#cboAPDisbursementDetailReportCompany');
+        var cboAPDisbursementDetailReportBranch = new wijmo.input.ComboBox('#cboAPDisbursementDetailReportBranch');
+        var disbursementDetailReportCollections;
+        var disbursementDetailReportGrid;
+        var isAPDisbursementDetailReportCompanySelected = false;
+
+        // ===================
+        // Get Parameter Value
+        // ===================
         function getParam(name) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+
             var regexS = "[\\?&]" + name + "=([^&#]*)";
             var regex = new RegExp(regexS);
+
             var results = regex.exec(window.location.href);
-            if (results == null)
+            if (results == null) {
                 return "";
-            else
+            } else {
                 return results[1];
+            }
         }
 
-        function disbursementDetailReportPDF_OnClick() {
-            window.location.href = '/RepDisbursementDetailReport/DisbursementDetailReport?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate");
-        }
-
-        function getDisbursementDetailReport() {
-            var disbursementDetailReport = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/disbursementDetailReport/list/' + getParam("StartDate") + '/' + getParam("EndDate"),
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (disbursementDetailReportResult) {
-                    if (disbursementDetailReportResult.length > 0) {
-                        var totalAmount = 0;
-
-                        for (i = 0; i < disbursementDetailReportResult.length; i++) {
-                            var docLink = "/Software/DisbursementDetail?DisbursementId=" + disbursementDetailReportResult[i]["CVId"];
-                            // Array Push
-                            disbursementDetailReport.push({
-
-                                CVId: disbursementDetailReportResult[i]["CVId"],
-                                Id: disbursementDetailReportResult[i]["Id"],
-                                Branch: disbursementDetailReportResult[i]["Branch"],
-                                CV: disbursementDetailReportResult[i]["CV"],
-                                CVForCSV: "CV-" + disbursementDetailReportResult[i]["CV"],
-                                CVButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + disbursementDetailReportResult[i]["CV"],
-                                CVDate: disbursementDetailReportResult[i]["CVDate"],
-                                Account: disbursementDetailReportResult[i]["Account"],
-                                Article: disbursementDetailReportResult[i]["Article"],
-                                RR: disbursementDetailReportResult[i]["RR"],
-                                Particulars: disbursementDetailReportResult[i]["Particulars"],
-                                Amount: disbursementDetailReportResult[i]["Amount"],
-
-                            });
-
-                            totalAmount += disbursementDetailReportResult[i]["Amount"];
-                        }
-
-                        document.getElementById("total").innerHTML = totalAmount.toLocaleString();
+        // ============
+        // Date Filters
+        // ============
+        function disbursementDetailReportDateFilters() {
+            NProgress.start();
+            cboAPDisbursementDetailReportStartDate.dispose();
+            cboAPDisbursementDetailReportStartDate = new wijmo.input.InputDate('#cboAPDisbursementDetailReportStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("StartDate")),
+                onValueChanged: function () {
+                    if (!isAPDisbursementDetailReportStartDateSelected) {
+                        NProgress.start();
+                        refreshDisbursementDetailReportFlexGrid();
+                    } else {
+                        isAPDisbursementDetailReportStartDateSelected = false;
                     }
-                    NProgress.done();
                 }
             });
 
-            return disbursementDetailReport;
+            cboAPDisbursementDetailReportEndDate.dispose();
+            cboAPDisbursementDetailReportEndDate = new wijmo.input.InputDate('#cboAPDisbursementDetailReportEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("EndDate")),
+                onValueChanged: function () {
+                    if (!isAPDisbursementDetailReportEndDateSelected) {
+                        NProgress.start();
+                        refreshDisbursementDetailReportFlexGrid();
+                    } else {
+                        isAPDisbursementDetailReportEndDateSelected = false;
+                    }
+                }
+            });
+
+            createCboCompany();
         }
-        var disbursementDetailReportCollection;
 
-        function disbursementDetailReportCSV_OnClick() {
+        // ==============
+        // Company Filter
+        // ==============
+        function createCboCompany() {
+            var companyObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/company/list',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (companyResults) {
+                    if (companyResults.length > 0) {
+                        for (i = 0; i < companyResults.length; i++) {
+                            companyObservableArray.push({
+                                Id: companyResults[i]["Id"],
+                                Company: companyResults[i]["Company"],
+                                Address: companyResults[i]["Address"],
+                                ContactNumber: companyResults[i]["ContactNumber"],
+                                TaxNumber: companyResults[i]["TaxNumber"],
+                            });
+                        }
+                    }
 
+                    var disabled = true;
+                    if (companyResults.length > 0) {
+                        disabled = false;
+                    } else {
+                        $("#btnDisbursementDetailReportCSV").prop("disabled", true);
+                        $("#btnDisbursementDetailReportPrintPDF").prop("disabled", true);
+                    }
 
+                    cboAPDisbursementDetailReportCompany.dispose();
+                    cboAPDisbursementDetailReportCompany = new wijmo.input.ComboBox('#cboAPDisbursementDetailReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        selectedValue: getParam("CompanyId"),
+                        onSelectedIndexChanged: function () {
+                            NProgress.start();
+                            $("#btnDisbursementDetailReportCSV").prop("disabled", false);
+                            $("#btnDisbursementDetailReportPrintPDF").prop("disabled", false);
+                            isAPDisbursementDetailReportCompanySelected = true;
+                            createCboBranch();
+                        }
+                    });
+
+                    createCboBranch();
+                }
+            });
+        }
+
+        // =============
+        // Branch Filter
+        // =============
+        function createCboBranch() {
+            var branchObservableArray = new wijmo.collections.ObservableArray();
+            if (cboAPDisbursementDetailReportCompany.selectedValue != null) {
+                $.ajax({
+                    url: '/api/branch/byCompanyId/list/locked/' + cboAPDisbursementDetailReportCompany.selectedValue,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branchObservableArray.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Branch: branchResults[i]["Branch"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"]
+                                });
+                            }
+                        }
+
+                        var disabled = true;
+                        if (branchResults.length > 0) {
+                            disabled = false;
+                        } else {
+                            $("#btnDisbursementDetailReportCSV").prop("disabled", true);
+                            $("#btnDisbursementDetailReportPrintPDF").prop("disabled", true);
+                        }
+
+                        cboAPDisbursementDetailReportBranch.dispose();
+                        cboAPDisbursementDetailReportBranch = new wijmo.input.ComboBox('#cboAPDisbursementDetailReportBranch', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: branchObservableArray,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Id",
+                            selectedValue: getParam("BranchId"),
+                            onSelectedIndexChanged: function () {
+                                NProgress.start();
+                                refreshDisbursementDetailReportFlexGrid();
+                            }
+                        });
+
+                        if (!isAPDisbursementDetailReportCompanySelected) {
+                            createDisbursementDetailReportFlexGrid();
+                        } else {
+                            refreshDisbursementDetailReportFlexGrid();
+                        }
+                    }
+                });
+            }
+        }
+
+        // ==================================
+        // Get Disbursement Order Detail Data
+        // ==================================
+        function getDisbursementDetailReport() {
+            var disbursementDetailReports = new wijmo.collections.ObservableArray;
+            if (cboAPDisbursementDetailReportCompany.selectedValue != null) {
+                if (cboAPDisbursementDetailReportBranch.selectedValue != null) {
+                    var startDate = cboAPDisbursementDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPDisbursementDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPDisbursementDetailReportCompany.selectedValue;
+                    var branchId = cboAPDisbursementDetailReportBranch.selectedValue;
+
+                    $.ajax({
+                        url: '/api/disbursementDetailReport/list/' + startDate + '/' + endDate + '/' + + companyId + '/' + branchId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (disbursementDetailReportResults) {
+                            var totalAmount = 0;
+                            if (disbursementDetailReportResults.length > 0) {
+                                for (i = 0; i < disbursementDetailReportResults.length; i++) {
+                                    var docLink = "/Software/DisbursementDetail?id=" + disbursementDetailReportResults[i]["CVId"];
+
+                                    var CVDateResult = new Date(disbursementDetailReportResults[i]["CVDate"])
+                                    var CVDate = ('0' + (CVDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + CVDateResult.getDate()).slice(-2) + '-' + CVDateResult.getFullYear();
+
+                                    var RRNumberForCSV = "";
+                                    if (disbursementDetailReportResults[i]["RR"] != null) {
+                                        RRNumberForCSV = "RR-" + disbursementDetailReportResults[i]["RR"];
+                                    }
+
+                                    disbursementDetailReports.push({
+                                        CVId: disbursementDetailReportResults[i]["CVId"],
+                                        Id: disbursementDetailReportResults[i]["Id"],
+                                        Branch: disbursementDetailReportResults[i]["Branch"],
+                                        CV: disbursementDetailReportResults[i]["CV"],
+                                        CVForCSV: "CV-" + disbursementDetailReportResults[i]["CV"],
+                                        CVButton: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block'>" + disbursementDetailReportResults[i]["CV"],
+                                        CVDate: CVDate,
+                                        Supplier: disbursementDetailReportResults[i]["Supplier"],
+                                        Account: disbursementDetailReportResults[i]["Account"],
+                                        Article: disbursementDetailReportResults[i]["Article"],
+                                        RR: disbursementDetailReportResults[i]["RR"],
+                                        RRForCSV: RRNumberForCSV,
+                                        Particulars: disbursementDetailReportResults[i]["Particulars"],
+                                        Amount: disbursementDetailReportResults[i]["Amount"],
+                                        AmountDisplay: parseFloat(disbursementDetailReportResults[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                    });
+
+                                    totalAmount += disbursementDetailReportResults[i]["Amount"];
+                                }
+                            }
+
+                            document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            NProgress.done();
+                        }
+                    });
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    NProgress.done();
+                }
+            } else {
+                document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                NProgress.done();
+            }
+
+            return disbursementDetailReports;
+        }
+
+        // =================
+        // Refresh Flex Grid
+        // =================
+        function refreshDisbursementDetailReportFlexGrid() {
+            disbursementDetailReportCollections = new wijmo.collections.CollectionView(getDisbursementDetailReport());
+            disbursementDetailReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                disbursementDetailReportCollections.refresh();
+
+                if (disbursementDetailReportCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    for (var i = 0; i < disbursementDetailReportCollections.items.length; i++) {
+                        totalAmount += disbursementDetailReportCollections.items[i].Amount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            disbursementDetailReportCollections.filter = function (item) {
+                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.CV.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            disbursementDetailReportGrid.itemsSource = disbursementDetailReportCollections;
+            disbursementDetailReportGrid.trackChanges = true;
+        }
+
+        // =========
+        // Flex Grid
+        // =========
+        function createDisbursementDetailReportFlexGrid() {
+            disbursementDetailReportCollections = new wijmo.collections.CollectionView(getDisbursementDetailReport());
+            disbursementDetailReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                disbursementDetailReportCollections.refresh();
+
+                if (disbursementDetailReportCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    for (var i = 0; i < disbursementDetailReportCollections.items.length; i++) {
+                        totalAmount += disbursementDetailReportCollections.items[i].Amount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            disbursementDetailReportCollections.filter = function (item) {
+                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.CV.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            disbursementDetailReportGrid = new wijmo.grid.FlexGrid('#disbursementDetailReportGrid');
+            disbursementDetailReportGrid.initialize({
+                columns: [
+                    {
+                        "header": "Branch",
+                        "binding": "Branch",
+                        "allowSorting": true,
+                        "width": "1.2*"
+                    },
+                    {
+                        "header": "CV Number  ",
+                        "binding": "CVButton",
+                        "isContentHtml": true,
+                        "allowSorting": true,
+                        "width": "1.2*"
+                    },
+                    {
+                        "header": "CV Date",
+                        "binding": "CVDate",
+                        "allowSorting": true,
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Supplier",
+                        "binding": "Supplier",
+                        "allowSorting": true,
+                        "width": "1.5*"
+                    },
+                    {
+                        "header": "Account",
+                        "binding": "Account",
+                        "allowSorting": true,
+                        "width": "1.5*"
+                    },
+                    {
+                        "header": "Article",
+                        "binding": "Article",
+                        "allowSorting": true,
+                        "width": "1.5*"
+                    },
+                    {
+                        "header": "RR Number",
+                        "binding": "RR",
+                        "allowSorting": true,
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Particulars",
+                        "binding": "Particulars",
+                        "allowSorting": true,
+                        "width": "1.5*"
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "AmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: disbursementDetailReportCollections,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            disbursementDetailReportGrid.trackChanges = true;
+        }
+
+        // ============
+        // Download CSV
+        // ============
+        function btnDisbursementDetailReportCSVOnclick() {
             var CSV = '';
             var disbursementDetailReport = [];
-            var fileName = 'DisbursementDetailDetailReport.CSV';
+            var fileName = 'DisbursementDetailReport.CSV';
 
-            for (i = 0; i < disbursementDetailReportCollection.items.length; i++) {
+            for (i = 0; i < disbursementDetailReportCollections.items.length; i++) {
+                var IsClose = disbursementDetailReportCollections.items[i].IsClose;
+                var isPOClose = "Not Closed";
+                if (IsClose) {
+                    isPOClose = "Closed"
+                }
+
                 disbursementDetailReport.push({
-                    CV: disbursementDetailReportCollection.items[i].CVForCSV,
-                    CVDate: disbursementDetailReportCollection.items[i].CVDate,
-                    Account: disbursementDetailReportCollection.items[i].Account,
-                    Article: disbursementDetailReportCollection.items[i].Article,
-                    RR: disbursementDetailReportCollection.items[i].RR,
-                    Particulars: disbursementDetailReportCollection.items[i].Particulars,
-                    Amount: disbursementDetailReportCollection.items[i].Amount,
-
+                    Branch: disbursementDetailReportCollections.items[i].Branch,
+                    CVNumber: disbursementDetailReportCollections.items[i].CVForCSV,
+                    CVDate: disbursementDetailReportCollections.items[i].CVDate,
+                    Supplier: disbursementDetailReportCollections.items[i].Supplier,
+                    Article: disbursementDetailReportCollections.items[i].Article,
+                    Account: disbursementDetailReportCollections.items[i].Account,
+                    RRNumber: disbursementDetailReportCollections.items[i].RRForCSV,
+                    Particulars: disbursementDetailReportCollections.items[i].Particulars,
+                    Amount: disbursementDetailReportCollections.items[i].Amount,
                 });
             }
 
-            //for (var i = 0; i < symbols.length; i++) {
-            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
-            //}
-
-            // Rows
             var Headers = [];
             Headers.push({
-
+                Branch: "Branch",
                 CVNumber: "CV Number",
                 CVDate: "CV Date",
-                Account: "Account",
+                Supplier: "Supplier",
                 Article: "Article",
-                RR: "RR Number",
+                Account: "Account",
+                RRNumber: "RR Number",
                 Particulars: "Particulars",
-                Amount: "Amount",
-
+                Amount: "Amount"
             });
 
             var header = '';
-            // Rows
             for (var b in Headers[0]) {
                 header += '"' + Headers[0][b] + '",';
             }
@@ -198,6 +546,7 @@
                 for (var a in disbursementDetailReport[i]) {
                     row += '"' + disbursementDetailReport[i][a] + '",';
                 }
+
                 row.slice(0, row.length - 1);
                 CSV += row + '\r\n';
             }
@@ -206,7 +555,6 @@
                 toastr.error("No data.");
             } else {
                 var link = document.createElement("a");
-
                 if (link.download !== undefined) {
                     var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
                     var url = URL.createObjectURL(blob);
@@ -231,83 +579,32 @@
                 toastr.success("Dowload successful.");
             }
         }
-        $(document).ready(function () {
-            NProgress.start();
-            document.getElementById("dateFrom").value = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
-            disbursementDetailReportCollection = new wijmo.collections.CollectionView(getDisbursementDetailReport());
-            disbursementDetailReportCollection.canFilter = true;
+        // =====================
+        // Preview and Print PDF
+        // =====================
+        function btnDisbursementDetailReportPrintPDFOnclick() {
+            if (cboAPDisbursementDetailReportCompany.selectedValue != null) {
+                if (cboAPDisbursementDetailReportBranch.selectedValue != null) {
+                    var startDate = cboAPDisbursementDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPDisbursementDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPDisbursementDetailReportCompany.selectedValue;
+                    var branchId = cboAPDisbursementDetailReportBranch.selectedValue;
 
-            var filterText = '';
-            $('#InputFilter').keyup(function () {
-                filterText = this.value.toLowerCase();
-                disbursementDetailReportCollection.refresh();
-            });
-            disbursementDetailReportCollection.filter = function (item) {
-                return !filterText || (item.CV.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1)
-
+                    window.location.href = '/RepDisbursementDetailReport/DisbursementDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
             }
-            // Flex Grid
-            var disbursementDetailReportGrid = new wijmo.grid.FlexGrid('#disbursementDetailReportGrid');
-            disbursementDetailReportGrid.initialize({
-                columns: [
-                    {
-                        "header": "CV Number  ",
-                        "binding": "CVButton",
-                        "isContentHtml": true,
-                        "allowSorting": true,
-                        "width": 110
-                    },
-                    {
-                        "header": "CV Date",
-                        "binding": "CVDate",
-                        "allowSorting": true,
-                        "width": 100
-                    },
-                    {
-                        "header": "Account ",
-                        "binding": "Account",
-                        "allowSorting": true,
-                        "width": 200
-                    },
-                    {
-                        "header": "Article",
-                        "binding": "Article",
-                        "allowSorting": true,
-                        "width": 250
-                    },
-                    {
-                        "header": "RR Number",
-                        "binding": "RR",
-                        "allowSorting": true,
-                        "width": 110
-                    },
-                    {
-                        "header": "Particulars",
-                        "binding": "Particulars",
-                        "allowSorting": true,
-                        "width": 200
-                    },
-                    {
-                        "header": "Amount",
-                        "binding": "Amount",
-                        "allowSorting": true,
-                        "width": 150
-                    }
-                ],
-                autoGenerateColumns: false,
-                itemsSource: disbursementDetailReportCollection,
-                isReadOnly: true,
-                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                allowDragging: wijmo.grid.AllowDragging.None,
-                selectionMode: wijmo.grid.SelectionMode.Row
-            });
+        }
 
-            disbursementDetailReportGrid.trackChanges = true;
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            disbursementDetailReportDateFilters();
         });
     </script>
     <script type="text/javascript">

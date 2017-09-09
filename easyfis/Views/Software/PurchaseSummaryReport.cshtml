@@ -111,8 +111,8 @@
         // ================
         var cboAPPurchaseSummaryReportStartDate = new wijmo.input.InputDate('#cboAPPurchaseSummaryReportStartDate');
         var cboAPPurchaseSummaryReportEndDate = new wijmo.input.InputDate('#cboAPPurchaseSummaryReportEndDate');
-        var isAPPurchaseSummaryReportStartDateSelected = true;
-        var isAPPurchaseSummaryReportEndDateSelected = true;
+        var isAPPurchaseSummaryReportStartDateSelected = false;
+        var isAPPurchaseSummaryReportEndDateSelected = false;
         var cboAPPurchaseSummaryReportCompany = new wijmo.input.ComboBox('#cboAPPurchaseSummaryReportCompany');
         var cboAPPurchaseSummaryReportBranch = new wijmo.input.ComboBox('#cboAPPurchaseSummaryReportBranch');
         var purchaseSummaryReportCollections;
@@ -353,6 +353,17 @@
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
                 purchaseSummaryReportCollections.refresh();
+
+                if (purchaseSummaryReportCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    for (var i = 0; i < purchaseSummaryReportCollections.items.length; i++) {
+                        totalAmount += purchaseSummaryReportCollections.items[i].Amount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
             });
 
             purchaseSummaryReportCollections.filter = function (item) {
@@ -360,7 +371,6 @@
                     || !filterText || (item.PONumber.toLowerCase().indexOf(filterText) > -1)
                     || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
                     || !filterText || (item.Remarks.toLowerCase().indexOf(filterText) > -1);
-
             }
 
             purchaseSummaryReportGrid.itemsSource = purchaseSummaryReportCollections;
@@ -378,6 +388,17 @@
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
                 purchaseSummaryReportCollections.refresh();
+
+                if (purchaseSummaryReportCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    for (var i = 0; i < purchaseSummaryReportCollections.items.length; i++) {
+                        totalAmount += purchaseSummaryReportCollections.items[i].Amount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
             });
 
             purchaseSummaryReportCollections.filter = function (item) {
@@ -385,7 +406,6 @@
                     || !filterText || (item.PONumber.toLowerCase().indexOf(filterText) > -1)
                     || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
                     || !filterText || (item.Remarks.toLowerCase().indexOf(filterText) > -1);
-
             }
 
             purchaseSummaryReportGrid = new wijmo.grid.FlexGrid('#purchaseSummaryReportGrid');
@@ -398,17 +418,17 @@
                         "width": "2*"
                     },
                     {
-                        "header": "PO Date",
-                        "binding": "PODate",
-                        "allowSorting": true,
-                        "width": "1*"
-                    },
-                    {
                         "header": "PO Number",
                         "binding": "PONumberButton",
                         "isContentHtml": true,
                         "allowSorting": true,
                         "width": "1.2*"
+                    },
+                    {
+                        "header": "PO Date",
+                        "binding": "PODate",
+                        "allowSorting": true,
+                        "width": "1*"
                     },
                     {
                         "header": "Supplier",
@@ -464,8 +484,8 @@
 
                 purchaseSummaryReport.push({
                     Branch: purchaseSummaryReportCollections.items[i].Branch,
-                    PODate: purchaseSummaryReportCollections.items[i].PODate,
                     PONumber: purchaseSummaryReportCollections.items[i].PONumberForCSV,
+                    PODate: purchaseSummaryReportCollections.items[i].PODate,
                     Supplier: purchaseSummaryReportCollections.items[i].Supplier,
                     Remarks: purchaseSummaryReportCollections.items[i].Remarks,
                     IsClose: isPOClose,
@@ -476,8 +496,8 @@
             var Headers = [];
             Headers.push({
                 Branch: "Branch",
-                PODate: "PO Date",
                 PONumber: "PO Number",
+                PODate: "PO Date",
                 Supplier: "Supplier",
                 Remarks: "Remarks",
                 IsClose: "Status",
@@ -657,6 +677,5 @@
             slideLeft.open();
         });
     </script>
-
 </body>
 </html>

@@ -25,5 +25,6 @@ namespace easyfis.Models
         public String Particulars { get; set; }
         public Decimal Amount { get; set; }
         public Boolean IsLocked { get; set; }
+        public String Supplier { get; set; }
     }
 }

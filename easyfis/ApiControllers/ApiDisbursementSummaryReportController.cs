@@ -10,33 +10,22 @@ namespace easyfis.ApiControllers
 {
     public class ApiDisbursementSummaryReportController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-        // current branch Id
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
 
-        public Decimal getAmount(Int32 id)
+        // ================================
+        // Disbursement Summary Report List
+        // ================================
+        [Authorize, HttpGet, Route("api/disbursementSummaryReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnDisbursement> ListDisbursementSummaryReport(String startDate, String endDate, String companyId, String branchId)
         {
-            var purchaseOrderItems = from d in db.TrnPurchaseOrderItems where d.POId == id select d;
-            Decimal amount = purchaseOrderItems.Sum(d => d.Amount);
-
-            return amount;
-        }
-
-        // list account
-        [Authorize]
-        [HttpGet]
-        [Route("api/disbursementSummaryReport/list/{startDate}/{endDate}")]
-        public List<Models.TrnDisbursement> listDisbursementSummaryReport(String startDate, String endDate)
-        {
-            // purchase orders
             var disbursements = from d in db.TrnDisbursements
-                                where d.BranchId == currentBranchId()
-                                && d.CVDate >= Convert.ToDateTime(startDate)
+                                where d.CVDate >= Convert.ToDateTime(startDate)
                                 && d.CVDate <= Convert.ToDateTime(endDate)
+                                && d.MstBranch.CompanyId == Convert.ToInt32(companyId)
+                                && d.BranchId == Convert.ToInt32(branchId)
                                 && d.IsLocked == true
                                 select new Models.TrnDisbursement
                                 {

@@ -19,7 +19,7 @@
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Receiving Receipt Summary Report 
+                        Receiving Receipt Summary Report
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -32,17 +32,17 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 59%">
-                                    <div class="input-group ">
+                                <td style="width: 49%">
+                                    <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                                         <input type="text" class="form-control " id="InputFilter" placeholder="Search">
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 40%" align="right">
-                                    <button onclick="receivingReceiptSummaryReportCSV_OnClick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                    <button onclick="receivingReceiptSummaryReportPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
-                                    <a href="/Software/AccountsPayable" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
+                                <td style="width: 50%" align="right">
+                                    <button onclick="btnReceivingReceiptSummaryReportCSVOnclick()" id="btnReceivingReceiptSummaryReportCSV" class="btn btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    <button onclick="btnReceivingReceiptSummaryReportPrintPDFOnclick()" id="btnReceivingReceiptSummaryReportPrintPDF" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                                    <a href="/Software/AccountsPayable" class="btn btn-danger"><i class="fa fa-close"></i> Close</a>
                                 </td>
                             </tr>
                         </table>
@@ -50,141 +50,458 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 59%">
+                                <td style="width: 24%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Date:</span>
-                                        <input type="text" class="form-control " id="dateFrom" placeholder="filter date" disabled>
+                                        <span class="input-group-addon"><b>Start Date</b></span>
+                                        <div class="comboBox-wide" id="cboAPReceivingReceiptSummaryReportStartDate"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 20%" align="right"></td>
-                                <td style="width: 20%"></td>
+                                <td style="width: 24%" align="right">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>End Date</b></span>
+                                        <div class="comboBox-wide" id="cboAPReceivingReceiptSummaryReportEndDate"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Company</b></span>
+                                        <div class="comboBox-wide" id="cboAPReceivingReceiptSummaryReportCompany"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Branch</b></span>
+                                        <div class="comboBox-wide" id="cboAPReceivingReceiptSummaryReportBranch"></div>
+                                    </div>
+                                </td>
                             </tr>
                         </table>
-                    </div>
-                    <div class="panel-body">
-                        <div id="receivingReceiptSummaryReportGrid" class="grid"></div>
                     </div>
                 </div>
+                <div id="receivingReceiptSummaryReportGrid" class="grid"></div>
+                <br /><br />
                 <div class="row">
-                    <div class="col-md-6"></div>
                     <div class="col-md-6">
-                        <table class="table table-responsive table-bordered">
-                            <tr>
-                                <td align="right">
-                                    <b>Total: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="total">NA</span>
-                                </td>
-                            </tr>
-                        </table>
+
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="dl-horizontal dl-custom">
+                            <dt>
+                                <b>Total Amount</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalAmount" placeholder="0.00" disabled />
+                            </dd>
+                        </dl>
                     </div>
                 </div>
             </section>
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var cboAPReceivingReceiptSummaryReportStartDate = new wijmo.input.InputDate('#cboAPReceivingReceiptSummaryReportStartDate');
+        var cboAPReceivingReceiptSummaryReportEndDate = new wijmo.input.InputDate('#cboAPReceivingReceiptSummaryReportEndDate');
+        var isAPReceivingReceiptSummaryReportStartDateSelected = false;
+        var isAPReceivingReceiptSummaryReportEndDateSelected = false;
+        var cboAPReceivingReceiptSummaryReportCompany = new wijmo.input.ComboBox('#cboAPReceivingReceiptSummaryReportCompany');
+        var cboAPReceivingReceiptSummaryReportBranch = new wijmo.input.ComboBox('#cboAPReceivingReceiptSummaryReportBranch');
+        var receivingReceiptSummaryReportCollections;
+        var receivingReceiptSummaryReportGrid;
+        var isAPReceivingReceiptSummaryReportCompanySelected = false;
+
+        // ===================
+        // Get Parameter Value
+        // ===================
         function getParam(name) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+
             var regexS = "[\\?&]" + name + "=([^&#]*)";
             var regex = new RegExp(regexS);
+
             var results = regex.exec(window.location.href);
-            if (results == null)
+            if (results == null) {
                 return "";
-            else
+            } else {
                 return results[1];
+            }
         }
 
-        function receivingReceiptSummaryReportPDF_OnClick() {
-            window.location.href = '/RepReceivingReceiptSummaryReport/ReceivingReceiptSummaryReport?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate");
-        }
-
-        function getReceivingReceiptSummaryReport() {
-            var receivingReceiptSummaryReport = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/ReceivingReceiptSummaryReport/list/' + getParam("StartDate") + '/' + getParam("EndDate"),
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (receivingReceiptSummaryReportResults) {
-                    if (receivingReceiptSummaryReportResults.length > 0) {
-                        var totalAmount = 0;
-
-                        for (i = 0; i < receivingReceiptSummaryReportResults.length; i++) {
-                            var docLink = "/Software/ReceivingReceiptDetail?ReceivingReceiptId=" + receivingReceiptSummaryReportResults[i]["Id"];
-                            // Array Push
-                            receivingReceiptSummaryReport.push({
-
-
-                                Id: receivingReceiptSummaryReportResults[i]["Id"],
-                                Branch: receivingReceiptSummaryReportResults[i]["Branch"],
-                                RRDate: receivingReceiptSummaryReportResults[i]["RRDate"],
-                                RRNumber: receivingReceiptSummaryReportResults[i]["RRNumber"],
-                                RRNumberForCSV: "RR-" + receivingReceiptSummaryReportResults[i]["RRNumber"],
-                                RRNumberButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + receivingReceiptSummaryReportResults[i]["RRNumber"],
-                                DocumentReference: receivingReceiptSummaryReportResults[i]["DocumentReference"],
-                                Supplier: receivingReceiptSummaryReportResults[i]["Supplier"],
-                                Remarks: receivingReceiptSummaryReportResults[i]["Remarks"],
-                                Amount: receivingReceiptSummaryReportResults[i]["Amount"]
-                            });
-
-                            totalAmount += receivingReceiptSummaryReportResults[i]["Amount"];
-                        }
-
-                        document.getElementById("total").innerHTML = totalAmount.toLocaleString();
+        // ============
+        // Date Filters
+        // ============
+        function receivingReceiptSummaryReportDateFilters() {
+            NProgress.start();
+            cboAPReceivingReceiptSummaryReportStartDate.dispose();
+            cboAPReceivingReceiptSummaryReportStartDate = new wijmo.input.InputDate('#cboAPReceivingReceiptSummaryReportStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("StartDate")),
+                onValueChanged: function () {
+                    if (!isAPReceivingReceiptSummaryReportStartDateSelected) {
+                        NProgress.start();
+                        refreshReceivingReceiptSummaryReportFlexGrid();
+                    } else {
+                        isAPReceivingReceiptSummaryReportStartDateSelected = false;
                     }
-                    NProgress.done();
                 }
             });
 
-            return receivingReceiptSummaryReport;
+            cboAPReceivingReceiptSummaryReportEndDate.dispose();
+            cboAPReceivingReceiptSummaryReportEndDate = new wijmo.input.InputDate('#cboAPReceivingReceiptSummaryReportEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("EndDate")),
+                onValueChanged: function () {
+                    if (!isAPReceivingReceiptSummaryReportEndDateSelected) {
+                        NProgress.start();
+                        refreshReceivingReceiptSummaryReportFlexGrid();
+                    } else {
+                        isAPReceivingReceiptSummaryReportEndDateSelected = false;
+                    }
+                }
+            });
+
+            createCboCompany();
         }
-        var receivingReceiptSummaryCollection;
 
-        function receivingReceiptSummaryReportCSV_OnClick() {
+        // ==============
+        // Company Filter
+        // ==============
+        function createCboCompany() {
+            var companyObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/company/list',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (companyResults) {
+                    if (companyResults.length > 0) {
+                        for (i = 0; i < companyResults.length; i++) {
+                            companyObservableArray.push({
+                                Id: companyResults[i]["Id"],
+                                Company: companyResults[i]["Company"],
+                                Address: companyResults[i]["Address"],
+                                ContactNumber: companyResults[i]["ContactNumber"],
+                                TaxNumber: companyResults[i]["TaxNumber"],
+                            });
+                        }
+                    }
 
+                    var disabled = true;
+                    if (companyResults.length > 0) {
+                        disabled = false;
+                    } else {
+                        $("#btnReceivingReceiptSummaryReportCSV").prop("disabled", true);
+                        $("#btnReceivingReceiptSummaryReportPrintPDF").prop("disabled", true);
+                    }
 
+                    cboAPReceivingReceiptSummaryReportCompany.dispose();
+                    cboAPReceivingReceiptSummaryReportCompany = new wijmo.input.ComboBox('#cboAPReceivingReceiptSummaryReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        selectedValue: getParam("CompanyId"),
+                        onSelectedIndexChanged: function () {
+                            NProgress.start();
+                            $("#btnReceivingReceiptSummaryReportCSV").prop("disabled", false);
+                            $("#btnReceivingReceiptSummaryReportPrintPDF").prop("disabled", false);
+                            isAPReceivingReceiptSummaryReportCompanySelected = true;
+                            createCboBranch();
+                        }
+                    });
+
+                    createCboBranch();
+                }
+            });
+        }
+
+        // =============
+        // Branch Filter
+        // =============
+        function createCboBranch() {
+            var branchObservableArray = new wijmo.collections.ObservableArray();
+            if (cboAPReceivingReceiptSummaryReportCompany.selectedValue != null) {
+                $.ajax({
+                    url: '/api/branch/byCompanyId/list/locked/' + cboAPReceivingReceiptSummaryReportCompany.selectedValue,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branchObservableArray.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Branch: branchResults[i]["Branch"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"]
+                                });
+                            }
+                        }
+
+                        var disabled = true;
+                        if (branchResults.length > 0) {
+                            disabled = false;
+                        } else {
+                            $("#btnReceivingReceiptSummaryReportCSV").prop("disabled", true);
+                            $("#btnReceivingReceiptSummaryReportPrintPDF").prop("disabled", true);
+                        }
+
+                        cboAPReceivingReceiptSummaryReportBranch.dispose();
+                        cboAPReceivingReceiptSummaryReportBranch = new wijmo.input.ComboBox('#cboAPReceivingReceiptSummaryReportBranch', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: branchObservableArray,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Id",
+                            selectedValue: getParam("BranchId"),
+                            onSelectedIndexChanged: function () {
+                                NProgress.start();
+                                refreshReceivingReceiptSummaryReportFlexGrid();
+                            }
+                        });
+
+                        if (!isAPReceivingReceiptSummaryReportCompanySelected) {
+                            createReceivingReceiptSummaryReportFlexGrid();
+                        } else {
+                            refreshReceivingReceiptSummaryReportFlexGrid();
+                        }
+                    }
+                });
+            }
+        }
+
+        // ========================================
+        // Get Receiving Receipt Order Summary Data
+        // ========================================
+        function getReceivingReceiptSummaryReport() {
+            var receivingReceiptSummaryReports = new wijmo.collections.ObservableArray;
+            if (cboAPReceivingReceiptSummaryReportCompany.selectedValue != null) {
+                if (cboAPReceivingReceiptSummaryReportBranch.selectedValue != null) {
+                    var startDate = cboAPReceivingReceiptSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPReceivingReceiptSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPReceivingReceiptSummaryReportCompany.selectedValue;
+                    var branchId = cboAPReceivingReceiptSummaryReportBranch.selectedValue;
+
+                    $.ajax({
+                        url: '/api/ReceivingReceiptSummaryReport/list/' + startDate + '/' + endDate + '/' + + companyId + '/' + branchId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (receivingReceiptSummaryReportResults) {
+                            var totalAmount = 0;
+                            if (receivingReceiptSummaryReportResults.length > 0) {
+                                for (i = 0; i < receivingReceiptSummaryReportResults.length; i++) {
+                                    var docLink = "/Software/ReceivingReceiptDetail?id=" + receivingReceiptSummaryReportResults[i]["Id"];
+
+                                    var RRDateResult = new Date(receivingReceiptSummaryReportResults[i]["RRDate"])
+                                    var RRDate = ('0' + (RRDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + RRDateResult.getDate()).slice(-2) + '-' + RRDateResult.getFullYear();
+
+                                    receivingReceiptSummaryReports.push({
+                                        Id: receivingReceiptSummaryReportResults[i]["Id"],
+                                        Branch: receivingReceiptSummaryReportResults[i]["Branch"],
+                                        RRDate: RRDate,
+                                        RRNumber: receivingReceiptSummaryReportResults[i]["RRNumber"],
+                                        RRNumberForCSV: "RR-" + receivingReceiptSummaryReportResults[i]["RRNumber"],
+                                        RRNumberButton: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block'>" + receivingReceiptSummaryReportResults[i]["RRNumber"],
+                                        DocumentReference: receivingReceiptSummaryReportResults[i]["DocumentReference"],
+                                        Supplier: receivingReceiptSummaryReportResults[i]["Supplier"],
+                                        Remarks: receivingReceiptSummaryReportResults[i]["Remarks"],
+                                        Amount: receivingReceiptSummaryReportResults[i]["Amount"],
+                                        AmountDisplay: parseFloat(receivingReceiptSummaryReportResults[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    });
+
+                                    totalAmount += receivingReceiptSummaryReportResults[i]["Amount"];
+                                }
+                            }
+
+                            document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            NProgress.done();
+                        }
+                    });
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    NProgress.done();
+                }
+            } else {
+                document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                NProgress.done();
+            }
+
+            return receivingReceiptSummaryReports;
+        }
+
+        // =================
+        // Refresh Flex Grid
+        // =================
+        function refreshReceivingReceiptSummaryReportFlexGrid() {
+            receivingReceiptSummaryReportCollections = new wijmo.collections.CollectionView(getReceivingReceiptSummaryReport());
+            receivingReceiptSummaryReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                receivingReceiptSummaryReportCollections.refresh();
+
+                if (receivingReceiptSummaryReportCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    for (var i = 0; i < receivingReceiptSummaryReportCollections.items.length; i++) {
+                        totalAmount += receivingReceiptSummaryReportCollections.items[i].Amount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            receivingReceiptSummaryReportCollections.filter = function (item) {
+                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.RRNumber.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Remarks.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            receivingReceiptSummaryReportGrid.itemsSource = receivingReceiptSummaryReportCollections;
+            receivingReceiptSummaryReportGrid.trackChanges = true;
+        }
+
+        // =========
+        // Flex Grid
+        // =========
+        function createReceivingReceiptSummaryReportFlexGrid() {
+            receivingReceiptSummaryReportCollections = new wijmo.collections.CollectionView(getReceivingReceiptSummaryReport());
+            receivingReceiptSummaryReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                receivingReceiptSummaryReportCollections.refresh();
+
+                if (receivingReceiptSummaryReportCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    for (var i = 0; i < receivingReceiptSummaryReportCollections.items.length; i++) {
+                        totalAmount += receivingReceiptSummaryReportCollections.items[i].Amount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            receivingReceiptSummaryReportCollections.filter = function (item) {
+                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.RRNumber.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Remarks.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            receivingReceiptSummaryReportGrid = new wijmo.grid.FlexGrid('#receivingReceiptSummaryReportGrid');
+            receivingReceiptSummaryReportGrid.initialize({
+                columns: [
+                    {
+                        "header": "Branch",
+                        "binding": "Branch",
+                        "allowSorting": true,
+                        "width": "1.5*"
+                    },
+                    {
+                        "header": "RR Number",
+                        "binding": "RRNumberButton",
+                        "isContentHtml": true,
+                        "allowSorting": true,
+                        "width": "1.2*"
+                    },
+                    {
+                        "header": "RR Date",
+                        "binding": "RRDate",
+                        "allowSorting": true,
+                        "width": "1.2*"
+                    },
+                    {
+                        "header": "Doc. Ref",
+                        "binding": "DocumentReference",
+                        "allowSorting": true,
+                        "width": "2*"
+                    },
+                    {
+                        "header": "Supplier",
+                        "binding": "Supplier",
+                        "allowSorting": true,
+                        "width": "3*"
+                    },
+                    {
+                        "header": "Remarks",
+                        "binding": "Remarks",
+                        "allowSorting": true,
+                        "width": "2*"
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "AmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1.5*"
+                    }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: receivingReceiptSummaryReportCollections,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            receivingReceiptSummaryReportGrid.trackChanges = true;
+        }
+
+        // ============
+        // Download CSV
+        // ============
+        function btnReceivingReceiptSummaryReportCSVOnclick() {
             var CSV = '';
             var receivingReceiptSummaryReport = [];
             var fileName = 'ReceivingReceiptSummaryReport.CSV';
 
-            for (i = 0; i < receivingReceiptSummaryReportCollection.items.length; i++) {
+            for (i = 0; i < receivingReceiptSummaryReportCollections.items.length; i++) {
                 receivingReceiptSummaryReport.push({
-                    Branch: receivingReceiptSummaryReportCollection.items[i].Branch,
-                    RRDate: receivingReceiptSummaryReportCollection.items[i].RRDate,
-                    RRNumber: receivingReceiptSummaryReportCollection.items[i].RRNumberForCSV,
-                    DocumentReference: receivingReceiptSummaryReportCollection.items[i].DocumentReference,
-                    Supplier: receivingReceiptSummaryReportCollection.items[i].Supplier,
-                    Remarks: receivingReceiptSummaryReportCollection.items[i].Remarks,
-                    Amount: receivingReceiptSummaryReportCollection.items[i].Amount,
-
-
+                    Branch: receivingReceiptSummaryReportCollections.items[i].Branch,
+                    RRNumber: receivingReceiptSummaryReportCollections.items[i].RRNumberForCSV,
+                    RRDate: receivingReceiptSummaryReportCollections.items[i].RRDate,
+                    DocumentReference: receivingReceiptSummaryReportCollections.items[i].DocumentReference,
+                    Supplier: receivingReceiptSummaryReportCollections.items[i].Supplier,
+                    Remarks: receivingReceiptSummaryReportCollections.items[i].Remarks,
+                    Amount: receivingReceiptSummaryReportCollections.items[i].Amount
                 });
             }
 
-            //for (var i = 0; i < symbols.length; i++) {
-            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
-            //}
             var Headers = [];
             Headers.push({
-
                 Branch: "Branch",
-                RRDate: "RR Date",
-                RRNumber: "RR Number",
+                PONumber: "RR Number",
+                PODate: "RR Date",
                 DocumentReference: "Document Reference",
                 Supplier: "Supplier",
                 Remarks: "Remarks",
+                Remarks: "Remarks",
                 Amount: "Amount",
-
             });
 
             var header = '';
-            // Rows
             for (var b in Headers[0]) {
                 header += '"' + Headers[0][b] + '",';
             }
@@ -204,7 +521,6 @@
                 toastr.error("No data.");
             } else {
                 var link = document.createElement("a");
-
                 if (link.download !== undefined) {
                     var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
                     var url = URL.createObjectURL(blob);
@@ -229,83 +545,32 @@
                 toastr.success("Dowload successful.");
             }
         }
-        $(document).ready(function () {
-            NProgress.start();
-            document.getElementById("dateFrom").value = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
-            receivingReceiptSummaryReportCollection = new wijmo.collections.CollectionView(getReceivingReceiptSummaryReport());
-            receivingReceiptSummaryReportCollection.canFilter = true;
+        // =====================
+        // Preview and Print PDF
+        // =====================
+        function btnReceivingReceiptSummaryReportPrintPDFOnclick() {
+            if (cboAPReceivingReceiptSummaryReportCompany.selectedValue != null) {
+                if (cboAPReceivingReceiptSummaryReportBranch.selectedValue != null) {
+                    var startDate = cboAPReceivingReceiptSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPReceivingReceiptSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPReceivingReceiptSummaryReportCompany.selectedValue;
+                    var branchId = cboAPReceivingReceiptSummaryReportBranch.selectedValue;
 
-            var filterText = '';
-            $('#InputFilter').keyup(function () {
-                filterText = this.value.toLowerCase();
-                receivingReceiptSummaryReportCollection.refresh();
-            });
-            receivingReceiptSummaryReportCollection.filter = function (item) {
-                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.RRNumber.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Remarks.toLowerCase().indexOf(filterText) > -1)
-
+                    window.location.href = '/RepReceivingReceiptSummaryReport/ReceivingReceiptSummaryReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
             }
-            // Flex Grid
-            var receivingReceiptSummaryReportGrid = new wijmo.grid.FlexGrid('#receivingReceiptSummaryReportGrid');
-            receivingReceiptSummaryReportGrid.initialize({
-                columns: [
-                    {
-                        "header": "Branch ",
-                        "binding": "Branch",
-                        "allowSorting": true,
-                        "width": 200,
-                    },
-                    {
-                        "header": "RR Date",
-                        "binding": "RRDate",
-                        "allowSorting": true,
-                        "width": 100
-                    },
-                    {
-                        "header": "RR Number ",
-                        "binding": "RRNumberButton",
-                        "isContentHtml": true,
-                        "allowSorting": true,
-                        "width": 110
-                    },
-                    {
-                        "header": "Doc. Ref",
-                        "binding": "DocumentReference",
-                        "allowSorting": true,
-                        "width": 200
-                    },
-                    {
-                        "header": "Supplier",
-                        "binding": "Supplier",
-                        "allowSorting": true,
-                        "width": 300
-                    },
-                    {
-                        "header": "Remarks",
-                        "binding": "Remarks",
-                        "allowSorting": true,
-                        "width": 300
-                    },
-                    {
-                        "header": "Amount",
-                        "binding": "Amount",
-                        "allowSorting": true,
-                        "width": 150
-                    }
-                ],
-                autoGenerateColumns: false,
-                itemsSource: receivingReceiptSummaryReportCollection,
-                isReadOnly: true,
-                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                allowDragging: wijmo.grid.AllowDragging.None,
-                selectionMode: wijmo.grid.SelectionMode.Row
-            });
+        }
 
-            receivingReceiptSummaryReportGrid.trackChanges = true;
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            receivingReceiptSummaryReportDateFilters();
         });
     </script>
     <script type="text/javascript">

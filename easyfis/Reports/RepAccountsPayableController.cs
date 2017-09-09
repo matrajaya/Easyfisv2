@@ -105,7 +105,7 @@ namespace easyfis.Controllers
             var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d).FirstOrDefault().Company;
             var address = (from d in db.MstCompanies where d.Id == CompanyId select d).FirstOrDefault().Address;
             var contactNo = (from d in db.MstCompanies where d.Id == CompanyId select d).FirstOrDefault().ContactNumber;
-            
+
             // =================
             // table main header
             // =================
@@ -359,7 +359,7 @@ namespace easyfis.Controllers
                 float[] widthsCellsTotal = new float[] { 100f, 100f, 120f, 100f, 100f, 100f, 100f, 100f, 100f, 100f };
                 total.SetWidths(widthsCellsTotal);
                 total.WidthPercentage = 100;
-                total.AddCell(new PdfPCell(new Phrase("Total", fontArial9Bold)) { Colspan = 4, Border = 0, HorizontalAlignment = 2, PaddingTop = 5f, PaddingRight = 5f, PaddingLeft = 10f });
+                total.AddCell(new PdfPCell(new Phrase("Total", fontArial9Bold)) { Colspan = 4, Border = 0, HorizontalAlignment = 2, PaddingTop = 5f, PaddingRight = 10f, PaddingLeft = 10f });
                 total.AddCell(new PdfPCell(new Phrase(totalBalanceAmount.ToString("#,##0.00"), fontArial9Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f, PaddingRight = 5f, PaddingLeft = 5f });
                 total.AddCell(new PdfPCell(new Phrase(totalCurrentAmount.ToString("#,##0.00"), fontArial9Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f, PaddingRight = 5f, PaddingLeft = 5f });
                 total.AddCell(new PdfPCell(new Phrase(totalAge30Amount.ToString("#,##0.00"), fontArial9Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f, PaddingRight = 5f, PaddingLeft = 5f });
