@@ -12,15 +12,14 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
-
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Accounts Receivable Report 
+                        Accounts Receivable Report
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -33,16 +32,16 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 59%">
+                                <td style="width: 49%">
                                     <div class="input-group ">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search">
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search...">
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 40%" align="right">
-                                    <button onclick="accountsReceivableReportCSVOnclick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                    <button onclick="accountsReceivableReportPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                <td style="width: 50%" align="right">
+                                    <button onclick="accountsReceivableReportCSVOnclick()" id="btnCSV" class="btn btn-success "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    <button onclick="accountsReceivableReportPDFOnclick()" id="btnPrintPDF" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                     <a href="/Software/AccountsReceivable" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
                                 </td>
                             </tr>
@@ -51,230 +50,685 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 59%">
+                                <td style="width: 24%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Filter Company</span>
-                                        <input type="text" class="form-control " id="companyname" placeholder="filter company" disabled>
+                                        <span class="input-group-addon"><b>Date as of</b></span>
+                                        <div class="comboBox-wide" id="cboAPReportDateAsOf" style="font-size: 12.5px;"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 20%" align="right">
+                                <td style="width: 24%" align="right">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Date as of</span>
-                                        <input type="text" class="form-control " id="dateAsOf" placeholder="Date as of" disabled>
+                                        <span class="input-group-addon"><b>Company</b></span>
+                                        <div class="comboBox-wide" id="cboAPReportComapny" style="font-size: 12.5px;"></div>
                                     </div>
                                 </td>
-                                <td style="width: 20%"></td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Branch</b></span>
+                                        <div class="comboBox-wide" id="cboAPReportBranch" style="font-size: 12.5px;"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Account</b></span>
+                                        <div class="comboBox-wide" id="cboAPReportAccount" style="font-size: 12.5px;"></div>
+                                    </div>
+                                </td>
                             </tr>
                         </table>
-                    </div>
-                    <div class="panel-body">
-                        <div id="accountsReceivableGrid" class="grid"></div>
                     </div>
                 </div>
+                <div id="accountsReceivableGrid" style="font-size: 12.5px;"></div>
+                <br /><br />
                 <div class="row">
-                    <div class="col-md-6"></div>
                     <div class="col-md-6">
-                        <table class="table table-responsive table-bordered">
-                            <tr>
-                                <td align="right">
-                                    <b>Total Balance: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="totalBalance">NA</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    <b>Total Current Amount: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="totalCurrentAmount">NA</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    <b>Total Amount in 30 Days: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="totalAmount30Days">NA</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    <b>Total Amount in 60 Days: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="totalAmount60Days">NA</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    <b>Total Amount in 90 Days: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="totalAmount90Days">NA</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    <b>Total Amount Over 120 Days: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="totalAmountOver120Days">NA</span>
-                                </td>
-                            </tr>
-                        </table>
+
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="dl-horizontal dl-custom">
+                            <dt>
+                                <b>Total Balance</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalBalance" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Total Current Amount</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalCurrentAmount" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Total Amount in 30 Days</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalAmount30Days" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Total Amount in 60 Days</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalAmount60Days" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Total Amount in 90 Days</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalAmount90Days" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Total Amount Over 120 Days</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalAmountOver120Days" placeholder="0.00" disabled />
+                            </dd>
+                        </dl>
                     </div>
                 </div>
             </section>
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var cboAPReportDateAsOf = new wijmo.input.InputDate('#cboAPReportDateAsOf');
+        var isDateAsOfSelected = true;
+        var cboAPReportComapny = new wijmo.input.ComboBox('#cboAPReportComapny');
+        var cboAPReportBranch = new wijmo.input.ComboBox('#cboAPReportBranch');
+        var cboAPReportAccount = new wijmo.input.ComboBox('#cboAPReportAccount');
+        var accountsReceivableCollections;
         var accountsReceivableGrid;
+        var accountHasData = false;
 
+        // ====================
+        // Get Parameter Values
+        // ====================
         function getParam(name) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+
             var regexS = "[\\?&]" + name + "=([^&#]*)";
             var regex = new RegExp(regexS);
+
             var results = regex.exec(window.location.href);
-            if (results == null)
+            if (results == null) {
                 return "";
-            else
+            } else {
                 return results[1];
+            }
         }
 
-        function getAccountsReceivable() {
+        // ==============
+        // AP Filter Date
+        // ==============
+        function createCboAPAllDateFilters() {
             NProgress.start();
-            var accountsReceivables = new wijmo.collections.ObservableArray;
-            document.getElementById("dateAsOf").value = getParam("DateAsOf");
-            $.ajax({
-                url: '/api/accountsReceivable/list/' + getParam("DateAsOf") + "/" + getParam("CompanyId"),
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (accountsReceivableResults) {
-                    if (accountsReceivableResults.length > 0) {
-                        var totalBalance = 0;
-                        var totalCurrentAmount = 0;
-                        var totalAge30Amount = 0;
-                        var totalAge60Amount = 0;
-                        var totalAge90Amount = 0;
-                        var totalAge120Amount = 0;
-
-                        for (i = 0; i < accountsReceivableResults.length; i++) {
-                            var docLink = "/Software/SalesDetail?SalesId=" + accountsReceivableResults[i]["Id"];
-
-                            totalBalance = totalBalance + accountsReceivableResults[i]["BalanceAmount"];
-                            totalCurrentAmount = totalCurrentAmount + accountsReceivableResults[i]["CurrentAmount"];
-                            totalAge30Amount = totalAge30Amount + accountsReceivableResults[i]["Age30Amount"];
-                            totalAge60Amount = totalAge60Amount + accountsReceivableResults[i]["Age60Amount"];
-                            totalAge90Amount = totalAge90Amount + accountsReceivableResults[i]["Age90Amount"];
-                            totalAge120Amount = totalAge120Amount + accountsReceivableResults[i]["Age120Amount"];
-
-                            accountsReceivables.push({
-                                Id: accountsReceivableResults[i]["Id"],
-                                AccountId: accountsReceivableResults[i]["AccountId"],
-                                AccountCode: accountsReceivableResults[i]["AccountCode"],
-                                Account: accountsReceivableResults[i]["AccountCode"] + "-" + accountsReceivableResults[i]["Account"],
-                                CustomerId: accountsReceivableResults[i]["CustomerId"],
-                                Customer: accountsReceivableResults[i]["Customer"],
-                                SINumber: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + accountsReceivableResults[i]["SINumber"] + "</a>",
-                                SINumberValue: accountsReceivableResults[i]["SINumber"],
-                                SINumberValue: "SI-" + accountsReceivableResults[i]["SINumber"],
-                                SIDate: accountsReceivableResults[i]["SIDate"],
-                                DocumentReference: accountsReceivableResults[i]["DocumentReference"],
-                                BalanceAmount: accountsReceivableResults[i]["BalanceAmount"],
-                                DueDate: accountsReceivableResults[i]["DueDate"],
-                                NumberOfDaysFromDueDate: accountsReceivableResults[i]["NumberOfDaysFromDueDate"],
-                                CurrentAmount: accountsReceivableResults[i]["CurrentAmount"],
-                                Age30Amount: accountsReceivableResults[i]["Age30Amount"],
-                                Age60Amount: accountsReceivableResults[i]["Age60Amount"],
-                                Age90Amount: accountsReceivableResults[i]["Age90Amount"],
-                                Age120Amount: accountsReceivableResults[i]["Age120Amount"],
-                            });
-                        }
-
-                        document.getElementById("totalBalance").innerHTML = (Math.round(totalBalance * 100) / 100).toLocaleString();
-                        document.getElementById("totalCurrentAmount").innerHTML = (Math.round(totalCurrentAmount * 100) / 100).toLocaleString();
-                        document.getElementById("totalAmount30Days").innerHTML = (Math.round(totalAge30Amount * 100) / 100).toLocaleString();
-                        document.getElementById("totalAmount60Days").innerHTML = (Math.round(totalAge60Amount * 100) / 100).toLocaleString();
-                        document.getElementById("totalAmount90Days").innerHTML = (Math.round(totalAge90Amount * 100) / 100).toLocaleString();
-                        document.getElementById("totalAmountOver120Days").innerHTML = (Math.round(totalAge120Amount * 100) / 100).toLocaleString();
+            cboAPReportDateAsOf.dispose();
+            cboAPReportDateAsOf = new wijmo.input.InputDate('#cboAPReportDateAsOf', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("DateAsOf")),
+                onValueChanged: function () {
+                    if (isDateAsOfSelected) {
+                        NProgress.start();
+                        refreshAccountsReceivableFlexGrid();
+                    } else {
+                        isDateAsOfSelected = false;
                     }
-
-                    NProgress.done();
                 }
             });
 
-            return accountsReceivables;
+            createCboAPAllCompanyFilter();
         }
-        var accountsReceivableCollection;
 
+        var isCompanySelected = false;
+
+        // ======================
+        // AP All Company Filters
+        // ======================
+        function createCboAPAllCompanyFilter() {
+            var companyObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/company/list',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (companyResults) {
+                    if (companyResults.length > 0) {
+                        for (i = 0; i < companyResults.length; i++) {
+                            companyObservableArray.push({
+                                Id: companyResults[i]["Id"],
+                                Company: companyResults[i]["Company"],
+                                Address: companyResults[i]["Address"],
+                                ContactNumber: companyResults[i]["ContactNumber"],
+                                TaxNumber: companyResults[i]["TaxNumber"],
+                            });
+                        }
+                    }
+
+                    var disabled = true;
+                    if (companyResults.length > 0) {
+                        disabled = false;
+                    } else {
+                        $("#btnCSV").prop("disabled", true);
+                        $("#btnPrintPDF").prop("disabled", true);
+                    }
+
+                    cboAPReportComapny.dispose();
+                    cboAPReportComapny = new wijmo.input.ComboBox('#cboAPReportComapny', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        selectedValue: getParam("CompanyId"),
+                        onSelectedIndexChanged: function () {
+                            NProgress.start();
+                            if (accountHasData) {
+                                $("#btnCSV").prop("disabled", false);
+                                $("#btnPrintPDF").prop("disabled", false);
+                            }
+                            isCompanySelected = true;
+                            createCboAPBranchFilter();
+                        }
+                    });
+
+                    createCboAPBranchFilter();
+                }
+            });
+        }
+
+        // ================
+        // AP Branch Filter
+        // ================
+        function createCboAPBranchFilter() {
+            var branchObservableArray = new wijmo.collections.ObservableArray();
+            if (cboAPReportComapny.selectedValue != null) {
+                var companyId = cboAPReportComapny.selectedValue;
+
+                $.ajax({
+                    url: '/api/branch/byCompanyId/list/locked/' + companyId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branchObservableArray.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Branch: branchResults[i]["Branch"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"]
+                                });
+                            }
+                        }
+
+                        var disabled = true;
+                        if (branchResults.length > 0) {
+                            disabled = false;
+                        } else {
+                            $("#btnCSV").prop("disabled", true);
+                            $("#btnPrintPDF").prop("disabled", true);
+                        }
+
+                        cboAPReportBranch.dispose();
+                        cboAPReportBranch = new wijmo.input.ComboBox('#cboAPReportBranch', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: branchObservableArray,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Id",
+                            selectedValue: getParam("BranchId"),
+                            onSelectedIndexChanged: function () {
+                                NProgress.start();
+                                refreshAccountsReceivableFlexGrid();
+                            }
+                        });
+
+                        if (!isCompanySelected) {
+                            createCboAPAccountFilter();
+                        } else {
+                            refreshAccountsReceivableFlexGrid();
+                        }
+                    }
+                });
+            } else {
+                cboAPReportBranch.dispose();
+                cboAPReportBranch = new wijmo.input.ComboBox('#cboAPReportBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray
+                });
+
+                refreshAccountsReceivableFlexGrid();
+            }
+        }
+
+        // =================
+        // AP Account Filter
+        // =================
+        function createCboAPAccountFilter() {
+            var accountsObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/articleGroup/account/list/2',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (accountResults) {
+                    if (accountResults.length > 0) {
+                        for (i = 0; i < accountResults.length; i++) {
+                            accountsObservableArray.push({
+                                AccountId: accountResults[i]["AccountId"],
+                                AccountCode: accountResults[i]["AccountCode"],
+                                Account: accountResults[i]["Account"],
+                            });
+                        }
+                    }
+
+                    var disabled = true;
+                    if (accountResults.length > 0) {
+                        disabled = false;
+                        accountHasData = true;
+                    } else {
+                        $("#btnCSV").prop("disabled", true);
+                        $("#btnPrintPDF").prop("disabled", true);
+                    }
+
+                    cboAPReportAccount.dispose();
+                    cboAPReportAccount = new wijmo.input.ComboBox('#cboAPReportAccount', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: accountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "AccountId",
+                        selectedValue: getParam("AccountId"),
+                        onSelectedIndexChanged: function () {
+                            NProgress.start();
+                            refreshAccountsReceivableFlexGrid();
+                        }
+                    });
+
+                    createAccounstReceivableFlexGrid();
+                }
+            });
+        }
+
+        // ===================
+        // Accounts Receivable
+        // ===================
+        function getAccountsReceivable() {
+            var accountsReceivableObservableArray = new wijmo.collections.ObservableArray;
+            if (cboAPReportComapny.selectedValue != null) {
+                if (cboAPReportBranch.selectedValue != null) {
+                    if (cboAPReportAccount.selectedValue != null) {
+
+                        var dateAsOf = cboAPReportDateAsOf.value.toLocaleDateString().replace(/\//g, '-');
+                        var companyId = cboAPReportComapny.selectedValue;
+                        var branchId = cboAPReportBranch.selectedValue;
+                        var accountId = cboAPReportAccount.selectedValue;
+
+                        $.ajax({
+                            url: '/api/accountsReceivable/list/' + dateAsOf + "/" + companyId + "/" + branchId + "/" + accountId,
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            success: function (accountsReceivableResults) {
+                                var totalBalance = 0;
+                                var totalCurrentAmount = 0;
+                                var totalAge30Amount = 0;
+                                var totalAge60Amount = 0;
+                                var totalAge90Amount = 0;
+                                var totalAge120Amount = 0;
+
+                                if (accountsReceivableResults.length > 0) {
+                                    for (i = 0; i < accountsReceivableResults.length; i++) {
+                                        var docLink = "/Software/SalesDetail?id=" + accountsReceivableResults[i]["Id"];
+
+                                        totalBalance = totalBalance + accountsReceivableResults[i]["BalanceAmount"];
+                                        totalCurrentAmount = totalCurrentAmount + accountsReceivableResults[i]["CurrentAmount"];
+                                        totalAge30Amount = totalAge30Amount + accountsReceivableResults[i]["Age30Amount"];
+                                        totalAge60Amount = totalAge60Amount + accountsReceivableResults[i]["Age60Amount"];
+                                        totalAge90Amount = totalAge90Amount + accountsReceivableResults[i]["Age90Amount"];
+                                        totalAge120Amount = totalAge120Amount + accountsReceivableResults[i]["Age120Amount"];
+
+                                        var SIDateResult = new Date(accountsReceivableResults[i]["SIDate"])
+                                        var SIDate = ('0' + (SIDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + SIDateResult.getDate()).slice(-2) + '-' + SIDateResult.getFullYear();
+
+                                        var DueDateResult = new Date(accountsReceivableResults[i]["DueDate"])
+                                        var DueDate = ('0' + (DueDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + DueDateResult.getDate()).slice(-2) + '-' + DueDateResult.getFullYear();
+
+                                        accountsReceivableObservableArray.push({
+                                            Id: accountsReceivableResults[i]["Id"],
+                                            AccountId: accountsReceivableResults[i]["AccountId"],
+                                            AccountCode: accountsReceivableResults[i]["AccountCode"],
+                                            Account: accountsReceivableResults[i]["AccountCode"] + "-" + accountsReceivableResults[i]["Account"],
+                                            CustomerId: accountsReceivableResults[i]["CustomerId"],
+                                            Customer: accountsReceivableResults[i]["Customer"],
+                                            SINumber: "<a href='" + docLink + "' style='font-size: 10px;' class='btn btn-primary btn-xs btn-block'>" + accountsReceivableResults[i]["SINumber"] + "</a>",
+                                            SINumberValue: accountsReceivableResults[i]["SINumber"],
+                                            SINumberCSVValue: "SI-" + accountsReceivableResults[i]["SINumber"],
+                                            SIDate: SIDate,
+                                            DocumentReference: accountsReceivableResults[i]["DocumentReference"],
+                                            BalanceAmount: accountsReceivableResults[i]["BalanceAmount"],
+                                            BalanceAmountDisplay: parseFloat(accountsReceivableResults[i]["BalanceAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            DueDate: DueDate,
+                                            NumberOfDaysFromDueDate: accountsReceivableResults[i]["NumberOfDaysFromDueDate"],
+                                            CurrentAmount: accountsReceivableResults[i]["CurrentAmount"],
+                                            CurrentAmountDisplay: parseFloat(accountsReceivableResults[i]["CurrentAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            Age30Amount: accountsReceivableResults[i]["Age30Amount"],
+                                            Age30AmountDisplay: parseFloat(accountsReceivableResults[i]["Age30Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            Age60Amount: accountsReceivableResults[i]["Age60Amount"],
+                                            Age60AmountDisplay: parseFloat(accountsReceivableResults[i]["Age60Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            Age90Amount: accountsReceivableResults[i]["Age90Amount"],
+                                            Age90AmountDisplay: parseFloat(accountsReceivableResults[i]["Age90Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            Age120Amount: accountsReceivableResults[i]["Age120Amount"],
+                                            Age120AmountDisplay: parseFloat(accountsReceivableResults[i]["Age120Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        });
+                                    }
+                                }
+
+                                document.getElementById("totalBalance").value = parseFloat(totalBalance).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                document.getElementById("totalCurrentAmount").value = parseFloat(totalCurrentAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                document.getElementById("totalAmount30Days").value = parseFloat(totalAge30Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                document.getElementById("totalAmount60Days").value = parseFloat(totalAge60Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                document.getElementById("totalAmount90Days").value = parseFloat(totalAge90Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                document.getElementById("totalAmountOver120Days").value = parseFloat(totalAge120Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                                NProgress.done();
+                            }
+                        });
+                    } else {
+                        document.getElementById("totalBalance").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById("totalCurrentAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById("totalAmount30Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById("totalAmount60Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById("totalAmount90Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById("totalAmountOver120Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                        NProgress.done();
+                    }
+                } else {
+                    document.getElementById("totalBalance").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCurrentAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount30Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount60Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount90Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmountOver120Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                    NProgress.done();
+                }
+            } else {
+                document.getElementById("totalBalance").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalCurrentAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalAmount30Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalAmount60Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalAmount90Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalAmountOver120Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                NProgress.done();
+            }
+
+            return accountsReceivableObservableArray;
+        }
+
+        // ==========================
+        // Accounts Receivable Flex Grid
+        // ==========================
+        function createAccounstReceivableFlexGrid() {
+            accountsReceivableCollections = new wijmo.collections.CollectionView(getAccountsReceivable());
+            accountsReceivableCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                accountsReceivableCollections.refresh();
+
+                if (accountsReceivableCollections.items.length > 0) {
+                    var totalBalance = 0;
+                    var totalCurrentAmount = 0;
+                    var totalAge30Amount = 0;
+                    var totalAge60Amount = 0;
+                    var totalAge90Amount = 0;
+                    var totalAge120Amount = 0;
+
+                    for (var i = 0; i < accountsReceivableCollections.items.length; i++) {
+                        totalBalance = totalBalance + accountsReceivableCollections.items[i]["BalanceAmount"];
+                        totalCurrentAmount = totalCurrentAmount + accountsReceivableCollections.items[i]["CurrentAmount"];
+                        totalAge30Amount = totalAge30Amount + accountsReceivableCollections.items[i]["Age30Amount"];
+                        totalAge60Amount = totalAge60Amount + accountsReceivableCollections.items[i]["Age60Amount"];
+                        totalAge90Amount = totalAge90Amount + accountsReceivableCollections.items[i]["Age90Amount"];
+                        totalAge120Amount = totalAge120Amount + accountsReceivableCollections.items[i]["Age120Amount"];
+                    }
+
+                    document.getElementById("totalBalance").value = parseFloat(totalBalance).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCurrentAmount").value = parseFloat(totalCurrentAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount30Days").value = parseFloat(totalAge30Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount60Days").value = parseFloat(totalAge60Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount90Days").value = parseFloat(totalAge90Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmountOver120Days").value = parseFloat(totalAge120Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalBalance").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCurrentAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount30Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount60Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount90Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmountOver120Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            accountsReceivableCollections.filter = function (item) {
+                return !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.SINumberValue.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            accountsReceivableGrid = new wijmo.grid.FlexGrid('#accountsReceivableGrid');
+            accountsReceivableGrid.initialize({
+                columns: [
+                    {
+                        "header": "SI No.",
+                        "binding": "SINumber",
+                        "allowSorting": true,
+                        "width": 80,
+                        "isContentHtml": true
+                    },
+                    {
+                        "header": "Customer",
+                        "binding": "Customer",
+                        "allowSorting": true,
+                        "width": "1.3*",
+
+                    },
+                    {
+                        "header": "SI Date",
+                        "binding": "SIDate",
+                        "allowSorting": true,
+                        "width": "0.8*"
+                    },
+                    {
+                        "header": "Doc. Ref.",
+                        "binding": "DocumentReference",
+                        "allowSorting": true,
+                        "width": "1*",
+                    },
+                    {
+                        "header": "Due Date",
+                        "binding": "DueDate",
+                        "allowSorting": true,
+                        "width": "0.8*"
+                    },
+                    {
+                        "header": "Balance",
+                        "binding": "BalanceAmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Current",
+                        "binding": "CurrentAmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "30 Days",
+                        "binding": "Age30AmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "60 Days",
+                        "binding": "Age60AmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "90 Days",
+                        "binding": "Age90AmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Over 120 Days",
+                        "binding": "Age120AmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: accountsReceivableCollections,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            accountsReceivableGrid.trackChanges = true;
+        }
+
+        // ==================================
+        // Refresh Accounts Receivable Flex Grid
+        // ==================================
+        function refreshAccountsReceivableFlexGrid() {
+            accountsReceivableCollections = new wijmo.collections.CollectionView(getAccountsReceivable());
+            accountsReceivableCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                accountsReceivableCollections.refresh();
+
+                if (accountsReceivableCollections.items.length > 0) {
+                    var totalBalance = 0;
+                    var totalCurrentAmount = 0;
+                    var totalAge30Amount = 0;
+                    var totalAge60Amount = 0;
+                    var totalAge90Amount = 0;
+                    var totalAge120Amount = 0;
+
+                    for (var i = 0; i < accountsReceivableCollections.items.length; i++) {
+                        totalBalance = totalBalance + accountsReceivableCollections.items[i]["BalanceAmount"];
+                        totalCurrentAmount = totalCurrentAmount + accountsReceivableCollections.items[i]["CurrentAmount"];
+                        totalAge30Amount = totalAge30Amount + accountsReceivableCollections.items[i]["Age30Amount"];
+                        totalAge60Amount = totalAge60Amount + accountsReceivableCollections.items[i]["Age60Amount"];
+                        totalAge90Amount = totalAge90Amount + accountsReceivableCollections.items[i]["Age90Amount"];
+                        totalAge120Amount = totalAge120Amount + accountsReceivableCollections.items[i]["Age120Amount"];
+                    }
+
+                    document.getElementById("totalBalance").value = parseFloat(totalBalance).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCurrentAmount").value = parseFloat(totalCurrentAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount30Days").value = parseFloat(totalAge30Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount60Days").value = parseFloat(totalAge60Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount90Days").value = parseFloat(totalAge90Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmountOver120Days").value = parseFloat(totalAge120Amount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalBalance").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCurrentAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount30Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount60Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount90Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmountOver120Days").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            accountsReceivableCollections.filter = function (item) {
+                return !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.SINumberValue.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            accountsReceivableGrid.itemsSource = accountsReceivableCollections;
+            accountsReceivableGrid.trackChanges = true;
+        }
+
+        // ============
+        // Download CSV
+        // ============
         function accountsReceivableReportCSVOnclick() {
-
-
             var CSV = '';
-            var accountReceivable = [];
-            var fileName = 'AccountReceivableReport.CSV';
+            var accountReceivables = [];
+            var fileName = 'AccountsReceivableReport.CSV';
 
-            for (i = 0; i < accountsReceivableCollection.items.length; i++) {
-                accountReceivable.push({
-                    SINumberValue: accountsReceivableCollection.items[i].SINumberValue,
-                    Account: accountsReceivableCollection.items[i].Account,
-                    Customer: accountsReceivableCollection.items[i].Customer,
-                    SIDate: accountsReceivableCollection.items[i].SIDate,
-                    DocumentReference: accountsReceivableCollection.items[i].DocumentReference,
-                    DueDate: accountsReceivableCollection.items[i].DueDate,
-                    BalanceAmount: accountsReceivableCollection.items[i].BalanceAmount,
-                    CurrentAmount: accountsReceivableCollection.items[i].CurrentAmount,
-                    CurrentAmount: accountsReceivableCollection.items[i].CurrentAmount,
-                    Age30Amount: accountsReceivableCollection.items[i].Age30Amount,
-                    Age60Amount: accountsReceivableCollection.items[i].Age60Amount,
-                    Age90Amount: accountsReceivableCollection.items[i].Age90Amount,
-                    Age120Amount: accountsReceivableCollection.items[i].Age120Amount
+            for (i = 0; i < accountsReceivableCollections.items.length; i++) {
+                accountReceivables.push({
+                    SINumber: accountsReceivableCollections.items[i].SINumberCSVValue,
+                    Account: accountsReceivableCollections.items[i].Account,
+                    Customer: accountsReceivableCollections.items[i].Customer,
+                    SIDate: accountsReceivableCollections.items[i].SIDate,
+                    DocumentReference: accountsReceivableCollections.items[i].DocumentReference,
+                    DueDate: accountsReceivableCollections.items[i].DueDate,
+                    BalanceAmount: accountsReceivableCollections.items[i].BalanceAmount,
+                    CurrentAmount: accountsReceivableCollections.items[i].CurrentAmount,
+                    Age30Amount: accountsReceivableCollections.items[i].Age30Amount,
+                    Age60Amount: accountsReceivableCollections.items[i].Age60Amount,
+                    Age90Amount: accountsReceivableCollections.items[i].Age90Amount,
+                    Age120Amount: accountsReceivableCollections.items[i].Age120Amount
                 });
             }
 
-            //for (var i = 0; i < symbols.length; i++) {
-            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
-            //}
-
             var Headers = [];
             Headers.push({
-
-                SINumberValue: "SI Number",
+                SINumber: "SI Number",
                 Account: "Account",
                 Customer: "Customer",
                 SIDate: "SI Date",
-                DocumentReference: "Document Reference",
-                DueDate: "DueDate",
+                DocumentReference: "Doc Reference",
+                DueDate: "Due Date",
                 BalanceAmount: "Balance",
                 CurrentAmount: "Current",
                 Age30Amount: "30 Days",
                 Age60Amount: "60 Days",
                 Age90Amount: "90 Days",
                 Age120Amount: "120 Days"
-
-
             });
 
             var header = '';
-            // Rows
             for (var b in Headers[0]) {
                 header += '"' + Headers[0][b] + '",';
             }
 
             CSV = header + '\r\n';
-            for (var i = 0; i < accountReceivable.length; i++) {
+            for (var i = 0; i < accountReceivables.length; i++) {
                 var row = '';
-                for (var a in accountReceivable[i]) {
-                    row += '"' + accountReceivable[i][a] + '",';
+                for (var a in accountReceivables[i]) {
+                    row += '"' + accountReceivables[i][a] + '",';
                 }
+
                 row.slice(0, row.length - 1);
                 CSV += row + '\r\n';
             }
@@ -283,7 +737,6 @@
                 toastr.error("No data.");
             } else {
                 var link = document.createElement("a");
-
                 if (link.download !== undefined) {
                     var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
                     var url = URL.createObjectURL(blob);
@@ -304,130 +757,39 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-
                 toastr.success("Dowload successful.");
             }
         }
 
+        // =========
+        // Print PDF
+        // =========
         function accountsReceivableReportPDFOnclick() {
-            window.location.href = '/RepAccountsReceivable/AccountsReceivable?DateAsOf=' + getParam("DateAsOf") + '&CompanyId=' + getParam("CompanyId");
+            if (cboAPReportComapny.selectedValue != null) {
+                if (cboAPReportBranch.selectedValue != null) {
+                    if (cboAPReportAccount.selectedValue != null) {
+                        var dateAsOf = cboAPReportDateAsOf.value.toLocaleDateString().replace(/\//g, '-');
+                        var companyId = cboAPReportComapny.selectedValue;
+                        var branchId = cboAPReportBranch.selectedValue;
+                        var accountId = cboAPReportAccount.selectedValue;
+
+                        window.location.href = '/RepAccountsReceivable/AccountsReceivableReport?DateAsOf=' + dateAsOf + '&CompanyId=' + companyId + '&BranchId=' + branchId + '&AccountId=' + accountId;
+                    } else {
+                        toastr.error("Lacking Information");
+                    }
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
+        // ============
+        // On load Page
+        // ============
         $(document).ready(function () {
-            $.ajax({
-                url: '/api/company/' + getParam("CompanyId"),
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (companyResults) {
-                    document.getElementById("companyname").value = companyResults.Company;
-                }
-            });
-
-            accountsReceivableCollection = new wijmo.collections.CollectionView(getAccountsReceivable());
-            accountsReceivableCollection.canFilter = true;
-
-            var filterText = '';
-            $('#InputFilter').keyup(function () {
-                filterText = this.value.toLowerCase();
-                accountsReceivableCollection.refresh();
-            });
-            accountsReceivableCollection.filter = function (item) {
-                return !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.SINumberValue.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1);
-            }
-            // Flex Grid
-            accountsReceivableGrid = new wijmo.grid.FlexGrid('#accountsReceivableGrid');
-            accountsReceivableGrid.initialize({
-                columns: [
-                    {
-                        "header": "SI Number",
-                        "binding": "SINumber",
-                        "allowSorting": true,
-                        "width": 120,
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
-                    {
-                        "header": "Account",
-                        "binding": "Account",
-                        "allowSorting": true,
-                        "width": 220
-                    },
-                    {
-                        "header": "Customer",
-                        "binding": "Customer",
-                        "allowSorting": true,
-                        "width": 250,
-
-                    },
-                    {
-                        "header": "SI Date",
-                        "binding": "SIDate",
-                        "allowSorting": true,
-                        "width": 90
-                    },
-                    {
-                        "header": "Document Ref.",
-                        "binding": "DocumentReference",
-                        "allowSorting": true,
-                        "width": 204,
-                    },
-                    {
-                        "header": "Due Date",
-                        "binding": "DueDate",
-                        "allowSorting": true,
-                        "width": 110
-                    },
-                    {
-                        "header": "Balance",
-                        "binding": "BalanceAmount",
-                        "allowSorting": true,
-                        "width": 135
-                    },
-                    {
-                        "header": "Current",
-                        "binding": "CurrentAmount",
-                        "allowSorting": true,
-                        "width": 135
-                    },
-                    {
-                        "header": "30 Days",
-                        "binding": "Age30Amount",
-                        "allowSorting": true,
-                        "width": 120
-                    },
-                    {
-                        "header": "60 Days",
-                        "binding": "Age60Amount",
-                        "allowSorting": true,
-                        "width": 120
-                    },
-                    {
-                        "header": "90 Days",
-                        "binding": "Age90Amount",
-                        "allowSorting": true,
-                        "width": 120
-                    },
-                    {
-                        "header": "Over 120 Days",
-                        "binding": "Age120Amount",
-                        "allowSorting": true,
-                        "width": 120
-                    },
-                ],
-                autoGenerateColumns: false,
-                itemsSource: accountsReceivableCollection,
-                isReadOnly: true,
-                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                allowDragging: wijmo.grid.AllowDragging.None,
-                selectionMode: wijmo.grid.SelectionMode.Row
-            });
-
-            accountsReceivableGrid.trackChanges = true;
+            createCboAPAllDateFilters();
         });
     </script>
     <script type="text/javascript">
@@ -531,6 +893,5 @@
             slideLeft.open();
         });
     </script>
-
 </body>
 </html>

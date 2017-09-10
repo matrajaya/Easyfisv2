@@ -9,9 +9,15 @@ namespace easyfis.ApiControllers
 {
     public class ApiAccountsReceivableController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        public Decimal computeAge(Int32 Age, Int32 Elapsed, Decimal Amount)
+        // =============
+        // Compute Aging
+        // =============
+        public Decimal ComputeAge(Int32 Age, Int32 Elapsed, Decimal Amount)
         {
             Decimal returnValue = 0;
 
@@ -58,17 +64,21 @@ namespace easyfis.ApiControllers
             return returnValue;
         }
 
-        // accounts receivable list
+        // ===============================
+        // Accounts Receivable Report list
+        // ===============================
         [Authorize]
         [HttpGet]
-        [Route("api/accountsReceivable/list/{dateAsOf}/{companyId}/")]
-        public List<Models.TrnSalesInvoice> listAccountsReceivable(String dateAsOf, String companyId)
+        [Route("api/accountsReceivable/list/{dateAsOf}/{companyId}/{branchId}/{accountId}")]
+        public List<Models.TrnSalesInvoice> ListAccountsReceivable(String dateAsOf, String companyId, String branchId, String accountId)
         {
             try
             {
                 var salesInvoice = from d in db.TrnSalesInvoices
                                    where d.SIDate <= Convert.ToDateTime(dateAsOf)
                                    && d.MstBranch.CompanyId == Convert.ToInt32(companyId)
+                                   && d.BranchId == Convert.ToInt32(branchId)
+                                   && d.MstArticle.AccountId == Convert.ToInt32(accountId)
                                    && d.BalanceAmount > 0
                                    && d.IsLocked == true
                                    select new Models.TrnSalesInvoice
@@ -85,11 +95,11 @@ namespace easyfis.ApiControllers
                                        Customer = d.MstArticle.Article,
                                        DueDate = d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays)).ToShortDateString(),
                                        NumberOfDaysFromDueDate = Convert.ToDateTime(dateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days,
-                                       CurrentAmount = computeAge(0, Convert.ToDateTime(dateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
-                                       Age30Amount = computeAge(1, Convert.ToDateTime(dateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
-                                       Age60Amount = computeAge(2, Convert.ToDateTime(dateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
-                                       Age90Amount = computeAge(3, Convert.ToDateTime(dateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
-                                       Age120Amount = computeAge(4, Convert.ToDateTime(dateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount)
+                                       CurrentAmount = ComputeAge(0, Convert.ToDateTime(dateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                       Age30Amount = ComputeAge(1, Convert.ToDateTime(dateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                       Age60Amount = ComputeAge(2, Convert.ToDateTime(dateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                       Age90Amount = ComputeAge(3, Convert.ToDateTime(dateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                       Age120Amount = ComputeAge(4, Convert.ToDateTime(dateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount)
                                    };
 
                 return salesInvoice.ToList();

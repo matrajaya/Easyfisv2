@@ -15,11 +15,11 @@ namespace easyfis.Controllers
         // list article group account
         [Authorize]
         [HttpGet]
-        [Route("api/articleGroup/account/list")]
-        public List<Models.MstArticleGroup> listArticleGroupAccount()
+        [Route("api/articleGroup/account/list/{articleTypeId}")]
+        public List<Models.MstArticleGroup> listArticleGroupAccount(String articleTypeId)
         {
             var articleGroups = from d in db.MstArticleGroups.OrderBy(d => d.ArticleGroup)
-                                where d.ArticleTypeId == 3
+                                where d.ArticleTypeId == Convert.ToInt32(articleTypeId)
                                 group d by new
                                 {
                                     AccountId = d.AccountId,

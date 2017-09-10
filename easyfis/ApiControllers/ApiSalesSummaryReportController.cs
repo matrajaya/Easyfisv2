@@ -10,8 +10,14 @@ namespace easyfis.ApiControllers
 {
     public class ApiSalesSummaryReportController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // =========================
+        // Sales Summary Report List
+        // =========================
         [Authorize, HttpGet, Route("api/salesSummaryReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
         public List<Models.TrnSalesInvoice> listSalesSummaryReport(String startDate, String endDate, String companyId, String branchId)
         {

@@ -1113,7 +1113,7 @@
         function createCboAPAccountFilter() {
             var accountsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/articleGroup/account/list',
+                url: '/api/articleGroup/account/list/3',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1185,7 +1185,7 @@
                         var branchId = cboAPReportBranch.selectedValue;
                         var accountId = cboAPReportAccount.selectedValue;
 
-                        window.location.href = '/RepAccountsPayable/AccountsPayable?DateAsOf=' + dateAsOf + '&CompanyId=' + companyId + '&BranchId=' + branchId + '&AccountId=' + accountId;
+                        window.location.href = '/RepAccountsPayable/AccountsPayableReport?DateAsOf=' + dateAsOf + '&CompanyId=' + companyId + '&BranchId=' + branchId + '&AccountId=' + accountId;
                     } else {
                         toastr.error("Lacking Information");
                     }

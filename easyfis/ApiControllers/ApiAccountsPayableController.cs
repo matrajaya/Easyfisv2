@@ -9,10 +9,15 @@ namespace easyfis.ApiControllers
 {
     public class ApiAccountsPayableController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // Compute age
-        public Decimal computeAge(Int32 Age, Int32 Elapsed, Decimal Amount)
+        // =============
+        // Compute Aging
+        // =============
+        public Decimal ComputeAge(Int32 Age, Int32 Elapsed, Decimal Amount)
         {
             Decimal returnValue = 0;
 
@@ -59,11 +64,13 @@ namespace easyfis.ApiControllers
             return returnValue;
         }
 
-        // accounts payable list
+        // ============================
+        // Accounts Payable Report list
+        // ============================
         [Authorize]
         [HttpGet]
         [Route("api/accountsPayable/list/{dateAsOf}/{companyId}/{branchId}/{accountId}")]
-        public List<Models.TrnReceivingReceipt> listAccountsPayable(String dateAsOf, String companyId, String branchId, String accountId)
+        public List<Models.TrnReceivingReceipt> ListAccountsPayable(String dateAsOf, String companyId, String branchId, String accountId)
         {
             try
             {
@@ -88,11 +95,11 @@ namespace easyfis.ApiControllers
                                             BalanceAmount = d.BalanceAmount,
                                             DueDate = d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays)).ToShortDateString(),
                                             NumberOfDaysFromDueDate = Convert.ToDateTime(dateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days,
-                                            CurrentAmount = computeAge(0, Convert.ToDateTime(dateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
-                                            Age30Amount = computeAge(1, Convert.ToDateTime(dateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
-                                            Age60Amount = computeAge(2, Convert.ToDateTime(dateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
-                                            Age90Amount = computeAge(3, Convert.ToDateTime(dateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
-                                            Age120Amount = computeAge(4, Convert.ToDateTime(dateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount)
+                                            CurrentAmount = ComputeAge(0, Convert.ToDateTime(dateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                            Age30Amount = ComputeAge(1, Convert.ToDateTime(dateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                            Age60Amount = ComputeAge(2, Convert.ToDateTime(dateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                            Age90Amount = ComputeAge(3, Convert.ToDateTime(dateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                            Age120Amount = ComputeAge(4, Convert.ToDateTime(dateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount)
                                         };
 
                 return receivingReceipts.ToList();

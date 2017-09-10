@@ -70,7 +70,7 @@ namespace easyfis.Controllers
         // Preview and Print PDF
         // =====================
         [Authorize]
-        public ActionResult AccountsPayable(String DateAsOf, Int32 CompanyId, Int32 BranchId, Int32 AccountId)
+        public ActionResult AccountsPayableReport(String DateAsOf, Int32 CompanyId, Int32 BranchId, Int32 AccountId)
         {
             // ========================
             // PDF settings and Formats
@@ -256,7 +256,7 @@ namespace easyfis.Controllers
                                                                && d.MstArticle.AccountId == AccountId
                                                                && d.BalanceAmount > 0
                                                                && d.IsLocked == true
-                                                               select new Models.TrnReceivingReceipt
+                                                               select new
                                                                {
                                                                    Id = d.Id,
                                                                    RRNumber = d.RRNumber,
