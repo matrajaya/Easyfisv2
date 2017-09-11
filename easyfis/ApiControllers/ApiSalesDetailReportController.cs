@@ -10,10 +10,16 @@ namespace easyfis.ApiControllers
 {
     public class ApiSalesDetailReportController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // ========================
+        // Sales Detail Report List
+        // ========================
         [Authorize, HttpGet, Route("api/salesDetailReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
-        public List<Models.TrnSalesInvoiceItem> listSalesDetailReport(String startDate, String endDate, String companyId, String branchId)
+        public List<Models.TrnSalesInvoiceItem> ListSalesDetailReport(String startDate, String endDate, String companyId, String branchId)
         {
             var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
                                     where d.TrnSalesInvoice.BranchId == Convert.ToInt32(branchId)
@@ -23,8 +29,9 @@ namespace easyfis.ApiControllers
                                     && d.TrnSalesInvoice.IsLocked == true
                                     select new Models.TrnSalesInvoiceItem
                                     {
-                                        SIId = d.SIId,
                                         Id = d.Id,
+                                        SIId = d.SIId,
+                                        Branch = d.TrnSalesInvoice.MstBranch.Branch,
                                         SI = d.TrnSalesInvoice.SINumber,
                                         SIDate = d.TrnSalesInvoice.SIDate.ToShortDateString(),
                                         Item = d.MstArticle.Article,

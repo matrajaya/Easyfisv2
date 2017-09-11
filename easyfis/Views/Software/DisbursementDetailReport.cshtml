@@ -319,7 +319,7 @@
                                         Branch: disbursementDetailReportResults[i]["Branch"],
                                         CV: disbursementDetailReportResults[i]["CV"],
                                         CVForCSV: "CV-" + disbursementDetailReportResults[i]["CV"],
-                                        CVButton: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block'  style='font-size: 10.5px;'>" + disbursementDetailReportResults[i]["CV"],
+                                        CVButton: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block' style='font-size: 10.5px;'>" + disbursementDetailReportResults[i]["CV"],
                                         CVDate: CVDate,
                                         Supplier: disbursementDetailReportResults[i]["Supplier"],
                                         Account: disbursementDetailReportResults[i]["Account"],
@@ -427,12 +427,6 @@
             disbursementDetailReportGrid.initialize({
                 columns: [
                     {
-                        "header": "Branch",
-                        "binding": "Branch",
-                        "allowSorting": true,
-                        "width": "1.2*"
-                    },
-                    {
                         "header": "CV Number  ",
                         "binding": "CVButton",
                         "isContentHtml": true,
@@ -449,25 +443,25 @@
                         "header": "Supplier",
                         "binding": "Supplier",
                         "allowSorting": true,
-                        "width": "1.5*"
+                        "width": "2*"
                     },
                     {
                         "header": "Account",
                         "binding": "Account",
                         "allowSorting": true,
-                        "width": "1.5*"
+                        "width": "2*"
                     },
                     {
                         "header": "Article",
                         "binding": "Article",
                         "allowSorting": true,
-                        "width": "1.5*"
+                        "width": "2*"
                     },
                     {
                         "header": "RR Number",
                         "binding": "RR",
                         "allowSorting": true,
-                        "width": "1*"
+                        "width": "1.5*"
                     },
                     {
                         "header": "Particulars",
@@ -480,7 +474,7 @@
                         "binding": "AmountDisplay",
                         "allowSorting": true,
                         "align": "right",
-                        "width": "1*"
+                        "width": "1.5*"
                     }
                 ],
                 autoGenerateColumns: false,

@@ -10,10 +10,16 @@ namespace easyfis.ApiControllers
 {
     public class ApiCollectionDetailReportController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // =============================
+        // Collection Detail Report List
+        // =============================
         [Authorize, HttpGet, Route("api/collectionDetailReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
-        public List<Models.TrnCollectionLine> listCollectionDetailReport(String startDate, String endDate, String companyId, String branchId)
+        public List<Models.TrnCollectionLine> ListCollectionDetailReport(String startDate, String endDate, String companyId, String branchId)
         {
             var collectionLines = from d in db.TrnCollectionLines
                                   where d.TrnCollection.BranchId == Convert.ToInt32(branchId)
@@ -23,8 +29,9 @@ namespace easyfis.ApiControllers
                                   && d.TrnCollection.IsLocked == true
                                   select new Models.TrnCollectionLine
                                   {
-                                      ORId = d.ORId,
                                       Id = d.Id,
+                                      Branch = d.TrnCollection.MstBranch.Branch,
+                                      ORId = d.ORId,
                                       OR = d.TrnCollection.ORNumber,
                                       ORDate = d.TrnCollection.ORDate.ToShortDateString(),
                                       SI = d.TrnSalesInvoice.SINumber,

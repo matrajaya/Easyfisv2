@@ -109,11 +109,10 @@ namespace easyfis.Controllers
                 // ====
                 // Data
                 // ====
-                PdfPTable data = new PdfPTable(9);
-                float[] widthsCellsData = new float[] { 20f, 15f, 13f, 25f, 25f, 15f, 10f, 15f, 15f };
+                PdfPTable data = new PdfPTable(8);
+                float[] widthsCellsData = new float[] { 15f, 13f, 25f, 25f, 15f, 10f, 15f, 15f };
                 data.SetWidths(widthsCellsData);
                 data.WidthPercentage = 100;
-                data.AddCell(new PdfPCell(new Phrase("Branch", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                 data.AddCell(new PdfPCell(new Phrase("PO Number", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                 data.AddCell(new PdfPCell(new Phrase("PO Date", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                 data.AddCell(new PdfPCell(new Phrase("Supplier", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
@@ -126,7 +125,6 @@ namespace easyfis.Controllers
                 Decimal total = 0;
                 foreach (var purchaseOrderItem in purchaseOrderItems)
                 {
-                    data.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Branch, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingRight = 5f, PaddingLeft = 5f });
                     data.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.PO, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingRight = 5f, PaddingLeft = 5f });
                     data.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.PODate, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingRight = 5f, PaddingLeft = 5f });
                     data.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Supplier, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingRight = 5f, PaddingLeft = 5f });
@@ -141,7 +139,7 @@ namespace easyfis.Controllers
                 // =====
                 // Total
                 // =====
-                data.AddCell(new PdfPCell(new Phrase("Total", fontArial10Bold)) { Colspan = 8, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingRight = 10f, PaddingLeft = 10f });
+                data.AddCell(new PdfPCell(new Phrase("Total", fontArial10Bold)) { Colspan = 7, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingRight = 10f, PaddingLeft = 10f });
                 data.AddCell(new PdfPCell(new Phrase(total.ToString("#,##0.00"), fontArial10Bold)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingRight = 5f, PaddingLeft = 5f });
                 document.Add(data);
             }

@@ -10,25 +10,16 @@ namespace easyfis.ApiControllers
 {
     public class ApiCollectionSummaryReportController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        public Decimal getAmount(Int32 id)
-        {
-            var collectionLines = from d in db.TrnCollectionLines
-                                  where d.ORId == id
-                                  select d;
-
-            Decimal amount = 0;
-            if (collectionLines.Any())
-            {
-                amount = collectionLines.Sum(d => d.Amount);
-            }
-
-            return amount;
-        }
-
+        // ==============================
+        // Collection Summary Report List
+        // ==============================
         [Authorize, HttpGet, Route("api/collectionSummaryReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
-        public List<Models.TrnCollection> listCollectionSummaryReport(String startDate, String endDate, String companyId, String branchId)
+        public List<Models.TrnCollection> ListCollectionSummaryReport(String startDate, String endDate, String companyId, String branchId)
         {
             var collections = from d in db.TrnCollections
                               where d.BranchId == Convert.ToInt32(branchId)
@@ -43,7 +34,8 @@ namespace easyfis.ApiControllers
                                   ORNumber = d.ORNumber,
                                   ORDate = d.ORDate.ToShortDateString(),
                                   Customer = d.MstArticle.Article,
-                                  Amount = getAmount(d.Id)
+                                  Particulars = d.Particulars,
+                                  Amount = d.TrnCollectionLines.Sum(a => a.Amount)
                               };
 
             return collections.ToList();
