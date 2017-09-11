@@ -19,7 +19,7 @@
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Accounts Payable Report 
+                        Accounts Payable Report
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -407,6 +407,7 @@
 
                                         accountsPayableObservableArray.push({
                                             Id: accountsPayableResults[i]["Id"],
+                                            Branch: accountsPayableResults[i]["Branch"],
                                             AccountId: accountsPayableResults[i]["AccountId"],
                                             AccountCode: accountsPayableResults[i]["AccountCode"],
                                             Account: accountsPayableResults[i]["AccountCode"] + "-" + accountsPayableResults[i]["Account"],
@@ -686,6 +687,7 @@
 
             for (i = 0; i < accountsPayableCollections.items.length; i++) {
                 accountPayables.push({
+                    Branch: accountsPayableCollections.items[i].Branch,
                     RRNumber: accountsPayableCollections.items[i].RRNumberCSVValue,
                     Account: accountsPayableCollections.items[i].Account,
                     Supplier: accountsPayableCollections.items[i].Supplier,
@@ -703,6 +705,7 @@
 
             var Headers = [];
             Headers.push({
+                Branch: "Branch",
                 RRNumber: "RR Number",
                 Account: "Account",
                 Supplier: "Supplier",

@@ -84,6 +84,7 @@ namespace easyfis.ApiControllers
                                    select new Models.TrnSalesInvoice
                                    {
                                        Id = d.Id,
+                                       Branch = d.MstBranch.Branch,
                                        AccountId = d.MstArticle.AccountId,
                                        AccountCode = d.MstArticle.MstAccount.AccountCode,
                                        Account = d.MstArticle.MstAccount.Account,

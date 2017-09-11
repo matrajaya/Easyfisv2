@@ -407,6 +407,7 @@
 
                                         accountsReceivableObservableArray.push({
                                             Id: accountsReceivableResults[i]["Id"],
+                                            Branch: accountsReceivableResults[i]["Branch"],
                                             AccountId: accountsReceivableResults[i]["AccountId"],
                                             AccountCode: accountsReceivableResults[i]["AccountCode"],
                                             Account: accountsReceivableResults[i]["AccountCode"] + "-" + accountsReceivableResults[i]["Account"],
@@ -686,6 +687,7 @@
 
             for (i = 0; i < accountsReceivableCollections.items.length; i++) {
                 accountReceivables.push({
+                    Branch: accountsReceivableCollections.items[i].Branch,
                     SINumber: accountsReceivableCollections.items[i].SINumberCSVValue,
                     Account: accountsReceivableCollections.items[i].Account,
                     Customer: accountsReceivableCollections.items[i].Customer,
@@ -703,6 +705,7 @@
 
             var Headers = [];
             Headers.push({
+                Branch: "Branch",
                 SINumber: "SI Number",
                 Account: "Account",
                 Customer: "Customer",
