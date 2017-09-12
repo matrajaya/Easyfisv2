@@ -53,28 +53,28 @@
                                 <td style="width: 24%">
                                     <div class="input-group ">
                                         <span class="input-group-addon"><b>Date as of</b></span>
-                                        <div class="comboBox-wide" id="cboAPReportDateAsOf" style="font-size: 12.5px;"></div>
+                                        <div class="comboBox-wide" id="cboARReportDateAsOf" style="font-size: 12.5px;"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 24%" align="right">
                                     <div class="input-group ">
                                         <span class="input-group-addon"><b>Company</b></span>
-                                        <div class="comboBox-wide" id="cboAPReportComapny" style="font-size: 12.5px;"></div>
+                                        <div class="comboBox-wide" id="cboARReportComapny" style="font-size: 12.5px;"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 24%">
                                     <div class="input-group ">
                                         <span class="input-group-addon"><b>Branch</b></span>
-                                        <div class="comboBox-wide" id="cboAPReportBranch" style="font-size: 12.5px;"></div>
+                                        <div class="comboBox-wide" id="cboARReportBranch" style="font-size: 12.5px;"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 24%">
                                     <div class="input-group ">
                                         <span class="input-group-addon"><b>Account</b></span>
-                                        <div class="comboBox-wide" id="cboAPReportAccount" style="font-size: 12.5px;"></div>
+                                        <div class="comboBox-wide" id="cboARReportAccount" style="font-size: 12.5px;"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -139,11 +139,11 @@
         // ================
         // Global Variables
         // ================
-        var cboAPReportDateAsOf = new wijmo.input.InputDate('#cboAPReportDateAsOf');
+        var cboARReportDateAsOf = new wijmo.input.InputDate('#cboARReportDateAsOf');
         var isDateAsOfSelected = true;
-        var cboAPReportComapny = new wijmo.input.ComboBox('#cboAPReportComapny');
-        var cboAPReportBranch = new wijmo.input.ComboBox('#cboAPReportBranch');
-        var cboAPReportAccount = new wijmo.input.ComboBox('#cboAPReportAccount');
+        var cboARReportComapny = new wijmo.input.ComboBox('#cboARReportComapny');
+        var cboARReportBranch = new wijmo.input.ComboBox('#cboARReportBranch');
+        var cboARReportAccount = new wijmo.input.ComboBox('#cboARReportAccount');
         var accountsReceivableCollections;
         var accountsReceivableGrid;
         var accountHasData = false;
@@ -166,12 +166,12 @@
         }
 
         // ==============
-        // AP Filter Date
+        // AR Filter Date
         // ==============
-        function createCboAPAllDateFilters() {
+        function createCboARAllDateFilters() {
             NProgress.start();
-            cboAPReportDateAsOf.dispose();
-            cboAPReportDateAsOf = new wijmo.input.InputDate('#cboAPReportDateAsOf', {
+            cboARReportDateAsOf.dispose();
+            cboARReportDateAsOf = new wijmo.input.InputDate('#cboARReportDateAsOf', {
                 format: 'MM-dd-yyyy',
                 value: new Date(getParam("DateAsOf")),
                 onValueChanged: function () {
@@ -184,15 +184,15 @@
                 }
             });
 
-            createCboAPAllCompanyFilter();
+            createCboARAllCompanyFilter();
         }
 
         var isCompanySelected = false;
 
         // ======================
-        // AP All Company Filters
+        // AR All Company Filters
         // ======================
-        function createCboAPAllCompanyFilter() {
+        function createCboARAllCompanyFilter() {
             var companyObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/company/list',
@@ -220,8 +220,8 @@
                         $("#btnPrintPDF").prop("disabled", true);
                     }
 
-                    cboAPReportComapny.dispose();
-                    cboAPReportComapny = new wijmo.input.ComboBox('#cboAPReportComapny', {
+                    cboARReportComapny.dispose();
+                    cboARReportComapny = new wijmo.input.ComboBox('#cboARReportComapny', {
                         disabled: disabled,
                         isEditable: false,
                         itemsSource: companyObservableArray,
@@ -235,22 +235,22 @@
                                 $("#btnPrintPDF").prop("disabled", false);
                             }
                             isCompanySelected = true;
-                            createCboAPBranchFilter();
+                            createCboARBranchFilter();
                         }
                     });
 
-                    createCboAPBranchFilter();
+                    createCboARBranchFilter();
                 }
             });
         }
 
         // ================
-        // AP Branch Filter
+        // AR Branch Filter
         // ================
-        function createCboAPBranchFilter() {
+        function createCboARBranchFilter() {
             var branchObservableArray = new wijmo.collections.ObservableArray();
-            if (cboAPReportComapny.selectedValue != null) {
-                var companyId = cboAPReportComapny.selectedValue;
+            if (cboARReportComapny.selectedValue != null) {
+                var companyId = cboARReportComapny.selectedValue;
 
                 $.ajax({
                     url: '/api/branch/byCompanyId/list/locked/' + companyId,
@@ -279,8 +279,8 @@
                             $("#btnPrintPDF").prop("disabled", true);
                         }
 
-                        cboAPReportBranch.dispose();
-                        cboAPReportBranch = new wijmo.input.ComboBox('#cboAPReportBranch', {
+                        cboARReportBranch.dispose();
+                        cboARReportBranch = new wijmo.input.ComboBox('#cboARReportBranch', {
                             disabled: disabled,
                             isEditable: false,
                             itemsSource: branchObservableArray,
@@ -294,15 +294,15 @@
                         });
 
                         if (!isCompanySelected) {
-                            createCboAPAccountFilter();
+                            createCboARAccountFilter();
                         } else {
                             refreshAccountsReceivableFlexGrid();
                         }
                     }
                 });
             } else {
-                cboAPReportBranch.dispose();
-                cboAPReportBranch = new wijmo.input.ComboBox('#cboAPReportBranch', {
+                cboARReportBranch.dispose();
+                cboARReportBranch = new wijmo.input.ComboBox('#cboARReportBranch', {
                     disabled: true,
                     isEditable: false,
                     itemsSource: branchObservableArray
@@ -313,9 +313,9 @@
         }
 
         // =================
-        // AP Account Filter
+        // AR Account Filter
         // =================
-        function createCboAPAccountFilter() {
+        function createCboARAccountFilter() {
             var accountsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/articleGroup/account/list/2',
@@ -342,8 +342,8 @@
                         $("#btnPrintPDF").prop("disabled", true);
                     }
 
-                    cboAPReportAccount.dispose();
-                    cboAPReportAccount = new wijmo.input.ComboBox('#cboAPReportAccount', {
+                    cboARReportAccount.dispose();
+                    cboARReportAccount = new wijmo.input.ComboBox('#cboARReportAccount', {
                         disabled: disabled,
                         isEditable: false,
                         itemsSource: accountsObservableArray,
@@ -366,14 +366,14 @@
         // ===================
         function getAccountsReceivable() {
             var accountsReceivableObservableArray = new wijmo.collections.ObservableArray;
-            if (cboAPReportComapny.selectedValue != null) {
-                if (cboAPReportBranch.selectedValue != null) {
-                    if (cboAPReportAccount.selectedValue != null) {
+            if (cboARReportComapny.selectedValue != null) {
+                if (cboARReportBranch.selectedValue != null) {
+                    if (cboARReportAccount.selectedValue != null) {
 
-                        var dateAsOf = cboAPReportDateAsOf.value.toLocaleDateString().replace(/\//g, '-');
-                        var companyId = cboAPReportComapny.selectedValue;
-                        var branchId = cboAPReportBranch.selectedValue;
-                        var accountId = cboAPReportAccount.selectedValue;
+                        var dateAsOf = cboARReportDateAsOf.value.toLocaleDateString().replace(/\//g, '-');
+                        var companyId = cboARReportComapny.selectedValue;
+                        var branchId = cboARReportBranch.selectedValue;
+                        var accountId = cboARReportAccount.selectedValue;
 
                         $.ajax({
                             url: '/api/accountsReceivable/list/' + dateAsOf + "/" + companyId + "/" + branchId + "/" + accountId,
@@ -768,13 +768,13 @@
         // Print PDF
         // =========
         function accountsReceivableReportPDFOnclick() {
-            if (cboAPReportComapny.selectedValue != null) {
-                if (cboAPReportBranch.selectedValue != null) {
-                    if (cboAPReportAccount.selectedValue != null) {
-                        var dateAsOf = cboAPReportDateAsOf.value.toLocaleDateString().replace(/\//g, '-');
-                        var companyId = cboAPReportComapny.selectedValue;
-                        var branchId = cboAPReportBranch.selectedValue;
-                        var accountId = cboAPReportAccount.selectedValue;
+            if (cboARReportComapny.selectedValue != null) {
+                if (cboARReportBranch.selectedValue != null) {
+                    if (cboARReportAccount.selectedValue != null) {
+                        var dateAsOf = cboARReportDateAsOf.value.toLocaleDateString().replace(/\//g, '-');
+                        var companyId = cboARReportComapny.selectedValue;
+                        var branchId = cboARReportBranch.selectedValue;
+                        var accountId = cboARReportAccount.selectedValue;
 
                         window.location.href = '/RepAccountsReceivable/AccountsReceivableReport?DateAsOf=' + dateAsOf + '&CompanyId=' + companyId + '&BranchId=' + branchId + '&AccountId=' + accountId;
                     } else {
@@ -792,7 +792,7 @@
         // On load Page
         // ============
         $(document).ready(function () {
-            createCboAPAllDateFilters();
+            createCboARAllDateFilters();
         });
     </script>
     <script type="text/javascript">

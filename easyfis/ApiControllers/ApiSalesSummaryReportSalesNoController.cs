@@ -10,10 +10,16 @@ namespace easyfis.ApiControllers
 {
     public class ApiSalesSummaryReportSalesNoController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // ======================================
+        // Sales Summary Report By Sales No. List
+        // ======================================
         [Authorize, HttpGet, Route("api/salesSummaryReportSalesNo/list/{startSalesNo}/{endSalesNo}/{companyId}/{branchId}")]
-        public List<Models.TrnSalesInvoice> listSalesSummaryReport(String startSalesNo, String endSalesNo, String companyId, String branchId)
+        public List<Models.TrnSalesInvoice> ListSalesSummaryReport(String startSalesNo, String endSalesNo, String companyId, String branchId)
         {
             var salesInvoices = from d in db.TrnSalesInvoices
                                 where d.BranchId == Convert.ToInt32(branchId)

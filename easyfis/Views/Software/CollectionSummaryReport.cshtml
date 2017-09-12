@@ -53,28 +53,28 @@
                                 <td style="width: 24%">
                                     <div class="input-group ">
                                         <span class="input-group-addon"><b>Start Date</b></span>
-                                        <div class="comboBox-wide" id="cboAPCollectionSummaryReportStartDate"></div>
+                                        <div class="comboBox-wide" id="cboARCollectionSummaryReportStartDate"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 24%" align="right">
                                     <div class="input-group ">
                                         <span class="input-group-addon"><b>End Date</b></span>
-                                        <div class="comboBox-wide" id="cboAPCollectionSummaryReportEndDate"></div>
+                                        <div class="comboBox-wide" id="cboARCollectionSummaryReportEndDate"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 24%">
                                     <div class="input-group ">
                                         <span class="input-group-addon"><b>Company</b></span>
-                                        <div class="comboBox-wide" id="cboAPCollectionSummaryReportCompany"></div>
+                                        <div class="comboBox-wide" id="cboARCollectionSummaryReportCompany"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 24%">
                                     <div class="input-group ">
                                         <span class="input-group-addon"><b>Branch</b></span>
-                                        <div class="comboBox-wide" id="cboAPCollectionSummaryReportBranch"></div>
+                                        <div class="comboBox-wide" id="cboARCollectionSummaryReportBranch"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -109,15 +109,15 @@
         // ================
         // Global Variables
         // ================
-        var cboAPCollectionSummaryReportStartDate = new wijmo.input.InputDate('#cboAPCollectionSummaryReportStartDate');
-        var cboAPCollectionSummaryReportEndDate = new wijmo.input.InputDate('#cboAPCollectionSummaryReportEndDate');
-        var isAPCollectionSummaryReportStartDateSelected = false;
-        var isAPCollectionSummaryReportEndDateSelected = false;
-        var cboAPCollectionSummaryReportCompany = new wijmo.input.ComboBox('#cboAPCollectionSummaryReportCompany');
-        var cboAPCollectionSummaryReportBranch = new wijmo.input.ComboBox('#cboAPCollectionSummaryReportBranch');
+        var cboARCollectionSummaryReportStartDate = new wijmo.input.InputDate('#cboARCollectionSummaryReportStartDate');
+        var cboARCollectionSummaryReportEndDate = new wijmo.input.InputDate('#cboARCollectionSummaryReportEndDate');
+        var isARCollectionSummaryReportStartDateSelected = false;
+        var isARCollectionSummaryReportEndDateSelected = false;
+        var cboARCollectionSummaryReportCompany = new wijmo.input.ComboBox('#cboARCollectionSummaryReportCompany');
+        var cboARCollectionSummaryReportBranch = new wijmo.input.ComboBox('#cboARCollectionSummaryReportBranch');
         var collectionSummaryReportCollections;
         var collectionSummaryReportGrid;
-        var isAPCollectionSummaryReportCompanySelected = false;
+        var isARCollectionSummaryReportCompanySelected = false;
 
         // ===================
         // Get Parameter Value
@@ -141,30 +141,30 @@
         // ============
         function collectionSummaryReportDateFilters() {
             NProgress.start();
-            cboAPCollectionSummaryReportStartDate.dispose();
-            cboAPCollectionSummaryReportStartDate = new wijmo.input.InputDate('#cboAPCollectionSummaryReportStartDate', {
+            cboARCollectionSummaryReportStartDate.dispose();
+            cboARCollectionSummaryReportStartDate = new wijmo.input.InputDate('#cboARCollectionSummaryReportStartDate', {
                 format: 'MM-dd-yyyy',
                 value: new Date(getParam("StartDate")),
                 onValueChanged: function () {
-                    if (!isAPCollectionSummaryReportStartDateSelected) {
+                    if (!isARCollectionSummaryReportStartDateSelected) {
                         NProgress.start();
                         refreshCollectionSummaryReportFlexGrid();
                     } else {
-                        isAPCollectionSummaryReportStartDateSelected = false;
+                        isARCollectionSummaryReportStartDateSelected = false;
                     }
                 }
             });
 
-            cboAPCollectionSummaryReportEndDate.dispose();
-            cboAPCollectionSummaryReportEndDate = new wijmo.input.InputDate('#cboAPCollectionSummaryReportEndDate', {
+            cboARCollectionSummaryReportEndDate.dispose();
+            cboARCollectionSummaryReportEndDate = new wijmo.input.InputDate('#cboARCollectionSummaryReportEndDate', {
                 format: 'MM-dd-yyyy',
                 value: new Date(getParam("EndDate")),
                 onValueChanged: function () {
-                    if (!isAPCollectionSummaryReportEndDateSelected) {
+                    if (!isARCollectionSummaryReportEndDateSelected) {
                         NProgress.start();
                         refreshCollectionSummaryReportFlexGrid();
                     } else {
-                        isAPCollectionSummaryReportEndDateSelected = false;
+                        isARCollectionSummaryReportEndDateSelected = false;
                     }
                 }
             });
@@ -203,8 +203,8 @@
                         $("#btnCollectionSummaryReportPrintPDF").prop("disabled", true);
                     }
 
-                    cboAPCollectionSummaryReportCompany.dispose();
-                    cboAPCollectionSummaryReportCompany = new wijmo.input.ComboBox('#cboAPCollectionSummaryReportCompany', {
+                    cboARCollectionSummaryReportCompany.dispose();
+                    cboARCollectionSummaryReportCompany = new wijmo.input.ComboBox('#cboARCollectionSummaryReportCompany', {
                         disabled: disabled,
                         isEditable: false,
                         itemsSource: companyObservableArray,
@@ -215,7 +215,7 @@
                             NProgress.start();
                             $("#btnCollectionSummaryReportCSV").prop("disabled", false);
                             $("#btnCollectionSummaryReportPrintPDF").prop("disabled", false);
-                            isAPCollectionSummaryReportCompanySelected = true;
+                            isARCollectionSummaryReportCompanySelected = true;
                             createCboBranch();
                         }
                     });
@@ -230,9 +230,9 @@
         // =============
         function createCboBranch() {
             var branchObservableArray = new wijmo.collections.ObservableArray();
-            if (cboAPCollectionSummaryReportCompany.selectedValue != null) {
+            if (cboARCollectionSummaryReportCompany.selectedValue != null) {
                 $.ajax({
-                    url: '/api/branch/byCompanyId/list/locked/' + cboAPCollectionSummaryReportCompany.selectedValue,
+                    url: '/api/branch/byCompanyId/list/locked/' + cboARCollectionSummaryReportCompany.selectedValue,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
@@ -258,8 +258,8 @@
                             $("#btnCollectionSummaryReportPrintPDF").prop("disabled", true);
                         }
 
-                        cboAPCollectionSummaryReportBranch.dispose();
-                        cboAPCollectionSummaryReportBranch = new wijmo.input.ComboBox('#cboAPCollectionSummaryReportBranch', {
+                        cboARCollectionSummaryReportBranch.dispose();
+                        cboARCollectionSummaryReportBranch = new wijmo.input.ComboBox('#cboARCollectionSummaryReportBranch', {
                             disabled: disabled,
                             isEditable: false,
                             itemsSource: branchObservableArray,
@@ -272,7 +272,7 @@
                             }
                         });
 
-                        if (!isAPCollectionSummaryReportCompanySelected) {
+                        if (!isARCollectionSummaryReportCompanySelected) {
                             createCollectionSummaryReportFlexGrid();
                         } else {
                             refreshCollectionSummaryReportFlexGrid();
@@ -287,12 +287,12 @@
         // ===============================
         function getCollectionSummaryReport() {
             var collectionSummaryReports = new wijmo.collections.ObservableArray;
-            if (cboAPCollectionSummaryReportCompany.selectedValue != null) {
-                if (cboAPCollectionSummaryReportBranch.selectedValue != null) {
-                    var startDate = cboAPCollectionSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-                    var endDate = cboAPCollectionSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
-                    var companyId = cboAPCollectionSummaryReportCompany.selectedValue;
-                    var branchId = cboAPCollectionSummaryReportBranch.selectedValue;
+            if (cboARCollectionSummaryReportCompany.selectedValue != null) {
+                if (cboARCollectionSummaryReportBranch.selectedValue != null) {
+                    var startDate = cboARCollectionSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboARCollectionSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboARCollectionSummaryReportCompany.selectedValue;
+                    var branchId = cboARCollectionSummaryReportBranch.selectedValue;
 
                     $.ajax({
                         url: '/api/collectionSummaryReport/list/' + startDate + '/' + endDate + '/' + + companyId + '/' + branchId,
@@ -538,12 +538,12 @@
         // Preview and Print PDF
         // =====================
         function btnCollectionSummaryReportPrintPDFOnclick() {
-            if (cboAPCollectionSummaryReportCompany.selectedValue != null) {
-                if (cboAPCollectionSummaryReportBranch.selectedValue != null) {
-                    var startDate = cboAPCollectionSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-                    var endDate = cboAPCollectionSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
-                    var companyId = cboAPCollectionSummaryReportCompany.selectedValue;
-                    var branchId = cboAPCollectionSummaryReportBranch.selectedValue;
+            if (cboARCollectionSummaryReportCompany.selectedValue != null) {
+                if (cboARCollectionSummaryReportBranch.selectedValue != null) {
+                    var startDate = cboARCollectionSummaryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboARCollectionSummaryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboARCollectionSummaryReportCompany.selectedValue;
+                    var branchId = cboARCollectionSummaryReportBranch.selectedValue;
 
                     window.location.href = '/RepCollectionSummaryReport/CollectionSummaryReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {

@@ -7,19 +7,19 @@
 
     <!-- Title of the Page -->
     <link rel="shortcut icon" href="~/Images/icon/easyfislogomini.ico">
-    <title> Sales Detail Report (VAT Sales)</title>
+    <title>Sales Detail Report (VAT SALES)</title>
 
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Sales Detail Report (VAT Sales)
+                        Sales Detail Report (VAT SALES)
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -32,17 +32,17 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 59%">
-                                    <div class="input-group ">
+                                <td style="width: 49%">
+                                    <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search">
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search...">
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 40%" align="right">
-                                    @*<button onclick="salesDetailReportCSV_OnClick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                        <button onclick="salesDetailReportPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>*@
-                                    <a href="/Software/AccountsReceivable" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
+                                <td style="width: 50%" align="right">
+                                    <button onclick="btnSalesDetailReportVATSalesCSVOnclick()" id="btnSalesDetailReportVATSalesCSV" class="btn btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    <!-- <button onclick="btnSalesDetailReportVATSalesPrintPDFOnclick()" id="btnSalesDetailReportVATSalesPrintPDF" class="btn btn-primary"><i class="fa fa-print"></i> Print</button> --> 
+                                    <a href="/Software/AccountsReceivable" class="btn btn-danger"><i class="fa fa-close"></i> Close</a>
                                 </td>
                             </tr>
                         </table>
@@ -50,156 +50,631 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 59%">
+                                <td style="width: 24%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Date:</span>
-                                        <input type="text" class="form-control " id="dateFrom" placeholder="filter date" disabled>
+                                        <span class="input-group-addon"><b>Start Date</b></span>
+                                        <div class="comboBox-wide" id="cboARSalesDetailReportVATSalesStartDate"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 20%" align="right"></td>
-                                <td style="width: 20%"></td>
+                                <td style="width: 24%" align="right">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>End Date</b></span>
+                                        <div class="comboBox-wide" id="cboARSalesDetailReportVATSalesEndDate"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Company</b></span>
+                                        <div class="comboBox-wide" id="cboARSalesDetailReportVATSalesCompany"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Branch</b></span>
+                                        <div class="comboBox-wide" id="cboARSalesDetailReportVATSalesBranch"></div>
+                                    </div>
+                                </td>
                             </tr>
                         </table>
-                    </div>
-                    <div class="panel-body">
-                        <div id="salesDetailReportGrid" class="grid"></div>
                     </div>
                 </div>
+                <div id="salesDetailReportVATSalesGrid" class="grid" style="font-size: 12px;"></div>
+                <br /><br />
                 <div class="row">
-                    <div class="col-md-6"></div>
                     <div class="col-md-6">
-                        <table class="table table-responsive table-bordered">
-                            <tr>
-                                <td align="right">
-                                    <b>Total: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="total">NA</span>
-                                </td>
-                            </tr>
-                        </table>
+
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="dl-horizontal dl-custom">
+                            <dt>
+                                <b>Total Amount</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalAmount" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Total Discount Amount</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalDiscountAmount" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Total VAT Amount</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalVATAmount" placeholder="0.00" disabled />
+                            </dd>
+                        </dl>
                     </div>
                 </div>
             </section>
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var cboARSalesDetailReportVATSalesStartDate = new wijmo.input.InputDate('#cboARSalesDetailReportVATSalesStartDate');
+        var cboARSalesDetailReportVATSalesEndDate = new wijmo.input.InputDate('#cboARSalesDetailReportVATSalesEndDate');
+        var isARSalesDetailReportVATSalesStartDateSelected = false;
+        var isARSalesDetailReportVATSalesEndDateSelected = false;
+        var cboARSalesDetailReportVATSalesCompany = new wijmo.input.ComboBox('#cboARSalesDetailReportVATSalesCompany');
+        var cboARSalesDetailReportVATSalesBranch = new wijmo.input.ComboBox('#cboARSalesDetailReportVATSalesBranch');
+        var salesDetailReportVATSalesCollections;
+        var salesDetailReportVATSalesGrid;
+        var isARSalesDetailReportVATSalesCompanySelected = false;
+
+        // ===================
+        // Get Parameter Value
+        // ===================
         function getParam(name) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+
             var regexS = "[\\?&]" + name + "=([^&#]*)";
             var regex = new RegExp(regexS);
+
             var results = regex.exec(window.location.href);
-            if (results == null)
+            if (results == null) {
                 return "";
-            else
+            } else {
                 return results[1];
+            }
         }
 
-        function salesDetailReportPDF_OnClick() {
-            window.location.href = '/RepSalesDetailReport/SalesDetailReport?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate");
-        }
-
-        function getSalesDetailReport() {
-            var salesDetailReport = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/salesDetailReport/VATSales/list/' + getParam("StartDate") + '/' + getParam("EndDate") + '/' + getParam("CompanyId") + '/' + getParam("BranchId"),
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (salesDetailReportResult) {
-                    if (salesDetailReportResult.length > 0) {
-                        var totalAmount = 0;
-
-                        for (i = 0; i < salesDetailReportResult.length; i++) {
-                            var docLink = "/Software/SalesDetail?SalesId=" + salesDetailReportResult[i]["SIId"];
-                            // Array Push
-                            salesDetailReport.push({
-
-                                SIId: salesDetailReportResult["SIId"],
-                                Id: salesDetailReportResult[i]["Id"],
-                                SI: salesDetailReportResult[i]["SI"],
-                                SIForCSV: "SI-" + salesDetailReportResult[i]["SI"],
-                                SIButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + salesDetailReportResult[i]["SI"],
-                                SIDate: salesDetailReportResult[i]["SIDate"],
-                                Item: salesDetailReportResult[i]["Item"],
-                                ItemInventory: salesDetailReportResult[i]["ItemInventory"] != null ? salesDetailReportResult[i]["ItemInventory"] : "",
-                                Unit: salesDetailReportResult[i]["Unit"],
-                                Quantity: salesDetailReportResult[i]["Quantity"],
-                                Price: salesDetailReportResult[i]["Price"],
-                                Amount: salesDetailReportResult[i]["Amount"],
-                                Customer: salesDetailReportResult[i]["Customer"],
-                            });
-
-                            totalAmount += salesDetailReportResult[i]["Amount"];
-                        }
-
-                        document.getElementById("total").innerHTML = totalAmount.toLocaleString();
+        // ============
+        // Date Filters
+        // ============
+        function salesDetailReportVATSalesDateFilters() {
+            NProgress.start();
+            cboARSalesDetailReportVATSalesStartDate.dispose();
+            cboARSalesDetailReportVATSalesStartDate = new wijmo.input.InputDate('#cboARSalesDetailReportVATSalesStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("StartDate")),
+                onValueChanged: function () {
+                    if (!isARSalesDetailReportVATSalesStartDateSelected) {
+                        NProgress.start();
+                        refreshSalesDetailReportVATSalesFlexGrid();
+                    } else {
+                        isARSalesDetailReportVATSalesStartDateSelected = false;
                     }
-                    NProgress.done();
                 }
             });
 
-            return salesDetailReport;
+            cboARSalesDetailReportVATSalesEndDate.dispose();
+            cboARSalesDetailReportVATSalesEndDate = new wijmo.input.InputDate('#cboARSalesDetailReportVATSalesEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("EndDate")),
+                onValueChanged: function () {
+                    if (!isARSalesDetailReportVATSalesEndDateSelected) {
+                        NProgress.start();
+                        refreshSalesDetailReportVATSalesFlexGrid();
+                    } else {
+                        isARSalesDetailReportVATSalesEndDateSelected = false;
+                    }
+                }
+            });
+
+            createCboCompany();
         }
-        var salesDetailReportCollection;
 
-        function salesDetailReportCSV_OnClick() {
+        // ==============
+        // Company Filter
+        // ==============
+        function createCboCompany() {
+            var companyObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/company/list',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (companyResults) {
+                    if (companyResults.length > 0) {
+                        for (i = 0; i < companyResults.length; i++) {
+                            companyObservableArray.push({
+                                Id: companyResults[i]["Id"],
+                                Company: companyResults[i]["Company"],
+                                Address: companyResults[i]["Address"],
+                                ContactNumber: companyResults[i]["ContactNumber"],
+                                TaxNumber: companyResults[i]["TaxNumber"],
+                            });
+                        }
+                    }
 
+                    var disabled = true;
+                    if (companyResults.length > 0) {
+                        disabled = false;
+                    } else {
+                        $("#btnSalesDetailReportVATSalesCSV").prop("disabled", true);
+                        $("#btnSalesDetailReportVATSalesPrintPDF").prop("disabled", true);
+                    }
 
+                    cboARSalesDetailReportVATSalesCompany.dispose();
+                    cboARSalesDetailReportVATSalesCompany = new wijmo.input.ComboBox('#cboARSalesDetailReportVATSalesCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        selectedValue: getParam("CompanyId"),
+                        onSelectedIndexChanged: function () {
+                            NProgress.start();
+                            $("#btnSalesDetailReportVATSalesCSV").prop("disabled", false);
+                            $("#btnSalesDetailReportVATSalesPrintPDF").prop("disabled", false);
+                            isARSalesDetailReportVATSalesCompanySelected = true;
+                            createCboBranch();
+                        }
+                    });
+
+                    createCboBranch();
+                }
+            });
+        }
+
+        // =============
+        // Branch Filter
+        // =============
+        function createCboBranch() {
+            var branchObservableArray = new wijmo.collections.ObservableArray();
+            if (cboARSalesDetailReportVATSalesCompany.selectedValue != null) {
+                $.ajax({
+                    url: '/api/branch/byCompanyId/list/locked/' + cboARSalesDetailReportVATSalesCompany.selectedValue,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branchObservableArray.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Branch: branchResults[i]["Branch"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"]
+                                });
+                            }
+                        }
+
+                        var disabled = true;
+                        if (branchResults.length > 0) {
+                            disabled = false;
+                        } else {
+                            $("#btnSalesDetailReportVATSalesCSV").prop("disabled", true);
+                            $("#btnSalesDetailReportVATSalesPrintPDF").prop("disabled", true);
+                        }
+
+                        cboARSalesDetailReportVATSalesBranch.dispose();
+                        cboARSalesDetailReportVATSalesBranch = new wijmo.input.ComboBox('#cboARSalesDetailReportVATSalesBranch', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: branchObservableArray,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Id",
+                            selectedValue: getParam("BranchId"),
+                            onSelectedIndexChanged: function () {
+                                NProgress.start();
+                                refreshSalesDetailReportVATSalesFlexGrid();
+                            }
+                        });
+
+                        if (!isARSalesDetailReportVATSalesCompanySelected) {
+                            createSalesDetailReportVATSalesFlexGrid();
+                        } else {
+                            refreshSalesDetailReportVATSalesFlexGrid();
+                        }
+                    }
+                });
+            }
+        }
+
+        // ===============================
+        // Get Sales Order Detail Data
+        // ===============================
+        function getSalesDetailReportVATSales() {
+            var salesDetailReportVATSaless = new wijmo.collections.ObservableArray;
+            if (cboARSalesDetailReportVATSalesCompany.selectedValue != null) {
+                if (cboARSalesDetailReportVATSalesBranch.selectedValue != null) {
+                    var startDate = cboARSalesDetailReportVATSalesStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboARSalesDetailReportVATSalesEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboARSalesDetailReportVATSalesCompany.selectedValue;
+                    var branchId = cboARSalesDetailReportVATSalesBranch.selectedValue;
+
+                    $.ajax({
+                        url: '/api/salesDetailReport/VATSales/list/' + startDate + '/' + endDate + '/' + + companyId + '/' + branchId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (salesDetailReportVATSalesResult) {
+                            var totalAmount = 0;
+                            var totalDiscountAmount = 0;
+                            var totalVATAmount = 0;
+                            if (salesDetailReportVATSalesResult.length > 0) {
+                                for (i = 0; i < salesDetailReportVATSalesResult.length; i++) {
+                                    var docLink = "/Software/SalesDetail?id=" + salesDetailReportVATSalesResult[i]["SIId"];
+
+                                    var SIDateResult = new Date(salesDetailReportVATSalesResult[i]["SIDate"])
+                                    var SIDate = ('0' + (SIDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + SIDateResult.getDate()).slice(-2) + '-' + SIDateResult.getFullYear();
+
+                                    salesDetailReportVATSaless.push({
+                                        Id: salesDetailReportVATSalesResult[i]["Id"],
+                                        SIId: salesDetailReportVATSalesResult["SIId"],
+                                        SI: salesDetailReportVATSalesResult[i]["SI"],
+                                        Branch: salesDetailReportVATSalesResult[i]["Branch"],
+                                        SIForCSV: "SI-" + salesDetailReportVATSalesResult[i]["SI"],
+                                        SIButton: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block' style='font-size: 10.5px;'>" + salesDetailReportVATSalesResult[i]["SI"],
+                                        SIDate: SIDate,
+                                        Item: salesDetailReportVATSalesResult[i]["Item"],
+                                        ItemInventory: salesDetailReportVATSalesResult[i]["ItemInventory"] != null ? salesDetailReportVATSalesResult[i]["ItemInventory"] : "",
+                                        Unit: salesDetailReportVATSalesResult[i]["Unit"],
+                                        Quantity: salesDetailReportVATSalesResult[i]["Quantity"],
+                                        QuantityDisplay: parseFloat(salesDetailReportVATSalesResult[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        Price: salesDetailReportVATSalesResult[i]["Price"],
+                                        PriceDisplay: parseFloat(salesDetailReportVATSalesResult[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","), Discount: salesDetailReportVATSalesResult[i]["Discount"],
+                                        Discount: salesDetailReportVATSalesResult[i]["Discount"],
+                                        DiscountRate: salesDetailReportVATSalesResult[i]["DiscountRate"],
+                                        DiscountPercentage: salesDetailReportVATSalesResult[i]["Discount"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + parseFloat(salesDetailReportVATSalesResult[i]["DiscountRate"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        DiscountAmount: salesDetailReportVATSalesResult[i]["DiscountAmount"],
+                                        DiscountAmountDisplay: parseFloat(salesDetailReportVATSalesResult[i]["DiscountAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        Amount: salesDetailReportVATSalesResult[i]["Amount"],
+                                        AmountDisplay: parseFloat(salesDetailReportVATSalesResult[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        Customer: salesDetailReportVATSalesResult[i]["Customer"],
+                                        VAT: salesDetailReportVATSalesResult[i]["VAT"],
+                                        VATRate: salesDetailReportVATSalesResult[i]["VATPercentage"],
+                                        VATPercentage: salesDetailReportVATSalesResult[i]["VAT"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + parseFloat(salesDetailReportVATSalesResult[i]["VATPercentage"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        VATAmount: salesDetailReportVATSalesResult[i]["VATAmount"],
+                                        VATAmountDisplay: parseFloat(salesDetailReportVATSalesResult[i]["VATAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    });
+
+                                    totalAmount += salesDetailReportVATSalesResult[i]["Amount"];
+                                    totalDiscountAmount += salesDetailReportVATSalesResult[i]["DiscountAmount"];
+                                    totalVATAmount += salesDetailReportVATSalesResult[i]["VATAmount"];
+                                }
+                            }
+
+                            document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            document.getElementById("totalDiscountAmount").value = parseFloat(totalDiscountAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            document.getElementById("totalVATAmount").value = parseFloat(totalVATAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            NProgress.done();
+                        }
+                    });
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalDiscountAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalVATAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    NProgress.done();
+                }
+            } else {
+                document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalDiscountAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalVATAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                NProgress.done();
+            }
+
+            return salesDetailReportVATSaless;
+        }
+
+        // =================
+        // Refresh Flex Grid
+        // =================
+        function refreshSalesDetailReportVATSalesFlexGrid() {
+            salesDetailReportVATSalesCollections = new wijmo.collections.CollectionView(getSalesDetailReportVATSales());
+            salesDetailReportVATSalesCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                salesDetailReportVATSalesCollections.refresh();
+
+                if (salesDetailReportVATSalesCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    var totalDiscountAmount = 0;
+                    var totalVATAmount = 0;
+
+                    for (var i = 0; i < salesDetailReportVATSalesCollections.items.length; i++) {
+                        totalAmount += salesDetailReportVATSalesCollections.items[i].Amount;
+                        totalDiscountAmount += salesDetailReportVATSalesCollections.items[i].DiscountAmount;
+                        totalVATAmount += salesDetailReportVATSalesCollections.items[i].VATAmount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalDiscountAmount").value = parseFloat(totalDiscountAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalVATAmount").value = parseFloat(totalVATAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalDiscountAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalVATAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            salesDetailReportVATSalesCollections.filter = function (item) {
+                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.SI.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Discount.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.VAT.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            salesDetailReportVATSalesGrid.itemsSource = salesDetailReportVATSalesCollections;
+            salesDetailReportVATSalesGrid.trackChanges = true;
+        }
+
+        // =========
+        // Flex Grid
+        // =========
+        function createSalesDetailReportVATSalesFlexGrid() {
+            salesDetailReportVATSalesCollections = new wijmo.collections.CollectionView(getSalesDetailReportVATSales());
+            salesDetailReportVATSalesCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                salesDetailReportVATSalesCollections.refresh();
+
+                if (salesDetailReportVATSalesCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    var totalDiscountAmount = 0;
+                    var totalVATAmount = 0;
+
+                    for (var i = 0; i < salesDetailReportVATSalesCollections.items.length; i++) {
+                        totalAmount += salesDetailReportVATSalesCollections.items[i].Amount;
+                        totalDiscountAmount += salesDetailReportVATSalesCollections.items[i].DiscountAmount;
+                        totalVATAmount += salesDetailReportVATSalesCollections.items[i].VATAmount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalDiscountAmount").value = parseFloat(totalDiscountAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalVATAmount").value = parseFloat(totalVATAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalDiscountAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalVATAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            salesDetailReportVATSalesCollections.filter = function (item) {
+                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.SI.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Discount.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.VAT.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            salesDetailReportVATSalesGrid = new wijmo.grid.FlexGrid('#salesDetailReportVATSalesGrid');
+            salesDetailReportVATSalesGrid.initialize({
+                columns: [
+                    {
+                        "header": "SI Number",
+                        "binding": "SIButton",
+                        "isContentHtml": true,
+                        "allowSorting": true,
+                        "width": "1*"
+                    },
+                    {
+                        "header": "SI Date",
+                        "binding": "SIDate",
+                        "allowSorting": true,
+                        "width": "0.8*"
+                    },
+                    {
+                        "header": "Customer",
+                        "binding": "Customer",
+                        "allowSorting": true,
+                        "width": "1.2*"
+                    },
+                    {
+                        "header": "Item",
+                        "binding": "Item",
+                        "allowSorting": true,
+                        "width": "1.2*"
+                    },
+                    {
+                        "header": "Price",
+                        "binding": "PriceDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Unit",
+                        "binding": "Unit",
+                        "allowSorting": true,
+                        "width": "0.7*"
+                    },
+                    {
+                        "header": "Quantity",
+                        "binding": "QuantityDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Rate",
+                        "binding": "DiscountPercentage",
+                        "allowSorting": true,
+                        "width": "0.8*",
+                        "align": "right",
+                        "isContentHtml": true
+                    },
+                    {
+                        "header": "Discount Amt.",
+                        "binding": "DiscountAmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "AmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "VAT Rate",
+                        "binding": "VATPercentage",
+                        "allowSorting": true,
+                        "width": "0.8*",
+                        "align": "right",
+                        "isContentHtml": true
+                    },
+                    {
+                        "header": "VAT Amt.",
+                        "binding": "VATAmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                ],
+                autoGenerateColumns: false,
+                itemsSource: salesDetailReportVATSalesCollections,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            salesDetailReportVATSalesGrid.trackChanges = true;
+
+            var hr = new wijmo.grid.Row();
+            salesDetailReportVATSalesGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
+            salesDetailReportVATSalesGrid.columnHeaders.rows.push(hr);
+            salesDetailReportVATSalesGrid.columnHeaders.rows[0].allowMerging = true;
+
+            salesDetailReportVATSalesGrid.columnHeaders.columns[0].allowMerging = true;
+            salesDetailReportVATSalesGrid.columnHeaders.setCellData(0, 0, 'SI Number');
+
+            salesDetailReportVATSalesGrid.columnHeaders.columns[1].allowMerging = true;
+            salesDetailReportVATSalesGrid.columnHeaders.setCellData(0, 1, 'SI Date');
+
+            salesDetailReportVATSalesGrid.columnHeaders.columns[2].allowMerging = true;
+            salesDetailReportVATSalesGrid.columnHeaders.setCellData(0, 2, 'Customer');
+
+            salesDetailReportVATSalesGrid.columnHeaders.columns[3].allowMerging = true;
+            salesDetailReportVATSalesGrid.columnHeaders.setCellData(0, 3, 'Item');
+
+            salesDetailReportVATSalesGrid.columnHeaders.columns[4].allowMerging = true;
+            salesDetailReportVATSalesGrid.columnHeaders.setCellData(0, 4, 'Price');
+
+            salesDetailReportVATSalesGrid.columnHeaders.columns[5].allowMerging = true;
+            salesDetailReportVATSalesGrid.columnHeaders.setCellData(0, 5, 'Unit');
+
+            salesDetailReportVATSalesGrid.columnHeaders.columns[6].allowMerging = true;
+            salesDetailReportVATSalesGrid.columnHeaders.setCellData(0, 6, 'Quantity');
+
+            salesDetailReportVATSalesGrid.columnHeaders.columns[7].allowMerging = true;
+            salesDetailReportVATSalesGrid.columnHeaders.setCellData(0, 7, 'Discount');
+
+            salesDetailReportVATSalesGrid.columnHeaders.columns[8].allowMerging = true;
+            salesDetailReportVATSalesGrid.columnHeaders.setCellData(0, 8, 'Discount Amt.');
+
+            salesDetailReportVATSalesGrid.columnHeaders.columns[9].allowMerging = true;
+            salesDetailReportVATSalesGrid.columnHeaders.setCellData(0, 9, 'Amount');
+
+            salesDetailReportVATSalesGrid.columnHeaders.columns[10].allowMerging = true;
+            salesDetailReportVATSalesGrid.columnHeaders.setCellData(0, 10, 'VAT');
+
+            salesDetailReportVATSalesGrid.columnHeaders.columns[11].allowMerging = true;
+            salesDetailReportVATSalesGrid.columnHeaders.setCellData(0, 11, 'VAT Amt.');
+
+            salesDetailReportVATSalesGrid.rows.defaultSize = 50;
+        }
+
+        // ============
+        // Download CSV
+        // ============
+        function btnSalesDetailReportVATSalesCSVOnclick() {
             var CSV = '';
-            var salesDetailReport = [];
-            var fileName = 'SalesDetailReport.CSV';
+            var salesDetailReportVATSales = [];
+            var fileName = 'SalesDetailReportVATSales.CSV';
 
-            for (i = 0; i < salesDetailReportCollection.items.length; i++) {
-                salesDetailReport.push({
-                    SI: salesDetailReportCollection.items[i].SIForCSV,
-                    SIDate: salesDetailReportCollection.items[i].SIDate,
-                    Item: salesDetailReportCollection.items[i].Item,
-                    ItemInventory: salesDetailReportCollection.items[i].ItemInventory,
-                    Price: salesDetailReportCollection.items[i].Price,
-                    Quantity: salesDetailReportCollection.items[i].Quantity,
-                    Unit: salesDetailReportCollection.items[i].Unit,
-                    Amount: salesDetailReportCollection.items[i].Amount,
+            for (i = 0; i < salesDetailReportVATSalesCollections.items.length; i++) {
+                var IsClose = salesDetailReportVATSalesCollections.items[i].IsClose;
+                var isPOClose = "Not Closed";
+                if (IsClose) {
+                    isPOClose = "Closed"
+                }
 
-
+                salesDetailReportVATSales.push({
+                    Branch: salesDetailReportVATSalesCollections.items[i].Branch,
+                    SINumber: salesDetailReportVATSalesCollections.items[i].SIForCSV,
+                    SIDate: salesDetailReportVATSalesCollections.items[i].SIDate,
+                    Customer: salesDetailReportVATSalesCollections.items[i].Customer,
+                    Item: salesDetailReportVATSalesCollections.items[i].Item,
+                    Price: salesDetailReportVATSalesCollections.items[i].Price,
+                    Unit: salesDetailReportVATSalesCollections.items[i].Unit,
+                    Quantity: salesDetailReportVATSalesCollections.items[i].Quantity,
+                    Discount: salesDetailReportVATSalesCollections.items[i].Discount,
+                    DiscountRate: salesDetailReportVATSalesCollections.items[i].DiscountRate,
+                    DiscountAmount: salesDetailReportVATSalesCollections.items[i].DiscountRate,
+                    VAT: salesDetailReportVATSalesCollections.items[i].Discount,
+                    VATRate: salesDetailReportVATSalesCollections.items[i].DiscountRate,
+                    VATAmount: salesDetailReportVATSalesCollections.items[i].DiscountRate,
+                    Amount: salesDetailReportVATSalesCollections.items[i].Amount,
                 });
             }
 
-            //for (var i = 0; i < symbols.length; i++) {
-            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
-            //}
-
-            // Rows
-            // Rows
             var Headers = [];
             Headers.push({
-
-                SI: "SI Number",
+                Branch: "Branch",
+                SINumber: "SI Number",
                 SIDate: "SI Date",
+                Customer: "Customer",
                 Item: "Item",
-                ItemInventory: "Inventory Code",
                 Price: "Price",
-                Quantity: "Quantity",
                 Unit: "Unit",
-                Amount: "Amount",
-
+                Quantity: "Quantity",
+                Discount: "Discount",
+                DiscountRate: "Discount Rate",
+                DiscountAmount: "Discount Amount",
+                VAT: "VAT",
+                VATRate: "VAT Rate",
+                VATAmount: "VAT Amount",
+                Amount: "Amount"
             });
 
             var header = '';
             for (var b in Headers[0]) {
                 header += '"' + Headers[0][b] + '",';
             }
+
             CSV = header + '\r\n';
-            for (var i = 0; i < salesDetailReport.length; i++) {
+            for (var i = 0; i < salesDetailReportVATSales.length; i++) {
                 var row = '';
-                for (var a in salesDetailReport[i]) {
-                    row += '"' + salesDetailReport[i][a] + '",';
+                for (var a in salesDetailReportVATSales[i]) {
+                    row += '"' + salesDetailReportVATSales[i][a] + '",';
                 }
+
                 row.slice(0, row.length - 1);
                 CSV += row + '\r\n';
             }
@@ -208,7 +683,6 @@
                 toastr.error("No data.");
             } else {
                 var link = document.createElement("a");
-
                 if (link.download !== undefined) {
                     var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
                     var url = URL.createObjectURL(blob);
@@ -234,95 +708,31 @@
             }
         }
 
-        $(document).ready(function () {
-            NProgress.start();
-            document.getElementById("dateFrom").value = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
+        // =====================
+        // Preview and Print PDF
+        // =====================
+        function btnSalesDetailReportVATSalesPrintPDFOnclick() {
+            if (cboARSalesDetailReportVATSalesCompany.selectedValue != null) {
+                if (cboARSalesDetailReportVATSalesBranch.selectedValue != null) {
+                    var startDate = cboARSalesDetailReportVATSalesStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboARSalesDetailReportVATSalesEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboARSalesDetailReportVATSalesCompany.selectedValue;
+                    var branchId = cboARSalesDetailReportVATSalesBranch.selectedValue;
 
-            salesDetailReportCollection = new wijmo.collections.CollectionView(getSalesDetailReport());
-            salesDetailReportCollection.canFilter = true;
-
-            var filterText = '';
-            $('#InputFilter').keyup(function () {
-                filterText = this.value.toLowerCase();
-                salesDetailReportCollection.refresh();
-            });
-            salesDetailReportCollection.filter = function (item) {
-                return !filterText || (item.SI.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.ItemInventory.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1)
-
+                    window.location.href = '/RepSalesDetailReportVATSales/SalesDetailReportVATSales?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
             }
-            // Flex Grid
-            var salesDetailReportGrid = new wijmo.grid.FlexGrid('#salesDetailReportGrid');
-            salesDetailReportGrid.initialize({
-                columns: [
-                    {
-                        "header": "SI Number ",
-                        "binding": "SIButton",
-                        "isContentHtml": true,
-                        "allowSorting": true,
-                        "width": 110,
-                    },
-                    {
-                        "header": "SI Date ",
-                        "binding": "SIDate",
-                        "allowSorting": true,
-                        "width": 100
-                    },
-                    {
-                        "header": "Customer",
-                        "binding": "Customer",
-                        "allowSorting": true,
-                        "width": 200
-                    },
-                    {
-                        "header": "Item ",
-                        "binding": "Item",
-                        "allowSorting": true,
-                        "width": 200
-                    },
-                    {
-                        "header": "Inventory Code ",
-                        "binding": "ItemInventory",
-                        "allowSorting": true,
-                        "width": 200
-                    },
-                    {
-                        "header": "Price",
-                        "binding": "Price",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Quantity",
-                        "binding": "Quantity",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Unit",
-                        "binding": "Unit",
-                        "allowSorting": true,
-                        "width": 120
-                    },
-                    {
-                        "header": "Amount",
-                        "binding": "Amount",
-                        "allowSorting": true,
-                        "width": 150
-                    }
-                ],
-                autoGenerateColumns: false,
-                itemsSource: salesDetailReportCollection,
-                isReadOnly: true,
-                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                allowDragging: wijmo.grid.AllowDragging.None,
-                selectionMode: wijmo.grid.SelectionMode.Row
-            });
+        }
 
-            salesDetailReportGrid.trackChanges = true;
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            salesDetailReportVATSalesDateFilters();
         });
     </script>
     <script type="text/javascript">

@@ -53,28 +53,28 @@
                                 <td style="width: 24%">
                                     <div class="input-group ">
                                         <span class="input-group-addon"><b>Start Date</b></span>
-                                        <div class="comboBox-wide" id="cboAPSalesDetailReportStartDate"></div>
+                                        <div class="comboBox-wide" id="cboARSalesDetailReportStartDate"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 24%" align="right">
                                     <div class="input-group ">
                                         <span class="input-group-addon"><b>End Date</b></span>
-                                        <div class="comboBox-wide" id="cboAPSalesDetailReportEndDate"></div>
+                                        <div class="comboBox-wide" id="cboARSalesDetailReportEndDate"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 24%">
                                     <div class="input-group ">
                                         <span class="input-group-addon"><b>Company</b></span>
-                                        <div class="comboBox-wide" id="cboAPSalesDetailReportCompany"></div>
+                                        <div class="comboBox-wide" id="cboARSalesDetailReportCompany"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 24%">
                                     <div class="input-group ">
                                         <span class="input-group-addon"><b>Branch</b></span>
-                                        <div class="comboBox-wide" id="cboAPSalesDetailReportBranch"></div>
+                                        <div class="comboBox-wide" id="cboARSalesDetailReportBranch"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -109,15 +109,15 @@
         // ================
         // Global Variables
         // ================
-        var cboAPSalesDetailReportStartDate = new wijmo.input.InputDate('#cboAPSalesDetailReportStartDate');
-        var cboAPSalesDetailReportEndDate = new wijmo.input.InputDate('#cboAPSalesDetailReportEndDate');
-        var isAPSalesDetailReportStartDateSelected = false;
-        var isAPSalesDetailReportEndDateSelected = false;
-        var cboAPSalesDetailReportCompany = new wijmo.input.ComboBox('#cboAPSalesDetailReportCompany');
-        var cboAPSalesDetailReportBranch = new wijmo.input.ComboBox('#cboAPSalesDetailReportBranch');
+        var cboARSalesDetailReportStartDate = new wijmo.input.InputDate('#cboARSalesDetailReportStartDate');
+        var cboARSalesDetailReportEndDate = new wijmo.input.InputDate('#cboARSalesDetailReportEndDate');
+        var isARSalesDetailReportStartDateSelected = false;
+        var isARSalesDetailReportEndDateSelected = false;
+        var cboARSalesDetailReportCompany = new wijmo.input.ComboBox('#cboARSalesDetailReportCompany');
+        var cboARSalesDetailReportBranch = new wijmo.input.ComboBox('#cboARSalesDetailReportBranch');
         var salesDetailReportCollections;
         var salesDetailReportGrid;
-        var isAPSalesDetailReportCompanySelected = false;
+        var isARSalesDetailReportCompanySelected = false;
 
         // ===================
         // Get Parameter Value
@@ -141,30 +141,30 @@
         // ============
         function salesDetailReportDateFilters() {
             NProgress.start();
-            cboAPSalesDetailReportStartDate.dispose();
-            cboAPSalesDetailReportStartDate = new wijmo.input.InputDate('#cboAPSalesDetailReportStartDate', {
+            cboARSalesDetailReportStartDate.dispose();
+            cboARSalesDetailReportStartDate = new wijmo.input.InputDate('#cboARSalesDetailReportStartDate', {
                 format: 'MM-dd-yyyy',
                 value: new Date(getParam("StartDate")),
                 onValueChanged: function () {
-                    if (!isAPSalesDetailReportStartDateSelected) {
+                    if (!isARSalesDetailReportStartDateSelected) {
                         NProgress.start();
                         refreshSalesDetailReportFlexGrid();
                     } else {
-                        isAPSalesDetailReportStartDateSelected = false;
+                        isARSalesDetailReportStartDateSelected = false;
                     }
                 }
             });
 
-            cboAPSalesDetailReportEndDate.dispose();
-            cboAPSalesDetailReportEndDate = new wijmo.input.InputDate('#cboAPSalesDetailReportEndDate', {
+            cboARSalesDetailReportEndDate.dispose();
+            cboARSalesDetailReportEndDate = new wijmo.input.InputDate('#cboARSalesDetailReportEndDate', {
                 format: 'MM-dd-yyyy',
                 value: new Date(getParam("EndDate")),
                 onValueChanged: function () {
-                    if (!isAPSalesDetailReportEndDateSelected) {
+                    if (!isARSalesDetailReportEndDateSelected) {
                         NProgress.start();
                         refreshSalesDetailReportFlexGrid();
                     } else {
-                        isAPSalesDetailReportEndDateSelected = false;
+                        isARSalesDetailReportEndDateSelected = false;
                     }
                 }
             });
@@ -203,8 +203,8 @@
                         $("#btnSalesDetailReportPrintPDF").prop("disabled", true);
                     }
 
-                    cboAPSalesDetailReportCompany.dispose();
-                    cboAPSalesDetailReportCompany = new wijmo.input.ComboBox('#cboAPSalesDetailReportCompany', {
+                    cboARSalesDetailReportCompany.dispose();
+                    cboARSalesDetailReportCompany = new wijmo.input.ComboBox('#cboARSalesDetailReportCompany', {
                         disabled: disabled,
                         isEditable: false,
                         itemsSource: companyObservableArray,
@@ -215,7 +215,7 @@
                             NProgress.start();
                             $("#btnSalesDetailReportCSV").prop("disabled", false);
                             $("#btnSalesDetailReportPrintPDF").prop("disabled", false);
-                            isAPSalesDetailReportCompanySelected = true;
+                            isARSalesDetailReportCompanySelected = true;
                             createCboBranch();
                         }
                     });
@@ -230,9 +230,9 @@
         // =============
         function createCboBranch() {
             var branchObservableArray = new wijmo.collections.ObservableArray();
-            if (cboAPSalesDetailReportCompany.selectedValue != null) {
+            if (cboARSalesDetailReportCompany.selectedValue != null) {
                 $.ajax({
-                    url: '/api/branch/byCompanyId/list/locked/' + cboAPSalesDetailReportCompany.selectedValue,
+                    url: '/api/branch/byCompanyId/list/locked/' + cboARSalesDetailReportCompany.selectedValue,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
@@ -258,8 +258,8 @@
                             $("#btnSalesDetailReportPrintPDF").prop("disabled", true);
                         }
 
-                        cboAPSalesDetailReportBranch.dispose();
-                        cboAPSalesDetailReportBranch = new wijmo.input.ComboBox('#cboAPSalesDetailReportBranch', {
+                        cboARSalesDetailReportBranch.dispose();
+                        cboARSalesDetailReportBranch = new wijmo.input.ComboBox('#cboARSalesDetailReportBranch', {
                             disabled: disabled,
                             isEditable: false,
                             itemsSource: branchObservableArray,
@@ -272,7 +272,7 @@
                             }
                         });
 
-                        if (!isAPSalesDetailReportCompanySelected) {
+                        if (!isARSalesDetailReportCompanySelected) {
                             createSalesDetailReportFlexGrid();
                         } else {
                             refreshSalesDetailReportFlexGrid();
@@ -287,12 +287,12 @@
         // ===============================
         function getSalesDetailReport() {
             var salesDetailReports = new wijmo.collections.ObservableArray;
-            if (cboAPSalesDetailReportCompany.selectedValue != null) {
-                if (cboAPSalesDetailReportBranch.selectedValue != null) {
-                    var startDate = cboAPSalesDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-                    var endDate = cboAPSalesDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
-                    var companyId = cboAPSalesDetailReportCompany.selectedValue;
-                    var branchId = cboAPSalesDetailReportBranch.selectedValue;
+            if (cboARSalesDetailReportCompany.selectedValue != null) {
+                if (cboARSalesDetailReportBranch.selectedValue != null) {
+                    var startDate = cboARSalesDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboARSalesDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboARSalesDetailReportCompany.selectedValue;
+                    var branchId = cboARSalesDetailReportBranch.selectedValue;
 
                     $.ajax({
                         url: '/api/salesDetailReport/list/' + startDate + '/' + endDate + '/' + + companyId + '/' + branchId,
@@ -583,12 +583,12 @@
         // Preview and Print PDF
         // =====================
         function btnSalesDetailReportPrintPDFOnclick() {
-            if (cboAPSalesDetailReportCompany.selectedValue != null) {
-                if (cboAPSalesDetailReportBranch.selectedValue != null) {
-                    var startDate = cboAPSalesDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-                    var endDate = cboAPSalesDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
-                    var companyId = cboAPSalesDetailReportCompany.selectedValue;
-                    var branchId = cboAPSalesDetailReportBranch.selectedValue;
+            if (cboARSalesDetailReportCompany.selectedValue != null) {
+                if (cboARSalesDetailReportBranch.selectedValue != null) {
+                    var startDate = cboARSalesDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboARSalesDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboARSalesDetailReportCompany.selectedValue;
+                    var branchId = cboARSalesDetailReportBranch.selectedValue;
 
                     window.location.href = '/RepSalesDetailReport/SalesDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
