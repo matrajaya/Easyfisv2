@@ -307,10 +307,13 @@
 
                                     salesDetailReports.push({
                                         Detail: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block'><i class='fa fa-edit'></i> Item Detail",
+                                        Branch: salesDetailReportResult[i]["Branch"],
                                         Item: salesDetailReportResult[i]["Item"],
                                         BaseUnit: salesDetailReportResult[i]["BaseUnit"],
                                         BaseQuantity: salesDetailReportResult[i]["BaseQuantity"],
                                         BaseQuantityDisplay: parseFloat(salesDetailReportResult[i]["BaseQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        BasePrice: salesDetailReportResult[i]["BasePrice"],
+                                        BasePriceDisplay: parseFloat(salesDetailReportResult[i]["BasePrice"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                         Amount: salesDetailReportResult[i]["Amount"],
                                         AmountDisplay: parseFloat(salesDetailReportResult[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     });
@@ -414,6 +417,13 @@
                         "width": "2*"
                     },
                     {
+                        "header": "Price",
+                        "binding": "BasePriceDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
                         "header": "Unit",
                         "binding": "BaseUnit",
                         "allowSorting": true,
@@ -432,7 +442,7 @@
                         "allowSorting": true,
                         "align": "right",
                         "width": "1*"
-                    },
+                    }
                 ],
                 autoGenerateColumns: false,
                 itemsSource: salesDetailReportCollections,
@@ -462,26 +472,18 @@
 
                 salesDetailReport.push({
                     Branch: salesDetailReportCollections.items[i].Branch,
-                    SINumber: salesDetailReportCollections.items[i].SIForCSV,
-                    SIDate: salesDetailReportCollections.items[i].SIDate,
-                    Customer: salesDetailReportCollections.items[i].Customer,
                     Item: salesDetailReportCollections.items[i].Item,
-                    ItemInventory: salesDetailReportCollections.items[i].ItemInventory,
-                    Price: salesDetailReportCollections.items[i].Price,
-                    Unit: salesDetailReportCollections.items[i].Unit,
-                    Quantity: salesDetailReportCollections.items[i].Quantity,
-                    Amount: salesDetailReportCollections.items[i].Amount,
+                    Price: salesDetailReportCollections.items[i].BasePrice,
+                    Unit: salesDetailReportCollections.items[i].BaseUnit,
+                    Quantity: salesDetailReportCollections.items[i].BaseQuantity,
+                    Amount: salesDetailReportCollections.items[i].Amount
                 });
             }
 
             var Headers = [];
             Headers.push({
                 Branch: "Branch",
-                SINumber: "SI Number",
-                SIDate: "SI Date",
-                Customer: "Customer",
                 Item: "Item",
-                ItemInventory: "Inventory Code",
                 Price: "Price",
                 Unit: "Unit",
                 Quantity: "Quantity",

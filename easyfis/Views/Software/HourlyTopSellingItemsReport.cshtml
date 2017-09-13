@@ -12,7 +12,7 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
@@ -32,17 +32,17 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 59%">
-                                    <div class="input-group ">
+                                <td style="width: 49%">
+                                    <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search">
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search...">
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 40%" align="right">
-                                    @*<button onclick="salesDetailReportCSV_OnClick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                        <button onclick="salesDetailReportPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>*@
-                                    <a href="/Software/AccountsReceivable" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
+                                <td style="width: 50%" align="right">
+                                    <button onclick="btnHourlyTopSellingItemsReportCSVOnclick()" id="btnHourlyTopSellingItemsReportCSV" class="btn btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    @*<button onclick="btnHourlyTopSellingItemsReportPrintPDFOnclick()" id="btnHourlyTopSellingItemsReportPrintPDF" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>*@
+                                    <a href="/Software/AccountsReceivable" class="btn btn-danger"><i class="fa fa-close"></i> Close</a>
                                 </td>
                             </tr>
                         </table>
@@ -50,147 +50,468 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 59%">
+                                <td style="width: 24%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Date:</span>
-                                        <input type="text" class="form-control " id="dateFrom" placeholder="filter date" disabled>
+                                        <span class="input-group-addon"><b>Start Date</b></span>
+                                        <div class="comboBox-wide" id="cboARHourlyTopSellingItemsReportStartDate"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 20%" align="right"></td>
-                                <td style="width: 20%"></td>
+                                <td style="width: 24%" align="right">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>End Date</b></span>
+                                        <div class="comboBox-wide" id="cboARHourlyTopSellingItemsReportEndDate"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Company</b></span>
+                                        <div class="comboBox-wide" id="cboARHourlyTopSellingItemsReportCompany"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Branch</b></span>
+                                        <div class="comboBox-wide" id="cboARHourlyTopSellingItemsReportBranch"></div>
+                                    </div>
+                                </td>
                             </tr>
                         </table>
-                    </div>
-                    <div class="panel-body">
-                        <div id="salesDetailReportGrid" class="grid"></div>
                     </div>
                 </div>
+                <div id="salesDetailReportGrid" class="grid"></div>
+                <br /><br />
                 <div class="row">
-                    <div class="col-md-6"></div>
                     <div class="col-md-6">
-                        <table class="table table-responsive table-bordered">
-                            <tr>
-                                <td align="right">
-                                    <b>Total: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="total">NA</span>
-                                </td>
-                            </tr>
-                        </table>
+
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="dl-horizontal dl-custom">
+                            <dt>
+                                <b>Total Amount</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalAmount" placeholder="0.00" disabled />
+                            </dd>
+                        </dl>
                     </div>
                 </div>
             </section>
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var cboARHourlyTopSellingItemsReportStartDate = new wijmo.input.InputDate('#cboARHourlyTopSellingItemsReportStartDate');
+        var cboARHourlyTopSellingItemsReportEndDate = new wijmo.input.InputDate('#cboARHourlyTopSellingItemsReportEndDate');
+        var isARHourlyTopSellingItemsReportStartDateSelected = false;
+        var isARHourlyTopSellingItemsReportEndDateSelected = false;
+        var cboARHourlyTopSellingItemsReportCompany = new wijmo.input.ComboBox('#cboARHourlyTopSellingItemsReportCompany');
+        var cboARHourlyTopSellingItemsReportBranch = new wijmo.input.ComboBox('#cboARHourlyTopSellingItemsReportBranch');
+        var salesDetailReportCollections;
+        var salesDetailReportGrid;
+        var isARHourlyTopSellingItemsReportCompanySelected = false;
+
+        // ===================
+        // Get Parameter Value
+        // ===================
         function getParam(name) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+
             var regexS = "[\\?&]" + name + "=([^&#]*)";
             var regex = new RegExp(regexS);
+
             var results = regex.exec(window.location.href);
-            if (results == null)
+            if (results == null) {
                 return "";
-            else
+            } else {
                 return results[1];
+            }
         }
 
-        function salesDetailReportPDF_OnClick() {
-            window.location.href = '/RepSalesDetailReport/SalesDetailReport?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate");
-        }
-
-        function getSalesDetailReport() {
-            var salesDetailReport = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/hourlyTopItemsSellingReport/list/' + getParam("StartDate") + '/' + getParam("EndDate") + '/' + getParam("CompanyId") + '/' + getParam("BranchId"),
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (salesDetailReportResult) {
-                    if (salesDetailReportResult.length > 0) {
-                        var totalAmount = 0;
-
-                        for (i = 0; i < salesDetailReportResult.length; i++) {
-                            var docLink = "/Software/SalesDetail?SalesId=" + salesDetailReportResult[i]["SIId"];
-                            // Array Push
-                            salesDetailReport.push({
-                                Item: salesDetailReportResult[i]["Item"],
-                                BaseUnit: salesDetailReportResult[i]["BaseUnit"],
-                                BaseQuantity: salesDetailReportResult[i]["BaseQuantity"],
-                                BasePrice: salesDetailReportResult[i]["BasePrice"],
-                                SalesItemTimeStamp: salesDetailReportResult[i]["SalesItemTimeStamp"]
-                            });
-
-                            totalAmount += salesDetailReportResult[i]["Amount"];
-                        }
-
-                        document.getElementById("total").innerHTML = totalAmount.toLocaleString();
+        // ============
+        // Date Filters
+        // ============
+        function salesDetailReportDateFilters() {
+            NProgress.start();
+            cboARHourlyTopSellingItemsReportStartDate.dispose();
+            cboARHourlyTopSellingItemsReportStartDate = new wijmo.input.InputDate('#cboARHourlyTopSellingItemsReportStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("StartDate")),
+                onValueChanged: function () {
+                    if (!isARHourlyTopSellingItemsReportStartDateSelected) {
+                        NProgress.start();
+                        refreshHourlyTopSellingItemsReportFlexGrid();
+                    } else {
+                        isARHourlyTopSellingItemsReportStartDateSelected = false;
                     }
-                    NProgress.done();
                 }
             });
 
-            return salesDetailReport;
+            cboARHourlyTopSellingItemsReportEndDate.dispose();
+            cboARHourlyTopSellingItemsReportEndDate = new wijmo.input.InputDate('#cboARHourlyTopSellingItemsReportEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("EndDate")),
+                onValueChanged: function () {
+                    if (!isARHourlyTopSellingItemsReportEndDateSelected) {
+                        NProgress.start();
+                        refreshHourlyTopSellingItemsReportFlexGrid();
+                    } else {
+                        isARHourlyTopSellingItemsReportEndDateSelected = false;
+                    }
+                }
+            });
+
+            createCboCompany();
         }
-        var salesDetailReportCollection;
 
-        function salesDetailReportCSV_OnClick() {
+        // ==============
+        // Company Filter
+        // ==============
+        function createCboCompany() {
+            var companyObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/company/list',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (companyResults) {
+                    if (companyResults.length > 0) {
+                        for (i = 0; i < companyResults.length; i++) {
+                            companyObservableArray.push({
+                                Id: companyResults[i]["Id"],
+                                Company: companyResults[i]["Company"],
+                                Address: companyResults[i]["Address"],
+                                ContactNumber: companyResults[i]["ContactNumber"],
+                                TaxNumber: companyResults[i]["TaxNumber"],
+                            });
+                        }
+                    }
 
+                    var disabled = true;
+                    if (companyResults.length > 0) {
+                        disabled = false;
+                    } else {
+                        $("#btnHourlyTopSellingItemsReportCSV").prop("disabled", true);
+                        $("#btnHourlyTopSellingItemsReportPrintPDF").prop("disabled", true);
+                    }
 
+                    cboARHourlyTopSellingItemsReportCompany.dispose();
+                    cboARHourlyTopSellingItemsReportCompany = new wijmo.input.ComboBox('#cboARHourlyTopSellingItemsReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        selectedValue: getParam("CompanyId"),
+                        onSelectedIndexChanged: function () {
+                            NProgress.start();
+                            $("#btnHourlyTopSellingItemsReportCSV").prop("disabled", false);
+                            $("#btnHourlyTopSellingItemsReportPrintPDF").prop("disabled", false);
+                            isARHourlyTopSellingItemsReportCompanySelected = true;
+                            createCboBranch();
+                        }
+                    });
+
+                    createCboBranch();
+                }
+            });
+        }
+
+        // =============
+        // Branch Filter
+        // =============
+        function createCboBranch() {
+            var branchObservableArray = new wijmo.collections.ObservableArray();
+            if (cboARHourlyTopSellingItemsReportCompany.selectedValue != null) {
+                $.ajax({
+                    url: '/api/branch/byCompanyId/list/locked/' + cboARHourlyTopSellingItemsReportCompany.selectedValue,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branchObservableArray.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Branch: branchResults[i]["Branch"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"]
+                                });
+                            }
+                        }
+
+                        var disabled = true;
+                        if (branchResults.length > 0) {
+                            disabled = false;
+                        } else {
+                            $("#btnHourlyTopSellingItemsReportCSV").prop("disabled", true);
+                            $("#btnHourlyTopSellingItemsReportPrintPDF").prop("disabled", true);
+                        }
+
+                        cboARHourlyTopSellingItemsReportBranch.dispose();
+                        cboARHourlyTopSellingItemsReportBranch = new wijmo.input.ComboBox('#cboARHourlyTopSellingItemsReportBranch', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: branchObservableArray,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Id",
+                            selectedValue: getParam("BranchId"),
+                            onSelectedIndexChanged: function () {
+                                NProgress.start();
+                                refreshHourlyTopSellingItemsReportFlexGrid();
+                            }
+                        });
+
+                        if (!isARHourlyTopSellingItemsReportCompanySelected) {
+                            createHourlyTopSellingItemsReportFlexGrid();
+                        } else {
+                            refreshHourlyTopSellingItemsReportFlexGrid();
+                        }
+                    }
+                });
+            }
+        }
+
+        // ===============================
+        // Get Sales Order Detail Data
+        // ===============================
+        function getHourlyTopSellingItemsReport() {
+            var salesDetailReports = new wijmo.collections.ObservableArray;
+            if (cboARHourlyTopSellingItemsReportCompany.selectedValue != null) {
+                if (cboARHourlyTopSellingItemsReportBranch.selectedValue != null) {
+                    var startDate = cboARHourlyTopSellingItemsReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboARHourlyTopSellingItemsReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboARHourlyTopSellingItemsReportCompany.selectedValue;
+                    var branchId = cboARHourlyTopSellingItemsReportBranch.selectedValue;
+
+                    $.ajax({
+                        url: '/api/hourlyTopItemsSellingReport/list/' + startDate + '/' + endDate + '/' + + companyId + '/' + branchId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (salesDetailReportResult) {
+                            var totalAmount = 0;
+                            if (salesDetailReportResult.length > 0) {
+                                for (i = 0; i < salesDetailReportResult.length; i++) {
+                                    var docLink = "/Software/ItemDetail?id=" + salesDetailReportResult[i]["ItemId"];
+
+                                    salesDetailReports.push({
+                                        Detail: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block'><i class='fa fa-edit'></i> Item Detail",
+                                        Branch: salesDetailReportResult[i]["Branch"],
+                                        Item: salesDetailReportResult[i]["Item"],
+                                        BaseUnit: salesDetailReportResult[i]["BaseUnit"],
+                                        BaseQuantity: salesDetailReportResult[i]["BaseQuantity"],
+                                        BaseQuantityDisplay: parseFloat(salesDetailReportResult[i]["BaseQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        BasePrice: salesDetailReportResult[i]["BasePrice"],
+                                        BasePriceDisplay: parseFloat(salesDetailReportResult[i]["BasePrice"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        Amount: salesDetailReportResult[i]["Amount"],
+                                        AmountDisplay: parseFloat(salesDetailReportResult[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        SalesItemTimeStamp: salesDetailReportResult[i]["SalesItemTimeStamp"]
+                                    });
+
+                                    totalAmount += salesDetailReportResult[i]["Amount"];
+                                }
+                            }
+
+                            document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            NProgress.done();
+                        }
+                    });
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    NProgress.done();
+                }
+            } else {
+                document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                NProgress.done();
+            }
+
+            return salesDetailReports;
+        }
+
+        // =================
+        // Refresh Flex Grid
+        // =================
+        function refreshHourlyTopSellingItemsReportFlexGrid() {
+            salesDetailReportCollections = new wijmo.collections.CollectionView(getHourlyTopSellingItemsReport());
+            salesDetailReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                salesDetailReportCollections.refresh();
+
+                if (salesDetailReportCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    for (var i = 0; i < salesDetailReportCollections.items.length; i++) {
+                        totalAmount += salesDetailReportCollections.items[i].Amount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            salesDetailReportCollections.filter = function (item) {
+                return !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.BaseUnit.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            salesDetailReportGrid.itemsSource = salesDetailReportCollections;
+            salesDetailReportGrid.trackChanges = true;
+        }
+
+        // =========
+        // Flex Grid
+        // =========
+        function createHourlyTopSellingItemsReportFlexGrid() {
+            salesDetailReportCollections = new wijmo.collections.CollectionView(getHourlyTopSellingItemsReport());
+            salesDetailReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                salesDetailReportCollections.refresh();
+
+                if (salesDetailReportCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    for (var i = 0; i < salesDetailReportCollections.items.length; i++) {
+                        totalAmount += salesDetailReportCollections.items[i].Amount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            salesDetailReportCollections.filter = function (item) {
+                return !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.BaseUnit.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            salesDetailReportGrid = new wijmo.grid.FlexGrid('#salesDetailReportGrid');
+            salesDetailReportGrid.initialize({
+                columns: [
+                    {
+                        "header": "Detail",
+                        "binding": "Detail",
+                        "isContentHtml": true,
+                        "allowSorting": true,
+                        "width": "0.7*"
+                    },
+                    {
+                        "header": "Item",
+                        "binding": "Item",
+                        "allowSorting": true,
+                        "width": "2*"
+                    },
+                    {
+                        "header": "Price",
+                        "binding": "BasePriceDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Unit",
+                        "binding": "BaseUnit",
+                        "allowSorting": true,
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Quantity",
+                        "binding": "BaseQuantityDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "AmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Time",
+                        "binding": "SalesItemTimeStamp",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                ],
+                autoGenerateColumns: false,
+                itemsSource: salesDetailReportCollections,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            salesDetailReportGrid.trackChanges = true;
+        }
+
+        // ============
+        // Download CSV
+        // ============
+        function btnHourlyTopSellingItemsReportCSVOnclick() {
             var CSV = '';
             var salesDetailReport = [];
-            var fileName = 'SalesDetailReport.CSV';
+            var fileName = 'HourlyTopSellingItemsReport.CSV';
 
-            for (i = 0; i < salesDetailReportCollection.items.length; i++) {
+            for (i = 0; i < salesDetailReportCollections.items.length; i++) {
+                var IsClose = salesDetailReportCollections.items[i].IsClose;
+                var isPOClose = "Not Closed";
+                if (IsClose) {
+                    isPOClose = "Closed"
+                }
+
                 salesDetailReport.push({
-                    SI: salesDetailReportCollection.items[i].SIForCSV,
-                    SIDate: salesDetailReportCollection.items[i].SIDate,
-                    Item: salesDetailReportCollection.items[i].Item,
-                    ItemInventory: salesDetailReportCollection.items[i].ItemInventory,
-                    Price: salesDetailReportCollection.items[i].Price,
-                    Quantity: salesDetailReportCollection.items[i].Quantity,
-                    Unit: salesDetailReportCollection.items[i].Unit,
-                    Amount: salesDetailReportCollection.items[i].Amount,
-
-
+                    Branch: salesDetailReportCollections.items[i].Branch,
+                    Item: salesDetailReportCollections.items[i].Item,
+                    Price: salesDetailReportCollections.items[i].BasePrice,
+                    Unit: salesDetailReportCollections.items[i].BaseUnit,
+                    Quantity: salesDetailReportCollections.items[i].BaseQuantity,
+                    Amount: salesDetailReportCollections.items[i].Amount,
+                    Hour: salesDetailReportCollections.items[i].SalesItemTimeStamp
                 });
             }
 
-            //for (var i = 0; i < symbols.length; i++) {
-            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
-            //}
-
-            // Rows
-            // Rows
             var Headers = [];
             Headers.push({
-
-                SI: "SI Number",
-                SIDate: "SI Date",
+                Branch: "Branch",
                 Item: "Item",
-                ItemInventory: "Inventory Code",
                 Price: "Price",
-                Quantity: "Quantity",
                 Unit: "Unit",
+                Quantity: "Quantity",
                 Amount: "Amount",
-
+                Hour: "Hour"
             });
 
             var header = '';
             for (var b in Headers[0]) {
                 header += '"' + Headers[0][b] + '",';
             }
+
             CSV = header + '\r\n';
             for (var i = 0; i < salesDetailReport.length; i++) {
                 var row = '';
                 for (var a in salesDetailReport[i]) {
                     row += '"' + salesDetailReport[i][a] + '",';
                 }
+
                 row.slice(0, row.length - 1);
                 CSV += row + '\r\n';
             }
@@ -199,7 +520,6 @@
                 toastr.error("No data.");
             } else {
                 var link = document.createElement("a");
-
                 if (link.download !== undefined) {
                     var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
                     var url = URL.createObjectURL(blob);
@@ -225,71 +545,31 @@
             }
         }
 
-        $(document).ready(function () {
-            NProgress.start();
-            document.getElementById("dateFrom").value = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
+        // =====================
+        // Preview and Print PDF
+        // =====================
+        function btnHourlyTopSellingItemsReportPrintPDFOnclick() {
+            if (cboARHourlyTopSellingItemsReportCompany.selectedValue != null) {
+                if (cboARHourlyTopSellingItemsReportBranch.selectedValue != null) {
+                    var startDate = cboARHourlyTopSellingItemsReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboARHourlyTopSellingItemsReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboARHourlyTopSellingItemsReportCompany.selectedValue;
+                    var branchId = cboARHourlyTopSellingItemsReportBranch.selectedValue;
 
-            salesDetailReportCollection = new wijmo.collections.CollectionView(getSalesDetailReport());
-            salesDetailReportCollection.canFilter = true;
-
-            var filterText = '';
-            $('#InputFilter').keyup(function () {
-                filterText = this.value.toLowerCase();
-                salesDetailReportCollection.refresh();
-            });
-            salesDetailReportCollection.filter = function (item) {
-                return !filterText || (item.SI.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.ItemInventory.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1)
-
+                    window.location.href = '/RepHourlyTopSellingItemsReport/HourlyTopSellingItemsReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
             }
-            // Flex Grid
-            var salesDetailReportGrid = new wijmo.grid.FlexGrid('#salesDetailReportGrid');
-            salesDetailReportGrid.initialize({
-                columns: [
-                    {
-                        "header": "Item ",
-                        "binding": "Item",
-                        "allowSorting": true,
-                        "width": 530
-                    },
-                    {
-                        "header": "Unit",
-                        "binding": "BaseUnit",
-                        "allowSorting": true,
-                        "width": 250
-                    },
-                    {
-                        "header": "Quantity",
-                        "binding": "BaseQuantity",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Price",
-                        "binding": "BasePrice",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Time Stamp",
-                        "align": "center",
-                        "binding": "SalesItemTimeStamp",
-                        "allowSorting": true,
-                        "width": 150
-                    }
-                ],
-                autoGenerateColumns: false,
-                itemsSource: salesDetailReportCollection,
-                isReadOnly: true,
-                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                allowDragging: wijmo.grid.AllowDragging.None,
-                selectionMode: wijmo.grid.SelectionMode.Row
-            });
+        }
 
-            salesDetailReportGrid.trackChanges = true;
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            salesDetailReportDateFilters();
         });
     </script>
     <script type="text/javascript">

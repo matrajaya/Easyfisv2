@@ -29,17 +29,21 @@ namespace easyfis.ApiControllers
                                    && d.TrnSalesInvoice.IsLocked == true
                                    group d by new
                                    {
+                                       Branch = d.TrnSalesInvoice.MstBranch.Branch,
                                        ItemId = d.ItemId,
                                        Item = d.MstArticle.Article,
-                                       BaseUnit = d.MstUnit1.Unit
+                                       BasePrice = d.MstArticle.Price,
+                                       BaseUnit = d.MstArticle.MstUnit.Unit
                                    } into g
                                    select new Models.TrnSalesInvoiceItem
                                    {
+                                       Branch = g.Key.Branch,
                                        ItemId = g.Key.ItemId,
                                        Item = g.Key.Item,
                                        BaseUnit = g.Key.BaseUnit,
                                        BaseQuantity = g.Sum(d => d.BaseQuantity),
-                                       Amount = g.Sum(d => d.Amount)
+                                       BasePrice = g.Key.BasePrice,
+                                       Amount = g.Sum(d => d.BaseQuantity) * g.Key.BasePrice
                                    };
 
             return salesInvoiceItem.OrderByDescending(q => q.BaseQuantity).ToList();
