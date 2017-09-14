@@ -13,14 +13,14 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Inventory Report 
+                        Inventory Report
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -52,39 +52,36 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
-                                            <button onclick="InventoryReportView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
-                                            <button onclick="InventoryReportPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <button onclick="btnInventoryReportViewOnclick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <button onclick="btnInventoryReportPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
                                     <div class="panel-body">
                                         <div class="">
                                             <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Start Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="inventory_StartDate"></div>
-                                                                <input type="hidden" id="inventory_StartDate_data" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">End Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="inventory_EndDate"></div>
-                                                                <input type="hidden" id="inventory_EndDate_data" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Company</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="Inventory_Company"></div>
-
-                                                                <input type="hidden" id="Inventory_Company_data" />
-                                                                <input type="hidden" id="Inventory_Company_selectedValue" />
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Start Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboInventoryStartDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">End Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboInventoryEndDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Company</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboInventoryCompany"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboInventoryBranch"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -96,47 +93,42 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
-                                            <button onclick="InventoryReportStockCardView_OnClick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
-                                            <button onclick="InventoryReportStockCardPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <button onclick="btnStockCardViewOnclick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
+                                            <button onclick="btnStockCardPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
                                     <div class="panel-body">
                                         <div class="">
                                             <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Start Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="stockCard_StartDate"></div>
-                                                                <input type="hidden" id="stockCard_StartDate_data" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">End Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="stockCard_EndDate"></div>
-                                                                <input type="hidden" id="stockCard_EndDate_data" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Branch</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="StockCard_Branch"></div>
-
-                                                                <input type="hidden" id="StockCard_Branch_data" />
-                                                                <input type="hidden" id="StockCard_Branch_selectedValue" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Item</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="Items_Item"></div>
-                                                                <input type="hidden" id="Items_Item_data" />
-                                                                <input type="hidden" id="Items_Item_selectedValue" />
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Start Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockCardStartDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">End Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockCardEndDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Company</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockCardCompany"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockCardBranch"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Item</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockCardItem"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -148,38 +140,35 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
-                                            <button onclick="InventoryReportStockInDetailPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <button onclick="btnStockInDetailPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
                                     <div class="panel-body">
                                         <div class="">
                                             <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Start Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="stockIn_StartDate"></div>
-                                                                <input type="hidden" id="stockIn_StartDate_data" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">End Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="stockIn_EndDate"></div>
-                                                                <input type="hidden" id="stockIn_EndDate_data" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Branch</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="StockIn_Branch"></div>
-
-                                                                <input type="hidden" id="StockIn_Branch_data" />
-                                                                <input type="hidden" id="StockIn_Branch_selectedValue" />
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Start Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockInDetailStartDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">End Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockInDetailEndDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Company</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockInDetailCompany"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockInDetailBranch"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -191,38 +180,35 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
-                                            <button onclick="InventoryReportStockOutDetailPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <button onclick="btnStockOutDetailPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
                                     <div class="panel-body">
                                         <div class="">
                                             <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Start Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="stockOut_StartDate"></div>
-                                                                <input type="hidden" id="stockOut_StartDate_data" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">End Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="stockOut_EndDate"></div>
-                                                                <input type="hidden" id="stockOut_EndDate_data" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Branch</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="StockOut_Branch"></div>
-
-                                                                <input type="hidden" id="StockOut_Branch_data" />
-                                                                <input type="hidden" id="StockOut_Branch_selectedValue" />
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Start Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockOutDetailStartDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">End Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockOutDetailEndDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Company</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockOutDetailCompany"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockOutDetailBranch"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -234,38 +220,35 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
-                                            <button onclick="InventoryReportStockTransferDetailPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <button onclick="btnStockTransferDetailPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
                                     <div class="panel-body">
                                         <div class="">
                                             <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Start Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="stockTransfer_StartDate"></div>
-                                                                <input type="hidden" id="stockTransfer_StartDate_data" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">End Date</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="stockTransfer_EndDate"></div>
-                                                                <input type="hidden" id="stockTransfer_EndDate_data" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Branch</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="StockTransfer_Branch"></div>
-
-                                                                <input type="hidden" id="StockTransfer_Branch_data" />
-                                                                <input type="hidden" id="StockTransfer_Branch_selectedValue" />
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Start Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockTransferDetailStartDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">End Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockTransferDetailEndDate"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Company</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockTransferDetailCompany"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboStockTransferDetailBranch"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -277,24 +260,17 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
-                                            <button onclick="InventoryReportItemListPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <button onclick="btnItemListPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
                                     <div class="panel-body">
                                         <div class="">
                                             <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Item Group</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ItemGroup_Item"></div>
-
-                                                                <input type="hidden" id="ItemGroup_Item_data" />
-                                                                <input type="hidden" id="ItemGroup_Item_selectedValue" />
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Item Group</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboItemListItemGroup"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -306,24 +282,17 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
-                                            <button onclick="InventoryReportItemComponentListPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <button onclick="btnItemComponentListPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
                                     <div class="panel-body">
                                         <div class="">
                                             <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Item Group</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ItemGroup_ItemComponent"></div>
-
-                                                                <input type="hidden" id="ItemGroup_ItemComponent_data" />
-                                                                <input type="hidden" id="ItemGroup_ItemComponent_selectedValue" />
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Item Group</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboItemComponentListItemGroup"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -335,24 +304,17 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
-                                            <button onclick="InventoryReportPhysicalCountSheetPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <button onclick="btnPhysicalCountSheetPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
                                     <div class="panel-body">
                                         <div class="">
                                             <form class="form-horizontal" role="form">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-sm-4">Item Group</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="ItemGroup_PhysicalCountSheet"></div>
-
-                                                                <input type="hidden" id="ItemGroup_PhysicalCountSheet_data" />
-                                                                <input type="hidden" id="ItemGroup_PhysicalCountSheet_selectedValue" />
-                                                            </div>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Item Group</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="cboPhysicalCountSheetItemGroup"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -364,7 +326,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
-                                            <button onclick="InventoryReportFixedAssetsPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
+                                            <button onclick="btnFixedAssetPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
@@ -376,24 +338,25 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="fixedAssetReport_StartDate"></div>
-                                                                <input type="hidden" id="fixedAssetReport_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboFixedAssetStartDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="fixedAssetReport_EndDate"></div>
-                                                                <input type="hidden" id="fixedAssetReport_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboFixedAssetEndDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="fixedAssetReport_Company"></div>
-
-                                                                <input type="hidden" id="fixedAssetReport_Company_data" />
-                                                                <input type="hidden" id="fixedAssetReport_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboFixedAssetCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboFixedAssetBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -417,1008 +380,768 @@
         // ================
         // Global Variables
         // ================
-        var companies;
-        var branches;
-        var stockCounts;
-        var cboItems;
-        var cboItemGroup;
-        var cboItemComponentGroup;
-        var cboPhysicalCountSheetItemGroup;
-        var inventoryStartDate;
-        var inventoryEndDate;
-        var cboCompanyForInventory;
-        var cboInventoryBranches;
-        var cboStockCountForInventory;
-        var cboIventoryItemGroup;
-        var stockCardStartDate;
-        var stockCardEndDate;
-        var cboStockCardCompany;
-        var cboStockCardBranches;
-        var cboStockCountForStockCard;
-        var cboStockCardItemGroup;
-        var fixedAssetReportStartDate;
-        var fixedAssetReportEndDate;
-        var cboFixedAssetReportCompany;
-        var cboFixedAssetReportItemGroup;
-        var cboFixedAssetReportBranches;
-        var cboStockCountForFixedAssetReport;
-        var stockInStartDate;
-        var stockInEndDate;
-        var cboStockInCompany;
-        var cboStockInBranches;
-        var cboStockCountForStockIn;
-        var cboStockInItemGroup;
-        var stockOutStartDate;
-        var stockOutEndDate;
-        var cboStockOutCompany;
-        var cboStockOutBranches;
-        var cboStockCountForStockOut;
-        var cboStockOutItemGroup;
-        var stockTransferStartDate;
-        var stockTransferEndDate;
-        var cboStockTransferCompany;
-        var cboStockTransferBranches;
-        var cboStockCountForStockTransfer;
-        var cboStockTransferItemGroup;
+        var cboInventoryStartDate = new wijmo.input.InputDate('#cboInventoryStartDate');
+        var cboInventoryEndDate = new wijmo.input.InputDate('#cboInventoryEndDate');
+        var cboInventoryCompany = new wijmo.input.ComboBox('#cboInventoryCompany');
+        var cboInventoryBranch = new wijmo.input.ComboBox('#cboInventoryBranch');
+        var cboStockCardStartDate = new wijmo.input.InputDate('#cboStockCardStartDate');
+        var cboStockCardEndDate = new wijmo.input.InputDate('#cboStockCardEndDate');
+        var cboStockCardCompany = new wijmo.input.ComboBox('#cboStockCardCompany');
+        var cboStockCardBranch = new wijmo.input.ComboBox('#cboStockCardBranch');
+        var cboStockCardItem = new wijmo.input.ComboBox('#cboStockCardItem');
+        var cboStockInDetailStartDate = new wijmo.input.InputDate('#cboStockInDetailStartDate');
+        var cboStockInDetailEndDate = new wijmo.input.InputDate('#cboStockInDetailEndDate');
+        var cboStockInDetailCompany = new wijmo.input.ComboBox('#cboStockInDetailCompany');
+        var cboStockInDetailBranch = new wijmo.input.ComboBox('#cboStockInDetailBranch');
+        var cboStockOutDetailStartDate = new wijmo.input.InputDate('#cboStockOutDetailStartDate');
+        var cboStockOutDetailEndDate = new wijmo.input.InputDate('#cboStockOutDetailEndDate');
+        var cboStockOutDetailCompany = new wijmo.input.ComboBox('#cboStockOutDetailCompany');
+        var cboStockOutDetailBranch = new wijmo.input.ComboBox('#cboStockOutDetailBranch');
+        var cboStockTransferDetailStartDate = new wijmo.input.InputDate('#cboStockTransferDetailStartDate');
+        var cboStockTransferDetailEndDate = new wijmo.input.InputDate('#cboStockTransferDetailEndDate');
+        var cboStockTransferDetailCompany = new wijmo.input.ComboBox('#cboStockTransferDetailCompany');
+        var cboStockTransferDetailBranch = new wijmo.input.ComboBox('#cboStockTransferDetailBranch');
+        var cboItemListItemGroup = new wijmo.input.ComboBox('#cboItemListItemGroup');
+        var cboItemComponentListItemGroup = new wijmo.input.ComboBox('#cboItemComponentListItemGroup');
+        var cboPhysicalCountSheetItemGroup = new wijmo.input.ComboBox('#cboPhysicalCountSheetItemGroup');
+        var cboFixedAssetStartDate = new wijmo.input.InputDate('#cboFixedAssetStartDate');
+        var cboFixedAssetEndDate = new wijmo.input.InputDate('#cboFixedAssetEndDate');
+        var cboFixedAssetCompany = new wijmo.input.ComboBox('#cboFixedAssetCompany');
+        var cboFixedAssetBranch = new wijmo.input.ComboBox('#cboFixedAssetBranch');
+        var isInventoryCompanySelected = true;
+        var isStockCardCompanySelected = true;
+        var isStockInDetailCompanySelected = true;
+        var isStockOutDetailCompanySelected = true;
+        var isStockTransferDetailCompanySelected = true;
+        var isFixedAssetCompanySelected = true;
+        var enableBranchSelect = false;
 
-        // ===========
-        // Get company
-        // ===========
-        function getCompanies() {
-            companies = new wijmo.collections.ObservableArray();
+        // ============
+        // Date Filters
+        // ============
+        function createCboDateFilters() {
+            // ================
+            // Inventory Report
+            // ================
+            NProgress.start();
+            cboInventoryStartDate.dispose();
+            cboInventoryStartDate = new wijmo.input.InputDate('#cboInventoryStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboInventoryEndDate.dispose();
+            cboInventoryEndDate = new wijmo.input.InputDate('#cboInventoryEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // ==========
+            // Stock Card
+            // ==========
+            cboStockCardStartDate.dispose();
+            cboStockCardStartDate = new wijmo.input.InputDate('#cboStockCardStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboStockCardEndDate.dispose();
+            cboStockCardEndDate = new wijmo.input.InputDate('#cboStockCardEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // ===============
+            // Stock In Detail
+            // ===============
+            cboStockInDetailStartDate.dispose();
+            cboStockInDetailStartDate = new wijmo.input.InputDate('#cboStockInDetailStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboStockInDetailEndDate.dispose();
+            cboStockInDetailEndDate = new wijmo.input.InputDate('#cboStockInDetailEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // ================
+            // Stock Out Detail
+            // ================
+            cboStockOutDetailStartDate.dispose();
+            cboStockOutDetailStartDate = new wijmo.input.InputDate('#cboStockOutDetailStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboStockOutDetailEndDate.dispose();
+            cboStockOutDetailEndDate = new wijmo.input.InputDate('#cboStockOutDetailEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // =====================
+            // Stock Transfer Detail
+            // =====================
+            cboStockTransferDetailStartDate.dispose();
+            cboStockTransferDetailStartDate = new wijmo.input.InputDate('#cboStockTransferDetailStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboStockTransferDetailEndDate.dispose();
+            cboStockTransferDetailEndDate = new wijmo.input.InputDate('#cboStockTransferDetailEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // ===========
+            // Fixed Asset
+            // ===========
+            cboFixedAssetStartDate.dispose();
+            cboFixedAssetStartDate = new wijmo.input.InputDate('#cboFixedAssetStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboFixedAssetEndDate.dispose();
+            cboFixedAssetEndDate = new wijmo.input.InputDate('#cboFixedAssetEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            createCboCompanyFilters();
+        }
+
+        // ===============
+        // Company Filters
+        // ===============
+        function createCboCompanyFilters() {
+            var companyObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/company/list',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            companies.push({
-                                Id: results[i]["Id"],
-                                Company: results[i]["Company"],
-                                Address: results[i]["Address"],
-                                ContactNumber: results[i]["ContactNumber"],
-                                TaxNumber: results[i]["TaxNumber"],
+                success: function (companyResults) {
+                    if (companyResults.length > 0) {
+                        for (i = 0; i < companyResults.length; i++) {
+                            companyObservableArray.push({
+                                Id: companyResults[i]["Id"],
+                                Company: companyResults[i]["Company"],
+                                Address: companyResults[i]["Address"],
+                                ContactNumber: companyResults[i]["ContactNumber"],
+                                TaxNumber: companyResults[i]["TaxNumber"],
                             });
                         }
-
-                        createCboComapny(companies);
                     }
-                }
-            });
-            return companies;
-        }
 
-        // ===================
-        // Company - Combo Box
-        // ===================
-        function createCboComapny(companies) {
-            var companyCollection = new wijmo.collections.CollectionView(companies);
-            var companyList = new Array();
-            for (var i = 0; i < companyCollection.items.length; i++) {
-                companyList.push(companyCollection.items[i].Company);
-            }
-
-            // Inventory
-            cboCompanyForInventory.dispose();
-            cboCompanyForInventory = new wijmo.input.ComboBox('#Inventory_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('Inventory_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#Inventory_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
-
-            // fixed Asset Report Company
-            cboFixedAssetReportCompany.dispose();
-            cboFixedAssetReportCompany = new wijmo.input.ComboBox('#fixedAssetReport_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('fixedAssetReport_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#fixedAssetReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
-        }
-
-        // ===========================
-        // Get branches for Stock Card
-        // ===========================
-        function getBranches() {
-            branches = new wijmo.collections.ObservableArray();
-
-            //var companyId;
-            //if (document.getElementById('StockCard_Company_data').value == "") {
-            //    companyId = 0;
-            //} else {
-            //    companyId = document.getElementById('StockCard_Company_data').value;
-            //}
-
-            $.ajax({
-                url: '/api/listBranch',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            branches.push({
-                                Id: results[i]["Id"],
-                                CompanyId: results[i]["CompanyId"],
-                                Company: results[i]["Company"],
-                                BranchCode: results[i]["BranchCode"],
-                                Branch: results[i]["Branch"],
-                                Address: results[i]["Address"],
-                                ContactNumber: results[i]["ContactNumber"],
-                                TaxNumber: results[i]["TaxNumber"],
-                                IsLocked: results[i]["IsLocked"]
-                            });
-                        }
-                        createCboBranchesStockCardFilterByCompany(branches);
-                        createCboBranchesStockInFilterByCompany(branches);
-                        createCboBranchesStockOutFilterByCompany(branches);
-                        createCboBranchesStockTransferFilterByCompany(branches);
+                    var disabled = true;
+                    if (companyResults.length > 0) {
+                        disabled = false;
                     } else {
-                        createCboBranchesStockCardFilterByCompany(branches);
-                        createCboBranchesStockInFilterByCompany(branches);
-                        createCboBranchesStockOutFilterByCompany(branches);
-                        createCboBranchesStockTransferFilterByCompany(branches);
+
+                    }
+
+                    cboInventoryCompany.dispose();
+                    cboInventoryCompany = new wijmo.input.ComboBox('#cboInventoryCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isInventoryCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboBranchFilters(this.selectedValue);
+                            } else {
+                                createCboBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboStockCardCompany.dispose();
+                    cboStockCardCompany = new wijmo.input.ComboBox('#cboStockCardCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isStockCardCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboBranchFilters(this.selectedValue);
+                            } else {
+                                createCboBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboStockInDetailCompany.dispose();
+                    cboStockInDetailCompany = new wijmo.input.ComboBox('#cboStockInDetailCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isStockInDetailCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboBranchFilters(this.selectedValue);
+                            } else {
+                                createCboBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboStockOutDetailCompany.dispose();
+                    cboStockOutDetailCompany = new wijmo.input.ComboBox('#cboStockOutDetailCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isStockOutDetailCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboBranchFilters(this.selectedValue);
+                            } else {
+                                createCboBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboStockTransferDetailCompany.dispose();
+                    cboStockTransferDetailCompany = new wijmo.input.ComboBox('#cboStockTransferDetailCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isStockTransferDetailCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboBranchFilters(this.selectedValue);
+                            } else {
+                                createCboBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboFixedAssetCompany.dispose();
+                    cboFixedAssetCompany = new wijmo.input.ComboBox('#cboFixedAssetCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isFixedAssetCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboBranchFilters(this.selectedValue);
+                            } else {
+                                createCboBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    if (cboInventoryCompany.selectedValue != null) {
+                        createCboBranchFilters(cboInventoryCompany.selectedValue);
+                    } else {
+                        createCboBranchFilters(null);
                     }
                 }
             });
-            return branches;
         }
 
-        // ==========================
-        // CBO Branches in Stock Card
-        // ==========================
-        function createCboBranchesStockCardFilterByCompany(branches) {
-            var branchesCollection = new wijmo.collections.CollectionView(branches);
-            var branchList = new Array();
-            for (var i = 0; i < branchesCollection.items.length; i++) {
-                branchList.push(branchesCollection.items[i].Branch);
-            }
+        // ==============
+        // Branch Filters
+        // ==============
+        function createCboBranchFilters(companyId) {
+            var branchObservableArray = new wijmo.collections.ObservableArray();
+            if (companyId != null) {
+                $.ajax({
+                    url: '/api/branch/byCompanyId/list/locked/' + companyId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branchObservableArray.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Branch: branchResults[i]["Branch"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"]
+                                });
+                            }
+                        }
 
-            var disabled;
-            if (branchesCollection.items.length == 0) {
-                disabled = true;
+                        var disabled = true;
+                        if (branchResults.length > 0) {
+                            disabled = false;
+
+                        } else {
+
+                        }
+
+                        if (isInventoryCompanySelected) {
+                            cboInventoryBranch.dispose();
+                            cboInventoryBranch = new wijmo.input.ComboBox('#cboInventoryBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isStockCardCompanySelected) {
+                            cboStockCardBranch.dispose();
+                            cboStockCardBranch = new wijmo.input.ComboBox('#cboStockCardBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isStockInDetailCompanySelected) {
+                            cboStockInDetailBranch.dispose();
+                            cboStockInDetailBranch = new wijmo.input.ComboBox('#cboStockInDetailBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isStockOutDetailCompanySelected) {
+                            cboStockOutDetailBranch.dispose();
+                            cboStockOutDetailBranch = new wijmo.input.ComboBox('#cboStockOutDetailBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isStockTransferDetailCompanySelected) {
+                            cboStockTransferDetailBranch.dispose();
+                            cboStockTransferDetailBranch = new wijmo.input.ComboBox('#cboStockTransferDetailBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isFixedAssetCompanySelected) {
+                            cboFixedAssetBranch.dispose();
+                            cboFixedAssetBranch = new wijmo.input.ComboBox('#cboFixedAssetBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (!enableBranchSelect) {
+                            enableBranchSelect = true;
+                            createCboItemFilters();
+                        }
+
+                        isInventoryCompanySelected = false;
+                        isStockCardCompanySelected = false;
+                        isStockInDetailCompanySelected = false;
+                        isStockOutDetailCompanySelected = false;
+                        isStockTransferDetailCompanySelected = false;
+                        isFixedAssetCompanySelected = false;
+                    }
+                });
             } else {
-                disabled = false;
-            }
+                cboInventoryBranch.dispose();
+                cboInventoryBranch = new wijmo.input.ComboBox('#cboInventoryBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
 
-            document.getElementById('StockCard_Branch_data').value = "";
+                cboStockCardBranch.dispose();
+                cboStockCardBranch = new wijmo.input.ComboBox('#cboStockCardBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
 
-            // branches
-            cboStockCardBranches.dispose();
-            cboStockCardBranches = new wijmo.input.ComboBox('#StockCard_Branch', {
-                disabled: disabled,
-                placeholder: "Select Branch",
-                itemsSource: branchList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('StockCard_Branch_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#StockCard_Branch_data").val(branchesCollection.items[this.selectedIndex].Id);
+                isStockInDetailCompanySelected.dispose();
+                isStockInDetailCompanySelected = new wijmo.input.ComboBox('#isStockInDetailCompanySelected', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                isStockOutDetailCompanySelected.dispose();
+                isStockOutDetailCompanySelected = new wijmo.input.ComboBox('#isStockOutDetailCompanySelected', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                isStockTransferDetailCompanySelected.dispose();
+                isStockTransferDetailCompanySelected = new wijmo.input.ComboBox('#isStockTransferDetailCompanySelected', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboAPReceivingReceiptSummaryReportBranch.dispose();
+                cboAPReceivingReceiptSummaryReportBranch = new wijmo.input.ComboBox('#cboAPReceivingReceiptSummaryReportBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                isFixedAssetCompanySelected.dispose();
+                isFixedAssetCompanySelected = new wijmo.input.ComboBox('#isFixedAssetCompanySelected', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                if (!enableBranchSelect) {
+                    enableBranchSelect = true;
+                    createCboItemFilters();
                 }
-            });
+
+                isInventoryCompanySelected = false;
+                isStockCardCompanySelected = false;
+                isStockInDetailCompanySelected = false;
+                isStockOutDetailCompanySelected = false;
+                isStockTransferDetailCompanySelected = false;
+                isFixedAssetCompanySelected = false;
+            }
         }
 
-        // ========================
-        // CBO Branches in Stock In
-        // ========================
-        function createCboBranchesStockInFilterByCompany(branches) {
-            var branchesCollection = new wijmo.collections.CollectionView(branches);
-            var branchList = new Array();
-            for (var i = 0; i < branchesCollection.items.length; i++) {
-                branchList.push(branchesCollection.items[i].Branch);
-            }
-
-            var disabled;
-            if (branchesCollection.items.length == 0) {
-                disabled = true;
-            } else {
-                disabled = false;
-            }
-
-            document.getElementById('StockIn_Branch_data').value = "";
-
-            // branches
-            cboStockInBranches.dispose();
-            cboStockInBranches = new wijmo.input.ComboBox('#StockIn_Branch', {
-                disabled: disabled,
-                placeholder: "Select Branch",
-                itemsSource: branchList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('StockIn_Branch_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#StockIn_Branch_data").val(branchesCollection.items[this.selectedIndex].Id);
-                }
-            });
-        }
-
-        // =========================
-        // CBO Branches in Stock Out
-        // =========================
-        function createCboBranchesStockOutFilterByCompany(branches) {
-            var branchesCollection = new wijmo.collections.CollectionView(branches);
-            var branchList = new Array();
-            for (var i = 0; i < branchesCollection.items.length; i++) {
-                branchList.push(branchesCollection.items[i].Branch);
-            }
-
-            var disabled;
-            if (branchesCollection.items.length == 0) {
-                disabled = true;
-            } else {
-                disabled = false;
-            }
-
-            document.getElementById('StockOut_Branch_data').value = "";
-
-            // branches
-            cboStockOutBranches.dispose();
-            cboStockOutBranches = new wijmo.input.ComboBox('#StockOut_Branch', {
-                disabled: disabled,
-                placeholder: "Select Branch",
-                itemsSource: branchList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('StockOut_Branch_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#StockOut_Branch_data").val(branchesCollection.items[this.selectedIndex].Id);
-                }
-            });
-        }
-
-        // ==============================
-        // CBO Branches in Stock Transfer
-        // ==============================
-        function createCboBranchesStockTransferFilterByCompany(branches) {
-            var branchesCollection = new wijmo.collections.CollectionView(branches);
-            var branchList = new Array();
-            for (var i = 0; i < branchesCollection.items.length; i++) {
-                branchList.push(branchesCollection.items[i].Branch);
-            }
-
-            var disabled;
-            if (branchesCollection.items.length == 0) {
-                disabled = true;
-            } else {
-                disabled = false;
-            }
-
-            document.getElementById('StockTransfer_Branch_data').value = "";
-
-            // branches
-            cboStockTransferBranches.dispose();
-            cboStockTransferBranches = new wijmo.input.ComboBox('#StockTransfer_Branch', {
-                disabled: disabled,
-                placeholder: "Select Branch",
-                itemsSource: branchList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('StockTransfer_Branch_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#StockTransfer_Branch_data").val(branchesCollection.items[this.selectedIndex].Id);
-                }
-            });
-        }
-
-        // ======================
-        // Get Item of Stock Card
-        // ======================
-        function getItemStockCard() {
-            ItemsStockCard = new wijmo.collections.ObservableArray();
-
+        // ============
+        // Item Filters
+        // ============
+        function createCboItemFilters() {
+            var itemsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listArticleByArticleTypeId/1',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                data: {},
                 success: function (Results) {
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-                            ItemsStockCard.push({
+                            itemsObservableArray.push({
                                 Id: Results[i]["Id"],
-                                ArticleCode: Results[i]["ArticleCode"],
-                                ManualArticleCode: Results[i]["ManualArticleCode"],
-                                Article: Results[i]["Article"],
-                                Category: Results[i]["Category"],
-                                ArticleTypeId: Results[i]["ArticleTypeId"],
-                                ArticleType: Results[i]["ArticleType"],
-                                ArticleGroupId: Results[i]["ArticleGroupId"],
-                                ArticleGroup: Results[i]["ArticleGroup"],
-                                AccountId: Results[i]["AccountId"],
-                                Account: Results[i]["Account"],
-                                SalesAccountId: Results[i]["SalesAccountId"],
-                                CostAccountId: Results[i]["CostAccountId"],
-                                AssetAccountId: Results[i]["AssetAccountId"],
-                                ExpenseAccountId: Results[i]["ExpenseAccountId"],
-                                UnitId: Results[i]["UnitId"],
-                                OutputTaxId: Results[i]["OutputTaxId"],
-                                InputTaxId: Results[i]["InputTaxId"],
-                                WTaxTypeId: Results[i]["WTaxTypeId"],
-                                Price: Results[i]["Price"],
-                                Cost: Results[i]["Cost"],
-                                IsInventory: Results[i]["IsInventory"],
-                                Particulars: Results[i]["Particulars"],
-                                Address: Results[i]["Address"],
-                                TermId: Results[i]["TermId"],
-                                ContactNumber: Results[i]["ContactNumber"],
-                                ContactPerson: Results[i]["ContactPerson"],
-                                TaxNumber: Results[i]["TaxNumber"],
-                                CreditLimit: Results[i]["CreditLimit"],
-                                DateAcquired: Results[i]["DateAcquired"],
-                                UsefulLife: Results[i]["UsefulLife"],
-                                SalvageValue: Results[i]["SalvageValue"],
-                                ManualArticleOldCode: Results[i]["ManualArticleOldCode"],
-                                IsLocked: Results[i]["IsLocked"],
-                                CreatedById: Results[i]["CreatedById"],
-                                CreatedBy: Results[i]["CreatedBy"],
-                                CreatedDateTime: Results[i]["CreatedDateTime"],
-                                UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedBy: Results[i]["UpdatedBy"],
-                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                Article: Results[i]["Article"]
                             });
                         }
-                        createCboItems(ItemsStockCard);
-                    } else {
-                        createCboItems(ItemsStockCard);
                     }
-                }
-            });
-            return ItemsStockCard;
-        }
 
-        // =================
-        // Items - Combo Box
-        // =================
-        function createCboItems(ItemsStockCard) {
-            var itemCollection = new wijmo.collections.CollectionView(ItemsStockCard);
-            var itemList = new Array();
-            for (var i = 0; i < itemCollection.items.length; i++) {
-                itemList.push(itemCollection.items[i].Article);
-            }
+                    var disabled = true;
+                    if (Results.length > 0) {
+                        disabled = false;
+                    } else {
 
-            cboItems.dispose();
-            cboItems = new wijmo.input.ComboBox('#Items_Item', {
-                placeholder: "Select Items",
-                itemsSource: itemList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('Items_Item_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#Items_Item_data").val(itemCollection.items[this.selectedIndex].Id);
+                    }
+
+                    cboStockCardItem.dispose();
+                    cboStockCardItem = new wijmo.input.ComboBox('#cboStockCardItem', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: itemsObservableArray,
+                        displayMemberPath: "Article",
+                        selectedValuePath: "Id"
+                    });
+
+                    createCboItemGroupFilters();
                 }
             });
         }
 
-        // ==============
-        // Get Item Group
-        // ==============
-        function getItemGroup() {
-            ItemGroup = new wijmo.collections.ObservableArray();
-
+        // ==================
+        // Item Group Filters
+        // ==================
+        function createCboItemGroupFilters() {
+            var itemGroupObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listArticleGroupByArticleTypeId/1',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                data: {},
                 success: function (Results) {
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-                            ItemGroup.push({
+                            itemGroupObservableArray.push({
                                 Id: Results[i]["Id"],
-                                ArticleGroup: Results[i]["ArticleGroup"],
-                                ArticleTypeId: Results[i]["ArticleTypeId"],
-                                ArticleType: Results[i]["ArticleType"],
-                                AccountId: Results[i]["AccountId"],
-                                Account: Results[i]["Account"],
-                                SalesAccountId: Results[i]["SalesAccountId"],
-                                SalesAccount: Results[i]["SalesAccount"],
-                                CostAccountId: Results[i]["CostAccountId"],
-                                CostAccount: Results[i]["CostAccount"],
-                                AssetAccountId: Results[i]["AssetAccountId"],
-                                AssetAccount: Results[i]["AssetAccount"],
-                                ExpenseAccountId: Results[i]["ExpenseAccountId"],
-                                ExpenseAccount: Results[i]["ExpenseAccount"],
-                                IsLocked: Results[i]["IsLocked"],
-                                CreatedById: Results[i]["CreatedById"],
-                                CreatedBy: Results[i]["CreatedBy"],
-                                CreatedDateTime: Results[i]["CreatedDateTime"],
-                                UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedBy: Results[i]["UpdatedBy"],
-                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                ArticleGroup: Results[i]["ArticleGroup"]
                             });
                         }
-                        createCboItemGroup(ItemGroup);
-                    } else {
-                        createCboItemGroup(ItemGroup);
                     }
+
+                    var disabled = true;
+                    if (Results.length > 0) {
+                        disabled = false;
+                    } else {
+
+                    }
+
+                    cboItemListItemGroup.dispose();
+                    cboItemListItemGroup = new wijmo.input.ComboBox('#cboItemListItemGroup', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: itemGroupObservableArray,
+                        displayMemberPath: "ArticleGroup",
+                        selectedValuePath: "Id"
+                    });
+
+                    cboItemComponentListItemGroup.dispose();
+                    cboItemComponentListItemGroup = new wijmo.input.ComboBox('#cboItemComponentListItemGroup', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: itemGroupObservableArray,
+                        displayMemberPath: "ArticleGroup",
+                        selectedValuePath: "Id"
+                    });
+
+                    cboPhysicalCountSheetItemGroup.dispose();
+                    cboPhysicalCountSheetItemGroup = new wijmo.input.ComboBox('#cboPhysicalCountSheetItemGroup', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: itemGroupObservableArray,
+                        displayMemberPath: "ArticleGroup",
+                        selectedValuePath: "Id"
+                    });
+
+                    NProgress.done();
                 }
             });
-            return ItemGroup;
         }
 
-        // ======================
-        // Item Group - Combo Box
-        // ======================
-        function createCboItemGroup(ItemGroup) {
-            var itemGroupCollection = new wijmo.collections.CollectionView(ItemGroup);
-            var itemGroupList = new Array();
-            for (var i = 0; i < itemGroupCollection.items.length; i++) {
-                itemGroupList.push(itemGroupCollection.items[i].ArticleGroup + ", " + itemGroupCollection.items[i].ArticleType);
+        // =====================
+        // Inventory Report View
+        // =====================
+        function btnInventoryReportViewOnclick() {
+            if (cboInventoryCompany.selectedValue != null) {
+                if (cboInventoryBranch.selectedValue != null) {
+                    var startDate = cboInventoryStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboInventoryEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboInventoryCompany.selectedValue;
+                    var branchId = cboInventoryBranch.selectedValue;
+
+                    window.location.href = '/Software/InventoryReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
             }
+        }
 
-            cboItemGroup.dispose();
-            cboItemGroup = new wijmo.input.ComboBox('#ItemGroup_Item', {
-                placeholder: "Select Item Group",
-                itemsSource: itemGroupList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('ItemGroup_Item_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#ItemGroup_Item_data").val(itemGroupCollection.items[this.selectedIndex].Id);
-                }
-            });
+        // ==========================
+        // Inventory Report Print PDF
+        // ==========================
+        function btnInventoryReportPrintPDFOnclick() {
+            if (cboInventoryCompany.selectedValue != null) {
+                if (cboInventoryBranch.selectedValue != null) {
+                    var startDate = cboInventoryStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboInventoryEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboInventoryCompany.selectedValue;
+                    var branchId = cboInventoryBranch.selectedValue;
 
-            cboItemComponentGroup.dispose();
-            cboItemComponentGroup = new wijmo.input.ComboBox('#ItemGroup_ItemComponent', {
-                placeholder: "Select Item Group",
-                itemsSource: itemGroupList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('ItemGroup_ItemComponent_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#ItemGroup_ItemComponent_data").val(itemGroupCollection.items[this.selectedIndex].Id);
+                    window.location.href = '/RepInventoryReport/InventoryReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
                 }
-            });
+            } else {
+                toastr.error("Lacking Information");
+            }
+        }
 
-            cboPhysicalCountSheetItemGroup.dispose();
-            cboPhysicalCountSheetItemGroup = new wijmo.input.ComboBox('#ItemGroup_PhysicalCountSheet', {
-                placeholder: "Select Item Group",
-                itemsSource: itemGroupList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('ItemGroup_PhysicalCountSheet_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#ItemGroup_PhysicalCountSheet_data").val(itemGroupCollection.items[this.selectedIndex].Id);
+        // ===============
+        // Stock Card View
+        // ===============
+        function btnStockCardViewOnclick() {
+            if (cboStockCardCompany.selectedValue != null) {
+                if (cboStockCardBranch.selectedValue != null) {
+                    if (cboStockCardItem.selectedValue != null) {
+                        var startDate = cboInventoryStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                        var endDate = cboInventoryEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                        var companyId = cboStockCardCompany.selectedValue;
+                        var branchId = cboStockCardBranch.selectedValue;
+                        var itemId = cboStockCardItem.selectedValue;
+
+                        window.location.href = '/Software/StockCard?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId + '&ItemId=' + itemId;
+                    } else {
+                        toastr.error("Lacking Information");
+                    }
+                } else {
+                    toastr.error("Lacking Information");
                 }
-            });
+            } else {
+                toastr.error("Lacking Information");
+            }
+        }
+
+        // ====================
+        // Stock Card Print PDF
+        // ====================
+        function btnStockCardPrintPDFOnclick() {
+            if (cboStockCardCompany.selectedValue != null) {
+                if (cboStockCardBranch.selectedValue != null) {
+                    if (cboStockCardItem.selectedValue != null) {
+                        var startDate = cboInventoryStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                        var endDate = cboInventoryEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                        var companyId = cboStockCardCompany.selectedValue;
+                        var branchId = cboStockCardBranch.selectedValue;
+                        var itemId = cboStockCardItem.selectedValue;
+
+                        window.location.href = '/RepStockCard/StockCard?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId + '&ItemId=' + itemId;
+                    } else {
+                        toastr.error("Lacking Information");
+                    }
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
+        }
+
+        // ================================
+        // Stock In Detail Report Print PDF
+        // ================================
+        function btnStockInDetailPrintPDFOnclick() {
+            if (cboStockInDetailCompany.selectedValue != null) {
+                if (cboStockInDetailBranch.selectedValue != null) {
+                    var startDate = cboStockInDetailStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboStockInDetailEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboStockInDetailCompany.selectedValue;
+                    var branchId = cboStockInDetailBranch.selectedValue;
+
+                    window.location.href = '/RepStockInDetailReport/StockInDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
+        }
+
+        // =================================
+        // Stock Out Detail Report Print PDF
+        // =================================
+        function btnStockOutDetailPrintPDFOnclick() {
+            if (cboStockOutDetailCompany.selectedValue != null) {
+                if (cboStockOutDetailBranch.selectedValue != null) {
+                    var startDate = cboStockOutDetailStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboStockOutDetailEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboStockOutDetailCompany.selectedValue;
+                    var branchId = cboStockOutDetailBranch.selectedValue;
+
+                    window.location.href = '/RepStockOutDetailReport/StockOutDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
+        }
+
+        // ======================================
+        // Stock Transfer Detail Report Print PDF
+        // ======================================
+        function btnStockTransferDetailPrintPDFOnclick() {
+            if (cboStockTransferDetailCompany.selectedValue != null) {
+                if (cboStockTransferDetailBranch.selectedValue != null) {
+                    var startDate = cboStockTransferDetailStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboStockTransferDetailEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboStockTransferDetailCompany.selectedValue;
+                    var branchId = cboStockTransferDetailBranch.selectedValue;
+
+                    window.location.href = '/RepStockTransferDetailReport/StockTransferDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
+        }
+
+        // ===================
+        // Item List Print PDF
+        // ===================
+        function btnItemListPrintPDFOnclick() {
+            if (cboItemListItemGroup.selectedValue != null) {
+                var itemGroupId = cboItemListItemGroup.selectedValue;
+                window.location.href = '/RepItemList/ItemList?ItemGroupId=' + itemGroupId;
+            } else {
+                toastr.error("Lacking Information");
+            }
         }
 
         // =============================
-        // Start and End Dates Functions
+        // Item Component List Print PDF
         // =============================
-        // get Inventory Start Date
-        function getInventoryStartDate() {
-            // Input Inventory Start Date
-            inventoryStartDate.dispose();
-            inventoryStartDate = new wijmo.input.InputDate('#inventory_StartDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('inventory_StartDate_data').value),
-                mask: '99-99-9999',
-                max: new Date(document.getElementById('inventory_EndDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('inventory_StartDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getInventoryEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Inventory End Date
-        function getInventoryEndDate() {
-            // Input Inventory End Date
-            inventoryEndDate.dispose();
-            inventoryEndDate = new wijmo.input.InputDate('#inventory_EndDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('inventory_EndDate_data').value),
-                mask: '99-99-9999',
-                min: new Date(document.getElementById('inventory_StartDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('inventory_EndDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getInventoryStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Stock Card Start Date
-        function getStockCardStartDate() {
-            // Input Stock Card Start Date
-            stockCardStartDate.dispose();
-            stockCardStartDate = new wijmo.input.InputDate('#stockCard_StartDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('stockCard_StartDate_data').value),
-                mask: '99-99-9999',
-                max: new Date(document.getElementById('stockCard_EndDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('stockCard_StartDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getStockCardEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Stock Card End Date
-        function getStockCardEndDate() {
-            // Input Stock Card End Date
-            stockCardEndDate.dispose();
-            stockCardEndDate = new wijmo.input.InputDate('#stockCard_EndDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('stockCard_EndDate_data').value),
-                mask: '99-99-9999',
-                min: new Date(document.getElementById('stockCard_StartDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('stockCard_EndDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getStockCardStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Stock In Start Date
-        function getStockInStartDate() {
-            // Input Stock In Start Date
-            stockInStartDate.dispose();
-            stockInStartDate = new wijmo.input.InputDate('#stockIn_StartDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('stockIn_StartDate_data').value),
-                mask: '99/99/9999',
-                max: new Date(document.getElementById('stockIn_EndDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('stockIn_StartDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getStockInEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Stock In End Date
-        function getStockInEndDate() {
-            // Input Stock In End Date
-            stockInEndDate.dispose();
-            stockInEndDate = new wijmo.input.InputDate('#stockIn_EndDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('stockIn_EndDate_data').value),
-                mask: '99/99/9999',
-                min: new Date(document.getElementById('stockIn_StartDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('stockIn_EndDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getStockInStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Stock Out Start Date
-        function getStockOutStartDate() {
-            // Input Stock In Start Date
-            stockOutStartDate.dispose();
-            stockOutStartDate = new wijmo.input.InputDate('#stockOut_StartDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('stockOut_StartDate_data').value),
-                mask: '99/99/9999',
-                max: new Date(document.getElementById('stockOut_EndDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('stockOut_StartDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getStockOutEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Stock Out End Date
-        function getStockOutEndDate() {
-            // Input Stock Out End Date
-            stockOutEndDate.dispose();
-            stockOutEndDate = new wijmo.input.InputDate('#stockOut_EndDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('stockOut_EndDate_data').value),
-                mask: '99/99/9999',
-                min: new Date(document.getElementById('stockOut_StartDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('stockOut_EndDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getStockOutStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Stock Transfer Start Date
-        function getStockTransferStartDate() {
-            // Input Stock Transfer Start Date
-            stockTransferStartDate.dispose();
-            stockTransferStartDate = new wijmo.input.InputDate('#stockTransfer_StartDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('stockTransfer_StartDate_data').value),
-                mask: '99/99/9999',
-                max: new Date(document.getElementById('stockTransfer_EndDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('stockTransfer_StartDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getStockTransferEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Stock Transfer End Date
-        function getStockTransferEndDate() {
-            // Input Stock Transfer End Date
-            stockTransferEndDate.dispose();
-            stockTransferEndDate = new wijmo.input.InputDate('#stockTransfer_EndDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('stockTransfer_EndDate_data').value),
-                mask: '99/99/9999',
-                min: new Date(document.getElementById('stockTransfer_StartDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('stockTransfer_EndDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getStockTransferStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Stock Transfer Start Date
-        function getfixedAssetReportStartDate() {
-            // Input Stock Transfer Start Date
-            fixedAssetReportStartDate.dispose();
-            fixedAssetReportStartDate = new wijmo.input.InputDate('#fixedAssetReport_StartDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('fixedAssetReport_StartDate_data').value),
-                mask: '99/99/9999',
-                max: new Date(document.getElementById('fixedAssetReport_EndDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('fixedAssetReport_StartDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getfixedAssetReportEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Stock Transfer End Date
-        function getfixedAssetReportEndDate() {
-            // Input Stock Transfer End Date
-            fixedAssetReportEndDate.dispose();
-            fixedAssetReportEndDate = new wijmo.input.InputDate('#fixedAssetReport_EndDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('fixedAssetReport_EndDate_data').value),
-                mask: '99/99/9999',
-                min: new Date(document.getElementById('fixedAssetReport_StartDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('fixedAssetReport_EndDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getfixedAssetReportStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        function InventoryReportPDF_OnClick() {
-            var inventoryReportStartDate = document.getElementById('inventory_StartDate_data').value;
-            var inventoryReportEndDate = document.getElementById('inventory_EndDate_data').value;
-
-            var companyId;
-            if (document.getElementById('Inventory_Company_data').value == "") {
-                companyId = 0;
-                document.getElementById('Inventory_Company').style.border = "1px solid red";
-                toastr.error("Lacking Information");
+        function btnItemComponentListPrintPDFOnclick() {
+            if (cboItemComponentListItemGroup.selectedValue != null) {
+                var itemGroupId = cboItemComponentListItemGroup.selectedValue;
+                window.location.href = '/RepItemComponentList/ItemComponentList?ItemGroupId=' + itemGroupId;
             } else {
-                companyId = document.getElementById('Inventory_Company_data').value;
-                document.getElementById('Inventory_Company').style.border = " ";
-                window.location.href = '/RepInventoryReport/InventoryReport?StartDate=' + convertDateToShortDateString(inventoryReportStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportEndDate) + '&CompanyId=' + companyId;
+                toastr.error("Lacking Information");
             }
         }
 
-        function InventoryReportView_OnClick() {
-            var inventoryReportStartDate = document.getElementById('inventory_StartDate_data').value;
-            var inventoryReportEndDate = document.getElementById('inventory_EndDate_data').value;
-
-            var companyId;
-            if (document.getElementById('Inventory_Company_data').value == "") {
-                companyId = 0;
-                document.getElementById('Inventory_Company').style.border = "1px solid red";
-                toastr.error("Lacking Information");
+        // ==============================
+        // Physical Count Sheet Print PDF
+        // ==============================
+        function btnPhysicalCountSheetPrintPDFOnclick() {
+            if (cboPhysicalCountSheetItemGroup.selectedValue != null) {
+                var itemGroupId = cboPhysicalCountSheetItemGroup.selectedValue;
+                window.location.href = '/RepPhysicalCountSheet/PhysicalCountSheet?ItemGroupId=' + itemGroupId;
             } else {
-                companyId = document.getElementById('Inventory_Company_data').value;
-                document.getElementById('Inventory_Company').style.border = " ";
-                window.location.href = '/Software/InventoryReport?StartDate=' + convertDateToShortDateString(inventoryReportStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportEndDate) + '&CompanyId=' + companyId;
+                toastr.error("Lacking Information");
             }
         }
 
-        function InventoryReportStockCardPDF_OnClick() {
-            var inventoryReportStockCardStartDate = document.getElementById('stockCard_StartDate_data').value;
-            var inventoryReportStockCardEndDate = document.getElementById('stockCard_EndDate_data').value;
+        // ============================
+        // Fixed Asset Report Print PDF
+        // ============================
+        function btnFixedAssetPrintPDFOnclick() {
+            if (cboFixedAssetCompany.selectedValue != null) {
+                if (cboFixedAssetBranch.selectedValue != null) {
+                    var startDate = cboFixedAssetStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboFixedAssetEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboFixedAssetCompany.selectedValue;
+                    var branchId = cboFixedAssetBranch.selectedValue;
 
-            var branchId;
-            var itemId;
-            if (document.getElementById('StockCard_Branch_data').value == "") {
-                branchId = 0;
-                document.getElementById('StockCard_Branch').style.border = "1px solid red";
-                document.getElementById('Items_Item').style.border = "1px solid red";
-                toastr.error("Lacking Information");
-            } else if (document.getElementById("Items_Item_data").value == "") {
-                itemId = 0;
-                document.getElementById('StockCard_Branch').style.border = "1px solid red";
-                document.getElementById('Items_Item').style.border = "1px solid red";
-                toastr.error("Lacking Information");
+                    window.location.href = '/RepFixedAssets/FixedAssets?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
             } else {
-                branchId = document.getElementById('StockCard_Branch_data').value;
-                itemId = document.getElementById("Items_Item_data").value;
-
-                document.getElementById('StockCard_Branch').style.border = " ";
-                document.getElementById('Items_Item').style.border = " ";
-                window.location.href = '/RepStockCard/StockCard?StartDate=' + convertDateToShortDateString(inventoryReportStockCardStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportStockCardEndDate) + '&BranchId=' + branchId + '&ItemId=' + itemId;
+                toastr.error("Lacking Information");
             }
         }
 
-        function InventoryReportStockCardView_OnClick() {
-            var inventoryReportStockCardStartDate = document.getElementById('stockCard_StartDate_data').value;
-            var inventoryReportStockCardEndDate = document.getElementById('stockCard_EndDate_data').value;
-
-            var branchId;
-            var itemId;
-            if (document.getElementById('StockCard_Branch_data').value == "") {
-                branchId = 0;
-                document.getElementById('StockCard_Branch').style.border = "1px solid red";
-                document.getElementById('Items_Item').style.border = "1px solid red";
-                toastr.error("Lacking Information");
-            } else if (document.getElementById("Items_Item_data").value == "") {
-                itemId = 0;
-                document.getElementById('StockCard_Branch').style.border = "1px solid red";
-                document.getElementById('Items_Item').style.border = "1px solid red";
-                toastr.error("Lacking Information");
-            } else {
-                branchId = document.getElementById('StockCard_Branch_data').value;
-                itemId = document.getElementById("Items_Item_data").value;
-
-                document.getElementById('StockCard_Branch').style.border = " ";
-                document.getElementById('Items_Item').style.border = " ";
-                window.location.href = '/Software/StockCard?StartDate=' + convertDateToShortDateString(inventoryReportStockCardStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportStockCardEndDate) + '&BranchId=' + branchId + '&ItemId=' + itemId;
-            }
-        }
-
-        function InventoryReportStockInDetailPDF_OnClick() {
-            var inventoryReportStockInDetailStartDate = document.getElementById('stockIn_StartDate_data').value;
-            var inventoryReportStockInDetailEndDate = document.getElementById('stockIn_EndDate_data').value;
-
-            var branchId;
-            if (document.getElementById('StockIn_Branch_data').value == "") {
-                branchId = 0;
-                document.getElementById('StockIn_Branch').style.border = "1px solid red";
-                toastr.error("Lacking Information");
-            } else {
-                branchId = document.getElementById('StockIn_Branch_data').value;
-                document.getElementById('StockIn_Branch').style.border = " ";
-                window.location.href = '/RepStockInDetailReport/StockInDetailReport?StartDate=' + convertDateToShortDateString(inventoryReportStockInDetailStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportStockInDetailEndDate) + '&BranchId=' + branchId;
-            }
-        }
-
-        function InventoryReportStockOutDetailPDF_OnClick() {
-            var inventoryReportStockOutDetailStartDate = document.getElementById('stockOut_StartDate_data').value;
-            var inventoryReportStockOutDetailEndDate = document.getElementById('stockOut_EndDate_data').value;
-
-            var branchId;
-            if (document.getElementById('StockOut_Branch_data').value == "") {
-                branchId = 0;
-                document.getElementById('StockOut_Branch').style.border = "1px solid red";
-                toastr.error("Lacking Information");
-            } else {
-                branchId = document.getElementById('StockOut_Branch_data').value;
-                document.getElementById('StockOut_Branch').style.border = " ";
-                window.location.href = '/RepStockOutDetailReport/StockOutDetailReport?StartDate=' + convertDateToShortDateString(inventoryReportStockOutDetailStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportStockOutDetailEndDate) + '&BranchId=' + branchId;
-            }
-        }
-
-        function InventoryReportStockTransferDetailPDF_OnClick() {
-            var inventoryReportStockTransferDetailStartDate = document.getElementById('stockTransfer_StartDate_data').value;
-            var inventoryReportStockTransferDetailEndDate = document.getElementById('stockTransfer_EndDate_data').value;
-
-            var branchId;
-            if (document.getElementById('StockTransfer_Branch_data').value == "") {
-                branchId = 0;
-                document.getElementById('StockTransfer_Branch').style.border = "1px solid red";
-                toastr.error("Lacking Information");
-            } else {
-                branchId = document.getElementById('StockTransfer_Branch_data').value;
-                document.getElementById('StockTransfer_Branch').style.border = " ";
-                window.location.href = '/RepStockTransferDetailReport/StockTransferDetailReport?StartDate=' + convertDateToShortDateString(inventoryReportStockTransferDetailStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportStockTransferDetailEndDate) + '&BranchId=' + branchId;
-            }
-        }
-
-        function InventoryReportItemListPDF_OnClick() {
-            var ItemGroupId;
-            if (document.getElementById('ItemGroup_Item_data').value == "") {
-                branchId = 0;
-                document.getElementById('ItemGroup_Item').style.border = "1px solid red";
-                toastr.error("Lacking Information");
-            } else {
-                ItemGroupId = document.getElementById('ItemGroup_Item_data').value;
-                document.getElementById('ItemGroup_Item').style.border = "";
-                window.location.href = '/RepItemList/ItemList?ItemGroupId=' + ItemGroupId;
-            }
-        }
-
-        function InventoryReportItemComponentListPDF_OnClick() {
-            var ItemGroupId;
-            if (document.getElementById('ItemGroup_ItemComponent_data').value == "") {
-                branchId = 0;
-                document.getElementById('ItemGroup_ItemComponent').style.border = "1px solid red";
-                toastr.error("Lacking Information");
-            } else {
-                ItemGroupId = document.getElementById('ItemGroup_ItemComponent_data').value;
-                document.getElementById('ItemGroup_ItemComponent').style.border = "";
-                window.location.href = '/RepItemComponentList/ItemComponentList?ItemGroupId=' + ItemGroupId;
-            }
-        }
-
-        function InventoryReportPhysicalCountSheetPDF_OnClick() {
-            var ItemGroupId;
-            if (document.getElementById('ItemGroup_PhysicalCountSheet_data').value == "") {
-                branchId = 0;
-                document.getElementById('ItemGroup_PhysicalCountSheet').style.border = "1px solid red";
-                toastr.error("Lacking Information");
-            } else {
-                ItemGroupId = document.getElementById('ItemGroup_PhysicalCountSheet_data').value;
-                document.getElementById('ItemGroup_PhysicalCountSheet').style.border = "";
-                window.location.href = '/RepPhysicalCountSheet/PhysicalCountSheet?ItemGroupId=' + ItemGroupId;
-            }
-        }
-
-        function InventoryReportFixedAssetsPDF_OnClick() {
-            var inventoryReportFixedAssetsStartDate = document.getElementById('fixedAssetReport_StartDate_data').value;
-            var inventoryReportFixedAssetsEndDate = document.getElementById('fixedAssetReport_EndDate_data').value;
-
-            var companyId;
-            if (document.getElementById('fixedAssetReport_Company_data').value == "") {
-                companyId = 0;
-                document.getElementById('fixedAssetReport_Company').style.border = "1px solid red";
-                toastr.error("Lacking Information");
-            } else {
-                companyId = document.getElementById('fixedAssetReport_Company_data').value;
-                document.getElementById('fixedAssetReport_Company').style.border = " ";
-                window.location.href = '/RepFixedAssets/FixedAssets?StartDate=' + convertDateToShortDateString(inventoryReportFixedAssetsStartDate) + '&EndDate=' + convertDateToShortDateString(inventoryReportFixedAssetsEndDate) + '&CompanyId=' + companyId;
-            }
-        }
-
-        function convertDateToShortDateString(theDate) {
-            var theDate = new Date(theDate);
-            return [theDate.getFullYear(), theDate.getMonth() + 1, theDate.getDate()].join('-');
-        }
-
-        // ===========
-        // OnLoad Page
-        // ===========
+        // ============
+        // On Load Page
+        // ============
         $(document).ready(function () {
-            var newDate = new Date();
-            var defaultDate = newDate;
-
-            // Inventory Dates
-            document.getElementById('inventory_StartDate_data').value = defaultDate;
-            document.getElementById('inventory_EndDate_data').value = defaultDate;
-
-            inventoryStartDate = new wijmo.input.InputDate('#inventory_StartDate');
-            inventoryEndDate = new wijmo.input.InputDate('#inventory_EndDate');
-
-            getInventoryStartDate();
-            getInventoryEndDate();
-
-            // Stock Card Dates
-            document.getElementById('stockCard_StartDate_data').value = defaultDate;
-            document.getElementById('stockCard_EndDate_data').value = defaultDate;
-
-            stockCardStartDate = new wijmo.input.InputDate('#stockCard_StartDate');
-            stockCardEndDate = new wijmo.input.InputDate('#stockCard_EndDate');
-
-            getStockCardStartDate();
-            getStockCardEndDate();
-
-            // Stock In Dates
-            document.getElementById('stockIn_StartDate_data').value = defaultDate;
-            document.getElementById('stockIn_EndDate_data').value = defaultDate;
-
-            stockInStartDate = new wijmo.input.InputDate('#stockIn_StartDate');
-            stockInEndDate = new wijmo.input.InputDate('#stockIn_EndDate');
-
-            getStockInStartDate();
-            getStockInEndDate();
-
-            // Stock Out Dates
-            document.getElementById('stockOut_StartDate_data').value = defaultDate;
-            document.getElementById('stockOut_EndDate_data').value = defaultDate;
-
-            stockOutStartDate = new wijmo.input.InputDate('#stockOut_StartDate');
-            stockOutEndDate = new wijmo.input.InputDate('#stockOut_EndDate');
-
-            getStockOutStartDate();
-            getStockOutEndDate();
-
-            // Stock Transfer Dates
-            document.getElementById('stockTransfer_StartDate_data').value = defaultDate;
-            document.getElementById('stockTransfer_EndDate_data').value = defaultDate;
-
-            stockTransferStartDate = new wijmo.input.InputDate('#stockTransfer_StartDate');
-            stockTransferEndDate = new wijmo.input.InputDate('#stockTransfer_EndDate');
-
-            getStockTransferStartDate();
-            getStockTransferEndDate();
-
-            // fixed Asset Report Dates
-            document.getElementById('fixedAssetReport_StartDate_data').value = defaultDate;
-            document.getElementById('fixedAssetReport_EndDate_data').value = defaultDate;
-
-            fixedAssetReportStartDate = new wijmo.input.InputDate('#fixedAssetReport_StartDate');
-            fixedAssetReportEndDate = new wijmo.input.InputDate('#fixedAssetReport_EndDate');
-
-            getfixedAssetReportStartDate();
-            getfixedAssetReportEndDate();
-
-            // Wijmo CBO Combo Box for Iventory
-            document.getElementById('Inventory_Company_data').value = "";
-            cboCompanyForInventory = new wijmo.input.ComboBox('#Inventory_Company');
-
-            // Wijmo CBO Combo Box for Stock Card
-            //cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company');
-            cboItems = new wijmo.input.ComboBox('#Items_Item');
-            cboStockCardBranches = new wijmo.input.ComboBox('#StockCard_Branch');
-
-            // Wijmo CBO Combo Box for Stock In
-            //cboStockInCompany = new wijmo.input.ComboBox('#StockIn_Company');
-            cboStockInBranches = new wijmo.input.ComboBox('#StockIn_Branch');
-
-            // Wijmo CBO Combo Box for Stock Out
-            //cboStockOutCompany = new wijmo.input.ComboBox('#StockOut_Company');
-            cboStockOutBranches = new wijmo.input.ComboBox('#StockOut_Branch');
-
-            // Wijmo CBO Combo Box for Stock Transfer
-            //cboStockTransferCompany = new wijmo.input.ComboBox('#StockTransfer_Company');
-            cboStockTransferBranches = new wijmo.input.ComboBox('#StockTransfer_Branch');
-
-            // Wijmo CBO Combo Box for Item List
-            cboItemGroup = new wijmo.input.ComboBox('#ItemGroup_Item');
-
-            // Wijmo CBO Combo Box for Item Component List
-            cboItemComponentGroup = new wijmo.input.ComboBox('#ItemGroup_ItemComponent');
-
-            // Wijmo CBO Combo Box for Item Physical Count Sheet List
-            cboPhysicalCountSheetItemGroup = new wijmo.input.ComboBox('#ItemGroup_PhysicalCountSheet');
-
-            // Wijmo CBO Combo Box for fixed Asset Report
-            cboFixedAssetReportCompany = new wijmo.input.ComboBox('#fixedAssetReport_Company');
-
-            // Call Function
-            getCompanies();
-            getItemStockCard();
-            getItemGroup();
-            getBranches();
-
+            createCboDateFilters();
         });
     </script>
     <script type="text/javascript">
