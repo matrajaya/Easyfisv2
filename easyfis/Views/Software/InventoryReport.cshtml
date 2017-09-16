@@ -19,7 +19,7 @@
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Inventory 
+                        Inventory
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -33,16 +33,16 @@
                         <table style="width: 100%" border="0">
                             <tr>
                                 <td style="width: 49%">
-                                    <div class="input-group ">
+                                    <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search">
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search...">
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 50%" align="right">
-                                    <button onclick="inventoryReportInventoryCSV_OnClick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                    <button onclick="inventoryReportInventoryPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
-                                    <a href="/Software/Inventory" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
+                                    <button onclick="btnInventoryReportCSVOnclick()" id="btnInventoryReportCSV" class="btn btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    <button onclick="btnInventoryReportPrintPDFOnclick()" id="btnInventoryReportPrintPDF" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                                    <a href="/Software/Inventory" class="btn btn-danger"><i class="fa fa-close"></i> Close</a>
                                 </td>
                             </tr>
                         </table>
@@ -50,202 +50,594 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 49%">
+                                <td style="width: 24%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Filter Company</span>
-                                        <input type="text" class="form-control " id="companyname" placeholder="filter company" disabled>
+                                        <span class="input-group-addon"><b>Start Date</b></span>
+                                        <div class="comboBox-wide" id="cboInventoryReportStartDate"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 50%" align="right">
+                                <td style="width: 24%" align="right">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Date</span>
-                                        <input type="text" class="form-control " id="inventoryDate" placeholder="Date" disabled>
+                                        <span class="input-group-addon"><b>End Date</b></span>
+                                        <div class="comboBox-wide" id="cboInventoryReportEndDate"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Company</b></span>
+                                        <div class="comboBox-wide" id="cboInventoryReportCompany"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Branch</b></span>
+                                        <div class="comboBox-wide" id="cboInventoryReportBranch"></div>
                                     </div>
                                 </td>
                             </tr>
                         </table>
                     </div>
-                    <div class="panel-body">
-                        <div id="inventoryGrid" class="grid"></div>
-                    </div>
                 </div>
+                <div id="inventoryReportGrid" class="grid" style="font-size: 12.5px;"></div>
+                <br /><br />
                 <div class="row">
-                    <div class="col-md-6"></div>
                     <div class="col-md-6">
-                        <table class="table table-responsive table-bordered">
-                            <tr>
-                                <td align="right">
-                                    <b>Total Amount: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="totalAmount">NA</span>
-                                </td>
-                            </tr>
-                        </table>
-                        <hr />
+
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="dl-horizontal dl-custom">
+                            <dt>
+                                <b>Total Amount</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalAmount" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Total Variance Amount</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalVarianceAmount" placeholder="0.00" disabled />
+                            </dd>
+                        </dl>
                     </div>
                 </div>
             </section>
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
+    <div id="c-mask" class="c-mask"></div>
+
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
-        var inventoryGrid;
+        // ================
+        // Global Variables
+        // ================
+        var cboInventoryReportStartDate = new wijmo.input.InputDate('#cboInventoryReportStartDate');
+        var cboInventoryReportEndDate = new wijmo.input.InputDate('#cboInventoryReportEndDate');
+        var isInventoryReportStartDateSelected = false;
+        var isInventoryReportEndDateSelected = false;
+        var cboInventoryReportCompany = new wijmo.input.ComboBox('#cboInventoryReportCompany');
+        var cboInventoryReportBranch = new wijmo.input.ComboBox('#cboInventoryReportBranch');
+        var inventoryReportCollections;
+        var inventoryReportGrid;
+        var isInventoryReportCompanySelected = false;
 
+        // ===================
+        // Get Parameter Value
+        // ===================
         function getParam(name) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+
             var regexS = "[\\?&]" + name + "=([^&#]*)";
             var regex = new RegExp(regexS);
+
             var results = regex.exec(window.location.href);
-            if (results == null)
+            if (results == null) {
                 return "";
-            else
+            } else {
                 return results[1];
+            }
         }
 
-        function getInventory() {
+        // ============
+        // Date Filters
+        // ============
+        function inventoryReportDateFilters() {
             NProgress.start();
-            var inventories = new wijmo.collections.ObservableArray;
-            document.getElementById("inventoryDate").value = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
-            $.ajax({
-                url: '/api/inventoryReport/list/' + getParam("StartDate") + "/" + getParam("EndDate") + "/" + getParam("CompanyId"),
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (inventoryResults) {
-                    if (inventoryResults.length > 0) {
-                        var totalBeg = 0;
-                        var totalIn = 0;
-                        var totalOut = 0;
-                        var totalEnd = 0;
-                        var totalAllAmount = 0;
-                        var totalVarianceAmount = 0;
-
-                        for (i = 0; i < inventoryResults.length; i++) {
-                            var totalAmount = inventoryResults[i]["Cost"] * inventoryResults[i]["EndQuantity"];
-                            var quantityVariance = inventoryResults[i]["EndQuantity"] - 0;
-                            var varianceAmount = inventoryResults[i]["Cost"] * quantityVariance;
-
-                            var branchId = inventoryResults[i]["BranchId"],
-
-                                articleLink = '/Software/StockCard?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&BranchId=' + branchId + '&ItemId=' + inventoryResults[i]["ArticleId"];
-
-                            totalAllAmount = totalAllAmount + totalAmount;
-                            totalVarianceAmount = totalVarianceAmount + varianceAmount;
-
-                            document.getElementById("totalAmount").innerHTML = (Math.round(totalAllAmount * 100) / 100).toLocaleString();
-
-                            inventories.push({
-                                Branch: inventoryResults[i]["Branch"],
-                                ArticleId: inventoryResults[i]["ArticleId"],
-                                Article: "<a href='" + articleLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left;'>" + inventoryResults[i]["Article"] + "</a>",
-                                ArticleForCSV: inventoryResults[i]["Article"],
-                                InventoryCode: inventoryResults[i]["InventoryCode"],
-                                Cost: inventoryResults[i]["Cost"],
-                                UnitId: inventoryResults[i]["UnitId"],
-                                Unit: inventoryResults[i]["Unit"],
-                                BegQuantity: inventoryResults[i]["BegQuantity"],
-                                InQuantity: inventoryResults[i]["InQuantity"],
-                                OutQuantity: inventoryResults[i]["OutQuantity"],
-                                EndQuantity: inventoryResults[i]["EndQuantity"],
-                                Amount: inventoryResults[i]["Amount"],
-                                TotalAmount: totalAmount,
-                                QuantityVariance: quantityVariance,
-                                VarianceAmount: varianceAmount,
-                                Count: "0.00"
-                            });
-                        }
-
-                        NProgress.done();
+            cboInventoryReportStartDate.dispose();
+            cboInventoryReportStartDate = new wijmo.input.InputDate('#cboInventoryReportStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("StartDate")),
+                onValueChanged: function () {
+                    if (!isInventoryReportStartDateSelected) {
+                        NProgress.start();
+                        refreshInventoryReportFlexGrid();
+                    } else {
+                        isInventoryReportStartDateSelected = false;
                     }
                 }
             });
-            return inventories;
+
+            cboInventoryReportEndDate.dispose();
+            cboInventoryReportEndDate = new wijmo.input.InputDate('#cboInventoryReportEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("EndDate")),
+                onValueChanged: function () {
+                    if (!isInventoryReportEndDateSelected) {
+                        NProgress.start();
+                        refreshInventoryReportFlexGrid();
+                    } else {
+                        isInventoryReportEndDateSelected = false;
+                    }
+                }
+            });
+
+            createCboCompany();
         }
 
-        function inventoryReportInventoryPDF_OnClick() {
-            window.location.href = '/RepInventoryReport/InventoryReport?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&CompanyId=' + getParam("CompanyId");
+        // ==============
+        // Company Filter
+        // ==============
+        function createCboCompany() {
+            var companyObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/company/list',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (companyResults) {
+                    if (companyResults.length > 0) {
+                        for (i = 0; i < companyResults.length; i++) {
+                            companyObservableArray.push({
+                                Id: companyResults[i]["Id"],
+                                Company: companyResults[i]["Company"],
+                                Address: companyResults[i]["Address"],
+                                ContactNumber: companyResults[i]["ContactNumber"],
+                                TaxNumber: companyResults[i]["TaxNumber"],
+                            });
+                        }
+                    }
+
+                    var disabled = true;
+                    if (companyResults.length > 0) {
+                        disabled = false;
+                    } else {
+                        $("#btnInventoryReportCSV").prop("disabled", true);
+                        $("#btnInventoryReportPrintPDF").prop("disabled", true);
+                    }
+
+                    cboInventoryReportCompany.dispose();
+                    cboInventoryReportCompany = new wijmo.input.ComboBox('#cboInventoryReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        selectedValue: getParam("CompanyId"),
+                        onSelectedIndexChanged: function () {
+                            NProgress.start();
+                            $("#btnInventoryReportCSV").prop("disabled", false);
+                            $("#btnInventoryReportPrintPDF").prop("disabled", false);
+                            isInventoryReportCompanySelected = true;
+                            createCboBranch();
+                        }
+                    });
+
+                    createCboBranch();
+                }
+            });
         }
 
-        //CSV Inventory
-        var inventoryCollections;
+        // =============
+        // Branch Filter
+        // =============
+        function createCboBranch() {
+            var branchObservableArray = new wijmo.collections.ObservableArray();
+            if (cboInventoryReportCompany.selectedValue != null) {
+                $.ajax({
+                    url: '/api/branch/byCompanyId/list/locked/' + cboInventoryReportCompany.selectedValue,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branchObservableArray.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Branch: branchResults[i]["Branch"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"]
+                                });
+                            }
+                        }
 
-        function inventoryReportInventoryCSV_OnClick() {
+                        var disabled = true;
+                        if (branchResults.length > 0) {
+                            disabled = false;
+                        } else {
+                            $("#btnInventoryReportCSV").prop("disabled", true);
+                            $("#btnInventoryReportPrintPDF").prop("disabled", true);
+                        }
 
-            var CSV = '';
-            var inventories = [];
-            var fileName = 'Inventory.CSV';
+                        cboInventoryReportBranch.dispose();
+                        cboInventoryReportBranch = new wijmo.input.ComboBox('#cboInventoryReportBranch', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: branchObservableArray,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Id",
+                            selectedValue: getParam("BranchId"),
+                            onSelectedIndexChanged: function () {
+                                NProgress.start();
+                                refreshInventoryReportFlexGrid();
+                            }
+                        });
 
-            for (i = 0; i < inventoryCollections.items.length; i++) {
-                inventories.push({
-                    Branch: inventoryCollections.items[i].Branch,
-                    InventoryCode: inventoryCollections.items[i].InventoryCode,
-                    ArticleForCSV: inventoryCollections.items[i].ArticleForCSV,
-                    Unit: inventoryCollections.items[i].Unit,
-                    Cost: inventoryCollections.items[i].Cost,
-                    BegQuantity: inventoryCollections.items[i].BegQuantity,
-                    InQuantity: inventoryCollections.items[i].InQuantity,
-                    OutQuantity: inventoryCollections.items[i].OutQuantity,
-                    EndQuantity: inventoryCollections.items[i].EndQuantity,
-                    TotalAmount: inventoryCollections.items[i].TotalAmount,
-                    Count: inventoryCollections.items[i].Count,
-                    QuantityVariance: inventoryCollections.items[i].QuantityVariance,
-                    VarianceAmount: inventoryCollections.items[i].VarianceAmount,
-
+                        if (!isInventoryReportCompanySelected) {
+                            createInventoryReportFlexGrid();
+                        } else {
+                            refreshInventoryReportFlexGrid();
+                        }
+                    }
                 });
             }
+        }
 
-            //for (var i = 0; i < symbols.length; i++) {
-            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
-            //}
+        // ===============================
+        // Get Sales Order Summary Data
+        // ===============================
+        function getInventoryReport() {
+            var inventoryReports = new wijmo.collections.ObservableArray;
+            if (cboInventoryReportCompany.selectedValue != null) {
+                if (cboInventoryReportBranch.selectedValue != null) {
+                    var startDate = cboInventoryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboInventoryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboInventoryReportCompany.selectedValue;
+                    var branchId = cboInventoryReportBranch.selectedValue;
+
+                    $.ajax({
+                        url: '/api/inventoryReport/list/' + startDate + '/' + endDate + '/' + + companyId + '/' + branchId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (inventoryReportResult) {
+                            var totalAllAmount = 0;
+                            var totalVarianceAmount = 0;
+
+                            if (inventoryReportResult != null) {
+                                if (inventoryReportResult.length > 0) {
+                                    for (i = 0; i < inventoryReportResult.length; i++) {
+                                        var branchId = inventoryReportResult[i]["BranchId"];
+                                        var itemId = inventoryReportResult[i]["ArticleId"];
+
+                                        var articleLink = '/Software/StockCard?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId + '&ItemId=' + itemId;
+
+                                        var totalAmount = inventoryReportResult[i]["Cost"] * inventoryReportResult[i]["EndQuantity"];
+                                        var quantityVariance = inventoryReportResult[i]["EndQuantity"] - 0;
+                                        var varianceAmount = inventoryReportResult[i]["Cost"] * quantityVariance;
+
+                                        inventoryReports.push({
+                                            Branch: inventoryReportResult[i]["Branch"],
+                                            ArticleId: inventoryReportResult[i]["ArticleId"],
+                                            Article: "<a href='" + articleLink + "' class='btn btn-primary btn-xs btn-block' style='font-size: 10px; text-align: left;'>" + inventoryReportResult[i]["Article"] + "</a>",
+                                            ArticleForCSV: inventoryReportResult[i]["Article"],
+                                            InventoryCode: inventoryReportResult[i]["InventoryCode"],
+                                            Cost: inventoryReportResult[i]["Cost"],
+                                            CostDisplay: parseFloat(inventoryReportResult[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            UnitId: inventoryReportResult[i]["UnitId"],
+                                            Unit: inventoryReportResult[i]["Unit"],
+                                            BegQuantity: inventoryReportResult[i]["BegQuantity"],
+                                            BegQuantityDisplay: parseFloat(inventoryReportResult[i]["BegQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            InQuantity: inventoryReportResult[i]["InQuantity"],
+                                            InQuantityDisplay: parseFloat(inventoryReportResult[i]["InQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            OutQuantity: inventoryReportResult[i]["OutQuantity"],
+                                            OutQuantityDisplay: parseFloat(inventoryReportResult[i]["OutQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            EndQuantity: inventoryReportResult[i]["EndQuantity"],
+                                            EndQuantityDisplay: parseFloat(inventoryReportResult[i]["EndQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            Amount: inventoryReportResult[i]["Amount"],
+                                            AmountDisplay: parseFloat(inventoryReportResult[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            TotalAmount: totalAmount,
+                                            TotalAmountDisplay: parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            QuantityVariance: quantityVariance,
+                                            QuantityVarianceDisplay: parseFloat(quantityVariance).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            VarianceAmount: varianceAmount,
+                                            VarianceAmountDisplay: parseFloat(varianceAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            Count: "0.00",
+                                        });
+
+                                        totalAllAmount += totalAmount;
+                                        totalVarianceAmount += varianceAmount;
+                                    }
+                                }
+                            }
+
+                            document.getElementById("totalAmount").value = parseFloat(totalAllAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            document.getElementById("totalVarianceAmount").value = parseFloat(totalVarianceAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            NProgress.done();
+                        }
+                    });
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalVarianceAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    NProgress.done();
+                }
+            } else {
+                document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalVarianceAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                NProgress.done();
+            }
+
+            return inventoryReports;
+        }
+
+        // =================
+        // Refresh Flex Grid
+        // =================
+        function refreshInventoryReportFlexGrid() {
+            inventoryReportCollections = new wijmo.collections.CollectionView(getInventoryReport());
+            inventoryReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                inventoryReportCollections.refresh();
+
+                if (inventoryReportCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    var totalVarianceAmount = 0;
+                    for (var i = 0; i < inventoryReportCollections.items.length; i++) {
+                        totalAmount += inventoryReportCollections.items[i].Cost * inventoryReportCollections.items[i].EndQuantity;
+                        totalVarianceAmount += inventoryReportCollections.items[i].VarianceAmount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalVarianceAmount").value = parseFloat(totalVarianceAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalVarianceAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            inventoryReportCollections.filter = function (item) {
+                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            inventoryReportGrid.itemsSource = inventoryReportCollections;
+            inventoryReportGrid.trackChanges = true;
+        }
+
+        // =========
+        // Flex Grid
+        // =========
+        function createInventoryReportFlexGrid() {
+            inventoryReportCollections = new wijmo.collections.CollectionView(getInventoryReport());
+            inventoryReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                inventoryReportCollections.refresh();
+
+                if (inventoryReportCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    var totalVarianceAmount = 0;
+                    for (var i = 0; i < inventoryReportCollections.items.length; i++) {
+                        totalAmount += inventoryReportCollections.items[i].Cost * inventoryReportCollections.items[i].EndQuantity;
+                        totalVarianceAmount += inventoryReportCollections.items[i].VarianceAmount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalVarianceAmount").value = parseFloat(totalVarianceAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalVarianceAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            inventoryReportCollections.filter = function (item) {
+                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            inventoryReportGrid = new wijmo.grid.FlexGrid('#inventoryReportGrid');
+            inventoryReportGrid.initialize({
+                columns: [
+                    {
+                        "header": "Item",
+                        "binding": "Article",
+                        "allowSorting": true,
+                        "width": "1.5*",
+                        "isContentHtml": true
+                    },
+                    {
+                        "header": "Code",
+                        "binding": "InventoryCode",
+                        "allowSorting": true,
+                        "width": "1.5*"
+                    },
+                    {
+                        "header": "Unit",
+                        "binding": "Unit",
+                        "allowSorting": true,
+                        "width": "0.5*"
+                    },
+                    {
+                        "header": "Cost",
+                        "binding": "CostDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    },
+                    {
+                        "header": "Beg",
+                        "binding": "BegQuantityDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    },
+                    {
+                        "header": "In",
+                        "binding": "InQuantityDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    },
+                    {
+                        "header": "Out",
+                        "binding": "OutQuantityDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    },
+                    {
+                        "header": "End",
+                        "binding": "EndQuantityDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "TotalAmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    },
+                    {
+                        "header": "Count",
+                        "binding": "Count",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    },
+                    {
+                        "header": "Variance",
+                        "binding": "QuantityVarianceDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    },
+                    {
+                        "header": "Variance",
+                        "binding": "VarianceAmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: inventoryReportCollections,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            inventoryReportGrid.trackChanges = true;
+
+            var hr = new wijmo.grid.Row();
+            inventoryReportGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
+            inventoryReportGrid.columnHeaders.rows.push(hr);
+            inventoryReportGrid.columnHeaders.rows[0].allowMerging = true;
+
+            inventoryReportGrid.columnHeaders.columns[0].allowMerging = true;
+            inventoryReportGrid.columnHeaders.setCellData(0, 0, 'Item');
+
+            inventoryReportGrid.columnHeaders.columns[1].allowMerging = true;
+            inventoryReportGrid.columnHeaders.setCellData(0, 1, 'Code');
+
+            inventoryReportGrid.columnHeaders.columns[2].allowMerging = true;
+            inventoryReportGrid.columnHeaders.setCellData(0, 2, 'Unit');
+
+            inventoryReportGrid.columnHeaders.columns[3].allowMerging = true;
+            inventoryReportGrid.columnHeaders.setCellData(0, 3, 'Cost');
+
+            for (var columnBasicUnitConversion = 4; columnBasicUnitConversion <= 7; columnBasicUnitConversion++) {
+                inventoryReportGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Quantity');
+            }
+
+            inventoryReportGrid.columnHeaders.columns[8].allowMerging = true;
+            inventoryReportGrid.columnHeaders.setCellData(0, 8, 'Amount');
+
+            for (var columnBasicUnitConversion = 9; columnBasicUnitConversion <= 10; columnBasicUnitConversion++) {
+                inventoryReportGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Quantity');
+            }
+
+            inventoryReportGrid.columnHeaders.columns[11].allowMerging = true;
+            inventoryReportGrid.columnHeaders.setCellData(0, 11, 'Variance');
+        }
+
+        // ============
+        // Download CSV
+        // ============
+        function btnInventoryReportCSVOnclick() {
+            var CSV = '';
+            var inventoryReport = [];
+            var fileName = 'InventoryReport.CSV';
+
+            for (i = 0; i < inventoryReportCollections.items.length; i++) {
+                inventoryReport.push({
+                    Branch: inventoryReportCollections.items[i].Branch,
+                    InventoryCode: inventoryReportCollections.items[i].InventoryCode,
+                    Article: inventoryReportCollections.items[i].ArticleForCSV,
+                    Unit: inventoryReportCollections.items[i].Unit,
+                    Cost: inventoryReportCollections.items[i].Cost,
+                    BegQuantity: inventoryReportCollections.items[i].BegQuantity,
+                    InQuantity: inventoryReportCollections.items[i].InQuantity,
+                    OutQuantity: inventoryReportCollections.items[i].OutQuantity,
+                    EndQuantity: inventoryReportCollections.items[i].EndQuantity,
+                    TotalAmount: inventoryReportCollections.items[i].TotalAmount,
+                    Count: inventoryReportCollections.items[i].Count,
+                    QuantityVariance: inventoryReportCollections.items[i].QuantityVariance,
+                    VarianceAmount: inventoryReportCollections.items[i].VarianceAmount,
+                });
+            }
 
             var Headers = [];
             Headers.push({
                 Branch: "Branch",
-                InventoryCode: "Code",
-                ArticleForCSV: "Item",
+                InventoryCode: "Inventory Code",
+                Article: "Item",
                 Unit: "Unit",
                 Cost: "Cost",
-                BegQuantity: "Beg",
-                InQuantity: "In",
-                OutQuantity: "Out",
-                EndQuantity: "End",
+                BegQuantity: "Beg Quantity",
+                InQuantity: "In Quantity",
+                OutQuantity: "Out Quantity",
+                EndQuantity: "End Quantity",
                 TotalAmount: "Total Amount",
                 Count: "Count",
-                QuantityVariance: "Variance",
+                QuantityVariance: "Quantity Variance",
                 VarianceAmount: "Variance Amount",
-
-
             });
 
             var header = '';
-            // Rows
             for (var b in Headers[0]) {
                 header += '"' + Headers[0][b] + '",';
             }
 
-
-
             CSV = header + '\r\n';
-            for (var i = 0; i < inventories.length; i++) {
+            for (var i = 0; i < inventoryReport.length; i++) {
                 var row = '';
-                for (var a in inventories[i]) {
-                    row += '"' + inventories[i][a] + '",';
+                for (var a in inventoryReport[i]) {
+                    row += '"' + inventoryReport[i][a] + '",';
                 }
 
                 row.slice(0, row.length - 1);
                 CSV += row + '\r\n';
             }
 
-
             if (CSV == '') {
                 toastr.error("No data.");
             } else {
                 var link = document.createElement("a");
-
                 if (link.download !== undefined) {
                     var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
                     var url = URL.createObjectURL(blob);
@@ -271,164 +663,31 @@
             }
         }
 
-        $(document).ready(function () {
-            $.ajax({
-                url: '/api/company/' + getParam("CompanyId"),
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (companyResults) {
-                    document.getElementById("companyname").value = companyResults.Company;
+        // =====================
+        // Preview and Print PDF
+        // =====================
+        function btnInventoryReportPrintPDFOnclick() {
+            if (cboInventoryReportCompany.selectedValue != null) {
+                if (cboInventoryReportBranch.selectedValue != null) {
+                    var startDate = cboInventoryReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboInventoryReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboInventoryReportCompany.selectedValue;
+                    var branchId = cboInventoryReportBranch.selectedValue;
+
+                    window.location.href = '/RepInventoryReport/InventoryReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
                 }
-            });
-
-            inventoryCollections = new wijmo.collections.CollectionView(getInventory());
-            inventoryCollections.canFilter = true;
-
-            var filterText = '';
-            $('#InputFilter').keyup(function () {
-                filterText = this.value.toLowerCase();
-                inventoryCollections.refresh();
-            });
-            inventoryCollections.filter = function (item) {
-                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1)
-
+            } else {
+                toastr.error("Lacking Information");
             }
-            // Flex Grid
-            inventoryGrid = new wijmo.grid.FlexGrid('#inventoryGrid');
-            inventoryGrid.initialize({
-                columns: [
-                    {
-                        "header": "Branch",
-                        "binding": "Branch",
-                        "allowSorting": true,
-                        "width": 200
-                    },
-                    {
-                        "header": "Code",
-                        "binding": "InventoryCode",
-                        "allowSorting": true,
-                        "width": 200,
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
-                    {
-                        "header": "Item",
-                        "binding": "Article",
-                        "allowSorting": true,
-                        "width": 200,
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
-                    {
-                        "header": "Unit",
-                        "binding": "Unit",
-                        "allowSorting": true,
-                        "width": 120
-                    },
-                    {
-                        "header": "Cost",
-                        "binding": "Cost",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Beg",
-                        "binding": "BegQuantity",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "In",
-                        "binding": "InQuantity",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Out",
-                        "binding": "OutQuantity",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "End",
-                        "binding": "EndQuantity",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Total Amount",
-                        "binding": "TotalAmount",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Count",
-                        "binding": "Count",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Variance",
-                        "binding": "QuantityVariance",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Variance Amount",
-                        "binding": "VarianceAmount",
-                        "allowSorting": true,
-                        "width": 150
-                    }
-                ],
-                autoGenerateColumns: false,
-                itemsSource: inventoryCollections,
-                isReadOnly: true,
-                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                allowDragging: wijmo.grid.AllowDragging.None,
-                selectionMode: wijmo.grid.SelectionMode.Row
-            });
+        }
 
-            inventoryGrid.trackChanges = true;
-
-            var hr = new wijmo.grid.Row();
-            inventoryGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
-            inventoryGrid.columnHeaders.rows.push(hr);
-            inventoryGrid.columnHeaders.rows[0].allowMerging = true;
-
-            inventoryGrid.columnHeaders.columns[0].allowMerging = true;
-            inventoryGrid.columnHeaders.setCellData(0, 0, 'Branch');
-
-            inventoryGrid.columnHeaders.columns[1].allowMerging = true;
-            inventoryGrid.columnHeaders.setCellData(0, 1, 'Code');
-
-            inventoryGrid.columnHeaders.columns[2].allowMerging = true;
-            inventoryGrid.columnHeaders.setCellData(0, 2, 'Item');
-
-            inventoryGrid.columnHeaders.columns[3].allowMerging = true;
-            inventoryGrid.columnHeaders.setCellData(0, 3, 'Unit');
-
-            inventoryGrid.columnHeaders.columns[4].allowMerging = true;
-            inventoryGrid.columnHeaders.setCellData(0, 4, 'Cost');
-
-            for (var columnBasicUnitConversion = 5; columnBasicUnitConversion <= 8; columnBasicUnitConversion++) {
-                inventoryGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Quantity');
-            }
-
-            inventoryGrid.columnHeaders.columns[9].allowMerging = true;
-            inventoryGrid.columnHeaders.setCellData(0, 9, 'Total Amount');
-
-            for (var columnBasicUnitConversion = 10; columnBasicUnitConversion <= 11; columnBasicUnitConversion++) {
-                inventoryGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Quantity');
-            }
-
-            inventoryGrid.columnHeaders.columns[12].allowMerging = true;
-            inventoryGrid.columnHeaders.setCellData(0, 12, 'Variance Amount');
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            inventoryReportDateFilters();
         });
     </script>
     <script type="text/javascript">

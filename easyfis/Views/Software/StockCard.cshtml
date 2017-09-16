@@ -12,15 +12,14 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
-
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Stock Card 
+                        Stock Card
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -33,17 +32,16 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 59%">
-                                    <div class="input-group ">
+                                <td style="width: 49.5%">
+                                    <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search">
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search...">
                                     </div>
                                 </td>
-                                <td style="width: 1%"></td>
-                                <td style="width: 40%" align="right">
-                                    <button onclick="InventoryStockCardCSV_OnClick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                    <button onclick="InventoryStockCardPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
-                                    <a href="/Software/InventoryReport" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
+                                <td style="width: 50.5%" align="right">
+                                    <button onclick="btnStockCardReportCSVOnclick()" id="btnStockCardReportCSV" class="btn btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    <button onclick="btnStockCardReportPrintPDFOnclick()" id="btnStockCardReportPrintPDF" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                                    <a href="/Software/Inventory" class="btn btn-danger"><i class="fa fa-close"></i> Close</a>
                                 </td>
                             </tr>
                         </table>
@@ -51,255 +49,666 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 59%">
+                                <td style="width: 24%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Date:</span>
-                                        <input type="text" class="form-control " id="inventoryDate" placeholder="date" disabled>
+                                        <span class="input-group-addon"><b>Start Date</b></span>
+                                        <div class="comboBox-wide" id="cboStockCardReportStartDate"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 20%" align="right"></td>
-                                <td style="width: 20%"></td>
+                                <td style="width: 24%" align="right">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>End Date</b></span>
+                                        <div class="comboBox-wide" id="cboStockCardReportEndDate"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Company</b></span>
+                                        <div class="comboBox-wide" id="cboStockCardReportCompany"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Branch</b></span>
+                                        <div class="comboBox-wide" id="cboStockCardReportBranch"></div>
+                                    </div>
+                                </td>
                             </tr>
                         </table>
                     </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <table class="table table-responsive table-bordered">
-                                    <tr>
-                                        <td align="right">
-                                            <b>Branch: </b>
-                                        </td>
-                                        <td style="padding-left: 10px">
-                                            <span id="branchTitle">NA</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">
-                                            <b>Item: </b>
-                                        </td>
-                                        <td style="padding-left: 10px">
-                                            <span id="itemTitle">NA</span>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="col-md-6">
-                            </div>
-                        </div>
-                        <div id="stockCardGrid" class="grid"></div>
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 49.5%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Item</b></span>
+                                        <div class="comboBox-wide" id="cboStockCardItem"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 50.5%"></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
+                <div id="stockCardReportGrid" class="grid"></div>
+                <br /><br />
                 <div class="row">
-                    <div class="col-md-6"></div>
                     <div class="col-md-6">
-                        <table class="table table-responsive table-bordered">
-                            <tr>
-                                <td align="right">
-                                    <b>Total Quantity: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="totalEnd">NA</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    <b>Total Amount: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="totalAmount">NA</span>
-                                </td>
-                            </tr>
-                        </table>
-                        <hr />
+
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="dl-horizontal dl-custom">
+                            <dt>
+                                <b>Total End Quantity</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalEnd" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Total Amount</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalAmount" placeholder="0.00" disabled />
+                            </dd>
+                        </dl>
                     </div>
                 </div>
             </section>
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
+    <div id="c-mask" class="c-mask"></div>
+
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
-        var stockCardGrid;
+        // ================
+        // Global Variables
+        // ================
+        var cboStockCardReportStartDate = new wijmo.input.InputDate('#cboStockCardReportStartDate');
+        var cboStockCardReportEndDate = new wijmo.input.InputDate('#cboStockCardReportEndDate');
+        var isStockCardReportStartDateSelected = false;
+        var isStockCardReportEndDateSelected = false;
+        var cboStockCardReportCompany = new wijmo.input.ComboBox('#cboStockCardReportCompany');
+        var cboStockCardReportBranch = new wijmo.input.ComboBox('#cboStockCardReportBranch');
+        var stockCardReportCollections;
+        var stockCardReportGrid;
+        var isStockCardReportCompanySelected = false;
+        var cboStockCardItem = new wijmo.input.ComboBox('#cboStockCardItem');
+        var isStockCardReportBranchSelected = false;
 
+        // ===================
+        // Get Parameter Value
+        // ===================
         function getParam(name) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+
             var regexS = "[\\?&]" + name + "=([^&#]*)";
             var regex = new RegExp(regexS);
+
             var results = regex.exec(window.location.href);
-            if (results == null)
+            if (results == null) {
                 return "";
-            else
+            } else {
                 return results[1];
+            }
         }
 
-        function getStockCard() {
+        // ============
+        // Date Filters
+        // ============
+        function stockCardReportDateFilters() {
             NProgress.start();
-            var stockCards = new wijmo.collections.ObservableArray;
-            document.getElementById("inventoryDate").value = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
+            cboStockCardReportStartDate.dispose();
+            cboStockCardReportStartDate = new wijmo.input.InputDate('#cboStockCardReportStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("StartDate")),
+                onValueChanged: function () {
+                    if (!isStockCardReportStartDateSelected) {
+                        NProgress.start();
+                        refreshStockCardReportFlexGrid();
+                    } else {
+                        isStockCardReportStartDateSelected = false;
+                    }
+                }
+            });
+
+            cboStockCardReportEndDate.dispose();
+            cboStockCardReportEndDate = new wijmo.input.InputDate('#cboStockCardReportEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("EndDate")),
+                onValueChanged: function () {
+                    if (!isStockCardReportEndDateSelected) {
+                        NProgress.start();
+                        refreshStockCardReportFlexGrid();
+                    } else {
+                        isStockCardReportEndDateSelected = false;
+                    }
+                }
+            });
+
+            createCboCompany();
+        }
+
+        // ==============
+        // Company Filter
+        // ==============
+        function createCboCompany() {
+            var companyObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/stockCard/list/' + getParam("StartDate") + "/" + getParam("EndDate") + "/" + getParam("BranchId") + "/" + getParam("ItemId"),
+                url: '/api/company/list',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (companyResults) {
+                    if (companyResults.length > 0) {
+                        for (i = 0; i < companyResults.length; i++) {
+                            companyObservableArray.push({
+                                Id: companyResults[i]["Id"],
+                                Company: companyResults[i]["Company"],
+                                Address: companyResults[i]["Address"],
+                                ContactNumber: companyResults[i]["ContactNumber"],
+                                TaxNumber: companyResults[i]["TaxNumber"],
+                            });
+                        }
+                    }
+
+                    var disabled = true;
+                    if (companyResults.length > 0) {
+                        disabled = false;
+                    } else {
+                        $("#btnStockCardReportCSV").prop("disabled", true);
+                        $("#btnStockCardReportPrintPDF").prop("disabled", true);
+                    }
+
+                    cboStockCardReportCompany.dispose();
+                    cboStockCardReportCompany = new wijmo.input.ComboBox('#cboStockCardReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        selectedValue: getParam("CompanyId"),
+                        onSelectedIndexChanged: function () {
+                            NProgress.start();
+                            $("#btnStockCardReportCSV").prop("disabled", false);
+                            $("#btnStockCardReportPrintPDF").prop("disabled", false);
+                            isStockCardReportCompanySelected = true;
+                            isStockCardReportBranchSelected = true;
+                            createCboBranch();
+                        }
+                    });
+
+                    createCboBranch();
+                }
+            });
+        }
+
+        // =============
+        // Branch Filter
+        // =============
+        function createCboBranch() {
+            var branchObservableArray = new wijmo.collections.ObservableArray();
+            if (cboStockCardReportCompany.selectedValue != null) {
+                $.ajax({
+                    url: '/api/branch/byCompanyId/list/locked/' + cboStockCardReportCompany.selectedValue,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branchObservableArray.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Branch: branchResults[i]["Branch"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"]
+                                });
+                            }
+                        }
+
+                        var disabled = true;
+                        if (branchResults.length > 0) {
+                            disabled = false;
+                        } else {
+                            $("#btnStockCardReportCSV").prop("disabled", true);
+                            $("#btnStockCardReportPrintPDF").prop("disabled", true);
+                        }
+
+                        cboStockCardReportBranch.dispose();
+                        cboStockCardReportBranch = new wijmo.input.ComboBox('#cboStockCardReportBranch', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: branchObservableArray,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Id",
+                            selectedValue: getParam("BranchId"),
+                            onSelectedIndexChanged: function () {
+                                NProgress.start();
+                                isStockCardReportBranchSelected = true;
+                                refreshStockCardReportFlexGrid();
+                            }
+                        });
+
+                        if (!isStockCardReportBranchSelected) {
+                            createCboItemFilters();
+                        } else {
+                            refreshStockCardReportFlexGrid();
+                        }
+                    }
+                });
+            }
+        }
+
+        // ============
+        // Item Filters
+        // ============
+        function createCboItemFilters() {
+            var itemsObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/1',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 success: function (Results) {
                     if (Results.length > 0) {
-                        var totalBeg = 0;
-                        var totalIn = 0;
-                        var totalOut = 0;
-                        var totalEnd = 0;
-                        var totalAmount = 0;
-
                         for (i = 0; i < Results.length; i++) {
-                            document.getElementById("branchTitle").innerHTML = Results[i]["Branch"];
-                            document.getElementById("itemTitle").innerHTML = Results[i]["Article"];
-
-                            var docRef;
-                            var docRefLink;
-
-                            if (Results[i]["RRId"] != null) {
-                                docRef = "RR-" + Results[i]["BranchCode"] + "-" + Results[i]["RRNumber"];
-                                docRefLink = "/Software/ReceivingReceiptDetail?ReceivingReceiptId=" + Results[i]["RRId"];
-                            } else if (Results[i]["SIId"] != null) {
-                                docRef = "SI-" + Results[i]["BranchCode"] + "-" + Results[i]["SINumber"];
-                                docRefLink = "/Software/SalesDetail?SalesId=" + Results[i]["SIId"];
-                            } else if (Results[i]["INId"] != null) {
-                                docRef = "IN-" + Results[i]["BranchCode"] + "-" + Results[i]["INNumber"];
-                                docRefLink = "/Software/StockInDetail?StockInId=" + Results[i]["INId"];
-                            } else if (Results[i]["OTId"] != null) {
-                                docRef = "OT-" + Results[i]["BranchCode"] + "-" + Results[i]["OTNumber"];
-                                docRefLink = "/Software/StockOutDetail?StockOutId=" + Results[i]["OTId"];
-                            } else if (Results[i]["STId"] != null) {
-                                docRef = "ST-" + Results[i]["BranchCode"] + "-" + Results[i]["STNumber"];
-                                docRefLink = "/Software/StockTransferDetail?StockTransferId=" + Results[i]["STId"];
-                            } else {
-                                docRef = "";
-                                docRefLink = "#";
-                            }
-
-                            stockCards.push({
+                            itemsObservableArray.push({
                                 Id: Results[i]["Id"],
-                                BranchId: Results[i]["BranchId"],
-                                Branch: Results[i]["Branch"],
-                                BranchCode: Results[i]["BranchCode"],
-                                DocumentReference: "<a href='" + docRefLink + "' class='btn btn-default btn-xs btn-block'>" + docRef + " </a>",
-                                DocumentReferenceValue: docRef,
-                                InventoryDate: Results[i]["InventoryDate"],
-                                ArticleId: Results[i]["ArticleId"],
-                                Article: Results[i]["Article"],
-                                ArticleInventoryId: Results[i]["ArticleInventoryId"],
-                                ArticleInventoryCode: Results[i]["ArticleInventoryCode"],
-                                RRId: Results[i]["RRId"],
-                                RRNumber: Results[i]["RRNumber"],
-                                SIId: Results[i]["SIId"],
-                                SINumber: Results[i]["SINumber"],
-                                INId: Results[i]["INId"],
-                                INNumber: Results[i]["INNumber"],
-                                OTId: Results[i]["OTId"],
-                                OTNumber: Results[i]["OTNumber"],
-                                STId: Results[i]["STId"],
-                                STNumber: Results[i]["STNumber"],
-                                QuantityIn: Results[i]["QuantityIn"],
-                                Quantity: Results[i]["Quantity"],
-                                QuantityOut: Results[i]["QuantityOut"],
-                                Amount: Results[i]["Amount"],
-                                Particulars: Results[i]["Particulars"],
-                                Cost: Results[i]["Cost"],
-                                Unit: Results[i]["Unit"],
-                                Beg: "0.00",
+                                Article: Results[i]["Article"]
                             });
-
-
-                            totalBeg = totalBeg + 0;
-                            totalIn = totalBeg + Results[i]["QuantityIn"];
-                            totalOut = totalOut + Results[i]["QuantityOut"];
-                            totalEnd = totalEnd + Results[i]["Quantity"];
-                            totalAmount = totalAmount + Results[i]["Amount"];
-
-                            document.getElementById("totalEnd").innerHTML = (Math.round(totalEnd * 100) / 100).toLocaleString();
-                            document.getElementById("totalAmount").innerHTML = (Math.round(totalAmount * 100) / 100).toLocaleString();
                         }
                     }
+
+                    var disabled = true;
+                    if (Results.length > 0) {
+                        disabled = false;
+                    } else {
+
+                    }
+
+                    cboStockCardItem.dispose();
+                    cboStockCardItem = new wijmo.input.ComboBox('#cboStockCardItem', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: itemsObservableArray,
+                        displayMemberPath: "Article",
+                        selectedValuePath: "Id",
+                        selectedValue: getParam("ItemId"),
+                        onSelectedIndexChanged: function () {
+                            NProgress.start();
+                            refreshStockCardReportFlexGrid();
+                        }
+                    });
+
+                    if (!isStockCardReportCompanySelected) {
+                        createStockCardReportFlexGrid();
+                    } else {
+                        refreshStockCardReportFlexGrid();
+                    }
+                }
+            });
+        }
+
+        // ===============================
+        // Get Sales Order Summary Data
+        // ===============================
+        function getStockCardReport() {
+            var stockCardReports = new wijmo.collections.ObservableArray;
+            if (cboStockCardReportCompany.selectedValue != null) {
+                if (cboStockCardReportBranch.selectedValue != null) {
+                    if (cboStockCardItem.selectedValue != null) {
+                        var startDate = cboStockCardReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                        var endDate = cboStockCardReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                        var companyId = cboStockCardReportCompany.selectedValue;
+                        var branchId = cboStockCardReportBranch.selectedValue;
+                        var itemId = cboStockCardItem.selectedValue;
+
+                        $.ajax({
+                            url: '/api/stockCard/list/' + startDate + '/' + endDate + '/' + + companyId + '/' + branchId + '/' + itemId,
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            success: function (stockCardReportResult) {
+                                var totalBeg = 0;
+                                var totalIn = 0;
+                                var totalOut = 0;
+                                var totalEnd = 0;
+                                var totalAmount = 0;
+
+                                if (stockCardReportResult.length > 0) {
+                                    for (i = 0; i < stockCardReportResult.length; i++) {
+                                        var docRef = "";
+                                        var docRefLink = "";
+                                        if (stockCardReportResult[i]["RRId"] != null) {
+                                            docRef = "RR-" + stockCardReportResult[i]["BranchCode"] + "-" + stockCardReportResult[i]["RRNumber"];
+                                            docRefLink = "/Software/ReceivingReceiptDetail?id=" + stockCardReportResult[i]["RRId"];
+                                        } else if (stockCardReportResult[i]["SIId"] != null) {
+                                            docRef = "SI-" + stockCardReportResult[i]["BranchCode"] + "-" + stockCardReportResult[i]["SINumber"];
+                                            docRefLink = "/Software/SalesDetail?id=" + stockCardReportResult[i]["SIId"];
+                                        } else if (stockCardReportResult[i]["INId"] != null) {
+                                            docRef = "IN-" + stockCardReportResult[i]["BranchCode"] + "-" + stockCardReportResult[i]["INNumber"];
+                                            docRefLink = "/Software/StockInDetail?id=" + stockCardReportResult[i]["INId"];
+                                        } else if (stockCardReportResult[i]["OTId"] != null) {
+                                            docRef = "OT-" + stockCardReportResult[i]["BranchCode"] + "-" + stockCardReportResult[i]["OTNumber"];
+                                            docRefLink = "/Software/StockOutDetail?id=" + stockCardReportResult[i]["OTId"];
+                                        } else if (stockCardReportResult[i]["STId"] != null) {
+                                            docRef = "ST-" + stockCardReportResult[i]["BranchCode"] + "-" + stockCardReportResult[i]["STNumber"];
+                                            docRefLink = "/Software/StockTransferDetail?id=" + stockCardReportResult[i]["STId"];
+                                        } else {
+                                            docRef = "";
+                                            docRefLink = "#";
+                                        }
+
+                                        var InventoryDateResult = new Date(stockCardReportResult[i]["InventoryDate"]);
+                                        var InventoryDate = ('0' + (InventoryDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + InventoryDateResult.getDate()).slice(-2) + '-' + InventoryDateResult.getFullYear();
+
+                                        stockCardReports.push({
+                                            Id: stockCardReportResult[i]["Id"],
+                                            BranchId: stockCardReportResult[i]["BranchId"],
+                                            Branch: stockCardReportResult[i]["Branch"],
+                                            BranchCode: stockCardReportResult[i]["BranchCode"],
+                                            DocumentReference: "<a href='" + docRefLink + "' class='btn btn-primary btn-xs btn-block'>" + docRef + " </a>",
+                                            DocumentReferenceValue: docRef,
+                                            InventoryDate: InventoryDate,
+                                            ArticleId: stockCardReportResult[i]["ArticleId"],
+                                            Article: stockCardReportResult[i]["Article"],
+                                            ArticleInventoryId: stockCardReportResult[i]["ArticleInventoryId"],
+                                            ArticleInventoryCode: stockCardReportResult[i]["ArticleInventoryCode"],
+                                            RRId: stockCardReportResult[i]["RRId"],
+                                            RRNumber: stockCardReportResult[i]["RRNumber"],
+                                            SIId: stockCardReportResult[i]["SIId"],
+                                            SINumber: stockCardReportResult[i]["SINumber"],
+                                            INId: stockCardReportResult[i]["INId"],
+                                            INNumber: stockCardReportResult[i]["INNumber"],
+                                            OTId: stockCardReportResult[i]["OTId"],
+                                            OTNumber: stockCardReportResult[i]["OTNumber"],
+                                            STId: stockCardReportResult[i]["STId"],
+                                            STNumber: stockCardReportResult[i]["STNumber"],
+                                            QuantityIn: stockCardReportResult[i]["QuantityIn"],
+                                            QuantityInDisplay: parseFloat(stockCardReportResult[i]["QuantityIn"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            Quantity: stockCardReportResult[i]["Quantity"],
+                                            QuantityDisplay: parseFloat(stockCardReportResult[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            QuantityOut: stockCardReportResult[i]["QuantityOut"],
+                                            QuantityOutDisplay: parseFloat(stockCardReportResult[i]["QuantityOut"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            Amount: stockCardReportResult[i]["Amount"],
+                                            AmountDisplay: parseFloat(stockCardReportResult[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            Particulars: stockCardReportResult[i]["Particulars"],
+                                            Cost: stockCardReportResult[i]["Cost"],
+                                            CostDisplay: parseFloat(stockCardReportResult[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            Unit: stockCardReportResult[i]["Unit"],
+                                            Beg: "0.00",
+                                        });
+
+                                        totalBeg = totalBeg + 0;
+                                        totalIn = totalBeg + stockCardReportResult[i]["QuantityIn"];
+                                        totalOut = totalOut + stockCardReportResult[i]["QuantityOut"];
+                                        totalEnd = totalEnd + stockCardReportResult[i]["Quantity"];
+                                        totalAmount = totalAmount + stockCardReportResult[i]["Amount"];
+                                    }
+
+                                    document.getElementById("totalEnd").value = parseFloat(totalEnd).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    NProgress.done();
+                                } else {
+                                    document.getElementById("totalEnd").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    NProgress.done();
+                                }
+                            }
+                        });
+                    } else {
+                        document.getElementById("totalEnd").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        NProgress.done();
+                    }
+                } else {
+                    document.getElementById("totalEnd").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     NProgress.done();
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
+            } else {
+                document.getElementById("totalEnd").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                NProgress.done();
+            }
+
+            return stockCardReports;
+        }
+
+        // =================
+        // Refresh Flex Grid
+        // =================
+        function refreshStockCardReportFlexGrid() {
+            stockCardReportCollections = new wijmo.collections.CollectionView(getStockCardReport());
+            stockCardReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                stockCardReportCollections.refresh();
+
+                if (stockCardReportCollections.items.length > 0) {
+                    var totalEnd = 0;
+                    var totalAmount = 0;
+                    for (var i = 0; i < stockCardReportCollections.items.length; i++) {
+                        totalEnd += stockCardReportCollections.items[i].Quantity;
+                        totalAmount += stockCardReportCollections.items[i].Amount;
+                    }
+
+                    document.getElementById("totalEnd").value = parseFloat(totalEnd).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalEnd").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
             });
 
-            return stockCards;
+            stockCardReportCollections.filter = function (item) {
+                return !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            stockCardReportGrid.itemsSource = stockCardReportCollections;
+            stockCardReportGrid.trackChanges = true;
         }
 
-        function InventoryStockCardPDF_OnClick() {
-            window.location.href = '/RepStockCard/StockCard?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&BranchId=' + getParam("BranchId") + '&ItemId=' + getParam("ItemId");
+        // =========
+        // Flex Grid
+        // =========
+        function createStockCardReportFlexGrid() {
+            stockCardReportCollections = new wijmo.collections.CollectionView(getStockCardReport());
+            stockCardReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                stockCardReportCollections.refresh();
+
+                if (stockCardReportCollections.items.length > 0) {
+                    var totalEnd = 0;
+                    var totalAmount = 0;
+                    for (var i = 0; i < stockCardReportCollections.items.length; i++) {
+                        totalEnd += stockCardReportCollections.items[i].Quantity;
+                        totalAmount += stockCardReportCollections.items[i].Amount;
+                    }
+
+                    document.getElementById("totalEnd").value = parseFloat(totalEnd).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalEnd").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            stockCardReportCollections.filter = function (item) {
+                return !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            stockCardReportGrid = new wijmo.grid.FlexGrid('#stockCardReportGrid');
+            stockCardReportGrid.initialize({
+                columns: [
+                    {
+                        "header": "Document",
+                        "binding": "DocumentReference",
+                        "width": "1.5*",
+                        "allowSorting": true,
+                        "isContentHtml": true
+                    },
+                    {
+                        "header": "Date",
+                        "binding": "InventoryDate",
+                        "allowSorting": true,
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Beg",
+                        "binding": "Beg",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    },
+                    {
+                        "header": "In",
+                        "binding": "QuantityInDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    },
+                    {
+                        "header": "Out",
+                        "binding": "QuantityOutDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    },
+                    {
+                        "header": "End",
+                        "binding": "QuantityDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    },
+                    {
+                        "header": "Unit",
+                        "binding": "Unit",
+                        "allowSorting": true,
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Cost",
+                        "binding": "CostDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "AmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "*"
+                    }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: stockCardReportCollections,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            stockCardReportGrid.trackChanges = true;
+
+            var hr = new wijmo.grid.Row();
+            stockCardReportGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
+            stockCardReportGrid.columnHeaders.rows.push(hr);
+            stockCardReportGrid.columnHeaders.rows[0].allowMerging = true;
+
+            stockCardReportGrid.columnHeaders.columns[0].allowMerging = true;
+            stockCardReportGrid.columnHeaders.setCellData(0, 0, 'Document');
+
+            stockCardReportGrid.columnHeaders.columns[1].allowMerging = true;
+            stockCardReportGrid.columnHeaders.setCellData(0, 1, 'Date');
+
+            for (var columnBasicUnitConversion = 2; columnBasicUnitConversion <= 5; columnBasicUnitConversion++) {
+                stockCardReportGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Quantity');
+            }
+
+            stockCardReportGrid.columnHeaders.columns[6].allowMerging = true;
+            stockCardReportGrid.columnHeaders.setCellData(0, 6, 'Unit');
+
+            stockCardReportGrid.columnHeaders.columns[7].allowMerging = true;
+            stockCardReportGrid.columnHeaders.setCellData(0, 7, 'Cost');
+
+            stockCardReportGrid.columnHeaders.columns[8].allowMerging = true;
+            stockCardReportGrid.columnHeaders.setCellData(0, 8, 'Amount');
         }
-        var stockCards;
 
-        function InventoryStockCardCSV_OnClick() {
-
+        // ============
+        // Download CSV
+        // ============
+        function btnStockCardReportCSVOnclick() {
             var CSV = '';
-            var stockCard = [];
-            var fileName = 'StockCard.CSV';
+            var stockCardReport = [];
+            var fileName = 'StockCardReport.CSV';
 
-            for (i = 0; i < stockCards.items.length; i++) {
-                stockCard.push({
-                    InventoryDate: stockCards.items[i].InventoryDate,
-                    DocumentReferenceValue: stockCards.items[i].DocumentReferenceValue,
-                    Beg: stockCards.items[i].Beg,
-                    QuantityIn: stockCards.items[i].QuantityIn,
-                    QuantityOut: stockCards.items[i].QuantityOut,
-                    Quantity: stockCards.items[i].Quantity,
-                    Unit: stockCards.items[i].Unit,
-                    Cost: stockCards.items[i].Cost,
-                    Amount: stockCards.items[i].Amount,
-
+            for (i = 0; i < stockCardReportCollections.items.length; i++) {
+                stockCardReport.push({
+                    Branch: stockCardReportCollections.items[i].Branch,
+                    Item: stockCardReportCollections.items[i].Article,
+                    Document: stockCardReportCollections.items[i].DocumentReferenceValue,
+                    Date: stockCardReportCollections.items[i].InventoryDate,
+                    BegQuantity: stockCardReportCollections.items[i].Beg,
+                    InQuantity: stockCardReportCollections.items[i].QuantityIn,
+                    OutQuantity: stockCardReportCollections.items[i].QuantityOut,
+                    EndQuantity: stockCardReportCollections.items[i].Quantity,
+                    Unit: stockCardReportCollections.items[i].Unit,
+                    Cost: stockCardReportCollections.items[i].Cost,
+                    Amount: stockCardReportCollections.items[i].Amount
                 });
             }
 
-            //for (var i = 0; i < symbols.length; i++) {
-            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
-            //}
-
             var Headers = [];
             Headers.push({
-                InventoryDate: "Date",
-                DocumentReferenceValue: "Document",
-                Beg: "Beg",
-                QuantityIn: "In",
-                QuantityOut: "Out",
-                Quantity: "End",
+                Branch: "Branch",
+                Item: "Item",
+                Document: "Document",
+                Date: "Date",
+                BegQuantity: "Beg Quantity",
+                InQuantity: "In Quantity",
+                OutQuantity: "Out Quantity",
+                EndQuantity: "End Quantity",
                 Unit: "Unit",
                 Cost: "Cost",
-                Amount: "Amount",
-
+                Amount: "Amount"
             });
 
             var header = '';
-            // Rows
             for (var b in Headers[0]) {
                 header += '"' + Headers[0][b] + '",';
             }
 
-
-
             CSV = header + '\r\n';
-            for (var i = 0; i < stockCard.length; i++) {
+            for (var i = 0; i < stockCardReport.length; i++) {
                 var row = '';
-                for (var a in stockCard[i]) {
-                    row += '"' + stockCard[i][a] + '",';
+                for (var a in stockCardReport[i]) {
+                    row += '"' + stockCardReport[i][a] + '",';
                 }
 
                 row.slice(0, row.length - 1);
                 CSV += row + '\r\n';
             }
 
-
             if (CSV == '') {
                 toastr.error("No data.");
             } else {
                 var link = document.createElement("a");
-
                 if (link.download !== undefined) {
                     var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
                     var url = URL.createObjectURL(blob);
@@ -325,115 +734,36 @@
             }
         }
 
-        $(document).ready(function () {
-            stockCards = new wijmo.collections.CollectionView(getStockCard());
-            stockCards.canFilter = true;
+        // =====================
+        // Preview and Print PDF
+        // =====================
+        function btnStockCardReportPrintPDFOnclick() {
+            if (cboStockCardReportCompany.selectedValue != null) {
+                if (cboStockCardReportBranch.selectedValue != null) {
+                    if (cboStockCardItem.selectedValue != null) {
+                        var startDate = cboStockCardReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                        var endDate = cboStockCardReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                        var companyId = cboStockCardReportCompany.selectedValue;
+                        var branchId = cboStockCardReportBranch.selectedValue;
+                        var itemId = cboStockCardItem.selectedValue;
 
-            var filterText = '';
-            $('#InputFilter').keyup(function () {
-                filterText = this.value.toLowerCase();
-                stockCards.refresh();
-            });
-            stockCards.filter = function (item) {
-                return !filterText || (item.DocumentReferenceValue.toLowerCase().indexOf(filterText) > -1)
-
-            }
-            // Flex Grid
-            stockCardGrid = new wijmo.grid.FlexGrid('#stockCardGrid');
-            stockCardGrid.initialize({
-                columns: [
-                    {
-                        "header": "Date",
-                        "binding": "InventoryDate",
-                        "allowSorting": true,
-                        "width": 100
-                    },
-                    {
-                        "header": "Document",
-                        "binding": "DocumentReference",
-                        "width": 200,
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
-                    {
-                        "header": "Beg",
-                        "binding": "Beg",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "In",
-                        "binding": "QuantityIn",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Out",
-                        "binding": "QuantityOut",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "End",
-                        "binding": "Quantity",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Unit",
-                        "binding": "Unit",
-                        "allowSorting": true,
-                        "width": 120
-                    },
-                    {
-                        "header": "Cost",
-                        "binding": "Cost",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Amount",
-                        "binding": "Amount",
-                        "allowSorting": true,
-                        "width": 150
+                        window.location.href = '/RepStockCard/StockCard?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId + '&ItemId=' + itemId;
+                    } else {
+                        toastr.error("Lacking Information");
                     }
-                ],
-                autoGenerateColumns: false,
-                itemsSource: stockCards,
-                isReadOnly: true,
-                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                allowDragging: wijmo.grid.AllowDragging.None,
-                selectionMode: wijmo.grid.SelectionMode.Row
-            });
-
-            stockCardGrid.trackChanges = true;
-
-            var hr = new wijmo.grid.Row();
-            stockCardGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
-            stockCardGrid.columnHeaders.rows.push(hr);
-            stockCardGrid.columnHeaders.rows[0].allowMerging = true;
-
-            stockCardGrid.columnHeaders.columns[0].allowMerging = true;
-            stockCardGrid.columnHeaders.setCellData(0, 0, 'Date');
-
-            stockCardGrid.columnHeaders.columns[1].allowMerging = true;
-            stockCardGrid.columnHeaders.setCellData(0, 1, 'Document');
-
-            for (var columnBasicUnitConversion = 2; columnBasicUnitConversion <= 5; columnBasicUnitConversion++) {
-                stockCardGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Quantity');
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
             }
+        }
 
-
-            stockCardGrid.columnHeaders.columns[6].allowMerging = true;
-            stockCardGrid.columnHeaders.setCellData(0, 6, 'Unit');
-
-            stockCardGrid.columnHeaders.columns[7].allowMerging = true;
-            stockCardGrid.columnHeaders.setCellData(0, 7, 'Cost');
-
-            stockCardGrid.columnHeaders.columns[8].allowMerging = true;
-            stockCardGrid.columnHeaders.setCellData(0, 8, 'Amount');
-
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            stockCardReportDateFilters();
         });
     </script>
     <script type="text/javascript">
