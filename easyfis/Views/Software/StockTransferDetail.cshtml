@@ -393,7 +393,28 @@
                         placeholder: "Select Branch",
                         itemsSource: branchesObservableArray,
                         displayMemberPath: "Branch",
-                        selectedValuePath: "Id"
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            var toBranchCollections = new wijmo.collections.CollectionView(branchesObservableArray);
+                            var toBranchesObservableArray = new wijmo.collections.ObservableArray();
+                            for (var i = 0; i < toBranchCollections.items.length; i++) {
+                                if (toBranchCollections.items[i].Id != cboStockTransferBranch.selectedValue) {
+                                    toBranchesObservableArray.push({
+                                        Id: toBranchCollections.items[i].Id,
+                                        Branch: toBranchCollections.items[i].Branch,
+                                    });
+                                }
+                            }
+
+                            cboStockTransferToBranch.dispose();
+                            cboStockTransferToBranch = new wijmo.input.ComboBox('#cboStockTransferToBranch', {
+                                isEditable: false,
+                                placeholder: "Select Branch",
+                                itemsSource: toBranchesObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
                     });
 
                     var toBranchCollections = new wijmo.collections.CollectionView(branchesObservableArray);

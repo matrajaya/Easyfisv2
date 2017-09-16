@@ -52,11 +52,23 @@ namespace easyfis.ApiControllers
                 var users = from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d;
                 if (users.Any())
                 {
-                    var updateUserBranch = users.FirstOrDefault();
-                    updateUserBranch.BranchId = userBranch.BranchId;
-                    db.SubmitChanges();
+                    var branches = from d in db.MstBranches
+                                   where d.Id == userBranch.BranchId
+                                   select d;
 
-                    return Request.CreateResponse(HttpStatusCode.OK);
+                    if (branches.Any())
+                    {
+                        var updateUserBranch = users.FirstOrDefault();
+                        updateUserBranch.CompanyId = branches.FirstOrDefault().CompanyId;
+                        updateUserBranch.BranchId = branches.FirstOrDefault().Id;
+                        db.SubmitChanges();
+
+                        return Request.CreateResponse(HttpStatusCode.OK);
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.NotFound);
+                    }
                 }
                 else
                 {
