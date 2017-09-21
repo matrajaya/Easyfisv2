@@ -102,7 +102,25 @@
                     <div class="col-md-6">
                         <dl class="dl-horizontal dl-custom">
                             <dt>
-                                <b>Total End Quantity</b>
+                                <b>Total Beg</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalBeg" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Total In</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalIn" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Total Out</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalOut" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Total End</b>
                             </dt>
                             <dd>
                                 <input type="text" class="form-control numberField" id="totalEnd" placeholder="0.00" disabled />
@@ -444,17 +462,24 @@
                                             Beg: "0.00",
                                         });
 
-                                        totalBeg = totalBeg + 0;
-                                        totalIn = totalBeg + stockCardReportResult[i]["QuantityIn"];
-                                        totalOut = totalOut + stockCardReportResult[i]["QuantityOut"];
-                                        totalEnd = totalEnd + stockCardReportResult[i]["Quantity"];
+                                        totalBeg += + 0;
+                                        totalIn += stockCardReportResult[i]["QuantityIn"];
+                                        totalOut += stockCardReportResult[i]["QuantityOut"];
+                                        totalEnd += stockCardReportResult[i]["Quantity"];
                                         totalAmount = totalAmount + stockCardReportResult[i]["Amount"];
                                     }
 
+                                    document.getElementById("totalBeg").value = parseFloat(totalBeg).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    document.getElementById("totalIn").value = parseFloat(totalIn).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    document.getElementById("totalOut").value = parseFloat(totalOut).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                     document.getElementById("totalEnd").value = parseFloat(totalEnd).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                     document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                     NProgress.done();
                                 } else {
+
+                                    document.getElementById("totalBeg").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    document.getElementById("totalIn").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    document.getElementById("totalOut").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                     document.getElementById("totalEnd").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                     document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                     NProgress.done();
@@ -462,16 +487,25 @@
                             }
                         });
                     } else {
+                        document.getElementById("totalBeg").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById("totalIn").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById("totalOut").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         document.getElementById("totalEnd").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         NProgress.done();
                     }
                 } else {
+                    document.getElementById("totalBeg").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalIn").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalOut").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     document.getElementById("totalEnd").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     NProgress.done();
                 }
             } else {
+                document.getElementById("totalBeg").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalIn").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalOut").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 document.getElementById("totalEnd").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 NProgress.done();
@@ -493,16 +527,28 @@
                 stockCardReportCollections.refresh();
 
                 if (stockCardReportCollections.items.length > 0) {
+                    var totalBeg = 0;
+                    var totalIn = 0;
+                    var totalOut = 0;
                     var totalEnd = 0;
                     var totalAmount = 0;
                     for (var i = 0; i < stockCardReportCollections.items.length; i++) {
+                        totalBeg += 0;
+                        totalIn += stockCardReportCollections.items[i].QuantityIn;
+                        totalOut += stockCardReportCollections.items[i].QuantityOut;
                         totalEnd += stockCardReportCollections.items[i].Quantity;
                         totalAmount += stockCardReportCollections.items[i].Amount;
                     }
 
+                    document.getElementById("totalBeg").value = parseFloat(totalBeg).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalIn").value = parseFloat(totalIn).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalOut").value = parseFloat(totalOut).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     document.getElementById("totalEnd").value = parseFloat(totalEnd).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 } else {
+                    document.getElementById("totalBeg").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalIn").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalOut").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     document.getElementById("totalEnd").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 }
@@ -530,16 +576,28 @@
                 stockCardReportCollections.refresh();
 
                 if (stockCardReportCollections.items.length > 0) {
+                    var totalBeg = 0;
+                    var totalIn = 0;
+                    var totalOut = 0;
                     var totalEnd = 0;
                     var totalAmount = 0;
                     for (var i = 0; i < stockCardReportCollections.items.length; i++) {
+                        totalBeg += 0;
+                        totalIn += stockCardReportCollections.items[i].QuantityIn;
+                        totalOut += stockCardReportCollections.items[i].QuantityOut;
                         totalEnd += stockCardReportCollections.items[i].Quantity;
                         totalAmount += stockCardReportCollections.items[i].Amount;
                     }
 
+                    document.getElementById("totalBeg").value = parseFloat(totalBeg).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalIn").value = parseFloat(totalIn).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalOut").value = parseFloat(totalOut).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     document.getElementById("totalEnd").value = parseFloat(totalEnd).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 } else {
+                    document.getElementById("totalBeg").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalIn").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalOut").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     document.getElementById("totalEnd").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 }
