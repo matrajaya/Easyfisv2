@@ -138,6 +138,12 @@
                                                     <div id="cboDiscounts"></div>
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-6">Sales Invoice Name</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control " id="defaultSalesInvoiceName" />
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-md-4"></div>
                                     </div>
@@ -575,6 +581,7 @@
                             cboInventoryType.selectedValue = userResults.InventoryType;
                             cboDiscounts.selectedValue = userResults.DefaultSalesInvoiceDiscountId;
                             document.getElementById("defaultOfficialReceiptName").value = userResults.OfficialReceiptName;
+                            document.getElementById("defaultSalesInvoiceName").value = userResults.SalesInvoiceName;
 
                             if (userResults.IsLocked) {
                                 document.getElementById("userDetail_Fullname").disabled = true;
@@ -586,6 +593,7 @@
                                 cboInventoryType.disabled = true;
                                 cboDiscounts.disabled = true;
                                 document.getElementById("defaultOfficialReceiptName").disabled = true;
+                                document.getElementById("defaultSalesInvoiceName").disabled = true;
 
                                 $("#btnUserDetailLock").prop("disabled", true);
                                 $("#btnAddUserForm").prop("disabled", true);
@@ -662,6 +670,7 @@
                 userObject.OfficialReceiptName = document.getElementById("defaultOfficialReceiptName").value;
                 userObject.InventoryType = cboInventoryType.selectedValue;
                 userObject.DefaultSalesInvoiceDiscountId = cboDiscounts.selectedValue;
+                userObject.SalesInvoiceName = document.getElementById("defaultSalesInvoiceName").value;
                 var data = JSON.stringify(userObject);
 
                 $.ajax({

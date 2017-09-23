@@ -283,6 +283,7 @@
                             selectedValue: defaultBranch.toString()
                         });
                         document.getElementById("defaultOfficialReceiptName").value = "@ViewData["OfficialReceiptName"]";
+                        document.getElementById("defaultSalesInvoiceName").value = "@ViewData["SalesInvoiceName"]";
                     }
                 }
             });
@@ -297,6 +298,7 @@
             userDefaultObject.OfficialReceiptName = document.getElementById("defaultOfficialReceiptName").value;
             userDefaultObject.InventoryType = cboInventoryType.selectedValue;
             userDefaultObject.DefaultSalesInvoiceDiscountId = cboDiscounts.selectedItem["Id"];
+            userDefaultObject.SalesInvoiceName = document.getElementById("defaultSalesInvoiceName").value;
             var userDefaultData = JSON.stringify(userDefaultObject);
 
             var userId = "@ViewData["UserId"]";
@@ -394,6 +396,7 @@
                             selectedValue: defaultDiscount.toString()
                         });
                         document.getElementById("defaultOfficialReceiptName").value = "@ViewData["OfficialReceiptName"]";
+                        document.getElementById("defaultSalesInvoiceName").value = "@ViewData["SalesInvoiceName"]";
                     }
                 }
             });
@@ -414,10 +417,12 @@
             var userName = "@ViewData["UserName"]";
             if (userName == "admin") {
                 document.getElementById("defaultOfficialReceiptName").disabled = false;
+                document.getElementById("defaultSalesInvoiceName").disabled = false;
             } else {
                 $('#btnDeleteAllTransaction').prop('disabled', true);
                 $('#btnIdSaveDefaults').prop('disabled', true);
                 document.getElementById("defaultOfficialReceiptName").disabled = true;
+                document.getElementById("defaultSalesInvoiceName").disabled = true;
             }
         });
     </script>

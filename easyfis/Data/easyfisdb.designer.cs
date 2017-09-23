@@ -22,7 +22,7 @@ namespace easyfis.Data
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="easyfis_abomar")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="easyfis_innosoft")]
 	public partial class easyfisdbDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -48,6 +48,33 @@ namespace easyfis.Data
     partial void InsertAspNetUser(AspNetUser instance);
     partial void UpdateAspNetUser(AspNetUser instance);
     partial void DeleteAspNetUser(AspNetUser instance);
+    partial void InsertIS_TrnActivity(IS_TrnActivity instance);
+    partial void UpdateIS_TrnActivity(IS_TrnActivity instance);
+    partial void DeleteIS_TrnActivity(IS_TrnActivity instance);
+    partial void InsertIS_TrnContinuity(IS_TrnContinuity instance);
+    partial void UpdateIS_TrnContinuity(IS_TrnContinuity instance);
+    partial void DeleteIS_TrnContinuity(IS_TrnContinuity instance);
+    partial void InsertIS_TrnDelivery(IS_TrnDelivery instance);
+    partial void UpdateIS_TrnDelivery(IS_TrnDelivery instance);
+    partial void DeleteIS_TrnDelivery(IS_TrnDelivery instance);
+    partial void InsertIS_TrnLead(IS_TrnLead instance);
+    partial void UpdateIS_TrnLead(IS_TrnLead instance);
+    partial void DeleteIS_TrnLead(IS_TrnLead instance);
+    partial void InsertIS_TrnProject(IS_TrnProject instance);
+    partial void UpdateIS_TrnProject(IS_TrnProject instance);
+    partial void DeleteIS_TrnProject(IS_TrnProject instance);
+    partial void InsertIS_TrnQuotation(IS_TrnQuotation instance);
+    partial void UpdateIS_TrnQuotation(IS_TrnQuotation instance);
+    partial void DeleteIS_TrnQuotation(IS_TrnQuotation instance);
+    partial void InsertIS_TrnRequest(IS_TrnRequest instance);
+    partial void UpdateIS_TrnRequest(IS_TrnRequest instance);
+    partial void DeleteIS_TrnRequest(IS_TrnRequest instance);
+    partial void InsertIS_TrnSoftwareDevelopment(IS_TrnSoftwareDevelopment instance);
+    partial void UpdateIS_TrnSoftwareDevelopment(IS_TrnSoftwareDevelopment instance);
+    partial void DeleteIS_TrnSoftwareDevelopment(IS_TrnSoftwareDevelopment instance);
+    partial void InsertIS_TrnSupport(IS_TrnSupport instance);
+    partial void UpdateIS_TrnSupport(IS_TrnSupport instance);
+    partial void DeleteIS_TrnSupport(IS_TrnSupport instance);
     partial void InsertMstAccount(MstAccount instance);
     partial void UpdateMstAccount(MstAccount instance);
     partial void DeleteMstAccount(MstAccount instance);
@@ -266,6 +293,78 @@ namespace easyfis.Data
 			get
 			{
 				return this.GetTable<AspNetUser>();
+			}
+		}
+		
+		public System.Data.Linq.Table<IS_TrnActivity> IS_TrnActivities
+		{
+			get
+			{
+				return this.GetTable<IS_TrnActivity>();
+			}
+		}
+		
+		public System.Data.Linq.Table<IS_TrnContinuity> IS_TrnContinuities
+		{
+			get
+			{
+				return this.GetTable<IS_TrnContinuity>();
+			}
+		}
+		
+		public System.Data.Linq.Table<IS_TrnDelivery> IS_TrnDeliveries
+		{
+			get
+			{
+				return this.GetTable<IS_TrnDelivery>();
+			}
+		}
+		
+		public System.Data.Linq.Table<IS_TrnLead> IS_TrnLeads
+		{
+			get
+			{
+				return this.GetTable<IS_TrnLead>();
+			}
+		}
+		
+		public System.Data.Linq.Table<IS_TrnProject> IS_TrnProjects
+		{
+			get
+			{
+				return this.GetTable<IS_TrnProject>();
+			}
+		}
+		
+		public System.Data.Linq.Table<IS_TrnQuotation> IS_TrnQuotations
+		{
+			get
+			{
+				return this.GetTable<IS_TrnQuotation>();
+			}
+		}
+		
+		public System.Data.Linq.Table<IS_TrnRequest> IS_TrnRequests
+		{
+			get
+			{
+				return this.GetTable<IS_TrnRequest>();
+			}
+		}
+		
+		public System.Data.Linq.Table<IS_TrnSoftwareDevelopment> IS_TrnSoftwareDevelopments
+		{
+			get
+			{
+				return this.GetTable<IS_TrnSoftwareDevelopment>();
+			}
+		}
+		
+		public System.Data.Linq.Table<IS_TrnSupport> IS_TrnSupports
+		{
+			get
+			{
+				return this.GetTable<IS_TrnSupport>();
 			}
 		}
 		
@@ -2316,6 +2415,4850 @@ namespace easyfis.Data
 		{
 			this.SendPropertyChanging();
 			entity.AspNetUser = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.IS_TrnActivity")]
+	public partial class IS_TrnActivity : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _ActivityNumber;
+		
+		private System.DateTime _ActivityDate;
+		
+		private int _StaffUserId;
+		
+		private System.Nullable<int> _CustomerId;
+		
+		private System.Nullable<int> _ProductId;
+		
+		private string _ParticularCategory;
+		
+		private string _Particulars;
+		
+		private decimal _NumberOfHours;
+		
+		private decimal _ActivityAmount;
+		
+		private string _ActivityStatus;
+		
+		private System.Nullable<int> _LeadId;
+		
+		private System.Nullable<int> _QuotationId;
+		
+		private System.Nullable<int> _DeliveryId;
+		
+		private System.Nullable<int> _SupportId;
+		
+		private System.Nullable<int> _SoftwareDevelopmentId;
+		
+		private EntityRef<IS_TrnDelivery> _IS_TrnDelivery;
+		
+		private EntityRef<IS_TrnLead> _IS_TrnLead;
+		
+		private EntityRef<IS_TrnQuotation> _IS_TrnQuotation;
+		
+		private EntityRef<IS_TrnSoftwareDevelopment> _IS_TrnSoftwareDevelopment;
+		
+		private EntityRef<IS_TrnSupport> _IS_TrnSupport;
+		
+		private EntityRef<MstArticle> _MstArticle;
+		
+		private EntityRef<MstArticle> _MstArticle1;
+		
+		private EntityRef<MstUser> _MstUser;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnActivityNumberChanging(string value);
+    partial void OnActivityNumberChanged();
+    partial void OnActivityDateChanging(System.DateTime value);
+    partial void OnActivityDateChanged();
+    partial void OnStaffUserIdChanging(int value);
+    partial void OnStaffUserIdChanged();
+    partial void OnCustomerIdChanging(System.Nullable<int> value);
+    partial void OnCustomerIdChanged();
+    partial void OnProductIdChanging(System.Nullable<int> value);
+    partial void OnProductIdChanged();
+    partial void OnParticularCategoryChanging(string value);
+    partial void OnParticularCategoryChanged();
+    partial void OnParticularsChanging(string value);
+    partial void OnParticularsChanged();
+    partial void OnNumberOfHoursChanging(decimal value);
+    partial void OnNumberOfHoursChanged();
+    partial void OnActivityAmountChanging(decimal value);
+    partial void OnActivityAmountChanged();
+    partial void OnActivityStatusChanging(string value);
+    partial void OnActivityStatusChanged();
+    partial void OnLeadIdChanging(System.Nullable<int> value);
+    partial void OnLeadIdChanged();
+    partial void OnQuotationIdChanging(System.Nullable<int> value);
+    partial void OnQuotationIdChanged();
+    partial void OnDeliveryIdChanging(System.Nullable<int> value);
+    partial void OnDeliveryIdChanged();
+    partial void OnSupportIdChanging(System.Nullable<int> value);
+    partial void OnSupportIdChanged();
+    partial void OnSoftwareDevelopmentIdChanging(System.Nullable<int> value);
+    partial void OnSoftwareDevelopmentIdChanged();
+    #endregion
+		
+		public IS_TrnActivity()
+		{
+			this._IS_TrnDelivery = default(EntityRef<IS_TrnDelivery>);
+			this._IS_TrnLead = default(EntityRef<IS_TrnLead>);
+			this._IS_TrnQuotation = default(EntityRef<IS_TrnQuotation>);
+			this._IS_TrnSoftwareDevelopment = default(EntityRef<IS_TrnSoftwareDevelopment>);
+			this._IS_TrnSupport = default(EntityRef<IS_TrnSupport>);
+			this._MstArticle = default(EntityRef<MstArticle>);
+			this._MstArticle1 = default(EntityRef<MstArticle>);
+			this._MstUser = default(EntityRef<MstUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActivityNumber", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string ActivityNumber
+		{
+			get
+			{
+				return this._ActivityNumber;
+			}
+			set
+			{
+				if ((this._ActivityNumber != value))
+				{
+					this.OnActivityNumberChanging(value);
+					this.SendPropertyChanging();
+					this._ActivityNumber = value;
+					this.SendPropertyChanged("ActivityNumber");
+					this.OnActivityNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActivityDate", DbType="DateTime NOT NULL")]
+		public System.DateTime ActivityDate
+		{
+			get
+			{
+				return this._ActivityDate;
+			}
+			set
+			{
+				if ((this._ActivityDate != value))
+				{
+					this.OnActivityDateChanging(value);
+					this.SendPropertyChanging();
+					this._ActivityDate = value;
+					this.SendPropertyChanged("ActivityDate");
+					this.OnActivityDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StaffUserId", DbType="Int NOT NULL")]
+		public int StaffUserId
+		{
+			get
+			{
+				return this._StaffUserId;
+			}
+			set
+			{
+				if ((this._StaffUserId != value))
+				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnStaffUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._StaffUserId = value;
+					this.SendPropertyChanged("StaffUserId");
+					this.OnStaffUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomerId", DbType="Int")]
+		public System.Nullable<int> CustomerId
+		{
+			get
+			{
+				return this._CustomerId;
+			}
+			set
+			{
+				if ((this._CustomerId != value))
+				{
+					if (this._MstArticle.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCustomerIdChanging(value);
+					this.SendPropertyChanging();
+					this._CustomerId = value;
+					this.SendPropertyChanged("CustomerId");
+					this.OnCustomerIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductId", DbType="Int")]
+		public System.Nullable<int> ProductId
+		{
+			get
+			{
+				return this._ProductId;
+			}
+			set
+			{
+				if ((this._ProductId != value))
+				{
+					if (this._MstArticle1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProductIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProductId = value;
+					this.SendPropertyChanged("ProductId");
+					this.OnProductIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ParticularCategory", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string ParticularCategory
+		{
+			get
+			{
+				return this._ParticularCategory;
+			}
+			set
+			{
+				if ((this._ParticularCategory != value))
+				{
+					this.OnParticularCategoryChanging(value);
+					this.SendPropertyChanging();
+					this._ParticularCategory = value;
+					this.SendPropertyChanged("ParticularCategory");
+					this.OnParticularCategoryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Particulars", DbType="NVarChar(1000) NOT NULL", CanBeNull=false)]
+		public string Particulars
+		{
+			get
+			{
+				return this._Particulars;
+			}
+			set
+			{
+				if ((this._Particulars != value))
+				{
+					this.OnParticularsChanging(value);
+					this.SendPropertyChanging();
+					this._Particulars = value;
+					this.SendPropertyChanged("Particulars");
+					this.OnParticularsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NumberOfHours", DbType="Decimal(18,5) NOT NULL")]
+		public decimal NumberOfHours
+		{
+			get
+			{
+				return this._NumberOfHours;
+			}
+			set
+			{
+				if ((this._NumberOfHours != value))
+				{
+					this.OnNumberOfHoursChanging(value);
+					this.SendPropertyChanging();
+					this._NumberOfHours = value;
+					this.SendPropertyChanged("NumberOfHours");
+					this.OnNumberOfHoursChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActivityAmount", DbType="Decimal(18,5) NOT NULL")]
+		public decimal ActivityAmount
+		{
+			get
+			{
+				return this._ActivityAmount;
+			}
+			set
+			{
+				if ((this._ActivityAmount != value))
+				{
+					this.OnActivityAmountChanging(value);
+					this.SendPropertyChanging();
+					this._ActivityAmount = value;
+					this.SendPropertyChanged("ActivityAmount");
+					this.OnActivityAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActivityStatus", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string ActivityStatus
+		{
+			get
+			{
+				return this._ActivityStatus;
+			}
+			set
+			{
+				if ((this._ActivityStatus != value))
+				{
+					this.OnActivityStatusChanging(value);
+					this.SendPropertyChanging();
+					this._ActivityStatus = value;
+					this.SendPropertyChanged("ActivityStatus");
+					this.OnActivityStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LeadId", DbType="Int")]
+		public System.Nullable<int> LeadId
+		{
+			get
+			{
+				return this._LeadId;
+			}
+			set
+			{
+				if ((this._LeadId != value))
+				{
+					if (this._IS_TrnLead.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLeadIdChanging(value);
+					this.SendPropertyChanging();
+					this._LeadId = value;
+					this.SendPropertyChanged("LeadId");
+					this.OnLeadIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_QuotationId", DbType="Int")]
+		public System.Nullable<int> QuotationId
+		{
+			get
+			{
+				return this._QuotationId;
+			}
+			set
+			{
+				if ((this._QuotationId != value))
+				{
+					if (this._IS_TrnQuotation.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnQuotationIdChanging(value);
+					this.SendPropertyChanging();
+					this._QuotationId = value;
+					this.SendPropertyChanged("QuotationId");
+					this.OnQuotationIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DeliveryId", DbType="Int")]
+		public System.Nullable<int> DeliveryId
+		{
+			get
+			{
+				return this._DeliveryId;
+			}
+			set
+			{
+				if ((this._DeliveryId != value))
+				{
+					if (this._IS_TrnDelivery.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDeliveryIdChanging(value);
+					this.SendPropertyChanging();
+					this._DeliveryId = value;
+					this.SendPropertyChanged("DeliveryId");
+					this.OnDeliveryIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SupportId", DbType="Int")]
+		public System.Nullable<int> SupportId
+		{
+			get
+			{
+				return this._SupportId;
+			}
+			set
+			{
+				if ((this._SupportId != value))
+				{
+					if (this._IS_TrnSupport.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSupportIdChanging(value);
+					this.SendPropertyChanging();
+					this._SupportId = value;
+					this.SendPropertyChanged("SupportId");
+					this.OnSupportIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SoftwareDevelopmentId", DbType="Int")]
+		public System.Nullable<int> SoftwareDevelopmentId
+		{
+			get
+			{
+				return this._SoftwareDevelopmentId;
+			}
+			set
+			{
+				if ((this._SoftwareDevelopmentId != value))
+				{
+					if (this._IS_TrnSoftwareDevelopment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSoftwareDevelopmentIdChanging(value);
+					this.SendPropertyChanging();
+					this._SoftwareDevelopmentId = value;
+					this.SendPropertyChanged("SoftwareDevelopmentId");
+					this.OnSoftwareDevelopmentIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnDelivery_IS_TrnActivity", Storage="_IS_TrnDelivery", ThisKey="DeliveryId", OtherKey="Id", IsForeignKey=true)]
+		public IS_TrnDelivery IS_TrnDelivery
+		{
+			get
+			{
+				return this._IS_TrnDelivery.Entity;
+			}
+			set
+			{
+				IS_TrnDelivery previousValue = this._IS_TrnDelivery.Entity;
+				if (((previousValue != value) 
+							|| (this._IS_TrnDelivery.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._IS_TrnDelivery.Entity = null;
+						previousValue.IS_TrnActivities.Remove(this);
+					}
+					this._IS_TrnDelivery.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnActivities.Add(this);
+						this._DeliveryId = value.Id;
+					}
+					else
+					{
+						this._DeliveryId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("IS_TrnDelivery");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnLead_IS_TrnActivity", Storage="_IS_TrnLead", ThisKey="LeadId", OtherKey="Id", IsForeignKey=true)]
+		public IS_TrnLead IS_TrnLead
+		{
+			get
+			{
+				return this._IS_TrnLead.Entity;
+			}
+			set
+			{
+				IS_TrnLead previousValue = this._IS_TrnLead.Entity;
+				if (((previousValue != value) 
+							|| (this._IS_TrnLead.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._IS_TrnLead.Entity = null;
+						previousValue.IS_TrnActivities.Remove(this);
+					}
+					this._IS_TrnLead.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnActivities.Add(this);
+						this._LeadId = value.Id;
+					}
+					else
+					{
+						this._LeadId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("IS_TrnLead");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnQuotation_IS_TrnActivity", Storage="_IS_TrnQuotation", ThisKey="QuotationId", OtherKey="Id", IsForeignKey=true)]
+		public IS_TrnQuotation IS_TrnQuotation
+		{
+			get
+			{
+				return this._IS_TrnQuotation.Entity;
+			}
+			set
+			{
+				IS_TrnQuotation previousValue = this._IS_TrnQuotation.Entity;
+				if (((previousValue != value) 
+							|| (this._IS_TrnQuotation.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._IS_TrnQuotation.Entity = null;
+						previousValue.IS_TrnActivities.Remove(this);
+					}
+					this._IS_TrnQuotation.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnActivities.Add(this);
+						this._QuotationId = value.Id;
+					}
+					else
+					{
+						this._QuotationId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("IS_TrnQuotation");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnSoftwareDevelopment_IS_TrnActivity", Storage="_IS_TrnSoftwareDevelopment", ThisKey="SoftwareDevelopmentId", OtherKey="Id", IsForeignKey=true)]
+		public IS_TrnSoftwareDevelopment IS_TrnSoftwareDevelopment
+		{
+			get
+			{
+				return this._IS_TrnSoftwareDevelopment.Entity;
+			}
+			set
+			{
+				IS_TrnSoftwareDevelopment previousValue = this._IS_TrnSoftwareDevelopment.Entity;
+				if (((previousValue != value) 
+							|| (this._IS_TrnSoftwareDevelopment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._IS_TrnSoftwareDevelopment.Entity = null;
+						previousValue.IS_TrnActivities.Remove(this);
+					}
+					this._IS_TrnSoftwareDevelopment.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnActivities.Add(this);
+						this._SoftwareDevelopmentId = value.Id;
+					}
+					else
+					{
+						this._SoftwareDevelopmentId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("IS_TrnSoftwareDevelopment");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnSupport_IS_TrnActivity", Storage="_IS_TrnSupport", ThisKey="SupportId", OtherKey="Id", IsForeignKey=true)]
+		public IS_TrnSupport IS_TrnSupport
+		{
+			get
+			{
+				return this._IS_TrnSupport.Entity;
+			}
+			set
+			{
+				IS_TrnSupport previousValue = this._IS_TrnSupport.Entity;
+				if (((previousValue != value) 
+							|| (this._IS_TrnSupport.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._IS_TrnSupport.Entity = null;
+						previousValue.IS_TrnActivities.Remove(this);
+					}
+					this._IS_TrnSupport.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnActivities.Add(this);
+						this._SupportId = value.Id;
+					}
+					else
+					{
+						this._SupportId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("IS_TrnSupport");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnActivity", Storage="_MstArticle", ThisKey="CustomerId", OtherKey="Id", IsForeignKey=true)]
+		public MstArticle MstArticle
+		{
+			get
+			{
+				return this._MstArticle.Entity;
+			}
+			set
+			{
+				MstArticle previousValue = this._MstArticle.Entity;
+				if (((previousValue != value) 
+							|| (this._MstArticle.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstArticle.Entity = null;
+						previousValue.IS_TrnActivities.Remove(this);
+					}
+					this._MstArticle.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnActivities.Add(this);
+						this._CustomerId = value.Id;
+					}
+					else
+					{
+						this._CustomerId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("MstArticle");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnActivity1", Storage="_MstArticle1", ThisKey="ProductId", OtherKey="Id", IsForeignKey=true)]
+		public MstArticle MstArticle1
+		{
+			get
+			{
+				return this._MstArticle1.Entity;
+			}
+			set
+			{
+				MstArticle previousValue = this._MstArticle1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstArticle1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstArticle1.Entity = null;
+						previousValue.IS_TrnActivities1.Remove(this);
+					}
+					this._MstArticle1.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnActivities1.Add(this);
+						this._ProductId = value.Id;
+					}
+					else
+					{
+						this._ProductId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("MstArticle1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnActivity", Storage="_MstUser", ThisKey="StaffUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.IS_TrnActivities.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnActivities.Add(this);
+						this._StaffUserId = value.Id;
+					}
+					else
+					{
+						this._StaffUserId = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.IS_TrnContinuity")]
+	public partial class IS_TrnContinuity : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _ContinuityNumber;
+		
+		private System.DateTime _ContinuityDate;
+		
+		private int _DeliveryId;
+		
+		private int _CustomerId;
+		
+		private int _ProductId;
+		
+		private System.DateTime _ExpiryDate;
+		
+		private string _Remarks;
+		
+		private decimal _ContinuityAmount;
+		
+		private int _StaffUserId;
+		
+		private string _ContinuityStatus;
+		
+		private EntitySet<IS_TrnSupport> _IS_TrnSupports;
+		
+		private EntityRef<IS_TrnDelivery> _IS_TrnDelivery;
+		
+		private EntityRef<MstArticle> _MstArticle;
+		
+		private EntityRef<MstArticle> _MstArticle1;
+		
+		private EntityRef<MstUser> _MstUser;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnContinuityNumberChanging(string value);
+    partial void OnContinuityNumberChanged();
+    partial void OnContinuityDateChanging(System.DateTime value);
+    partial void OnContinuityDateChanged();
+    partial void OnDeliveryIdChanging(int value);
+    partial void OnDeliveryIdChanged();
+    partial void OnCustomerIdChanging(int value);
+    partial void OnCustomerIdChanged();
+    partial void OnProductIdChanging(int value);
+    partial void OnProductIdChanged();
+    partial void OnExpiryDateChanging(System.DateTime value);
+    partial void OnExpiryDateChanged();
+    partial void OnRemarksChanging(string value);
+    partial void OnRemarksChanged();
+    partial void OnContinuityAmountChanging(decimal value);
+    partial void OnContinuityAmountChanged();
+    partial void OnStaffUserIdChanging(int value);
+    partial void OnStaffUserIdChanged();
+    partial void OnContinuityStatusChanging(string value);
+    partial void OnContinuityStatusChanged();
+    #endregion
+		
+		public IS_TrnContinuity()
+		{
+			this._IS_TrnSupports = new EntitySet<IS_TrnSupport>(new Action<IS_TrnSupport>(this.attach_IS_TrnSupports), new Action<IS_TrnSupport>(this.detach_IS_TrnSupports));
+			this._IS_TrnDelivery = default(EntityRef<IS_TrnDelivery>);
+			this._MstArticle = default(EntityRef<MstArticle>);
+			this._MstArticle1 = default(EntityRef<MstArticle>);
+			this._MstUser = default(EntityRef<MstUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContinuityNumber", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string ContinuityNumber
+		{
+			get
+			{
+				return this._ContinuityNumber;
+			}
+			set
+			{
+				if ((this._ContinuityNumber != value))
+				{
+					this.OnContinuityNumberChanging(value);
+					this.SendPropertyChanging();
+					this._ContinuityNumber = value;
+					this.SendPropertyChanged("ContinuityNumber");
+					this.OnContinuityNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContinuityDate", DbType="DateTime NOT NULL")]
+		public System.DateTime ContinuityDate
+		{
+			get
+			{
+				return this._ContinuityDate;
+			}
+			set
+			{
+				if ((this._ContinuityDate != value))
+				{
+					this.OnContinuityDateChanging(value);
+					this.SendPropertyChanging();
+					this._ContinuityDate = value;
+					this.SendPropertyChanged("ContinuityDate");
+					this.OnContinuityDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DeliveryId", DbType="Int NOT NULL")]
+		public int DeliveryId
+		{
+			get
+			{
+				return this._DeliveryId;
+			}
+			set
+			{
+				if ((this._DeliveryId != value))
+				{
+					if (this._IS_TrnDelivery.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDeliveryIdChanging(value);
+					this.SendPropertyChanging();
+					this._DeliveryId = value;
+					this.SendPropertyChanged("DeliveryId");
+					this.OnDeliveryIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomerId", DbType="Int NOT NULL")]
+		public int CustomerId
+		{
+			get
+			{
+				return this._CustomerId;
+			}
+			set
+			{
+				if ((this._CustomerId != value))
+				{
+					if (this._MstArticle.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCustomerIdChanging(value);
+					this.SendPropertyChanging();
+					this._CustomerId = value;
+					this.SendPropertyChanged("CustomerId");
+					this.OnCustomerIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductId", DbType="Int NOT NULL")]
+		public int ProductId
+		{
+			get
+			{
+				return this._ProductId;
+			}
+			set
+			{
+				if ((this._ProductId != value))
+				{
+					if (this._MstArticle1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProductIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProductId = value;
+					this.SendPropertyChanged("ProductId");
+					this.OnProductIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExpiryDate", DbType="DateTime NOT NULL")]
+		public System.DateTime ExpiryDate
+		{
+			get
+			{
+				return this._ExpiryDate;
+			}
+			set
+			{
+				if ((this._ExpiryDate != value))
+				{
+					this.OnExpiryDateChanging(value);
+					this.SendPropertyChanging();
+					this._ExpiryDate = value;
+					this.SendPropertyChanged("ExpiryDate");
+					this.OnExpiryDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Remarks", DbType="NVarChar(1000)")]
+		public string Remarks
+		{
+			get
+			{
+				return this._Remarks;
+			}
+			set
+			{
+				if ((this._Remarks != value))
+				{
+					this.OnRemarksChanging(value);
+					this.SendPropertyChanging();
+					this._Remarks = value;
+					this.SendPropertyChanged("Remarks");
+					this.OnRemarksChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContinuityAmount", DbType="Decimal(18,5) NOT NULL")]
+		public decimal ContinuityAmount
+		{
+			get
+			{
+				return this._ContinuityAmount;
+			}
+			set
+			{
+				if ((this._ContinuityAmount != value))
+				{
+					this.OnContinuityAmountChanging(value);
+					this.SendPropertyChanging();
+					this._ContinuityAmount = value;
+					this.SendPropertyChanged("ContinuityAmount");
+					this.OnContinuityAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StaffUserId", DbType="Int NOT NULL")]
+		public int StaffUserId
+		{
+			get
+			{
+				return this._StaffUserId;
+			}
+			set
+			{
+				if ((this._StaffUserId != value))
+				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnStaffUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._StaffUserId = value;
+					this.SendPropertyChanged("StaffUserId");
+					this.OnStaffUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContinuityStatus", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string ContinuityStatus
+		{
+			get
+			{
+				return this._ContinuityStatus;
+			}
+			set
+			{
+				if ((this._ContinuityStatus != value))
+				{
+					this.OnContinuityStatusChanging(value);
+					this.SendPropertyChanging();
+					this._ContinuityStatus = value;
+					this.SendPropertyChanged("ContinuityStatus");
+					this.OnContinuityStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnContinuity_IS_TrnSupport", Storage="_IS_TrnSupports", ThisKey="Id", OtherKey="ContinuityId")]
+		public EntitySet<IS_TrnSupport> IS_TrnSupports
+		{
+			get
+			{
+				return this._IS_TrnSupports;
+			}
+			set
+			{
+				this._IS_TrnSupports.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnDelivery_IS_TrnContinuity", Storage="_IS_TrnDelivery", ThisKey="DeliveryId", OtherKey="Id", IsForeignKey=true)]
+		public IS_TrnDelivery IS_TrnDelivery
+		{
+			get
+			{
+				return this._IS_TrnDelivery.Entity;
+			}
+			set
+			{
+				IS_TrnDelivery previousValue = this._IS_TrnDelivery.Entity;
+				if (((previousValue != value) 
+							|| (this._IS_TrnDelivery.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._IS_TrnDelivery.Entity = null;
+						previousValue.IS_TrnContinuities.Remove(this);
+					}
+					this._IS_TrnDelivery.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnContinuities.Add(this);
+						this._DeliveryId = value.Id;
+					}
+					else
+					{
+						this._DeliveryId = default(int);
+					}
+					this.SendPropertyChanged("IS_TrnDelivery");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnContinuity", Storage="_MstArticle", ThisKey="CustomerId", OtherKey="Id", IsForeignKey=true)]
+		public MstArticle MstArticle
+		{
+			get
+			{
+				return this._MstArticle.Entity;
+			}
+			set
+			{
+				MstArticle previousValue = this._MstArticle.Entity;
+				if (((previousValue != value) 
+							|| (this._MstArticle.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstArticle.Entity = null;
+						previousValue.IS_TrnContinuities.Remove(this);
+					}
+					this._MstArticle.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnContinuities.Add(this);
+						this._CustomerId = value.Id;
+					}
+					else
+					{
+						this._CustomerId = default(int);
+					}
+					this.SendPropertyChanged("MstArticle");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnContinuity1", Storage="_MstArticle1", ThisKey="ProductId", OtherKey="Id", IsForeignKey=true)]
+		public MstArticle MstArticle1
+		{
+			get
+			{
+				return this._MstArticle1.Entity;
+			}
+			set
+			{
+				MstArticle previousValue = this._MstArticle1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstArticle1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstArticle1.Entity = null;
+						previousValue.IS_TrnContinuities1.Remove(this);
+					}
+					this._MstArticle1.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnContinuities1.Add(this);
+						this._ProductId = value.Id;
+					}
+					else
+					{
+						this._ProductId = default(int);
+					}
+					this.SendPropertyChanged("MstArticle1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnContinuity", Storage="_MstUser", ThisKey="StaffUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.IS_TrnContinuities.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnContinuities.Add(this);
+						this._StaffUserId = value.Id;
+					}
+					else
+					{
+						this._StaffUserId = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_IS_TrnSupports(IS_TrnSupport entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnContinuity = this;
+		}
+		
+		private void detach_IS_TrnSupports(IS_TrnSupport entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnContinuity = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.IS_TrnDelivery")]
+	public partial class IS_TrnDelivery : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _DeliveryNumber;
+		
+		private System.DateTime _DeliveryDate;
+		
+		private int _QuotationId;
+		
+		private int _CustomerId;
+		
+		private int _ProductId;
+		
+		private System.DateTime _MeetingDate;
+		
+		private string _Remarks;
+		
+		private int _SalesUserId;
+		
+		private int _TechnicalUserId;
+		
+		private int _FunctionalUserId;
+		
+		private string _DeliveryStatus;
+		
+		private EntitySet<IS_TrnActivity> _IS_TrnActivities;
+		
+		private EntitySet<IS_TrnContinuity> _IS_TrnContinuities;
+		
+		private EntityRef<IS_TrnQuotation> _IS_TrnQuotation;
+		
+		private EntityRef<MstArticle> _MstArticle;
+		
+		private EntityRef<MstArticle> _MstArticle1;
+		
+		private EntityRef<MstUser> _MstUser;
+		
+		private EntityRef<MstUser> _MstUser1;
+		
+		private EntityRef<MstUser> _MstUser2;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnDeliveryNumberChanging(string value);
+    partial void OnDeliveryNumberChanged();
+    partial void OnDeliveryDateChanging(System.DateTime value);
+    partial void OnDeliveryDateChanged();
+    partial void OnQuotationIdChanging(int value);
+    partial void OnQuotationIdChanged();
+    partial void OnCustomerIdChanging(int value);
+    partial void OnCustomerIdChanged();
+    partial void OnProductIdChanging(int value);
+    partial void OnProductIdChanged();
+    partial void OnMeetingDateChanging(System.DateTime value);
+    partial void OnMeetingDateChanged();
+    partial void OnRemarksChanging(string value);
+    partial void OnRemarksChanged();
+    partial void OnSalesUserIdChanging(int value);
+    partial void OnSalesUserIdChanged();
+    partial void OnTechnicalUserIdChanging(int value);
+    partial void OnTechnicalUserIdChanged();
+    partial void OnFunctionalUserIdChanging(int value);
+    partial void OnFunctionalUserIdChanged();
+    partial void OnDeliveryStatusChanging(string value);
+    partial void OnDeliveryStatusChanged();
+    #endregion
+		
+		public IS_TrnDelivery()
+		{
+			this._IS_TrnActivities = new EntitySet<IS_TrnActivity>(new Action<IS_TrnActivity>(this.attach_IS_TrnActivities), new Action<IS_TrnActivity>(this.detach_IS_TrnActivities));
+			this._IS_TrnContinuities = new EntitySet<IS_TrnContinuity>(new Action<IS_TrnContinuity>(this.attach_IS_TrnContinuities), new Action<IS_TrnContinuity>(this.detach_IS_TrnContinuities));
+			this._IS_TrnQuotation = default(EntityRef<IS_TrnQuotation>);
+			this._MstArticle = default(EntityRef<MstArticle>);
+			this._MstArticle1 = default(EntityRef<MstArticle>);
+			this._MstUser = default(EntityRef<MstUser>);
+			this._MstUser1 = default(EntityRef<MstUser>);
+			this._MstUser2 = default(EntityRef<MstUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DeliveryNumber", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string DeliveryNumber
+		{
+			get
+			{
+				return this._DeliveryNumber;
+			}
+			set
+			{
+				if ((this._DeliveryNumber != value))
+				{
+					this.OnDeliveryNumberChanging(value);
+					this.SendPropertyChanging();
+					this._DeliveryNumber = value;
+					this.SendPropertyChanged("DeliveryNumber");
+					this.OnDeliveryNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DeliveryDate", DbType="DateTime NOT NULL")]
+		public System.DateTime DeliveryDate
+		{
+			get
+			{
+				return this._DeliveryDate;
+			}
+			set
+			{
+				if ((this._DeliveryDate != value))
+				{
+					this.OnDeliveryDateChanging(value);
+					this.SendPropertyChanging();
+					this._DeliveryDate = value;
+					this.SendPropertyChanged("DeliveryDate");
+					this.OnDeliveryDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_QuotationId", DbType="Int NOT NULL")]
+		public int QuotationId
+		{
+			get
+			{
+				return this._QuotationId;
+			}
+			set
+			{
+				if ((this._QuotationId != value))
+				{
+					if (this._IS_TrnQuotation.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnQuotationIdChanging(value);
+					this.SendPropertyChanging();
+					this._QuotationId = value;
+					this.SendPropertyChanged("QuotationId");
+					this.OnQuotationIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomerId", DbType="Int NOT NULL")]
+		public int CustomerId
+		{
+			get
+			{
+				return this._CustomerId;
+			}
+			set
+			{
+				if ((this._CustomerId != value))
+				{
+					if (this._MstArticle.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCustomerIdChanging(value);
+					this.SendPropertyChanging();
+					this._CustomerId = value;
+					this.SendPropertyChanged("CustomerId");
+					this.OnCustomerIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductId", DbType="Int NOT NULL")]
+		public int ProductId
+		{
+			get
+			{
+				return this._ProductId;
+			}
+			set
+			{
+				if ((this._ProductId != value))
+				{
+					if (this._MstArticle1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProductIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProductId = value;
+					this.SendPropertyChanged("ProductId");
+					this.OnProductIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MeetingDate", DbType="DateTime NOT NULL")]
+		public System.DateTime MeetingDate
+		{
+			get
+			{
+				return this._MeetingDate;
+			}
+			set
+			{
+				if ((this._MeetingDate != value))
+				{
+					this.OnMeetingDateChanging(value);
+					this.SendPropertyChanging();
+					this._MeetingDate = value;
+					this.SendPropertyChanged("MeetingDate");
+					this.OnMeetingDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Remarks", DbType="NVarChar(1000) NOT NULL", CanBeNull=false)]
+		public string Remarks
+		{
+			get
+			{
+				return this._Remarks;
+			}
+			set
+			{
+				if ((this._Remarks != value))
+				{
+					this.OnRemarksChanging(value);
+					this.SendPropertyChanging();
+					this._Remarks = value;
+					this.SendPropertyChanged("Remarks");
+					this.OnRemarksChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SalesUserId", DbType="Int NOT NULL")]
+		public int SalesUserId
+		{
+			get
+			{
+				return this._SalesUserId;
+			}
+			set
+			{
+				if ((this._SalesUserId != value))
+				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSalesUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._SalesUserId = value;
+					this.SendPropertyChanged("SalesUserId");
+					this.OnSalesUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TechnicalUserId", DbType="Int NOT NULL")]
+		public int TechnicalUserId
+		{
+			get
+			{
+				return this._TechnicalUserId;
+			}
+			set
+			{
+				if ((this._TechnicalUserId != value))
+				{
+					if (this._MstUser1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTechnicalUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._TechnicalUserId = value;
+					this.SendPropertyChanged("TechnicalUserId");
+					this.OnTechnicalUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FunctionalUserId", DbType="Int NOT NULL")]
+		public int FunctionalUserId
+		{
+			get
+			{
+				return this._FunctionalUserId;
+			}
+			set
+			{
+				if ((this._FunctionalUserId != value))
+				{
+					if (this._MstUser2.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnFunctionalUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._FunctionalUserId = value;
+					this.SendPropertyChanged("FunctionalUserId");
+					this.OnFunctionalUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DeliveryStatus", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string DeliveryStatus
+		{
+			get
+			{
+				return this._DeliveryStatus;
+			}
+			set
+			{
+				if ((this._DeliveryStatus != value))
+				{
+					this.OnDeliveryStatusChanging(value);
+					this.SendPropertyChanging();
+					this._DeliveryStatus = value;
+					this.SendPropertyChanged("DeliveryStatus");
+					this.OnDeliveryStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnDelivery_IS_TrnActivity", Storage="_IS_TrnActivities", ThisKey="Id", OtherKey="DeliveryId")]
+		public EntitySet<IS_TrnActivity> IS_TrnActivities
+		{
+			get
+			{
+				return this._IS_TrnActivities;
+			}
+			set
+			{
+				this._IS_TrnActivities.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnDelivery_IS_TrnContinuity", Storage="_IS_TrnContinuities", ThisKey="Id", OtherKey="DeliveryId")]
+		public EntitySet<IS_TrnContinuity> IS_TrnContinuities
+		{
+			get
+			{
+				return this._IS_TrnContinuities;
+			}
+			set
+			{
+				this._IS_TrnContinuities.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnQuotation_IS_TrnDelivery", Storage="_IS_TrnQuotation", ThisKey="QuotationId", OtherKey="Id", IsForeignKey=true)]
+		public IS_TrnQuotation IS_TrnQuotation
+		{
+			get
+			{
+				return this._IS_TrnQuotation.Entity;
+			}
+			set
+			{
+				IS_TrnQuotation previousValue = this._IS_TrnQuotation.Entity;
+				if (((previousValue != value) 
+							|| (this._IS_TrnQuotation.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._IS_TrnQuotation.Entity = null;
+						previousValue.IS_TrnDeliveries.Remove(this);
+					}
+					this._IS_TrnQuotation.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnDeliveries.Add(this);
+						this._QuotationId = value.Id;
+					}
+					else
+					{
+						this._QuotationId = default(int);
+					}
+					this.SendPropertyChanged("IS_TrnQuotation");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnDelivery", Storage="_MstArticle", ThisKey="CustomerId", OtherKey="Id", IsForeignKey=true)]
+		public MstArticle MstArticle
+		{
+			get
+			{
+				return this._MstArticle.Entity;
+			}
+			set
+			{
+				MstArticle previousValue = this._MstArticle.Entity;
+				if (((previousValue != value) 
+							|| (this._MstArticle.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstArticle.Entity = null;
+						previousValue.IS_TrnDeliveries.Remove(this);
+					}
+					this._MstArticle.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnDeliveries.Add(this);
+						this._CustomerId = value.Id;
+					}
+					else
+					{
+						this._CustomerId = default(int);
+					}
+					this.SendPropertyChanged("MstArticle");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnDelivery1", Storage="_MstArticle1", ThisKey="ProductId", OtherKey="Id", IsForeignKey=true)]
+		public MstArticle MstArticle1
+		{
+			get
+			{
+				return this._MstArticle1.Entity;
+			}
+			set
+			{
+				MstArticle previousValue = this._MstArticle1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstArticle1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstArticle1.Entity = null;
+						previousValue.IS_TrnDeliveries1.Remove(this);
+					}
+					this._MstArticle1.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnDeliveries1.Add(this);
+						this._ProductId = value.Id;
+					}
+					else
+					{
+						this._ProductId = default(int);
+					}
+					this.SendPropertyChanged("MstArticle1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnDelivery", Storage="_MstUser", ThisKey="SalesUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.IS_TrnDeliveries.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnDeliveries.Add(this);
+						this._SalesUserId = value.Id;
+					}
+					else
+					{
+						this._SalesUserId = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnDelivery1", Storage="_MstUser1", ThisKey="TechnicalUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser1
+		{
+			get
+			{
+				return this._MstUser1.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser1.Entity = null;
+						previousValue.IS_TrnDeliveries1.Remove(this);
+					}
+					this._MstUser1.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnDeliveries1.Add(this);
+						this._TechnicalUserId = value.Id;
+					}
+					else
+					{
+						this._TechnicalUserId = default(int);
+					}
+					this.SendPropertyChanged("MstUser1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnDelivery2", Storage="_MstUser2", ThisKey="FunctionalUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser2
+		{
+			get
+			{
+				return this._MstUser2.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser2.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser2.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser2.Entity = null;
+						previousValue.IS_TrnDeliveries2.Remove(this);
+					}
+					this._MstUser2.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnDeliveries2.Add(this);
+						this._FunctionalUserId = value.Id;
+					}
+					else
+					{
+						this._FunctionalUserId = default(int);
+					}
+					this.SendPropertyChanged("MstUser2");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_IS_TrnActivities(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnDelivery = this;
+		}
+		
+		private void detach_IS_TrnActivities(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnDelivery = null;
+		}
+		
+		private void attach_IS_TrnContinuities(IS_TrnContinuity entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnDelivery = this;
+		}
+		
+		private void detach_IS_TrnContinuities(IS_TrnContinuity entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnDelivery = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.IS_TrnLead")]
+	public partial class IS_TrnLead : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _LeadNumber;
+		
+		private System.DateTime _LeadDate;
+		
+		private string _LeadName;
+		
+		private string _Address;
+		
+		private string _ContactPerson;
+		
+		private string _ContactPosition;
+		
+		private string _ContactEmail;
+		
+		private string _ContactPhoneNo;
+		
+		private string _ReferredBy;
+		
+		private string _Remarks;
+		
+		private int _EncodedByUserId;
+		
+		private System.Nullable<int> _AssignedToUserId;
+		
+		private string _LeadStatus;
+		
+		private EntitySet<IS_TrnActivity> _IS_TrnActivities;
+		
+		private EntitySet<IS_TrnQuotation> _IS_TrnQuotations;
+		
+		private EntityRef<MstUser> _MstUser;
+		
+		private EntityRef<MstUser> _MstUser1;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnLeadNumberChanging(string value);
+    partial void OnLeadNumberChanged();
+    partial void OnLeadDateChanging(System.DateTime value);
+    partial void OnLeadDateChanged();
+    partial void OnLeadNameChanging(string value);
+    partial void OnLeadNameChanged();
+    partial void OnAddressChanging(string value);
+    partial void OnAddressChanged();
+    partial void OnContactPersonChanging(string value);
+    partial void OnContactPersonChanged();
+    partial void OnContactPositionChanging(string value);
+    partial void OnContactPositionChanged();
+    partial void OnContactEmailChanging(string value);
+    partial void OnContactEmailChanged();
+    partial void OnContactPhoneNoChanging(string value);
+    partial void OnContactPhoneNoChanged();
+    partial void OnReferredByChanging(string value);
+    partial void OnReferredByChanged();
+    partial void OnRemarksChanging(string value);
+    partial void OnRemarksChanged();
+    partial void OnEncodedByUserIdChanging(int value);
+    partial void OnEncodedByUserIdChanged();
+    partial void OnAssignedToUserIdChanging(System.Nullable<int> value);
+    partial void OnAssignedToUserIdChanged();
+    partial void OnLeadStatusChanging(string value);
+    partial void OnLeadStatusChanged();
+    #endregion
+		
+		public IS_TrnLead()
+		{
+			this._IS_TrnActivities = new EntitySet<IS_TrnActivity>(new Action<IS_TrnActivity>(this.attach_IS_TrnActivities), new Action<IS_TrnActivity>(this.detach_IS_TrnActivities));
+			this._IS_TrnQuotations = new EntitySet<IS_TrnQuotation>(new Action<IS_TrnQuotation>(this.attach_IS_TrnQuotations), new Action<IS_TrnQuotation>(this.detach_IS_TrnQuotations));
+			this._MstUser = default(EntityRef<MstUser>);
+			this._MstUser1 = default(EntityRef<MstUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LeadNumber", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string LeadNumber
+		{
+			get
+			{
+				return this._LeadNumber;
+			}
+			set
+			{
+				if ((this._LeadNumber != value))
+				{
+					this.OnLeadNumberChanging(value);
+					this.SendPropertyChanging();
+					this._LeadNumber = value;
+					this.SendPropertyChanged("LeadNumber");
+					this.OnLeadNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LeadDate", DbType="DateTime NOT NULL")]
+		public System.DateTime LeadDate
+		{
+			get
+			{
+				return this._LeadDate;
+			}
+			set
+			{
+				if ((this._LeadDate != value))
+				{
+					this.OnLeadDateChanging(value);
+					this.SendPropertyChanging();
+					this._LeadDate = value;
+					this.SendPropertyChanged("LeadDate");
+					this.OnLeadDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LeadName", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string LeadName
+		{
+			get
+			{
+				return this._LeadName;
+			}
+			set
+			{
+				if ((this._LeadName != value))
+				{
+					this.OnLeadNameChanging(value);
+					this.SendPropertyChanging();
+					this._LeadName = value;
+					this.SendPropertyChanged("LeadName");
+					this.OnLeadNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="NVarChar(1000) NOT NULL", CanBeNull=false)]
+		public string Address
+		{
+			get
+			{
+				return this._Address;
+			}
+			set
+			{
+				if ((this._Address != value))
+				{
+					this.OnAddressChanging(value);
+					this.SendPropertyChanging();
+					this._Address = value;
+					this.SendPropertyChanged("Address");
+					this.OnAddressChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContactPerson", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string ContactPerson
+		{
+			get
+			{
+				return this._ContactPerson;
+			}
+			set
+			{
+				if ((this._ContactPerson != value))
+				{
+					this.OnContactPersonChanging(value);
+					this.SendPropertyChanging();
+					this._ContactPerson = value;
+					this.SendPropertyChanged("ContactPerson");
+					this.OnContactPersonChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContactPosition", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string ContactPosition
+		{
+			get
+			{
+				return this._ContactPosition;
+			}
+			set
+			{
+				if ((this._ContactPosition != value))
+				{
+					this.OnContactPositionChanging(value);
+					this.SendPropertyChanging();
+					this._ContactPosition = value;
+					this.SendPropertyChanged("ContactPosition");
+					this.OnContactPositionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContactEmail", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string ContactEmail
+		{
+			get
+			{
+				return this._ContactEmail;
+			}
+			set
+			{
+				if ((this._ContactEmail != value))
+				{
+					this.OnContactEmailChanging(value);
+					this.SendPropertyChanging();
+					this._ContactEmail = value;
+					this.SendPropertyChanged("ContactEmail");
+					this.OnContactEmailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContactPhoneNo", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string ContactPhoneNo
+		{
+			get
+			{
+				return this._ContactPhoneNo;
+			}
+			set
+			{
+				if ((this._ContactPhoneNo != value))
+				{
+					this.OnContactPhoneNoChanging(value);
+					this.SendPropertyChanging();
+					this._ContactPhoneNo = value;
+					this.SendPropertyChanged("ContactPhoneNo");
+					this.OnContactPhoneNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReferredBy", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string ReferredBy
+		{
+			get
+			{
+				return this._ReferredBy;
+			}
+			set
+			{
+				if ((this._ReferredBy != value))
+				{
+					this.OnReferredByChanging(value);
+					this.SendPropertyChanging();
+					this._ReferredBy = value;
+					this.SendPropertyChanged("ReferredBy");
+					this.OnReferredByChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Remarks", DbType="NVarChar(1000) NOT NULL", CanBeNull=false)]
+		public string Remarks
+		{
+			get
+			{
+				return this._Remarks;
+			}
+			set
+			{
+				if ((this._Remarks != value))
+				{
+					this.OnRemarksChanging(value);
+					this.SendPropertyChanging();
+					this._Remarks = value;
+					this.SendPropertyChanged("Remarks");
+					this.OnRemarksChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EncodedByUserId", DbType="Int NOT NULL")]
+		public int EncodedByUserId
+		{
+			get
+			{
+				return this._EncodedByUserId;
+			}
+			set
+			{
+				if ((this._EncodedByUserId != value))
+				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnEncodedByUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._EncodedByUserId = value;
+					this.SendPropertyChanged("EncodedByUserId");
+					this.OnEncodedByUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AssignedToUserId", DbType="Int")]
+		public System.Nullable<int> AssignedToUserId
+		{
+			get
+			{
+				return this._AssignedToUserId;
+			}
+			set
+			{
+				if ((this._AssignedToUserId != value))
+				{
+					if (this._MstUser1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAssignedToUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._AssignedToUserId = value;
+					this.SendPropertyChanged("AssignedToUserId");
+					this.OnAssignedToUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LeadStatus", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string LeadStatus
+		{
+			get
+			{
+				return this._LeadStatus;
+			}
+			set
+			{
+				if ((this._LeadStatus != value))
+				{
+					this.OnLeadStatusChanging(value);
+					this.SendPropertyChanging();
+					this._LeadStatus = value;
+					this.SendPropertyChanged("LeadStatus");
+					this.OnLeadStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnLead_IS_TrnActivity", Storage="_IS_TrnActivities", ThisKey="Id", OtherKey="LeadId")]
+		public EntitySet<IS_TrnActivity> IS_TrnActivities
+		{
+			get
+			{
+				return this._IS_TrnActivities;
+			}
+			set
+			{
+				this._IS_TrnActivities.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnLead_IS_TrnQuotation", Storage="_IS_TrnQuotations", ThisKey="Id", OtherKey="LeadId")]
+		public EntitySet<IS_TrnQuotation> IS_TrnQuotations
+		{
+			get
+			{
+				return this._IS_TrnQuotations;
+			}
+			set
+			{
+				this._IS_TrnQuotations.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnLead", Storage="_MstUser", ThisKey="EncodedByUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.IS_TrnLeads.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnLeads.Add(this);
+						this._EncodedByUserId = value.Id;
+					}
+					else
+					{
+						this._EncodedByUserId = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnLead1", Storage="_MstUser1", ThisKey="AssignedToUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser1
+		{
+			get
+			{
+				return this._MstUser1.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser1.Entity = null;
+						previousValue.IS_TrnLeads1.Remove(this);
+					}
+					this._MstUser1.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnLeads1.Add(this);
+						this._AssignedToUserId = value.Id;
+					}
+					else
+					{
+						this._AssignedToUserId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("MstUser1");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_IS_TrnActivities(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnLead = this;
+		}
+		
+		private void detach_IS_TrnActivities(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnLead = null;
+		}
+		
+		private void attach_IS_TrnQuotations(IS_TrnQuotation entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnLead = this;
+		}
+		
+		private void detach_IS_TrnQuotations(IS_TrnQuotation entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnLead = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.IS_TrnProject")]
+	public partial class IS_TrnProject : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _ProjectNumber;
+		
+		private System.DateTime _ProjectDate;
+		
+		private string _ProjectName;
+		
+		private string _ProjectType;
+		
+		private int _CustomerId;
+		
+		private string _Particulars;
+		
+		private int _EncodedByUserId;
+		
+		private int _ProjectManagerUserId;
+		
+		private System.DateTime _ProjectStartDate;
+		
+		private System.DateTime _ProjectEndDate;
+		
+		private string _ProjectStatus;
+		
+		private EntitySet<IS_TrnSoftwareDevelopment> _IS_TrnSoftwareDevelopments;
+		
+		private EntityRef<MstArticle> _MstArticle;
+		
+		private EntityRef<MstUser> _MstUser;
+		
+		private EntityRef<MstUser> _MstUser1;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnProjectNumberChanging(string value);
+    partial void OnProjectNumberChanged();
+    partial void OnProjectDateChanging(System.DateTime value);
+    partial void OnProjectDateChanged();
+    partial void OnProjectNameChanging(string value);
+    partial void OnProjectNameChanged();
+    partial void OnProjectTypeChanging(string value);
+    partial void OnProjectTypeChanged();
+    partial void OnCustomerIdChanging(int value);
+    partial void OnCustomerIdChanged();
+    partial void OnParticularsChanging(string value);
+    partial void OnParticularsChanged();
+    partial void OnEncodedByUserIdChanging(int value);
+    partial void OnEncodedByUserIdChanged();
+    partial void OnProjectManagerUserIdChanging(int value);
+    partial void OnProjectManagerUserIdChanged();
+    partial void OnProjectStartDateChanging(System.DateTime value);
+    partial void OnProjectStartDateChanged();
+    partial void OnProjectEndDateChanging(System.DateTime value);
+    partial void OnProjectEndDateChanged();
+    partial void OnProjectStatusChanging(string value);
+    partial void OnProjectStatusChanged();
+    #endregion
+		
+		public IS_TrnProject()
+		{
+			this._IS_TrnSoftwareDevelopments = new EntitySet<IS_TrnSoftwareDevelopment>(new Action<IS_TrnSoftwareDevelopment>(this.attach_IS_TrnSoftwareDevelopments), new Action<IS_TrnSoftwareDevelopment>(this.detach_IS_TrnSoftwareDevelopments));
+			this._MstArticle = default(EntityRef<MstArticle>);
+			this._MstUser = default(EntityRef<MstUser>);
+			this._MstUser1 = default(EntityRef<MstUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectNumber", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string ProjectNumber
+		{
+			get
+			{
+				return this._ProjectNumber;
+			}
+			set
+			{
+				if ((this._ProjectNumber != value))
+				{
+					this.OnProjectNumberChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectNumber = value;
+					this.SendPropertyChanged("ProjectNumber");
+					this.OnProjectNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectDate", DbType="DateTime NOT NULL")]
+		public System.DateTime ProjectDate
+		{
+			get
+			{
+				return this._ProjectDate;
+			}
+			set
+			{
+				if ((this._ProjectDate != value))
+				{
+					this.OnProjectDateChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectDate = value;
+					this.SendPropertyChanged("ProjectDate");
+					this.OnProjectDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectName", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string ProjectName
+		{
+			get
+			{
+				return this._ProjectName;
+			}
+			set
+			{
+				if ((this._ProjectName != value))
+				{
+					this.OnProjectNameChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectName = value;
+					this.SendPropertyChanged("ProjectName");
+					this.OnProjectNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectType", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string ProjectType
+		{
+			get
+			{
+				return this._ProjectType;
+			}
+			set
+			{
+				if ((this._ProjectType != value))
+				{
+					this.OnProjectTypeChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectType = value;
+					this.SendPropertyChanged("ProjectType");
+					this.OnProjectTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomerId", DbType="Int NOT NULL")]
+		public int CustomerId
+		{
+			get
+			{
+				return this._CustomerId;
+			}
+			set
+			{
+				if ((this._CustomerId != value))
+				{
+					if (this._MstArticle.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCustomerIdChanging(value);
+					this.SendPropertyChanging();
+					this._CustomerId = value;
+					this.SendPropertyChanged("CustomerId");
+					this.OnCustomerIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Particulars", DbType="NVarChar(1000) NOT NULL", CanBeNull=false)]
+		public string Particulars
+		{
+			get
+			{
+				return this._Particulars;
+			}
+			set
+			{
+				if ((this._Particulars != value))
+				{
+					this.OnParticularsChanging(value);
+					this.SendPropertyChanging();
+					this._Particulars = value;
+					this.SendPropertyChanged("Particulars");
+					this.OnParticularsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EncodedByUserId", DbType="Int NOT NULL")]
+		public int EncodedByUserId
+		{
+			get
+			{
+				return this._EncodedByUserId;
+			}
+			set
+			{
+				if ((this._EncodedByUserId != value))
+				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnEncodedByUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._EncodedByUserId = value;
+					this.SendPropertyChanged("EncodedByUserId");
+					this.OnEncodedByUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectManagerUserId", DbType="Int NOT NULL")]
+		public int ProjectManagerUserId
+		{
+			get
+			{
+				return this._ProjectManagerUserId;
+			}
+			set
+			{
+				if ((this._ProjectManagerUserId != value))
+				{
+					if (this._MstUser1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProjectManagerUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectManagerUserId = value;
+					this.SendPropertyChanged("ProjectManagerUserId");
+					this.OnProjectManagerUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectStartDate", DbType="DateTime NOT NULL")]
+		public System.DateTime ProjectStartDate
+		{
+			get
+			{
+				return this._ProjectStartDate;
+			}
+			set
+			{
+				if ((this._ProjectStartDate != value))
+				{
+					this.OnProjectStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectStartDate = value;
+					this.SendPropertyChanged("ProjectStartDate");
+					this.OnProjectStartDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectEndDate", DbType="DateTime NOT NULL")]
+		public System.DateTime ProjectEndDate
+		{
+			get
+			{
+				return this._ProjectEndDate;
+			}
+			set
+			{
+				if ((this._ProjectEndDate != value))
+				{
+					this.OnProjectEndDateChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectEndDate = value;
+					this.SendPropertyChanged("ProjectEndDate");
+					this.OnProjectEndDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectStatus", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string ProjectStatus
+		{
+			get
+			{
+				return this._ProjectStatus;
+			}
+			set
+			{
+				if ((this._ProjectStatus != value))
+				{
+					this.OnProjectStatusChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectStatus = value;
+					this.SendPropertyChanged("ProjectStatus");
+					this.OnProjectStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnProject_IS_TrnSoftwareDevelopment", Storage="_IS_TrnSoftwareDevelopments", ThisKey="Id", OtherKey="ProjectId")]
+		public EntitySet<IS_TrnSoftwareDevelopment> IS_TrnSoftwareDevelopments
+		{
+			get
+			{
+				return this._IS_TrnSoftwareDevelopments;
+			}
+			set
+			{
+				this._IS_TrnSoftwareDevelopments.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnProject", Storage="_MstArticle", ThisKey="CustomerId", OtherKey="Id", IsForeignKey=true)]
+		public MstArticle MstArticle
+		{
+			get
+			{
+				return this._MstArticle.Entity;
+			}
+			set
+			{
+				MstArticle previousValue = this._MstArticle.Entity;
+				if (((previousValue != value) 
+							|| (this._MstArticle.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstArticle.Entity = null;
+						previousValue.IS_TrnProjects.Remove(this);
+					}
+					this._MstArticle.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnProjects.Add(this);
+						this._CustomerId = value.Id;
+					}
+					else
+					{
+						this._CustomerId = default(int);
+					}
+					this.SendPropertyChanged("MstArticle");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnProject", Storage="_MstUser", ThisKey="EncodedByUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.IS_TrnProjects.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnProjects.Add(this);
+						this._EncodedByUserId = value.Id;
+					}
+					else
+					{
+						this._EncodedByUserId = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnProject1", Storage="_MstUser1", ThisKey="ProjectManagerUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser1
+		{
+			get
+			{
+				return this._MstUser1.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser1.Entity = null;
+						previousValue.IS_TrnProjects1.Remove(this);
+					}
+					this._MstUser1.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnProjects1.Add(this);
+						this._ProjectManagerUserId = value.Id;
+					}
+					else
+					{
+						this._ProjectManagerUserId = default(int);
+					}
+					this.SendPropertyChanged("MstUser1");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_IS_TrnSoftwareDevelopments(IS_TrnSoftwareDevelopment entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnProject = this;
+		}
+		
+		private void detach_IS_TrnSoftwareDevelopments(IS_TrnSoftwareDevelopment entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnProject = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.IS_TrnQuotation")]
+	public partial class IS_TrnQuotation : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _QuotationNumber;
+		
+		private System.DateTime _QuotationDate;
+		
+		private int _LeadId;
+		
+		private int _CustomerId;
+		
+		private int _ProductId;
+		
+		private string _Remarks;
+		
+		private int _EncodedByUserId;
+		
+		private string _QuotationStatus;
+		
+		private EntitySet<IS_TrnActivity> _IS_TrnActivities;
+		
+		private EntitySet<IS_TrnDelivery> _IS_TrnDeliveries;
+		
+		private EntityRef<IS_TrnLead> _IS_TrnLead;
+		
+		private EntityRef<MstArticle> _MstArticle;
+		
+		private EntityRef<MstArticle> _MstArticle1;
+		
+		private EntityRef<MstUser> _MstUser;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnQuotationNumberChanging(string value);
+    partial void OnQuotationNumberChanged();
+    partial void OnQuotationDateChanging(System.DateTime value);
+    partial void OnQuotationDateChanged();
+    partial void OnLeadIdChanging(int value);
+    partial void OnLeadIdChanged();
+    partial void OnCustomerIdChanging(int value);
+    partial void OnCustomerIdChanged();
+    partial void OnProductIdChanging(int value);
+    partial void OnProductIdChanged();
+    partial void OnRemarksChanging(string value);
+    partial void OnRemarksChanged();
+    partial void OnEncodedByUserIdChanging(int value);
+    partial void OnEncodedByUserIdChanged();
+    partial void OnQuotationStatusChanging(string value);
+    partial void OnQuotationStatusChanged();
+    #endregion
+		
+		public IS_TrnQuotation()
+		{
+			this._IS_TrnActivities = new EntitySet<IS_TrnActivity>(new Action<IS_TrnActivity>(this.attach_IS_TrnActivities), new Action<IS_TrnActivity>(this.detach_IS_TrnActivities));
+			this._IS_TrnDeliveries = new EntitySet<IS_TrnDelivery>(new Action<IS_TrnDelivery>(this.attach_IS_TrnDeliveries), new Action<IS_TrnDelivery>(this.detach_IS_TrnDeliveries));
+			this._IS_TrnLead = default(EntityRef<IS_TrnLead>);
+			this._MstArticle = default(EntityRef<MstArticle>);
+			this._MstArticle1 = default(EntityRef<MstArticle>);
+			this._MstUser = default(EntityRef<MstUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_QuotationNumber", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string QuotationNumber
+		{
+			get
+			{
+				return this._QuotationNumber;
+			}
+			set
+			{
+				if ((this._QuotationNumber != value))
+				{
+					this.OnQuotationNumberChanging(value);
+					this.SendPropertyChanging();
+					this._QuotationNumber = value;
+					this.SendPropertyChanged("QuotationNumber");
+					this.OnQuotationNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_QuotationDate", DbType="DateTime NOT NULL")]
+		public System.DateTime QuotationDate
+		{
+			get
+			{
+				return this._QuotationDate;
+			}
+			set
+			{
+				if ((this._QuotationDate != value))
+				{
+					this.OnQuotationDateChanging(value);
+					this.SendPropertyChanging();
+					this._QuotationDate = value;
+					this.SendPropertyChanged("QuotationDate");
+					this.OnQuotationDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LeadId", DbType="Int NOT NULL")]
+		public int LeadId
+		{
+			get
+			{
+				return this._LeadId;
+			}
+			set
+			{
+				if ((this._LeadId != value))
+				{
+					if (this._IS_TrnLead.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLeadIdChanging(value);
+					this.SendPropertyChanging();
+					this._LeadId = value;
+					this.SendPropertyChanged("LeadId");
+					this.OnLeadIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomerId", DbType="Int NOT NULL")]
+		public int CustomerId
+		{
+			get
+			{
+				return this._CustomerId;
+			}
+			set
+			{
+				if ((this._CustomerId != value))
+				{
+					if (this._MstArticle.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCustomerIdChanging(value);
+					this.SendPropertyChanging();
+					this._CustomerId = value;
+					this.SendPropertyChanged("CustomerId");
+					this.OnCustomerIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductId", DbType="Int NOT NULL")]
+		public int ProductId
+		{
+			get
+			{
+				return this._ProductId;
+			}
+			set
+			{
+				if ((this._ProductId != value))
+				{
+					if (this._MstArticle1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProductIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProductId = value;
+					this.SendPropertyChanged("ProductId");
+					this.OnProductIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Remarks", DbType="NVarChar(1000) NOT NULL", CanBeNull=false)]
+		public string Remarks
+		{
+			get
+			{
+				return this._Remarks;
+			}
+			set
+			{
+				if ((this._Remarks != value))
+				{
+					this.OnRemarksChanging(value);
+					this.SendPropertyChanging();
+					this._Remarks = value;
+					this.SendPropertyChanged("Remarks");
+					this.OnRemarksChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EncodedByUserId", DbType="Int NOT NULL")]
+		public int EncodedByUserId
+		{
+			get
+			{
+				return this._EncodedByUserId;
+			}
+			set
+			{
+				if ((this._EncodedByUserId != value))
+				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnEncodedByUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._EncodedByUserId = value;
+					this.SendPropertyChanged("EncodedByUserId");
+					this.OnEncodedByUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_QuotationStatus", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string QuotationStatus
+		{
+			get
+			{
+				return this._QuotationStatus;
+			}
+			set
+			{
+				if ((this._QuotationStatus != value))
+				{
+					this.OnQuotationStatusChanging(value);
+					this.SendPropertyChanging();
+					this._QuotationStatus = value;
+					this.SendPropertyChanged("QuotationStatus");
+					this.OnQuotationStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnQuotation_IS_TrnActivity", Storage="_IS_TrnActivities", ThisKey="Id", OtherKey="QuotationId")]
+		public EntitySet<IS_TrnActivity> IS_TrnActivities
+		{
+			get
+			{
+				return this._IS_TrnActivities;
+			}
+			set
+			{
+				this._IS_TrnActivities.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnQuotation_IS_TrnDelivery", Storage="_IS_TrnDeliveries", ThisKey="Id", OtherKey="QuotationId")]
+		public EntitySet<IS_TrnDelivery> IS_TrnDeliveries
+		{
+			get
+			{
+				return this._IS_TrnDeliveries;
+			}
+			set
+			{
+				this._IS_TrnDeliveries.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnLead_IS_TrnQuotation", Storage="_IS_TrnLead", ThisKey="LeadId", OtherKey="Id", IsForeignKey=true)]
+		public IS_TrnLead IS_TrnLead
+		{
+			get
+			{
+				return this._IS_TrnLead.Entity;
+			}
+			set
+			{
+				IS_TrnLead previousValue = this._IS_TrnLead.Entity;
+				if (((previousValue != value) 
+							|| (this._IS_TrnLead.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._IS_TrnLead.Entity = null;
+						previousValue.IS_TrnQuotations.Remove(this);
+					}
+					this._IS_TrnLead.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnQuotations.Add(this);
+						this._LeadId = value.Id;
+					}
+					else
+					{
+						this._LeadId = default(int);
+					}
+					this.SendPropertyChanged("IS_TrnLead");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnQuotation", Storage="_MstArticle", ThisKey="CustomerId", OtherKey="Id", IsForeignKey=true)]
+		public MstArticle MstArticle
+		{
+			get
+			{
+				return this._MstArticle.Entity;
+			}
+			set
+			{
+				MstArticle previousValue = this._MstArticle.Entity;
+				if (((previousValue != value) 
+							|| (this._MstArticle.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstArticle.Entity = null;
+						previousValue.IS_TrnQuotations.Remove(this);
+					}
+					this._MstArticle.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnQuotations.Add(this);
+						this._CustomerId = value.Id;
+					}
+					else
+					{
+						this._CustomerId = default(int);
+					}
+					this.SendPropertyChanged("MstArticle");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnQuotation1", Storage="_MstArticle1", ThisKey="ProductId", OtherKey="Id", IsForeignKey=true)]
+		public MstArticle MstArticle1
+		{
+			get
+			{
+				return this._MstArticle1.Entity;
+			}
+			set
+			{
+				MstArticle previousValue = this._MstArticle1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstArticle1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstArticle1.Entity = null;
+						previousValue.IS_TrnQuotations1.Remove(this);
+					}
+					this._MstArticle1.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnQuotations1.Add(this);
+						this._ProductId = value.Id;
+					}
+					else
+					{
+						this._ProductId = default(int);
+					}
+					this.SendPropertyChanged("MstArticle1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnQuotation", Storage="_MstUser", ThisKey="EncodedByUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.IS_TrnQuotations.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnQuotations.Add(this);
+						this._EncodedByUserId = value.Id;
+					}
+					else
+					{
+						this._EncodedByUserId = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_IS_TrnActivities(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnQuotation = this;
+		}
+		
+		private void detach_IS_TrnActivities(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnQuotation = null;
+		}
+		
+		private void attach_IS_TrnDeliveries(IS_TrnDelivery entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnQuotation = this;
+		}
+		
+		private void detach_IS_TrnDeliveries(IS_TrnDelivery entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnQuotation = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.IS_TrnRequest")]
+	public partial class IS_TrnRequest : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _RequestNumber;
+		
+		private System.DateTime _RequestDate;
+		
+		private string _RequestType;
+		
+		private string _Particulars;
+		
+		private int _EncodedByUserId;
+		
+		private System.Nullable<int> _CheckedByUserId;
+		
+		private string _CheckedRemarks;
+		
+		private System.Nullable<int> _ApprovedByUserId;
+		
+		private string _ApprovedRemarks;
+		
+		private string _RequestStatus;
+		
+		private EntityRef<MstUser> _MstUser;
+		
+		private EntityRef<MstUser> _MstUser1;
+		
+		private EntityRef<MstUser> _MstUser2;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnRequestNumberChanging(string value);
+    partial void OnRequestNumberChanged();
+    partial void OnRequestDateChanging(System.DateTime value);
+    partial void OnRequestDateChanged();
+    partial void OnRequestTypeChanging(string value);
+    partial void OnRequestTypeChanged();
+    partial void OnParticularsChanging(string value);
+    partial void OnParticularsChanged();
+    partial void OnEncodedByUserIdChanging(int value);
+    partial void OnEncodedByUserIdChanged();
+    partial void OnCheckedByUserIdChanging(System.Nullable<int> value);
+    partial void OnCheckedByUserIdChanged();
+    partial void OnCheckedRemarksChanging(string value);
+    partial void OnCheckedRemarksChanged();
+    partial void OnApprovedByUserIdChanging(System.Nullable<int> value);
+    partial void OnApprovedByUserIdChanged();
+    partial void OnApprovedRemarksChanging(string value);
+    partial void OnApprovedRemarksChanged();
+    partial void OnRequestStatusChanging(string value);
+    partial void OnRequestStatusChanged();
+    #endregion
+		
+		public IS_TrnRequest()
+		{
+			this._MstUser = default(EntityRef<MstUser>);
+			this._MstUser1 = default(EntityRef<MstUser>);
+			this._MstUser2 = default(EntityRef<MstUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestNumber", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string RequestNumber
+		{
+			get
+			{
+				return this._RequestNumber;
+			}
+			set
+			{
+				if ((this._RequestNumber != value))
+				{
+					this.OnRequestNumberChanging(value);
+					this.SendPropertyChanging();
+					this._RequestNumber = value;
+					this.SendPropertyChanged("RequestNumber");
+					this.OnRequestNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestDate", DbType="DateTime NOT NULL")]
+		public System.DateTime RequestDate
+		{
+			get
+			{
+				return this._RequestDate;
+			}
+			set
+			{
+				if ((this._RequestDate != value))
+				{
+					this.OnRequestDateChanging(value);
+					this.SendPropertyChanging();
+					this._RequestDate = value;
+					this.SendPropertyChanged("RequestDate");
+					this.OnRequestDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestType", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string RequestType
+		{
+			get
+			{
+				return this._RequestType;
+			}
+			set
+			{
+				if ((this._RequestType != value))
+				{
+					this.OnRequestTypeChanging(value);
+					this.SendPropertyChanging();
+					this._RequestType = value;
+					this.SendPropertyChanged("RequestType");
+					this.OnRequestTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Particulars", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Particulars
+		{
+			get
+			{
+				return this._Particulars;
+			}
+			set
+			{
+				if ((this._Particulars != value))
+				{
+					this.OnParticularsChanging(value);
+					this.SendPropertyChanging();
+					this._Particulars = value;
+					this.SendPropertyChanged("Particulars");
+					this.OnParticularsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EncodedByUserId", DbType="Int NOT NULL")]
+		public int EncodedByUserId
+		{
+			get
+			{
+				return this._EncodedByUserId;
+			}
+			set
+			{
+				if ((this._EncodedByUserId != value))
+				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnEncodedByUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._EncodedByUserId = value;
+					this.SendPropertyChanged("EncodedByUserId");
+					this.OnEncodedByUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CheckedByUserId", DbType="Int")]
+		public System.Nullable<int> CheckedByUserId
+		{
+			get
+			{
+				return this._CheckedByUserId;
+			}
+			set
+			{
+				if ((this._CheckedByUserId != value))
+				{
+					if (this._MstUser1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCheckedByUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._CheckedByUserId = value;
+					this.SendPropertyChanged("CheckedByUserId");
+					this.OnCheckedByUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CheckedRemarks", DbType="NVarChar(MAX)")]
+		public string CheckedRemarks
+		{
+			get
+			{
+				return this._CheckedRemarks;
+			}
+			set
+			{
+				if ((this._CheckedRemarks != value))
+				{
+					this.OnCheckedRemarksChanging(value);
+					this.SendPropertyChanging();
+					this._CheckedRemarks = value;
+					this.SendPropertyChanged("CheckedRemarks");
+					this.OnCheckedRemarksChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ApprovedByUserId", DbType="Int")]
+		public System.Nullable<int> ApprovedByUserId
+		{
+			get
+			{
+				return this._ApprovedByUserId;
+			}
+			set
+			{
+				if ((this._ApprovedByUserId != value))
+				{
+					if (this._MstUser2.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnApprovedByUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._ApprovedByUserId = value;
+					this.SendPropertyChanged("ApprovedByUserId");
+					this.OnApprovedByUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ApprovedRemarks", DbType="NVarChar(MAX)")]
+		public string ApprovedRemarks
+		{
+			get
+			{
+				return this._ApprovedRemarks;
+			}
+			set
+			{
+				if ((this._ApprovedRemarks != value))
+				{
+					this.OnApprovedRemarksChanging(value);
+					this.SendPropertyChanging();
+					this._ApprovedRemarks = value;
+					this.SendPropertyChanged("ApprovedRemarks");
+					this.OnApprovedRemarksChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestStatus", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string RequestStatus
+		{
+			get
+			{
+				return this._RequestStatus;
+			}
+			set
+			{
+				if ((this._RequestStatus != value))
+				{
+					this.OnRequestStatusChanging(value);
+					this.SendPropertyChanging();
+					this._RequestStatus = value;
+					this.SendPropertyChanged("RequestStatus");
+					this.OnRequestStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnRequest", Storage="_MstUser", ThisKey="EncodedByUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.IS_TrnRequests.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnRequests.Add(this);
+						this._EncodedByUserId = value.Id;
+					}
+					else
+					{
+						this._EncodedByUserId = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnRequest1", Storage="_MstUser1", ThisKey="CheckedByUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser1
+		{
+			get
+			{
+				return this._MstUser1.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser1.Entity = null;
+						previousValue.IS_TrnRequests1.Remove(this);
+					}
+					this._MstUser1.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnRequests1.Add(this);
+						this._CheckedByUserId = value.Id;
+					}
+					else
+					{
+						this._CheckedByUserId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("MstUser1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnRequest2", Storage="_MstUser2", ThisKey="ApprovedByUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser2
+		{
+			get
+			{
+				return this._MstUser2.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser2.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser2.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser2.Entity = null;
+						previousValue.IS_TrnRequests2.Remove(this);
+					}
+					this._MstUser2.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnRequests2.Add(this);
+						this._ApprovedByUserId = value.Id;
+					}
+					else
+					{
+						this._ApprovedByUserId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("MstUser2");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.IS_TrnSoftwareDevelopment")]
+	public partial class IS_TrnSoftwareDevelopment : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _SoftDevNumber;
+		
+		private System.DateTime _SoftDevDate;
+		
+		private int _ProjectId;
+		
+		private string _Task;
+		
+		private string _Remarks;
+		
+		private decimal _NumberOfHours;
+		
+		private int _EncodedByUserId;
+		
+		private System.Nullable<int> _AssignedToUserId;
+		
+		private string _SoftDevStatus;
+		
+		private EntitySet<IS_TrnActivity> _IS_TrnActivities;
+		
+		private EntityRef<IS_TrnProject> _IS_TrnProject;
+		
+		private EntityRef<MstUser> _MstUser;
+		
+		private EntityRef<MstUser> _MstUser1;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnSoftDevNumberChanging(string value);
+    partial void OnSoftDevNumberChanged();
+    partial void OnSoftDevDateChanging(System.DateTime value);
+    partial void OnSoftDevDateChanged();
+    partial void OnProjectIdChanging(int value);
+    partial void OnProjectIdChanged();
+    partial void OnTaskChanging(string value);
+    partial void OnTaskChanged();
+    partial void OnRemarksChanging(string value);
+    partial void OnRemarksChanged();
+    partial void OnNumberOfHoursChanging(decimal value);
+    partial void OnNumberOfHoursChanged();
+    partial void OnEncodedByUserIdChanging(int value);
+    partial void OnEncodedByUserIdChanged();
+    partial void OnAssignedToUserIdChanging(System.Nullable<int> value);
+    partial void OnAssignedToUserIdChanged();
+    partial void OnSoftDevStatusChanging(string value);
+    partial void OnSoftDevStatusChanged();
+    #endregion
+		
+		public IS_TrnSoftwareDevelopment()
+		{
+			this._IS_TrnActivities = new EntitySet<IS_TrnActivity>(new Action<IS_TrnActivity>(this.attach_IS_TrnActivities), new Action<IS_TrnActivity>(this.detach_IS_TrnActivities));
+			this._IS_TrnProject = default(EntityRef<IS_TrnProject>);
+			this._MstUser = default(EntityRef<MstUser>);
+			this._MstUser1 = default(EntityRef<MstUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SoftDevNumber", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string SoftDevNumber
+		{
+			get
+			{
+				return this._SoftDevNumber;
+			}
+			set
+			{
+				if ((this._SoftDevNumber != value))
+				{
+					this.OnSoftDevNumberChanging(value);
+					this.SendPropertyChanging();
+					this._SoftDevNumber = value;
+					this.SendPropertyChanged("SoftDevNumber");
+					this.OnSoftDevNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SoftDevDate", DbType="DateTime NOT NULL")]
+		public System.DateTime SoftDevDate
+		{
+			get
+			{
+				return this._SoftDevDate;
+			}
+			set
+			{
+				if ((this._SoftDevDate != value))
+				{
+					this.OnSoftDevDateChanging(value);
+					this.SendPropertyChanging();
+					this._SoftDevDate = value;
+					this.SendPropertyChanged("SoftDevDate");
+					this.OnSoftDevDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProjectId", DbType="Int NOT NULL")]
+		public int ProjectId
+		{
+			get
+			{
+				return this._ProjectId;
+			}
+			set
+			{
+				if ((this._ProjectId != value))
+				{
+					if (this._IS_TrnProject.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProjectIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProjectId = value;
+					this.SendPropertyChanged("ProjectId");
+					this.OnProjectIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Task", DbType="NVarChar(1000) NOT NULL", CanBeNull=false)]
+		public string Task
+		{
+			get
+			{
+				return this._Task;
+			}
+			set
+			{
+				if ((this._Task != value))
+				{
+					this.OnTaskChanging(value);
+					this.SendPropertyChanging();
+					this._Task = value;
+					this.SendPropertyChanged("Task");
+					this.OnTaskChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Remarks", DbType="NVarChar(1000) NOT NULL", CanBeNull=false)]
+		public string Remarks
+		{
+			get
+			{
+				return this._Remarks;
+			}
+			set
+			{
+				if ((this._Remarks != value))
+				{
+					this.OnRemarksChanging(value);
+					this.SendPropertyChanging();
+					this._Remarks = value;
+					this.SendPropertyChanged("Remarks");
+					this.OnRemarksChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NumberOfHours", DbType="Decimal(18,5) NOT NULL")]
+		public decimal NumberOfHours
+		{
+			get
+			{
+				return this._NumberOfHours;
+			}
+			set
+			{
+				if ((this._NumberOfHours != value))
+				{
+					this.OnNumberOfHoursChanging(value);
+					this.SendPropertyChanging();
+					this._NumberOfHours = value;
+					this.SendPropertyChanged("NumberOfHours");
+					this.OnNumberOfHoursChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EncodedByUserId", DbType="Int NOT NULL")]
+		public int EncodedByUserId
+		{
+			get
+			{
+				return this._EncodedByUserId;
+			}
+			set
+			{
+				if ((this._EncodedByUserId != value))
+				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnEncodedByUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._EncodedByUserId = value;
+					this.SendPropertyChanged("EncodedByUserId");
+					this.OnEncodedByUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AssignedToUserId", DbType="Int")]
+		public System.Nullable<int> AssignedToUserId
+		{
+			get
+			{
+				return this._AssignedToUserId;
+			}
+			set
+			{
+				if ((this._AssignedToUserId != value))
+				{
+					if (this._MstUser1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAssignedToUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._AssignedToUserId = value;
+					this.SendPropertyChanged("AssignedToUserId");
+					this.OnAssignedToUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SoftDevStatus", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string SoftDevStatus
+		{
+			get
+			{
+				return this._SoftDevStatus;
+			}
+			set
+			{
+				if ((this._SoftDevStatus != value))
+				{
+					this.OnSoftDevStatusChanging(value);
+					this.SendPropertyChanging();
+					this._SoftDevStatus = value;
+					this.SendPropertyChanged("SoftDevStatus");
+					this.OnSoftDevStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnSoftwareDevelopment_IS_TrnActivity", Storage="_IS_TrnActivities", ThisKey="Id", OtherKey="SoftwareDevelopmentId")]
+		public EntitySet<IS_TrnActivity> IS_TrnActivities
+		{
+			get
+			{
+				return this._IS_TrnActivities;
+			}
+			set
+			{
+				this._IS_TrnActivities.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnProject_IS_TrnSoftwareDevelopment", Storage="_IS_TrnProject", ThisKey="ProjectId", OtherKey="Id", IsForeignKey=true)]
+		public IS_TrnProject IS_TrnProject
+		{
+			get
+			{
+				return this._IS_TrnProject.Entity;
+			}
+			set
+			{
+				IS_TrnProject previousValue = this._IS_TrnProject.Entity;
+				if (((previousValue != value) 
+							|| (this._IS_TrnProject.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._IS_TrnProject.Entity = null;
+						previousValue.IS_TrnSoftwareDevelopments.Remove(this);
+					}
+					this._IS_TrnProject.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnSoftwareDevelopments.Add(this);
+						this._ProjectId = value.Id;
+					}
+					else
+					{
+						this._ProjectId = default(int);
+					}
+					this.SendPropertyChanged("IS_TrnProject");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnSoftwareDevelopment", Storage="_MstUser", ThisKey="EncodedByUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.IS_TrnSoftwareDevelopments.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnSoftwareDevelopments.Add(this);
+						this._EncodedByUserId = value.Id;
+					}
+					else
+					{
+						this._EncodedByUserId = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnSoftwareDevelopment1", Storage="_MstUser1", ThisKey="AssignedToUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser1
+		{
+			get
+			{
+				return this._MstUser1.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser1.Entity = null;
+						previousValue.IS_TrnSoftwareDevelopments1.Remove(this);
+					}
+					this._MstUser1.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnSoftwareDevelopments1.Add(this);
+						this._AssignedToUserId = value.Id;
+					}
+					else
+					{
+						this._AssignedToUserId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("MstUser1");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_IS_TrnActivities(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnSoftwareDevelopment = this;
+		}
+		
+		private void detach_IS_TrnActivities(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnSoftwareDevelopment = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.IS_TrnSupport")]
+	public partial class IS_TrnSupport : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _SupportNumber;
+		
+		private System.DateTime _SupportDate;
+		
+		private int _ContinuityId;
+		
+		private string _IssueCategory;
+		
+		private string _Issue;
+		
+		private int _CustomerId;
+		
+		private int _ProductId;
+		
+		private string _Severity;
+		
+		private string _Caller;
+		
+		private string _Remarks;
+		
+		private string _ScreenShotURL;
+		
+		private string _SupportType;
+		
+		private int _EncodedByUserId;
+		
+		private System.Nullable<int> _AssignedToUserId;
+		
+		private string _SupportStatus;
+		
+		private EntitySet<IS_TrnActivity> _IS_TrnActivities;
+		
+		private EntityRef<IS_TrnContinuity> _IS_TrnContinuity;
+		
+		private EntityRef<MstArticle> _MstArticle;
+		
+		private EntityRef<MstArticle> _MstArticle1;
+		
+		private EntityRef<MstUser> _MstUser;
+		
+		private EntityRef<MstUser> _MstUser1;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnSupportNumberChanging(string value);
+    partial void OnSupportNumberChanged();
+    partial void OnSupportDateChanging(System.DateTime value);
+    partial void OnSupportDateChanged();
+    partial void OnContinuityIdChanging(int value);
+    partial void OnContinuityIdChanged();
+    partial void OnIssueCategoryChanging(string value);
+    partial void OnIssueCategoryChanged();
+    partial void OnIssueChanging(string value);
+    partial void OnIssueChanged();
+    partial void OnCustomerIdChanging(int value);
+    partial void OnCustomerIdChanged();
+    partial void OnProductIdChanging(int value);
+    partial void OnProductIdChanged();
+    partial void OnSeverityChanging(string value);
+    partial void OnSeverityChanged();
+    partial void OnCallerChanging(string value);
+    partial void OnCallerChanged();
+    partial void OnRemarksChanging(string value);
+    partial void OnRemarksChanged();
+    partial void OnScreenShotURLChanging(string value);
+    partial void OnScreenShotURLChanged();
+    partial void OnSupportTypeChanging(string value);
+    partial void OnSupportTypeChanged();
+    partial void OnEncodedByUserIdChanging(int value);
+    partial void OnEncodedByUserIdChanged();
+    partial void OnAssignedToUserIdChanging(System.Nullable<int> value);
+    partial void OnAssignedToUserIdChanged();
+    partial void OnSupportStatusChanging(string value);
+    partial void OnSupportStatusChanged();
+    #endregion
+		
+		public IS_TrnSupport()
+		{
+			this._IS_TrnActivities = new EntitySet<IS_TrnActivity>(new Action<IS_TrnActivity>(this.attach_IS_TrnActivities), new Action<IS_TrnActivity>(this.detach_IS_TrnActivities));
+			this._IS_TrnContinuity = default(EntityRef<IS_TrnContinuity>);
+			this._MstArticle = default(EntityRef<MstArticle>);
+			this._MstArticle1 = default(EntityRef<MstArticle>);
+			this._MstUser = default(EntityRef<MstUser>);
+			this._MstUser1 = default(EntityRef<MstUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SupportNumber", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string SupportNumber
+		{
+			get
+			{
+				return this._SupportNumber;
+			}
+			set
+			{
+				if ((this._SupportNumber != value))
+				{
+					this.OnSupportNumberChanging(value);
+					this.SendPropertyChanging();
+					this._SupportNumber = value;
+					this.SendPropertyChanged("SupportNumber");
+					this.OnSupportNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SupportDate", DbType="DateTime NOT NULL")]
+		public System.DateTime SupportDate
+		{
+			get
+			{
+				return this._SupportDate;
+			}
+			set
+			{
+				if ((this._SupportDate != value))
+				{
+					this.OnSupportDateChanging(value);
+					this.SendPropertyChanging();
+					this._SupportDate = value;
+					this.SendPropertyChanged("SupportDate");
+					this.OnSupportDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContinuityId", DbType="Int NOT NULL")]
+		public int ContinuityId
+		{
+			get
+			{
+				return this._ContinuityId;
+			}
+			set
+			{
+				if ((this._ContinuityId != value))
+				{
+					if (this._IS_TrnContinuity.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnContinuityIdChanging(value);
+					this.SendPropertyChanging();
+					this._ContinuityId = value;
+					this.SendPropertyChanged("ContinuityId");
+					this.OnContinuityIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IssueCategory", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string IssueCategory
+		{
+			get
+			{
+				return this._IssueCategory;
+			}
+			set
+			{
+				if ((this._IssueCategory != value))
+				{
+					this.OnIssueCategoryChanging(value);
+					this.SendPropertyChanging();
+					this._IssueCategory = value;
+					this.SendPropertyChanged("IssueCategory");
+					this.OnIssueCategoryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Issue", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string Issue
+		{
+			get
+			{
+				return this._Issue;
+			}
+			set
+			{
+				if ((this._Issue != value))
+				{
+					this.OnIssueChanging(value);
+					this.SendPropertyChanging();
+					this._Issue = value;
+					this.SendPropertyChanged("Issue");
+					this.OnIssueChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomerId", DbType="Int NOT NULL")]
+		public int CustomerId
+		{
+			get
+			{
+				return this._CustomerId;
+			}
+			set
+			{
+				if ((this._CustomerId != value))
+				{
+					if (this._MstArticle.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCustomerIdChanging(value);
+					this.SendPropertyChanging();
+					this._CustomerId = value;
+					this.SendPropertyChanged("CustomerId");
+					this.OnCustomerIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductId", DbType="Int NOT NULL")]
+		public int ProductId
+		{
+			get
+			{
+				return this._ProductId;
+			}
+			set
+			{
+				if ((this._ProductId != value))
+				{
+					if (this._MstArticle1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProductIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProductId = value;
+					this.SendPropertyChanged("ProductId");
+					this.OnProductIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Severity", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Severity
+		{
+			get
+			{
+				return this._Severity;
+			}
+			set
+			{
+				if ((this._Severity != value))
+				{
+					this.OnSeverityChanging(value);
+					this.SendPropertyChanging();
+					this._Severity = value;
+					this.SendPropertyChanged("Severity");
+					this.OnSeverityChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Caller", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string Caller
+		{
+			get
+			{
+				return this._Caller;
+			}
+			set
+			{
+				if ((this._Caller != value))
+				{
+					this.OnCallerChanging(value);
+					this.SendPropertyChanging();
+					this._Caller = value;
+					this.SendPropertyChanged("Caller");
+					this.OnCallerChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Remarks", DbType="NVarChar(1000) NOT NULL", CanBeNull=false)]
+		public string Remarks
+		{
+			get
+			{
+				return this._Remarks;
+			}
+			set
+			{
+				if ((this._Remarks != value))
+				{
+					this.OnRemarksChanging(value);
+					this.SendPropertyChanging();
+					this._Remarks = value;
+					this.SendPropertyChanged("Remarks");
+					this.OnRemarksChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ScreenShotURL", DbType="NVarChar(1000) NOT NULL", CanBeNull=false)]
+		public string ScreenShotURL
+		{
+			get
+			{
+				return this._ScreenShotURL;
+			}
+			set
+			{
+				if ((this._ScreenShotURL != value))
+				{
+					this.OnScreenShotURLChanging(value);
+					this.SendPropertyChanging();
+					this._ScreenShotURL = value;
+					this.SendPropertyChanged("ScreenShotURL");
+					this.OnScreenShotURLChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SupportType", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string SupportType
+		{
+			get
+			{
+				return this._SupportType;
+			}
+			set
+			{
+				if ((this._SupportType != value))
+				{
+					this.OnSupportTypeChanging(value);
+					this.SendPropertyChanging();
+					this._SupportType = value;
+					this.SendPropertyChanged("SupportType");
+					this.OnSupportTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EncodedByUserId", DbType="Int NOT NULL")]
+		public int EncodedByUserId
+		{
+			get
+			{
+				return this._EncodedByUserId;
+			}
+			set
+			{
+				if ((this._EncodedByUserId != value))
+				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnEncodedByUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._EncodedByUserId = value;
+					this.SendPropertyChanged("EncodedByUserId");
+					this.OnEncodedByUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AssignedToUserId", DbType="Int")]
+		public System.Nullable<int> AssignedToUserId
+		{
+			get
+			{
+				return this._AssignedToUserId;
+			}
+			set
+			{
+				if ((this._AssignedToUserId != value))
+				{
+					if (this._MstUser1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAssignedToUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._AssignedToUserId = value;
+					this.SendPropertyChanged("AssignedToUserId");
+					this.OnAssignedToUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SupportStatus", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string SupportStatus
+		{
+			get
+			{
+				return this._SupportStatus;
+			}
+			set
+			{
+				if ((this._SupportStatus != value))
+				{
+					this.OnSupportStatusChanging(value);
+					this.SendPropertyChanging();
+					this._SupportStatus = value;
+					this.SendPropertyChanged("SupportStatus");
+					this.OnSupportStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnSupport_IS_TrnActivity", Storage="_IS_TrnActivities", ThisKey="Id", OtherKey="SupportId")]
+		public EntitySet<IS_TrnActivity> IS_TrnActivities
+		{
+			get
+			{
+				return this._IS_TrnActivities;
+			}
+			set
+			{
+				this._IS_TrnActivities.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IS_TrnContinuity_IS_TrnSupport", Storage="_IS_TrnContinuity", ThisKey="ContinuityId", OtherKey="Id", IsForeignKey=true)]
+		public IS_TrnContinuity IS_TrnContinuity
+		{
+			get
+			{
+				return this._IS_TrnContinuity.Entity;
+			}
+			set
+			{
+				IS_TrnContinuity previousValue = this._IS_TrnContinuity.Entity;
+				if (((previousValue != value) 
+							|| (this._IS_TrnContinuity.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._IS_TrnContinuity.Entity = null;
+						previousValue.IS_TrnSupports.Remove(this);
+					}
+					this._IS_TrnContinuity.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnSupports.Add(this);
+						this._ContinuityId = value.Id;
+					}
+					else
+					{
+						this._ContinuityId = default(int);
+					}
+					this.SendPropertyChanged("IS_TrnContinuity");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnSupport", Storage="_MstArticle", ThisKey="CustomerId", OtherKey="Id", IsForeignKey=true)]
+		public MstArticle MstArticle
+		{
+			get
+			{
+				return this._MstArticle.Entity;
+			}
+			set
+			{
+				MstArticle previousValue = this._MstArticle.Entity;
+				if (((previousValue != value) 
+							|| (this._MstArticle.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstArticle.Entity = null;
+						previousValue.IS_TrnSupports.Remove(this);
+					}
+					this._MstArticle.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnSupports.Add(this);
+						this._CustomerId = value.Id;
+					}
+					else
+					{
+						this._CustomerId = default(int);
+					}
+					this.SendPropertyChanged("MstArticle");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnSupport1", Storage="_MstArticle1", ThisKey="ProductId", OtherKey="Id", IsForeignKey=true)]
+		public MstArticle MstArticle1
+		{
+			get
+			{
+				return this._MstArticle1.Entity;
+			}
+			set
+			{
+				MstArticle previousValue = this._MstArticle1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstArticle1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstArticle1.Entity = null;
+						previousValue.IS_TrnSupports1.Remove(this);
+					}
+					this._MstArticle1.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnSupports1.Add(this);
+						this._ProductId = value.Id;
+					}
+					else
+					{
+						this._ProductId = default(int);
+					}
+					this.SendPropertyChanged("MstArticle1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnSupport", Storage="_MstUser", ThisKey="EncodedByUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.IS_TrnSupports.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnSupports.Add(this);
+						this._EncodedByUserId = value.Id;
+					}
+					else
+					{
+						this._EncodedByUserId = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnSupport1", Storage="_MstUser1", ThisKey="AssignedToUserId", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser1
+		{
+			get
+			{
+				return this._MstUser1.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser1.Entity = null;
+						previousValue.IS_TrnSupports1.Remove(this);
+					}
+					this._MstUser1.Entity = value;
+					if ((value != null))
+					{
+						value.IS_TrnSupports1.Add(this);
+						this._AssignedToUserId = value.Id;
+					}
+					else
+					{
+						this._AssignedToUserId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("MstUser1");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_IS_TrnActivities(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnSupport = this;
+		}
+		
+		private void detach_IS_TrnActivities(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.IS_TrnSupport = null;
 		}
 	}
 	
@@ -5029,6 +9972,28 @@ namespace easyfis.Data
 		
 		private EntitySet<TrnStockTransferItem> _TrnStockTransferItems;
 		
+		private EntitySet<IS_TrnActivity> _IS_TrnActivities;
+		
+		private EntitySet<IS_TrnActivity> _IS_TrnActivities1;
+		
+		private EntitySet<IS_TrnContinuity> _IS_TrnContinuities;
+		
+		private EntitySet<IS_TrnContinuity> _IS_TrnContinuities1;
+		
+		private EntitySet<IS_TrnDelivery> _IS_TrnDeliveries;
+		
+		private EntitySet<IS_TrnDelivery> _IS_TrnDeliveries1;
+		
+		private EntitySet<IS_TrnProject> _IS_TrnProjects;
+		
+		private EntitySet<IS_TrnQuotation> _IS_TrnQuotations;
+		
+		private EntitySet<IS_TrnQuotation> _IS_TrnQuotations1;
+		
+		private EntitySet<IS_TrnSupport> _IS_TrnSupports;
+		
+		private EntitySet<IS_TrnSupport> _IS_TrnSupports1;
+		
 		private EntitySet<MstArticleComponent> _MstArticleComponents;
 		
 		private EntitySet<MstArticleComponent> _MstArticleComponents1;
@@ -5194,6 +10159,17 @@ namespace easyfis.Data
 		public MstArticle()
 		{
 			this._TrnStockTransferItems = new EntitySet<TrnStockTransferItem>(new Action<TrnStockTransferItem>(this.attach_TrnStockTransferItems), new Action<TrnStockTransferItem>(this.detach_TrnStockTransferItems));
+			this._IS_TrnActivities = new EntitySet<IS_TrnActivity>(new Action<IS_TrnActivity>(this.attach_IS_TrnActivities), new Action<IS_TrnActivity>(this.detach_IS_TrnActivities));
+			this._IS_TrnActivities1 = new EntitySet<IS_TrnActivity>(new Action<IS_TrnActivity>(this.attach_IS_TrnActivities1), new Action<IS_TrnActivity>(this.detach_IS_TrnActivities1));
+			this._IS_TrnContinuities = new EntitySet<IS_TrnContinuity>(new Action<IS_TrnContinuity>(this.attach_IS_TrnContinuities), new Action<IS_TrnContinuity>(this.detach_IS_TrnContinuities));
+			this._IS_TrnContinuities1 = new EntitySet<IS_TrnContinuity>(new Action<IS_TrnContinuity>(this.attach_IS_TrnContinuities1), new Action<IS_TrnContinuity>(this.detach_IS_TrnContinuities1));
+			this._IS_TrnDeliveries = new EntitySet<IS_TrnDelivery>(new Action<IS_TrnDelivery>(this.attach_IS_TrnDeliveries), new Action<IS_TrnDelivery>(this.detach_IS_TrnDeliveries));
+			this._IS_TrnDeliveries1 = new EntitySet<IS_TrnDelivery>(new Action<IS_TrnDelivery>(this.attach_IS_TrnDeliveries1), new Action<IS_TrnDelivery>(this.detach_IS_TrnDeliveries1));
+			this._IS_TrnProjects = new EntitySet<IS_TrnProject>(new Action<IS_TrnProject>(this.attach_IS_TrnProjects), new Action<IS_TrnProject>(this.detach_IS_TrnProjects));
+			this._IS_TrnQuotations = new EntitySet<IS_TrnQuotation>(new Action<IS_TrnQuotation>(this.attach_IS_TrnQuotations), new Action<IS_TrnQuotation>(this.detach_IS_TrnQuotations));
+			this._IS_TrnQuotations1 = new EntitySet<IS_TrnQuotation>(new Action<IS_TrnQuotation>(this.attach_IS_TrnQuotations1), new Action<IS_TrnQuotation>(this.detach_IS_TrnQuotations1));
+			this._IS_TrnSupports = new EntitySet<IS_TrnSupport>(new Action<IS_TrnSupport>(this.attach_IS_TrnSupports), new Action<IS_TrnSupport>(this.detach_IS_TrnSupports));
+			this._IS_TrnSupports1 = new EntitySet<IS_TrnSupport>(new Action<IS_TrnSupport>(this.attach_IS_TrnSupports1), new Action<IS_TrnSupport>(this.detach_IS_TrnSupports1));
 			this._MstArticleComponents = new EntitySet<MstArticleComponent>(new Action<MstArticleComponent>(this.attach_MstArticleComponents), new Action<MstArticleComponent>(this.detach_MstArticleComponents));
 			this._MstArticleComponents1 = new EntitySet<MstArticleComponent>(new Action<MstArticleComponent>(this.attach_MstArticleComponents1), new Action<MstArticleComponent>(this.detach_MstArticleComponents1));
 			this._MstArticleContacts = new EntitySet<MstArticleContact>(new Action<MstArticleContact>(this.attach_MstArticleContacts), new Action<MstArticleContact>(this.detach_MstArticleContacts));
@@ -6044,6 +11020,149 @@ namespace easyfis.Data
 			set
 			{
 				this._TrnStockTransferItems.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnActivity", Storage="_IS_TrnActivities", ThisKey="Id", OtherKey="CustomerId")]
+		public EntitySet<IS_TrnActivity> IS_TrnActivities
+		{
+			get
+			{
+				return this._IS_TrnActivities;
+			}
+			set
+			{
+				this._IS_TrnActivities.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnActivity1", Storage="_IS_TrnActivities1", ThisKey="Id", OtherKey="ProductId")]
+		public EntitySet<IS_TrnActivity> IS_TrnActivities1
+		{
+			get
+			{
+				return this._IS_TrnActivities1;
+			}
+			set
+			{
+				this._IS_TrnActivities1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnContinuity", Storage="_IS_TrnContinuities", ThisKey="Id", OtherKey="CustomerId")]
+		public EntitySet<IS_TrnContinuity> IS_TrnContinuities
+		{
+			get
+			{
+				return this._IS_TrnContinuities;
+			}
+			set
+			{
+				this._IS_TrnContinuities.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnContinuity1", Storage="_IS_TrnContinuities1", ThisKey="Id", OtherKey="ProductId")]
+		public EntitySet<IS_TrnContinuity> IS_TrnContinuities1
+		{
+			get
+			{
+				return this._IS_TrnContinuities1;
+			}
+			set
+			{
+				this._IS_TrnContinuities1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnDelivery", Storage="_IS_TrnDeliveries", ThisKey="Id", OtherKey="CustomerId")]
+		public EntitySet<IS_TrnDelivery> IS_TrnDeliveries
+		{
+			get
+			{
+				return this._IS_TrnDeliveries;
+			}
+			set
+			{
+				this._IS_TrnDeliveries.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnDelivery1", Storage="_IS_TrnDeliveries1", ThisKey="Id", OtherKey="ProductId")]
+		public EntitySet<IS_TrnDelivery> IS_TrnDeliveries1
+		{
+			get
+			{
+				return this._IS_TrnDeliveries1;
+			}
+			set
+			{
+				this._IS_TrnDeliveries1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnProject", Storage="_IS_TrnProjects", ThisKey="Id", OtherKey="CustomerId")]
+		public EntitySet<IS_TrnProject> IS_TrnProjects
+		{
+			get
+			{
+				return this._IS_TrnProjects;
+			}
+			set
+			{
+				this._IS_TrnProjects.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnQuotation", Storage="_IS_TrnQuotations", ThisKey="Id", OtherKey="CustomerId")]
+		public EntitySet<IS_TrnQuotation> IS_TrnQuotations
+		{
+			get
+			{
+				return this._IS_TrnQuotations;
+			}
+			set
+			{
+				this._IS_TrnQuotations.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnQuotation1", Storage="_IS_TrnQuotations1", ThisKey="Id", OtherKey="ProductId")]
+		public EntitySet<IS_TrnQuotation> IS_TrnQuotations1
+		{
+			get
+			{
+				return this._IS_TrnQuotations1;
+			}
+			set
+			{
+				this._IS_TrnQuotations1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnSupport", Storage="_IS_TrnSupports", ThisKey="Id", OtherKey="CustomerId")]
+		public EntitySet<IS_TrnSupport> IS_TrnSupports
+		{
+			get
+			{
+				return this._IS_TrnSupports;
+			}
+			set
+			{
+				this._IS_TrnSupports.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_IS_TrnSupport1", Storage="_IS_TrnSupports1", ThisKey="Id", OtherKey="ProductId")]
+		public EntitySet<IS_TrnSupport> IS_TrnSupports1
+		{
+			get
+			{
+				return this._IS_TrnSupports1;
+			}
+			set
+			{
+				this._IS_TrnSupports1.Assign(value);
 			}
 		}
 		
@@ -6904,6 +12023,138 @@ namespace easyfis.Data
 		{
 			this.SendPropertyChanging();
 			entity.MstArticle = null;
+		}
+		
+		private void attach_IS_TrnActivities(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle = this;
+		}
+		
+		private void detach_IS_TrnActivities(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle = null;
+		}
+		
+		private void attach_IS_TrnActivities1(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle1 = this;
+		}
+		
+		private void detach_IS_TrnActivities1(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle1 = null;
+		}
+		
+		private void attach_IS_TrnContinuities(IS_TrnContinuity entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle = this;
+		}
+		
+		private void detach_IS_TrnContinuities(IS_TrnContinuity entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle = null;
+		}
+		
+		private void attach_IS_TrnContinuities1(IS_TrnContinuity entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle1 = this;
+		}
+		
+		private void detach_IS_TrnContinuities1(IS_TrnContinuity entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle1 = null;
+		}
+		
+		private void attach_IS_TrnDeliveries(IS_TrnDelivery entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle = this;
+		}
+		
+		private void detach_IS_TrnDeliveries(IS_TrnDelivery entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle = null;
+		}
+		
+		private void attach_IS_TrnDeliveries1(IS_TrnDelivery entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle1 = this;
+		}
+		
+		private void detach_IS_TrnDeliveries1(IS_TrnDelivery entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle1 = null;
+		}
+		
+		private void attach_IS_TrnProjects(IS_TrnProject entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle = this;
+		}
+		
+		private void detach_IS_TrnProjects(IS_TrnProject entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle = null;
+		}
+		
+		private void attach_IS_TrnQuotations(IS_TrnQuotation entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle = this;
+		}
+		
+		private void detach_IS_TrnQuotations(IS_TrnQuotation entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle = null;
+		}
+		
+		private void attach_IS_TrnQuotations1(IS_TrnQuotation entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle1 = this;
+		}
+		
+		private void detach_IS_TrnQuotations1(IS_TrnQuotation entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle1 = null;
+		}
+		
+		private void attach_IS_TrnSupports(IS_TrnSupport entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle = this;
+		}
+		
+		private void detach_IS_TrnSupports(IS_TrnSupport entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle = null;
+		}
+		
+		private void attach_IS_TrnSupports1(IS_TrnSupport entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle1 = this;
+		}
+		
+		private void detach_IS_TrnSupports1(IS_TrnSupport entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstArticle1 = null;
 		}
 		
 		private void attach_MstArticleComponents(MstArticleComponent entity)
@@ -9489,7 +14740,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_MstArticlePrice", Storage="_MstArticle", ThisKey="ArticleId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticle_MstArticlePrice", Storage="_MstArticle", ThisKey="ArticleId", OtherKey="Id", IsForeignKey=true)]
 		public MstArticle MstArticle
 		{
 			get
@@ -13813,7 +19064,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem", Storage="_TrnSalesInvoiceItems", ThisKey="Id", OtherKey="BaseUnitId")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem", Storage="_TrnSalesInvoiceItems", ThisKey="Id", OtherKey="UnitId")]
 		public EntitySet<TrnSalesInvoiceItem> TrnSalesInvoiceItems
 		{
 			get
@@ -13826,7 +19077,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem1", Storage="_TrnSalesInvoiceItems1", ThisKey="Id", OtherKey="UnitId")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem1", Storage="_TrnSalesInvoiceItems1", ThisKey="Id", OtherKey="BaseUnitId")]
 		public EntitySet<TrnSalesInvoiceItem> TrnSalesInvoiceItems1
 		{
 			get
@@ -14180,6 +19431,8 @@ namespace easyfis.Data
 		
 		private int _DefaultSalesInvoiceDiscountId;
 		
+		private string _SalesInvoiceName;
+		
 		private bool _IsLocked;
 		
 		private int _CreatedById;
@@ -14189,6 +19442,40 @@ namespace easyfis.Data
 		private int _UpdatedById;
 		
 		private System.DateTime _UpdatedDateTime;
+		
+		private EntitySet<IS_TrnActivity> _IS_TrnActivities;
+		
+		private EntitySet<IS_TrnContinuity> _IS_TrnContinuities;
+		
+		private EntitySet<IS_TrnDelivery> _IS_TrnDeliveries;
+		
+		private EntitySet<IS_TrnDelivery> _IS_TrnDeliveries1;
+		
+		private EntitySet<IS_TrnDelivery> _IS_TrnDeliveries2;
+		
+		private EntitySet<IS_TrnLead> _IS_TrnLeads;
+		
+		private EntitySet<IS_TrnLead> _IS_TrnLeads1;
+		
+		private EntitySet<IS_TrnProject> _IS_TrnProjects;
+		
+		private EntitySet<IS_TrnProject> _IS_TrnProjects1;
+		
+		private EntitySet<IS_TrnQuotation> _IS_TrnQuotations;
+		
+		private EntitySet<IS_TrnRequest> _IS_TrnRequests;
+		
+		private EntitySet<IS_TrnRequest> _IS_TrnRequests1;
+		
+		private EntitySet<IS_TrnRequest> _IS_TrnRequests2;
+		
+		private EntitySet<IS_TrnSoftwareDevelopment> _IS_TrnSoftwareDevelopments;
+		
+		private EntitySet<IS_TrnSoftwareDevelopment> _IS_TrnSoftwareDevelopments1;
+		
+		private EntitySet<IS_TrnSupport> _IS_TrnSupports;
+		
+		private EntitySet<IS_TrnSupport> _IS_TrnSupports1;
 		
 		private EntitySet<MstAccount> _MstAccounts;
 		
@@ -14402,6 +19689,8 @@ namespace easyfis.Data
     partial void OnInventoryTypeChanged();
     partial void OnDefaultSalesInvoiceDiscountIdChanging(int value);
     partial void OnDefaultSalesInvoiceDiscountIdChanged();
+    partial void OnSalesInvoiceNameChanging(string value);
+    partial void OnSalesInvoiceNameChanged();
     partial void OnIsLockedChanging(bool value);
     partial void OnIsLockedChanged();
     partial void OnCreatedByIdChanging(int value);
@@ -14416,6 +19705,23 @@ namespace easyfis.Data
 		
 		public MstUser()
 		{
+			this._IS_TrnActivities = new EntitySet<IS_TrnActivity>(new Action<IS_TrnActivity>(this.attach_IS_TrnActivities), new Action<IS_TrnActivity>(this.detach_IS_TrnActivities));
+			this._IS_TrnContinuities = new EntitySet<IS_TrnContinuity>(new Action<IS_TrnContinuity>(this.attach_IS_TrnContinuities), new Action<IS_TrnContinuity>(this.detach_IS_TrnContinuities));
+			this._IS_TrnDeliveries = new EntitySet<IS_TrnDelivery>(new Action<IS_TrnDelivery>(this.attach_IS_TrnDeliveries), new Action<IS_TrnDelivery>(this.detach_IS_TrnDeliveries));
+			this._IS_TrnDeliveries1 = new EntitySet<IS_TrnDelivery>(new Action<IS_TrnDelivery>(this.attach_IS_TrnDeliveries1), new Action<IS_TrnDelivery>(this.detach_IS_TrnDeliveries1));
+			this._IS_TrnDeliveries2 = new EntitySet<IS_TrnDelivery>(new Action<IS_TrnDelivery>(this.attach_IS_TrnDeliveries2), new Action<IS_TrnDelivery>(this.detach_IS_TrnDeliveries2));
+			this._IS_TrnLeads = new EntitySet<IS_TrnLead>(new Action<IS_TrnLead>(this.attach_IS_TrnLeads), new Action<IS_TrnLead>(this.detach_IS_TrnLeads));
+			this._IS_TrnLeads1 = new EntitySet<IS_TrnLead>(new Action<IS_TrnLead>(this.attach_IS_TrnLeads1), new Action<IS_TrnLead>(this.detach_IS_TrnLeads1));
+			this._IS_TrnProjects = new EntitySet<IS_TrnProject>(new Action<IS_TrnProject>(this.attach_IS_TrnProjects), new Action<IS_TrnProject>(this.detach_IS_TrnProjects));
+			this._IS_TrnProjects1 = new EntitySet<IS_TrnProject>(new Action<IS_TrnProject>(this.attach_IS_TrnProjects1), new Action<IS_TrnProject>(this.detach_IS_TrnProjects1));
+			this._IS_TrnQuotations = new EntitySet<IS_TrnQuotation>(new Action<IS_TrnQuotation>(this.attach_IS_TrnQuotations), new Action<IS_TrnQuotation>(this.detach_IS_TrnQuotations));
+			this._IS_TrnRequests = new EntitySet<IS_TrnRequest>(new Action<IS_TrnRequest>(this.attach_IS_TrnRequests), new Action<IS_TrnRequest>(this.detach_IS_TrnRequests));
+			this._IS_TrnRequests1 = new EntitySet<IS_TrnRequest>(new Action<IS_TrnRequest>(this.attach_IS_TrnRequests1), new Action<IS_TrnRequest>(this.detach_IS_TrnRequests1));
+			this._IS_TrnRequests2 = new EntitySet<IS_TrnRequest>(new Action<IS_TrnRequest>(this.attach_IS_TrnRequests2), new Action<IS_TrnRequest>(this.detach_IS_TrnRequests2));
+			this._IS_TrnSoftwareDevelopments = new EntitySet<IS_TrnSoftwareDevelopment>(new Action<IS_TrnSoftwareDevelopment>(this.attach_IS_TrnSoftwareDevelopments), new Action<IS_TrnSoftwareDevelopment>(this.detach_IS_TrnSoftwareDevelopments));
+			this._IS_TrnSoftwareDevelopments1 = new EntitySet<IS_TrnSoftwareDevelopment>(new Action<IS_TrnSoftwareDevelopment>(this.attach_IS_TrnSoftwareDevelopments1), new Action<IS_TrnSoftwareDevelopment>(this.detach_IS_TrnSoftwareDevelopments1));
+			this._IS_TrnSupports = new EntitySet<IS_TrnSupport>(new Action<IS_TrnSupport>(this.attach_IS_TrnSupports), new Action<IS_TrnSupport>(this.detach_IS_TrnSupports));
+			this._IS_TrnSupports1 = new EntitySet<IS_TrnSupport>(new Action<IS_TrnSupport>(this.attach_IS_TrnSupports1), new Action<IS_TrnSupport>(this.detach_IS_TrnSupports1));
 			this._MstAccounts = new EntitySet<MstAccount>(new Action<MstAccount>(this.attach_MstAccounts), new Action<MstAccount>(this.detach_MstAccounts));
 			this._MstAccounts1 = new EntitySet<MstAccount>(new Action<MstAccount>(this.attach_MstAccounts1), new Action<MstAccount>(this.detach_MstAccounts1));
 			this._MstAccountCashFlows = new EntitySet<MstAccountCashFlow>(new Action<MstAccountCashFlow>(this.attach_MstAccountCashFlows), new Action<MstAccountCashFlow>(this.detach_MstAccountCashFlows));
@@ -14798,6 +20104,26 @@ namespace easyfis.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SalesInvoiceName", DbType="NVarChar(255)")]
+		public string SalesInvoiceName
+		{
+			get
+			{
+				return this._SalesInvoiceName;
+			}
+			set
+			{
+				if ((this._SalesInvoiceName != value))
+				{
+					this.OnSalesInvoiceNameChanging(value);
+					this.SendPropertyChanging();
+					this._SalesInvoiceName = value;
+					this.SendPropertyChanged("SalesInvoiceName");
+					this.OnSalesInvoiceNameChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsLocked", DbType="Bit NOT NULL")]
 		public bool IsLocked
 		{
@@ -14895,6 +20221,227 @@ namespace easyfis.Data
 					this.SendPropertyChanged("UpdatedDateTime");
 					this.OnUpdatedDateTimeChanged();
 				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnActivity", Storage="_IS_TrnActivities", ThisKey="Id", OtherKey="StaffUserId")]
+		public EntitySet<IS_TrnActivity> IS_TrnActivities
+		{
+			get
+			{
+				return this._IS_TrnActivities;
+			}
+			set
+			{
+				this._IS_TrnActivities.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnContinuity", Storage="_IS_TrnContinuities", ThisKey="Id", OtherKey="StaffUserId")]
+		public EntitySet<IS_TrnContinuity> IS_TrnContinuities
+		{
+			get
+			{
+				return this._IS_TrnContinuities;
+			}
+			set
+			{
+				this._IS_TrnContinuities.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnDelivery", Storage="_IS_TrnDeliveries", ThisKey="Id", OtherKey="SalesUserId")]
+		public EntitySet<IS_TrnDelivery> IS_TrnDeliveries
+		{
+			get
+			{
+				return this._IS_TrnDeliveries;
+			}
+			set
+			{
+				this._IS_TrnDeliveries.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnDelivery1", Storage="_IS_TrnDeliveries1", ThisKey="Id", OtherKey="TechnicalUserId")]
+		public EntitySet<IS_TrnDelivery> IS_TrnDeliveries1
+		{
+			get
+			{
+				return this._IS_TrnDeliveries1;
+			}
+			set
+			{
+				this._IS_TrnDeliveries1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnDelivery2", Storage="_IS_TrnDeliveries2", ThisKey="Id", OtherKey="FunctionalUserId")]
+		public EntitySet<IS_TrnDelivery> IS_TrnDeliveries2
+		{
+			get
+			{
+				return this._IS_TrnDeliveries2;
+			}
+			set
+			{
+				this._IS_TrnDeliveries2.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnLead", Storage="_IS_TrnLeads", ThisKey="Id", OtherKey="EncodedByUserId")]
+		public EntitySet<IS_TrnLead> IS_TrnLeads
+		{
+			get
+			{
+				return this._IS_TrnLeads;
+			}
+			set
+			{
+				this._IS_TrnLeads.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnLead1", Storage="_IS_TrnLeads1", ThisKey="Id", OtherKey="AssignedToUserId")]
+		public EntitySet<IS_TrnLead> IS_TrnLeads1
+		{
+			get
+			{
+				return this._IS_TrnLeads1;
+			}
+			set
+			{
+				this._IS_TrnLeads1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnProject", Storage="_IS_TrnProjects", ThisKey="Id", OtherKey="EncodedByUserId")]
+		public EntitySet<IS_TrnProject> IS_TrnProjects
+		{
+			get
+			{
+				return this._IS_TrnProjects;
+			}
+			set
+			{
+				this._IS_TrnProjects.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnProject1", Storage="_IS_TrnProjects1", ThisKey="Id", OtherKey="ProjectManagerUserId")]
+		public EntitySet<IS_TrnProject> IS_TrnProjects1
+		{
+			get
+			{
+				return this._IS_TrnProjects1;
+			}
+			set
+			{
+				this._IS_TrnProjects1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnQuotation", Storage="_IS_TrnQuotations", ThisKey="Id", OtherKey="EncodedByUserId")]
+		public EntitySet<IS_TrnQuotation> IS_TrnQuotations
+		{
+			get
+			{
+				return this._IS_TrnQuotations;
+			}
+			set
+			{
+				this._IS_TrnQuotations.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnRequest", Storage="_IS_TrnRequests", ThisKey="Id", OtherKey="EncodedByUserId")]
+		public EntitySet<IS_TrnRequest> IS_TrnRequests
+		{
+			get
+			{
+				return this._IS_TrnRequests;
+			}
+			set
+			{
+				this._IS_TrnRequests.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnRequest1", Storage="_IS_TrnRequests1", ThisKey="Id", OtherKey="CheckedByUserId")]
+		public EntitySet<IS_TrnRequest> IS_TrnRequests1
+		{
+			get
+			{
+				return this._IS_TrnRequests1;
+			}
+			set
+			{
+				this._IS_TrnRequests1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnRequest2", Storage="_IS_TrnRequests2", ThisKey="Id", OtherKey="ApprovedByUserId")]
+		public EntitySet<IS_TrnRequest> IS_TrnRequests2
+		{
+			get
+			{
+				return this._IS_TrnRequests2;
+			}
+			set
+			{
+				this._IS_TrnRequests2.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnSoftwareDevelopment", Storage="_IS_TrnSoftwareDevelopments", ThisKey="Id", OtherKey="EncodedByUserId")]
+		public EntitySet<IS_TrnSoftwareDevelopment> IS_TrnSoftwareDevelopments
+		{
+			get
+			{
+				return this._IS_TrnSoftwareDevelopments;
+			}
+			set
+			{
+				this._IS_TrnSoftwareDevelopments.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnSoftwareDevelopment1", Storage="_IS_TrnSoftwareDevelopments1", ThisKey="Id", OtherKey="AssignedToUserId")]
+		public EntitySet<IS_TrnSoftwareDevelopment> IS_TrnSoftwareDevelopments1
+		{
+			get
+			{
+				return this._IS_TrnSoftwareDevelopments1;
+			}
+			set
+			{
+				this._IS_TrnSoftwareDevelopments1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnSupport", Storage="_IS_TrnSupports", ThisKey="Id", OtherKey="EncodedByUserId")]
+		public EntitySet<IS_TrnSupport> IS_TrnSupports
+		{
+			get
+			{
+				return this._IS_TrnSupports;
+			}
+			set
+			{
+				this._IS_TrnSupports.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_IS_TrnSupport1", Storage="_IS_TrnSupports1", ThisKey="Id", OtherKey="AssignedToUserId")]
+		public EntitySet<IS_TrnSupport> IS_TrnSupports1
+		{
+			get
+			{
+				return this._IS_TrnSupports1;
+			}
+			set
+			{
+				this._IS_TrnSupports1.Assign(value);
 			}
 		}
 		
@@ -16246,6 +21793,210 @@ namespace easyfis.Data
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_IS_TrnActivities(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_IS_TrnActivities(IS_TrnActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
+		private void attach_IS_TrnContinuities(IS_TrnContinuity entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_IS_TrnContinuities(IS_TrnContinuity entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
+		private void attach_IS_TrnDeliveries(IS_TrnDelivery entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_IS_TrnDeliveries(IS_TrnDelivery entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
+		private void attach_IS_TrnDeliveries1(IS_TrnDelivery entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = this;
+		}
+		
+		private void detach_IS_TrnDeliveries1(IS_TrnDelivery entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = null;
+		}
+		
+		private void attach_IS_TrnDeliveries2(IS_TrnDelivery entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser2 = this;
+		}
+		
+		private void detach_IS_TrnDeliveries2(IS_TrnDelivery entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser2 = null;
+		}
+		
+		private void attach_IS_TrnLeads(IS_TrnLead entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_IS_TrnLeads(IS_TrnLead entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
+		private void attach_IS_TrnLeads1(IS_TrnLead entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = this;
+		}
+		
+		private void detach_IS_TrnLeads1(IS_TrnLead entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = null;
+		}
+		
+		private void attach_IS_TrnProjects(IS_TrnProject entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_IS_TrnProjects(IS_TrnProject entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
+		private void attach_IS_TrnProjects1(IS_TrnProject entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = this;
+		}
+		
+		private void detach_IS_TrnProjects1(IS_TrnProject entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = null;
+		}
+		
+		private void attach_IS_TrnQuotations(IS_TrnQuotation entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_IS_TrnQuotations(IS_TrnQuotation entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
+		private void attach_IS_TrnRequests(IS_TrnRequest entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_IS_TrnRequests(IS_TrnRequest entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
+		private void attach_IS_TrnRequests1(IS_TrnRequest entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = this;
+		}
+		
+		private void detach_IS_TrnRequests1(IS_TrnRequest entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = null;
+		}
+		
+		private void attach_IS_TrnRequests2(IS_TrnRequest entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser2 = this;
+		}
+		
+		private void detach_IS_TrnRequests2(IS_TrnRequest entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser2 = null;
+		}
+		
+		private void attach_IS_TrnSoftwareDevelopments(IS_TrnSoftwareDevelopment entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_IS_TrnSoftwareDevelopments(IS_TrnSoftwareDevelopment entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
+		private void attach_IS_TrnSoftwareDevelopments1(IS_TrnSoftwareDevelopment entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = this;
+		}
+		
+		private void detach_IS_TrnSoftwareDevelopments1(IS_TrnSoftwareDevelopment entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = null;
+		}
+		
+		private void attach_IS_TrnSupports(IS_TrnSupport entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_IS_TrnSupports(IS_TrnSupport entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
+		private void attach_IS_TrnSupports1(IS_TrnSupport entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = this;
+		}
+		
+		private void detach_IS_TrnSupports1(IS_TrnSupport entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = null;
 		}
 		
 		private void attach_MstAccounts(MstAccount entity)
@@ -17730,7 +23481,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SysForm_MstUserForm", Storage="_SysForm", ThisKey="FormId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SysForm_MstUserForm", Storage="_SysForm", ThisKey="FormId", OtherKey="Id", IsForeignKey=true)]
 		public SysForm SysForm
 		{
 			get
@@ -28701,7 +34452,7 @@ namespace easyfis.Data
 			{
 				if ((this._UnitId != value))
 				{
-					if (this._MstUnit1.HasLoadedOrAssignedValue)
+					if (this._MstUnit.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -28933,7 +34684,7 @@ namespace easyfis.Data
 			{
 				if ((this._BaseUnitId != value))
 				{
-					if (this._MstUnit.HasLoadedOrAssignedValue)
+					if (this._MstUnit1.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -29142,7 +34893,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem", Storage="_MstUnit", ThisKey="BaseUnitId", OtherKey="Id", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem", Storage="_MstUnit", ThisKey="UnitId", OtherKey="Id", IsForeignKey=true)]
 		public MstUnit MstUnit
 		{
 			get
@@ -29165,18 +34916,18 @@ namespace easyfis.Data
 					if ((value != null))
 					{
 						value.TrnSalesInvoiceItems.Add(this);
-						this._BaseUnitId = value.Id;
+						this._UnitId = value.Id;
 					}
 					else
 					{
-						this._BaseUnitId = default(int);
+						this._UnitId = default(int);
 					}
 					this.SendPropertyChanged("MstUnit");
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem1", Storage="_MstUnit1", ThisKey="UnitId", OtherKey="Id", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUnit_TrnSalesInvoiceItem1", Storage="_MstUnit1", ThisKey="BaseUnitId", OtherKey="Id", IsForeignKey=true)]
 		public MstUnit MstUnit1
 		{
 			get
@@ -29199,11 +34950,11 @@ namespace easyfis.Data
 					if ((value != null))
 					{
 						value.TrnSalesInvoiceItems1.Add(this);
-						this._UnitId = value.Id;
+						this._BaseUnitId = value.Id;
 					}
 					else
 					{
-						this._UnitId = default(int);
+						this._BaseUnitId = default(int);
 					}
 					this.SendPropertyChanged("MstUnit1");
 				}

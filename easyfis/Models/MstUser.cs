@@ -36,5 +36,6 @@ namespace easyfis.Models
         public String OfficialReceiptName { get; set; }
         public String InventoryType { get; set; }
         public Int32 DefaultSalesInvoiceDiscountId { get; set; }
+        public String SalesInvoiceName { get; set; }
     }
 }

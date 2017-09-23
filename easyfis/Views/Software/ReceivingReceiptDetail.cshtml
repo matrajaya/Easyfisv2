@@ -230,7 +230,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdApplyPOStatusButton"class="btn btn-primary" onclick="cmdApplyAllPOStatusButton_OnClick()"><i class="fa fa-check"></i> Apply</button>
+                    <button id="cmdApplyPOStatusButton" class="btn btn-primary" onclick="cmdApplyAllPOStatusButton_OnClick()"><i class="fa fa-check"></i> Apply</button>
                     <button id="cmdPOStatusCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
@@ -256,7 +256,6 @@
                         <br />
                         <div class="tab-content">
                             <div id="RRItem" class="tab-pane fade in active">
-                                <input type="hidden" id="RRLine_Id" />
                                 <dl class="dl-horizontal">
                                     <dt>Branch</dt>
                                     <dd><div class="comboBox-wide" id="cboRRItemBranch"></div></dd>
@@ -1869,7 +1868,8 @@
                 });
             });
 
-            getBranchesPOItemForComboBox(0,0,0,0,0);
+            var cboRRHeaderBranchId = cboRRbranch.selectedValue;
+            getBranchesPOItemForComboBox(cboRRHeaderBranchId,0,0,0,0);
             receivingReceiptId = 0;
             document.getElementById('RRLine_Particulars').value = "NA";
             document.getElementById('RRLine_Quantity').value = formatDecimalValues(0);

@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="easyfis_abomar" Class="easyfisdbDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=innosoftserver2.eastasia.cloudapp.azure.com;Initial Catalog=easyfis_abomar;User ID=sa;Connect Timeout=30;Encrypt=True;TrustServerCertificate=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnection" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="easyfis_innosoft" Class="easyfisdbDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=localhost;Initial Catalog=easyfis_innosoft;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="easyfis_innosoftConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.AspNetRoles" Member="AspNetRoles">
     <Type Name="AspNetRole">
       <Column Name="Id" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -75,6 +75,201 @@
       <Association Name="AspNetUser_AspNetUserLogin" Member="AspNetUserLogins" ThisKey="Id" OtherKey="User_Id" Type="AspNetUserLogin" />
       <Association Name="AspNetUser_AspNetUserRole" Member="AspNetUserRoles" ThisKey="Id" OtherKey="UserId" Type="AspNetUserRole" />
       <Association Name="AspNetUser_MstUser" Member="MstUsers" ThisKey="Id" OtherKey="UserId" Type="MstUser" />
+    </Type>
+  </Table>
+  <Table Name="dbo.IS_TrnActivity" Member="IS_TrnActivities">
+    <Type Name="IS_TrnActivity">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ActivityNumber" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ActivityDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="StaffUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProductId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ParticularCategory" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Particulars" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="NumberOfHours" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="ActivityAmount" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="ActivityStatus" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="LeadId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="QuotationId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DeliveryId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SupportId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SoftwareDevelopmentId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="IS_TrnDelivery_IS_TrnActivity" Member="IS_TrnDelivery" ThisKey="DeliveryId" OtherKey="Id" Type="IS_TrnDelivery" IsForeignKey="true" />
+      <Association Name="IS_TrnLead_IS_TrnActivity" Member="IS_TrnLead" ThisKey="LeadId" OtherKey="Id" Type="IS_TrnLead" IsForeignKey="true" />
+      <Association Name="IS_TrnQuotation_IS_TrnActivity" Member="IS_TrnQuotation" ThisKey="QuotationId" OtherKey="Id" Type="IS_TrnQuotation" IsForeignKey="true" />
+      <Association Name="IS_TrnSoftwareDevelopment_IS_TrnActivity" Member="IS_TrnSoftwareDevelopment" ThisKey="SoftwareDevelopmentId" OtherKey="Id" Type="IS_TrnSoftwareDevelopment" IsForeignKey="true" />
+      <Association Name="IS_TrnSupport_IS_TrnActivity" Member="IS_TrnSupport" ThisKey="SupportId" OtherKey="Id" Type="IS_TrnSupport" IsForeignKey="true" />
+      <Association Name="MstArticle_IS_TrnActivity" Member="MstArticle" ThisKey="CustomerId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
+      <Association Name="MstArticle_IS_TrnActivity1" Member="MstArticle1" ThisKey="ProductId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnActivity" Member="MstUser" ThisKey="StaffUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.IS_TrnContinuity" Member="IS_TrnContinuities">
+    <Type Name="IS_TrnContinuity">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ContinuityNumber" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ContinuityDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ExpiryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Remarks" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="ContinuityAmount" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="StaffUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ContinuityStatus" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="IS_TrnContinuity_IS_TrnSupport" Member="IS_TrnSupports" ThisKey="Id" OtherKey="ContinuityId" Type="IS_TrnSupport" />
+      <Association Name="IS_TrnDelivery_IS_TrnContinuity" Member="IS_TrnDelivery" ThisKey="DeliveryId" OtherKey="Id" Type="IS_TrnDelivery" IsForeignKey="true" />
+      <Association Name="MstArticle_IS_TrnContinuity" Member="MstArticle" ThisKey="CustomerId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
+      <Association Name="MstArticle_IS_TrnContinuity1" Member="MstArticle1" ThisKey="ProductId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnContinuity" Member="MstUser" ThisKey="StaffUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.IS_TrnDelivery" Member="IS_TrnDeliveries">
+    <Type Name="IS_TrnDelivery">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DeliveryNumber" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="QuotationId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MeetingDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Remarks" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TechnicalUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FunctionalUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryStatus" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="IS_TrnDelivery_IS_TrnActivity" Member="IS_TrnActivities" ThisKey="Id" OtherKey="DeliveryId" Type="IS_TrnActivity" />
+      <Association Name="IS_TrnDelivery_IS_TrnContinuity" Member="IS_TrnContinuities" ThisKey="Id" OtherKey="DeliveryId" Type="IS_TrnContinuity" />
+      <Association Name="IS_TrnQuotation_IS_TrnDelivery" Member="IS_TrnQuotation" ThisKey="QuotationId" OtherKey="Id" Type="IS_TrnQuotation" IsForeignKey="true" />
+      <Association Name="MstArticle_IS_TrnDelivery" Member="MstArticle" ThisKey="CustomerId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
+      <Association Name="MstArticle_IS_TrnDelivery1" Member="MstArticle1" ThisKey="ProductId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnDelivery" Member="MstUser" ThisKey="SalesUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnDelivery1" Member="MstUser1" ThisKey="TechnicalUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnDelivery2" Member="MstUser2" ThisKey="FunctionalUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.IS_TrnLead" Member="IS_TrnLeads">
+    <Type Name="IS_TrnLead">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="LeadNumber" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="LeadDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="LeadName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="ContactPerson" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ContactPosition" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ContactEmail" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ContactPhoneNo" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ReferredBy" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Remarks" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="EncodedByUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AssignedToUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LeadStatus" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="IS_TrnLead_IS_TrnActivity" Member="IS_TrnActivities" ThisKey="Id" OtherKey="LeadId" Type="IS_TrnActivity" />
+      <Association Name="IS_TrnLead_IS_TrnQuotation" Member="IS_TrnQuotations" ThisKey="Id" OtherKey="LeadId" Type="IS_TrnQuotation" />
+      <Association Name="MstUser_IS_TrnLead" Member="MstUser" ThisKey="EncodedByUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnLead1" Member="MstUser1" ThisKey="AssignedToUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.IS_TrnProject" Member="IS_TrnProjects">
+    <Type Name="IS_TrnProject">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProjectNumber" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProjectDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ProjectName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ProjectType" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Particulars" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="EncodedByUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProjectManagerUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProjectStartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ProjectEndDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ProjectStatus" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="IS_TrnProject_IS_TrnSoftwareDevelopment" Member="IS_TrnSoftwareDevelopments" ThisKey="Id" OtherKey="ProjectId" Type="IS_TrnSoftwareDevelopment" />
+      <Association Name="MstArticle_IS_TrnProject" Member="MstArticle" ThisKey="CustomerId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnProject" Member="MstUser" ThisKey="EncodedByUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnProject1" Member="MstUser1" ThisKey="ProjectManagerUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.IS_TrnQuotation" Member="IS_TrnQuotations">
+    <Type Name="IS_TrnQuotation">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="QuotationNumber" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="QuotationDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="LeadId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Remarks" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="EncodedByUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="QuotationStatus" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="IS_TrnQuotation_IS_TrnActivity" Member="IS_TrnActivities" ThisKey="Id" OtherKey="QuotationId" Type="IS_TrnActivity" />
+      <Association Name="IS_TrnQuotation_IS_TrnDelivery" Member="IS_TrnDeliveries" ThisKey="Id" OtherKey="QuotationId" Type="IS_TrnDelivery" />
+      <Association Name="IS_TrnLead_IS_TrnQuotation" Member="IS_TrnLead" ThisKey="LeadId" OtherKey="Id" Type="IS_TrnLead" IsForeignKey="true" />
+      <Association Name="MstArticle_IS_TrnQuotation" Member="MstArticle" ThisKey="CustomerId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
+      <Association Name="MstArticle_IS_TrnQuotation1" Member="MstArticle1" ThisKey="ProductId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnQuotation" Member="MstUser" ThisKey="EncodedByUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.IS_TrnRequest" Member="IS_TrnRequests">
+    <Type Name="IS_TrnRequest">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RequestNumber" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="RequestDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="RequestType" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Particulars" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="EncodedByUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CheckedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CheckedRemarks" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ApprovedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ApprovedRemarks" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="RequestStatus" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="MstUser_IS_TrnRequest" Member="MstUser" ThisKey="EncodedByUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnRequest1" Member="MstUser1" ThisKey="CheckedByUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnRequest2" Member="MstUser2" ThisKey="ApprovedByUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.IS_TrnSoftwareDevelopment" Member="IS_TrnSoftwareDevelopments">
+    <Type Name="IS_TrnSoftwareDevelopment">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SoftDevNumber" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SoftDevDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ProjectId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Task" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="Remarks" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="NumberOfHours" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="EncodedByUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AssignedToUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SoftDevStatus" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="IS_TrnSoftwareDevelopment_IS_TrnActivity" Member="IS_TrnActivities" ThisKey="Id" OtherKey="SoftwareDevelopmentId" Type="IS_TrnActivity" />
+      <Association Name="IS_TrnProject_IS_TrnSoftwareDevelopment" Member="IS_TrnProject" ThisKey="ProjectId" OtherKey="Id" Type="IS_TrnProject" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnSoftwareDevelopment" Member="MstUser" ThisKey="EncodedByUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnSoftwareDevelopment1" Member="MstUser1" ThisKey="AssignedToUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.IS_TrnSupport" Member="IS_TrnSupports">
+    <Type Name="IS_TrnSupport">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SupportNumber" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SupportDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ContinuityId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IssueCategory" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Issue" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Severity" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Caller" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Remarks" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="ScreenShotURL" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="SupportType" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="EncodedByUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AssignedToUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SupportStatus" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="IS_TrnSupport_IS_TrnActivity" Member="IS_TrnActivities" ThisKey="Id" OtherKey="SupportId" Type="IS_TrnActivity" />
+      <Association Name="IS_TrnContinuity_IS_TrnSupport" Member="IS_TrnContinuity" ThisKey="ContinuityId" OtherKey="Id" Type="IS_TrnContinuity" IsForeignKey="true" />
+      <Association Name="MstArticle_IS_TrnSupport" Member="MstArticle" ThisKey="CustomerId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
+      <Association Name="MstArticle_IS_TrnSupport1" Member="MstArticle1" ThisKey="ProductId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnSupport" Member="MstUser" ThisKey="EncodedByUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_IS_TrnSupport1" Member="MstUser1" ThisKey="AssignedToUserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.MstAccount" Member="MstAccounts">
@@ -223,6 +418,17 @@
       <Column Name="UpdatedById" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="MstArticle_TrnStockTransferItem" Member="TrnStockTransferItems" ThisKey="Id" OtherKey="ItemId" Type="TrnStockTransferItem" />
+      <Association Name="MstArticle_IS_TrnActivity" Member="IS_TrnActivities" ThisKey="Id" OtherKey="CustomerId" Type="IS_TrnActivity" />
+      <Association Name="MstArticle_IS_TrnActivity1" Member="IS_TrnActivities1" ThisKey="Id" OtherKey="ProductId" Type="IS_TrnActivity" />
+      <Association Name="MstArticle_IS_TrnContinuity" Member="IS_TrnContinuities" ThisKey="Id" OtherKey="CustomerId" Type="IS_TrnContinuity" />
+      <Association Name="MstArticle_IS_TrnContinuity1" Member="IS_TrnContinuities1" ThisKey="Id" OtherKey="ProductId" Type="IS_TrnContinuity" />
+      <Association Name="MstArticle_IS_TrnDelivery" Member="IS_TrnDeliveries" ThisKey="Id" OtherKey="CustomerId" Type="IS_TrnDelivery" />
+      <Association Name="MstArticle_IS_TrnDelivery1" Member="IS_TrnDeliveries1" ThisKey="Id" OtherKey="ProductId" Type="IS_TrnDelivery" />
+      <Association Name="MstArticle_IS_TrnProject" Member="IS_TrnProjects" ThisKey="Id" OtherKey="CustomerId" Type="IS_TrnProject" />
+      <Association Name="MstArticle_IS_TrnQuotation" Member="IS_TrnQuotations" ThisKey="Id" OtherKey="CustomerId" Type="IS_TrnQuotation" />
+      <Association Name="MstArticle_IS_TrnQuotation1" Member="IS_TrnQuotations1" ThisKey="Id" OtherKey="ProductId" Type="IS_TrnQuotation" />
+      <Association Name="MstArticle_IS_TrnSupport" Member="IS_TrnSupports" ThisKey="Id" OtherKey="CustomerId" Type="IS_TrnSupport" />
+      <Association Name="MstArticle_IS_TrnSupport1" Member="IS_TrnSupports1" ThisKey="Id" OtherKey="ProductId" Type="IS_TrnSupport" />
       <Association Name="MstArticle_MstArticleComponent" Member="MstArticleComponents" ThisKey="Id" OtherKey="ArticleId" Type="MstArticleComponent" />
       <Association Name="MstArticle_MstArticleComponent1" Member="MstArticleComponents1" ThisKey="Id" OtherKey="ComponentArticleId" Type="MstArticleComponent" />
       <Association Name="MstArticle_MstArticleContact" Member="MstArticleContacts" ThisKey="Id" OtherKey="ArticleId" Type="MstArticleContact" />
@@ -358,7 +564,7 @@
       <Column Name="PriceDescription" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="Price" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
       <Column Name="Remarks" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
-      <Association Name="MstArticle_MstArticlePrice" Member="MstArticle" ThisKey="ArticleId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="MstArticle_MstArticlePrice" Member="MstArticle" ThisKey="ArticleId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.MstArticleType" Member="MstArticleTypes">
@@ -540,8 +746,8 @@
       <Association Name="MstUnit_TrnPurchaseOrderItem1" Member="TrnPurchaseOrderItems1" ThisKey="Id" OtherKey="BaseUnitId" Type="TrnPurchaseOrderItem" />
       <Association Name="MstUnit_TrnReceivingReceiptItem" Member="TrnReceivingReceiptItems" ThisKey="Id" OtherKey="UnitId" Type="TrnReceivingReceiptItem" />
       <Association Name="MstUnit_TrnReceivingReceiptItem1" Member="TrnReceivingReceiptItems1" ThisKey="Id" OtherKey="BaseUnitId" Type="TrnReceivingReceiptItem" />
-      <Association Name="MstUnit_TrnSalesInvoiceItem" Member="TrnSalesInvoiceItems" ThisKey="Id" OtherKey="BaseUnitId" Type="TrnSalesInvoiceItem" />
-      <Association Name="MstUnit_TrnSalesInvoiceItem1" Member="TrnSalesInvoiceItems1" ThisKey="Id" OtherKey="UnitId" Type="TrnSalesInvoiceItem" />
+      <Association Name="MstUnit_TrnSalesInvoiceItem" Member="TrnSalesInvoiceItems" ThisKey="Id" OtherKey="UnitId" Type="TrnSalesInvoiceItem" />
+      <Association Name="MstUnit_TrnSalesInvoiceItem1" Member="TrnSalesInvoiceItems1" ThisKey="Id" OtherKey="BaseUnitId" Type="TrnSalesInvoiceItem" />
       <Association Name="MstUnit_TrnStockInItem" Member="TrnStockInItems" ThisKey="Id" OtherKey="UnitId" Type="TrnStockInItem" />
       <Association Name="MstUnit_TrnStockInItem1" Member="TrnStockInItems1" ThisKey="Id" OtherKey="BaseUnitId" Type="TrnStockInItem" />
       <Association Name="MstUnit_TrnStockOutItem" Member="TrnStockOutItems" ThisKey="Id" OtherKey="UnitId" Type="TrnStockOutItem" />
@@ -565,11 +771,29 @@
       <Column Name="OfficialReceiptName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="InventoryType" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="DefaultSalesInvoiceDiscountId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SalesInvoiceName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="IsLocked" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="CreatedById" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedById" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="MstUser_IS_TrnActivity" Member="IS_TrnActivities" ThisKey="Id" OtherKey="StaffUserId" Type="IS_TrnActivity" />
+      <Association Name="MstUser_IS_TrnContinuity" Member="IS_TrnContinuities" ThisKey="Id" OtherKey="StaffUserId" Type="IS_TrnContinuity" />
+      <Association Name="MstUser_IS_TrnDelivery" Member="IS_TrnDeliveries" ThisKey="Id" OtherKey="SalesUserId" Type="IS_TrnDelivery" />
+      <Association Name="MstUser_IS_TrnDelivery1" Member="IS_TrnDeliveries1" ThisKey="Id" OtherKey="TechnicalUserId" Type="IS_TrnDelivery" />
+      <Association Name="MstUser_IS_TrnDelivery2" Member="IS_TrnDeliveries2" ThisKey="Id" OtherKey="FunctionalUserId" Type="IS_TrnDelivery" />
+      <Association Name="MstUser_IS_TrnLead" Member="IS_TrnLeads" ThisKey="Id" OtherKey="EncodedByUserId" Type="IS_TrnLead" />
+      <Association Name="MstUser_IS_TrnLead1" Member="IS_TrnLeads1" ThisKey="Id" OtherKey="AssignedToUserId" Type="IS_TrnLead" />
+      <Association Name="MstUser_IS_TrnProject" Member="IS_TrnProjects" ThisKey="Id" OtherKey="EncodedByUserId" Type="IS_TrnProject" />
+      <Association Name="MstUser_IS_TrnProject1" Member="IS_TrnProjects1" ThisKey="Id" OtherKey="ProjectManagerUserId" Type="IS_TrnProject" />
+      <Association Name="MstUser_IS_TrnQuotation" Member="IS_TrnQuotations" ThisKey="Id" OtherKey="EncodedByUserId" Type="IS_TrnQuotation" />
+      <Association Name="MstUser_IS_TrnRequest" Member="IS_TrnRequests" ThisKey="Id" OtherKey="EncodedByUserId" Type="IS_TrnRequest" />
+      <Association Name="MstUser_IS_TrnRequest1" Member="IS_TrnRequests1" ThisKey="Id" OtherKey="CheckedByUserId" Type="IS_TrnRequest" />
+      <Association Name="MstUser_IS_TrnRequest2" Member="IS_TrnRequests2" ThisKey="Id" OtherKey="ApprovedByUserId" Type="IS_TrnRequest" />
+      <Association Name="MstUser_IS_TrnSoftwareDevelopment" Member="IS_TrnSoftwareDevelopments" ThisKey="Id" OtherKey="EncodedByUserId" Type="IS_TrnSoftwareDevelopment" />
+      <Association Name="MstUser_IS_TrnSoftwareDevelopment1" Member="IS_TrnSoftwareDevelopments1" ThisKey="Id" OtherKey="AssignedToUserId" Type="IS_TrnSoftwareDevelopment" />
+      <Association Name="MstUser_IS_TrnSupport" Member="IS_TrnSupports" ThisKey="Id" OtherKey="EncodedByUserId" Type="IS_TrnSupport" />
+      <Association Name="MstUser_IS_TrnSupport1" Member="IS_TrnSupports1" ThisKey="Id" OtherKey="AssignedToUserId" Type="IS_TrnSupport" />
       <Association Name="MstUser_MstAccount" Member="MstAccounts" ThisKey="Id" OtherKey="CreatedById" Type="MstAccount" />
       <Association Name="MstUser_MstAccount1" Member="MstAccounts1" ThisKey="Id" OtherKey="UpdatedById" Type="MstAccount" />
       <Association Name="MstUser_MstAccountCashFlow" Member="MstAccountCashFlows" ThisKey="Id" OtherKey="CreatedById" Type="MstAccountCashFlow" />
@@ -684,7 +908,7 @@
       <Column Name="CanUnlock" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="CanPrint" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="MstUser_MstUserForm" Member="MstUser" ThisKey="UserId" OtherKey="Id" Type="MstUser" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-      <Association Name="SysForm_MstUserForm" Member="SysForm" ThisKey="FormId" OtherKey="Id" Type="SysForm" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="SysForm_MstUserForm" Member="SysForm" ThisKey="FormId" OtherKey="Id" Type="SysForm" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.SysAuditTrail" Member="SysAuditTrails">
@@ -1119,8 +1343,8 @@
       <Association Name="MstArticleInventory_TrnSalesInvoiceItem" Member="MstArticleInventory" ThisKey="ItemInventoryId" OtherKey="Id" Type="MstArticleInventory" IsForeignKey="true" />
       <Association Name="MstDiscount_TrnSalesInvoiceItem" Member="MstDiscount" ThisKey="DiscountId" OtherKey="Id" Type="MstDiscount" IsForeignKey="true" />
       <Association Name="MstTaxType_TrnSalesInvoiceItem" Member="MstTaxType" ThisKey="VATId" OtherKey="Id" Type="MstTaxType" IsForeignKey="true" />
-      <Association Name="MstUnit_TrnSalesInvoiceItem" Member="MstUnit" ThisKey="BaseUnitId" OtherKey="Id" Type="MstUnit" IsForeignKey="true" />
-      <Association Name="MstUnit_TrnSalesInvoiceItem1" Member="MstUnit1" ThisKey="UnitId" OtherKey="Id" Type="MstUnit" IsForeignKey="true" />
+      <Association Name="MstUnit_TrnSalesInvoiceItem" Member="MstUnit" ThisKey="UnitId" OtherKey="Id" Type="MstUnit" IsForeignKey="true" />
+      <Association Name="MstUnit_TrnSalesInvoiceItem1" Member="MstUnit1" ThisKey="BaseUnitId" OtherKey="Id" Type="MstUnit" IsForeignKey="true" />
       <Association Name="TrnSalesInvoice_TrnSalesInvoiceItem" Member="TrnSalesInvoice" ThisKey="SIId" OtherKey="Id" Type="TrnSalesInvoice" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>

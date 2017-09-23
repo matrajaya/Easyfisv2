@@ -98,7 +98,8 @@ namespace easyfis.Controllers
                             CustomerAdvancesAccount = d.MstAccount2.Account,
                             OfficialReceiptName = d.OfficialReceiptName,
                             InventoryType = d.InventoryType,
-                            DefaultSalesInvoiceDiscountId = d.DefaultSalesInvoiceDiscountId
+                            DefaultSalesInvoiceDiscountId = d.DefaultSalesInvoiceDiscountId,
+                            SalesInvoiceName = d.SalesInvoiceName
                             //CreatedById = d.CreatedById,
                             //CreatedBy = d.MstUser1.FullName,
                             //CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
@@ -228,6 +229,7 @@ namespace easyfis.Controllers
                     updateMstUsers.OfficialReceiptName = mstUser.OfficialReceiptName;
                     updateMstUsers.InventoryType = mstUser.InventoryType;
                     updateMstUsers.DefaultSalesInvoiceDiscountId = mstUser.DefaultSalesInvoiceDiscountId;
+                    updateMstUsers.SalesInvoiceName = mstUser.SalesInvoiceName;
                     db.SubmitChanges();
 
                     if (aspUsers.Any())
@@ -295,6 +297,7 @@ namespace easyfis.Controllers
                     updateUserDefaults.BranchId = mstUser.BranchId;
                     updateUserDefaults.OfficialReceiptName = mstUser.OfficialReceiptName;
                     updateUserDefaults.DefaultSalesInvoiceDiscountId = mstUser.DefaultSalesInvoiceDiscountId;
+                    updateUserDefaults.SalesInvoiceName = mstUser.SalesInvoiceName;
 
                     var inventory = from d in db.TrnInventories
                                     select d;

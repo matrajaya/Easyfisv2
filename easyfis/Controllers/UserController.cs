@@ -30,6 +30,7 @@ namespace easyfis.Controllers
                     string inventoryType = string.Concat((from d in db.MstUsers where d.UserId == userId select d.InventoryType).SingleOrDefault());
                     string defaultSalesInvoiceDiscountId = string.Concat((from d in db.MstUsers where d.UserId == userId select d.DefaultSalesInvoiceDiscountId).SingleOrDefault());
                     string defaultSalesInvoiceDiscount = string.Concat((from d in db.MstUsers where d.UserId == userId select d.MstDiscount.Discount).SingleOrDefault());
+                    string salesInvoiceName = string.Concat((from d in db.MstUsers where d.UserId == userId select d.SalesInvoiceName).SingleOrDefault());
 
                     ViewData.Add("UserId", userId);
                     ViewData.Add("FullName", fullName);
@@ -44,8 +45,10 @@ namespace easyfis.Controllers
                     ViewData.Add("InventoryType", inventoryType);
                     ViewData.Add("defaultSalesInvoiceDiscountId", defaultSalesInvoiceDiscountId);
                     ViewData.Add("DefaultSalesInvoiceDiscount", defaultSalesInvoiceDiscount);
+                    ViewData.Add("SalesInvoiceName", salesInvoiceName);
                 }
             }
+
             base.OnActionExecuted(filterContext);
         }
         //public UserAccountController()

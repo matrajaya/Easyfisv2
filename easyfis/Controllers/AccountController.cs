@@ -242,6 +242,7 @@ namespace easyfis.Controllers
                         var officialReceiptName = "Official Receipt";
                         var inventoryType = "Moving Average";
                         var defaultSalesInvoiceDiscountId = discount.FirstOrDefault().Id;
+                        var salesInvoiceName = "Sales Invoice";
 
                         var adminUser = from d in db.MstUsers
                                         where d.UserName.Equals("admin")
@@ -269,6 +270,7 @@ namespace easyfis.Controllers
                         newMstUser.OfficialReceiptName = officialReceiptName;
                         newMstUser.InventoryType = inventoryType;
                         newMstUser.DefaultSalesInvoiceDiscountId = defaultSalesInvoiceDiscountId;
+                        newMstUser.SalesInvoiceName = salesInvoiceName;
                         newMstUser.IsLocked = true;
                         newMstUser.CreatedById = 0;
                         newMstUser.CreatedDateTime = DateTime.Now;
@@ -288,9 +290,11 @@ namespace easyfis.Controllers
 
                         return RedirectToAction("Register", "Account");
                     }
+
                     //AddErrors(result);
                 }
             }
+
             // If we got this far, something failed, redisplay form
             return View(model);
         }

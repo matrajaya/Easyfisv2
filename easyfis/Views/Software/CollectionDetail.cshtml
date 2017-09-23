@@ -165,7 +165,6 @@
                 </div>
                 <div class="modal-body">
                     <form id="collectionLineDetailForm">
-                        <input type="hidden" id="collectionLine_Id" />
                         <dl class="dl-horizontal">
                             <dt>Branch</dt>
                             <dd><div class="comboBox-wide" id="cboCollectionLineBranch"></div></dd>
@@ -1286,7 +1285,8 @@
                 });
             });
 
-            getDisbursementBranchesForComboBox(0, 0, 0, 0, 0, new Date(), 0);
+            var cboORBranchId = cboORBranch.selectedValue;
+            getDisbursementBranchesForComboBox(cboORBranchId, 0, 0, 0, 0, new Date(), 0);
             collectionLineId = 0;
             document.getElementById('collectionLine_Particulars').value = 'NA';
             document.getElementById('collectionLine_checkNo').value = 'NA';

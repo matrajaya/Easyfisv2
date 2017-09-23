@@ -1073,7 +1073,9 @@
 
             journalVoucherLineId = 0;
             IsAccountChanged = false;
-            getBranchesForComboBoxInJournalVoucherLine(0,0,0,0,0);
+
+            var cboJVBranchId = cboJVBranch.selectedValue;
+            getBranchesForComboBoxInJournalVoucherLine(cboJVBranchId,0,0,0,0);
             document.getElementById('JVL_Particulars').value = 'NA';
             document.getElementById('JVL_DebitAmount').value = formatDecimalValues(0);
             document.getElementById('JVL_CreditAmount').value = formatDecimalValues(0);

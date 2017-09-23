@@ -1288,7 +1288,9 @@
 
             IsAccountChanged = false;
             disbursementLineId = 0;
-            getDisbursementBranchesForComboBox(0, 0, 0, 0);
+
+            var cboCVBranchId = cboCVBranch.selectedValue;
+            getDisbursementBranchesForComboBox(cboCVBranchId, 0, 0, 0);
             var headerParticulars = document.getElementById("disbursement_Particulars").value;
             document.getElementById('disbursementLine_Particulars').value = headerParticulars;
         }
