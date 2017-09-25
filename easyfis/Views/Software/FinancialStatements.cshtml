@@ -13,7 +13,7 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
@@ -69,17 +69,19 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Date as of</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementBalanceSheet_DateAsOf"></div>
-                                                                <input type="hidden" id="FinancialStatementBalanceSheet_DateAsOf_data" />
+                                                                <div class="comboBox-wide" id="cboBalanceSheetDateAsOf"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementBalanceSheet_Company"></div>
-
-                                                                <input type="hidden" id="FinancialStatementBalanceSheet_Company_data" />
-                                                                <input type="hidden" id="FinancialStatementBalanceSheet_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboBalanceSheetCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboBalanceSheetBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -105,24 +107,25 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementIncomeStatement_StartDate"></div>
-                                                                <input type="hidden" id="FinancialStatementIncomeStatement_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboIncomeStatementStartDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementIncomeStatement_EndDate"></div>
-                                                                <input type="hidden" id="FinancialStatementIncomeStatement_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboIncomeStatementEndDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementIncomeStatement_Company"></div>
-
-                                                                <input type="hidden" id="FinancialStatementIncomeStatement_Company_data" />
-                                                                <input type="hidden" id="FinancialStatementIncomeStatement_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboIncomeStatementCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboIncomeStatementBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -148,24 +151,25 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementCashFlow_StartDate"></div>
-                                                                <input type="hidden" id="FinancialStatementCashFlow_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboCashFlowStartDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementCashFlow_EndDate"></div>
-                                                                <input type="hidden" id="FinancialStatementCashFlow_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboCashFlowEndDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementCashFlow_Company"></div>
-
-                                                                <input type="hidden" id="FinancialStatementCashFlow_Company_data" />
-                                                                <input type="hidden" id="FinancialStatementCashFlow_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboCashFlowCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboCashFlowBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -192,24 +196,25 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementTrialBalance_StartDate"></div>
-                                                                <input type="hidden" id="FinancialStatementTrialBalance_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboTrialBalanceStartDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementTrialBalance_EndDate"></div>
-                                                                <input type="hidden" id="FinancialStatementTrialBalance_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboTrialBalanceEndDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementTrialBalance_Company"></div>
-
-                                                                <input type="hidden" id="FinancialStatementTrialBalance_Company_data" />
-                                                                <input type="hidden" id="FinancialStatementTrialBalance_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboTrialBalanceCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboTrialBalanceBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -236,33 +241,31 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementAccountLedger_StartDate"></div>
-                                                                <input type="hidden" id="FinancialStatementAccountLedger_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboAccountLedgerStartDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementAccountLedger_EndDate"></div>
-                                                                <input type="hidden" id="FinancialStatementAccountLedger_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboAccountLedgerEndDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementAccountLedger_Company"></div>
-
-                                                                <input type="hidden" id="FinancialStatementAccountLedger_Company_data" />
-                                                                <input type="hidden" id="FinancialStatementAccountLedger_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboAccountLedgerCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboAccountLedgerBranch"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Account</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementAccountLedger_Account"></div>
-
-                                                                <input type="hidden" id="FinancialStatementAccountLedger_Account_data" />
-                                                                <input type="hidden" id="FinancialStatementAccountLedger_Account_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboAccountLedgerAccount"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -289,24 +292,25 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialReceivingReceiptBook_StartDate"></div>
-                                                                <input type="hidden" id="FinancialReceivingReceiptBook_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboReceivingReceiptBookStartDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialReceivingReceiptBook_EndDate"></div>
-                                                                <input type="hidden" id="FinancialReceivingReceiptBook_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboReceivingReceiptBookEndDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialReceivingReceiptBook_Company"></div>
-
-                                                                <input type="hidden" id="FinancialReceivingReceiptBook_Company_data" />
-                                                                <input type="hidden" id="FinancialReceivingReceiptBook_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboReceivingReceiptBookCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboReceivingReceiptBookBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -333,24 +337,25 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementDisbursementBook_StartDate"></div>
-                                                                <input type="hidden" id="FinancialStatementDisbursementBook_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboDisbursementBookStartDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementDisbursementBook_EndDate"></div>
-                                                                <input type="hidden" id="FinancialStatementDisbursementBook_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboDisbursementBookEndDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementDisbursementBook_Company"></div>
-
-                                                                <input type="hidden" id="FinancialStatementDisbursementBook_Company_data" />
-                                                                <input type="hidden" id="FinancialStatementDisbursementBook_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboDisbursementBookCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboDisbursementBookBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -377,24 +382,25 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementSalesBook_StartDate"></div>
-                                                                <input type="hidden" id="FinancialStatementSalesBook_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboSalesBookStartDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementSalesBook_EndDate"></div>
-                                                                <input type="hidden" id="FinancialStatementSalesBook_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboSalesBookEndDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementSalesBook_Company"></div>
-
-                                                                <input type="hidden" id="FinancialStatementSalesBook_Company_data" />
-                                                                <input type="hidden" id="FinancialStatementSalesBook_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboSalesBookCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboSalesBookBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -421,24 +427,25 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementCollectionBook_StartDate"></div>
-                                                                <input type="hidden" id="FinancialStatementCollectionBook_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboCollectionBookStartDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementCollectionBook_EndDate"></div>
-                                                                <input type="hidden" id="FinancialStatementCollectionBook_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboCollectionBookEndDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementCollectionBook_Company"></div>
-
-                                                                <input type="hidden" id="FinancialStatementCollectionBook_Company_data" />
-                                                                <input type="hidden" id="FinancialStatementCollectionBook_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboCollectionBookCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboCollectionBookBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -465,24 +472,25 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementStockInBook_StartDate"></div>
-                                                                <input type="hidden" id="FinancialStatementStockInBook_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboStockInBookStartDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementStockInBook_EndDate"></div>
-                                                                <input type="hidden" id="FinancialStatementStockInBook_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboStockInBookEndDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementStockInBook_Company"></div>
-
-                                                                <input type="hidden" id="FinancialStatementStockInBook_Company_data" />
-                                                                <input type="hidden" id="FinancialStatementStockInBook_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboStockInBookCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboStockInBookBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -509,24 +517,25 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementStockOutBook_StartDate"></div>
-                                                                <input type="hidden" id="FinancialStatementStockOutBook_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboStockOutBookStartDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementStockOutBook_EndDate"></div>
-                                                                <input type="hidden" id="FinancialStatementStockOutBook_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboStockOutBookEndDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementStockOutBook_Company"></div>
-
-                                                                <input type="hidden" id="FinancialStatementStockOutBook_Company_data" />
-                                                                <input type="hidden" id="FinancialStatementStockOutBook_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboStockOutBookCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboStockOutBookBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -553,24 +562,25 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementStockTransferBook_StartDate"></div>
-                                                                <input type="hidden" id="FinancialStatementStockTransferBook_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboStockTransferBookStartDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementStockTransferBook_EndDate"></div>
-                                                                <input type="hidden" id="FinancialStatementStockTransferBook_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboStockTransferBookEndDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementStockTransferBook_Company"></div>
-
-                                                                <input type="hidden" id="FinancialStatementStockTransferBook_Company_data" />
-                                                                <input type="hidden" id="FinancialStatementStockTransferBook_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboStockTransferBookCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboStockTransferBookBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -597,24 +607,25 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Start Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementJournalVoucherBook_StartDate"></div>
-                                                                <input type="hidden" id="FinancialStatementJournalVoucherBook_StartDate_data" />
+                                                                <div class="comboBox-wide" id="cboJournalVoucherBookStartDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">End Date</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementJournalVoucherBook_EndDate"></div>
-                                                                <input type="hidden" id="FinancialStatementJournalVoucherBook_EndDate_data" />
+                                                                <div class="comboBox-wide" id="cboJournalVoucherBookEndDate"></div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-sm-4">Company</label>
                                                             <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="FinancialStatementJournalVoucherBook_Company"></div>
-
-                                                                <input type="hidden" id="FinancialStatementJournalVoucherBook_Company_data" />
-                                                                <input type="hidden" id="FinancialStatementJournalVoucherBook_Company_selectedValue" />
+                                                                <div class="comboBox-wide" id="cboJournalVoucherBookCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Branch</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="cboJournalVoucherBookBranch"></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -641,751 +652,894 @@
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         // ================
         // Global Variables
         // ================
-        var FinancialStatementBalanceSheetDateAsOf;
-        var companies;
-        var cboFinancialStatementBalanceSheetCompany;
-        var branches;
-        var cboFinancialStatementBalanceSheetBranches;
-        var FinancialStatementIncomeStatementStartDate;
-        var FinancialStatementIncomeStatementEndDate;
-        var cboFinancialStatementIncomeStatementCompany;
-        var cboFinancialStatementIncomeStatementBranch;
-        var FinancialStatementCashFlowStartDate;
-        var FinancialStatementCashFlowEndDate;
-        var cboFinancialStatementCashFlowCompany;
-        var cboFinancialStatementCashFlowBranch;
-        var FinancialStatementTrialBalanceStartDate;
-        var FinancialStatementTrialBalanceEndDate;
-        var cboFinancialStatementTrialBalanceCompany;
-        var cboFinancialStatementTrialBalanceBranch;
-        var FinancialStatementAccountLedgerStartDate;
-        var FinancialStatementAccountLedgerEndDate;
-        var cboFinancialStatementAccountLedgerCompany;
-        var cboFinancialStatementAccountLedgerBranch;
-        var accounts;
-        var cboFinancialStatementAccountLedgerAccounts;
-        var FinancialReceivingReceiptBookStartDate;
-        var FinancialReceivingReceiptBookEndDate;
-        var cboFinancialReceivingReceiptBookCompany;
-        var cboFinancialReceivingReceiptBookBranch;
-        var FinancialStatementDisbursementBookStartDate;
-        var FinancialStatementDisbursementBookEndDate;
-        var cboFinancialStatementDisbursementBookCompany;
-        var cboFinancialStatementDisbursementBookBranch;
-        var FinancialStatementSalesBookStartDate;
-        var FinancialStatementSalesBookEndDate;
-        var cboFinancialStatementSalesBookCompany;
-        var cboFinancialStatementSalesBookBranch;
-        var FinancialStatementCollectionBookStartDate;
-        var FinancialStatementCollectionBookEndDate;
-        var cboFinancialStatementCollectionBookCompany;
-        var cboFinancialStatementCollectionBookBranch;
-        var FinancialStatementStockInBookStartDate;
-        var FinancialStatementStockInBookEndDate;
-        var cboFinancialStatementStockInBookCompany;
-        var cboFinancialStatementStockInBookBranch;
-        var FinancialStatementStockOutBookStartDate;
-        var FinancialStatementStockOutBookEndDate;
-        var cboFinancialStatementStockOutBookCompany;
-        var cboFinancialStatementStockOutBookBranch;
-        var FinancialStatementStockTransferBookStartDate;
-        var FinancialStatementStockTransferBookEndDate;
-        var cboFinancialStatementStockTransferBookCompany;
-        var cboFinancialStatementStockTransferBookBranch;
-        var FinancialStatementJournalVoucherBookStartDate;
-        var FinancialStatementJournalVoucherBookEndDate;
-        var cboFinancialStatementJournalVoucherBookCompany;
-        var cboFinancialStatementJournalVoucherBookBranch;
+        var cboBalanceSheetDateAsOf = new wijmo.input.InputDate('#cboBalanceSheetDateAsOf');
+        var cboBalanceSheetCompany = new wijmo.input.ComboBox('#cboBalanceSheetCompany');
+        var cboBalanceSheetBranch = new wijmo.input.ComboBox('#cboBalanceSheetBranch');
+        var cboIncomeStatementStartDate = new wijmo.input.InputDate('#cboIncomeStatementStartDate');
+        var cboIncomeStatementEndDate = new wijmo.input.InputDate('#cboIncomeStatementEndDate');
+        var cboIncomeStatementCompany = new wijmo.input.ComboBox('#cboIncomeStatementCompany');
+        var cboIncomeStatementBranch = new wijmo.input.ComboBox('#cboIncomeStatementBranch');
+        var cboCashFlowStartDate = new wijmo.input.InputDate('#cboCashFlowStartDate');
+        var cboCashFlowEndDate = new wijmo.input.InputDate('#cboCashFlowEndDate');
+        var cboCashFlowCompany = new wijmo.input.ComboBox('#cboCashFlowCompany');
+        var cboCashFlowBranch = new wijmo.input.ComboBox('#cboCashFlowBranch');
+        var cboTrialBalanceStartDate = new wijmo.input.InputDate('#cboTrialBalanceStartDate');
+        var cboTrialBalanceEndDate = new wijmo.input.InputDate('#cboTrialBalanceEndDate');
+        var cboTrialBalanceCompany = new wijmo.input.ComboBox('#cboTrialBalanceCompany');
+        var cboTrialBalanceBranch = new wijmo.input.ComboBox('#cboTrialBalanceBranch');
+        var cboAccountLedgerStartDate = new wijmo.input.InputDate('#cboAccountLedgerStartDate');
+        var cboAccountLedgerEndDate = new wijmo.input.InputDate('#cboAccountLedgerEndDate');
+        var cboAccountLedgerCompany = new wijmo.input.ComboBox('#cboAccountLedgerCompany');
+        var cboAccountLedgerBranch = new wijmo.input.ComboBox('#cboAccountLedgerBranch');
+        var cboAccountLedgerAccount = new wijmo.input.ComboBox('#cboAccountLedgerAccount');
+        var cboReceivingReceiptBookStartDate = new wijmo.input.InputDate('#cboReceivingReceiptBookStartDate');
+        var cboReceivingReceiptBookEndDate = new wijmo.input.InputDate('#cboReceivingReceiptBookEndDate');
+        var cboReceivingReceiptBookCompany = new wijmo.input.ComboBox('#cboReceivingReceiptBookCompany');
+        var cboReceivingReceiptBookBranch = new wijmo.input.ComboBox('#cboReceivingReceiptBookBranch');
+        var cboDisbursementBookStartDate = new wijmo.input.InputDate('#cboDisbursementBookStartDate');
+        var cboDisbursementBookEndDate = new wijmo.input.InputDate('#cboDisbursementBookEndDate');
+        var cboDisbursementBookCompany = new wijmo.input.ComboBox('#cboDisbursementBookCompany');
+        var cboDisbursementBookBranch = new wijmo.input.ComboBox('#cboDisbursementBookBranch');
+        var cboSalesBookStartDate = new wijmo.input.InputDate('#cboSalesBookStartDate');
+        var cboSalesBookEndDate = new wijmo.input.InputDate('#cboSalesBookEndDate');
+        var cboSalesBookCompany = new wijmo.input.ComboBox('#cboSalesBookCompany');
+        var cboSalesBookBranch = new wijmo.input.ComboBox('#cboSalesBookBranch');
+        var cboCollectionBookStartDate = new wijmo.input.InputDate('#cboCollectionBookStartDate');
+        var cboCollectionBookEndDate = new wijmo.input.InputDate('#cboCollectionBookEndDate');
+        var cboCollectionBookCompany = new wijmo.input.ComboBox('#cboCollectionBookCompany');
+        var cboCollectionBookBranch = new wijmo.input.ComboBox('#cboCollectionBookBranch');
+        var cboStockInBookStartDate = new wijmo.input.InputDate('#cboStockInBookStartDate');
+        var cboStockInBookEndDate = new wijmo.input.InputDate('#cboStockInBookEndDate');
+        var cboStockInBookCompany = new wijmo.input.ComboBox('#cboStockInBookCompany');
+        var cboStockInBookBranch = new wijmo.input.ComboBox('#cboStockInBookBranch');
+        var cboStockOutBookStartDate = new wijmo.input.InputDate('#cboStockOutBookStartDate');
+        var cboStockOutBookEndDate = new wijmo.input.InputDate('#cboStockOutBookEndDate');
+        var cboStockOutBookCompany = new wijmo.input.ComboBox('#cboStockOutBookCompany');
+        var cboStockOutBookBranch = new wijmo.input.ComboBox('#cboStockOutBookBranch');
+        var cboStockTransferBookStartDate = new wijmo.input.InputDate('#cboStockTransferBookStartDate');
+        var cboStockTransferBookEndDate = new wijmo.input.InputDate('#cboStockTransferBookEndDate');
+        var cboStockTransferBookCompany = new wijmo.input.ComboBox('#cboStockTransferBookCompany');
+        var cboStockTransferBookBranch = new wijmo.input.ComboBox('#cboStockTransferBookBranch');
+        var cboJournalVoucherBookStartDate = new wijmo.input.InputDate('#cboJournalVoucherBookStartDate');
+        var cboJournalVoucherBookEndDate = new wijmo.input.InputDate('#cboJournalVoucherBookEndDate');
+        var cboJournalVoucherBookCompany = new wijmo.input.ComboBox('#cboJournalVoucherBookCompany');
+        var cboJournalVoucherBookBranch = new wijmo.input.ComboBox('#cboJournalVoucherBookBranch');
+        var isCboBalanceSheetCompanySelected = true;
+        var isCboIncomeStatementCompanySelected = true;
+        var isCboCashFlowCompanySelected = true;
+        var isCboTrialBalanceCompanySelected = true;
+        var isCboAccountLedgerCompanySelected = true;
+        var isCboReceivingReceiptBookCompanySelected = true;
+        var isCboDisbursementBookCompanySelected = true;
+        var isCboSalesBookCompanySelected = true;
+        var isCboCollectionBookCompanySelected = true;
+        var isCboStockInBookCompanySelected = true;
+        var isCboStockOutBookCompanySelected = true;
+        var isCboStockTransferBookCompanySelected = true;
+        var isCboJournalVoucherBookCompanySelected = true;
 
-        // ===========
-        // Get company
-        // ===========
-        function getCompanies() {
-            companies = new wijmo.collections.ObservableArray();
+        var enableBranchSelect = false;
+
+        // ============
+        // Date Filters
+        // ============
+        function createCboFFSDateFilters() {
+            // =============
+            // Balance Sheet
+            // =============
+            NProgress.start();
+            cboBalanceSheetDateAsOf.dispose();
+            cboBalanceSheetDateAsOf = new wijmo.input.InputDate('#cboBalanceSheetDateAsOf', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // ================
+            // Income Statement
+            // ================
+            cboIncomeStatementStartDate.dispose();
+            cboIncomeStatementStartDate = new wijmo.input.InputDate('#cboIncomeStatementStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboIncomeStatementEndDate.dispose();
+            cboIncomeStatementEndDate = new wijmo.input.InputDate('#cboIncomeStatementEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // =========
+            // Cash Flow
+            // =========
+            cboCashFlowStartDate.dispose();
+            cboCashFlowStartDate = new wijmo.input.InputDate('#cboCashFlowStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboCashFlowEndDate.dispose();
+            cboCashFlowEndDate = new wijmo.input.InputDate('#cboCashFlowEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // =============
+            // Trial Balance
+            // =============
+            cboTrialBalanceStartDate.dispose();
+            cboTrialBalanceStartDate = new wijmo.input.InputDate('#cboTrialBalanceStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboTrialBalanceEndDate.dispose();
+            cboTrialBalanceEndDate = new wijmo.input.InputDate('#cboTrialBalanceEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // ==============
+            // Account Ledger
+            // ==============
+            cboAccountLedgerStartDate.dispose();
+            cboAccountLedgerStartDate = new wijmo.input.InputDate('#cboAccountLedgerStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboAccountLedgerEndDate.dispose();
+            cboAccountLedgerEndDate = new wijmo.input.InputDate('#cboAccountLedgerEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // ======================
+            // Receiving Receipt Book
+            // ======================
+            cboReceivingReceiptBookStartDate.dispose();
+            cboReceivingReceiptBookStartDate = new wijmo.input.InputDate('#cboReceivingReceiptBookStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboReceivingReceiptBookEndDate.dispose();
+            cboReceivingReceiptBookEndDate = new wijmo.input.InputDate('#cboReceivingReceiptBookEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // =================
+            // Disbursement Book
+            // =================
+            cboDisbursementBookStartDate.dispose();
+            cboDisbursementBookStartDate = new wijmo.input.InputDate('#cboDisbursementBookStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboDisbursementBookEndDate.dispose();
+            cboDisbursementBookEndDate = new wijmo.input.InputDate('#cboDisbursementBookEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // ==========
+            // Sales Book
+            // ==========
+            cboSalesBookStartDate.dispose();
+            cboSalesBookStartDate = new wijmo.input.InputDate('#cboSalesBookStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboSalesBookEndDate.dispose();
+            cboSalesBookEndDate = new wijmo.input.InputDate('#cboSalesBookEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // ===============
+            // Collection Book
+            // ===============
+            cboCollectionBookStartDate.dispose();
+            cboCollectionBookStartDate = new wijmo.input.InputDate('#cboCollectionBookStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboCollectionBookEndDate.dispose();
+            cboCollectionBookEndDate = new wijmo.input.InputDate('#cboCollectionBookEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // =============
+            // Stock In Book
+            // =============
+            cboStockInBookStartDate.dispose();
+            cboStockInBookStartDate = new wijmo.input.InputDate('#cboStockInBookStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboStockInBookEndDate.dispose();
+            cboStockInBookEndDate = new wijmo.input.InputDate('#cboStockInBookEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // ==============
+            // Stock Out Book
+            // ==============
+            cboStockOutBookStartDate.dispose();
+            cboStockOutBookStartDate = new wijmo.input.InputDate('#cboStockOutBookStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboStockOutBookEndDate.dispose();
+            cboStockOutBookEndDate = new wijmo.input.InputDate('#cboStockOutBookEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // ===================
+            // Stock Transfer Book
+            // ===================
+            cboStockTransferBookStartDate.dispose();
+            cboStockTransferBookStartDate = new wijmo.input.InputDate('#cboStockTransferBookStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboStockTransferBookEndDate.dispose();
+            cboStockTransferBookEndDate = new wijmo.input.InputDate('#cboStockTransferBookEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            // ====================
+            // Journal Voucher Book
+            // ====================
+            cboJournalVoucherBookStartDate.dispose();
+            cboJournalVoucherBookStartDate = new wijmo.input.InputDate('#cboJournalVoucherBookStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            cboJournalVoucherBookEndDate.dispose();
+            cboJournalVoucherBookEndDate = new wijmo.input.InputDate('#cboJournalVoucherBookEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date()
+            });
+
+            createCboFSCompanyFilters();
+        }
+
+        // ===============
+        // Company Filters
+        // ===============
+        function createCboFSCompanyFilters() {
+            var companyObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/company/list',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            companies.push({
-                                Id: results[i]["Id"],
-                                Company: results[i]["Company"],
-                                Address: results[i]["Address"],
-                                ContactNumber: results[i]["ContactNumber"],
-                                TaxNumber: results[i]["TaxNumber"],
+                success: function (companyResults) {
+                    if (companyResults.length > 0) {
+                        for (i = 0; i < companyResults.length; i++) {
+                            companyObservableArray.push({
+                                Id: companyResults[i]["Id"],
+                                Company: companyResults[i]["Company"],
+                                Address: companyResults[i]["Address"],
+                                ContactNumber: companyResults[i]["ContactNumber"],
+                                TaxNumber: companyResults[i]["TaxNumber"],
                             });
                         }
+                    }
 
-                        createCboComapny(companies);
+                    var disabled = true;
+                    if (companyResults.length > 0) {
+                        disabled = false;
+                    } else {
+
+                    }
+
+                    cboBalanceSheetCompany.dispose();
+                    cboBalanceSheetCompany = new wijmo.input.ComboBox('#cboBalanceSheetCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCboBalanceSheetCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboFSBranchFilters(this.selectedValue);
+                            } else {
+                                createCboFSBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboIncomeStatementCompany.dispose();
+                    cboIncomeStatementCompany = new wijmo.input.ComboBox('#cboIncomeStatementCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCboIncomeStatementCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboFSBranchFilters(this.selectedValue);
+                            } else {
+                                createCboFSBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboCashFlowCompany.dispose();
+                    cboCashFlowCompany = new wijmo.input.ComboBox('#cboCashFlowCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCboCashFlowCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboFSBranchFilters(this.selectedValue);
+                            } else {
+                                createCboFSBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboTrialBalanceCompany.dispose();
+                    cboTrialBalanceCompany = new wijmo.input.ComboBox('#cboTrialBalanceCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCboTrialBalanceCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboFSBranchFilters(this.selectedValue);
+                            } else {
+                                createCboFSBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboAccountLedgerCompany.dispose();
+                    cboAccountLedgerCompany = new wijmo.input.ComboBox('#cboAccountLedgerCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCboAccountLedgerCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboFSBranchFilters(this.selectedValue);
+                            } else {
+                                createCboFSBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboReceivingReceiptBookCompany.dispose();
+                    cboReceivingReceiptBookCompany = new wijmo.input.ComboBox('#cboReceivingReceiptBookCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCboReceivingReceiptBookCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboFSBranchFilters(this.selectedValue);
+                            } else {
+                                createCboFSBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboDisbursementBookCompany.dispose();
+                    cboDisbursementBookCompany = new wijmo.input.ComboBox('#cboDisbursementBookCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCboDisbursementBookCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboFSBranchFilters(this.selectedValue);
+                            } else {
+                                createCboFSBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboSalesBookCompany.dispose();
+                    cboSalesBookCompany = new wijmo.input.ComboBox('#cboSalesBookCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCboSalesBookCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboFSBranchFilters(this.selectedValue);
+                            } else {
+                                createCboFSBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboCollectionBookCompany.dispose();
+                    cboCollectionBookCompany = new wijmo.input.ComboBox('#cboCollectionBookCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCboCollectionBookCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboFSBranchFilters(this.selectedValue);
+                            } else {
+                                createCboFSBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboStockInBookCompany.dispose();
+                    cboStockInBookCompany = new wijmo.input.ComboBox('#cboStockInBookCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCboStockInBookCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboFSBranchFilters(this.selectedValue);
+                            } else {
+                                createCboFSBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboStockOutBookCompany.dispose();
+                    cboStockOutBookCompany = new wijmo.input.ComboBox('#cboStockOutBookCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCboStockOutBookCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboFSBranchFilters(this.selectedValue);
+                            } else {
+                                createCboFSBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboStockTransferBookCompany.dispose();
+                    cboStockTransferBookCompany = new wijmo.input.ComboBox('#cboStockTransferBookCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCboStockTransferBookCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboFSBranchFilters(this.selectedValue);
+                            } else {
+                                createCboFSBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    cboJournalVoucherBookCompany.dispose();
+                    cboJournalVoucherBookCompany = new wijmo.input.ComboBox('#cboJournalVoucherBookCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        onSelectedIndexChanged: function () {
+                            isCboJournalVoucherBookCompanySelected = true;
+                            if (this.selectedValue != null) {
+                                createCboFSBranchFilters(this.selectedValue);
+                            } else {
+                                createCboFSBranchFilters(0);
+                            }
+                        }
+                    });
+
+                    if (cboBalanceSheetCompany.selectedValue != null) {
+                        createCboFSBranchFilters(cboBalanceSheetCompany.selectedValue);
+                    } else {
+                        createCboFSBranchFilters(null);
                     }
                 }
             });
-            return companies;
         }
 
-        // ===================
-        // Company - Combo Box
-        // ===================
-        function createCboComapny(companies) {
-            var companyCollection = new wijmo.collections.CollectionView(companies);
-            var companyList = new Array();
-            for (var i = 0; i < companyCollection.items.length; i++) {
-                companyList.push(companyCollection.items[i].Company);
+        // ==============
+        // Branch Filters
+        // ==============
+        function createCboFSBranchFilters(companyId) {
+            var branchObservableArray = new wijmo.collections.ObservableArray();
+            if (companyId != null) {
+                $.ajax({
+                    url: '/api/branch/byCompanyId/list/locked/' + companyId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branchObservableArray.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Branch: branchResults[i]["Branch"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"]
+                                });
+                            }
+                        }
+
+                        var disabled = true;
+                        if (branchResults.length > 0) {
+                            disabled = false;
+                        } else {
+
+                        }
+
+                        if (isCboBalanceSheetCompanySelected) {
+                            cboBalanceSheetBranch.dispose();
+                            cboBalanceSheetBranch = new wijmo.input.ComboBox('#cboBalanceSheetBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isCboIncomeStatementCompanySelected) {
+                            cboIncomeStatementBranch.dispose();
+                            cboIncomeStatementBranch = new wijmo.input.ComboBox('#cboIncomeStatementBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isCboCashFlowCompanySelected) {
+                            cboCashFlowBranch.dispose();
+                            cboCashFlowBranch = new wijmo.input.ComboBox('#cboCashFlowBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isCboTrialBalanceCompanySelected) {
+                            cboTrialBalanceBranch.dispose();
+                            cboTrialBalanceBranch = new wijmo.input.ComboBox('#cboTrialBalanceBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isCboAccountLedgerCompanySelected) {
+                            cboAccountLedgerBranch.dispose();
+                            cboAccountLedgerBranch = new wijmo.input.ComboBox('#cboAccountLedgerBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isCboReceivingReceiptBookCompanySelected) {
+                            cboReceivingReceiptBookBranch.dispose();
+                            cboReceivingReceiptBookBranch = new wijmo.input.ComboBox('#cboReceivingReceiptBookBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isCboDisbursementBookCompanySelected) {
+                            cboDisbursementBookBranch.dispose();
+                            cboDisbursementBookBranch = new wijmo.input.ComboBox('#cboDisbursementBookBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isCboSalesBookCompanySelected) {
+                            cboSalesBookBranch.dispose();
+                            cboSalesBookBranch = new wijmo.input.ComboBox('#cboSalesBookBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isCboCollectionBookCompanySelected) {
+                            cboCollectionBookBranch.dispose();
+                            cboCollectionBookBranch = new wijmo.input.ComboBox('#cboCollectionBookBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isCboStockInBookCompanySelected) {
+                            cboStockInBookBranch.dispose();
+                            cboStockInBookBranch = new wijmo.input.ComboBox('#cboStockInBookBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isCboStockOutBookCompanySelected) {
+                            cboStockOutBookBranch.dispose();
+                            cboStockOutBookBranch = new wijmo.input.ComboBox('#cboStockOutBookBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isCboStockTransferBookCompanySelected) {
+                            cboStockTransferBookBranch.dispose();
+                            cboStockTransferBookBranch = new wijmo.input.ComboBox('#cboStockTransferBookBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (isCboJournalVoucherBookCompanySelected) {
+                            cboJournalVoucherBookBranch.dispose();
+                            cboJournalVoucherBookBranch = new wijmo.input.ComboBox('#cboJournalVoucherBookBranch', {
+                                disabled: disabled,
+                                isEditable: false,
+                                itemsSource: branchObservableArray,
+                                displayMemberPath: "Branch",
+                                selectedValuePath: "Id"
+                            });
+                        }
+
+                        if (!enableBranchSelect) {
+                            enableBranchSelect = true;
+                            createCboFSAccountFilters();
+                        }
+
+                        isCboBalanceSheetCompanySelected = false;
+                        isCboIncomeStatementCompanySelected = false;
+                        isCboCashFlowCompanySelected = false;
+                        isCboTrialBalanceCompanySelected = false;
+                        isCboAccountLedgerCompanySelected = false;
+                        isCboReceivingReceiptBookCompanySelected = false;
+                        isCboDisbursementBookCompanySelected = false;
+                        isCboSalesBookCompanySelected = false;
+                        isCboCollectionBookCompanySelected = false;
+                        isCboStockInBookCompanySelected = false;
+                        isCboStockOutBookCompanySelected = false;
+                        isCboStockTransferBookCompanySelected = false;
+                        isCboJournalVoucherBookCompanySelected = false;
+                    }
+                });
+            } else {
+                cboBalanceSheetBranch.dispose();
+                cboBalanceSheetBranch = new wijmo.input.ComboBox('#cboBalanceSheetBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboIncomeStatementBranch.dispose();
+                cboIncomeStatementBranch = new wijmo.input.ComboBox('#cboIncomeStatementBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboCashFlowBranch.dispose();
+                cboCashFlowBranch = new wijmo.input.ComboBox('#cboCashFlowBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboTrialBalanceBranch.dispose();
+                cboTrialBalanceBranch = new wijmo.input.ComboBox('#cboTrialBalanceBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboAccountLedgerBranch.dispose();
+                cboAccountLedgerBranch = new wijmo.input.ComboBox('#cboAccountLedgerBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboReceivingReceiptBookBranch.dispose();
+                cboReceivingReceiptBookBranch = new wijmo.input.ComboBox('#cboReceivingReceiptBookBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboDisbursementBookBranch.dispose();
+                cboDisbursementBookBranch = new wijmo.input.ComboBox('#cboDisbursementBookBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboSalesBookBranch.dispose();
+                cboSalesBookBranch = new wijmo.input.ComboBox('#cboDisbursementBookBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboCollectionBookBranch.dispose();
+                cboCollectionBookBranch = new wijmo.input.ComboBox('#cboCollectionBookBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboStockInBookBranch.dispose();
+                cboStockInBookBranch = new wijmo.input.ComboBox('#cboStockInBookBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboStockOutBookBranch.dispose();
+                cboStockOutBookBranch = new wijmo.input.ComboBox('#cboStockOutBookBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboStockTransferBookBranch.dispose();
+                cboStockTransferBookBranch = new wijmo.input.ComboBox('#cboStockTransferBookBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                cboJournalVoucherBookBranch.dispose();
+                cboJournalVoucherBookBranch = new wijmo.input.ComboBox('#cboJournalVoucherBookBranch', {
+                    disabled: true,
+                    isEditable: false,
+                    itemsSource: branchObservableArray,
+                });
+
+                if (!enableBranchSelect) {
+                    enableBranchSelect = true;
+                    createCboFSAccountFilters();
+                }
+
+                isCboBalanceSheetCompanySelected = false;
+                isCboIncomeStatementCompanySelected = false;
+                isCboCashFlowCompanySelected = false;
+                isCboTrialBalanceCompanySelected = false;
+                isCboAccountLedgerCompanySelected = false;
+                isCboReceivingReceiptBookCompanySelected = false;
+                isCboDisbursementBookCompanySelected = false;
+                isCboSalesBookCompanySelected = false;
+                isCboCollectionBookCompanySelected = false;
+                isCboStockInBookCompanySelected = false;
+                isCboStockOutBookCompanySelected = false;
+                isCboStockTransferBookCompanySelected = false;
+                isCboJournalVoucherBookCompanySelected = false;
             }
-
-            cboFinancialStatementBalanceSheetCompany.dispose();
-            cboFinancialStatementBalanceSheetCompany = new wijmo.input.ComboBox('#FinancialStatementBalanceSheet_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('FinancialStatementBalanceSheet_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#FinancialStatementBalanceSheet_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
-
-            cboFinancialStatementIncomeStatementCompany.dispose();
-            cboFinancialStatementIncomeStatementCompany = new wijmo.input.ComboBox('#FinancialStatementIncomeStatement_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('FinancialStatementIncomeStatement_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#FinancialStatementIncomeStatement_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
-
-
-            cboFinancialStatementCashFlowCompany.dispose();
-            cboFinancialStatementCashFlowCompany = new wijmo.input.ComboBox('#FinancialStatementCashFlow_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('FinancialStatementCashFlow_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#FinancialStatementCashFlow_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
-
-            cboFinancialStatementTrialBalanceCompany.dispose();
-            cboFinancialStatementTrialBalanceCompany = new wijmo.input.ComboBox('#FinancialStatementTrialBalance_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('FinancialStatementTrialBalance_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#FinancialStatementTrialBalance_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
-
-            cboFinancialStatementAccountLedgerCompany.dispose();
-            cboFinancialStatementAccountLedgerCompany = new wijmo.input.ComboBox('#FinancialStatementAccountLedger_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('FinancialStatementAccountLedger_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#FinancialStatementAccountLedger_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
-
-            cboFinancialReceivingReceiptBookCompany.dispose();
-            cboFinancialReceivingReceiptBookCompany = new wijmo.input.ComboBox('#FinancialReceivingReceiptBook_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('FinancialReceivingReceiptBook_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#FinancialReceivingReceiptBook_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
-
-            cboFinancialStatementDisbursementBookCompany.dispose();
-            cboFinancialStatementDisbursementBookCompany = new wijmo.input.ComboBox('#FinancialStatementDisbursementBook_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('FinancialStatementDisbursementBook_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#FinancialStatementDisbursementBook_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
-
-            cboFinancialStatementSalesBookCompany.dispose();
-            cboFinancialStatementSalesBookCompany = new wijmo.input.ComboBox('#FinancialStatementSalesBook_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('FinancialStatementSalesBook_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#FinancialStatementSalesBook_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
-
-            cboFinancialStatementCollectionBookCompany.dispose();
-            cboFinancialStatementCollectionBookCompany = new wijmo.input.ComboBox('#FinancialStatementCollectionBook_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('FinancialStatementCollectionBook_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#FinancialStatementCollectionBook_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
-
-            cboFinancialStatementStockInBookCompany.dispose();
-            cboFinancialStatementStockInBookCompany = new wijmo.input.ComboBox('#FinancialStatementStockInBook_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('FinancialStatementStockInBook_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#FinancialStatementStockInBook_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
-
-            cboFinancialStatementStockOutBookCompany.dispose();
-            cboFinancialStatementStockOutBookCompany = new wijmo.input.ComboBox('#FinancialStatementStockOutBook_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('FinancialStatementStockOutBook_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#FinancialStatementStockOutBook_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
-
-            cboFinancialStatementStockTransferBookCompany.dispose();
-            cboFinancialStatementStockTransferBookCompany = new wijmo.input.ComboBox('#FinancialStatementStockTransferBook_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('FinancialStatementStockTransferBook_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#FinancialStatementStockTransferBook_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
-
-            cboFinancialStatementJournalVoucherBookCompany.dispose();
-            cboFinancialStatementJournalVoucherBookCompany = new wijmo.input.ComboBox('#FinancialStatementJournalVoucherBook_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('FinancialStatementJournalVoucherBook_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#FinancialStatementJournalVoucherBook_Company_data").val(companyCollection.items[this.selectedIndex].Id);
-                }
-            });
         }
 
-        // ========================================================
-        // Get Finaancial Statement Account Ledger Account Accounts
-        // ========================================================
-        function getFinaancialStatementAccountLedgerAccountAccounts() {
-            accounts = new wijmo.collections.ObservableArray();
+        // ===============
+        // Account Filters
+        // ===============
+        function createCboFSAccountFilters() {
+            var accountsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listAccount',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            accounts.push({
-                                Id: results[i]["Id"],
-                                AccountCode: results[i]["AccountCode"],
-                                Account: results[i]["Account"],
-                                AccountTypeId: results[i]["AccountTypeId"],
-                                AccountType: results[i]["AccountType"],
-                                AccountCashFlowId: results[i]["AccountCashFlowId"],
-                                AccountCashFlow: results[i]["AccountCashFlow"]
+                success: function (accountResults) {
+                    if (accountResults.length > 0) {
+                        for (i = 0; i < accountResults.length; i++) {
+                            accountsObservableArray.push({
+                                AccountId: accountResults[i]["AccountId"],
+                                AccountCode: accountResults[i]["AccountCode"],
+                                Account: accountResults[i]["Account"],
                             });
                         }
-
-                        createCboinancialStatementAccountLedgerAccount(accounts);
                     }
-                }
-            });
-            return accounts;
-        }
 
-        // ====================
-        // Accounts - Combo Box
-        // ====================
-        function createCboinancialStatementAccountLedgerAccount(accounts) {
-            var accountCollection = new wijmo.collections.CollectionView(accounts);
-            var accountList = new Array();
-            for (var i = 0; i < accountCollection.items.length; i++) {
-                accountList.push(accountCollection.items[i].Account);
-            }
+                    var disabled = true;
+                    if (accountResults.length > 0) {
+                        disabled = false;
+                    } else {
 
-            // Inventory
-            cboFinancialStatementAccountLedgerAccounts.dispose();
-            cboFinancialStatementAccountLedgerAccounts = new wijmo.input.ComboBox('#FinancialStatementAccountLedger_Account', {
-                placeholder: "Select Account",
-                itemsSource: accountList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('FinancialStatementAccountLedger_Account_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#FinancialStatementAccountLedger_Account_data").val(accountCollection.items[this.selectedIndex].Id);
+                    }
+
+                    cboAccountLedgerAccount.dispose();
+                    cboAccountLedgerAccount = new wijmo.input.ComboBox('#cboAccountLedgerAccount', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: accountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "AccountId"
+                    });
+
+                    NProgress.done();
                 }
             });
         }
 
-        // get Financial Statement Income Statement Start Date
-        function getFinancialStatementIncomeStatementStartDate() {
-            FinancialStatementIncomeStatementStartDate.dispose();
-            FinancialStatementIncomeStatementStartDate = new wijmo.input.InputDate('#FinancialStatementIncomeStatement_StartDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('FinancialStatementIncomeStatement_StartDate_data').value),
-                mask: '99/99/9999',
-                max: new Date(document.getElementById('FinancialStatementIncomeStatement_EndDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('FinancialStatementIncomeStatement_StartDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getFinancialStatementIncomeStatementEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Income Statement End Date
-        function getFinancialStatementIncomeStatementEndDate() {
-            FinancialStatementIncomeStatementEndDate.dispose();
-            FinancialStatementIncomeStatementEndDate = new wijmo.input.InputDate('#FinancialStatementIncomeStatement_EndDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('FinancialStatementIncomeStatement_EndDate_data').value),
-                mask: '99/99/9999',
-                min: new Date(document.getElementById('FinancialStatementIncomeStatement_StartDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('FinancialStatementIncomeStatement_EndDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getFinancialStatementIncomeStatementStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-
-        // get Financial Statement Cas hFlow Start Date
-        function getFinancialStatementCashFlowStartDate() {
-            FinancialStatementCashFlowStartDate.dispose();
-            FinancialStatementCashFlowStartDate = new wijmo.input.InputDate('#FinancialStatementCashFlow_StartDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('FinancialStatementCashFlow_StartDate_data').value),
-                mask: '99/99/9999',
-                max: new Date(document.getElementById('FinancialStatementCashFlow_EndDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('FinancialStatementCashFlow_StartDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getFinancialStatementCashFlowEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Cash Flow End Date
-        function getFinancialStatementCashFlowEndDate() {
-            FinancialStatementCashFlowEndDate.dispose();
-            FinancialStatementCashFlowEndDate = new wijmo.input.InputDate('#FinancialStatementCashFlow_EndDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('FinancialStatementCashFlow_EndDate_data').value),
-                mask: '99/99/9999',
-                min: new Date(document.getElementById('FinancialStatementCashFlow_StartDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('FinancialStatementCashFlow_EndDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getFinancialStatementCashFlowStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Trial Balance Start Date
-        function getFinancialStatementTrialBalanceStartDate() {
-            FinancialStatementTrialBalanceStartDate.dispose();
-            FinancialStatementTrialBalanceStartDate = new wijmo.input.InputDate('#FinancialStatementTrialBalance_StartDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementTrialBalance_StartDate_data').value),
-                mask: '99-99-9999',
-                max: new Date(document.getElementById('FinancialStatementTrialBalance_EndDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementTrialBalance_StartDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementTrialBalanceEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Trial Balance End Date
-        function getFinancialStatementTrialBalanceEndDate() {
-            FinancialStatementTrialBalanceEndDate.dispose();
-            FinancialStatementTrialBalanceEndDate = new wijmo.input.InputDate('#FinancialStatementTrialBalance_EndDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementTrialBalance_EndDate_data').value),
-                mask: '99-99-9999',
-                min: new Date(document.getElementById('FinancialStatementTrialBalance_StartDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementTrialBalance_EndDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementTrialBalanceStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Account Ledger Start Date
-        function getFinancialStatementAccountLedgerStartDate() {
-            FinancialStatementAccountLedgerStartDate.dispose();
-            FinancialStatementAccountLedgerStartDate = new wijmo.input.InputDate('#FinancialStatementAccountLedger_StartDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementAccountLedger_StartDate_data').value),
-                mask: '99-99-9999',
-                max: new Date(document.getElementById('FinancialStatementAccountLedger_EndDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementAccountLedger_StartDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementAccountLedgerEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Account Ledger End Date
-        function getFinancialStatementAccountLedgerEndDate() {
-            FinancialStatementAccountLedgerEndDate.dispose();
-            FinancialStatementAccountLedgerEndDate = new wijmo.input.InputDate('#FinancialStatementAccountLedger_EndDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementAccountLedger_EndDate_data').value),
-                mask: '99-99-9999',
-                min: new Date(document.getElementById('FinancialStatementAccountLedger_StartDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementAccountLedger_EndDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementAccountLedgerStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Receiving Receipt Book Start Date
-        function getFinancialReceivingReceiptBookStartDate() {
-            FinancialReceivingReceiptBookStartDate.dispose();
-            FinancialReceivingReceiptBookStartDate = new wijmo.input.InputDate('#FinancialReceivingReceiptBook_StartDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value),
-                mask: '99-99-9999',
-                max: new Date(document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialReceivingReceiptBookEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Receiving Receipt Book End Date
-        function getFinancialReceivingReceiptBookEndDate() {
-            FinancialReceivingReceiptBookEndDate.dispose();
-            FinancialReceivingReceiptBookEndDate = new wijmo.input.InputDate('#FinancialReceivingReceiptBook_EndDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value),
-                mask: '99-99-9999',
-                min: new Date(document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialReceivingReceiptBookStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Disbursement Book Start Date
-        function getFinancialStatementDisbursementBookStartDate() {
-            FinancialStatementDisbursementBookStartDate.dispose();
-            FinancialStatementDisbursementBookStartDate = new wijmo.input.InputDate('#FinancialStatementDisbursementBook_StartDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value),
-                mask: '99-99-9999',
-                max: new Date(document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementDisbursementBookEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Disbursement Book End Date
-        function getFinancialStatementDisbursementBookEndDate() {
-            FinancialStatementDisbursementBookEndDate.dispose();
-            FinancialStatementDisbursementBookEndDate = new wijmo.input.InputDate('#FinancialStatementDisbursementBook_EndDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value),
-                mask: '99-99-9999',
-                min: new Date(document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementDisbursementBookStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Sales Book Start Date
-        function getFinancialStatementSalesBookStartDate() {
-            FinancialStatementSalesBookStartDate.dispose();
-            FinancialStatementSalesBookStartDate = new wijmo.input.InputDate('#FinancialStatementSalesBook_StartDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementSalesBook_StartDate_data').value),
-                mask: '99-99-9999',
-                max: new Date(document.getElementById('FinancialStatementSalesBook_EndDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementSalesBook_StartDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementSalesBookEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Sales Book End Date
-        function getFinancialStatementSalesBookEndDate() {
-            FinancialStatementSalesBookEndDate.dispose();
-            FinancialStatementSalesBookEndDate = new wijmo.input.InputDate('#FinancialStatementSalesBook_EndDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementSalesBook_EndDate_data').value),
-                mask: '99-99-9999',
-                min: new Date(document.getElementById('FinancialStatementSalesBook_StartDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementSalesBook_EndDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementSalesBookStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Collection Book Start Date
-        function getFinancialStatementCollectionBookStartDate() {
-            FinancialStatementCollectionBookStartDate.dispose();
-            FinancialStatementCollectionBookStartDate = new wijmo.input.InputDate('#FinancialStatementCollectionBook_StartDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementCollectionBook_StartDate_data').value),
-                mask: '99-99-9999',
-                max: new Date(document.getElementById('FinancialStatementCollectionBook_EndDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementCollectionBook_StartDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementCollectionBookEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Collection Book End Date
-        function getFinancialStatementCollectionBookEndDate() {
-            FinancialStatementCollectionBookEndDate.dispose();
-            FinancialStatementCollectionBookEndDate = new wijmo.input.InputDate('#FinancialStatementCollectionBook_EndDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementCollectionBook_EndDate_data').value),
-                mask: '99-99-9999',
-                min: new Date(document.getElementById('FinancialStatementCollectionBook_StartDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementCollectionBook_EndDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementCollectionBookStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Stock In Book Start Date
-        function getFinancialStatementStockInBookStartDate() {
-            FinancialStatementStockInBookStartDate.dispose();
-            FinancialStatementStockInBookStartDate = new wijmo.input.InputDate('#FinancialStatementStockInBook_StartDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementStockInBook_StartDate_data').value),
-                mask: '99-99-9999',
-                max: new Date(document.getElementById('FinancialStatementStockInBook_EndDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementStockInBook_StartDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementStockInBookEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Stock In Book End Date
-        function getFinancialStatementStockInBookEndDate() {
-            FinancialStatementStockInBookEndDate.dispose();
-            FinancialStatementStockInBookEndDate = new wijmo.input.InputDate('#FinancialStatementStockInBook_EndDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementStockInBook_EndDate_data').value),
-                mask: '99-99-9999',
-                min: new Date(document.getElementById('FinancialStatementStockInBook_StartDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementStockInBook_EndDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementStockInBookStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Stock Out Book Start Date
-        function getFinancialStatementStockOutBookStartDate() {
-            FinancialStatementStockOutBookStartDate.dispose();
-            FinancialStatementStockOutBookStartDate = new wijmo.input.InputDate('#FinancialStatementStockOutBook_StartDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementStockOutBook_StartDate_data').value),
-                mask: '99-99-9999',
-                max: new Date(document.getElementById('FinancialStatementStockOutBook_EndDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementStockOutBook_StartDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementStockOutBookEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Stock Out Book End Date
-        function getFinancialStatementStockOutBookEndDate() {
-            FinancialStatementStockOutBookEndDate.dispose();
-            FinancialStatementStockOutBookEndDate = new wijmo.input.InputDate('#FinancialStatementStockOutBook_EndDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementStockOutBook_EndDate_data').value),
-                mask: '99-99-9999',
-                min: new Date(document.getElementById('FinancialStatementStockOutBook_StartDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementStockOutBook_EndDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementStockOutBookStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Stock Transfer Book Start Date
-        function getFinancialStatementStockTransferBookStartDate() {
-            FinancialStatementStockTransferBookStartDate.dispose();
-            FinancialStatementStockTransferBookStartDate = new wijmo.input.InputDate('#FinancialStatementStockTransferBook_StartDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value),
-                mask: '99-99-9999',
-                max: new Date(document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementStockTransferBookEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Stock Transfer Book End Date
-        function getFinancialStatementStockTransferBookEndDate() {
-            FinancialStatementStockTransferBookEndDate.dispose();
-            FinancialStatementStockTransferBookEndDate = new wijmo.input.InputDate('#FinancialStatementStockTransferBook_EndDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value),
-                mask: '99-99-9999',
-                min: new Date(document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementStockTransferBookStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Journal Voucher Book Start Date
-        function getFinancialStatementJournalVoucherBookStartDate() {
-            FinancialStatementJournalVoucherBookStartDate.dispose();
-            FinancialStatementJournalVoucherBookStartDate = new wijmo.input.InputDate('#FinancialStatementJournalVoucherBook_StartDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementJournalVoucherBook_StartDate_data').value),
-                mask: '99-99-9999',
-                max: new Date(document.getElementById('FinancialStatementJournalVoucherBook_EndDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementJournalVoucherBook_StartDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementJournalVoucherBookEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Financial Statement Journal Voucher Book End Date
-        function getFinancialStatementJournalVoucherBookEndDate() {
-            FinancialStatementJournalVoucherBookEndDate.dispose();
-            FinancialStatementJournalVoucherBookEndDate = new wijmo.input.InputDate('#FinancialStatementJournalVoucherBook_EndDate', {
-                format: 'MM-dd-yyyy',
-                value: new Date(document.getElementById('FinancialStatementJournalVoucherBook_EndDate_data').value),
-                mask: '99-99-9999',
-                min: new Date(document.getElementById('FinancialStatementJournalVoucherBook_StartDate_data').value),
-                onValueChanged: function () {
-                    var thisDateValue = this.value;
-                    document.getElementById('FinancialStatementJournalVoucherBook_EndDate_data').value = thisDateValue;
-                    setTimeout(function () {
-                        getFinancialStatementJournalVoucherBookStartDate();
-                    }, 50);
-                }
-            });
-        }
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            createCboFFSDateFilters();
+        });
 
         function FinancialStatementBalanceSheetPDF_OnClick() {
             var financialStatementBalanceSheetDateAsOf = document.getElementById('FinancialStatementBalanceSheet_DateAsOf_data').value;
@@ -1790,191 +1944,6 @@
             return [theDate.getFullYear(), theDate.getMonth() + 1, theDate.getDate()].join('-');
         }
 
-        // ============
-        // On Load Page
-        // ============
-        $(document).ready(function () {
-            // Financial Statement Balance Sheet Date As Of ..
-            accountsPayableReportDateAsOf = new wijmo.input.InputDate('#FinancialStatementBalanceSheet_DateAsOf', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                onValueChanged: function () {
-                    document.getElementById('FinancialStatementBalanceSheet_DateAsOf_data').value = this.value.toLocaleDateString();
-                }
-            });
-
-            document.getElementById('FinancialStatementBalanceSheet_DateAsOf_data').value = new Date().toLocaleDateString();
-
-            // Financial Statement Income Statement Dates
-            document.getElementById('FinancialStatementIncomeStatement_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('FinancialStatementIncomeStatement_EndDate_data').value = new Date().toLocaleDateString();
-
-            FinancialStatementIncomeStatementStartDate = new wijmo.input.InputDate('#FinancialStatementIncomeStatement_StartDate');
-            FinancialStatementIncomeStatementEndDate = new wijmo.input.InputDate('#FinancialStatementIncomeStatement_EndDate');
-
-            getFinancialStatementIncomeStatementStartDate();
-            getFinancialStatementIncomeStatementEndDate();
-
-            // Financial Statement Cash Flow Dates
-            document.getElementById('FinancialStatementCashFlow_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('FinancialStatementCashFlow_EndDate_data').value = new Date().toLocaleDateString();
-
-            FinancialStatementCashFlowStartDate = new wijmo.input.InputDate('#FinancialStatementCashFlow_StartDate');
-            FinancialStatementCashFlowEndDate = new wijmo.input.InputDate('#FinancialStatementCashFlow_EndDate');
-
-            getFinancialStatementCashFlowStartDate();
-            getFinancialStatementCashFlowEndDate();
-
-            var newDate = new Date();
-            var defaultDate = newDate;
-
-            // Financial Statement Trial Balance Dates
-            document.getElementById('FinancialStatementTrialBalance_StartDate_data').value = defaultDate;
-            document.getElementById('FinancialStatementTrialBalance_EndDate_data').value = defaultDate;
-
-            FinancialStatementTrialBalanceStartDate = new wijmo.input.InputDate('#FinancialStatementTrialBalance_StartDate');
-            FinancialStatementTrialBalanceEndDate = new wijmo.input.InputDate('#FinancialStatementTrialBalance_EndDate');
-
-            getFinancialStatementTrialBalanceStartDate();
-            getFinancialStatementTrialBalanceEndDate();
-
-            // Financial Statement Account Ledger Dates
-            document.getElementById('FinancialStatementAccountLedger_StartDate_data').value = defaultDate;
-            document.getElementById('FinancialStatementAccountLedger_EndDate_data').value = defaultDate;
-
-            FinancialStatementAccountLedgerStartDate = new wijmo.input.InputDate('#FinancialStatementAccountLedger_StartDate');
-            FinancialStatementAccountLedgerEndDate = new wijmo.input.InputDate('#FinancialStatementAccountLedger_EndDate');
-
-            getFinancialStatementAccountLedgerStartDate();
-            getFinancialStatementAccountLedgerEndDate();
-
-            // Financial Statement Receiving Receipt Book
-            document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value = defaultDate;
-            document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value = defaultDate;
-
-            FinancialReceivingReceiptBookStartDate = new wijmo.input.InputDate('#FinancialReceivingReceiptBook_StartDate');
-            FinancialReceivingReceiptBookEndDate = new wijmo.input.InputDate('#FinancialReceivingReceiptBook_EndDate');
-
-            getFinancialReceivingReceiptBookEndDate();
-            getFinancialReceivingReceiptBookStartDate();
-
-            // Financial Statement Disbursement Book
-            document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value = defaultDate;
-            document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value = defaultDate;
-
-            FinancialStatementDisbursementBookStartDate = new wijmo.input.InputDate('#FinancialStatementDisbursementBook_StartDate');
-            FinancialStatementDisbursementBookEndDate = new wijmo.input.InputDate('#FinancialStatementDisbursementBook_EndDate');
-
-            getFinancialStatementDisbursementBookEndDate();
-            getFinancialStatementDisbursementBookStartDate();
-
-            // Financial Statement Sales Book
-            document.getElementById('FinancialStatementSalesBook_StartDate_data').value = defaultDate;
-            document.getElementById('FinancialStatementSalesBook_EndDate_data').value = defaultDate;
-
-            FinancialStatementSalesBookStartDate = new wijmo.input.InputDate('#FinancialStatementSalesBook_StartDate');
-            FinancialStatementSalesBookEndDate = new wijmo.input.InputDate('#FinancialStatementSalesBook_EndDate');
-
-            getFinancialStatementSalesBookStartDate();
-            getFinancialStatementSalesBookEndDate();
-
-            // Financial Statement Collection Book
-            document.getElementById('FinancialStatementCollectionBook_StartDate_data').value = defaultDate;
-            document.getElementById('FinancialStatementCollectionBook_EndDate_data').value = defaultDate;
-
-            FinancialStatementCollectionBookStartDate = new wijmo.input.InputDate('#FinancialStatementCollectionBook_StartDate');
-            FinancialStatementCollectionBookEndDate = new wijmo.input.InputDate('#FinancialStatementCollectionBook_EndDate');
-
-            getFinancialStatementCollectionBookStartDate();
-            getFinancialStatementCollectionBookEndDate();
-
-            // Financial Statement Stock In Book
-            document.getElementById('FinancialStatementStockInBook_StartDate_data').value = defaultDate;
-            document.getElementById('FinancialStatementStockInBook_EndDate_data').value = defaultDate;
-
-            FinancialStatementStockInBookStartDate = new wijmo.input.InputDate('#FinancialStatementStockInBook_StartDate');
-            FinancialStatementStockInBookEndDate = new wijmo.input.InputDate('#FinancialStatementStockInBook_EndDate');
-
-            getFinancialStatementStockInBookStartDate();
-            getFinancialStatementStockInBookEndDate();
-
-            // Financial Statement Stock Out Book
-            document.getElementById('FinancialStatementStockOutBook_StartDate_data').value = defaultDate;
-            document.getElementById('FinancialStatementStockOutBook_EndDate_data').value = defaultDate;
-
-            FinancialStatementStockOutBookStartDate = new wijmo.input.InputDate('#FinancialStatementStockOutBook_StartDate');
-            FinancialStatementStockOutBookEndDate = new wijmo.input.InputDate('#FinancialStatementStockOutBook_EndDate');
-
-            getFinancialStatementStockOutBookStartDate();
-            getFinancialStatementStockOutBookEndDate();
-
-            // Financial Statement Stock Transfer Book
-            document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value = defaultDate;
-            document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value = defaultDate;
-
-            FinancialStatementStockTransferBookStartDate = new wijmo.input.InputDate('#FinancialStatementStockTransferBook_StartDate');
-            FinancialStatementStockTransferBookEndDate = new wijmo.input.InputDate('#FinancialStatementStockTransferBook_EndDate');
-
-            getFinancialStatementStockTransferBookStartDate();
-            getFinancialStatementStockTransferBookEndDate();
-
-            // Financial Statement Journal Voucher Book
-            document.getElementById('FinancialStatementJournalVoucherBook_StartDate_data').value = defaultDate;
-            document.getElementById('FinancialStatementJournalVoucherBook_EndDate_data').value = defaultDate;
-
-            FinancialStatementJournalVoucherBookStartDate = new wijmo.input.InputDate('#FinancialStatementJournalVoucherBook_StartDate');
-            FinancialStatementJournalVoucherBookEndDate = new wijmo.input.InputDate('#FinancialStatementJournalVoucherBook_EndDate');
-
-            getFinancialStatementJournalVoucherBookStartDate();
-            getFinancialStatementJournalVoucherBookEndDate();
-
-            // wijmo cbo financial Statement Balance Sheet
-            document.getElementById('FinancialStatementBalanceSheet_Company_data').value = "";
-            cboFinancialStatementBalanceSheetCompany = new wijmo.input.ComboBox('#FinancialStatementBalanceSheet_Company');
-
-            // Wijmo CBO combobox Financial Statement Income Statement
-            cboFinancialStatementIncomeStatementCompany = new wijmo.input.ComboBox('#FinancialStatementIncomeStatement_Company');
-
-            // Wijmo CBO combobox Financial Statement CashFlow
-            cboFinancialStatementCashFlowCompany = new wijmo.input.ComboBox('#FinancialStatementCashFlow_Company');
-
-            // Wijmo CBO combobox Financial Statement Trial Balance
-            document.getElementById('FinancialStatementTrialBalance_Company_data').value = "";
-            cboFinancialStatementTrialBalanceCompany = new wijmo.input.ComboBox('#FinancialStatementTrialBalance_Company');
-
-            // Wijmo CBO combobox Financial Statement Account Ledger
-            cboFinancialStatementAccountLedgerCompany = new wijmo.input.ComboBox('#FinancialStatementAccountLedger_Company');
-            cboFinancialStatementAccountLedgerAccounts = new wijmo.input.ComboBox('#FinancialStatementAccountLedger_Account');
-
-            // Wijmo CBO combobox Financial Statement Receiving Receipt book
-            cboFinancialReceivingReceiptBookCompany = new wijmo.input.ComboBox('#FinancialReceivingReceiptBook_Company');
-
-            // Wijmo CBO combobox Financial Statement Disbursement book
-            cboFinancialStatementDisbursementBookCompany = new wijmo.input.ComboBox('#FinancialStatementDisbursementBook_Company');
-
-            // Wijmo CBO combobox Financial Statement Sales book
-            cboFinancialStatementSalesBookCompany = new wijmo.input.ComboBox('#FinancialStatementSalesBook_Company');
-
-            // Wijmo CBO combobox Financial Statement Collection book
-            cboFinancialStatementCollectionBookCompany = new wijmo.input.ComboBox('#FinancialStatementCollectionBook_Company');
-
-            // Wijmo CBO combobox Financial Statement Stock In book
-            cboFinancialStatementStockInBookCompany = new wijmo.input.ComboBox('#FinancialStatementStockInBook_Company');
-
-            // Wijmo CBO combobox Financial Statement Stock Out book
-            cboFinancialStatementStockOutBookCompany = new wijmo.input.ComboBox('#FinancialStatementStockOutBook_Company');
-
-            // Wijmo CBO combobox Financial Statement Stock Transfer book
-            cboFinancialStatementStockTransferBookCompany = new wijmo.input.ComboBox('#FinancialStatementStockTransferBook_Company');
-
-            // Wijmo CBO combobox Financial Statement Journal Voucher book
-            cboFinancialStatementJournalVoucherBookCompany = new wijmo.input.ComboBox('#FinancialStatementJournalVoucherBook_Company');
-
-            // Call Function
-            getCompanies();
-            getFinaancialStatementAccountLedgerAccountAccounts();
-        });
     </script>
     <script type="text/javascript">
         var cboUserBranches = new wijmo.input.ComboBox('#cboUserBranches');
