@@ -179,6 +179,26 @@
                                 <div id="ComponentGrid" class="grid"></div>
                             </div>
                         </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="padding-bottom: 0px;">
+                                <div class="row">
+                                    <div class="col-md-7">
+
+                                    </div>
+                                    <div class="col-md-5">
+                                        <dl class="dl-horizontal">
+                                            <dt>
+                                                <b>Total Amount</b>
+                                            </dt>
+                                            <dd>
+                                                <input type="text" class="form-control numberField" id="totalComponentAmount" placeholder="0.00" disabled />
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div id="Price" class="tab-pane fade in">
                         <div class="panel panel-default">
@@ -1488,6 +1508,7 @@
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     success: function (componentResults) {
+                        var totalComponentAmount = 0;
                         if (componentResults.length > 0) {
                             var canEdit = "@ViewData["CanEdit"]";
                             var editDisabled = "";
@@ -1509,6 +1530,8 @@
                             }
 
                             for (i = 0; i < componentResults.length; i++) {
+                                totalComponentAmount += (componentResults[i]["Quantity"] * componentResults[i]["Cost"]);
+
                                 componentsObservableArray.push({
                                     EditId: btnEditId,
                                     DeleteId: btnDeleteId,
@@ -1531,6 +1554,7 @@
                             }
                         }
 
+                        document.getElementById('totalComponentAmount').value = parseFloat(totalComponentAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         NProgress.done();
                     }
                 });

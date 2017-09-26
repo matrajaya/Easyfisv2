@@ -53,7 +53,7 @@ namespace easyfis.Controllers
                                         Quantity = d.Quantity,
                                         UnitId = d.MstArticle1.UnitId,
                                         Unit = d.MstArticle1.MstUnit.Unit,
-                                        Cost = Convert.ToDecimal(d.MstArticle1.Cost),
+                                        Cost = d.MstArticle1.MstArticleInventories.OrderByDescending(c => c.Cost).FirstOrDefault().Cost,
                                         Particulars = d.Particulars,
                                     };
 
@@ -210,7 +210,7 @@ namespace easyfis.Controllers
                                WTaxTypeId = d.WTaxTypeId,
                                WTaxType = d.MstTaxType2.TaxType,
                                Price = d.Price,
-                               Cost = d.Cost,
+                               Cost = d.MstArticleInventories.OrderByDescending(c => c.Cost).FirstOrDefault().Cost,
                                IsInventory = d.IsInventory,
                                Particulars = d.Particulars,
                                Address = d.Address,
