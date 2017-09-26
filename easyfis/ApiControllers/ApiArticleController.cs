@@ -252,8 +252,8 @@ namespace easyfis.Controllers
         // list article by article type Id intventory
         [Authorize]
         [HttpGet]
-        [Route("api/listArticleByArticleTypeIdByInventory/{articleTypeId}")]
-        public List<Models.MstArticle> listArticleByArticleTypeIdByInventory(String articleTypeId)
+        [Route("api/listArticleByArticleTypeIdByInventory/{articleTypeId}/{branchId}")]
+        public List<Models.MstArticle> listArticleByArticleTypeIdByInventory(String articleTypeId, String branchId)
         {
             var articles = from d in db.MstArticles.OrderBy(d => d.Article)
                            where d.ArticleTypeId == Convert.ToInt32(articleTypeId)
@@ -291,7 +291,7 @@ namespace easyfis.Controllers
                                WTaxTypeId = d.WTaxTypeId,
                                WTaxType = d.MstTaxType2.TaxType,
                                Price = d.Price,
-                               Cost = d.Cost,
+                               Cost = d.MstArticleComponents.Where(c => c.MstArticle1.MstArticleInventories.FirstOrDefault().BranchId == Convert.ToInt32(branchId)).Sum(c => c.Quantity * c.MstArticle1.MstArticleInventories.OrderByDescending(a => a.Cost).FirstOrDefault().Cost),
                                IsInventory = d.IsInventory,
                                Particulars = d.Particulars,
                                Address = d.Address,

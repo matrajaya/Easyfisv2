@@ -170,6 +170,22 @@
                     </div>
                     <div id="InventoryEntries" class="tab-pane fade in" style="margin-bottom: 15px;">
                         <div id="InventoryEntryGrid" class="grid"></div>
+                        <br /><br />
+                        <div class="row">
+                            <div class="col-md-7">
+
+                            </div>
+                            <div class="col-md-5">
+                                <dl class="dl-horizontal">
+                                    <dt>
+                                        <b>Total Amount</b>
+                                    </dt>
+                                    <dd>
+                                        <input type="text" class="form-control numberField" id="totalInventoryAmount" placeholder="0.00" disabled />
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1042,9 +1058,10 @@
         // GET Item Id, Manual Code and Component
         // ======================================
         function getArticleItemForManualCodeAndComponent(itemId, unitId) {
+            var branchId = cboINBranch.selectedValue;
             var articleItemsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticleByArticleTypeIdByInventory/1',
+                url: '/api/listArticleByArticleTypeIdByInventory/1/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1057,7 +1074,8 @@
                                 ItemDescription: results[i]["Article"],
                                 UnitId: results[i]["UnitId"],
                                 Unit: results[i]["Unit"],
-                                Particulars: results[i]["Particulars"]
+                                Particulars: results[i]["Particulars"],
+                                Cost: results[i]["Cost"]
                             });
                         }
                     }
@@ -1094,8 +1112,29 @@
                         onSelectedIndexChanged: function () {
                             cboINItemCode.selectedValue = this.selectedValue;
                             getStockInItemUnitForComboBox(unitId);
+
+                            if (document.getElementById("StockIn_Produce").checked) {
+                                if (this.selectedItem["Cost"] != null) {
+                                    document.getElementById('stockInItem_Cost').value = formatDecimalValues(this.selectedItem["Cost"]);
+                                } else {
+                                    document.getElementById('stockInItem_Cost').value = formatDecimalValues(0);
+                                }
+
+                                computeAmount();
+                            }
+
                         }
                     });
+
+                    if (document.getElementById("StockIn_Produce").checked) {
+                        if (cboINItemDescription.selectedItem["Cost"] != null) {
+                            document.getElementById('stockInItem_Cost').value = formatDecimalValues(cboINItemDescription.selectedItem["Cost"]);
+                        } else {
+                            document.getElementById('stockInItem_Cost').value = formatDecimalValues(0);
+                        }
+
+                        computeAmount();
+                    }
 
                     getStockInItemUnitForComboBox(unitId);
                 }
@@ -1374,6 +1413,7 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
+                    var totalInventoryAmount = 0;
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
 
@@ -1403,9 +1443,12 @@
                                 Code: Results[i]["Code"],
                                 Unit: Results[i]["Unit"]
                             });
+
+                            totalInventoryAmount += Results[i]["Amount"];
                         }
                     }
 
+                    document.getElementById('totalInventoryAmount').value = parseFloat(totalInventoryAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     NProgress.done();
                 }
             });
@@ -1644,9 +1687,10 @@
 
         // get Items for Item Query
         function getArticleItemForItemQuery() {
+            var branchId = cboINBranch.selectedValue;
             var items = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticleByArticleTypeIdByInventory/1',
+                url: '/api/listArticleByArticleTypeIdByInventory/1/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',

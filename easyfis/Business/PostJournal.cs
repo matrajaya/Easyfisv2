@@ -317,48 +317,86 @@ namespace easyfis.Business
                         foreach (var stockInDebitItem in stockInDebitItems)
                         {
                             Data.TrnJournal newStockInDebitItemJournal = new Data.TrnJournal();
-
                             newStockInDebitItemJournal.JournalDate = stockIns.FirstOrDefault().INDate;
                             newStockInDebitItemJournal.BranchId = stockIns.FirstOrDefault().BranchId;
-
                             newStockInDebitItemJournal.AccountId = getAccountId(stockInDebitItem.ArticleGroup.Id, stockIns.FirstOrDefault().BranchId, "Account");
                             newStockInDebitItemJournal.ArticleId = stockIns.FirstOrDefault().ArticleId;
-
                             newStockInDebitItemJournal.Particulars = stockIns.FirstOrDefault().Particulars;
-
                             newStockInDebitItemJournal.DebitAmount = stockInDebitItem.Amount;
                             newStockInDebitItemJournal.CreditAmount = 0;
-
                             newStockInDebitItemJournal.INId = INId;
                             newStockInDebitItemJournal.DocumentReference = "IN-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber;
-
                             db.TrnJournals.InsertOnSubmit(newStockInDebitItemJournal);
                         }
                     }
 
-                    // ========================================
-                    // Credit: Lines (Equity/Liability Account)
-                    // ========================================
-                    Data.TrnJournal newStockInCreditHeaderJournal = new Data.TrnJournal();
+                    // =========
+                    // Component
+                    // =========
+                    if (stockIns.FirstOrDefault().IsProduced)
+                    {
+                        var stockInArticleComponents = from d in db.TrnStockInItems
+                                                       where d.INId == INId
+                                                       select new
+                                                       {
+                                                           Quantity = d.Quantity,
+                                                           ArticleComponent = d.MstArticle.MstArticleComponents
+                                                       };
 
-                    newStockInCreditHeaderJournal.JournalDate = stockIns.FirstOrDefault().INDate;
-                    newStockInCreditHeaderJournal.BranchId = stockIns.FirstOrDefault().BranchId;
+                        if (stockInArticleComponents.Any())
+                        {
+                            foreach (var stockInArticleComponent in stockInArticleComponents)
+                            {
+                                var articleComponents = from d in stockInArticleComponent.ArticleComponent.ToList()
+                                                        group d by new
+                                                        {
+                                                            ArticleGroup = d.MstArticle1.MstArticleGroup
+                                                        } into g
+                                                        select new
+                                                        {
+                                                            ArticleGroup = g.Key.ArticleGroup,
+                                                            Amount = g.Sum(d => d.Quantity * d.MstArticle1.MstArticleInventories.OrderByDescending(c => c.Cost).FirstOrDefault().Cost) * stockInArticleComponent.Quantity
+                                                        };
 
-                    newStockInCreditHeaderJournal.AccountId = stockIns.FirstOrDefault().AccountId;
-                    newStockInCreditHeaderJournal.ArticleId = stockIns.FirstOrDefault().ArticleId;
-
-                    newStockInCreditHeaderJournal.Particulars = stockIns.FirstOrDefault().Particulars;
-
-                    newStockInCreditHeaderJournal.DebitAmount = 0;
-                    newStockInCreditHeaderJournal.CreditAmount = stockIns.FirstOrDefault().TrnStockInItems.Sum(d => d.Amount);
-
-                    newStockInCreditHeaderJournal.INId = INId;
-                    newStockInCreditHeaderJournal.DocumentReference = "IN-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber;
-
-                    db.TrnJournals.InsertOnSubmit(newStockInCreditHeaderJournal);
+                                if (articleComponents.Any())
+                                {
+                                    foreach (var articleComponent in articleComponents)
+                                    {
+                                        Data.TrnJournal newStockInCreditHeaderJournal = new Data.TrnJournal();
+                                        newStockInCreditHeaderJournal.JournalDate = stockIns.FirstOrDefault().INDate;
+                                        newStockInCreditHeaderJournal.BranchId = stockIns.FirstOrDefault().BranchId;
+                                        newStockInCreditHeaderJournal.AccountId = articleComponent.ArticleGroup.AccountId;
+                                        newStockInCreditHeaderJournal.ArticleId = stockIns.FirstOrDefault().ArticleId;
+                                        newStockInCreditHeaderJournal.Particulars = stockIns.FirstOrDefault().Particulars;
+                                        newStockInCreditHeaderJournal.DebitAmount = 0;
+                                        newStockInCreditHeaderJournal.CreditAmount = articleComponent.Amount;
+                                        newStockInCreditHeaderJournal.INId = INId;
+                                        newStockInCreditHeaderJournal.DocumentReference = "IN-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber;
+                                        db.TrnJournals.InsertOnSubmit(newStockInCreditHeaderJournal);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // ========================================
+                        // Credit: Lines (Equity/Liability Account)
+                        // ========================================
+                        Data.TrnJournal newStockInCreditHeaderJournal = new Data.TrnJournal();
+                        newStockInCreditHeaderJournal.JournalDate = stockIns.FirstOrDefault().INDate;
+                        newStockInCreditHeaderJournal.BranchId = stockIns.FirstOrDefault().BranchId;
+                        newStockInCreditHeaderJournal.AccountId = stockIns.FirstOrDefault().AccountId;
+                        newStockInCreditHeaderJournal.ArticleId = stockIns.FirstOrDefault().ArticleId;
+                        newStockInCreditHeaderJournal.Particulars = stockIns.FirstOrDefault().Particulars;
+                        newStockInCreditHeaderJournal.DebitAmount = 0;
+                        newStockInCreditHeaderJournal.CreditAmount = stockIns.FirstOrDefault().TrnStockInItems.Sum(d => d.Amount);
+                        newStockInCreditHeaderJournal.INId = INId;
+                        newStockInCreditHeaderJournal.DocumentReference = "IN-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber;
+                        db.TrnJournals.InsertOnSubmit(newStockInCreditHeaderJournal);
+                    }
 
                     // Save
-
                     db.SubmitChanges();
 
                 }
