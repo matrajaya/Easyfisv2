@@ -9,13 +9,16 @@ namespace easyfis.ApiControllers
 {
     public class ApiAccountLedgerController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // account ledger list
-        [Authorize]
-        [HttpGet]
-        [Route("api/accountLedger/list/{startDate}/{endDate}/{companyId}/{accountId}")]
-        public List<Models.TrnJournal> listAccountLedger(String startDate, String endDate, String companyId, String accountId)
+        // ===================
+        // Account Ledger List
+        // ===================
+        [Authorize, HttpGet, Route("api/accountLedger/list/{startDate}/{endDate}/{companyId}/{branchId}/{accountId}")]
+        public List<Models.TrnJournal> ListAccountLedger(String startDate, String endDate, String companyId, String branchId, String accountId)
         {
             try
             {
@@ -23,6 +26,7 @@ namespace easyfis.ApiControllers
                                where d.JournalDate >= Convert.ToDateTime(startDate)
                                && d.JournalDate <= Convert.ToDateTime(endDate)
                                && d.MstBranch.CompanyId == Convert.ToInt32(companyId)
+                               && d.BranchId == Convert.ToInt32(branchId)
                                && d.AccountId == Convert.ToInt32(accountId)
                                select new Models.TrnJournal
                                {

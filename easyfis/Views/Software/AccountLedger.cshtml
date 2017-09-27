@@ -7,19 +7,19 @@
 
     <!-- Title of the Page -->
     <link rel="shortcut icon" href="~/Images/icon/easyfislogomini.ico">
-    <title> Account Ledger</title>
+    <title>Account Ledger</title>
 
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Account Ledger  
+                        Account Ledger
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -32,16 +32,16 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 49%">
-                                    <div class="input-group ">
+                                <td style="width: 49.5%">
+                                    <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search">
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search...">
                                     </div>
                                 </td>
-                                <td style="width: 1%"></td>
-                                <td style="width: 50%" align="right">
-                                    <button onclick="FinancialStatementAccountLedgerPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
-                                    <a href="/Software/FinancialStatements" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
+                                <td style="width: 50.5%" align="right">
+                                    <button onclick="btnAccountLedgerReportCSVOnclick()" id="btnAccountLedgerReportCSV" class="btn btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    <button onclick="btnAccountLedgerReportPrintPDFOnclick()" id="btnAccountLedgerReportPrintPDF" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                                    <a href="/Software/FinancialStatements" class="btn btn-danger"><i class="fa fa-close"></i> Close</a>
                                 </td>
                             </tr>
                         </table>
@@ -49,17 +49,31 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 49%">
+                                <td style="width: 24%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Filter Company</span>
-                                        <input type="text" class="form-control " id="companyname" placeholder="filter company" disabled>
+                                        <span class="input-group-addon"><b>Start Date</b></span>
+                                        <div class="comboBox-wide" id="cboARAccountLedgerReportStartDate"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 50%" align="right">
+                                <td style="width: 24%" align="right">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Date</span>
-                                        <input type="text" class="form-control " id="jdate" placeholder="Date" disabled>
+                                        <span class="input-group-addon"><b>End Date</b></span>
+                                        <div class="comboBox-wide" id="cboARAccountLedgerReportEndDate"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Company</b></span>
+                                        <div class="comboBox-wide" id="cboARAccountLedgerReportCompany"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Branch</b></span>
+                                        <div class="comboBox-wide" id="cboARAccountLedgerReportBranch"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -68,195 +82,490 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 49%">
+                                <td style="width: 49.5%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Account</span>
-                                        <input type="text" class="form-control " id="accountTitle" placeholder="filter active" disabled>
+                                        <span class="input-group-addon"><b>Account</b></span>
+                                        <div class="comboBox-wide" id="cboAccountLedgerAccount"></div>
                                     </div>
                                 </td>
-                                <td style="width: 1%"></td>
-                                <td style="width: 50%" align="right"></td>
+                                <td style="width: 50.5%"></td>
                             </tr>
                         </table>
-                    </div>
-                    <div class="panel-body">
-                        <div id="accountLedgerGrid" class="grid"></div>
                     </div>
                 </div>
+                <div id="accountLedgerReportGrid" class="grid"></div>
+                <br /><br />
                 <div class="row">
-                    <div class="col-md-6"></div>
                     <div class="col-md-6">
-                        <table class="table table-responsive table-bordered">
-                            <tr>
-                                <td align="right">
-                                    <b>Total Debit: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="totalDebit">NA</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    <b>Total Credit: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="totalCredit">NA</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    <b>Balance: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="totalBalance">NA</span>
-                                </td>
-                            </tr>
-                        </table>
+
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="dl-horizontal dl-custom">
+                            <dt>
+                                <b>Total Debit</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalDebitAmount" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Total Credit</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalCreditAmount" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Balance</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalBalanceAmount" placeholder="0.00" disabled />
+                            </dd>
+                        </dl>
                     </div>
                 </div>
             </section>
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
-        var accountLedgerGrid;
+        // ================
+        // Global Variables
+        // ================
+        var cboARAccountLedgerReportStartDate = new wijmo.input.InputDate('#cboARAccountLedgerReportStartDate');
+        var cboARAccountLedgerReportEndDate = new wijmo.input.InputDate('#cboARAccountLedgerReportEndDate');
+        var isARAccountLedgerReportStartDateSelected = false;
+        var isARAccountLedgerReportEndDateSelected = false;
+        var cboARAccountLedgerReportCompany = new wijmo.input.ComboBox('#cboARAccountLedgerReportCompany');
+        var cboARAccountLedgerReportBranch = new wijmo.input.ComboBox('#cboARAccountLedgerReportBranch');
+        var accountLedgerReportCollections;
+        var accountLedgerReportGrid;
+        var isARAccountLedgerReportCompanySelected = false;
+        var cboAccountLedgerAccount = new wijmo.input.ComboBox('#cboAccountLedgerAccount');
 
+        // ===================
+        // Get Parameter Value
+        // ===================
         function getParam(name) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+
             var regexS = "[\\?&]" + name + "=([^&#]*)";
             var regex = new RegExp(regexS);
+
             var results = regex.exec(window.location.href);
-            if (results == null)
+            if (results == null) {
                 return "";
-            else
+            } else {
                 return results[1];
+            }
         }
 
-        function getAccountLedger() {
+        // ============
+        // Date Filters
+        // ============
+        function accountLedgerReportDateFilters() {
             NProgress.start();
-            var accountLedgers = new wijmo.collections.ObservableArray;
-            document.getElementById("jdate").value = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
+            cboARAccountLedgerReportStartDate.dispose();
+            cboARAccountLedgerReportStartDate = new wijmo.input.InputDate('#cboARAccountLedgerReportStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("StartDate")),
+                onValueChanged: function () {
+                    if (!isARAccountLedgerReportStartDateSelected) {
+                        NProgress.start();
+                        refreshAccountLedgerReportFlexGrid();
+                    } else {
+                        isARAccountLedgerReportStartDateSelected = false;
+                    }
+                }
+            });
+
+            cboARAccountLedgerReportEndDate.dispose();
+            cboARAccountLedgerReportEndDate = new wijmo.input.InputDate('#cboARAccountLedgerReportEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("EndDate")),
+                onValueChanged: function () {
+                    if (!isARAccountLedgerReportEndDateSelected) {
+                        NProgress.start();
+                        refreshAccountLedgerReportFlexGrid();
+                    } else {
+                        isARAccountLedgerReportEndDateSelected = false;
+                    }
+                }
+            });
+
+            createCboCompany();
+        }
+
+        // ==============
+        // Company Filter
+        // ==============
+        function createCboCompany() {
+            var companyObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/accountLedger/list/' + getParam("StartDate") + "/" + getParam("EndDate") + "/" + getParam("CompanyId") + "/" + getParam("AccountId"),
+                url: '/api/company/list',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (Results) {
-                    $.ajax({
-                        url: '/api/company/' + getParam("CompanyId"),
-                        cache: false,
-                        type: 'GET',
-                        contentType: 'application/json; charset=utf-8',
-                        success: function (companyResults) {
-                            document.getElementById("companyname").value = companyResults.Company;
+                success: function (companyResults) {
+                    if (companyResults.length > 0) {
+                        for (i = 0; i < companyResults.length; i++) {
+                            companyObservableArray.push({
+                                Id: companyResults[i]["Id"],
+                                Company: companyResults[i]["Company"],
+                                Address: companyResults[i]["Address"],
+                                ContactNumber: companyResults[i]["ContactNumber"],
+                                TaxNumber: companyResults[i]["TaxNumber"],
+                            });
+                        }
+                    }
+
+                    var disabled = true;
+                    if (companyResults.length > 0) {
+                        disabled = false;
+                    } else {
+                        $("#btnAccountLedgerReportCSV").prop("disabled", true);
+                        $("#btnAccountLedgerReportPrintPDF").prop("disabled", true);
+                    }
+
+                    cboARAccountLedgerReportCompany.dispose();
+                    cboARAccountLedgerReportCompany = new wijmo.input.ComboBox('#cboARAccountLedgerReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        selectedValue: getParam("CompanyId"),
+                        onSelectedIndexChanged: function () {
+                            NProgress.start();
+                            $("#btnAccountLedgerReportCSV").prop("disabled", false);
+                            $("#btnAccountLedgerReportPrintPDF").prop("disabled", false);
+                            isARAccountLedgerReportCompanySelected = true;
+                            createCboBranch();
                         }
                     });
 
+                    createCboBranch();
+                }
+            });
+        }
 
-                    if (Results.length > 0) {
-                        var totalDebit = 0;
-                        var totalCredit = 0;
-                        var totalBalance = 0;
-
-                        for (i = 0; i < Results.length; i++) {
-                            document.getElementById("accountTitle").value = Results[i]["AccountCode"] + " - " + Results[i]["Account"];
-
-                            var docRefLink;
-                            if (Results[i]["ORId"] != null) {
-                                docRefLink = "/Software/CollectionDetail?CollectonId=" + Results[i]["ORId"];
-                            } else if (Results[i]["CVId"] != null) {
-                                docRefLink = "/Software/DisbursementDetail?DisbursementId=" + Results[i]["CVId"];
-                            } else if (Results[i]["JVId"] != null) {
-                                docRefLink = "/Software/JournalVoucherDetail?JournalVoucherId=" + Results[i]["JVId"];
-                            } else if (Results[i]["RRId"] != null) {
-                                docRefLink = "/Software/ReceivingReceiptDetail?ReceivingReceiptId=" + Results[i]["RRId"];
-                            } else if (Results[i]["SIId"] != null) {
-                                docRefLink = "/Software/SalesDetail?SalesId=" + Results[i]["SIId"];
-                            } else if (Results[i]["INId"] != null) {
-                                docRefLink = "/Software/StockInDetail?StockInId=" + Results[i]["INId"];
-                            } else if (Results[i]["OTId"] != null) {
-                                docRefLink = "/Software/StockOutDetail?StockOutId=" + Results[i]["OTId"];
-                            } else if (Results[i]["STId"] != null) {
-                                docRefLink = "/Software/StockTransferDetail?StockTransferId=" + Results[i]["STId"];
-                            } else {
-                                docRefLink = "#";
+        // =============
+        // Branch Filter
+        // =============
+        function createCboBranch() {
+            var branchObservableArray = new wijmo.collections.ObservableArray();
+            if (cboARAccountLedgerReportCompany.selectedValue != null) {
+                $.ajax({
+                    url: '/api/branch/byCompanyId/list/locked/' + cboARAccountLedgerReportCompany.selectedValue,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branchObservableArray.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Branch: branchResults[i]["Branch"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"]
+                                });
                             }
-
-                            totalDebit = totalDebit + Results[i]["DebitAmount"];
-                            totalCredit = totalCredit + Results[i]["CreditAmount"];
-                            totalBalance = totalDebit - totalCredit;
-
-                            accountLedgers.push({
-                                AccountId: Results[i]["AccountId"],
-                                AccountCode: Results[i]["AccountCode"],
-                                Account: Results[i]["Account"],
-                                JournalDate: Results[i]["JournalDate"],
-                                DocumentReference: "<a href='" + docRefLink + "' class='btn btn-default btn-xs btn-block'> " + Results[i]["DocumentReference"] + "</a>",
-                                Article: Results[i]["Article"],
-                                Particulars: Results[i]["Particulars"],
-                                DebitAmount: Results[i]["DebitAmount"],
-                                CreditAmount: Results[i]["CreditAmount"],
-                                Balance: Results[i]["DebitAmount"] - Results[i]["CreditAmount"],
-                                ORId: Results[i]["ORId"],
-                                CVId: Results[i]["CVId"],
-                                JVId: Results[i]["JVId"],
-                                RRId: Results[i]["RRId"],
-                                SIId: Results[i]["SIId"],
-                                INId: Results[i]["INId"],
-                                OTId: Results[i]["OTId"],
-                                STId: Results[i]["STId"]
-                            });
                         }
 
-                        document.getElementById("totalDebit").innerHTML = totalDebit.toLocaleString();
-                        document.getElementById("totalCredit").innerHTML = totalCredit.toLocaleString();
-                        document.getElementById("totalBalance").innerHTML = totalBalance.toLocaleString();
+                        var disabled = true;
+                        if (branchResults.length > 0) {
+                            disabled = false;
+                        } else {
+                            $("#btnAccountLedgerReportCSV").prop("disabled", true);
+                            $("#btnAccountLedgerReportPrintPDF").prop("disabled", true);
+                        }
+
+                        cboARAccountLedgerReportBranch.dispose();
+                        cboARAccountLedgerReportBranch = new wijmo.input.ComboBox('#cboARAccountLedgerReportBranch', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: branchObservableArray,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Id",
+                            selectedValue: getParam("BranchId"),
+                            onSelectedIndexChanged: function () {
+                                NProgress.start();
+                                refreshAccountLedgerReportFlexGrid();
+                            }
+                        });
+
+                        if (!isARAccountLedgerReportCompanySelected) {
+                            createCboFSAccountFilters();
+                        } else {
+                            refreshAccountLedgerReportFlexGrid();
+                        }
                     }
+                });
+            }
+        }
+
+        // ===============
+        // Account Filters
+        // ===============
+        function createCboFSAccountFilters() {
+            var accountsObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listAccount',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (accountResults) {
+                    if (accountResults.length > 0) {
+                        for (i = 0; i < accountResults.length; i++) {
+                            accountsObservableArray.push({
+                                Id: accountResults[i]["Id"],
+                                AccountCode: accountResults[i]["AccountCode"],
+                                Account: accountResults[i]["Account"],
+                            });
+                        }
+                    }
+
+                    var disabled = true;
+                    if (accountResults.length > 0) {
+                        disabled = false;
+                    } else {
+
+                    }
+
+                    cboAccountLedgerAccount.dispose();
+                    cboAccountLedgerAccount = new wijmo.input.ComboBox('#cboAccountLedgerAccount', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: accountsObservableArray,
+                        displayMemberPath: "Account",
+                        selectedValuePath: "Id",
+                        selectedValue: getParam("AccountId"),
+                        onSelectedIndexChanged: function () {
+                            NProgress.start();
+                            refreshAccountLedgerReportFlexGrid();
+                        }
+                    });
+
+                    if (!isARAccountLedgerReportCompanySelected) {
+                        createAccountLedgerReportFlexGrid();
+                    } else {
+                        refreshAccountLedgerReportFlexGrid();
+                    }
+
                     NProgress.done();
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
-
-            return accountLedgers;
         }
 
-        function FinancialStatementAccountLedgerPDF_OnClick() {
-            window.location.href = '/RepAccountLedger/AccountLedger?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&CompanyId=' + getParam("CompanyId") + '&AccountId=' + getParam("AccountId");
+        // ======================
+        // Get Trial Balance Data
+        // ======================
+        function getAccountLedgerReport() {
+            var accountLedgerReports = new wijmo.collections.ObservableArray;
+            if (cboARAccountLedgerReportCompany.selectedValue != null) {
+                if (cboARAccountLedgerReportBranch.selectedValue != null) {
+                    if (cboAccountLedgerAccount.selectedValue != null) {
+                        var startDate = cboARAccountLedgerReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                        var endDate = cboARAccountLedgerReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                        var companyId = cboARAccountLedgerReportCompany.selectedValue;
+                        var branchId = cboARAccountLedgerReportBranch.selectedValue;
+                        var accountId = cboAccountLedgerAccount.selectedValue;
+
+                        $.ajax({
+                            url: '/api/accountLedger/list/' + startDate + '/' + endDate + '/' + + companyId + '/' + branchId + '/' + accountId,
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            success: function (accountLedgerReportResult) {
+                                var totalDebit = 0;
+                                var totalCredit = 0;
+                                var totalBalance = 0;
+
+                                if (accountLedgerReportResult.length > 0) {
+                                    for (i = 0; i < accountLedgerReportResult.length; i++) {
+
+                                        var JournalDateResult = new Date(accountLedgerReportResult[i]["JournalDate"])
+                                        var JournalDate = ('0' + (JournalDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + JournalDateResult.getDate()).slice(-2) + '-' + JournalDateResult.getFullYear();
+
+                                        var docRefLink = "";
+                                        if (accountLedgerReportResult[i]["ORId"] != null) {
+                                            docRefLink = "/Software/CollectionDetail?id=" + accountLedgerReportResult[i]["ORId"];
+                                        } else if (accountLedgerReportResult[i]["CVId"] != null) {
+                                            docRefLink = "/Software/DisbursementDetail?id=" + accountLedgerReportResult[i]["CVId"];
+                                        } else if (accountLedgerReportResult[i]["JVId"] != null) {
+                                            docRefLink = "/Software/JournalVoucherDetail?id=" + accountLedgerReportResult[i]["JVId"];
+                                        } else if (accountLedgerReportResult[i]["RRId"] != null) {
+                                            docRefLink = "/Software/ReceivingReceiptDetail?id=" + accountLedgerReportResult[i]["RRId"];
+                                        } else if (accountLedgerReportResult[i]["SIId"] != null) {
+                                            docRefLink = "/Software/SalesDetail?id=" + accountLedgerReportResult[i]["SIId"];
+                                        } else if (accountLedgerReportResult[i]["INId"] != null) {
+                                            docRefLink = "/Software/StockInDetail?id=" + accountLedgerReportResult[i]["INId"];
+                                        } else if (accountLedgerReportResult[i]["OTId"] != null) {
+                                            docRefLink = "/Software/StockOutDetail?id=" + accountLedgerReportResult[i]["OTId"];
+                                        } else if (accountLedgerReportResult[i]["STId"] != null) {
+                                            docRefLink = "/Software/StockTransferDetail?id=" + accountLedgerReportResult[i]["STId"];
+                                        } else {
+                                            docRefLink = "#";
+                                        }
+
+                                        var accountLink = "/Software/AccountLedger?StartDate=" + startDate + "&EndDate=" + endDate + "&CompanyId=" + companyId + "&AccountId=" + accountLedgerReportResult[i]["AccountId"];
+
+                                        accountLedgerReports.push({
+                                            AccountId: accountLedgerReportResult[i]["AccountId"],
+                                            AccountCode: accountLedgerReportResult[i]["AccountCode"],
+                                            Account: accountLedgerReportResult[i]["Account"],
+                                            JournalDate: JournalDate,
+                                            DocumentReferenceForCSV: accountLedgerReportResult[i]["DocumentReference"],
+                                            DocumentReference: "<a href='" + docRefLink + "' class='btn btn-primary btn-xs btn-block'> " + accountLedgerReportResult[i]["DocumentReference"] + "</a>",
+                                            Article: accountLedgerReportResult[i]["Article"],
+                                            Particulars: accountLedgerReportResult[i]["Particulars"],
+                                            DebitAmount: accountLedgerReportResult[i]["DebitAmount"],
+                                            DebitAmountDisplay: parseFloat(accountLedgerReportResult[i]["DebitAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            CreditAmount: accountLedgerReportResult[i]["CreditAmount"],
+                                            CreditAmountDisplay: parseFloat(accountLedgerReportResult[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            Balance: accountLedgerReportResult[i]["DebitAmount"] - accountLedgerReportResult[i]["CreditAmount"],
+                                            BalanceDisplay: parseFloat(accountLedgerReportResult[i]["DebitAmount"] - accountLedgerReportResult[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                            ORId: accountLedgerReportResult[i]["ORId"],
+                                            CVId: accountLedgerReportResult[i]["CVId"],
+                                            JVId: accountLedgerReportResult[i]["JVId"],
+                                            RRId: accountLedgerReportResult[i]["RRId"],
+                                            SIId: accountLedgerReportResult[i]["SIId"],
+                                            INId: accountLedgerReportResult[i]["INId"],
+                                            OTId: accountLedgerReportResult[i]["OTId"],
+                                            STId: accountLedgerReportResult[i]["STId"]
+                                        });
+
+                                        totalDebit += accountLedgerReportResult[i]["DebitAmount"];
+                                        totalCredit += accountLedgerReportResult[i]["CreditAmount"];
+                                        totalBalance += accountLedgerReportResult[i]["DebitAmount"] - accountLedgerReportResult[i]["CreditAmount"];
+                                    }
+                                }
+
+                                document.getElementById("totalDebitAmount").value = parseFloat(totalDebit).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                document.getElementById("totalCreditAmount").value = parseFloat(totalCredit).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                document.getElementById("totalBalanceAmount").value = parseFloat(totalBalance).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                NProgress.done();
+                            }
+                        });
+                    } else {
+                        document.getElementById("totalDebitAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById("totalCreditAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        document.getElementById("totalBalanceAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                } else {
+                    document.getElementById("totalDebitAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCreditAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalBalanceAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    NProgress.done();
+                }
+            } else {
+                document.getElementById("totalDebitAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalCreditAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalBalanceAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                NProgress.done();
+            }
+
+            return accountLedgerReports;
         }
 
-        $(document).ready(function () {
-            var accountLedgers = new wijmo.collections.CollectionView(getAccountLedger());
-            accountLedgers.canFilter = true;
+        // =================
+        // Refresh Flex Grid
+        // =================
+        function refreshAccountLedgerReportFlexGrid() {
+            accountLedgerReportCollections = new wijmo.collections.CollectionView(getAccountLedgerReport());
+            accountLedgerReportCollections.canFilter = true;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
-                accountLedgers.refresh();
+                accountLedgerReportCollections.refresh();
+
+                if (accountLedgerReportCollections.items.length > 0) {
+                    var totalDebit = 0;
+                    var totalCredit = 0;
+                    var totalBalance = 0;
+
+                    for (var i = 0; i < accountLedgerReportCollections.items.length; i++) {
+                        totalDebit += accountLedgerReportCollections.items[i].DebitAmount;
+                        totalCredit += accountLedgerReportCollections.items[i].CreditAmount;
+                        totalBalance += accountLedgerReportCollections.items[i].Balance;
+                    }
+
+                    document.getElementById("totalDebitAmount").value = parseFloat(totalDebit).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCreditAmount").value = parseFloat(totalCredit).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalBalanceAmount").value = parseFloat(totalBalance).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalDebitAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCreditAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalBalanceAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
             });
-            accountLedgers.filter = function (item) {
+
+            accountLedgerReportCollections.filter = function (item) {
                 return !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1)
                     || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1)
-
+                    || !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
             }
-            // Flex Grid
-            accountLedgerGrid = new wijmo.grid.FlexGrid('#accountLedgerGrid');
-            accountLedgerGrid.initialize({
+
+            accountLedgerReportGrid.itemsSource = accountLedgerReportCollections;
+            accountLedgerReportGrid.trackChanges = true;
+        }
+
+        // =========
+        // Flex Grid
+        // =========
+        function createAccountLedgerReportFlexGrid() {
+            accountLedgerReportCollections = new wijmo.collections.CollectionView(getAccountLedgerReport());
+            accountLedgerReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                accountLedgerReportCollections.refresh();
+
+                if (accountLedgerReportCollections.items.length > 0) {
+                    var totalDebit = 0;
+                    var totalCredit = 0;
+                    var totalBalance = 0;
+
+                    for (var i = 0; i < accountLedgerReportCollections.items.length; i++) {
+                        totalDebit += accountLedgerReportCollections.items[i].DebitAmount;
+                        totalCredit += accountLedgerReportCollections.items[i].CreditAmount;
+                        totalBalance += accountLedgerReportCollections.items[i].Balance;
+                    }
+
+                    document.getElementById("totalDebitAmount").value = parseFloat(totalDebit).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCreditAmount").value = parseFloat(totalCredit).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalBalanceAmount").value = parseFloat(totalBalance).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalDebitAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCreditAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalBalanceAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            accountLedgerReportCollections.filter = function (item) {
+                return !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            accountLedgerReportGrid = new wijmo.grid.FlexGrid('#accountLedgerReportGrid');
+            accountLedgerReportGrid.initialize({
                 columns: [
                     {
                         "header": "Date",
                         "binding": "JournalDate",
                         "allowSorting": true,
-                        "width": 100
+                        "width": "1*"
                     },
                     {
                         "header": "Document Reference ",
                         "binding": "DocumentReference",
-                        "width": 200,
+                        "width": "1.5*",
                         "allowResizing": false,
                         "allowSorting": false,
                         "isContentHtml": true
@@ -265,57 +574,154 @@
                         "header": "Article",
                         "binding": "Article",
                         "allowSorting": true,
-                        "width": 300
+                        "width": "1.5*",
                     },
                     {
                         "header": "Particulars",
                         "binding": "Particulars",
                         "allowSorting": true,
-                        "width": 300
+                        "width": "1.5*",
                     },
                     {
                         "header": "Debit",
-                        "binding": "DebitAmount",
+                        "binding": "DebitAmountDisplay",
+                        "align": "right",
                         "allowSorting": true,
-                        "width": 150
+                        "width": "1*"
                     },
                     {
                         "header": "Credit",
-                        "binding": "CreditAmount",
+                        "binding": "CreditAmountDisplay",
+                        "align": "right",
                         "allowSorting": true,
-                        "width": 150
+                        "width": "1*"
                     },
                     {
                         "header": "Balance",
-                        "binding": "Balance",
+                        "binding": "BalanceDisplay",
+                        "align": "right",
                         "allowSorting": true,
-                        "width": 150
+                        "width": "1*"
                     }
                 ],
                 autoGenerateColumns: false,
-                itemsSource: accountLedgers,
+                itemsSource: accountLedgerReportCollections,
                 isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
 
-            accountLedgerGrid.trackChanges = true;
-        });
-    </script>
-    <script type="text/javascript">
-        var slideLeft = new Menu({
-            wrapper: '#o-wrapper',
-            type: 'slide-left',
-            menuOpenerClass: '.c-button',
-            maskId: '#c-mask'
-        });
+            accountLedgerReportGrid.trackChanges = true;
+        }
 
-        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+        // ============
+        // Download CSV
+        // ============
+        function btnAccountLedgerReportCSVOnclick() {
+            var CSV = '';
+            var accountLedgerReport = [];
+            var fileName = 'AccountLedgerReport.CSV';
 
-        slideLeftBtn.addEventListener('click', function (e) {
-            e.preventDefault;
-            slideLeft.open();
+            for (i = 0; i < accountLedgerReportCollections.items.length; i++) {
+                var IsClose = accountLedgerReportCollections.items[i].IsClose;
+                var isPOClose = "Not Closed";
+                if (IsClose) {
+                    isPOClose = "Closed"
+                }
+
+                accountLedgerReport.push({
+                    JournalDate: accountLedgerReportCollections.items[i].JournalDate,
+                    DocumentReference: accountLedgerReportCollections.items[i].DocumentReferenceForCSV,
+                    Article: accountLedgerReportCollections.items[i].Article,
+                    Particulars: accountLedgerReportCollections.items[i].Particulars,
+                    DebitAmount: accountLedgerReportCollections.items[i].DebitAmount,
+                    CreditAmount: accountLedgerReportCollections.items[i].CreditAmount,
+                    Balance: accountLedgerReportCollections.items[i].Balance
+                });
+            }
+
+            var Headers = [];
+            Headers.push({
+                JournalDate: "Journal Date",
+                DocumentReference: "Document Reference",
+                Article: "Article",
+                Particulars: "Particulars",
+                DebitAmount: "Debit Amount",
+                CreditAmount: "Credit Amount",
+                Balance: "Balance"
+            });
+
+            var header = '';
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+            CSV = header + '\r\n';
+            for (var i = 0; i < accountLedgerReport.length; i++) {
+                var row = '';
+                for (var a in accountLedgerReport[i]) {
+                    row += '"' + accountLedgerReport[i][a] + '",';
+                }
+
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }
+        }
+
+        // =====================
+        // Preview and Print PDF
+        // =====================
+        function btnAccountLedgerReportPrintPDFOnclick() {
+            if (cboARAccountLedgerReportCompany.selectedValue != null) {
+                if (cboARAccountLedgerReportBranch.selectedValue != null) {
+                    var startDate = cboARAccountLedgerReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboARAccountLedgerReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboARAccountLedgerReportCompany.selectedValue;
+                    var branchId = cboARAccountLedgerReportBranch.selectedValue;
+
+                    window.location.href = '/RepAccountLedger/AccountLedger?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
+        }
+
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            accountLedgerReportDateFilters();
         });
     </script>
     <script type="text/javascript">
@@ -403,6 +809,21 @@
                 }
             });
         }
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
+        });
     </script>
 </body>
 </html>

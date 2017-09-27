@@ -1604,7 +1604,7 @@
                     var companyId = cboTrialBalanceCompany.selectedValue;
                     var branchId = cboTrialBalanceBranch.selectedValue;
 
-                    window.location.href = '/Software/TrialBalance?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/Software/TrialBalance?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1624,7 +1624,7 @@
                     var companyId = cboTrialBalanceCompany.selectedValue;
                     var branchId = cboTrialBalanceBranch.selectedValue;
 
-                    window.location.href = '/RepTrialBalance/TrialBalance?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/RepTrialBalance/TrialBalance?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1646,7 +1646,7 @@
                         var branchId = cboAccountLedgerBranch.selectedValue;
                         var accountId = cboAccountLedgerAccount.selectedValue;
 
-                        window.location.href = '/Software/AccountLedger?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&AccountId=' + accountId;
+                        window.location.href = '/Software/AccountLedger?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId + '&AccountId=' + accountId;
                     } else {
                         toastr.error("Lacking Information");
                     }
@@ -1671,7 +1671,7 @@
                         var branchId = cboAccountLedgerBranch.selectedValue;
                         var accountId = cboAccountLedgerAccount.selectedValue;
 
-                        window.location.href = '/RepAccountLedger/AccountLedger?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&AccountId=' + accountId;
+                        window.location.href = '/RepAccountLedger/AccountLedger?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + '&BranchId=' + branchId + companyId + '&AccountId=' + accountId;
                     } else {
                         toastr.error("Lacking Information");
                     }
@@ -1694,7 +1694,7 @@
                     var companyId = cboReceivingReceiptBookCompany.selectedValue;
                     var branchId = cboReceivingReceiptBookBranch.selectedValue;
 
-                    window.location.href = '/Software/ReceivingReceiptBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/Software/ReceivingReceiptBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1714,7 +1714,7 @@
                     var companyId = cboReceivingReceiptBookCompany.selectedValue;
                     var branchId = cboReceivingReceiptBookBranch.selectedValue;
 
-                    window.location.href = '/RepReceivingReceiptBook/ReceivingReceiptBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/RepReceivingReceiptBook/ReceivingReceiptBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1734,7 +1734,7 @@
                     var companyId = cboDisbursementBookCompany.selectedValue;
                     var branchId = cboDisbursementBookBranch.selectedValue;
 
-                    window.location.href = '/Software/DisbursementBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/Software/DisbursementBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1754,7 +1754,7 @@
                     var companyId = cboDisbursementBookCompany.selectedValue;
                     var branchId = cboDisbursementBookBranch.selectedValue;
 
-                    window.location.href = '/RepDisbursementBook/DisbursementBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/RepDisbursementBook/DisbursementBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1774,7 +1774,7 @@
                     var companyId = cboSalesBookCompany.selectedValue;
                     var branchId = cboSalesBookBranch.selectedValue;
 
-                    window.location.href = '/Software/SalesBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/Software/SalesBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1794,7 +1794,7 @@
                     var companyId = cboSalesBookCompany.selectedValue;
                     var branchId = cboSalesBookBranch.selectedValue;
 
-                    window.location.href = '/RepSalesBook/SalesBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/RepSalesBook/SalesBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1814,7 +1814,7 @@
                     var companyId = cboCollectionBookCompany.selectedValue;
                     var branchId = cboCollectionBookBranch.selectedValue;
 
-                    window.location.href = '/Software/CollectionBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/Software/CollectionBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1834,7 +1834,7 @@
                     var companyId = cboCollectionBookCompany.selectedValue;
                     var branchId = cboCollectionBookBranch.selectedValue;
 
-                    window.location.href = '/RepCollectionBook/CollectionBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/RepCollectionBook/CollectionBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1854,7 +1854,7 @@
                     var companyId = cboStockInBookCompany.selectedValue;
                     var branchId = cboStockInBookBranch.selectedValue;
 
-                    window.location.href = '/Software/StockInBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/Software/StockInBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1874,7 +1874,7 @@
                     var companyId = cboStockInBookCompany.selectedValue;
                     var branchId = cboStockInBookBranch.selectedValue;
 
-                    window.location.href = '/RepStockInBook/StockInBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/RepStockInBook/StockInBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1894,7 +1894,7 @@
                     var companyId = cboStockOutBookCompany.selectedValue;
                     var branchId = cboStockOutBookBranch.selectedValue;
 
-                    window.location.href = '/Software/StockOutBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/Software/StockOutBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1914,7 +1914,7 @@
                     var companyId = cboStockOutBookCompany.selectedValue;
                     var branchId = cboStockOutBookBranch.selectedValue;
 
-                    window.location.href = '/RepStockOutBook/StockOutBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/RepStockOutBook/StockOutBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1934,7 +1934,7 @@
                     var companyId = cboStockTransferBookCompany.selectedValue;
                     var branchId = cboStockTransferBookBranch.selectedValue;
 
-                    window.location.href = '/Software/StockTransferBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/Software/StockTransferBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1954,7 +1954,7 @@
                     var companyId = cboStockTransferBookCompany.selectedValue;
                     var branchId = cboStockTransferBookBranch.selectedValue;
 
-                    window.location.href = '/RepStockTransferBook/StockTransferBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/RepStockTransferBook/StockTransferBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1974,7 +1974,7 @@
                     var companyId = cboJournalVoucherBookCompany.selectedValue;
                     var branchId = cboJournalVoucherBookBranch.selectedValue;
 
-                    window.location.href = '/Software/JournalVoucherBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/Software/JournalVoucherBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }
@@ -1994,7 +1994,7 @@
                     var companyId = cboJournalVoucherBookCompany.selectedValue;
                     var branchId = cboJournalVoucherBookBranch.selectedValue;
 
-                    window.location.href = '/RepJournalVoucherBook/JournalVoucherBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                    window.location.href = '/RepJournalVoucherBook/JournalVoucherBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
                 } else {
                     toastr.error("Lacking Information");
                 }

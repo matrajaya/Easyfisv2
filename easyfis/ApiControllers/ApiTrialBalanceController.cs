@@ -9,13 +9,18 @@ namespace easyfis.ApiControllers
 {
     public class ApiTrialBalanceController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // trial balance list
+        // =========================
+        // Trial Balance Report List
+        // =========================
         [Authorize]
         [HttpGet]
-        [Route("api/trialBalance/list/{StartDate}/{EndDate}/{CompanyId}")]
-        public List<Models.TrnJournal> listTrialBalance(String StartDate, String EndDate, String CompanyId)
+        [Route("api/trialBalance/list/{StartDate}/{EndDate}/{CompanyId}/{BranchId}")]
+        public List<Models.TrnJournal> ListTrialBalance(String StartDate, String EndDate, String CompanyId, String BranchId)
         {
             try
             {
@@ -23,6 +28,7 @@ namespace easyfis.ApiControllers
                                where d.JournalDate >= Convert.ToDateTime(StartDate)
                                && d.JournalDate <= Convert.ToDateTime(EndDate)
                                && d.MstBranch.CompanyId == Convert.ToInt32(CompanyId)
+                               && d.BranchId == Convert.ToInt32(BranchId)
                                group d by new
                                {
                                    AccountId = d.MstAccount.Id,
@@ -44,6 +50,6 @@ namespace easyfis.ApiControllers
             {
                 return null;
             }
-        } 
+        }
     }
 }

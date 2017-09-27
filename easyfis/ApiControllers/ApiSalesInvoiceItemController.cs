@@ -303,7 +303,86 @@ namespace easyfis.Controllers
                     }
                     else
                     {
-                        return Request.CreateResponse(HttpStatusCode.NotFound);
+                        Data.TrnSalesInvoiceItem newSaleInvoiceItem = new Data.TrnSalesInvoiceItem();
+
+                        newSaleInvoiceItem.SIId = saleItem.SIId;
+                        newSaleInvoiceItem.ItemId = saleItem.ItemId;
+                        newSaleInvoiceItem.ItemInventoryId = saleItem.ItemInventoryId;
+                        newSaleInvoiceItem.Particulars = saleItem.Particulars;
+                        newSaleInvoiceItem.UnitId = saleItem.UnitId;
+                        newSaleInvoiceItem.Quantity = saleItem.Quantity;
+                        newSaleInvoiceItem.Price = saleItem.Price;
+                        newSaleInvoiceItem.DiscountId = saleItem.DiscountId;
+                        newSaleInvoiceItem.DiscountRate = saleItem.DiscountRate;
+                        newSaleInvoiceItem.DiscountAmount = saleItem.DiscountAmount;
+                        newSaleInvoiceItem.NetPrice = saleItem.NetPrice;
+                        newSaleInvoiceItem.Amount = saleItem.Amount;
+                        newSaleInvoiceItem.VATId = saleItem.VATId;
+                        newSaleInvoiceItem.VATPercentage = saleItem.VATPercentage;
+                        newSaleInvoiceItem.VATAmount = saleItem.VATAmount;
+
+                        var item = from d in db.MstArticles
+                                   where d.Id == saleItem.ItemId
+                                   select d;
+
+                        newSaleInvoiceItem.BaseUnitId = item.FirstOrDefault().UnitId;
+
+                        var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == saleItem.ItemId && d.UnitId == saleItem.UnitId select d;
+
+                        if (conversionUnit.Any())
+                        {
+                            if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                            {
+                                newSaleInvoiceItem.BaseQuantity = saleItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                            }
+                            else
+                            {
+                                newSaleInvoiceItem.BaseQuantity = saleItem.Quantity * 1;
+                            }
+                        }
+                        else
+                        {
+                            newSaleInvoiceItem.BaseQuantity = saleItem.Quantity * 1;
+                        }
+
+                        if (conversionUnit.Any())
+                        {
+                            var baseQuantity = saleItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                            if (baseQuantity > 0)
+                            {
+                                newSaleInvoiceItem.BasePrice = saleItem.Amount / baseQuantity;
+                            }
+                            else
+                            {
+                                newSaleInvoiceItem.BasePrice = saleItem.Amount;
+                            }
+                        }
+                        else
+                        {
+                            newSaleInvoiceItem.BasePrice = saleItem.Amount;
+                        }
+
+                        newSaleInvoiceItem.SalesItemTimeStamp = DateTime.Now;
+                        db.TrnSalesInvoiceItems.InsertOnSubmit(newSaleInvoiceItem);
+                        db.SubmitChanges();
+
+                        var salesInvoces = from d in db.TrnSalesInvoices where d.Id == saleItem.SIId select d;
+                        if (salesInvoces.Any())
+                        {
+                            var salesInvoiceItems = from d in db.TrnSalesInvoiceItems where d.SIId == saleItem.SIId select d;
+
+                            Decimal amount = 0;
+                            if (salesInvoiceItems.Any())
+                            {
+                                amount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
+                            }
+
+                            var updateSalesInvoice = salesInvoces.FirstOrDefault();
+                            updateSalesInvoice.Amount = amount;
+                            db.SubmitChanges();
+                        }
+
+                        return Request.CreateResponse(HttpStatusCode.OK);
                     }
                 }
                 else
