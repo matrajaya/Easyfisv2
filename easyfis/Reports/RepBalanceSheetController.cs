@@ -11,59 +11,75 @@ namespace easyfis.Reports
 {
     public class RepBalanceSheetController : Controller
     {
-        // Easyfis data context
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // PDF Collection Summary Report
+        // ===================
+        // Balance Sheet - PDF
+        // ===================
         [Authorize]
         public ActionResult BalanceSheet(String DateAsOf, Int32 CompanyId)
         {
+            // ============
             // PDF settings
+            // ============
             MemoryStream workStream = new MemoryStream();
             Rectangle rectangle = new Rectangle(PageSize.A3);
             Document document = new Document(rectangle, 72, 72, 72, 72);
             document.SetMargins(30f, 30f, 30f, 30f);
             PdfWriter.GetInstance(document, workStream).CloseStream = false;
 
-            // Document Starts
             document.Open();
 
+            // ===================
             // Fonts Customization
+            // ===================
             Font fontArial17Bold = FontFactory.GetFont("Arial", 17, Font.BOLD);
             Font fontArial11 = FontFactory.GetFont("Arial", 11);
             Font fontArial10Bold = FontFactory.GetFont("Arial", 10, Font.BOLD);
             Font fontArial10 = FontFactory.GetFont("Arial", 10);
             Font fontArial11Bold = FontFactory.GetFont("Arial", 11, Font.BOLD);
 
-            // line
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
 
+            // ==============
             // Company Detail
+            // ==============
             var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
             var address = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
             var contactNo = (from d in db.MstCompanies where d.Id == CompanyId select d.ContactNumber).SingleOrDefault();
 
-            // table main header
-            PdfPTable tableHeaderPage = new PdfPTable(2);
-            float[] widthsCellsheaderPage = new float[] { 100f, 75f };
-            tableHeaderPage.SetWidths(widthsCellsheaderPage);
-            tableHeaderPage.WidthPercentage = 100;
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(companyName, fontArial17Bold)) { Border = 0 });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase("Balance Sheet", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(address, fontArial11)) { Border = 0, PaddingTop = 5f });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase("Date as of " + DateAsOf, fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2, });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
-            document.Add(tableHeaderPage);
+            // ======
+            // Header
+            // ======
+            PdfPTable header = new PdfPTable(2);
+            float[] widthsCellsHeader = new float[] { 100f, 75f };
+            header.SetWidths(widthsCellsHeader);
+            header.WidthPercentage = 100;
+            header.AddCell(new PdfPCell(new Phrase(companyName, fontArial17Bold)) { Border = 0 });
+            header.AddCell(new PdfPCell(new Phrase("Balance Sheet", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
+            header.AddCell(new PdfPCell(new Phrase(address, fontArial11)) { Border = 0, PaddingTop = 5f });
+            header.AddCell(new PdfPCell(new Phrase("Date as of " + DateAsOf, fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2, });
+            header.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
+            header.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
+            document.Add(header);
             document.Add(line);
 
-            // Assets
+            Decimal totalOverallAssets = 0;
+            Decimal totalOverallLiabilities = 0;
+            Decimal totalOverallEquities = 0;
+
+            // ==========
+            // Get Assets
+            // ==========
             var assets = from d in db.TrnJournals
                          where d.JournalDate <= Convert.ToDateTime(DateAsOf) &&
                          d.MstAccount.MstAccountType.MstAccountCategory.Id == 1 &&
                          d.MstBranch.CompanyId == CompanyId
                          group d by d.MstAccount into g
-                         select new Models.TrnJournal
+                         select new
                          {
                              DocumentReference = "1 - Asset",
                              AccountCategoryCode = g.Key.MstAccountType.MstAccountCategory.AccountCategoryCode,
@@ -78,137 +94,143 @@ namespace easyfis.Reports
                              Balance = g.Sum(d => d.DebitAmount - d.CreditAmount)
                          };
 
-            Decimal totalOverAllAssets = 0;
             if (assets.Any())
             {
-                String subCategoryDescription = "";
-                Boolean subCategoryDescriptionSame = false;
-                foreach (var assetSubCategoryDescription in assets)
+                // ==============================
+                // Asset Sub Category Description
+                // ==============================
+                var assetSubCategoryDescriptions = from d in assets
+                                                   group d by new
+                                                   {
+                                                       SubCategoryDescription = d.SubCategoryDescription
+                                                   } into g
+                                                   select new
+                                                   {
+                                                       SubCategoryDescription = g.Key.SubCategoryDescription,
+                                                       Balance = g.Sum(d => d.DebitAmount - d.CreditAmount)
+                                                   };
+
+                if (assetSubCategoryDescriptions.Any())
                 {
-                    if (subCategoryDescriptionSame == false)
+                    Decimal totalAllAssets = 0;
+                    foreach (var assetSubCategoryDescription in assetSubCategoryDescriptions)
                     {
-                        if (subCategoryDescription.Equals(assetSubCategoryDescription.SubCategoryDescription) == false)
+                        document.Add(line);
+                        PdfPTable assetSubCategoryDescriptionTable = new PdfPTable(1);
+                        float[] widthCellsAssetSubCategoryDescriptionTable = new float[] { 100f };
+                        assetSubCategoryDescriptionTable.SetWidths(widthCellsAssetSubCategoryDescriptionTable);
+                        assetSubCategoryDescriptionTable.WidthPercentage = 100;
+                        assetSubCategoryDescriptionTable.AddCell(new PdfPCell(new Phrase(assetSubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                        document.Add(assetSubCategoryDescriptionTable);
+
+                        // ===================
+                        // Asset Account Types
+                        // ===================
+                        var assetAccountTypes = from d in assets
+                                                where d.SubCategoryDescription.Equals(assetSubCategoryDescription.SubCategoryDescription)
+                                                group d by new
+                                                {
+                                                    AccountType = d.AccountType
+                                                } into g
+                                                select new
+                                                {
+                                                    AccountType = g.Key.AccountType,
+                                                    Balance = g.Sum(d => d.DebitAmount - d.CreditAmount)
+                                                };
+
+                        if (assetAccountTypes.Any())
                         {
-                            Decimal totalAllAssets = 0;
-                            subCategoryDescription = assetSubCategoryDescription.SubCategoryDescription;
-                            PdfPTable tableSubCategoryDescriptionAsset = new PdfPTable(1);
-                            float[] widthSubCategoryDescriptionAssetCells = new float[] { 100f };
-                            tableSubCategoryDescriptionAsset.SetWidths(widthSubCategoryDescriptionAssetCells);
-                            tableSubCategoryDescriptionAsset.WidthPercentage = 100;
-                            document.Add(line);
-                            tableSubCategoryDescriptionAsset.AddCell(new PdfPCell(new Phrase(assetSubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                            document.Add(tableSubCategoryDescriptionAsset);
-
-                            String accountType = "";
-                            Boolean accountTypeSame = false;
-                            foreach (var assetAccountTypes in assets)
+                            Decimal totalCurrentAssets = 0;
+                            foreach (var assetAccountType in assetAccountTypes)
                             {
-                                if (accountTypeSame == false)
-                                {
-                                    if (accountType.Equals(assetAccountTypes.AccountType) == false)
-                                    {
-                                        accountType = assetAccountTypes.AccountType;
-                                        if (assetAccountTypes.SubCategoryDescription.Equals(subCategoryDescription) == true)
-                                        {
-                                            Decimal accountTypeTotalBalance = 0;
-                                            foreach (var accountTypeBalance in assets)
-                                            {
-                                                if (accountTypeBalance.AccountType.Equals(accountType) == true)
-                                                {
-                                                    accountTypeTotalBalance = accountTypeTotalBalance + accountTypeBalance.Balance;
-                                                }
-                                            }
+                                totalCurrentAssets += assetAccountType.Balance;
 
-                                            PdfPTable tableAccountTypes = new PdfPTable(3);
-                                            float[] widthCellsAccountTypes = new float[] { 50f, 100f, 50f };
-                                            tableAccountTypes.SetWidths(widthCellsAccountTypes);
-                                            tableAccountTypes.WidthPercentage = 100;
-                                            tableAccountTypes.AddCell(new PdfPCell(new Phrase(assetAccountTypes.AccountType, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
-                                            tableAccountTypes.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
-                                            tableAccountTypes.AddCell(new PdfPCell(new Phrase(accountTypeTotalBalance.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
-                                            document.Add(tableAccountTypes);
+                                PdfPTable assetAccountTypeTable = new PdfPTable(3);
+                                float[] widthCellsAssetAccountTypeTable = new float[] { 50f, 100f, 50f };
+                                assetAccountTypeTable.SetWidths(widthCellsAssetAccountTypeTable);
+                                assetAccountTypeTable.WidthPercentage = 100;
+                                assetAccountTypeTable.AddCell(new PdfPCell(new Phrase(assetAccountType.AccountType, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                                assetAccountTypeTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                                assetAccountTypeTable.AddCell(new PdfPCell(new Phrase(assetAccountType.Balance.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+                                document.Add(assetAccountTypeTable);
 
-                                            String account = "";
-                                            Boolean accountSame = false;
-                                            foreach (var assetAccounts in assets)
-                                            {
-                                                if (accountSame == false)
-                                                {
-                                                    if (account.Equals(assetAccounts.Account) == false)
+                                // ==============
+                                // Asset Accounts
+                                // ==============
+                                var assetAccounts = from d in assets
+                                                    where d.AccountType.Equals(assetAccountType.AccountType)
+                                                    group d by new
                                                     {
-                                                        account = assetAccounts.Account;
-                                                        if (assetAccounts.AccountType.Equals(accountType) == true)
-                                                        {
-                                                            PdfPTable tableAccounts = new PdfPTable(3);
-                                                            float[] widthCellsAccounts = new float[] { 50f, 100f, 50f };
-                                                            tableAccounts.SetWidths(widthCellsAccounts);
-                                                            tableAccounts.WidthPercentage = 100;
-                                                            tableAccounts.AddCell(new PdfPCell(new Phrase(assetAccounts.AccountCode, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-                                                            tableAccounts.AddCell(new PdfPCell(new Phrase(assetAccounts.Account, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
-                                                            tableAccounts.AddCell(new PdfPCell(new Phrase(assetAccounts.Balance.ToString("#,##0.00"), fontArial10)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                                                            document.Add(tableAccounts);
+                                                        AccountCode = d.AccountCode,
+                                                        Account = d.Account
+                                                    } into g
+                                                    select new
+                                                    {
+                                                        AccountCode = g.Key.AccountCode,
+                                                        Account = g.Key.Account,
+                                                        DebitAmount = g.Sum(d => d.DebitAmount),
+                                                        CreditAmount = g.Sum(d => d.CreditAmount),
+                                                        Balance = g.Sum(d => d.DebitAmount - d.CreditAmount)
+                                                    };
 
-                                                            totalAllAssets = totalAllAssets + assetAccounts.Balance;
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    accountSame = false;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        accountTypeSame = false;
-                                    }
-                                }
-                                else
+                                if (assetAccounts.Any())
                                 {
-                                    accountTypeSame = false;
+                                    foreach (var assetAccount in assetAccounts)
+                                    {
+                                        totalAllAssets += assetAccount.Balance;
+
+                                        PdfPTable assetAccountTable = new PdfPTable(3);
+                                        float[] widthCellsAssetAccountTable = new float[] { 50f, 100f, 50f };
+                                        assetAccountTable.SetWidths(widthCellsAssetAccountTable);
+                                        assetAccountTable.WidthPercentage = 100;
+                                        assetAccountTable.AddCell(new PdfPCell(new Phrase(assetAccount.AccountCode, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                                        assetAccountTable.AddCell(new PdfPCell(new Phrase(assetAccount.Account, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
+                                        assetAccountTable.AddCell(new PdfPCell(new Phrase(assetAccount.Balance.ToString("#,##0.00"), fontArial10)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                                        document.Add(assetAccountTable);
+                                    }
                                 }
                             }
 
+                            // ====================
+                            // Total Current Assets
+                            // ====================
                             document.Add(line);
-                            PdfPTable tableTotalAllAssets = new PdfPTable(5);
-                            float[] widthTotalTotalAllAssetsCells = new float[] { 50f, 70f, 100f, 100f, 60f };
-                            tableTotalAllAssets.SetWidths(widthTotalTotalAllAssetsCells);
-                            tableTotalAllAssets.WidthPercentage = 100;
-                            tableTotalAllAssets.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            tableTotalAllAssets.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            tableTotalAllAssets.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            tableTotalAllAssets.AddCell(new PdfPCell(new Phrase("Total " + assetSubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            tableTotalAllAssets.AddCell(new PdfPCell(new Phrase(totalAllAssets.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            document.Add(tableTotalAllAssets);
+                            PdfPTable totalCurrentAssetsTable = new PdfPTable(5);
+                            float[] widthCellsTotalCurrentAssetsTable = new float[] { 50f, 70f, 100f, 100f, 60f };
+                            totalCurrentAssetsTable.SetWidths(widthCellsTotalCurrentAssetsTable);
+                            totalCurrentAssetsTable.WidthPercentage = 100;
+                            totalCurrentAssetsTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            totalCurrentAssetsTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            totalCurrentAssetsTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            totalCurrentAssetsTable.AddCell(new PdfPCell(new Phrase("Total " + assetSubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            totalCurrentAssetsTable.AddCell(new PdfPCell(new Phrase(totalCurrentAssets.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            document.Add(totalCurrentAssetsTable);
+                        }
+                    }
 
-                            totalOverAllAssets = totalOverAllAssets + totalAllAssets;
-                        }
-                        else
-                        {
-                            subCategoryDescriptionSame = false;
-                        }
-                    }
-                    else
-                    {
-                        subCategoryDescriptionSame = false;
-                    }
+                    // ================
+                    // Total All Assets
+                    // ================
+                    document.Add(line);
+                    PdfPTable totalAllAssetsTable = new PdfPTable(5);
+                    float[] widthCellsTotalAllAssetsTable = new float[] { 50f, 70f, 100f, 100f, 60f };
+                    totalAllAssetsTable.SetWidths(widthCellsTotalAllAssetsTable);
+                    totalAllAssetsTable.WidthPercentage = 100;
+                    totalAllAssetsTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    totalAllAssetsTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    totalAllAssetsTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    totalAllAssetsTable.AddCell(new PdfPCell(new Phrase("Total Asset", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    totalAllAssetsTable.AddCell(new PdfPCell(new Phrase(totalAllAssets.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    document.Add(totalAllAssetsTable);
+
+                    totalOverallAssets += totalAllAssets;
+                    document.Add(Chunk.NEWLINE);
                 }
-
-                document.Add(line);
-                PdfPTable tableTotalOverAllAssets = new PdfPTable(5);
-                float[] widthTotalTotalOverAllAssetsCells = new float[] { 50f, 70f, 100f, 100f, 60f };
-                tableTotalOverAllAssets.SetWidths(widthTotalTotalOverAllAssetsCells);
-                tableTotalOverAllAssets.WidthPercentage = 100;
-                tableTotalOverAllAssets.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableTotalOverAllAssets.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableTotalOverAllAssets.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableTotalOverAllAssets.AddCell(new PdfPCell(new Phrase("Total Asset", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableTotalOverAllAssets.AddCell(new PdfPCell(new Phrase(totalOverAllAssets.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                document.Add(tableTotalOverAllAssets);
             }
 
-            // Liabilities
+            // ===============
+            // Get Liabilities
+            // ===============
             var liabilities = from d in db.TrnJournals
                               where d.JournalDate <= Convert.ToDateTime(DateAsOf) &&
                               d.MstAccount.MstAccountType.MstAccountCategory.Id == 2 &&
@@ -229,139 +251,143 @@ namespace easyfis.Reports
                                   Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
                               };
 
-            document.Add(Chunk.NEWLINE);
-
-            Decimal totalOverAllLiabilities = 0;
             if (liabilities.Any())
             {
-                String subCategoryDescription = "";
-                Boolean subCategoryDescriptionSame = false;
-                foreach (var liabilitySubCategoryDescription in liabilities)
+                // ==================================
+                // Liability Sub Category Description
+                // ==================================
+                var liabilitySubCategoryDescriptions = from d in liabilities
+                                                       group d by new
+                                                       {
+                                                           SubCategoryDescription = d.SubCategoryDescription
+                                                       } into g
+                                                       select new
+                                                       {
+                                                           SubCategoryDescription = g.Key.SubCategoryDescription,
+                                                           Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
+                                                       };
+
+                if (liabilitySubCategoryDescriptions.Any())
                 {
-                    if (subCategoryDescriptionSame == false)
+                    Decimal totalAllLiabilities = 0;
+                    foreach (var liabilitySubCategoryDescription in liabilitySubCategoryDescriptions)
                     {
-                        if (subCategoryDescription.Equals(liabilitySubCategoryDescription.SubCategoryDescription) == false)
-                        {
-                            Decimal totalAllLiabilities = 0;
-                            subCategoryDescription = liabilitySubCategoryDescription.SubCategoryDescription;
-                            PdfPTable tableSubCategoryDescriptionLiability = new PdfPTable(1);
-                            float[] widthSubCategoryDescriptionLiabilityCells = new float[] { 100f };
-                            tableSubCategoryDescriptionLiability.SetWidths(widthSubCategoryDescriptionLiabilityCells);
-                            tableSubCategoryDescriptionLiability.WidthPercentage = 100;
-                            document.Add(line);
-                            tableSubCategoryDescriptionLiability.AddCell(new PdfPCell(new Phrase(liabilitySubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                            document.Add(tableSubCategoryDescriptionLiability);
+                        document.Add(line);
+                        PdfPTable liabilitySubCategoryDescriptionTable = new PdfPTable(1);
+                        float[] widthCellsLiabilitySubCategoryDescriptionTable = new float[] { 100f };
+                        liabilitySubCategoryDescriptionTable.SetWidths(widthCellsLiabilitySubCategoryDescriptionTable);
+                        liabilitySubCategoryDescriptionTable.WidthPercentage = 100;
+                        liabilitySubCategoryDescriptionTable.AddCell(new PdfPCell(new Phrase(liabilitySubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                        document.Add(liabilitySubCategoryDescriptionTable);
 
-                            String accountType = "";
-                            Boolean accountTypeSame = false;
-                            foreach (var liabilityAccountTypes in liabilities)
-                            {
-                                if (accountTypeSame == false)
-                                {
-                                    if (accountType.Equals(liabilityAccountTypes.AccountType) == false)
-                                    {
-                                        accountType = liabilityAccountTypes.AccountType;
-                                        if (liabilityAccountTypes.SubCategoryDescription.Equals(subCategoryDescription) == true)
-                                        {
-                                            Decimal accountTypeTotalBalance = 0;
-                                            foreach (var accountTypeBalance in liabilities)
-                                            {
-                                                if (accountTypeBalance.AccountType.Equals(accountType) == true)
-                                                {
-                                                    accountTypeTotalBalance = accountTypeTotalBalance + accountTypeBalance.Balance;
-                                                }
-                                            }
-
-                                            PdfPTable tableAccountTypes = new PdfPTable(3);
-                                            float[] widthCellsAccountTypes = new float[] { 50f, 100f, 50f };
-                                            tableAccountTypes.SetWidths(widthCellsAccountTypes);
-                                            tableAccountTypes.WidthPercentage = 100;
-                                            tableAccountTypes.AddCell(new PdfPCell(new Phrase(liabilityAccountTypes.AccountType, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
-                                            tableAccountTypes.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
-                                            tableAccountTypes.AddCell(new PdfPCell(new Phrase(accountTypeTotalBalance.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
-                                            document.Add(tableAccountTypes);
-
-                                            String account = "";
-                                            Boolean accountSame = false;
-                                            foreach (var liabilityAccounts in liabilities)
-                                            {
-                                                if (accountSame == false)
-                                                {
-                                                    if (account.Equals(liabilityAccounts.Account) == false)
+                        // =======================
+                        // Liability Account Types
+                        // =======================
+                        var liabilityAccountTypes = from d in liabilities
+                                                    where d.SubCategoryDescription.Equals(liabilitySubCategoryDescription.SubCategoryDescription)
+                                                    group d by new
                                                     {
-                                                        account = liabilityAccounts.Account;
-                                                        if (liabilityAccounts.AccountType.Equals(accountType) == true)
-                                                        {
-                                                            PdfPTable tableAccounts = new PdfPTable(3);
-                                                            float[] widthCellsAccounts = new float[] { 50f, 100f, 50f };
-                                                            tableAccounts.SetWidths(widthCellsAccounts);
-                                                            tableAccounts.WidthPercentage = 100;
-                                                            tableAccounts.AddCell(new PdfPCell(new Phrase(liabilityAccounts.AccountCode, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-                                                            tableAccounts.AddCell(new PdfPCell(new Phrase(liabilityAccounts.Account, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
-                                                            tableAccounts.AddCell(new PdfPCell(new Phrase(liabilityAccounts.Balance.ToString("#,##0.00"), fontArial10)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                                                            document.Add(tableAccounts);
+                                                        AccountType = d.AccountType
+                                                    } into g
+                                                    select new
+                                                    {
+                                                        AccountType = g.Key.AccountType,
+                                                        Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
+                                                    };
 
-                                                            totalAllLiabilities = totalAllLiabilities + liabilityAccounts.Balance;
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    accountSame = false;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        accountTypeSame = false;
-                                    }
-                                }
-                                else
+                        if (liabilityAccountTypes.Any())
+                        {
+                            Decimal totalCurrentLiabilities = 0;
+                            foreach (var liabilityAccountType in liabilityAccountTypes)
+                            {
+                                totalCurrentLiabilities += liabilityAccountType.Balance;
+
+                                PdfPTable liabilityAccountTypeTable = new PdfPTable(3);
+                                float[] widthCellsLiabilityAccountTypeTable = new float[] { 50f, 100f, 50f };
+                                liabilityAccountTypeTable.SetWidths(widthCellsLiabilityAccountTypeTable);
+                                liabilityAccountTypeTable.WidthPercentage = 100;
+                                liabilityAccountTypeTable.AddCell(new PdfPCell(new Phrase(liabilityAccountType.AccountType, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                                liabilityAccountTypeTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                                liabilityAccountTypeTable.AddCell(new PdfPCell(new Phrase(liabilityAccountType.Balance.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+                                document.Add(liabilityAccountTypeTable);
+
+                                // ==================
+                                // Liability Accounts
+                                // ==================
+                                var liabilityAccounts = from d in liabilities
+                                                        where d.AccountType.Equals(liabilityAccountType.AccountType)
+                                                        group d by new
+                                                        {
+                                                            AccountCode = d.AccountCode,
+                                                            Account = d.Account
+                                                        } into g
+                                                        select new
+                                                        {
+                                                            AccountCode = g.Key.AccountCode,
+                                                            Account = g.Key.Account,
+                                                            DebitAmount = g.Sum(d => d.DebitAmount),
+                                                            CreditAmount = g.Sum(d => d.CreditAmount),
+                                                            Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
+                                                        };
+
+                                if (liabilityAccounts.Any())
                                 {
-                                    accountTypeSame = false;
+                                    foreach (var liabilityAccount in liabilityAccounts)
+                                    {
+                                        totalAllLiabilities += liabilityAccount.Balance;
+
+                                        PdfPTable liabilityAccountTable = new PdfPTable(3);
+                                        float[] widthCellsLiabilityAccountTable = new float[] { 50f, 100f, 50f };
+                                        liabilityAccountTable.SetWidths(widthCellsLiabilityAccountTable);
+                                        liabilityAccountTable.WidthPercentage = 100;
+                                        liabilityAccountTable.AddCell(new PdfPCell(new Phrase(liabilityAccount.AccountCode, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                                        liabilityAccountTable.AddCell(new PdfPCell(new Phrase(liabilityAccount.Account, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
+                                        liabilityAccountTable.AddCell(new PdfPCell(new Phrase(liabilityAccount.Balance.ToString("#,##0.00"), fontArial10)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                                        document.Add(liabilityAccountTable);
+                                    }
                                 }
                             }
 
+                            // =========================
+                            // Total Current Liabilities
+                            // =========================
                             document.Add(line);
-                            PdfPTable tableTotalAllLiability = new PdfPTable(5);
-                            float[] widthTotalTotalAllLiabilityCells = new float[] { 50f, 70f, 100f, 100f, 60f };
-                            tableTotalAllLiability.SetWidths(widthTotalTotalAllLiabilityCells);
-                            tableTotalAllLiability.WidthPercentage = 100;
-                            tableTotalAllLiability.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            tableTotalAllLiability.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            tableTotalAllLiability.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            tableTotalAllLiability.AddCell(new PdfPCell(new Phrase("Total " + liabilitySubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            tableTotalAllLiability.AddCell(new PdfPCell(new Phrase(totalAllLiabilities.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            document.Add(tableTotalAllLiability);
+                            PdfPTable totalCurrentLiabilitiesTable = new PdfPTable(5);
+                            float[] widthCellsTotalCurrentLiabilitiesTable = new float[] { 50f, 70f, 100f, 100f, 60f };
+                            totalCurrentLiabilitiesTable.SetWidths(widthCellsTotalCurrentLiabilitiesTable);
+                            totalCurrentLiabilitiesTable.WidthPercentage = 100;
+                            totalCurrentLiabilitiesTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            totalCurrentLiabilitiesTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            totalCurrentLiabilitiesTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            totalCurrentLiabilitiesTable.AddCell(new PdfPCell(new Phrase("Total " + liabilitySubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            totalCurrentLiabilitiesTable.AddCell(new PdfPCell(new Phrase(totalCurrentLiabilities.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            document.Add(totalCurrentLiabilitiesTable);
+                        }
+                    }
 
-                            totalOverAllLiabilities = totalOverAllLiabilities + totalAllLiabilities;
-                        }
-                        else
-                        {
-                            subCategoryDescriptionSame = false;
-                        }
-                    }
-                    else
-                    {
-                        subCategoryDescriptionSame = false;
-                    }
+                    // =====================
+                    // Total All Liabilities
+                    // =====================
+                    document.Add(line);
+                    PdfPTable totalAllLiabilitiesTable = new PdfPTable(5);
+                    float[] widthCellsTotalAllLiabilitiesTable = new float[] { 50f, 70f, 100f, 100f, 60f };
+                    totalAllLiabilitiesTable.SetWidths(widthCellsTotalAllLiabilitiesTable);
+                    totalAllLiabilitiesTable.WidthPercentage = 100;
+                    totalAllLiabilitiesTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    totalAllLiabilitiesTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    totalAllLiabilitiesTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    totalAllLiabilitiesTable.AddCell(new PdfPCell(new Phrase("Total Liability", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    totalAllLiabilitiesTable.AddCell(new PdfPCell(new Phrase(totalAllLiabilities.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    document.Add(totalAllLiabilitiesTable);
+
+                    totalOverallLiabilities += totalAllLiabilities;
+                    document.Add(Chunk.NEWLINE);
                 }
-
-                document.Add(line);
-                PdfPTable tableTotalOverAllLiability = new PdfPTable(5);
-                float[] widthTotalTotalOverAllLiabilityCells = new float[] { 50f, 70f, 100f, 100f, 60f };
-                tableTotalOverAllLiability.SetWidths(widthTotalTotalOverAllLiabilityCells);
-                tableTotalOverAllLiability.WidthPercentage = 100;
-                tableTotalOverAllLiability.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableTotalOverAllLiability.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableTotalOverAllLiability.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableTotalOverAllLiability.AddCell(new PdfPCell(new Phrase("Total Liability", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableTotalOverAllLiability.AddCell(new PdfPCell(new Phrase(totalOverAllLiabilities.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                document.Add(tableTotalOverAllLiability);
             }
 
-            // Equities
+            // ===================
+            // Get Profit and Loss
+            // ===================
             var profitAndLoss = from d in db.TrnJournals
                                 where d.JournalDate <= Convert.ToDateTime(DateAsOf)
                                 && d.MstAccount.MstAccountType.MstAccountCategory.Id == 5 || d.MstAccount.MstAccountType.MstAccountCategory.Id == 6
@@ -382,10 +408,9 @@ namespace easyfis.Reports
                                     Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
                                 };
 
-            var identityUserId = User.Identity.GetUserId();
-            var mstUserId = from d in db.MstUsers where d.UserId == identityUserId select d;
-            var incomeAccount = from d in db.MstAccounts where d.Id == mstUserId.FirstOrDefault().IncomeAccountId select d;
-
+            // ============
+            // Get Equities
+            // ============
             var equities = from d in db.TrnJournals
                            where d.JournalDate <= Convert.ToDateTime(DateAsOf)
                            && d.MstAccount.MstAccountType.MstAccountCategory.Id == 4
@@ -401,23 +426,26 @@ namespace easyfis.Reports
                                AccountType = g.Key.MstAccountType.AccountType,
                                AccountCode = g.Key.AccountCode,
                                Account = g.Key.Account,
-                               DebitAmount = g.Sum(d => d.DebitAmount), 
+                               DebitAmount = g.Sum(d => d.DebitAmount),
                                CreditAmount = g.Sum(d => d.CreditAmount),
                                Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
                            };
+
+            var currentUser = from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d;
+            var incomeAccount = from d in db.MstAccounts where d.Id == currentUser.FirstOrDefault().IncomeAccountId select d;
 
             var retainedEarnings = from d in profitAndLoss
                                    group d by d.DocumentReference into g
                                    select new Models.TrnJournal
                                    {
                                        DocumentReference = "3 - Equity",
-                                       AccountCategoryCode = incomeAccount.First().MstAccountType.MstAccountCategory.AccountCategoryCode,
-                                       AccountCategory = incomeAccount.First().MstAccountType.MstAccountCategory.AccountCategory,
-                                       SubCategoryDescription = incomeAccount.First().MstAccountType.SubCategoryDescription,
-                                       AccountTypeCode = incomeAccount.First().MstAccountType.AccountTypeCode,
-                                       AccountType = incomeAccount.First().MstAccountType.AccountType,
-                                       AccountCode = incomeAccount.First().AccountCode,
-                                       Account = incomeAccount.First().Account,
+                                       AccountCategoryCode = incomeAccount.FirstOrDefault().MstAccountType.MstAccountCategory.AccountCategoryCode,
+                                       AccountCategory = incomeAccount.FirstOrDefault().MstAccountType.MstAccountCategory.AccountCategory,
+                                       SubCategoryDescription = incomeAccount.FirstOrDefault().MstAccountType.SubCategoryDescription,
+                                       AccountTypeCode = incomeAccount.FirstOrDefault().MstAccountType.AccountTypeCode,
+                                       AccountType = incomeAccount.FirstOrDefault().MstAccountType.AccountType,
+                                       AccountCode = incomeAccount.FirstOrDefault().AccountCode,
+                                       Account = incomeAccount.FirstOrDefault().Account,
                                        DebitAmount = g.Sum(d => d.DebitAmount),
                                        CreditAmount = g.Sum(d => d.CreditAmount),
                                        Balance = g.Sum(d => d.Balance),
@@ -425,193 +453,176 @@ namespace easyfis.Reports
 
             var unionEquitiesWithRetainEarnings = equities.Union(retainedEarnings);
 
-            var equitiesWithRetainEarnings = from d in unionEquitiesWithRetainEarnings
-                                             group d by new
-                                             {
-                                                 AccountCategoryCode = d.AccountCategoryCode,
-                                                 AccountCategory = d.AccountCategory,
-                                                 SubCategoryDescription = d.SubCategoryDescription,
-                                                 AccountTypeCode = d.AccountTypeCode,
-                                                 AccountType = d.AccountType,
-                                                 AccountCode = d.AccountCode,
-                                                 Account = d.Account
-                                             } into g
-                                             select new
-                                             {
-                                                 DocumentReference = "3 - Equity",
-                                                 AccountCategoryCode = g.Key.AccountCategoryCode,
-                                                 AccountCategory = g.Key.AccountCategory,
-                                                 SubCategoryDescription = g.Key.SubCategoryDescription,
-                                                 AccountTypeCode = g.Key.AccountTypeCode,
-                                                 AccountType = g.Key.AccountType,
-                                                 AccountCode = g.Key.AccountCode,
-                                                 Account = g.Key.Account,
-                                                 DebitAmount = g.Sum(d => d.DebitAmount),
-                                                 CreditAmount = g.Sum(d => d.CreditAmount),
-                                                 Balance = g.Sum(d => d.Balance),
-                                             };
-
-            document.Add(Chunk.NEWLINE);
-
-            Decimal totalOverAllEquities = 0;
-            if (equitiesWithRetainEarnings.Any())
+            if (unionEquitiesWithRetainEarnings.Any())
             {
-                String subCategoryDescription = "";
-                Boolean subCategoryDescriptionSame = false;
-                foreach (var equitySubCategoryDescription in equitiesWithRetainEarnings)
-                {
-                    if (subCategoryDescriptionSame == false)
-                    {
-                        if (subCategoryDescription.Equals(equitySubCategoryDescription.SubCategoryDescription) == false)
-                        {
-                            Decimal totalAllEquities = 0;
-                            subCategoryDescription = equitySubCategoryDescription.SubCategoryDescription;
-                            PdfPTable tableSubCategoryDescriptionEquity = new PdfPTable(1);
-                            float[] widthSubCategoryDescriptionEquityCells = new float[] { 100f };
-                            tableSubCategoryDescriptionEquity.SetWidths(widthSubCategoryDescriptionEquityCells);
-                            tableSubCategoryDescriptionEquity.WidthPercentage = 100;
-                            document.Add(line);
-                            tableSubCategoryDescriptionEquity.AddCell(new PdfPCell(new Phrase(equitySubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                            document.Add(tableSubCategoryDescriptionEquity);
-
-                            String accountType = "";
-                            Boolean accountTypeSame = false;
-                            foreach (var equityAccountTypes in equitiesWithRetainEarnings)
-                            {
-                                if (accountTypeSame == false)
-                                {
-                                    if (accountType.Equals(equityAccountTypes.AccountType) == false)
-                                    {
-                                        accountType = equityAccountTypes.AccountType;
-                                        if (equityAccountTypes.SubCategoryDescription.Equals(subCategoryDescription) == true)
-                                        {
-                                            Decimal accountTypeTotalBalance = 0;
-                                            foreach (var accountTypeBalance in equitiesWithRetainEarnings)
-                                            {
-                                                if (accountTypeBalance.AccountType.Equals(accountType) == true)
-                                                {
-                                                    accountTypeTotalBalance = accountTypeTotalBalance + accountTypeBalance.Balance;
-                                                }
-                                            }
-
-                                            PdfPTable tableAccountTypes = new PdfPTable(3);
-                                            float[] widthCellsAccountTypes = new float[] { 50f, 100f, 50f };
-                                            tableAccountTypes.SetWidths(widthCellsAccountTypes);
-                                            tableAccountTypes.WidthPercentage = 100;
-                                            tableAccountTypes.AddCell(new PdfPCell(new Phrase(equityAccountTypes.AccountType, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
-                                            tableAccountTypes.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
-                                            tableAccountTypes.AddCell(new PdfPCell(new Phrase(accountTypeTotalBalance.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
-                                            document.Add(tableAccountTypes);
-
-                                            String account = "";
-                                            Boolean accountSame = false;
-                                            foreach (var equityAccounts in equitiesWithRetainEarnings)
-                                            {
-                                                if (accountSame == false)
-                                                {
-                                                    if (account.Equals(equityAccounts.Account) == false)
+                // ================================
+                // Equity Sub Category Descriptions
+                // ================================
+                var equitySubCategoryDescriptions = from d in unionEquitiesWithRetainEarnings
+                                                    group d by new
                                                     {
-                                                        account = equityAccounts.Account;
-                                                        if (equityAccounts.AccountType.Equals(accountType) == true)
-                                                        {
-                                                            PdfPTable tableAccounts = new PdfPTable(3);
-                                                            float[] widthCellsAccounts = new float[] { 50f, 100f, 50f };
-                                                            tableAccounts.SetWidths(widthCellsAccounts);
-                                                            tableAccounts.WidthPercentage = 100;
-                                                            tableAccounts.AddCell(new PdfPCell(new Phrase(equityAccounts.AccountCode, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-                                                            tableAccounts.AddCell(new PdfPCell(new Phrase(equityAccounts.Account, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
-                                                            tableAccounts.AddCell(new PdfPCell(new Phrase(equityAccounts.Balance.ToString("#,##0.00"), fontArial10)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                                                            document.Add(tableAccounts);
+                                                        SubCategoryDescription = d.SubCategoryDescription
+                                                    } into g
+                                                    select new
+                                                    {
+                                                        SubCategoryDescription = g.Key.SubCategoryDescription,
+                                                        Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
+                                                    };
 
-                                                            totalAllEquities = totalAllEquities + equityAccounts.Balance;
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    accountSame = false;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        accountTypeSame = false;
-                                    }
-                                }
-                                else
+                if (equitySubCategoryDescriptions.Any())
+                {
+                    Decimal totalAllEquities = 0;
+                    foreach (var equitySubCategoryDescription in equitySubCategoryDescriptions)
+                    {
+                        document.Add(line);
+                        PdfPTable equitySubCategoryDescriptionTable = new PdfPTable(1);
+                        float[] widthCellsEquitySubCategoryDescriptionTable = new float[] { 100f };
+                        equitySubCategoryDescriptionTable.SetWidths(widthCellsEquitySubCategoryDescriptionTable);
+                        equitySubCategoryDescriptionTable.WidthPercentage = 100;
+                        equitySubCategoryDescriptionTable.AddCell(new PdfPCell(new Phrase(equitySubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                        document.Add(equitySubCategoryDescriptionTable);
+
+                        // ====================
+                        // Equity Account Types
+                        // ====================
+                        var equityAccountTypes = from d in unionEquitiesWithRetainEarnings
+                                                 where d.SubCategoryDescription.Equals(equitySubCategoryDescription.SubCategoryDescription)
+                                                 group d by new
+                                                 {
+                                                     AccountType = d.AccountType
+                                                 } into g
+                                                 select new
+                                                 {
+                                                     AccountType = g.Key.AccountType,
+                                                     Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
+                                                 };
+
+                        if (equityAccountTypes.Any())
+                        {
+                            Decimal totalCurrentEquities = 0;
+                            foreach (var equityAccountType in equityAccountTypes)
+                            {
+                                totalCurrentEquities += equityAccountType.Balance;
+
+                                PdfPTable equityAccountTypeTable = new PdfPTable(3);
+                                float[] widthCellsEquityAccountTypeTable = new float[] { 50f, 100f, 50f };
+                                equityAccountTypeTable.SetWidths(widthCellsEquityAccountTypeTable);
+                                equityAccountTypeTable.WidthPercentage = 100;
+                                equityAccountTypeTable.AddCell(new PdfPCell(new Phrase(equityAccountType.AccountType, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                                equityAccountTypeTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                                equityAccountTypeTable.AddCell(new PdfPCell(new Phrase(equityAccountType.Balance.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+                                document.Add(equityAccountTypeTable);
+
+                                // ===============
+                                // Equity Accounts
+                                // ===============
+                                var equityAccounts = from d in unionEquitiesWithRetainEarnings
+                                                     where d.AccountType.Equals(equityAccountType.AccountType)
+                                                     group d by new
+                                                     {
+                                                         AccountCode = d.AccountCode,
+                                                         Account = d.Account
+                                                     } into g
+                                                     select new
+                                                     {
+                                                         AccountCode = g.Key.AccountCode,
+                                                         Account = g.Key.Account,
+                                                         DebitAmount = g.Sum(d => d.DebitAmount),
+                                                         CreditAmount = g.Sum(d => d.CreditAmount),
+                                                         Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
+                                                     };
+
+                                if (equityAccounts.Any())
                                 {
-                                    accountTypeSame = false;
+                                    foreach (var equityAccount in equityAccounts)
+                                    {
+                                        totalAllEquities += equityAccount.Balance;
+
+                                        PdfPTable equityAccountTable = new PdfPTable(3);
+                                        float[] widthCellsEquityAccountTable = new float[] { 50f, 100f, 50f };
+                                        equityAccountTable.SetWidths(widthCellsEquityAccountTable);
+                                        equityAccountTable.WidthPercentage = 100;
+                                        equityAccountTable.AddCell(new PdfPCell(new Phrase(equityAccount.AccountCode, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                                        equityAccountTable.AddCell(new PdfPCell(new Phrase(equityAccount.Account, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
+                                        equityAccountTable.AddCell(new PdfPCell(new Phrase(equityAccount.Balance.ToString("#,##0.00"), fontArial10)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                                        document.Add(equityAccountTable);
+                                    }
                                 }
                             }
 
+                            // ======================
+                            // Total Current Equities
+                            // ======================
                             document.Add(line);
-                            PdfPTable tableTotalAllEquity = new PdfPTable(5);
-                            float[] widthTotalTotalAllEquityCells = new float[] { 50f, 70f, 100f, 100f, 60f };
-                            tableTotalAllEquity.SetWidths(widthTotalTotalAllEquityCells);
-                            tableTotalAllEquity.WidthPercentage = 100;
-                            tableTotalAllEquity.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            tableTotalAllEquity.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            tableTotalAllEquity.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            tableTotalAllEquity.AddCell(new PdfPCell(new Phrase("Total " + equitySubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            tableTotalAllEquity.AddCell(new PdfPCell(new Phrase(totalAllEquities.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            document.Add(tableTotalAllEquity);
+                            PdfPTable totalCurrentEquitiesTable = new PdfPTable(5);
+                            float[] widthCellsTotalCurrentEquitiesTable = new float[] { 50f, 70f, 100f, 100f, 60f };
+                            totalCurrentEquitiesTable.SetWidths(widthCellsTotalCurrentEquitiesTable);
+                            totalCurrentEquitiesTable.WidthPercentage = 100;
+                            totalCurrentEquitiesTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            totalCurrentEquitiesTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            totalCurrentEquitiesTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            totalCurrentEquitiesTable.AddCell(new PdfPCell(new Phrase("Total " + equitySubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            totalCurrentEquitiesTable.AddCell(new PdfPCell(new Phrase(totalCurrentEquities.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            document.Add(totalCurrentEquitiesTable);
+                        }
+                    }
 
-                            totalOverAllEquities = totalOverAllEquities + totalAllEquities;
-                        }
-                        else
-                        {
-                            subCategoryDescriptionSame = false;
-                        }
-                    }
-                    else
-                    {
-                        subCategoryDescriptionSame = false;
-                    }
+                    // ==================
+                    // Total All Equities
+                    // ==================
+                    document.Add(line);
+                    PdfPTable totalAllEquitiesTable = new PdfPTable(5);
+                    float[] widthCellsTotalAllEquitiesTable = new float[] { 50f, 70f, 100f, 100f, 60f };
+                    totalAllEquitiesTable.SetWidths(widthCellsTotalAllEquitiesTable);
+                    totalAllEquitiesTable.WidthPercentage = 100;
+                    totalAllEquitiesTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    totalAllEquitiesTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    totalAllEquitiesTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    totalAllEquitiesTable.AddCell(new PdfPCell(new Phrase("Total Equity", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    totalAllEquitiesTable.AddCell(new PdfPCell(new Phrase(totalAllEquities.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    document.Add(totalAllEquitiesTable);
+
+                    totalOverallEquities += totalAllEquities;
+                    document.Add(Chunk.NEWLINE);
                 }
-
-                document.Add(line);
-                PdfPTable tableTotalOverAllEquity = new PdfPTable(5);
-                float[] widthTotalTotalOverAllEquityCells = new float[] { 50f, 70f, 100f, 100f, 60f };
-                tableTotalOverAllEquity.SetWidths(widthTotalTotalOverAllEquityCells);
-                tableTotalOverAllEquity.WidthPercentage = 100;
-                tableTotalOverAllEquity.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableTotalOverAllEquity.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableTotalOverAllEquity.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableTotalOverAllEquity.AddCell(new PdfPCell(new Phrase("Total Equity", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableTotalOverAllEquity.AddCell(new PdfPCell(new Phrase(totalOverAllEquities.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                document.Add(tableTotalOverAllEquity);
             }
 
             document.Add(Chunk.NEWLINE);
 
-            Decimal totalLiabilityAndEquity = totalOverAllLiabilities + totalOverAllEquities;
-            document.Add(line);
-            PdfPTable tableTotalLiabilityAndEquity = new PdfPTable(5);
-            float[] widthTotalLiabilityAndEquityCells = new float[] { 50f, 70f, 100f, 100f, 60f };
-            tableTotalLiabilityAndEquity.SetWidths(widthTotalLiabilityAndEquityCells);
-            tableTotalLiabilityAndEquity.WidthPercentage = 100;
-            tableTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-            tableTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-            tableTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-            tableTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("Total Liability and Equity", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-            tableTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase(totalLiabilityAndEquity.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-            document.Add(tableTotalLiabilityAndEquity);
+            // ==============================
+            // Total Liabilities and Equities
+            // ==============================
+            Decimal totalLiabilityAndEquity = totalOverallLiabilities + totalOverallEquities;
 
-            Decimal Balance = totalOverAllAssets - totalOverAllLiabilities - totalOverAllEquities;
             document.Add(line);
-            PdfPTable tableBalance = new PdfPTable(5);
-            float[] widthTotalBalanceCells = new float[] { 50f, 70f, 100f, 100f, 60f };
-            tableBalance.SetWidths(widthTotalBalanceCells);
-            tableBalance.WidthPercentage = 100;
-            tableBalance.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-            tableBalance.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-            tableBalance.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-            tableBalance.AddCell(new PdfPCell(new Phrase("Balance", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-            tableBalance.AddCell(new PdfPCell(new Phrase(Balance.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-            document.Add(tableBalance);
+            PdfPTable tableTotalLiabilityAndEquityTable = new PdfPTable(5);
+            float[] widthCellsTableTotalLiabilityAndEquityTable = new float[] { 50f, 70f, 100f, 100f, 60f };
+            tableTotalLiabilityAndEquityTable.SetWidths(widthCellsTableTotalLiabilityAndEquityTable);
+            tableTotalLiabilityAndEquityTable.WidthPercentage = 100;
+            tableTotalLiabilityAndEquityTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            tableTotalLiabilityAndEquityTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            tableTotalLiabilityAndEquityTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            tableTotalLiabilityAndEquityTable.AddCell(new PdfPCell(new Phrase("Total Liability and Equity", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            tableTotalLiabilityAndEquityTable.AddCell(new PdfPCell(new Phrase(totalLiabilityAndEquity.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            document.Add(tableTotalLiabilityAndEquityTable);
 
-            // Document End
+            // =======
+            // Balance
+            // =======
+            Decimal Balance = totalOverallAssets - totalLiabilityAndEquity;
+
+            document.Add(line);
+            PdfPTable balanceTable = new PdfPTable(5);
+            float[] widthCellsBalanceTable = new float[] { 50f, 70f, 100f, 100f, 60f };
+            balanceTable.SetWidths(widthCellsBalanceTable);
+            balanceTable.WidthPercentage = 100;
+            balanceTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            balanceTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            balanceTable.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            balanceTable.AddCell(new PdfPCell(new Phrase("Balance", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            balanceTable.AddCell(new PdfPCell(new Phrase(Balance.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            document.Add(balanceTable);
+
             document.Close();
 
             byte[] byteInfo = workStream.ToArray();
