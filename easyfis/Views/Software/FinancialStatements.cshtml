@@ -78,12 +78,12 @@
                                                                 <div class="comboBox-wide" id="cboBalanceSheetCompany"></div>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group">
+                                                        @*<div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
                                                                 <div class="comboBox-wide" id="cboBalanceSheetBranch"></div>
                                                             </div>
-                                                        </div>
+                                                        </div>*@
                                                     </div>
                                                 </div>
                                             </form>
@@ -122,12 +122,12 @@
                                                                 <div class="comboBox-wide" id="cboIncomeStatementCompany"></div>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group">
+                                                        @*<div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
                                                                 <div class="comboBox-wide" id="cboIncomeStatementBranch"></div>
                                                             </div>
-                                                        </div>
+                                                        </div>*@
                                                     </div>
                                                 </div>
                                             </form>
@@ -166,12 +166,12 @@
                                                                 <div class="comboBox-wide" id="cboCashFlowCompany"></div>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group">
+                                                        @*<div class="form-group">
                                                             <label class="control-label col-sm-4">Branch</label>
                                                             <div class="col-sm-8">
                                                                 <div class="comboBox-wide" id="cboCashFlowBranch"></div>
                                                             </div>
-                                                        </div>
+                                                        </div>*@
                                                     </div>
                                                 </div>
                                             </form>
@@ -661,15 +661,15 @@
         // ================
         var cboBalanceSheetDateAsOf = new wijmo.input.InputDate('#cboBalanceSheetDateAsOf');
         var cboBalanceSheetCompany = new wijmo.input.ComboBox('#cboBalanceSheetCompany');
-        var cboBalanceSheetBranch = new wijmo.input.ComboBox('#cboBalanceSheetBranch');
+        //var cboBalanceSheetBranch = new wijmo.input.ComboBox('#cboBalanceSheetBranch');
         var cboIncomeStatementStartDate = new wijmo.input.InputDate('#cboIncomeStatementStartDate');
         var cboIncomeStatementEndDate = new wijmo.input.InputDate('#cboIncomeStatementEndDate');
         var cboIncomeStatementCompany = new wijmo.input.ComboBox('#cboIncomeStatementCompany');
-        var cboIncomeStatementBranch = new wijmo.input.ComboBox('#cboIncomeStatementBranch');
+        //var cboIncomeStatementBranch = new wijmo.input.ComboBox('#cboIncomeStatementBranch');
         var cboCashFlowStartDate = new wijmo.input.InputDate('#cboCashFlowStartDate');
         var cboCashFlowEndDate = new wijmo.input.InputDate('#cboCashFlowEndDate');
         var cboCashFlowCompany = new wijmo.input.ComboBox('#cboCashFlowCompany');
-        var cboCashFlowBranch = new wijmo.input.ComboBox('#cboCashFlowBranch');
+        //var cboCashFlowBranch = new wijmo.input.ComboBox('#cboCashFlowBranch');
         var cboTrialBalanceStartDate = new wijmo.input.InputDate('#cboTrialBalanceStartDate');
         var cboTrialBalanceEndDate = new wijmo.input.InputDate('#cboTrialBalanceEndDate');
         var cboTrialBalanceCompany = new wijmo.input.ComboBox('#cboTrialBalanceCompany');
@@ -1216,38 +1216,38 @@
 
                         }
 
-                        if (isCboBalanceSheetCompanySelected) {
-                            cboBalanceSheetBranch.dispose();
-                            cboBalanceSheetBranch = new wijmo.input.ComboBox('#cboBalanceSheetBranch', {
-                                disabled: disabled,
-                                isEditable: false,
-                                itemsSource: branchObservableArray,
-                                displayMemberPath: "Branch",
-                                selectedValuePath: "Id"
-                            });
-                        }
+                        //if (isCboBalanceSheetCompanySelected) {
+                        //    cboBalanceSheetBranch.dispose();
+                        //    cboBalanceSheetBranch = new wijmo.input.ComboBox('#cboBalanceSheetBranch', {
+                        //        disabled: disabled,
+                        //        isEditable: false,
+                        //        itemsSource: branchObservableArray,
+                        //        displayMemberPath: "Branch",
+                        //        selectedValuePath: "Id"
+                        //    });
+                        //}
 
-                        if (isCboIncomeStatementCompanySelected) {
-                            cboIncomeStatementBranch.dispose();
-                            cboIncomeStatementBranch = new wijmo.input.ComboBox('#cboIncomeStatementBranch', {
-                                disabled: disabled,
-                                isEditable: false,
-                                itemsSource: branchObservableArray,
-                                displayMemberPath: "Branch",
-                                selectedValuePath: "Id"
-                            });
-                        }
+                        //if (isCboIncomeStatementCompanySelected) {
+                        //    cboIncomeStatementBranch.dispose();
+                        //    cboIncomeStatementBranch = new wijmo.input.ComboBox('#cboIncomeStatementBranch', {
+                        //        disabled: disabled,
+                        //        isEditable: false,
+                        //        itemsSource: branchObservableArray,
+                        //        displayMemberPath: "Branch",
+                        //        selectedValuePath: "Id"
+                        //    });
+                        //}
 
-                        if (isCboCashFlowCompanySelected) {
-                            cboCashFlowBranch.dispose();
-                            cboCashFlowBranch = new wijmo.input.ComboBox('#cboCashFlowBranch', {
-                                disabled: disabled,
-                                isEditable: false,
-                                itemsSource: branchObservableArray,
-                                displayMemberPath: "Branch",
-                                selectedValuePath: "Id"
-                            });
-                        }
+                        //if (isCboCashFlowCompanySelected) {
+                        //    cboCashFlowBranch.dispose();
+                        //    cboCashFlowBranch = new wijmo.input.ComboBox('#cboCashFlowBranch', {
+                        //        disabled: disabled,
+                        //        isEditable: false,
+                        //        itemsSource: branchObservableArray,
+                        //        displayMemberPath: "Branch",
+                        //        selectedValuePath: "Id"
+                        //    });
+                        //}
 
                         if (isCboTrialBalanceCompanySelected) {
                             cboTrialBalanceBranch.dispose();
@@ -1380,26 +1380,26 @@
                     }
                 });
             } else {
-                cboBalanceSheetBranch.dispose();
-                cboBalanceSheetBranch = new wijmo.input.ComboBox('#cboBalanceSheetBranch', {
-                    disabled: true,
-                    isEditable: false,
-                    itemsSource: branchObservableArray,
-                });
+                //cboBalanceSheetBranch.dispose();
+                //cboBalanceSheetBranch = new wijmo.input.ComboBox('#cboBalanceSheetBranch', {
+                //    disabled: true,
+                //    isEditable: false,
+                //    itemsSource: branchObservableArray,
+                //});
 
-                cboIncomeStatementBranch.dispose();
-                cboIncomeStatementBranch = new wijmo.input.ComboBox('#cboIncomeStatementBranch', {
-                    disabled: true,
-                    isEditable: false,
-                    itemsSource: branchObservableArray,
-                });
+                //cboIncomeStatementBranch.dispose();
+                //cboIncomeStatementBranch = new wijmo.input.ComboBox('#cboIncomeStatementBranch', {
+                //    disabled: true,
+                //    isEditable: false,
+                //    itemsSource: branchObservableArray,
+                //});
 
-                cboCashFlowBranch.dispose();
-                cboCashFlowBranch = new wijmo.input.ComboBox('#cboCashFlowBranch', {
-                    disabled: true,
-                    isEditable: false,
-                    itemsSource: branchObservableArray,
-                });
+                //cboCashFlowBranch.dispose();
+                //cboCashFlowBranch = new wijmo.input.ComboBox('#cboCashFlowBranch', {
+                //    disabled: true,
+                //    isEditable: false,
+                //    itemsSource: branchObservableArray,
+                //});
 
                 cboTrialBalanceBranch.dispose();
                 cboTrialBalanceBranch = new wijmo.input.ComboBox('#cboTrialBalanceBranch', {
@@ -1539,15 +1539,15 @@
         // =======================
         function btnBalanceSheetPrintPDFOnclick() {
             if (cboBalanceSheetCompany.selectedValue != null) {
-                if (cboBalanceSheetBranch.selectedValue != null) {
+                //if (cboBalanceSheetBranch.selectedValue != null) {
                     var dateAsOf = cboBalanceSheetDateAsOf.value.toLocaleDateString().replace(/\//g, '-');
                     var companyId = cboBalanceSheetCompany.selectedValue;
-                    var branchId = cboBalanceSheetBranch.selectedValue;
+                    //var branchId = cboBalanceSheetBranch.selectedValue;
 
                     window.location.href = '/RepBalanceSheet/BalanceSheet?DateAsOf=' + dateAsOf + '&CompanyId=' + companyId;
-                } else {
-                    toastr.error("Lacking Information");
-                }
+                //} else {
+                //    toastr.error("Lacking Information");
+                //}
             } else {
                 toastr.error("Lacking Information");
             }
@@ -1558,16 +1558,16 @@
         // ==========================
         function btnIncomeStatementPDFOnclick() {
             if (cboIncomeStatementCompany.selectedValue != null) {
-                if (cboIncomeStatementBranch.selectedValue != null) {
+                //if (cboIncomeStatementBranch.selectedValue != null) {
                     var startDate = cboIncomeStatementStartDate.value.toLocaleDateString().replace(/\//g, '-');
                     var endDate = cboIncomeStatementEndDate.value.toLocaleDateString().replace(/\//g, '-');
                     var companyId = cboIncomeStatementCompany.selectedValue;
-                    var branchId = cboIncomeStatementBranch.selectedValue;
+                    //var branchId = cboIncomeStatementBranch.selectedValue;
 
                     window.location.href = '/RepIncomeStatement/IncomeStatement?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
-                } else {
-                    toastr.error("Lacking Information");
-                }
+                //} else {
+                //    toastr.error("Lacking Information");
+                //}
             } else {
                 toastr.error("Lacking Information");
             }
@@ -1578,16 +1578,16 @@
         // ===================
         function btnCashFlowPrintPDFOnclick() {
             if (cboCashFlowCompany.selectedValue != null) {
-                if (cboCashFlowBranch.selectedValue != null) {
+                //if (cboCashFlowBranch.selectedValue != null) {
                     var startDate = cboCashFlowStartDate.value.toLocaleDateString().replace(/\//g, '-');
                     var endDate = cboCashFlowEndDate.value.toLocaleDateString().replace(/\//g, '-');
                     var companyId = cboCashFlowCompany.selectedValue;
-                    var branchId = cboCashFlowBranch.selectedValue;
+                    //var branchId = cboCashFlowBranch.selectedValue;
 
                     window.location.href = '/RepCashFlowIndirect/CashFlowIndirect?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
-                } else {
-                    toastr.error("Lacking Information");
-                }
+                //} else {
+                //    toastr.error("Lacking Information");
+                //}
             } else {
                 toastr.error("Lacking Information");
             }
