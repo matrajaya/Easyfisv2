@@ -12,14 +12,14 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body class="">
+<body>
     <div id="o-wrapper" class="o-wrapper">
         <main class="o-content">
             @Html.Partial("_SoftwareHeader")
             <section class="content-header">
                 <div class="container">
                     <h3>
-                        Stock In Book 
+                        Stock In Book
                     </h3>
                     <p>
                         <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
@@ -33,16 +33,16 @@
                         <table style="width: 100%" border="0">
                             <tr>
                                 <td style="width: 49%">
-                                    <div class="input-group ">
+                                    <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search">
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search...">
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 50%" align="right">
-                                    <button onclick="stockInBookCSV_OnClick()" class="btn btn-primary "><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                    <button onclick="stockInBookPDF_OnClick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
-                                    <a href="/Software/FinancialStatements" class="btn btn-danger "><i class="fa fa-close"></i> Close</a>
+                                    <button onclick="btnStockInBookCSVOnclick()" id="btnStockInBookCSV" class="btn btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    <button onclick="btnStockInBookPrintPDFOnclick()" id="btnStockInBookPrintPDF" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                                    <a href="/Software/FinancialStatements" class="btn btn-danger"><i class="fa fa-close"></i> Close</a>
                                 </td>
                             </tr>
                         </table>
@@ -50,106 +50,472 @@
                     <div class="panel-heading">
                         <table style="width: 100%" border="0">
                             <tr>
-                                <td style="width: 49%">
+                                <td style="width: 24%">
                                     <div class="input-group ">
-                                        <span class="input-group-addon">Date:</span>
-                                        <input type="text" class="form-control " id="dateFrom" placeholder="filter date" disabled>
+                                        <span class="input-group-addon"><b>Start Date</b></span>
+                                        <div class="comboBox-wide" id="cboARStockInBookStartDate"></div>
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
-                                <td style="width: 20%" align="right"></td>
-                                <td style="width: 30%"></td>
+                                <td style="width: 24%" align="right">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>End Date</b></span>
+                                        <div class="comboBox-wide" id="cboARStockInBookEndDate"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Company</b></span>
+                                        <div class="comboBox-wide" id="cboARStockInBookCompany"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Branch</b></span>
+                                        <div class="comboBox-wide" id="cboARStockInBookBranch"></div>
+                                    </div>
+                                </td>
                             </tr>
                         </table>
-                    </div>
-                    <div class="panel-body">
-                        <div id="stockInBookGrid" class="grid"></div>
                     </div>
                 </div>
+                <div id="stockInBookGrid" class="grid"></div>
+                <br /><br />
                 <div class="row">
-                    <div class="col-md-6"></div>
                     <div class="col-md-6">
-                        <table class="table table-responsive table-bordered">
-                            <tr>
-                                <td align="right">
-                                    <b>Total: </b>
-                                </td>
-                                <td style="padding-left: 10px" align="right">
-                                    <span id="total">NA</span>
-                                </td>
-                            </tr>
-                        </table>
+
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="dl-horizontal dl-custom">
+                            <dt>
+                                <b>Total Debit</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalDebitAmount" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Total Credit</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalCreditAmount" placeholder="0.00" disabled />
+                            </dd>
+                            <dt>
+                                <b>Balance</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalBalanceAmount" placeholder="0.00" disabled />
+                            </dd>
+                        </dl>
                     </div>
                 </div>
             </section>
             @Html.Partial("_SoftwareFooter")
         </main>
     </div>
+    <div id="c-mask" class="c-mask"></div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var cboARStockInBookStartDate = new wijmo.input.InputDate('#cboARStockInBookStartDate');
+        var cboARStockInBookEndDate = new wijmo.input.InputDate('#cboARStockInBookEndDate');
+        var isARStockInBookStartDateSelected = false;
+        var isARStockInBookEndDateSelected = false;
+        var cboARStockInBookCompany = new wijmo.input.ComboBox('#cboARStockInBookCompany');
+        var cboARStockInBookBranch = new wijmo.input.ComboBox('#cboARStockInBookBranch');
+        var stockInBookCollections;
+        var stockInBookGrid;
+        var isARStockInBookCompanySelected = false;
+
+        // ===================
+        // Get Parameter Value
+        // ===================
         function getParam(name) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+
             var regexS = "[\\?&]" + name + "=([^&#]*)";
             var regex = new RegExp(regexS);
+
             var results = regex.exec(window.location.href);
-            if (results == null)
+            if (results == null) {
                 return "";
-            else
+            } else {
                 return results[1];
+            }
         }
 
-        function stockInBookPDF_OnClick() {
-            window.location.href = '/RepStockInBook/StockInBook?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&CompanyId=' + getParam("CompanyId");;
-        }
-
-        function getStockInBook() {
-            var stockInBook = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/StockInBook/list/' + getParam("StartDate") + '/' + getParam("EndDate") + '/' + getParam("CompanyId"),
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (stockInBookResults) {
-                    if (stockInBookResults.length > 0) {
-                        var totalAmount = 0;
-
-                        for (i = 0; i < stockInBookResults.length; i++) {
-                            // Array Push
-                            stockInBook.push({
-
-                                DocumentReference: stockInBookResults[i]["DocumentReference"],
-                                AccountCode: stockInBookResults[i]["AccountCode"],
-                                Account: stockInBookResults[i]["Account"],
-                                Article: stockInBookResults[i]["Article"],
-                                DebitAmount: stockInBookResults[i]["DebitAmount"],
-                                CreditAmount: stockInBookResults[i]["CreditAmount"],
-                                Balance: stockInBookResults[i]["Balance"],
-
-
-                            });
-
-                            totalAmount += stockInBookResults[i]["Amount"];
-                        }
-
-                        document.getElementById("total").innerHTML = totalAmount.toLocaleString();
+        // ============
+        // Date Filters
+        // ============
+        function stockInBookDateFilters() {
+            NProgress.start();
+            cboARStockInBookStartDate.dispose();
+            cboARStockInBookStartDate = new wijmo.input.InputDate('#cboARStockInBookStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("StartDate")),
+                onValueChanged: function () {
+                    if (!isARStockInBookStartDateSelected) {
+                        NProgress.start();
+                        refreshStockInBookFlexGrid();
+                    } else {
+                        isARStockInBookStartDateSelected = false;
                     }
-                    NProgress.done();
                 }
             });
 
-            return stockInBook;
+            cboARStockInBookEndDate.dispose();
+            cboARStockInBookEndDate = new wijmo.input.InputDate('#cboARStockInBookEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("EndDate")),
+                onValueChanged: function () {
+                    if (!isARStockInBookEndDateSelected) {
+                        NProgress.start();
+                        refreshStockInBookFlexGrid();
+                    } else {
+                        isARStockInBookEndDateSelected = false;
+                    }
+                }
+            });
+
+            createCboCompany();
         }
-        var stockInBookCollections;
 
-        function stockInBookCSV_OnClick() {
+        // ==============
+        // Company Filter
+        // ==============
+        function createCboCompany() {
+            var companyObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/company/list',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (companyResults) {
+                    if (companyResults.length > 0) {
+                        for (i = 0; i < companyResults.length; i++) {
+                            companyObservableArray.push({
+                                Id: companyResults[i]["Id"],
+                                Company: companyResults[i]["Company"],
+                                Address: companyResults[i]["Address"],
+                                ContactNumber: companyResults[i]["ContactNumber"],
+                                TaxNumber: companyResults[i]["TaxNumber"],
+                            });
+                        }
+                    }
 
+                    var disabled = true;
+                    if (companyResults.length > 0) {
+                        disabled = false;
+                    } else {
+                        $("#btnStockInBookCSV").prop("disabled", true);
+                        $("#btnStockInBookPrintPDF").prop("disabled", true);
+                    }
+
+                    cboARStockInBookCompany.dispose();
+                    cboARStockInBookCompany = new wijmo.input.ComboBox('#cboARStockInBookCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        selectedValue: getParam("CompanyId"),
+                        onSelectedIndexChanged: function () {
+                            NProgress.start();
+                            $("#btnStockInBookCSV").prop("disabled", false);
+                            $("#btnStockInBookPrintPDF").prop("disabled", false);
+                            isARStockInBookCompanySelected = true;
+                            createCboBranch();
+                        }
+                    });
+
+                    createCboBranch();
+                }
+            });
+        }
+
+        // =============
+        // Branch Filter
+        // =============
+        function createCboBranch() {
+            var branchObservableArray = new wijmo.collections.ObservableArray();
+            if (cboARStockInBookCompany.selectedValue != null) {
+                $.ajax({
+                    url: '/api/branch/byCompanyId/list/locked/' + cboARStockInBookCompany.selectedValue,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branchObservableArray.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Branch: branchResults[i]["Branch"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"]
+                                });
+                            }
+                        }
+
+                        var disabled = true;
+                        if (branchResults.length > 0) {
+                            disabled = false;
+                        } else {
+                            $("#btnStockInBookCSV").prop("disabled", true);
+                            $("#btnStockInBookPrintPDF").prop("disabled", true);
+                        }
+
+                        cboARStockInBookBranch.dispose();
+                        cboARStockInBookBranch = new wijmo.input.ComboBox('#cboARStockInBookBranch', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: branchObservableArray,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Id",
+                            selectedValue: getParam("BranchId"),
+                            onSelectedIndexChanged: function () {
+                                NProgress.start();
+                                refreshStockInBookFlexGrid();
+                            }
+                        });
+
+                        if (!isARStockInBookCompanySelected) {
+                            createStockInBookFlexGrid();
+                        } else {
+                            refreshStockInBookFlexGrid();
+                        }
+                    }
+                });
+            }
+        }
+
+        // ===============================
+        // Get Receiving Receipt Book Data
+        // ===============================
+        function getStockInBook() {
+            var stockInBooks = new wijmo.collections.ObservableArray;
+            if (cboARStockInBookCompany.selectedValue != null) {
+                if (cboARStockInBookBranch.selectedValue != null) {
+                    var startDate = cboARStockInBookStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboARStockInBookEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboARStockInBookCompany.selectedValue;
+                    var branchId = cboARStockInBookBranch.selectedValue;
+
+                    $.ajax({
+                        url: '/api/StockInBook/list/' + startDate + '/' + endDate + '/' + + companyId + '/' + branchId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (stockInBookResult) {
+                            var totalDebit = 0;
+                            var totalCredit = 0;
+                            var totalBalance = 0;
+                            if (stockInBookResult.length > 0) {
+                                for (i = 0; i < stockInBookResult.length; i++) {
+                                    stockInBooks.push({
+                                        DocumentReference: stockInBookResult[i]["DocumentReference"],
+                                        AccountCode: stockInBookResult[i]["AccountCode"],
+                                        Account: stockInBookResult[i]["Account"],
+                                        Article: stockInBookResult[i]["Article"],
+                                        DebitAmount: stockInBookResult[i]["DebitAmount"],
+                                        DebitAmountDisplay: parseFloat(stockInBookResult[i]["DebitAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        CreditAmount: stockInBookResult[i]["CreditAmount"],
+                                        CreditAmountDisplay: parseFloat(stockInBookResult[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        Balance: stockInBookResult[i]["DebitAmount"] - stockInBookResult[i]["CreditAmount"],
+                                        BalanceDisplay: parseFloat(stockInBookResult[i]["DebitAmount"] - stockInBookResult[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    });
+
+                                    totalDebit += stockInBookResult[i]["DebitAmount"];
+                                    totalCredit += stockInBookResult[i]["CreditAmount"];
+                                    totalBalance += stockInBookResult[i]["DebitAmount"] - stockInBookResult[i]["CreditAmount"];
+                                }
+                            }
+
+                            document.getElementById("totalDebitAmount").value = parseFloat(totalDebit).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            document.getElementById("totalCreditAmount").value = parseFloat(totalCredit).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            document.getElementById("totalBalanceAmount").value = parseFloat(totalBalance).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            NProgress.done();
+                        }
+                    });
+                } else {
+                    document.getElementById("totalDebitAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCreditAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalBalanceAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    NProgress.done();
+                }
+            } else {
+                document.getElementById("totalDebitAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalCreditAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("totalBalanceAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                NProgress.done();
+            }
+
+            return stockInBooks;
+        }
+
+        // =================
+        // Refresh Flex Grid
+        // =================
+        function refreshStockInBookFlexGrid() {
+            stockInBookCollections = new wijmo.collections.CollectionView(getStockInBook());
+            stockInBookCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                stockInBookCollections.refresh();
+
+                if (stockInBookCollections.items.length > 0) {
+                    var totalDebit = 0;
+                    var totalCredit = 0;
+                    var totalBalance = 0;
+                    for (var i = 0; i < stockInBookCollections.items.length; i++) {
+                        totalDebit += stockInBookCollections.items[i].DebitAmount;
+                        totalCredit += stockInBookCollections.items[i].CreditAmount;
+                        totalBalance += stockInBookCollections.items[i].Balance;
+                    }
+
+                    document.getElementById("totalDebitAmount").value = parseFloat(totalDebit).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCreditAmount").value = parseFloat(totalCredit).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalBalanceAmount").value = parseFloat(totalBalance).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalDebitAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCreditAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalBalanceAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            stockInBookCollections.filter = function (item) {
+                return !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.AccountCode.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            stockInBookGrid.itemsSource = stockInBookCollections;
+            stockInBookGrid.trackChanges = true;
+        }
+
+        // =========
+        // Flex Grid
+        // =========
+        function createStockInBookFlexGrid() {
+            stockInBookCollections = new wijmo.collections.CollectionView(getStockInBook());
+            stockInBookCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                stockInBookCollections.refresh();
+
+                if (stockInBookCollections.items.length > 0) {
+                    var totalDebit = 0;
+                    var totalCredit = 0;
+                    var totalBalance = 0;
+                    for (var i = 0; i < stockInBookCollections.items.length; i++) {
+                        totalDebit += stockInBookCollections.items[i].DebitAmount;
+                        totalCredit += stockInBookCollections.items[i].CreditAmount;
+                        totalBalance += stockInBookCollections.items[i].Balance;
+                    }
+
+                    document.getElementById("totalDebitAmount").value = parseFloat(totalDebit).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCreditAmount").value = parseFloat(totalCredit).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalBalanceAmount").value = parseFloat(totalBalance).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalDebitAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalCreditAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.getElementById("totalBalanceAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            stockInBookCollections.filter = function (item) {
+                return !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.AccountCode.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            stockInBookGrid = new wijmo.grid.FlexGrid('#stockInBookGrid');
+            stockInBookGrid.initialize({
+                columns: [
+                    {
+                        "header": "IN Number",
+                        "binding": "DocumentReference",
+                        "allowSorting": true,
+                        "width": "1.5*"
+                    },
+                    {
+                        "header": "Code",
+                        "binding": "AccountCode",
+                        "allowSorting": true,
+                        "width": "0.5*"
+                    },
+                    {
+                        "header": "Account",
+                        "binding": "Account",
+                        "allowSorting": true,
+                        "width": "1.5*"
+                    },
+                    {
+                        "header": "Article",
+                        "binding": "Article",
+                        "isContentHtml": true,
+                        "allowSorting": true,
+                        "width": "2*"
+                    },
+                    {
+                        "header": "Debit",
+                        "binding": "DebitAmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Credit",
+                        "binding": "CreditAmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Balance",
+                        "binding": "BalanceDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1*"
+                    },
+                ],
+                autoGenerateColumns: false,
+                itemsSource: stockInBookCollections,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            stockInBookGrid.trackChanges = true;
+        }
+
+        // ============
+        // Download CSV
+        // ============
+        function btnStockInBookCSVOnclick() {
             var CSV = '';
             var stockInBook = [];
             var fileName = 'StockInBook.CSV';
 
             for (i = 0; i < stockInBookCollections.items.length; i++) {
+                var IsClose = stockInBookCollections.items[i].IsClose;
+                var isPOClose = "Not Closed";
+                if (IsClose) {
+                    isPOClose = "Closed"
+                }
+
                 stockInBook.push({
                     DocumentReference: stockInBookCollections.items[i].DocumentReference,
                     AccountCode: stockInBookCollections.items[i].AccountCode,
@@ -158,33 +524,24 @@
                     DebitAmount: stockInBookCollections.items[i].DebitAmount,
                     CreditAmount: stockInBookCollections.items[i].CreditAmount,
                     Balance: stockInBookCollections.items[i].Balance,
-
                 });
             }
 
-            //for (var i = 0; i < symbols.length; i++) {
-            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
-            //}
-
             var Headers = [];
             Headers.push({
-                DocumentReference: "IN Number",
-                AccountCode: "Code",
+                DocumentReference: "Document Reference",
+                AccountCode: "Account Code",
                 Account: "Account",
                 Article: "Article",
-                DebitAmount: "Debit",
-                CreditAmount: "Credit",
+                DebitAmount: "Debit Amount",
+                CreditAmount: "Credit Amount",
                 Balance: "Balance",
-
             });
 
             var header = '';
-            // Rows
             for (var b in Headers[0]) {
                 header += '"' + Headers[0][b] + '",';
             }
-
-
 
             CSV = header + '\r\n';
             for (var i = 0; i < stockInBook.length; i++) {
@@ -197,12 +554,10 @@
                 CSV += row + '\r\n';
             }
 
-
             if (CSV == '') {
                 toastr.error("No data.");
             } else {
                 var link = document.createElement("a");
-
                 if (link.download !== undefined) {
                     var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
                     var url = URL.createObjectURL(blob);
@@ -228,82 +583,31 @@
             }
         }
 
-        $(document).ready(function () {
-            NProgress.start();
-            document.getElementById("dateFrom").value = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
+        // =====================
+        // Preview and Print PDF
+        // =====================
+        function btnStockInBookPrintPDFOnclick() {
+            if (cboARStockInBookCompany.selectedValue != null) {
+                if (cboARStockInBookBranch.selectedValue != null) {
+                    var startDate = cboARStockInBookStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboARStockInBookEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboARStockInBookCompany.selectedValue;
+                    var branchId = cboARStockInBookBranch.selectedValue;
 
-            stockInBookCollections = new wijmo.collections.CollectionView(getStockInBook());
-            stockInBookCollections.canFilter = true;
-
-            var filterText = '';
-            $('#InputFilter').keyup(function () {
-                filterText = this.value.toLowerCase();
-                stockInBookCollections.refresh();
-            });
-            stockInBookCollections.filter = function (item) {
-                return !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.AccountCode.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
-
+                    window.location.href = '/RepStockInBook/StockInBook?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
             }
-            // Flex Grid
-            var stockInBookGrid = new wijmo.grid.FlexGrid('#stockInBookGrid');
-            stockInBookGrid.initialize({
-                columns: [
-                    {
-                        "header": "IN Number",
-                        "binding": "DocumentReference",
-                        "allowSorting": true,
-                        "width": 180,
-                    },
-                    {
-                        "header": "Code",
-                        "binding": "AccountCode",
-                        "allowSorting": true,
-                        "width": 100
-                    },
-                    {
-                        "header": "Account",
-                        "binding": "Account",
-                        "allowSorting": true,
-                        "width": 200
-                    },
-                    {
-                        "header": "Article",
-                        "binding": "Article",
-                        "isContentHtml": true,
-                        "allowSorting": true,
-                        "width": 200
-                    },
-                    {
-                        "header": "Debit",
-                        "binding": "DebitAmount",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Credit",
-                        "binding": "CreditAmount",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                    {
-                        "header": "Balance",
-                        "binding": "Balance",
-                        "allowSorting": true,
-                        "width": 150
-                    },
-                ],
-                autoGenerateColumns: false,
-                itemsSource: stockInBookCollections,
-                isReadOnly: true,
-                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                allowDragging: wijmo.grid.AllowDragging.None,
-                selectionMode: wijmo.grid.SelectionMode.Row
-            });
+        }
 
-            stockInBookGrid.trackChanges = true;
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            stockInBookDateFilters();
         });
     </script>
     <script type="text/javascript">

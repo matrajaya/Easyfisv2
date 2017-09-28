@@ -18,9 +18,7 @@ namespace easyfis.ApiControllers
         // =====================
         // Inventory Report List
         // =====================
-        [Authorize]
-        [HttpGet]
-        [Route("api/inventoryReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        [Authorize, HttpGet, Route("api/inventoryReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
         public List<Models.MstArticleInventory> ListInventoryReport(String startDate, String endDate, String companyId, String branchId)
         {
             try

@@ -10,21 +10,23 @@ namespace easyfis.ApiControllers
 {
     public class ApiStockOutBookController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-
-        // list account
-        [Authorize]
-        [HttpGet]
-        [Route("api/StockOutBook/list/{startDate}/{endDate}/{companyId}")]
-        public List<Models.TrnJournal> listStockOutBook(String startDate, String endDate, String companyId)
+        // ==========================
+        // Stock Out Book List Report
+        // ==========================
+        [Authorize, HttpGet, Route("api/StockOutBook/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnJournal> ListStockOutBook(String startDate, String endDate, String companyId, String branchId)
         {
-
             var journalsDocumentReferences = from d in db.TrnJournals
                                              where d.JournalDate >= Convert.ToDateTime(startDate)
                                              && d.JournalDate <= Convert.ToDateTime(endDate)
                                              && d.MstBranch.CompanyId == Convert.ToInt32(companyId)
-                                              && d.OTId != null
+                                             && d.BranchId == Convert.ToInt32(branchId)
+                                             && d.OTId != null
                                              select new Models.TrnJournal
                                              {
                                                  DocumentReference = d.DocumentReference,

@@ -198,7 +198,7 @@ namespace easyfis.Controllers
         public List<Models.MstArticleInventory> listArticleInventoryBybranchId(String branchId)
         {
             var articleInventories = from d in db.MstArticleInventories.OrderBy(d => d.MstArticle.Article)
-                                     where d.BranchId == currentBranchId()
+                                     where d.BranchId == Convert.ToInt32(branchId)
                                      && d.MstArticle.IsLocked == true
                                      && d.MstArticle.IsInventory == true
                                      && d.Quantity > 0

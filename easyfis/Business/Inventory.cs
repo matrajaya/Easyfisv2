@@ -374,6 +374,7 @@ namespace easyfis.Business
             try
             {
                 Int32 articleInventoryId;
+                Int32 componentArticleInventoryId;
 
                 // ===============
                 // Stock In Header
@@ -400,6 +401,8 @@ namespace easyfis.Business
                             {
                                 if (stockInItem.MstArticle.MstArticleComponents.Any())
                                 {
+                                    articleInventoryId = 0;
+
                                     // ======================
                                     // Get Artticle Inventory
                                     // ======================
@@ -408,7 +411,6 @@ namespace easyfis.Business
                                                              && d.ArticleId == stockInItem.ItemId
                                                              select d;
 
-                                    articleInventoryId = 0;
                                     if (articleInventories.Any())
                                     {
                                         if (stockIns.FirstOrDefault().MstUser4.InventoryType.Equals("Moving Average"))
@@ -419,7 +421,7 @@ namespace easyfis.Business
                                         {
                                             foreach (var articleInventory in articleInventories)
                                             {
-                                                if (articleInventory.InventoryCode.Equals("ST-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber))
+                                                if (articleInventory.InventoryCode.Equals("IN-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber))
                                                 {
                                                     articleInventoryId = articleInventory.Id;
                                                     break;
@@ -464,33 +466,70 @@ namespace easyfis.Business
                                     db.TrnInventories.InsertOnSubmit(newInventory);
                                     db.SubmitChanges();
 
+                                    // ======================================================
+                                    // Update article inventory quantity and cost (Component) 
+                                    // ======================================================
+                                    UpdateArticleInventory(articleInventoryId, stockIns.FirstOrDefault().MstUser4.InventoryType);
+
                                     // =========
                                     // Component
                                     // =========
                                     foreach (var component in stockInItem.MstArticle.MstArticleComponents)
                                     {
-                                        // ============================
-                                        // Insert Inventory (Component)
-                                        // ============================
-                                        Data.TrnInventory newComponentInventory = new Data.TrnInventory();
-                                        newComponentInventory.BranchId = stockIns.FirstOrDefault().BranchId;
-                                        newComponentInventory.InventoryDate = Convert.ToDateTime(stockIns.FirstOrDefault().INDate);
-                                        newComponentInventory.ArticleId = component.ComponentArticleId;
-                                        newComponentInventory.ArticleInventoryId = articleInventoryId;
-                                        newComponentInventory.INId = INId;
-                                        newComponentInventory.QuantityIn = 0;
-                                        newComponentInventory.QuantityOut = (component.Quantity * stockInItem.Quantity) * -1;
-                                        newComponentInventory.Quantity = (component.Quantity * stockInItem.Quantity) * -1;
-                                        newComponentInventory.Amount = (newComponentInventory.Quantity * component.MstArticle1.MstArticleInventories.OrderByDescending(c => c.Cost).FirstOrDefault().Cost);
-                                        newComponentInventory.Particulars = stockIns.FirstOrDefault().Particulars;
-                                        db.TrnInventories.InsertOnSubmit(newComponentInventory);
-                                        db.SubmitChanges();
-                                    }
+                                        componentArticleInventoryId = 0;
 
-                                    // ======================================================
-                                    // Update article inventory quantity and cost (Component) 
-                                    // ======================================================
-                                    UpdateArticleInventory(articleInventoryId, stockIns.FirstOrDefault().MstUser4.InventoryType);
+                                        // ======================
+                                        // Get Artticle Inventory
+                                        // ======================
+                                        var componentArticleInventories = from d in db.MstArticleInventories
+                                                                          where d.BranchId == stockIns.FirstOrDefault().BranchId
+                                                                          && d.ArticleId == component.ComponentArticleId
+                                                                          select d;
+
+                                        if (componentArticleInventories.Any())
+                                        {
+                                            if (stockIns.FirstOrDefault().MstUser4.InventoryType.Equals("Moving Average"))
+                                            {
+                                                componentArticleInventoryId = componentArticleInventories.FirstOrDefault().Id;
+                                            }
+                                            else
+                                            {
+                                                foreach (var componentArticleInventory in componentArticleInventories)
+                                                {
+                                                    if (componentArticleInventory.InventoryCode.Equals("IN-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber))
+                                                    {
+                                                        componentArticleInventoryId = componentArticleInventory.Id;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        if (componentArticleInventoryId != 0)
+                                        {
+                                            // ============================
+                                            // Insert Inventory (Component)
+                                            // ============================
+                                            Data.TrnInventory newComponentInventory = new Data.TrnInventory();
+                                            newComponentInventory.BranchId = stockIns.FirstOrDefault().BranchId;
+                                            newComponentInventory.InventoryDate = Convert.ToDateTime(stockIns.FirstOrDefault().INDate);
+                                            newComponentInventory.ArticleId = component.ComponentArticleId;
+                                            newComponentInventory.ArticleInventoryId = componentArticleInventoryId;
+                                            newComponentInventory.INId = INId;
+                                            newComponentInventory.QuantityIn = 0;
+                                            newComponentInventory.QuantityOut = (component.Quantity * stockInItem.Quantity) * -1;
+                                            newComponentInventory.Quantity = (component.Quantity * stockInItem.Quantity) * -1;
+                                            newComponentInventory.Amount = (newComponentInventory.Quantity * component.MstArticle1.MstArticleInventories.OrderByDescending(c => c.Cost).FirstOrDefault().Cost);
+                                            newComponentInventory.Particulars = stockIns.FirstOrDefault().Particulars;
+                                            db.TrnInventories.InsertOnSubmit(newComponentInventory);
+                                            db.SubmitChanges();
+
+                                            // ======================================================
+                                            // Update article inventory quantity and cost (Component) 
+                                            // ======================================================
+                                            UpdateArticleInventory(articleInventoryId, stockIns.FirstOrDefault().MstUser4.InventoryType);
+                                        }
+                                    }
                                 }
                             }
                             else
@@ -514,7 +553,7 @@ namespace easyfis.Business
                                     {
                                         foreach (var articleInventory in articleInventories)
                                         {
-                                            if (articleInventory.InventoryCode.Equals("ST-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber))
+                                            if (articleInventory.InventoryCode.Equals("IN-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber))
                                             {
                                                 articleInventoryId = articleInventory.Id;
                                                 break;
@@ -622,7 +661,7 @@ namespace easyfis.Business
                                 {
                                     foreach (var articleInventory in articleInventories)
                                     {
-                                        if (articleInventory.InventoryCode.Equals("ST-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber))
+                                        if (articleInventory.InventoryCode.Equals("IN-" + stockIns.FirstOrDefault().MstBranch.BranchCode + "-" + stockIns.FirstOrDefault().INNumber))
                                         {
                                             articleInventoryId = articleInventory.Id;
                                             break;

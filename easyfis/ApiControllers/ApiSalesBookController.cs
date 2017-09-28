@@ -10,20 +10,22 @@ namespace easyfis.ApiControllers
 {
     public class ApiSalesBookController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-
-        // list account
-        [Authorize]
-        [HttpGet]
-        [Route("api/SalesBook/list/{startDate}/{endDate}/{companyId}")]
-        public List<Models.TrnJournal> listSalesBook(String startDate, String endDate, String companyId)
+        // ======================
+        // Sales Book List Report
+        // ======================
+        [Authorize, HttpGet, Route("api/SalesBook/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnJournal> ListSalesBook(String startDate, String endDate, String companyId, String branchId)
         {
-
             var journalsDocumentReferences = from d in db.TrnJournals
                                              where d.JournalDate >= Convert.ToDateTime(startDate)
                                              && d.JournalDate <= Convert.ToDateTime(endDate)
                                              && d.MstBranch.CompanyId == Convert.ToInt32(companyId)
+                                             && d.BranchId == Convert.ToInt32(branchId)
                                              && d.SIId != null
                                              select new Models.TrnJournal
                                              {

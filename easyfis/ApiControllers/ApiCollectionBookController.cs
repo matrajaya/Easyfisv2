@@ -10,20 +10,22 @@ namespace easyfis.ApiControllers
 {
     public class ApiCollectionBookController : ApiController
     {
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-
-        // list account
-        [Authorize]
-        [HttpGet]
-        [Route("api/CollectionBook/list/{startDate}/{endDate}/{companyId}")]
-        public List<Models.TrnJournal> listCollectionBook(String startDate, String endDate, String companyId)
+        // ===========================
+        // Collection Book List Report
+        // ===========================
+        [Authorize, HttpGet, Route("api/CollectionBook/list/{startDate}/{endDate}/{companyId}/{branchId}")]
+        public List<Models.TrnJournal> listCollectionBook(String startDate, String endDate, String companyId, String branchId)
         {
-
             var journalsDocumentReferences = from d in db.TrnJournals
                                              where d.JournalDate >= Convert.ToDateTime(startDate)
                                              && d.JournalDate <= Convert.ToDateTime(endDate)
                                              && d.MstBranch.CompanyId == Convert.ToInt32(companyId)
+                                             && d.BranchId == Convert.ToInt32(branchId)
                                              && d.ORId != null
                                              select new Models.TrnJournal
                                              {
