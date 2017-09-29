@@ -703,12 +703,17 @@
         function btnAccountLedgerReportPrintPDFOnclick() {
             if (cboARAccountLedgerReportCompany.selectedValue != null) {
                 if (cboARAccountLedgerReportBranch.selectedValue != null) {
-                    var startDate = cboARAccountLedgerReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
-                    var endDate = cboARAccountLedgerReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
-                    var companyId = cboARAccountLedgerReportCompany.selectedValue;
-                    var branchId = cboARAccountLedgerReportBranch.selectedValue;
+                    if (cboAccountLedgerAccount.selectedValue != null) {
+                        var startDate = cboARAccountLedgerReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                        var endDate = cboARAccountLedgerReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                        var companyId = cboARAccountLedgerReportCompany.selectedValue;
+                        var branchId = cboARAccountLedgerReportBranch.selectedValue;
+                        var accountId = cboAccountLedgerAccount.selectedValue;
 
-                    window.location.href = '/RepAccountLedger/AccountLedger?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                        window.location.href = '/RepAccountLedger/AccountLedger?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId + '&AccountId=' + accountId;
+                    } else {
+                        toastr.error("Lacking Information");
+                    }
                 } else {
                     toastr.error("Lacking Information");
                 }

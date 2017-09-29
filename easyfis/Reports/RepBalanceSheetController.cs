@@ -3,6 +3,7 @@ using iTextSharp.text.pdf;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -42,7 +43,7 @@ namespace easyfis.Reports
             Font fontArial10 = FontFactory.GetFont("Arial", 10);
             Font fontArial11Bold = FontFactory.GetFont("Arial", 11, Font.BOLD);
 
-            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 4.5F)));
 
             // ==============
             // Company Detail
@@ -61,11 +62,21 @@ namespace easyfis.Reports
             header.AddCell(new PdfPCell(new Phrase(companyName, fontArial17Bold)) { Border = 0 });
             header.AddCell(new PdfPCell(new Phrase("Balance Sheet", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
             header.AddCell(new PdfPCell(new Phrase(address, fontArial11)) { Border = 0, PaddingTop = 5f });
-            header.AddCell(new PdfPCell(new Phrase("Date as of " + DateAsOf, fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2, });
+            header.AddCell(new PdfPCell(new Phrase("Date as of " + Convert.ToDateTime(DateAsOf).ToString("MM-dd-yyyy", CultureInfo.InvariantCulture), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2, });
             header.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
             header.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
             document.Add(header);
             document.Add(line);
+
+            // =====
+            // Space
+            // =====
+            PdfPTable spaceTable = new PdfPTable(1);
+            float[] widthCellsSpaceTable = new float[] { 100f };
+            spaceTable.SetWidths(widthCellsSpaceTable);
+            spaceTable.WidthPercentage = 100;
+            spaceTable.AddCell(new PdfPCell(new Phrase(" ", fontArial10Bold)) { Border = 0, PaddingTop = 5f });
+            document.Add(spaceTable);
 
             Decimal totalOverallAssets = 0;
             Decimal totalOverallLiabilities = 0;
@@ -115,7 +126,6 @@ namespace easyfis.Reports
                     Decimal totalAllAssets = 0;
                     foreach (var assetSubCategoryDescription in assetSubCategoryDescriptions)
                     {
-                        document.Add(line);
                         PdfPTable assetSubCategoryDescriptionTable = new PdfPTable(1);
                         float[] widthCellsAssetSubCategoryDescriptionTable = new float[] { 100f };
                         assetSubCategoryDescriptionTable.SetWidths(widthCellsAssetSubCategoryDescriptionTable);
@@ -272,7 +282,6 @@ namespace easyfis.Reports
                     Decimal totalAllLiabilities = 0;
                     foreach (var liabilitySubCategoryDescription in liabilitySubCategoryDescriptions)
                     {
-                        document.Add(line);
                         PdfPTable liabilitySubCategoryDescriptionTable = new PdfPTable(1);
                         float[] widthCellsLiabilitySubCategoryDescriptionTable = new float[] { 100f };
                         liabilitySubCategoryDescriptionTable.SetWidths(widthCellsLiabilitySubCategoryDescriptionTable);
@@ -474,7 +483,6 @@ namespace easyfis.Reports
                     Decimal totalAllEquities = 0;
                     foreach (var equitySubCategoryDescription in equitySubCategoryDescriptions)
                     {
-                        document.Add(line);
                         PdfPTable equitySubCategoryDescriptionTable = new PdfPTable(1);
                         float[] widthCellsEquitySubCategoryDescriptionTable = new float[] { 100f };
                         equitySubCategoryDescriptionTable.SetWidths(widthCellsEquitySubCategoryDescriptionTable);

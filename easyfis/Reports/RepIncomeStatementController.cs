@@ -1,6 +1,7 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -40,7 +41,7 @@ namespace easyfis.Reports
             Font fontArial10 = FontFactory.GetFont("Arial", 10);
             Font fontArial11Bold = FontFactory.GetFont("Arial", 11, Font.BOLD);
 
-            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 4.5F)));
 
             // ==============
             // Company Detail
@@ -59,11 +60,21 @@ namespace easyfis.Reports
             header.AddCell(new PdfPCell(new Phrase(companyName, fontArial17Bold)) { Border = 0 });
             header.AddCell(new PdfPCell(new Phrase("Income Statement", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
             header.AddCell(new PdfPCell(new Phrase(address, fontArial11)) { Border = 0, PaddingTop = 5f });
-            header.AddCell(new PdfPCell(new Phrase("Date from " + StartDate + " to " + EndDate, fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2, });
+            header.AddCell(new PdfPCell(new Phrase("Date from " + Convert.ToDateTime(StartDate).ToString("MM-dd-yyyy", CultureInfo.InvariantCulture) + " to " + Convert.ToDateTime(EndDate).ToString("MM-dd-yyyy", CultureInfo.InvariantCulture), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2, });
             header.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
             header.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
             document.Add(header);
             document.Add(line);
+
+            // =====
+            // Space
+            // =====
+            PdfPTable spaceTable = new PdfPTable(1);
+            float[] widthCellsSpaceTable = new float[] { 100f };
+            spaceTable.SetWidths(widthCellsSpaceTable);
+            spaceTable.WidthPercentage = 100;
+            spaceTable.AddCell(new PdfPCell(new Phrase(" ", fontArial10Bold)) { Border = 0, PaddingTop = 5f });
+            document.Add(spaceTable);
 
             Decimal totalOverallIncomes = 0;
             Decimal totalOverallExpenses = 0;
@@ -113,7 +124,6 @@ namespace easyfis.Reports
                     Decimal totalAllIncomes = 0;
                     foreach (var incomeSubCategoryDescription in incomeSubCategoryDescriptions)
                     {
-                        document.Add(line);
                         PdfPTable incomeSubCategoryDescriptionTable = new PdfPTable(1);
                         float[] widthCellsIncomeSubCategoryDescriptionTable = new float[] { 100f };
                         incomeSubCategoryDescriptionTable.SetWidths(widthCellsIncomeSubCategoryDescriptionTable);
@@ -271,7 +281,6 @@ namespace easyfis.Reports
                     Decimal totalAllExpenses = 0;
                     foreach (var expenseSubCategoryDescription in expenseSubCategoryDescriptions)
                     {
-                        document.Add(line);
                         PdfPTable expenseSubCategoryDescriptionTable = new PdfPTable(1);
                         float[] widthCellsExpenseSubCategoryDescriptionTable = new float[] { 100f };
                         expenseSubCategoryDescriptionTable.SetWidths(widthCellsExpenseSubCategoryDescriptionTable);

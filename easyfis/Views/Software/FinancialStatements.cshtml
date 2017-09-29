@@ -79,11 +79,11 @@
                                                             </div>
                                                         </div>
                                                         @*<div class="form-group">
-                                                            <label class="control-label col-sm-4">Branch</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cboBalanceSheetBranch"></div>
-                                                            </div>
-                                                        </div>*@
+                                                                <label class="control-label col-sm-4">Branch</label>
+                                                                <div class="col-sm-8">
+                                                                    <div class="comboBox-wide" id="cboBalanceSheetBranch"></div>
+                                                                </div>
+                                                            </div>*@
                                                     </div>
                                                 </div>
                                             </form>
@@ -123,11 +123,11 @@
                                                             </div>
                                                         </div>
                                                         @*<div class="form-group">
-                                                            <label class="control-label col-sm-4">Branch</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cboIncomeStatementBranch"></div>
-                                                            </div>
-                                                        </div>*@
+                                                                <label class="control-label col-sm-4">Branch</label>
+                                                                <div class="col-sm-8">
+                                                                    <div class="comboBox-wide" id="cboIncomeStatementBranch"></div>
+                                                                </div>
+                                                            </div>*@
                                                     </div>
                                                 </div>
                                             </form>
@@ -167,11 +167,11 @@
                                                             </div>
                                                         </div>
                                                         @*<div class="form-group">
-                                                            <label class="control-label col-sm-4">Branch</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="comboBox-wide" id="cboCashFlowBranch"></div>
-                                                            </div>
-                                                        </div>*@
+                                                                <label class="control-label col-sm-4">Branch</label>
+                                                                <div class="col-sm-8">
+                                                                    <div class="comboBox-wide" id="cboCashFlowBranch"></div>
+                                                                </div>
+                                                            </div>*@
                                                     </div>
                                                 </div>
                                             </form>
@@ -1540,11 +1540,11 @@
         function btnBalanceSheetPrintPDFOnclick() {
             if (cboBalanceSheetCompany.selectedValue != null) {
                 //if (cboBalanceSheetBranch.selectedValue != null) {
-                    var dateAsOf = cboBalanceSheetDateAsOf.value.toLocaleDateString().replace(/\//g, '-');
-                    var companyId = cboBalanceSheetCompany.selectedValue;
-                    //var branchId = cboBalanceSheetBranch.selectedValue;
+                var dateAsOf = cboBalanceSheetDateAsOf.value.toLocaleDateString().replace(/\//g, '-');
+                var companyId = cboBalanceSheetCompany.selectedValue;
+                //var branchId = cboBalanceSheetBranch.selectedValue;
 
-                    window.location.href = '/RepBalanceSheet/BalanceSheet?DateAsOf=' + dateAsOf + '&CompanyId=' + companyId;
+                window.location.href = '/RepBalanceSheet/BalanceSheet?DateAsOf=' + dateAsOf + '&CompanyId=' + companyId;
                 //} else {
                 //    toastr.error("Lacking Information");
                 //}
@@ -1559,12 +1559,12 @@
         function btnIncomeStatementPDFOnclick() {
             if (cboIncomeStatementCompany.selectedValue != null) {
                 //if (cboIncomeStatementBranch.selectedValue != null) {
-                    var startDate = cboIncomeStatementStartDate.value.toLocaleDateString().replace(/\//g, '-');
-                    var endDate = cboIncomeStatementEndDate.value.toLocaleDateString().replace(/\//g, '-');
-                    var companyId = cboIncomeStatementCompany.selectedValue;
-                    //var branchId = cboIncomeStatementBranch.selectedValue;
+                var startDate = cboIncomeStatementStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                var endDate = cboIncomeStatementEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                var companyId = cboIncomeStatementCompany.selectedValue;
+                //var branchId = cboIncomeStatementBranch.selectedValue;
 
-                    window.location.href = '/RepIncomeStatement/IncomeStatement?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepIncomeStatement/IncomeStatement?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
                 //} else {
                 //    toastr.error("Lacking Information");
                 //}
@@ -1579,12 +1579,12 @@
         function btnCashFlowPrintPDFOnclick() {
             if (cboCashFlowCompany.selectedValue != null) {
                 //if (cboCashFlowBranch.selectedValue != null) {
-                    var startDate = cboCashFlowStartDate.value.toLocaleDateString().replace(/\//g, '-');
-                    var endDate = cboCashFlowEndDate.value.toLocaleDateString().replace(/\//g, '-');
-                    var companyId = cboCashFlowCompany.selectedValue;
-                    //var branchId = cboCashFlowBranch.selectedValue;
+                var startDate = cboCashFlowStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                var endDate = cboCashFlowEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                var companyId = cboCashFlowCompany.selectedValue;
+                //var branchId = cboCashFlowBranch.selectedValue;
 
-                    window.location.href = '/RepCashFlowIndirect/CashFlowIndirect?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepCashFlowIndirect/CashFlowIndirect?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId;
                 //} else {
                 //    toastr.error("Lacking Information");
                 //}
@@ -1671,7 +1671,7 @@
                         var branchId = cboAccountLedgerBranch.selectedValue;
                         var accountId = cboAccountLedgerAccount.selectedValue;
 
-                        window.location.href = '/RepAccountLedger/AccountLedger?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + '&BranchId=' + branchId + companyId + '&AccountId=' + accountId;
+                        window.location.href = '/RepAccountLedger/AccountLedger?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId + '&AccountId=' + accountId;
                     } else {
                         toastr.error("Lacking Information");
                     }
