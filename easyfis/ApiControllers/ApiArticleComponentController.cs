@@ -34,6 +34,25 @@ namespace easyfis.Controllers
             return articleComponents.ToList();
         }
 
+        // ================
+        // Get Highest Cost
+        // ================
+        public Decimal getHighestCost(Int32 articleId)
+        {
+            var articleInventories = from d in db.MstArticleInventories.OrderByDescending(d => d.Cost)
+                                     where d.ArticleId == articleId
+                                     select d;
+
+            if (articleInventories.Any())
+            {
+                return articleInventories.FirstOrDefault().Cost;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         // list Article Component by ArticleId
         [Authorize]
         [HttpGet]
@@ -53,7 +72,7 @@ namespace easyfis.Controllers
                                         Quantity = d.Quantity,
                                         UnitId = d.MstArticle1.UnitId,
                                         Unit = d.MstArticle1.MstUnit.Unit,
-                                        Cost = d.MstArticle1.MstArticleInventories.OrderByDescending(c => c.Cost).FirstOrDefault().Cost,
+                                        Cost = getHighestCost(d.ComponentArticleId),
                                         Particulars = d.Particulars,
                                     };
 
