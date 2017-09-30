@@ -2,6 +2,7 @@
 using iTextSharp.text.pdf;
 using Microsoft.AspNet.Identity;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -10,242 +11,202 @@ namespace easyfis.Reports
 {
     public class RepPurchaseOrderController : Controller
     {
-        // Easyfis data context
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // current branch Id
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
-
-        // PDF Item List
+        // ====================
+        // Purchase Order - PDF
+        // ====================
         [Authorize]
         public ActionResult PurchaseOrder(Int32 POId)
         {
-            // PDF settings
+            // ==============================
+            // PDF Settings and Customization
+            // ==============================
             MemoryStream workStream = new MemoryStream();
             Rectangle rectangle = new Rectangle(PageSize.A3);
             Document document = new Document(rectangle, 72, 72, 72, 72);
             document.SetMargins(30f, 30f, 30f, 30f);
             PdfWriter.GetInstance(document, workStream).CloseStream = false;
 
-            // Document Starts
             document.Open();
 
-            // Fonts Customization
+            // =====
+            // Fonts
+            // =====
             Font fontArial17Bold = FontFactory.GetFont("Arial", 17, Font.BOLD);
             Font fontArial11 = FontFactory.GetFont("Arial", 11);
-            Font fontArial10Bold = FontFactory.GetFont("Arial", 10, Font.BOLD);
             Font fontArial9Bold = FontFactory.GetFont("Arial", 9, Font.BOLD);
             Font fontArial9 = FontFactory.GetFont("Arial", 9);
+            Font fontArial10Bold = FontFactory.GetFont("Arial", 10, Font.BOLD);
             Font fontArial10 = FontFactory.GetFont("Arial", 10);
             Font fontArial11Bold = FontFactory.GetFont("Arial", 11, Font.BOLD);
             Font fontArial12Bold = FontFactory.GetFont("Arial", 12, Font.BOLD);
 
-            // line
-            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 4.5F)));
 
+            var identityUserId = User.Identity.GetUserId();
+            var currentUser = from d in db.MstUsers where d.UserId == identityUserId select d;
+            var currentCompanyId = currentUser.FirstOrDefault().CompanyId;
+            var currentBranchId = currentUser.FirstOrDefault().BranchId;
+
+            // ==============
             // Company Detail
-            var companyName = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.Company).SingleOrDefault();
-            var address = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.Address).SingleOrDefault();
-            var contactNo = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.ContactNumber).SingleOrDefault();
-            var branch = (from d in db.MstBranches where d.Id == currentBranchId() select d.Branch).SingleOrDefault();
+            // ==============
+            var companyName = (from d in db.MstCompanies where d.Id == Convert.ToInt32(currentCompanyId) select d.Company).FirstOrDefault();
+            var address = (from d in db.MstCompanies where d.Id == Convert.ToInt32(currentCompanyId) select d.Address).FirstOrDefault();
+            var contactNo = (from d in db.MstCompanies where d.Id == Convert.ToInt32(currentCompanyId) select d.ContactNumber).FirstOrDefault();
+            var branch = (from d in db.MstBranches where d.Id == Convert.ToInt32(currentBranchId) select d.ContactNumber).FirstOrDefault();
 
-            // table main header
-            PdfPTable tableHeaderPage = new PdfPTable(2);
-            float[] widthsCellsheaderPage = new float[] { 100f, 75f };
-            tableHeaderPage.SetWidths(widthsCellsheaderPage);
-            tableHeaderPage.WidthPercentage = 100;
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(companyName, fontArial17Bold)) { Border = 0 });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase("Purchase Order", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(address, fontArial11)) { Border = 0, PaddingTop = 5f });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(branch, fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2, });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
-            document.Add(tableHeaderPage);
+            // ===========
+            // Header Page
+            // ===========
+            PdfPTable headerPage = new PdfPTable(2);
+            float[] widthsCellsHeaderPage = new float[] { 100f, 75f };
+            headerPage.SetWidths(widthsCellsHeaderPage);
+            headerPage.WidthPercentage = 100;
+            headerPage.AddCell(new PdfPCell(new Phrase(companyName, fontArial17Bold)) { Border = 0 });
+            headerPage.AddCell(new PdfPCell(new Phrase("Purchase Order", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
+            headerPage.AddCell(new PdfPCell(new Phrase(address, fontArial11)) { Border = 0, PaddingTop = 5f });
+            headerPage.AddCell(new PdfPCell(new Phrase(branch, fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
+            headerPage.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
+            headerPage.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
+            document.Add(headerPage);
             document.Add(line);
 
-            var purchaseOrderHeaders = from d in db.TrnPurchaseOrders
-                                       where d.Id == POId
-                                       && d.IsLocked == true
-                                       select new Models.TrnPurchaseOrder
-                                       {
-                                           Id = d.Id,
-                                           BranchId = d.BranchId,
-                                           Branch = d.MstBranch.Branch,
-                                           PONumber = d.PONumber,
-                                           PODate = d.PODate.ToShortDateString(),
-                                           SupplierId = d.SupplierId,
-                                           Supplier = d.MstArticle.Article,
-                                           TermId = d.TermId,
-                                           Term = d.MstTerm.Term,
-                                           ManualRequestNumber = d.ManualRequestNumber,
-                                           ManualPONumber = d.ManualPONumber,
-                                           DateNeeded = d.DateNeeded.ToShortDateString(),
-                                           Remarks = d.Remarks,
-                                           IsClose = d.IsClose,
-                                           RequestedById = d.RequestedById,
-                                           RequestedBy = d.MstUser4.FullName,
-                                           PreparedById = d.PreparedById,
-                                           PreparedBy = d.MstUser3.FullName,
-                                           CheckedById = d.CheckedById,
-                                           CheckedBy = d.MstUser1.FullName,
-                                           ApprovedById = d.ApprovedById,
-                                           ApprovedBy = d.MstUser.FullName
-                                       };
+            // ===================
+            // Get Purchase Orders
+            // ===================
+            var purchaseOrders = from d in db.TrnPurchaseOrders
+                                 where d.Id == Convert.ToInt32(POId)
+                                 && d.IsLocked == true
+                                 select d;
 
-            if (purchaseOrderHeaders.Any())
+            if (purchaseOrders.Any())
             {
+                String supplier = purchaseOrders.FirstOrDefault().MstArticle.Article;
+                String PONumber = purchaseOrders.FirstOrDefault().PONumber;
+                String term = purchaseOrders.FirstOrDefault().MstArticle.MstTerm.Term;
+                String PODate = purchaseOrders.FirstOrDefault().PODate.ToString("MM-dd-yyyy", CultureInfo.InvariantCulture);
+                String dateNeeded = purchaseOrders.FirstOrDefault().DateNeeded.ToString("MM-dd-yyyy", CultureInfo.InvariantCulture);
+                String requestNo = purchaseOrders.FirstOrDefault().ManualRequestNumber;
+                String remarks = purchaseOrders.FirstOrDefault().Remarks;
+                String preparedBy = purchaseOrders.FirstOrDefault().MstUser3.FullName;
+                String checkedBy = purchaseOrders.FirstOrDefault().MstUser1.FullName;
+                String approvedBy = purchaseOrders.FirstOrDefault().MstUser.FullName;
+                String requestedBy = purchaseOrders.FirstOrDefault().MstUser4.FullName;
 
+                PdfPTable tablePurchaseOrder = new PdfPTable(4);
+                float[] widthscellsTablePurchaseOrder = new float[] { 40f, 130f, 70f, 40f };
+                tablePurchaseOrder.SetWidths(widthscellsTablePurchaseOrder);
+                tablePurchaseOrder.WidthPercentage = 100;
 
-                String Supplier = "", Term = "", DateNeeded = "", Remarks = "";
-                String PONumber = "", PODate = "", RequestNo = "";
-                String PreparedBy = "", CheckedBy = "", ApprovedBy = "", RequestedBy = "";
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Supplier: ", fontArial11Bold)) { Border = 0, PaddingTop = 10f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(supplier, fontArial11)) { Border = 0, PaddingTop = 10f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("PO Number: ", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(PONumber, fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
 
-                foreach (var purchaseOrderHeader in purchaseOrderHeaders)
-                {
-                    Supplier = purchaseOrderHeader.Supplier;
-                    Term = purchaseOrderHeader.Term;
-                    DateNeeded = purchaseOrderHeader.DateNeeded;
-                    Remarks = purchaseOrderHeader.Remarks;
-                    PONumber = purchaseOrderHeader.PONumber;
-                    PODate = purchaseOrderHeader.PODate;
-                    RequestNo = purchaseOrderHeader.ManualRequestNumber;
-                    PreparedBy = purchaseOrderHeader.PreparedBy;
-                    CheckedBy = purchaseOrderHeader.CheckedBy;
-                    ApprovedBy = purchaseOrderHeader.ApprovedBy;
-                    RequestedBy = purchaseOrderHeader.RequestedBy;
-                }
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Term: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(term, fontArial11)) { Border = 0, PaddingTop = 3f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("PO date: ", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(PODate, fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
 
-                PdfPTable tableSubHeader = new PdfPTable(4);
-                float[] widthscellsSubheader = new float[] { 40f, 100f, 100f, 40f };
-                tableSubHeader.SetWidths(widthscellsSubheader);
-                tableSubHeader.WidthPercentage = 100;
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("Supplier: ", fontArial11Bold)) { Border = 0, PaddingTop = 10f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(Supplier, fontArial11)) { Border = 0, PaddingTop = 10f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("PO Number: ", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(PONumber, fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Date Needed: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(dateNeeded, fontArial11)) { Border = 0, PaddingTop = 3f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(" ", fontArial11Bold)) { Colspan = 2, Border = 0, PaddingTop = 3f });
 
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("Term: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(Term, fontArial11)) { Border = 0, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("PO date: ", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(PODate, fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Request No: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(requestNo, fontArial11)) { Border = 0, PaddingTop = 3f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(" ", fontArial11Bold)) { Colspan = 2, Border = 0, PaddingTop = 3f });
 
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("Date Needed: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(DateNeeded, fontArial11)) { Border = 0, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("Request No: ", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(RequestNo, fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Remarks: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(remarks, fontArial11)) { Border = 0, PaddingTop = 3f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(" ", fontArial11Bold)) { Colspan = 2, Border = 0, PaddingTop = 3f });
 
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("Remarks: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(Remarks, fontArial11)) { Border = 0, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("", fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
+                document.Add(tablePurchaseOrder);
 
-                document.Add(tableSubHeader);
                 document.Add(Chunk.NEWLINE);
 
+                // ========================
+                // Get Purchase Order Items
+                // ========================
                 var purchaseOrderItems = from d in db.TrnPurchaseOrderItems
                                          where d.POId == POId
                                          && d.TrnPurchaseOrder.IsLocked == true
-                                         select new Models.TrnPurchaseOrderItem
+                                         select new
                                          {
-                                             Id = d.Id,
-                                             POId = d.POId,
                                              PO = d.TrnPurchaseOrder.PONumber,
-                                             ItemId = d.ItemId,
                                              Item = d.MstArticle.Article,
-                                             ItemCode = d.MstArticle.ManualArticleCode,
                                              Particulars = d.Particulars,
-                                             UnitId = d.UnitId,
                                              Unit = d.MstUnit.Unit,
                                              Quantity = d.Quantity,
                                              Cost = d.Cost,
                                              Amount = d.Amount
                                          };
 
-                PdfPTable tablePOLines = new PdfPTable(6);
-                float[] widthscellsPOLines = new float[] { 50f, 60f, 130f, 150f, 100f, 100f };
-                tablePOLines.SetWidths(widthscellsPOLines);
-                tablePOLines.WidthPercentage = 100;
-
-                tablePOLines.AddCell(new PdfPCell(new Phrase("Quantity", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tablePOLines.AddCell(new PdfPCell(new Phrase("Unit", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tablePOLines.AddCell(new PdfPCell(new Phrase("Item", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tablePOLines.AddCell(new PdfPCell(new Phrase("Particulars", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tablePOLines.AddCell(new PdfPCell(new Phrase("Price", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tablePOLines.AddCell(new PdfPCell(new Phrase("Amount", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-
-                Decimal TotalAmount = 0;
-                foreach (var purchaseOrderItem in purchaseOrderItems)
+                if (purchaseOrderItems.Any())
                 {
-                    tablePOLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Quantity.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tablePOLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Unit, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
-                    tablePOLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Item, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
-                    tablePOLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Particulars, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
-                    tablePOLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Cost.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tablePOLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Amount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    PdfPTable tablePurchaseOrderLines = new PdfPTable(6);
+                    float[] widthscellsPOLines = new float[] { 100f, 70f, 150f, 150f, 100f, 100f };
+                    tablePurchaseOrderLines.SetWidths(widthscellsPOLines);
+                    tablePurchaseOrderLines.WidthPercentage = 100;
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Quantity", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Unit", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Item", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Particulars", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Price", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Amount", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f, BackgroundColor = BaseColor.LIGHT_GRAY });
 
-                    TotalAmount = TotalAmount + purchaseOrderItem.Amount;
+                    Decimal totalAmount = 0;
+
+                    foreach (var purchaseOrderItem in purchaseOrderItems)
+                    {
+                        tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Quantity.ToString("#,##0.00"), fontArial11)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Unit, fontArial11)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Item, fontArial11)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Particulars, fontArial11)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Cost.ToString("#,##0.00"), fontArial11)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Amount.ToString("#,##0.00"), fontArial11)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+
+                        totalAmount += purchaseOrderItem.Amount;
+                    }
+
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Total Amount", fontArial11Bold)) { Colspan = 5, HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), fontArial11Bold)) { HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                    document.Add(tablePurchaseOrderLines);
                 }
 
-                document.Add(tablePOLines);
-
-                document.Add(Chunk.NEWLINE);
-
-                PdfPTable tablePOLineTotalAmount = new PdfPTable(6);
-                float[] widthscellsPOLinesTotalAmount = new float[] { 50f, 60f, 130f, 150f, 100f, 100f };
-                tablePOLineTotalAmount.SetWidths(widthscellsPOLinesTotalAmount);
-                tablePOLineTotalAmount.WidthPercentage = 100;
-
-                tablePOLineTotalAmount.AddCell(new PdfPCell(new Phrase("", fontArial9)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tablePOLineTotalAmount.AddCell(new PdfPCell(new Phrase("", fontArial9)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                tablePOLineTotalAmount.AddCell(new PdfPCell(new Phrase("", fontArial9)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                tablePOLineTotalAmount.AddCell(new PdfPCell(new Phrase("", fontArial9)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                tablePOLineTotalAmount.AddCell(new PdfPCell(new Phrase("Total:", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tablePOLineTotalAmount.AddCell(new PdfPCell(new Phrase(TotalAmount.ToString("#,##0.00"), fontArial9)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-
-                document.Add(tablePOLineTotalAmount);
-
-                document.Add(Chunk.NEWLINE);
-                document.Add(Chunk.NEWLINE);
                 document.Add(Chunk.NEWLINE);
                 document.Add(Chunk.NEWLINE);
                 document.Add(Chunk.NEWLINE);
 
-                // Table for Footer
-                PdfPTable tableFooter = new PdfPTable(7);
-                tableFooter.WidthPercentage = 100;
-                float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f, 20f, 100f };
-                tableFooter.SetWidths(widthsCells2);
-                tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase("Requested by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-
-                tableFooter.AddCell(new PdfPCell(new Phrase(PreparedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(CheckedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(ApprovedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(RequestedBy)) { Border = 1, HorizontalAlignment = 0, PaddingBottom = 5f });
-                document.Add(tableFooter);
+                // ==============
+                // User Signature
+                // ==============
+                PdfPTable tableUsers = new PdfPTable(7);
+                float[] widthsCellsTableUsers = new float[] { 100f, 20f, 100f, 20f, 100f, 20f, 100f };
+                tableUsers.WidthPercentage = 100;
+                tableUsers.SetWidths(widthsCellsTableUsers);
+                tableUsers.AddCell(new PdfPCell(new Phrase("Prepared by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                tableUsers.AddCell(new PdfPCell(new Phrase("Checked by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                tableUsers.AddCell(new PdfPCell(new Phrase("Approved by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                tableUsers.AddCell(new PdfPCell(new Phrase("Requested by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { Colspan = 7, Border = 0, PaddingTop = 15f, PaddingBottom = 15f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(preparedBy, fontArial11)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(checkedBy, fontArial11)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(approvedBy, fontArial11)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(requestedBy, fontArial11)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+                document.Add(tableUsers);
             }
 
-            // Document End
             document.Close();
 
             byte[] byteInfo = workStream.ToArray();
