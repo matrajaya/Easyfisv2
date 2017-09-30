@@ -10,67 +10,88 @@ namespace easyfis.Reports
 {
     public class RepChartOfAccountsController : Controller
     {
-        // Easyfis data context
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // current branch Id
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
-
-        // PDF Collection Summary Report
+        // ==============================
+        // Chart of Accounts Report - PDF
+        // ==============================
         [Authorize]
         public ActionResult ChartOfAccounts()
         {
-            // PDF settings
+            // ============
+            // PDF Settings
+            // ============
             MemoryStream workStream = new MemoryStream();
             Rectangle rectangle = new Rectangle(PageSize.A3);
             Document document = new Document(rectangle, 72, 72, 72, 72);
             document.SetMargins(30f, 30f, 30f, 30f);
             PdfWriter.GetInstance(document, workStream).CloseStream = false;
 
-            // Document Starts
             document.Open();
 
+            // ===================
             // Fonts Customization
+            // ===================
             Font fontArial17Bold = FontFactory.GetFont("Arial", 17, Font.BOLD);
             Font fontArial11 = FontFactory.GetFont("Arial", 11);
             Font fontArial10Bold = FontFactory.GetFont("Arial", 10, Font.BOLD);
             Font fontArial10 = FontFactory.GetFont("Arial", 10);
             Font fontArial11Bold = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font fontArial12Bold = FontFactory.GetFont("Arial", 12, Font.BOLD);
 
-            // line
-            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 4.5F)));
 
+            var identityUserId = User.Identity.GetUserId();
+            var currentUser = from d in db.MstUsers where d.UserId == identityUserId select d;
+            var currentBranchId = currentUser.FirstOrDefault().BranchId;
+
+            // ==============
             // Company Detail
-            var companyName = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.Company).SingleOrDefault();
-            var address = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.Address).SingleOrDefault();
-            var contactNo = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.ContactNumber).SingleOrDefault();
-            var branch = (from d in db.MstBranches where d.Id == currentBranchId() select d.Branch).SingleOrDefault();
+            // ==============
+            var companyName = (from d in db.MstBranches where d.Id == currentBranchId select d.MstCompany.Company).SingleOrDefault();
+            var address = (from d in db.MstBranches where d.Id == currentBranchId select d.MstCompany.Address).SingleOrDefault();
+            var contactNo = (from d in db.MstBranches where d.Id == currentBranchId select d.MstCompany.ContactNumber).SingleOrDefault();
+            var branch = (from d in db.MstBranches where d.Id == currentBranchId select d.Branch).SingleOrDefault();
 
-            // table main header
-            PdfPTable tableHeaderPage = new PdfPTable(2);
-            float[] widthsCellsheaderPage = new float[] { 100f, 75f };
-            tableHeaderPage.SetWidths(widthsCellsheaderPage);
-            tableHeaderPage.WidthPercentage = 100;
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(companyName, fontArial17Bold)) { Border = 0 });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase("Chart of Accounts", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(address, fontArial11)) { Border = 0, PaddingTop = 5f });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase("", fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2, });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
-            document.Add(tableHeaderPage);
+            // ===========
+            // Header Page
+            // ===========
+            PdfPTable headerPage = new PdfPTable(2);
+            float[] widthsCellsHeaderPage = new float[] { 100f, 75f };
+            headerPage.SetWidths(widthsCellsHeaderPage);
+            headerPage.WidthPercentage = 100;
+            headerPage.AddCell(new PdfPCell(new Phrase(companyName, fontArial17Bold)) { Border = 0 });
+            headerPage.AddCell(new PdfPCell(new Phrase("Chart of Accounts", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
+            headerPage.AddCell(new PdfPCell(new Phrase(address, fontArial11)) { Border = 0, PaddingTop = 5f });
+            headerPage.AddCell(new PdfPCell(new Phrase(branch, fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
+            headerPage.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
+            headerPage.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
+            document.Add(headerPage);
             document.Add(line);
 
+            // =====
+            // Space
+            // =====
+            PdfPTable spaceTable = new PdfPTable(1);
+            float[] widthCellsSpaceTable = new float[] { 100f };
+            spaceTable.SetWidths(widthCellsSpaceTable);
+            spaceTable.WidthPercentage = 100;
+            spaceTable.AddCell(new PdfPCell(new Phrase(" ", fontArial10Bold)) { Border = 0, PaddingTop = 5f });
+            document.Add(spaceTable);
+
+            // ==================
+            // Account Categories
+            // ==================
             var accountCategories = from d in db.MstAccountCategories
                                     group d by new
                                     {
                                         AccountCategoryCode = d.AccountCategoryCode,
                                         AccountCategory = d.AccountCategory
                                     } into g
-                                    select new Models.MstAccountCategory
+                                    select new
                                     {
                                         AccountCategoryCode = g.Key.AccountCategoryCode,
                                         AccountCategory = g.Key.AccountCategory
@@ -84,17 +105,19 @@ namespace easyfis.Reports
                     float[] widthscellsTableAccountCategory = new float[] { 100f };
                     tableAccountCategory.SetWidths(widthscellsTableAccountCategory);
                     tableAccountCategory.WidthPercentage = 100;
-
                     tableAccountCategory.AddCell(new PdfPCell(new Phrase(accountCategory.AccountCategory, fontArial11)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, Border = 0, BackgroundColor = BaseColor.LIGHT_GRAY });
                     document.Add(tableAccountCategory);
 
+                    // ======================
+                    // Account Sub Categories
+                    // ======================
                     var accountSubCategories = from d in db.MstAccountTypes
-                                               where d.MstAccountCategory.AccountCategory == accountCategory.AccountCategory
+                                               where d.MstAccountCategory.AccountCategory.Equals(accountCategory.AccountCategory)
                                                group d by new
                                                {
                                                    SubCategoryDescription = d.SubCategoryDescription
                                                } into g
-                                               select new Models.MstAccountType
+                                               select new
                                                {
                                                    SubCategoryDescription = g.Key.SubCategoryDescription
                                                };
@@ -107,17 +130,19 @@ namespace easyfis.Reports
                             float[] widthscellsTableSubAccountCategory = new float[] { 100f };
                             tableSubAccountCategory.SetWidths(widthscellsTableSubAccountCategory);
                             tableSubAccountCategory.WidthPercentage = 100;
-
                             tableSubAccountCategory.AddCell(new PdfPCell(new Phrase(accountSubCategory.SubCategoryDescription, fontArial11)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f, Border = 0 });
                             document.Add(tableSubAccountCategory);
 
+                            // =============
+                            // Account Types
+                            // =============
                             var accountTypes = from d in db.MstAccountTypes
-                                               where d.SubCategoryDescription == accountSubCategory.SubCategoryDescription
+                                               where d.SubCategoryDescription.Equals(accountSubCategory.SubCategoryDescription)
                                                group d by new
                                                {
                                                    AccountType = d.AccountType
                                                } into g
-                                               select new Models.MstAccountType
+                                               select new
                                                {
                                                    AccountType = g.Key.AccountType
                                                };
@@ -130,13 +155,15 @@ namespace easyfis.Reports
                                     float[] widthscellsTableAccountType = new float[] { 100f };
                                     tableAccountType.SetWidths(widthscellsTableAccountType);
                                     tableAccountType.WidthPercentage = 100;
-
                                     tableAccountType.AddCell(new PdfPCell(new Phrase(accountType.AccountType, fontArial11)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 40f, Border = 0 });
                                     document.Add(tableAccountType);
 
+                                    // ========
+                                    // Accounts
+                                    // ========
                                     var accounts = from d in db.MstAccounts
-                                                   where d.MstAccountType.AccountType == accountType.AccountType
-                                                   select new Models.MstAccount
+                                                   where d.MstAccountType.AccountType.Equals(accountType.AccountType)
+                                                   select new
                                                    {
                                                        AccountCode = d.AccountCode,
                                                        Account = d.Account
@@ -150,11 +177,9 @@ namespace easyfis.Reports
                                             float[] widthscellsTableAccount = new float[] { 20f, 100f };
                                             tableAccount.SetWidths(widthscellsTableAccount);
                                             tableAccount.WidthPercentage = 100;
-
                                             tableAccount.AddCell(new PdfPCell(new Phrase(account.AccountCode, fontArial11)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 60f, Border = 0 });
                                             tableAccount.AddCell(new PdfPCell(new Phrase(account.Account, fontArial11)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 10f, Border = 0 });
                                             document.Add(tableAccount);
-
                                         }
                                     }
                                 }
@@ -164,7 +189,6 @@ namespace easyfis.Reports
                 }
             }
 
-            // Document End
             document.Close();
 
             byte[] byteInfo = workStream.ToArray();
