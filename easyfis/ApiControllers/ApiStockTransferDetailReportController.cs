@@ -8,17 +8,17 @@ using System.Web.Http;
 namespace easyfis.ApiControllers
 {
     public class ApiStockTransferDetailReportController : ApiController
-    {       
+    {
         // ============
         // Data Context 
         // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ===========================
-        // Stock Out Detail Report List
-        // ===========================
+        // =================================
+        // Stock Transfer Detail Report List
+        // =================================
         [Authorize, HttpGet, Route("api/stockTransferDetailReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
-        public List<Models.TrnStockTransferItem> ListStockInDetailReport(String startDate, String endDate, String companyId, String branchId)
+        public List<Models.TrnStockTransferItem> ListStockTransferDetailReport(String startDate, String endDate, String companyId, String branchId)
         {
             var stockTransferItems = from d in db.TrnStockTransferItems
                                      where d.TrnStockTransfer.MstBranch.CompanyId == Convert.ToInt32(companyId)
@@ -49,6 +49,7 @@ namespace easyfis.ApiControllers
                                          BaseQuantity = d.BaseQuantity,
                                          BaseCost = d.BaseCost,
                                      };
+
             return stockTransferItems.ToList();
         }
     }

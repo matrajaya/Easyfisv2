@@ -46,6 +46,7 @@ namespace easyfis.ApiControllers
                                    BaseQuantity = d.BaseQuantity,
                                    BaseCost = d.BaseCost
                                };
+
             return stockInItems.ToList();
         }
     }

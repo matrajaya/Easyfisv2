@@ -81,7 +81,7 @@
                         </table>
                     </div>
                 </div>
-                <div id="stockOutDetailReportGrid" style="font-size: 13px;"></div>
+                <div id="stockOutDetailReportGrid"></div>
                 <br /><br />
                 <div class="row">
                     <div class="col-md-6">
@@ -308,17 +308,12 @@
                                     var OTDateResult = new Date(stockOutDetailReportResults[i]["OTDate"])
                                     var OTDate = ('0' + (OTDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + OTDateResult.getDate()).slice(-2) + '-' + OTDateResult.getFullYear();
 
-                                    //var RRNumberForCSV = "";
-                                    //if (stockOutDetailReportResults[i]["RR"] != null) {
-                                    //    RRNumberForCSV = "RR-" + stockOutDetailReportResults[i]["RR"];
-                                    //}
-
                                     stockOutDetailReports.push({
                                         OTId: stockOutDetailReportResults[i]["OTId"],
                                         Id: stockOutDetailReportResults[i]["Id"],
                                         OT: stockOutDetailReportResults[i]["OT"],
                                         OTForCSV: "OT-" + stockOutDetailReportResults[i]["OT"],
-                                        OTButton: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block' style='font-size: 10.5px;'>" + stockOutDetailReportResults[i]["OT"],
+                                        OTButton: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block'>" + stockOutDetailReportResults[i]["OT"],
                                         OTDate: OTDate,
                                         ExpenseAccountId: stockOutDetailReportResults[i]["ExpenseAccountId"],
                                         ExpenseAccount: stockOutDetailReportResults[i]["ExpenseAccount"],
@@ -331,12 +326,12 @@
                                         UnitId: stockOutDetailReportResults[i]["UnitId"],
                                         Unit: stockOutDetailReportResults[i]["Unit"],
                                         Quantity: stockOutDetailReportResults[i]["Quantity"],
+                                        QuantityDisplay: parseFloat(stockOutDetailReportResults[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                         Cost: stockOutDetailReportResults[i]["Cost"],
                                         CostDisplay: parseFloat(stockOutDetailReportResults[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                         Amount: stockOutDetailReportResults[i]["Amount"],
                                         AmountDisplay: parseFloat(stockOutDetailReportResults[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                         BaseUnitId: stockOutDetailReportResults[i]["BaseUnitId"],
-                                        Unit: stockOutDetailReportResults[i]["Unit"],
                                         BaseQuantity: stockOutDetailReportResults[i]["BaseQuantity"],
                                         BaseCost: stockOutDetailReportResults[i]["BaseCost"],
                                     });
@@ -387,11 +382,8 @@
 
             stockOutDetailReportCollections.filter = function (item) {
                 return !filterText || (item.OT.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1);
-                    //|| !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
-                    //|| !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
-                    //|| !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1)
-                    //|| !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
+                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
             }
 
             stockOutDetailReportGrid.itemsSource = stockOutDetailReportCollections;
@@ -424,11 +416,8 @@
 
             stockOutDetailReportCollections.filter = function (item) {
                 return !filterText || (item.OT.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1);
-                //|| !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
-                //|| !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
-                //|| !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1)
-                //|| !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
+                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
             }
 
             stockOutDetailReportGrid = new wijmo.grid.FlexGrid('#stockOutDetailReportGrid');
@@ -439,13 +428,13 @@
                         "binding": "OTButton",
                         "isContentHtml": true,
                         "allowSorting": true,
-                        "width": "1.2*"
+                        "width": "2*"
                     },
                     {
                         "header": "OT Date",
                         "binding": "OTDate",
                         "allowSorting": true,
-                        "width": "1*"
+                        "width": "1.5*"
                     },
                     {
                         "header": "Item",
@@ -455,9 +444,10 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "Quantity",
+                        "binding": "QuantityDisplay",
                         "allowSorting": true,
-                        "width": "2*"
+                        "align": "right",
+                        "width": "1.5*"
                     },
                     {
                         "header": "Unit",

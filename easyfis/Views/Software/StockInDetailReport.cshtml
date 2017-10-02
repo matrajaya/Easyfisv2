@@ -81,7 +81,7 @@
                         </table>
                     </div>
                 </div>
-                <div id="stockInDetailReportGrid" style="font-size: 13px;"></div>
+                <div id="stockInDetailReportGrid"></div>
                 <br /><br />
                 <div class="row">
                     <div class="col-md-6">
@@ -308,17 +308,12 @@
                                     var INDateResult = new Date(stockInDetailReportResults[i]["INDate"])
                                     var INDate = ('0' + (INDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + INDateResult.getDate()).slice(-2) + '-' + INDateResult.getFullYear();
 
-                                    //var RRNumberForCSV = "";
-                                    //if (stockInDetailReportResults[i]["RR"] != null) {
-                                    //    RRNumberForCSV = "RR-" + stockInDetailReportResults[i]["RR"];
-                                    //}
-
                                     stockInDetailReports.push({
                                         INId: stockInDetailReportResults[i]["INId"],
                                         Id: stockInDetailReportResults[i]["Id"],
                                         IN: stockInDetailReportResults[i]["IN"],
                                         INForCSV: "IN-" + stockInDetailReportResults[i]["IN"],
-                                        INButton: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block' style='font-size: 10.5px;'>" + stockInDetailReportResults[i]["IN"],
+                                        INButton: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block'>" + stockInDetailReportResults[i]["IN"],
                                         INDate: INDate,
                                         ItemId: stockInDetailReportResults[i]["ItemId"],
                                         ItemCode: stockInDetailReportResults[i]["ItemCode"],
@@ -327,12 +322,12 @@
                                         UnitId: stockInDetailReportResults[i]["UnitId"],
                                         Unit: stockInDetailReportResults[i]["Unit"],
                                         Quantity: stockInDetailReportResults[i]["Quantity"],
+                                        QuantityDisplay: parseFloat(stockInDetailReportResults[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                         Cost: stockInDetailReportResults[i]["Cost"],
                                         CostDisplay: parseFloat(stockInDetailReportResults[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                         Amount: stockInDetailReportResults[i]["Amount"],
                                         AmountDisplay: parseFloat(stockInDetailReportResults[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                         BaseUnitId: stockInDetailReportResults[i]["BaseUnitId"],
-                                        Unit: stockInDetailReportResults[i]["Unit"],
                                         BaseQuantity: stockInDetailReportResults[i]["BaseQuantity"],
                                         BaseCost: stockInDetailReportResults[i]["BaseCost"],
                                     });
@@ -383,11 +378,8 @@
 
             stockInDetailReportCollections.filter = function (item) {
                 return !filterText || (item.IN.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1);
-                    //|| !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
-                    //|| !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
-                    //|| !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1)
-                    //|| !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
+                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
             }
 
             stockInDetailReportGrid.itemsSource = stockInDetailReportCollections;
@@ -420,11 +412,8 @@
 
             stockInDetailReportCollections.filter = function (item) {
                 return !filterText || (item.IN.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1);
-                    //|| !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
-                    //|| !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
-                    //|| !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1)
-                    //|| !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
+                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
             }
 
             stockInDetailReportGrid = new wijmo.grid.FlexGrid('#stockInDetailReportGrid');
@@ -435,13 +424,13 @@
                         "binding": "INButton",
                         "isContentHtml": true,
                         "allowSorting": true,
-                        "width": "1.2*"
+                        "width": "2*"
                     },
                     {
                         "header": "IN Date",
                         "binding": "INDate",
                         "allowSorting": true,
-                        "width": "1*"
+                        "width": "1.5*"
                     },
                     {
                         "header": "Item",
@@ -451,9 +440,10 @@
                     },
                     {
                         "header": "Quantity",
-                        "binding": "Quantity",
+                        "binding": "QuantityDisplay",
                         "allowSorting": true,
-                        "width": "2*"
+                        "align": "right",
+                        "width": "1.5*"
                     },
                     {
                         "header": "Unit",
@@ -515,7 +505,6 @@
 
             var Headers = [];
             Headers.push({
-                IN: "IN",
                 INNumber: "IN Number",
                 INDate: "IN Date",
                 Item: "Item",

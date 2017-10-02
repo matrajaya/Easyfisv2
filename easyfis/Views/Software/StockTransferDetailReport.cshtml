@@ -81,7 +81,7 @@
                         </table>
                     </div>
                 </div>
-                <div id="stockTransferDetailReportGrid" style="font-size: 13px;"></div>
+                <div id="stockTransferDetailReportGrid"></div>
                 <br /><br />
                 <div class="row">
                     <div class="col-md-6">
@@ -318,7 +318,7 @@
                                         Id: stockTransferDetailReportResults[i]["Id"],
                                         ST: stockTransferDetailReportResults[i]["ST"],
                                         STForCSV: "OT-" + stockTransferDetailReportResults[i]["ST"],
-                                        STButton: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block' style='font-size: 10.5px;'>" + stockTransferDetailReportResults[i]["ST"],
+                                        STButton: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block'>" + stockTransferDetailReportResults[i]["ST"],
                                         STDate: STDate,
                                         ToBranch: stockTransferDetailReportResults[i]["ToBranch"],
                                         ItemId: stockTransferDetailReportResults[i]["ItemId"],
@@ -330,12 +330,12 @@
                                         UnitId: stockTransferDetailReportResults[i]["UnitId"],
                                         Unit: stockTransferDetailReportResults[i]["Unit"],
                                         Quantity: stockTransferDetailReportResults[i]["Quantity"],
+                                        QuantityDisplay: parseFloat(stockTransferDetailReportResults[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                         Cost: stockTransferDetailReportResults[i]["Cost"],
                                         CostDisplay: parseFloat(stockTransferDetailReportResults[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                         Amount: stockTransferDetailReportResults[i]["Amount"],
                                         AmountDisplay: parseFloat(stockTransferDetailReportResults[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                         BaseUnitId: stockTransferDetailReportResults[i]["BaseUnitId"],
-                                        Unit: stockTransferDetailReportResults[i]["Unit"],
                                         BaseQuantity: stockTransferDetailReportResults[i]["BaseQuantity"],
                                         BaseCost: stockTransferDetailReportResults[i]["BaseCost"],
                                     });
@@ -387,10 +387,8 @@
             stockTransferDetailReportCollections.filter = function (item) {
                 return !filterText || (item.OT.toLowerCase().indexOf(filterText) > -1)
                     || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.ToBranch.toLowerCase().indexOf(filterText) > -1);
-                    //|| !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
-                    //|| !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1)
-                    //|| !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
+                    || !filterText || (item.ToBranch.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
             }
 
             stockTransferDetailReportGrid.itemsSource = stockTransferDetailReportCollections;
@@ -424,10 +422,8 @@
             stockTransferDetailReportCollections.filter = function (item) {
                 return !filterText || (item.OT.toLowerCase().indexOf(filterText) > -1)
                     || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
-                    || !filterText || (item.ToBranch.toLowerCase().indexOf(filterText) > -1);
-                //|| !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
-                //|| !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1)
-                //|| !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
+                    || !filterText || (item.ToBranch.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
             }
 
             stockTransferDetailReportGrid = new wijmo.grid.FlexGrid('#stockTransferDetailReportGrid');
@@ -438,31 +434,32 @@
                         "binding": "STButton",
                         "isContentHtml": true,
                         "allowSorting": true,
-                        "width": "1.2*"
+                        "width": "2*"
                     },
                     {
                         "header": "ST Date",
                         "binding": "STDate",
                         "allowSorting": true,
-                        "width": "1*"
+                        "width": "1.5*"
                     },
                     {
                         "header": "To Branch",
                         "binding": "ToBranch",
                         "allowSorting": true,
-                        "width": "4*"
+                        "width": "3*"
                     },
                     {
                         "header": "Item",
                         "binding": "Item",
                         "allowSorting": true,
-                        "width": "4*"
+                        "width": "3*"
                     },
                     {
                         "header": "Quantity",
-                        "binding": "Quantity",
+                        "binding": "QuantityDisplay",
                         "allowSorting": true,
-                        "width": "2*"
+                        "align": "right",
+                        "width": "1.5*"
                     },
                     {
                         "header": "Unit",

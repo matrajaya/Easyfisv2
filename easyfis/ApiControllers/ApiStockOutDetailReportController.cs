@@ -14,9 +14,9 @@ namespace easyfis.ApiControllers
         // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ===========================
+        // ============================
         // Stock Out Detail Report List
-        // ===========================
+        // ============================
         [Authorize, HttpGet, Route("api/stockOutDetailReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
         public List<Models.TrnStockOutItem> ListStockInDetailReport(String startDate, String endDate, String companyId, String branchId)
         {
@@ -50,6 +50,7 @@ namespace easyfis.ApiControllers
                                    BaseQuantity = d.BaseQuantity,
                                    BaseCost = d.BaseCost
                                };
+
             return stockOutItems.ToList();
         }
     }
