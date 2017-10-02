@@ -1116,5 +1116,23 @@ namespace easyfis.Controllers
         {
             return View();
         }
+
+        [Authorize]
+        public ActionResult StockInDetailReport()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult StockOutDetailReport()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult StockTransferDetailReport()
+        {
+            return View();
+        }
     }
 }

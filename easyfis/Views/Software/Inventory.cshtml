@@ -140,6 +140,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
+                                            <button onclick="btnStockInDetailViewOnclick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
                                             <button onclick="btnStockInDetailPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -180,6 +181,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
+                                            <button onclick="btnStockOutDetailViewOnclick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
                                             <button onclick="btnStockOutDetailPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -220,6 +222,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
+                                            <button onclick="btnStockTransferDetailViewOnclick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
                                             <button onclick="btnStockTransferDetailPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -1021,6 +1024,26 @@
             }
         }
 
+        // ====================
+        // Stock-In Detail View
+        // ====================
+        function btnStockInDetailViewOnclick() {
+            if (cboStockInDetailCompany.selectedValue != null) {
+                if (cboStockInDetailBranch.selectedValue != null) {
+                    var startDate = cboStockInDetailStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboStockInDetailEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboStockInDetailCompany.selectedValue;
+                    var branchId = cboStockInDetailBranch.selectedValue;
+
+                    window.location.href = '/Software/StockInDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
+        }
+
         // ================================
         // Stock In Detail Report Print PDF
         // ================================
@@ -1041,6 +1064,25 @@
             }
         }
 
+        // ====================
+        // Stock-Out Detail View
+        // ====================
+        function btnStockOutDetailViewOnclick() {
+            if (cboStockOutDetailCompany.selectedValue != null) {
+                if (cboStockOutDetailBranch.selectedValue != null) {
+                    var startDate = cboStockOutDetailStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboStockOutDetailEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboStockOutDetailCompany.selectedValue;
+                    var branchId = cboStockOutDetailBranch.selectedValue;
+
+                    window.location.href = '/Software/StockOutDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
+        }
         // =================================
         // Stock Out Detail Report Print PDF
         // =================================
@@ -1061,6 +1103,25 @@
             }
         }
 
+        // ======================================
+        // Stock Transfer Detail Report View
+        // ======================================
+        function btnStockTransferDetailViewOnclick() {
+            if (cboStockTransferDetailCompany.selectedValue != null) {
+                if (cboStockTransferDetailBranch.selectedValue != null) {
+                    var startDate = cboStockTransferDetailStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboStockTransferDetailEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboStockTransferDetailCompany.selectedValue;
+                    var branchId = cboStockTransferDetailBranch.selectedValue;
+
+                    window.location.href = '/Software/StockTransferDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
+        }
         // ======================================
         // Stock Transfer Detail Report Print PDF
         // ======================================

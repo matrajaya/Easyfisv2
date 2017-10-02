@@ -1,0 +1,712 @@
+﻿<!DOCTYPE html>
+<html>
+<head>stockTransfer
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <!-- Title of the Page -->
+    <link rel="shortcut icon" href="~/Images/icon/easyfislogomini.ico">
+    <title>Stock Transfer Detail Report</title>
+
+    <!-- CSS StyleSheets-->
+    @Styles.Render("~/Content/Software-css")
+</head>
+<body>
+    <div id="o-wrapper" class="o-wrapper">
+        <main class="o-content">
+            @Html.Partial("_SoftwareHeader")
+            <section class="content-header">
+                <div class="container">
+                    <h3>
+                        Stock Transfer Detail Report
+                    </h3>
+                    <p>
+                        <i class="fa fa-building-o fa-fw"></i> &nbsp; @ViewData["Company"] <br />
+                        <i class="fa fa-home fa-fw"></i> &nbsp; <a href="#" onclick="getUserBranches()" style="color: white;">@ViewData["Branch"]</a>
+                    </p>
+                </div>
+            </section>
+            <section class="container">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 49%">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input type="text" class="form-control " id="InputFilter" placeholder="Search...">
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 50%" align="right">
+                                    <button onclick="btnStockTransferDetailReportCSVOnclick()" id="btnStockTransferDetailReportCSV" class="btn btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                    <button onclick="btnStockTransferDetailReportPrintPDFOnclick()" id="btnStockTransferDetailReportPrintPDF" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                                    <a href="/Software/Inventory" class="btn btn-danger"><i class="fa fa-close"></i> Close</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Start Date</b></span>
+                                        <div class="comboBox-wide" id="cboAPStockTransferDetailReportStartDate"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%" align="right">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>End Date</b></span>
+                                        <div class="comboBox-wide" id="cboAPStockTransferDetailReportEndDate"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Company</b></span>
+                                        <div class="comboBox-wide" id="cboAPStockTransferDetailReportCompany"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 1%"></td>
+                                <td style="width: 24%">
+                                    <div class="input-group ">
+                                        <span class="input-group-addon"><b>Branch</b></span>
+                                        <div class="comboBox-wide" id="cboAPStockTransferDetailReportBranch"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div id="stockTransferDetailReportGrid" style="font-size: 13px;"></div>
+                <br /><br />
+                <div class="row">
+                    <div class="col-md-6">
+
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="dl-horizontal dl-custom">
+                            <dt>
+                                <b>Total Amount</b>
+                            </dt>
+                            <dd>
+                                <input type="text" class="form-control numberField" id="totalAmount" placeholder="0.00" disabled />
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </section>
+            @Html.Partial("_SoftwareFooter")
+        </main>
+    </div>
+    <div id="c-mask" class="c-mask"></div>
+
+    @Scripts.Render("~/Scripts/Software-js")
+    <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var cboAPStockTransferDetailReportStartDate = new wijmo.input.InputDate('#cboAPStockTransferDetailReportStartDate');
+        var cboAPStockTransferDetailReportEndDate = new wijmo.input.InputDate('#cboAPStockTransferDetailReportEndDate');
+        var isAPStockTransferDetailReportStartDateSelected = false;
+        var isAPStockTransferDetailReportEndDateSelected = false;
+        var cboAPStockTransferDetailReportCompany = new wijmo.input.ComboBox('#cboAPStockTransferDetailReportCompany');
+        var cboAPStockTransferDetailReportBranch = new wijmo.input.ComboBox('#cboAPStockTransferDetailReportBranch');
+        var stockTransferDetailReportCollections;
+        var stockTransferDetailReportGrid;
+        var isAPStockTransferDetailReportCompanySelected = false;
+
+        // ===================
+        // Get Parameter Value
+        // ===================
+        function getParam(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+
+            var results = regex.exec(window.location.href);
+            if (results == null) {
+                return "";
+            } else {
+                return results[1];
+            }
+        }
+
+        // ============
+        // Date Filters
+        // ============
+        function stockTransferDetailReportDateFilters() {
+            NProgress.start();
+            cboAPStockTransferDetailReportStartDate.dispose();
+            cboAPStockTransferDetailReportStartDate = new wijmo.input.InputDate('#cboAPStockTransferDetailReportStartDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("StartDate")),
+                onValueChanged: function () {
+                    if (!isAPStockTransferDetailReportStartDateSelected) {
+                        NProgress.start();
+                        refreshStockTransferDetailReportFlexGrid();
+                    } else {
+                        isAPStockTransferDetailReportStartDateSelected = false;
+                    }
+                }
+            });
+
+            cboAPStockTransferDetailReportEndDate.dispose();
+            cboAPStockTransferDetailReportEndDate = new wijmo.input.InputDate('#cboAPStockTransferDetailReportEndDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(getParam("EndDate")),
+                onValueChanged: function () {
+                    if (!isAPStockTransferDetailReportEndDateSelected) {
+                        NProgress.start();
+                        refreshStockTransferDetailReportFlexGrid();
+                    } else {
+                        isAPStockTransferDetailReportEndDateSelected = false;
+                    }
+                }
+            });
+
+            createCboCompany();
+        }
+
+        // ==============
+        // Company Filter
+        // ==============
+        function createCboCompany() {
+            var companyObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/company/list',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (companyResults) {
+                    if (companyResults.length > 0) {
+                        for (i = 0; i < companyResults.length; i++) {
+                            companyObservableArray.push({
+                                Id: companyResults[i]["Id"],
+                                Company: companyResults[i]["Company"],
+                                Address: companyResults[i]["Address"],
+                                ContactNumber: companyResults[i]["ContactNumber"],
+                                TaxNumber: companyResults[i]["TaxNumber"],
+                            });
+                        }
+                    }
+
+                    var disabled = true;
+                    if (companyResults.length > 0) {
+                        disabled = false;
+                    } else {
+                        $("#btnStockTransferDetailReportCSV").prop("disabled", true);
+                        $("#btnStockTransferDetailReportPrintPDF").prop("disabled", true);
+                    }
+
+                    cboAPStockTransferDetailReportCompany.dispose();
+                    cboAPStockTransferDetailReportCompany = new wijmo.input.ComboBox('#cboAPStockTransferDetailReportCompany', {
+                        disabled: disabled,
+                        isEditable: false,
+                        itemsSource: companyObservableArray,
+                        displayMemberPath: "Company",
+                        selectedValuePath: "Id",
+                        selectedValue: getParam("CompanyId"),
+                        onSelectedIndexChanged: function () {
+                            NProgress.start();
+                            $("#btnStockTransferDetailReportCSV").prop("disabled", false);
+                            $("#btnStockTransferDetailReportPrintPDF").prop("disabled", false);
+                            isAPStockTransferDetailReportCompanySelected = true;
+                            createCboBranch();
+                        }
+                    });
+
+                    createCboBranch();
+                }
+            });
+        }
+
+        // =============
+        // Branch Filter
+        // =============
+        function createCboBranch() {
+            var branchObservableArray = new wijmo.collections.ObservableArray();
+            if (cboAPStockTransferDetailReportCompany.selectedValue != null) {
+                $.ajax({
+                    url: '/api/branch/byCompanyId/list/locked/' + cboAPStockTransferDetailReportCompany.selectedValue,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (branchResults) {
+                        if (branchResults.length > 0) {
+                            for (i = 0; i < branchResults.length; i++) {
+                                branchObservableArray.push({
+                                    Id: branchResults[i]["Id"],
+                                    CompanyId: branchResults[i]["CompanyId"],
+                                    Branch: branchResults[i]["Branch"],
+                                    Address: branchResults[i]["Address"],
+                                    ContactNumber: branchResults[i]["ContactNumber"],
+                                    TaxNumber: branchResults[i]["TaxNumber"]
+                                });
+                            }
+                        }
+
+                        var disabled = true;
+                        if (branchResults.length > 0) {
+                            disabled = false;
+                        } else {
+                            $("#btnStockTransferDetailReportCSV").prop("disabled", true);
+                            $("#btnStockTransferDetailReportPrintPDF").prop("disabled", true);
+                        }
+
+                        cboAPStockTransferDetailReportBranch.dispose();
+                        cboAPStockTransferDetailReportBranch = new wijmo.input.ComboBox('#cboAPStockTransferDetailReportBranch', {
+                            disabled: disabled,
+                            isEditable: false,
+                            itemsSource: branchObservableArray,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Id",
+                            selectedValue: getParam("BranchId"),
+                            onSelectedIndexChanged: function () {
+                                NProgress.start();
+                                refreshStockTransferDetailReportFlexGrid();
+                            }
+                        });
+
+                        if (!isAPStockTransferDetailReportCompanySelected) {
+                            createStockTransferDetailReportFlexGrid();
+                        } else {
+                            refreshStockTransferDetailReportFlexGrid();
+                        }
+                    }
+                });
+            }
+        }
+
+        // ==================================
+        // Get StockTransfer Order Detail Data
+        // ==================================
+        function getStockTransferDetailReport() {
+            var stockTransferDetailReports = new wijmo.collections.ObservableArray;
+            if (cboAPStockTransferDetailReportCompany.selectedValue != null) {
+                if (cboAPStockTransferDetailReportBranch.selectedValue != null) {
+                    var startDate = cboAPStockTransferDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPStockTransferDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPStockTransferDetailReportCompany.selectedValue;
+                    var branchId = cboAPStockTransferDetailReportBranch.selectedValue;
+
+                    $.ajax({
+                        url: '/api/stockTransferDetailReport/list/' + startDate + '/' + endDate + '/' + +companyId + '/' + branchId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (stockTransferDetailReportResults) {
+                            var totalAmount = 0;
+                            if (stockTransferDetailReportResults.length > 0) {
+                                for (i = 0; i < stockTransferDetailReportResults.length; i++) {
+                                    var docLink = "/Software/StockTransferDetail?id=" + stockTransferDetailReportResults[i]["STId"];
+
+                                    var STDateResult = new Date(stockTransferDetailReportResults[i]["STDate"])
+                                    var STDate = ('0' + (STDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + STDateResult.getDate()).slice(-2) + '-' + STDateResult.getFullYear();
+
+                                    //var RRNumberForCSV = "";
+                                    //if (stockTransferDetailReportResults[i]["RR"] != null) {
+                                    //    RRNumberForCSV = "RR-" + stockTransferDetailReportResults[i]["RR"];
+                                    //}
+
+                                    stockTransferDetailReports.push({
+                                        STId: stockTransferDetailReportResults[i]["STId"],
+                                        Id: stockTransferDetailReportResults[i]["Id"],
+                                        ST: stockTransferDetailReportResults[i]["ST"],
+                                        STForCSV: "OT-" + stockTransferDetailReportResults[i]["ST"],
+                                        STButton: "<a href='" + docLink + "' class='btn btn-primary btn-xs btn-block' style='font-size: 10.5px;'>" + stockTransferDetailReportResults[i]["ST"],
+                                        STDate: STDate,
+                                        ToBranch: stockTransferDetailReportResults[i]["ToBranch"],
+                                        ItemId: stockTransferDetailReportResults[i]["ItemId"],
+                                        ItemCode: stockTransferDetailReportResults[i]["ItemCode"],
+                                        Item: stockTransferDetailReportResults[i]["Item"],
+                                        ItemInventoryId: stockTransferDetailReportResults[i]["ItemInventoryId"],
+                                        ItemInventory: stockTransferDetailReportResults[i]["ItemInventory"],
+                                        Particulars: stockTransferDetailReportResults[i]["Particulars"],
+                                        UnitId: stockTransferDetailReportResults[i]["UnitId"],
+                                        Unit: stockTransferDetailReportResults[i]["Unit"],
+                                        Quantity: stockTransferDetailReportResults[i]["Quantity"],
+                                        Cost: stockTransferDetailReportResults[i]["Cost"],
+                                        CostDisplay: parseFloat(stockTransferDetailReportResults[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        Amount: stockTransferDetailReportResults[i]["Amount"],
+                                        AmountDisplay: parseFloat(stockTransferDetailReportResults[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        BaseUnitId: stockTransferDetailReportResults[i]["BaseUnitId"],
+                                        Unit: stockTransferDetailReportResults[i]["Unit"],
+                                        BaseQuantity: stockTransferDetailReportResults[i]["BaseQuantity"],
+                                        BaseCost: stockTransferDetailReportResults[i]["BaseCost"],
+                                    });
+
+                                    totalAmount += stockTransferDetailReportResults[i]["Amount"];
+                                }
+                            }
+
+                            document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            NProgress.done();
+                        }
+                    });
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    NProgress.done();
+                }
+            } else {
+                document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                NProgress.done();
+            }
+
+            return stockTransferDetailReports;
+        }
+
+        // =================
+        // Refresh Flex Grid
+        // =================
+        function refreshStockTransferDetailReportFlexGrid() {
+            stockTransferDetailReportCollections = new wijmo.collections.CollectionView(getStockTransferDetailReport());
+            stockTransferDetailReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                stockTransferDetailReportCollections.refresh();
+
+                if (stockTransferDetailReportCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    for (var i = 0; i < stockTransferDetailReportCollections.items.length; i++) {
+                        totalAmount += stockTransferDetailReportCollections.items[i].Amount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            stockTransferDetailReportCollections.filter = function (item) {
+                return !filterText || (item.OT.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.ToBranch.toLowerCase().indexOf(filterText) > -1);
+                    //|| !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                    //|| !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1)
+                    //|| !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            stockTransferDetailReportGrid.itemsSource = stockTransferDetailReportCollections;
+            stockTransferDetailReportGrid.trackChanges = true;
+        }
+
+        // =========
+        // Flex Grid
+        // =========
+        function createStockTransferDetailReportFlexGrid() {
+            stockTransferDetailReportCollections = new wijmo.collections.CollectionView(getStockTransferDetailReport());
+            stockTransferDetailReportCollections.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                stockTransferDetailReportCollections.refresh();
+
+                if (stockTransferDetailReportCollections.items.length > 0) {
+                    var totalAmount = 0;
+                    for (var i = 0; i < stockTransferDetailReportCollections.items.length; i++) {
+                        totalAmount += stockTransferDetailReportCollections.items[i].Amount;
+                    }
+
+                    document.getElementById("totalAmount").value = parseFloat(totalAmount).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    document.getElementById("totalAmount").value = parseFloat(0).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            });
+
+            stockTransferDetailReportCollections.filter = function (item) {
+                return !filterText || (item.OT.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.Item.toLowerCase().indexOf(filterText) > -1)
+                    || !filterText || (item.ToBranch.toLowerCase().indexOf(filterText) > -1);
+                //|| !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                //|| !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1)
+                //|| !filterText || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            stockTransferDetailReportGrid = new wijmo.grid.FlexGrid('#stockTransferDetailReportGrid');
+            stockTransferDetailReportGrid.initialize({
+                columns: [
+                    {
+                        "header": "ST Number  ",
+                        "binding": "STButton",
+                        "isContentHtml": true,
+                        "allowSorting": true,
+                        "width": "1.2*"
+                    },
+                    {
+                        "header": "ST Date",
+                        "binding": "STDate",
+                        "allowSorting": true,
+                        "width": "1*"
+                    },
+                    {
+                        "header": "To Branch",
+                        "binding": "ToBranch",
+                        "allowSorting": true,
+                        "width": "4*"
+                    },
+                    {
+                        "header": "Item",
+                        "binding": "Item",
+                        "allowSorting": true,
+                        "width": "4*"
+                    },
+                    {
+                        "header": "Quantity",
+                        "binding": "Quantity",
+                        "allowSorting": true,
+                        "width": "2*"
+                    },
+                    {
+                        "header": "Unit",
+                        "binding": "Unit",
+                        "allowSorting": true,
+                        "width": "2*"
+                    },
+                    {
+                        "header": "Cost",
+                        "binding": "CostDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1.5*"
+                    },
+                    {
+                        "header": "Amount",
+                        "binding": "AmountDisplay",
+                        "allowSorting": true,
+                        "align": "right",
+                        "width": "1.5*"
+                    }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: stockTransferDetailReportCollections,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            stockTransferDetailReportGrid.trackChanges = true;
+        }
+
+        // ============
+        // Download CSV
+        // ============
+        function btnStockTransferDetailReportCSVOnclick() {
+            var CSV = '';
+            var stockTransferDetailReport = [];
+            var fileName = 'StockTransferDetailReport.CSV';
+
+            for (i = 0; i < stockTransferDetailReportCollections.items.length; i++) {
+                var IsClose = stockTransferDetailReportCollections.items[i].IsClose;
+                var isPOClose = "Not Closed";
+                if (IsClose) {
+                    isPOClose = "Closed"
+                }
+
+                stockTransferDetailReport.push({
+                    STNumber: stockTransferDetailReportCollections.items[i].STForCSV,
+                    STDate: stockTransferDetailReportCollections.items[i].STDate,
+                    Branch: stockTransferDetailReportCollections.items[i].ToBranch,
+                    Item: stockTransferDetailReportCollections.items[i].Item,
+                    Quantity: stockTransferDetailReportCollections.items[i].Quantity,
+                    Unit: stockTransferDetailReportCollections.items[i].Unit,
+                    Cost: stockTransferDetailReportCollections.items[i].Cost,
+                    Amount: stockTransferDetailReportCollections.items[i].Amount,
+                });
+            }
+
+            var Headers = [];
+            Headers.push({
+                STNumber: "ST Number",
+                STDate: "ST Date",
+                Branch: "Branch",
+                Item: "Item",
+                Quantity: "Quantity",
+                Unit: "Unit",
+                Cost: "Cost",
+                Amount: "Amount"
+            });
+
+            var header = '';
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+            CSV = header + '\r\n';
+            for (var i = 0; i < stockTransferDetailReport.length; i++) {
+                var row = '';
+                for (var a in stockTransferDetailReport[i]) {
+                    row += '"' + stockTransferDetailReport[i][a] + '",';
+                }
+
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }
+        }
+
+        // =====================
+        // Preview and Print PDF
+        // =====================
+        function btnStockTransferDetailReportPrintPDFOnclick() {
+            if (cboAPStockTransferDetailReportCompany.selectedValue != null) {
+                if (cboAPStockTransferDetailReportBranch.selectedValue != null) {
+                    var startDate = cboAPStockTransferDetailReportStartDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var endDate = cboAPStockTransferDetailReportEndDate.value.toLocaleDateString().replace(/\//g, '-');
+                    var companyId = cboAPStockTransferDetailReportCompany.selectedValue;
+                    var branchId = cboAPStockTransferDetailReportBranch.selectedValue;
+
+                    window.location.href = '/RepStockTransferDetailReport/StockTransferDetailReport?StartDate=' + startDate + '&EndDate=' + endDate + '&CompanyId=' + companyId + '&BranchId=' + branchId;
+                } else {
+                    toastr.error("Lacking Information");
+                }
+            } else {
+                toastr.error("Lacking Information");
+            }
+        }
+
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            stockTransferDetailReportDateFilters();
+        });
+    </script>
+    <script type="text/javascript">
+        var cboUserBranches = new wijmo.input.ComboBox('#cboUserBranches');
+        function getUserBranches() {
+            $("#loadingUserBranches").show();
+            document.getElementById("loadingUserBranches").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#userBranchContent").hide();
+
+            $('#userBranchesModal').modal({ show: true, backdrop: 'static' });
+
+            document.getElementById('updateUserBranch').innerHTML = "<i class='fa fa-save fa-fw'></i> Update";
+            $("#updateUserBranch").prop("disabled", false);
+            $("#closeUserBranch").prop("disabled", false);
+
+            var userBranchesObservableArray = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/userBranch/list',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (userBranchesResults) {
+                    if (userBranchesResults.length > 0) {
+                        for (i = 0; i < userBranchesResults.length; i++) {
+                            userBranchesObservableArray.push({
+                                BranchId: userBranchesResults[i]["BranchId"],
+                                Branch: userBranchesResults[i]["Branch"]
+                            });
+                        }
+                    }
+
+                    var currentBranch = "@ViewData["BranchId"]";
+                    cboUserBranches.dispose();
+                    cboUserBranches = new wijmo.input.ComboBox('#cboUserBranches', {
+                        isEditable: false,
+                        placeholder: "Select Branches",
+                        itemsSource: userBranchesObservableArray,
+                        displayMemberPath: "Branch",
+                        selectedValuePath: "BranchId",
+                        selectedValue: currentBranch
+                    });
+
+                    setTimeout(function () {
+                        $("#loadingUserBranches").hide();
+                        $("#userBranchContent").show();
+                    }, 500)
+                }
+            });
+        }
+
+        function updateUserBranchOnclick() {
+            document.getElementById('updateUserBranch').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
+            $("#updateUserBranch").prop("disabled", true);
+            $("#closeUserBranch").prop("disabled", true);
+
+            var userBranchObject = new Object();
+            userBranchObject.BranchId = cboUserBranches.selectedValue;
+            var userBranchData = JSON.stringify(userBranchObject);
+
+            $.ajax({
+                type: "PUT",
+                url: '/api/userBranch/update',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: userBranchData,
+                statusCode: {
+                    200: function () {
+                        toastr.success("Update Successful");
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 1000);
+                    },
+                    404: function () {
+                        toastr.error("Not Found");
+                        document.getElementById('updateUserBranch').innerHTML = "<i class='fa fa-save fa-fw'></i> Update";
+                        $("#updateUserBranch").prop("disabled", false);
+                        $("#closeUserBranch").prop("disabled", false);
+                    },
+                    500: function () {
+                        toastr.error("Bad Request");
+                        document.getElementById('updateUserBranch').innerHTML = "<i class='fa fa-save fa-fw'></i> Update";
+                        $("#updateUserBranch").prop("disabled", false);
+                        $("#closeUserBranch").prop("disabled", false);
+                    }
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        var slideLeft = new Menu({
+            wrapper: '#o-wrapper',
+            type: 'slide-left',
+            menuOpenerClass: '.c-button',
+            maskId: '#c-mask'
+        });
+
+        var slideLeftBtn = document.querySelector('#c-button--slide-left');
+
+        slideLeftBtn.addEventListener('click', function (e) {
+            e.preventDefault;
+            slideLeft.open();
+        });
+    </script>
+</body>
+</html>
