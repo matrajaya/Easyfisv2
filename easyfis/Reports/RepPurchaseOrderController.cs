@@ -44,6 +44,7 @@ namespace easyfis.Reports
             Font fontArial10 = FontFactory.GetFont("Arial", 10);
             Font fontArial11Bold = FontFactory.GetFont("Arial", 11, Font.BOLD);
             Font fontArial12Bold = FontFactory.GetFont("Arial", 12, Font.BOLD);
+            Font fontArial13Bold = FontFactory.GetFont("Arial", 13, Font.BOLD);
 
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 4.5F)));
 
@@ -110,7 +111,7 @@ namespace easyfis.Reports
 
                 tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Term: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
                 tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(term, fontArial11)) { Border = 0, PaddingTop = 3f });
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("PO date: ", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("PO Date: ", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
                 tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(PODate, fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
 
                 tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Date Needed: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
@@ -148,6 +149,16 @@ namespace easyfis.Reports
 
                 if (purchaseOrderItems.Any())
                 {
+                    // ==========
+                    // Item Label
+                    // ==========
+                    PdfPTable tableItemLabel = new PdfPTable(1);
+                    float[] widthCellsTableItemLabel = new float[] { 100f };
+                    tableItemLabel.SetWidths(widthCellsTableItemLabel);
+                    tableItemLabel.WidthPercentage = 100;
+                    tableItemLabel.AddCell(new PdfPCell(new Phrase("Items", fontArial13Bold)) { Border = 0, PaddingTop = 5f, PaddingBottom = 10f });
+                    document.Add(tableItemLabel);
+
                     PdfPTable tablePurchaseOrderLines = new PdfPTable(6);
                     float[] widthscellsPOLines = new float[] { 100f, 70f, 150f, 150f, 100f, 100f };
                     tablePurchaseOrderLines.SetWidths(widthscellsPOLines);
@@ -173,7 +184,7 @@ namespace easyfis.Reports
                         totalAmount += purchaseOrderItem.Amount;
                     }
 
-                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Total Amount", fontArial11Bold)) { Colspan = 5, HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Total", fontArial11Bold)) { Colspan = 5, HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
                     tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), fontArial11Bold)) { HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
                     document.Add(tablePurchaseOrderLines);
                 }
