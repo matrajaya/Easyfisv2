@@ -263,6 +263,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
+                                            <button onclick="btnItemListViewOnclick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
                                             <button onclick="btnItemListPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -285,6 +286,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
+                                            <button onclick="btnItemComponentListViewOnclick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
                                             <button onclick="btnItemComponentListPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -307,6 +309,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div align="right">
+                                            <button onclick="btnPhysicalCountSheetViewOnclick()" class="btn btn-primary "><i class="fa fa-table"></i> View</button>
                                             <button onclick="btnPhysicalCountSheetPrintPDFOnclick()" class="btn btn-primary "><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger " id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -1142,6 +1145,17 @@
             }
         }
 
+        // ==============
+        // Item List VIEW
+        // ==============
+        function btnItemListViewOnclick() {
+            if (cboItemListItemGroup.selectedValue != null) {
+                var itemGroupId = cboItemListItemGroup.selectedValue;
+                window.location.href = '/Software/ItemList?ItemGroupId=' + itemGroupId;
+            } else {
+                toastr.error("Lacking Information");
+            }
+        }
         // ===================
         // Item List Print PDF
         // ===================
@@ -1157,6 +1171,17 @@
         // =============================
         // Item Component List Print PDF
         // =============================
+        function btnItemComponentListViewOnclick() {
+            if (cboItemComponentListItemGroup.selectedValue != null) {
+                var itemGroupId = cboItemComponentListItemGroup.selectedValue;
+                window.location.href = '/Software/ItemComponentList?ItemGroupId=' + itemGroupId;
+            } else {
+                toastr.error("Lacking Information");
+            }
+        }
+        // =============================
+        // Item Component List Print PDF
+        // =============================
         function btnItemComponentListPrintPDFOnclick() {
             if (cboItemComponentListItemGroup.selectedValue != null) {
                 var itemGroupId = cboItemComponentListItemGroup.selectedValue;
@@ -1166,6 +1191,17 @@
             }
         }
 
+        // =========================
+        // Physical Count Sheet View
+        // =========================
+        function btnPhysicalCountSheetViewOnclick() {
+            if (cboPhysicalCountSheetItemGroup.selectedValue != null) {
+                var itemGroupId = cboPhysicalCountSheetItemGroup.selectedValue;
+                window.location.href = '/Software/PhysicalCountSheet?ItemGroupId=' + itemGroupId;
+            } else {
+                toastr.error("Lacking Information");
+            }
+        }
         // ==============================
         // Physical Count Sheet Print PDF
         // ==============================

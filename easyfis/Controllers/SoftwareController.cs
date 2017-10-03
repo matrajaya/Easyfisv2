@@ -1174,5 +1174,23 @@ namespace easyfis.Controllers
         {
             return View();
         }
+
+        [Authorize]
+        public ActionResult ItemList()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult ItemComponentList()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult PhysicalCountSheet()
+        {
+            return View();
+        }
     }
 }
