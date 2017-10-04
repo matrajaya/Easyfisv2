@@ -2,6 +2,7 @@
 using iTextSharp.text.pdf;
 using Microsoft.AspNet.Identity;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -10,155 +11,131 @@ namespace easyfis.Reports
 {
     public class RepReceivingReceiptController : Controller
     {
-        // Easyfis data context
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // current branch Id
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
-
-        // PDF Item List
+        // =======================
+        // Receiving Receipt - PDF
+        // =======================
         [Authorize]
         public ActionResult ReceivingReceipt(Int32 RRId)
         {
-            // PDF settings
+            // ==============================
+            // PDF Settings and Customization
+            // ==============================
             MemoryStream workStream = new MemoryStream();
             Rectangle rectangle = new Rectangle(PageSize.A3);
             Document document = new Document(rectangle, 72, 72, 72, 72);
             document.SetMargins(30f, 30f, 30f, 30f);
             PdfWriter.GetInstance(document, workStream).CloseStream = false;
 
-            // Document Starts
             document.Open();
 
-            // Fonts Customization
+            // =====
+            // Fonts
+            // =====
             Font fontArial17Bold = FontFactory.GetFont("Arial", 17, Font.BOLD);
             Font fontArial11 = FontFactory.GetFont("Arial", 11);
-            Font fontArial10Bold = FontFactory.GetFont("Arial", 10, Font.BOLD);
             Font fontArial9Bold = FontFactory.GetFont("Arial", 9, Font.BOLD);
             Font fontArial9 = FontFactory.GetFont("Arial", 9);
+            Font fontArial10Bold = FontFactory.GetFont("Arial", 10, Font.BOLD);
             Font fontArial10 = FontFactory.GetFont("Arial", 10);
             Font fontArial11Bold = FontFactory.GetFont("Arial", 11, Font.BOLD);
             Font fontArial12Bold = FontFactory.GetFont("Arial", 12, Font.BOLD);
+            Font fontArial13Bold = FontFactory.GetFont("Arial", 13, Font.BOLD);
 
-            // line
-            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 4.5F)));
 
+            var identityUserId = User.Identity.GetUserId();
+            var currentUser = from d in db.MstUsers where d.UserId == identityUserId select d;
+            var currentCompanyId = currentUser.FirstOrDefault().CompanyId;
+            var currentBranchId = currentUser.FirstOrDefault().BranchId;
+
+            // ==============
             // Company Detail
-            var companyName = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.Company).SingleOrDefault();
-            var address = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.Address).SingleOrDefault();
-            var contactNo = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.ContactNumber).SingleOrDefault();
-            var branch = (from d in db.MstBranches where d.Id == currentBranchId() select d.Branch).SingleOrDefault();
+            // ==============
+            var companyName = (from d in db.MstCompanies where d.Id == Convert.ToInt32(currentCompanyId) select d.Company).FirstOrDefault();
+            var address = (from d in db.MstCompanies where d.Id == Convert.ToInt32(currentCompanyId) select d.Address).FirstOrDefault();
+            var contactNo = (from d in db.MstCompanies where d.Id == Convert.ToInt32(currentCompanyId) select d.ContactNumber).FirstOrDefault();
+            var branch = (from d in db.MstBranches where d.Id == Convert.ToInt32(currentBranchId) select d.ContactNumber).FirstOrDefault();
 
-            // table main header
-            PdfPTable tableHeaderPage = new PdfPTable(2);
-            float[] widthsCellsheaderPage = new float[] { 100f, 75f };
-            tableHeaderPage.SetWidths(widthsCellsheaderPage);
-            tableHeaderPage.WidthPercentage = 100;
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(companyName, fontArial17Bold)) { Border = 0 });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase("Receiving Receipt", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(address, fontArial11)) { Border = 0, PaddingTop = 5f });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(branch, fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2, });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
-            document.Add(tableHeaderPage);
+            // ===========
+            // Header Page
+            // ===========
+            PdfPTable headerPage = new PdfPTable(2);
+            float[] widthsCellsHeaderPage = new float[] { 100f, 75f };
+            headerPage.SetWidths(widthsCellsHeaderPage);
+            headerPage.WidthPercentage = 100;
+            headerPage.AddCell(new PdfPCell(new Phrase(companyName, fontArial17Bold)) { Border = 0 });
+            headerPage.AddCell(new PdfPCell(new Phrase("Receiving Receipt", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
+            headerPage.AddCell(new PdfPCell(new Phrase(address, fontArial11)) { Border = 0, PaddingTop = 5f });
+            headerPage.AddCell(new PdfPCell(new Phrase(branch, fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
+            headerPage.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
+            headerPage.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
+            document.Add(headerPage);
+
+            // =====
+            // Space
+            // =====
+            PdfPTable spaceTable = new PdfPTable(1);
+            float[] widthCellsSpaceTable = new float[] { 100f };
+            spaceTable.SetWidths(widthCellsSpaceTable);
+            spaceTable.WidthPercentage = 100;
+            spaceTable.AddCell(new PdfPCell(new Phrase(" ", fontArial10Bold)) { Border = 0, PaddingTop = 5f });
+
             document.Add(line);
 
-            var receivingReceiptHeaders = from d in db.TrnReceivingReceipts
-                                          where d.Id == RRId
-                                          && d.IsLocked == true
-                                          select new Models.TrnReceivingReceipt
-                                          {
-                                              Id = d.Id,
-                                              BranchId = d.BranchId,
-                                              Branch = d.MstBranch.Branch,
-                                              RRDate = d.RRDate.ToShortDateString(),
-                                              RRNumber = d.RRNumber,
-                                              SupplierId = d.SupplierId,
-                                              Supplier = d.MstArticle.Article,
-                                              TermId = d.TermId,
-                                              Term = d.MstTerm.Term,
-                                              DueDate = d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays)).ToShortDateString(),
-                                              DocumentReference = d.DocumentReference,
-                                              ManualRRNumber = d.ManualRRNumber,
-                                              Remarks = d.Remarks,
-                                              Amount = d.Amount,
-                                              WTaxAmount = d.WTaxAmount,
-                                              PaidAmount = d.PaidAmount,
-                                              AdjustmentAmount = d.AdjustmentAmount,
-                                              BalanceAmount = d.BalanceAmount,
-                                              ReceivedById = d.ReceivedById,
-                                              ReceivedBy = d.MstUser4.FullName,
-                                              PreparedById = d.PreparedById,
-                                              PreparedBy = d.MstUser3.FullName,
-                                              CheckedById = d.CheckedById,
-                                              CheckedBy = d.MstUser1.FullName,
-                                              ApprovedById = d.ApprovedById,
-                                              ApprovedBy = d.MstUser.FullName,
-                                              IsLocked = d.IsLocked,
-                                              CreatedById = d.CreatedById,
-                                              CreatedBy = d.MstUser2.FullName,
-                                              CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                              UpdatedById = d.UpdatedById,
-                                              UpdatedBy = d.MstUser5.FullName,
-                                              UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                          };
+            // =====================
+            // Get Receiving Receipt
+            // =====================
+            var receivingReceipt = from d in db.TrnReceivingReceipts
+                                   where d.Id == RRId
+                                   && d.IsLocked == true
+                                   select d;
 
-            if (receivingReceiptHeaders.Any())
+            if (receivingReceipt.Any())
             {
-                String Supplier = "", Term = "", DueDate = "", Remarks = "";
-                String RRNumber = "", RRDate = "", DocumentRef = "";
-                String PreparedBy = "", CheckedBy = "", ApprovedBy = "", ReceivedBy = "";
+                String supplier = receivingReceipt.FirstOrDefault().MstArticle.Article;
+                String term = receivingReceipt.FirstOrDefault().MstTerm.Term;
+                String dueDate = receivingReceipt.FirstOrDefault().RRDate.AddDays(Convert.ToInt32(receivingReceipt.FirstOrDefault().MstTerm.NumberOfDays)).ToString("MM-dd-yyyy", CultureInfo.InvariantCulture);
+                String remarks = receivingReceipt.FirstOrDefault().Remarks;
+                String RRNumber = receivingReceipt.FirstOrDefault().RRNumber;
+                String RRDate = receivingReceipt.FirstOrDefault().RRDate.ToString("MM-dd-yyyy", CultureInfo.InvariantCulture);
+                String documentRef = receivingReceipt.FirstOrDefault().DocumentReference;
+                String preparedBy = receivingReceipt.FirstOrDefault().MstUser3.FullName;
+                String checkedBy = receivingReceipt.FirstOrDefault().MstUser1.FullName;
+                String approvedBy = receivingReceipt.FirstOrDefault().MstUser.FullName;
+                String receivedBy = receivingReceipt.FirstOrDefault().MstUser4.FullName;
 
-                foreach (var receivingReceiptHeader in receivingReceiptHeaders)
-                {
-                    Supplier = receivingReceiptHeader.Supplier;
-                    Term = receivingReceiptHeader.Term;
-                    DueDate = receivingReceiptHeader.DueDate;
-                    Remarks = receivingReceiptHeader.Remarks;
-                    RRNumber = receivingReceiptHeader.RRNumber;
-                    RRDate = receivingReceiptHeader.RRDate;
-                    DocumentRef = receivingReceiptHeader.DocumentReference;
-                    PreparedBy = receivingReceiptHeader.PreparedBy;
-                    CheckedBy = receivingReceiptHeader.CheckedBy;
-                    ApprovedBy = receivingReceiptHeader.ApprovedBy;
-                    ReceivedBy = receivingReceiptHeader.ReceivedBy;
-                }
+                PdfPTable tableReceivingReceipt = new PdfPTable(4);
+                float[] widthscellsTableReceivingReceipt = new float[] { 40f, 150f, 70f, 50f };
+                tableReceivingReceipt.SetWidths(widthscellsTableReceivingReceipt);
+                tableReceivingReceipt.WidthPercentage = 100;
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase("Customer ", fontArial11Bold)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase(supplier, fontArial11)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase("RR Number ", fontArial11Bold)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase(RRNumber, fontArial11)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase("Term ", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase(term, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase("RR Date ", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase(RRDate, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase("Due Date ", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase(dueDate, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase("Document Ref ", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase(documentRef, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase("Remarks ", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase(remarks, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase(" ", fontArial11)) { Colspan = 2, Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                document.Add(tableReceivingReceipt);
 
-                PdfPTable tableSubHeader = new PdfPTable(4);
-                float[] widthscellsSubheader = new float[] { 40f, 100f, 100f, 40f };
-                tableSubHeader.SetWidths(widthscellsSubheader);
-                tableSubHeader.WidthPercentage = 100;
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("Supplier: ", fontArial11Bold)) { Border = 0, PaddingTop = 10f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(Supplier, fontArial11)) { Border = 0, PaddingTop = 10f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("RR Number: ", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(RRNumber, fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("Term: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(Term, fontArial11)) { Border = 0, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("RR date: ", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(RRDate, fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
-
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("Due Date: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(DueDate, fontArial11)) { Border = 0, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("Document Ref: ", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(DocumentRef, fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
-
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("Remarks: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(Remarks, fontArial11)) { Border = 0, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("", fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
-
-                document.Add(tableSubHeader);
-                document.Add(Chunk.NEWLINE);
+                document.Add(spaceTable);
 
                 var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
                                             where d.RRId == RRId
                                             && d.TrnReceivingReceipt.IsLocked == true
-                                            select new Models.TrnReceivingReceiptItem
+                                            select new
                                             {
                                                 Id = d.Id,
                                                 RRId = d.RRId,
@@ -190,90 +167,118 @@ namespace easyfis.Reports
                                                 BaseCost = d.BaseCost
                                             };
 
-                PdfPTable tableRRLines = new PdfPTable(6);
-                float[] widthscellsRRLines = new float[] { 50f, 60f, 150f, 130f, 100f, 100f };
-                tableRRLines.SetWidths(widthscellsRRLines);
-                tableRRLines.WidthPercentage = 100;
-
-                tableRRLines.AddCell(new PdfPCell(new Phrase("Quantity", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tableRRLines.AddCell(new PdfPCell(new Phrase("Unit", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tableRRLines.AddCell(new PdfPCell(new Phrase("Item", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tableRRLines.AddCell(new PdfPCell(new Phrase("Branch", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tableRRLines.AddCell(new PdfPCell(new Phrase("Price", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tableRRLines.AddCell(new PdfPCell(new Phrase("Amount", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-
-                Decimal TotalAmount = 0;
-                foreach (var receivingReceiptItem in receivingReceiptItems)
+                if (receivingReceiptItems.Any())
                 {
-                    tableRRLines.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Quantity.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableRRLines.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Unit, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableRRLines.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Item, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableRRLines.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Branch, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableRRLines.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Cost.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableRRLines.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Amount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    PdfPTable tableReceivingReceiptItems = new PdfPTable(6);
+                    float[] widthsCellsReceivingReceiptItems = new float[] { 100f, 70f, 200f, 150f, 100f, 100f };
+                    tableReceivingReceiptItems.SetWidths(widthsCellsReceivingReceiptItems);
+                    tableReceivingReceiptItems.WidthPercentage = 100;
+                    tableReceivingReceiptItems.AddCell(new PdfPCell(new Phrase("Quantity", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tableReceivingReceiptItems.AddCell(new PdfPCell(new Phrase("Unit", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tableReceivingReceiptItems.AddCell(new PdfPCell(new Phrase("Item", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tableReceivingReceiptItems.AddCell(new PdfPCell(new Phrase("Branch", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tableReceivingReceiptItems.AddCell(new PdfPCell(new Phrase("Price", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tableReceivingReceiptItems.AddCell(new PdfPCell(new Phrase("Amount", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
 
-                    TotalAmount = TotalAmount + receivingReceiptItem.Amount;
+                    Decimal totalAmount = 0;
+
+                    foreach (var receivingReceiptItem in receivingReceiptItems)
+                    {
+                        tableReceivingReceiptItems.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Quantity.ToString("#,##0.00"), fontArial11)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tableReceivingReceiptItems.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Unit, fontArial11)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tableReceivingReceiptItems.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Item, fontArial11)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tableReceivingReceiptItems.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Branch, fontArial11)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tableReceivingReceiptItems.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Cost.ToString("#,##0.00"), fontArial11)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tableReceivingReceiptItems.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Amount.ToString("#,##0.00"), fontArial11)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+
+                        totalAmount += receivingReceiptItem.Amount;
+                    }
+
+                    tableReceivingReceiptItems.AddCell(new PdfPCell(new Phrase("Total", fontArial11Bold)) { Colspan = 5, HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableReceivingReceiptItems.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), fontArial11Bold)) { HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                    document.Add(tableReceivingReceiptItems);
+
+                    document.Add(spaceTable);
                 }
 
-                document.Add(tableRRLines);
+                // ============
+                // VAT Analysis
+                // ============
+                var VATItems = from d in receivingReceiptItems
+                               group d by new
+                               {
+                                   VAT = d.VAT,
+                                   WTAX = d.WTAX
+                               } into g
+                               select new
+                               {
+                                   VAT = g.Key.VAT,
+                                   Amount = g.Sum(d => d.Amount),
+                                   VATAmount = g.Sum(d => d.VATAmount),
+                                   WTAXAmount = g.Sum(d => d.WTAXAmount)
+                               };
 
-                document.Add(Chunk.NEWLINE);
+                if (VATItems.Any())
+                {
+                    PdfPTable tableVATAnalysis = new PdfPTable(4);
+                    float[] widthsCellsVATItems = new float[] { 200f, 100f, 100f, 100f };
+                    tableVATAnalysis.SetWidths(widthsCellsVATItems);
+                    tableVATAnalysis.HorizontalAlignment = Element.ALIGN_LEFT;
+                    tableVATAnalysis.WidthPercentage = 50;
+                    tableVATAnalysis.AddCell(new PdfPCell(new Phrase("VAT", fontArial9Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tableVATAnalysis.AddCell(new PdfPCell(new Phrase("Amount", fontArial9Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tableVATAnalysis.AddCell(new PdfPCell(new Phrase("VAT Amount", fontArial9Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tableVATAnalysis.AddCell(new PdfPCell(new Phrase("WTAX Amount", fontArial9Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
 
-                PdfPTable tableRRLineTotalAmount = new PdfPTable(6);
-                float[] widthscellsRRLinesTotalAmount = new float[] { 50f, 60f, 150f, 130f, 100f, 100f };
-                tableRRLineTotalAmount.SetWidths(widthscellsRRLinesTotalAmount);
-                tableRRLineTotalAmount.WidthPercentage = 100;
+                    Decimal totalVATAmount = 0;
+                    Decimal totalVAT = 0;
+                    Decimal totalWTAX = 0;
 
-                tableRRLineTotalAmount.AddCell(new PdfPCell(new Phrase("", fontArial9)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableRRLineTotalAmount.AddCell(new PdfPCell(new Phrase("", fontArial9)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                tableRRLineTotalAmount.AddCell(new PdfPCell(new Phrase("", fontArial9)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                tableRRLineTotalAmount.AddCell(new PdfPCell(new Phrase("", fontArial9)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                tableRRLineTotalAmount.AddCell(new PdfPCell(new Phrase("Total:", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableRRLineTotalAmount.AddCell(new PdfPCell(new Phrase(TotalAmount.ToString("#,##0.00"), fontArial9)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    foreach (var VATItem in VATItems)
+                    {
+                        tableVATAnalysis.AddCell(new PdfPCell(new Phrase(VATItem.VAT, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tableVATAnalysis.AddCell(new PdfPCell(new Phrase(VATItem.Amount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tableVATAnalysis.AddCell(new PdfPCell(new Phrase(VATItem.VATAmount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tableVATAnalysis.AddCell(new PdfPCell(new Phrase(VATItem.WTAXAmount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
 
-                document.Add(tableRRLineTotalAmount);
+                        totalVATAmount += VATItem.Amount;
+                        totalVAT += VATItem.VATAmount;
+                        totalWTAX += VATItem.WTAXAmount;
+                    }
 
-                document.Add(Chunk.NEWLINE);
-                document.Add(Chunk.NEWLINE);
-                document.Add(Chunk.NEWLINE);
-                document.Add(Chunk.NEWLINE);
-                document.Add(Chunk.NEWLINE);
+                    tableVATAnalysis.AddCell(new PdfPCell(new Phrase("Total", fontArial9Bold)) { HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableVATAnalysis.AddCell(new PdfPCell(new Phrase(totalVATAmount.ToString("#,##0.00"), fontArial9Bold)) { HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableVATAnalysis.AddCell(new PdfPCell(new Phrase(totalVAT.ToString("#,##0.00"), fontArial9Bold)) { HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableVATAnalysis.AddCell(new PdfPCell(new Phrase(totalWTAX.ToString("#,##0.00"), fontArial9Bold)) { HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
 
-                // Table for Footer
-                PdfPTable tableFooter = new PdfPTable(7);
-                tableFooter.WidthPercentage = 100;
-                float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f, 20f, 100f };
-                tableFooter.SetWidths(widthsCells2);
+                    // TODO: Option Settings for VAT Analysis Table
+                    //document.Add(tableVATAnalysis);
 
-                tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase("Received by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
+                    //document.Add(spaceTable);
+                }
 
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-
-                tableFooter.AddCell(new PdfPCell(new Phrase(PreparedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(CheckedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(ApprovedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(ReceivedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
-
-                document.Add(tableFooter);
-
+                // ==============
+                // User Signature
+                // ==============
+                PdfPTable tableUsers = new PdfPTable(4);
+                float[] widthsCellsTableUsers = new float[] { 100f, 100f, 100f, 100f };
+                tableUsers.WidthPercentage = 100;
+                tableUsers.SetWidths(widthsCellsTableUsers);
+                tableUsers.AddCell(new PdfPCell(new Phrase("Prepared by", fontArial11Bold)) { PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase("Checked by", fontArial11Bold)) { PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase("Approved by", fontArial11Bold)) { PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase("Received by", fontArial11Bold)) { PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { PaddingBottom = 50f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { PaddingBottom = 50f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { PaddingBottom = 50f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { PaddingBottom = 50f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(preparedBy, fontArial11)) { HorizontalAlignment = 1, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(checkedBy, fontArial11)) { HorizontalAlignment = 1, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(approvedBy, fontArial11)) { HorizontalAlignment = 1, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(receivedBy, fontArial11)) { HorizontalAlignment = 1, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                document.Add(tableUsers);
             }
 
-            // Document End
             document.Close();
 
             byte[] byteInfo = workStream.ToArray();

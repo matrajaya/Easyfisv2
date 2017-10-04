@@ -75,6 +75,16 @@ namespace easyfis.Reports
             headerPage.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
             headerPage.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
             document.Add(headerPage);
+
+            // =====
+            // Space
+            // =====
+            PdfPTable spaceTable = new PdfPTable(1);
+            float[] widthCellsSpaceTable = new float[] { 100f };
+            spaceTable.SetWidths(widthCellsSpaceTable);
+            spaceTable.WidthPercentage = 100;
+            spaceTable.AddCell(new PdfPCell(new Phrase(" ", fontArial10Bold)) { Border = 0, PaddingTop = 5f });
+
             document.Add(line);
 
             // ===================
@@ -100,35 +110,28 @@ namespace easyfis.Reports
                 String requestedBy = purchaseOrders.FirstOrDefault().MstUser4.FullName;
 
                 PdfPTable tablePurchaseOrder = new PdfPTable(4);
-                float[] widthscellsTablePurchaseOrder = new float[] { 40f, 130f, 70f, 40f };
+                float[] widthscellsTablePurchaseOrder = new float[] { 40f, 150f, 70f, 50f };
                 tablePurchaseOrder.SetWidths(widthscellsTablePurchaseOrder);
                 tablePurchaseOrder.WidthPercentage = 100;
 
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Supplier: ", fontArial11Bold)) { Border = 0, PaddingTop = 10f });
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(supplier, fontArial11)) { Border = 0, PaddingTop = 10f });
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("PO Number: ", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(PONumber, fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Term: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(term, fontArial11)) { Border = 0, PaddingTop = 3f });
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("PO Date: ", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(PODate, fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
-
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Date Needed: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(dateNeeded, fontArial11)) { Border = 0, PaddingTop = 3f });
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(" ", fontArial11Bold)) { Colspan = 2, Border = 0, PaddingTop = 3f });
-
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Request No: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(requestNo, fontArial11)) { Border = 0, PaddingTop = 3f });
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(" ", fontArial11Bold)) { Colspan = 2, Border = 0, PaddingTop = 3f });
-
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Remarks: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(remarks, fontArial11)) { Border = 0, PaddingTop = 3f });
-                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(" ", fontArial11Bold)) { Colspan = 2, Border = 0, PaddingTop = 3f });
-
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Supplier", fontArial11Bold)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(supplier, fontArial11)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("PO Number", fontArial11Bold)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(PONumber, fontArial11)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Term", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(term, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("PO Date", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(PODate, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Date Needed", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(dateNeeded, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Request No.", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(requestNo, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase("Remarks ", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(remarks, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tablePurchaseOrder.AddCell(new PdfPCell(new Phrase(" ", fontArial11)) { Colspan = 2, Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
                 document.Add(tablePurchaseOrder);
 
-                document.Add(Chunk.NEWLINE);
+                document.Add(spaceTable);
 
                 // ========================
                 // Get Purchase Order Items
@@ -149,26 +152,16 @@ namespace easyfis.Reports
 
                 if (purchaseOrderItems.Any())
                 {
-                    // ==========
-                    // Item Label
-                    // ==========
-                    PdfPTable tableItemLabel = new PdfPTable(1);
-                    float[] widthCellsTableItemLabel = new float[] { 100f };
-                    tableItemLabel.SetWidths(widthCellsTableItemLabel);
-                    tableItemLabel.WidthPercentage = 100;
-                    tableItemLabel.AddCell(new PdfPCell(new Phrase("Items", fontArial13Bold)) { Border = 0, PaddingTop = 5f, PaddingBottom = 10f });
-                    document.Add(tableItemLabel);
-
                     PdfPTable tablePurchaseOrderLines = new PdfPTable(6);
-                    float[] widthscellsPOLines = new float[] { 100f, 70f, 150f, 150f, 100f, 100f };
+                    float[] widthscellsPOLines = new float[] { 100f, 70f, 200f, 150f, 100f, 100f };
                     tablePurchaseOrderLines.SetWidths(widthscellsPOLines);
                     tablePurchaseOrderLines.WidthPercentage = 100;
-                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Quantity", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Unit", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Item", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Particulars", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Price", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Amount", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Quantity", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Unit", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Item", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Particulars", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Price", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Amount", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
 
                     Decimal totalAmount = 0;
 
@@ -187,34 +180,29 @@ namespace easyfis.Reports
                     tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase("Total", fontArial11Bold)) { Colspan = 5, HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
                     tablePurchaseOrderLines.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), fontArial11Bold)) { HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
                     document.Add(tablePurchaseOrderLines);
-                }
 
-                document.Add(Chunk.NEWLINE);
-                document.Add(Chunk.NEWLINE);
-                document.Add(Chunk.NEWLINE);
+                    document.Add(spaceTable);
+                }
 
                 // ==============
                 // User Signature
                 // ==============
-                PdfPTable tableUsers = new PdfPTable(7);
-                float[] widthsCellsTableUsers = new float[] { 100f, 20f, 100f, 20f, 100f, 20f, 100f };
+                PdfPTable tableUsers = new PdfPTable(4);
+                float[] widthsCellsTableUsers = new float[] { 100f, 100f, 100f, 100f };
                 tableUsers.WidthPercentage = 100;
                 tableUsers.SetWidths(widthsCellsTableUsers);
-                tableUsers.AddCell(new PdfPCell(new Phrase("Prepared by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                tableUsers.AddCell(new PdfPCell(new Phrase("Checked by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                tableUsers.AddCell(new PdfPCell(new Phrase("Approved by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                tableUsers.AddCell(new PdfPCell(new Phrase("Requested by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { Colspan = 7, Border = 0, PaddingTop = 15f, PaddingBottom = 15f });
-                tableUsers.AddCell(new PdfPCell(new Phrase(preparedBy, fontArial11)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
-                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                tableUsers.AddCell(new PdfPCell(new Phrase(checkedBy, fontArial11)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
-                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                tableUsers.AddCell(new PdfPCell(new Phrase(approvedBy, fontArial11)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
-                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                tableUsers.AddCell(new PdfPCell(new Phrase(requestedBy, fontArial11)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase("Prepared by", fontArial11Bold)) { PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase("Checked by", fontArial11Bold)) { PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase("Approved by", fontArial11Bold)) { PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase("Requested by", fontArial11Bold)) { PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { PaddingBottom = 50f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { PaddingBottom = 50f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { PaddingBottom = 50f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { PaddingBottom = 50f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(preparedBy, fontArial11)) { HorizontalAlignment = 1, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(checkedBy, fontArial11)) { HorizontalAlignment = 1, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(approvedBy, fontArial11)) { HorizontalAlignment = 1, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(requestedBy, fontArial11)) { HorizontalAlignment = 1, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
                 document.Add(tableUsers);
             }
 
