@@ -1029,7 +1029,6 @@
                             }, 1000);
                         },
                         404: function (message) {
-                            toastr.error("Not Found");
                             toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Lock Failed!");
                             document.getElementById('item_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
                             $('#item_LockButton').prop('disabled', false);
