@@ -266,7 +266,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult ChartOfAccounts()
         {
-            if (PageAccess("CharOfAccounts").Equals("CharOfAccounts"))
+            if (PageAccess("ChartOfAccounts").Equals("ChartOfAccounts"))
             {
                 return View();
             }
