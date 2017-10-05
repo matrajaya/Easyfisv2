@@ -104,6 +104,15 @@ namespace easyfis.Controllers
         }
 
         // ==============
+        // Not Found Page
+        // ==============
+        [Authorize]
+        public ActionResult PageNotFound()
+        {
+            return View();
+        }
+
+        // ==============
         // Forbidden Page
         // ==============
         [Authorize]
@@ -267,6 +276,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // ==============
+        // Purchase Order
+        // ==============
         [Authorize]
         public ActionResult PurchaseOrder()
         {
@@ -289,6 +301,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // =====================
+        // Purchase Order Detail
+        // =====================
         [Authorize]
         public ActionResult PurchaseOrderDetail()
         {
@@ -302,6 +317,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // =================
+        // Receiving Receipt
+        // =================
         [Authorize]
         public ActionResult ReceivingReceipt()
         {
@@ -324,6 +342,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // ========================
+        // Receiving Receipt Detail
+        // ========================
         [Authorize]
         public ActionResult ReceivingReceiptDetail()
         {
@@ -337,158 +358,9 @@ namespace easyfis.Controllers
             }
         }
 
-        [Authorize]
-        public ActionResult AccountsPayable()
-        {
-            if (PageAccess("AccountsPayableReport").Equals("AccountsPayableReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult AccountsPayableReport()
-        {
-            if (PageAccess("ViewAccountsPayableReport").Equals("ViewAccountsPayableReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult PurchaseSummaryReport()
-        {
-            if (PageAccess("ViewPurchaseSummaryReport").Equals("ViewPurchaseSummaryReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult PurchaseDetailReport()
-        {
-            if (PageAccess("ViewPurchaseDetailReport").Equals("ViewPurchaseDetailReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult ReceivingReceiptSummaryReport()
-        {
-            if (PageAccess("ViewReceivingReceiptSummaryReport").Equals("ViewReceivingReceiptSummaryReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult ReceivingReceiptDetailReport()
-        {
-            if (PageAccess("ViewReceivingReceiptDetailReport").Equals("ViewReceivingReceiptDetailReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult DisbursementSummaryReport()
-        {
-            if (PageAccess("ViewDisbursementSummaryReport").Equals("ViewDisbursementSummaryReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult DisbursementDetailReport()
-        {
-            if (PageAccess("ViewDisbursementDetailReport").Equals("ViewDisbursementDetailReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult Disbursement()
-        {
-            if (PageAccess("DisbursementList").Equals("DisbursementList"))
-            {
-                if (AccessToDetail("DisbursementDetail").Equals("DisbursementDetail"))
-                {
-                    ViewData.Add("CanAccessToDetailPage", "True");
-                }
-                else
-                {
-                    ViewData.Add("CanAccessToDetailPage", "False");
-                }
-
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult DisbursementDetail()
-        {
-            if (PageAccess("DisbursementDetail").Equals("DisbursementDetail"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult Bank()
-        {
-            if (PageAccess("BankList").Equals("BankList"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
+        // =====
+        // Sales
+        // =====
         [Authorize]
         public ActionResult Sales()
         {
@@ -511,6 +383,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // ============
+        // Sales Detail
+        // ============
         [Authorize]
         public ActionResult SalesDetail()
         {
@@ -524,237 +399,9 @@ namespace easyfis.Controllers
             }
         }
 
-        [Authorize]
-        public ActionResult AccountsReceivable()
-        {
-            if (PageAccess("AccountsReceivableReport").Equals("AccountsReceivableReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult AccountsReceivableReport()
-        {
-            if (PageAccess("ViewAccountsReceivableReport").Equals("ViewAccountsReceivableReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult SalesSummaryReport()
-        {
-            if (PageAccess("ViewSalesSummaryReport").Equals("ViewSalesSummaryReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult SalesDetailReport()
-        {
-            if (PageAccess("ViewSalesDetailReport").Equals("ViewSalesDetailReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult CollectionSummaryReport()
-        {
-            if (PageAccess("ViewCollectionSummaryReport").Equals("ViewCollectionSummaryReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult CollectionDetailReport()
-        {
-            if (PageAccess("ViewCollectionDetailReport").Equals("ViewCollectionDetailReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult ReceivingReceiptBook()
-        {
-            if (PageAccess("ViewReceivingReceiptBook").Equals("ViewReceivingReceiptBook"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult DisbursementBook()
-        {
-            if (PageAccess("ViewDisbursementBook").Equals("ViewDisbursementBook"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult SalesBook()
-        {
-            if (PageAccess("ViewSalesBook").Equals("ViewSalesBook"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult CollectionBook()
-        {
-            if (PageAccess("ViewCollectionBook").Equals("ViewCollectionBook"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult StockInBook()
-        {
-            if (PageAccess("ViewStockInBook").Equals("ViewStockInBook"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-
-        }
-
-        [Authorize]
-        public ActionResult StockOutBook()
-        {
-            if (PageAccess("ViewStockOutBook").Equals("ViewStockOutBook"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult StockTransferBook()
-        {
-            if (PageAccess("ViewStockTransferBook").Equals("ViewStockTransferBook"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult JournalVoucherBook()
-        {
-            if (PageAccess("ViewJournalVoucherBook").Equals("ViewJournalVoucherBook"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult Collection()
-        {
-            if (PageAccess("CollectionList").Equals("CollectionList"))
-            {
-                if (AccessToDetail("CollectionDetail").Equals("CollectionDetail"))
-                {
-                    ViewData.Add("CanAccessToDetailPage", "True");
-                }
-                else
-                {
-                    ViewData.Add("CanAccessToDetailPage", "False");
-                }
-
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult CollectionDetail()
-        {
-            if (PageAccess("CollectionDetail").Equals("CollectionDetail"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult BankReconciliation()
-        {
-            if (PageAccess("BankReconciliation").Equals("BankReconciliation"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
+        // ========
+        // Stock In
+        // ========
         [Authorize]
         public ActionResult StockIn()
         {
@@ -777,6 +424,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // ===============
+        // Stock In Detail
+        // ===============
         [Authorize]
         public ActionResult StockInDetail()
         {
@@ -790,6 +440,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // =========
+        // Stock Out 
+        // =========
         [Authorize]
         public ActionResult StockOut()
         {
@@ -812,6 +465,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // =================
+        // Stock Out  Detail
+        // =================
         [Authorize]
         public ActionResult StockOutDetail()
         {
@@ -825,108 +481,9 @@ namespace easyfis.Controllers
             }
         }
 
-        [Authorize]
-        public ActionResult InventoryReport()
-        {
-            if (PageAccess("ViewInventoryReport").Equals("ViewInventoryReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult Inventory()
-        {
-            if (PageAccess("InventoryReport").Equals("InventoryReport"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult StockCard()
-        {
-            return View();
-        }
-
-        [Authorize]
-        public ActionResult StockTransfer()
-        {
-            if (PageAccess("StockTransferList").Equals("StockTransferList"))
-            {
-                if (AccessToDetail("StockTransferDetail").Equals("StockTransferDetail"))
-                {
-                    ViewData.Add("CanAccessToDetailPage", "True");
-                }
-                else
-                {
-                    ViewData.Add("CanAccessToDetailPage", "False");
-                }
-
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult StockTransferDetail()
-        {
-            if (PageAccess("StockTransferDetail").Equals("StockTransferDetail"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult StockCount()
-        {
-            if (PageAccess("StockCountList").Equals("StockCountList"))
-            {
-                if (AccessToDetail("StockCountDetail").Equals("StockCountDetail"))
-                {
-                    ViewData.Add("CanAccessToDetailPage", "True");
-                }
-                else
-                {
-                    ViewData.Add("CanAccessToDetailPage", "False");
-                }
-
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
-        [Authorize]
-        public ActionResult StockCountDetail()
-        {
-            if (PageAccess("StockCountDetail").Equals("StockCountDetail"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
-        }
-
+        // ===============
+        // Journal Voucher
+        // ===============
         [Authorize]
         public ActionResult JournalVoucher()
         {
@@ -949,6 +506,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // ======================
+        // Journal Voucher Detail
+        // ======================
         [Authorize]
         public ActionResult JournalVoucherDetail()
         {
@@ -962,6 +522,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // =======
+        // Company
+        // =======
         [Authorize]
         public ActionResult Company()
         {
@@ -984,6 +547,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // ==============
+        // Company Detail
+        // ==============
         [Authorize]
         public ActionResult CompanyDetail()
         {
@@ -997,6 +563,377 @@ namespace easyfis.Controllers
             }
         }
 
+        // ================
+        // Accounts Payable
+        // ================
+        [Authorize]
+        public ActionResult AccountsPayable()
+        {
+            if (PageAccess("AccountsPayableReport").Equals("AccountsPayableReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ============================
+        // View Accounts Payable Report
+        // ============================
+        [Authorize]
+        public ActionResult AccountsPayableReport()
+        {
+            if (PageAccess("ViewAccountsPayableReport").Equals("ViewAccountsPayableReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ============================
+        // View Purchase Summary Report
+        // ============================
+        [Authorize]
+        public ActionResult PurchaseSummaryReport()
+        {
+            if (PageAccess("ViewPurchaseSummaryReport").Equals("ViewPurchaseSummaryReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ===========================
+        // View Purchase Detail Report
+        // ===========================
+        [Authorize]
+        public ActionResult PurchaseDetailReport()
+        {
+            if (PageAccess("ViewPurchaseDetailReport").Equals("ViewPurchaseDetailReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // =====================================
+        // View Receiving Receipt Summary Report
+        // =====================================
+        [Authorize]
+        public ActionResult ReceivingReceiptSummaryReport()
+        {
+            if (PageAccess("ViewReceivingReceiptSummaryReport").Equals("ViewReceivingReceiptSummaryReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ====================================
+        // View Receiving Receipt Detail Report
+        // ====================================
+        [Authorize]
+        public ActionResult ReceivingReceiptDetailReport()
+        {
+            if (PageAccess("ViewReceivingReceiptDetailReport").Equals("ViewReceivingReceiptDetailReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ================================
+        // View Disbursement Summary Report
+        // ================================
+        [Authorize]
+        public ActionResult DisbursementSummaryReport()
+        {
+            if (PageAccess("ViewDisbursementSummaryReport").Equals("ViewDisbursementSummaryReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ===============================
+        // View Disbursement Detail Report
+        // ===============================
+        [Authorize]
+        public ActionResult DisbursementDetailReport()
+        {
+            if (PageAccess("ViewDisbursementDetailReport").Equals("ViewDisbursementDetailReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ===================
+        // Accounts Receivable
+        // ===================
+        [Authorize]
+        public ActionResult AccountsReceivable()
+        {
+            if (PageAccess("AccountsReceivableReport").Equals("AccountsReceivableReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ================================
+        // View Accounts Receivable  Report
+        // ================================
+        [Authorize]
+        public ActionResult AccountsReceivableReport()
+        {
+            if (PageAccess("ViewAccountsReceivableReport").Equals("ViewAccountsReceivableReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // =========================
+        // View Sales Summary Report
+        // =========================
+        [Authorize]
+        public ActionResult SalesSummaryReport()
+        {
+            if (PageAccess("ViewSalesSummaryReport").Equals("ViewSalesSummaryReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ========================
+        // View Sales Detail Report
+        // ========================
+        [Authorize]
+        public ActionResult SalesDetailReport()
+        {
+            if (PageAccess("ViewSalesDetailReport").Equals("ViewSalesDetailReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ==============================
+        // View Collection Summary Report
+        // ==============================
+        [Authorize]
+        public ActionResult CollectionSummaryReport()
+        {
+            if (PageAccess("ViewCollectionSummaryReport").Equals("ViewCollectionSummaryReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // =============================
+        // View Collection Detail Report
+        // =============================
+        [Authorize]
+        public ActionResult CollectionDetailReport()
+        {
+            if (PageAccess("ViewCollectionDetailReport").Equals("ViewCollectionDetailReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // =========
+        // Inventory
+        // =========
+        [Authorize]
+        public ActionResult Inventory()
+        {
+            if (PageAccess("InventoryReport").Equals("InventoryReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // =====================
+        // View Inventory Report
+        // =====================
+        [Authorize]
+        public ActionResult InventoryReport()
+        {
+            if (PageAccess("ViewInventoryReport").Equals("ViewInventoryReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // =====================
+        // View Inventory Report
+        // =====================
+        [Authorize]
+        public ActionResult StockCard()
+        {
+            if (PageAccess("ViewStockCard").Equals("ViewStockCard"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ===========================
+        // View Stock In Detail Report
+        // ===========================
+        [Authorize]
+        public ActionResult StockInDetailReport()
+        {
+            if (PageAccess("ViewStockInDetailReport").Equals("ViewStockInDetailReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ============================
+        // View Stock Out Detail Report
+        // ============================
+        [Authorize]
+        public ActionResult StockOutDetailReport()
+        {
+            if (PageAccess("ViewStockOutDetailReport").Equals("ViewStockOutDetailReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // =================================
+        // View Stock Transfer Detail Report
+        // =================================
+        [Authorize]
+        public ActionResult StockTransferDetailReport()
+        {
+            if (PageAccess("ViewStockTransferDetailReport").Equals("ViewStockTransferDetailReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // =====================
+        // View Item List Report
+        // =====================
+        [Authorize]
+        public ActionResult ItemList()
+        {
+            if (PageAccess("ViewItemList").Equals("ViewItemList"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ===============================
+        // View Item Component List Report
+        // ===============================
+        [Authorize]
+        public ActionResult ItemComponentList()
+        {
+            if (PageAccess("ViewItemComponentList").Equals("ViewItemComponentList"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ================================
+        // View Physical Count Sheet Report
+        // ================================
+        [Authorize]
+        public ActionResult PhysicalCountSheet()
+        {
+            if (PageAccess("ViewPhysicalCountSheet").Equals("ViewPhysicalCountSheet"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ====================
+        // Financial Statements
+        // ====================
         [Authorize]
         public ActionResult FinancialStatements()
         {
@@ -1010,6 +947,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // ==================
+        // View Trial Balance
+        // ==================
         [Authorize]
         public ActionResult TrialBalance()
         {
@@ -1023,6 +963,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // ===================
+        // View Account Ledger
+        // ===================
         [Authorize]
         public ActionResult AccountLedger()
         {
@@ -1036,6 +979,261 @@ namespace easyfis.Controllers
             }
         }
 
+        // ===========================
+        // View Receiving Receipt Book 
+        // ===========================
+        [Authorize]
+        public ActionResult ReceivingReceiptBook()
+        {
+            if (PageAccess("ViewReceivingReceiptBook").Equals("ViewReceivingReceiptBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ======================
+        // View Disbursement Book 
+        // ======================
+        [Authorize]
+        public ActionResult DisbursementBook()
+        {
+            if (PageAccess("ViewDisbursementBook").Equals("ViewDisbursementBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ===============
+        // View Sales Book 
+        // ===============
+        [Authorize]
+        public ActionResult SalesBook()
+        {
+            if (PageAccess("ViewSalesBook").Equals("ViewSalesBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ====================
+        // View Collection Book 
+        // ====================
+        [Authorize]
+        public ActionResult CollectionBook()
+        {
+            if (PageAccess("ViewCollectionBook").Equals("ViewCollectionBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ===================
+        // View Stock In Book 
+        // ==================
+        [Authorize]
+        public ActionResult StockInBook()
+        {
+            if (PageAccess("ViewStockInBook").Equals("ViewStockInBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+
+        }
+
+        // ===================
+        // View Stock Out Book 
+        // ===================
+        [Authorize]
+        public ActionResult StockOutBook()
+        {
+            if (PageAccess("ViewStockOutBook").Equals("ViewStockOutBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ========================
+        // View Stock Transfer Book 
+        // ========================
+        [Authorize]
+        public ActionResult StockTransferBook()
+        {
+            if (PageAccess("ViewStockTransferBook").Equals("ViewStockTransferBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // =========================
+        // View Journal Voucher Book 
+        // =========================
+        [Authorize]
+        public ActionResult JournalVoucherBook()
+        {
+            if (PageAccess("ViewJournalVoucherBook").Equals("ViewJournalVoucherBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ============
+        // Disbursement
+        // ============
+        [Authorize]
+        public ActionResult Disbursement()
+        {
+            if (PageAccess("DisbursementList").Equals("DisbursementList"))
+            {
+                if (AccessToDetail("DisbursementDetail").Equals("DisbursementDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ===================
+        // Disbursement Detail
+        // ===================
+        [Authorize]
+        public ActionResult DisbursementDetail()
+        {
+            if (PageAccess("DisbursementDetail").Equals("DisbursementDetail"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ==========
+        // Collection
+        // ==========
+        [Authorize]
+        public ActionResult Collection()
+        {
+            if (PageAccess("CollectionList").Equals("CollectionList"))
+            {
+                if (AccessToDetail("CollectionDetail").Equals("CollectionDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // =================
+        // Collection Detail
+        // =================
+        [Authorize]
+        public ActionResult CollectionDetail()
+        {
+            if (PageAccess("CollectionDetail").Equals("CollectionDetail"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ==============
+        // Stock Transfer
+        // ==============
+        [Authorize]
+        public ActionResult StockTransfer()
+        {
+            if (PageAccess("StockTransferList").Equals("StockTransferList"))
+            {
+                if (AccessToDetail("StockTransferDetail").Equals("StockTransferDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // =====================
+        // Stock Transfer Detail
+        // =====================
+        [Authorize]
+        public ActionResult StockTransferDetail()
+        {
+            if (PageAccess("StockTransferDetail").Equals("StockTransferDetail"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // =====
+        // Users
+        // =====
         [Authorize]
         public ActionResult Users()
         {
@@ -1049,6 +1247,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // ============
+        // Users Detail
+        // ============
         [Authorize]
         public ActionResult UsersDetail()
         {
@@ -1062,6 +1263,82 @@ namespace easyfis.Controllers
             }
         }
 
+        // ====
+        // Bank
+        // ====
+        [Authorize]
+        public ActionResult Bank()
+        {
+            if (PageAccess("BankList").Equals("BankList"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ===================
+        // Bank Reconciliation
+        // ===================
+        [Authorize]
+        public ActionResult BankReconciliation()
+        {
+            if (PageAccess("BankReconciliation").Equals("BankReconciliation"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ===========
+        // Stock Count
+        // ===========
+        [Authorize]
+        public ActionResult StockCount()
+        {
+            if (PageAccess("StockCountList").Equals("StockCountList"))
+            {
+                if (AccessToDetail("StockCountDetail").Equals("StockCountDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ==================
+        // Stock Count Detail
+        // ==================
+        [Authorize]
+        public ActionResult StockCountDetail()
+        {
+            if (PageAccess("StockCountDetail").Equals("StockCountDetail"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        // ============
+        // System Table
+        // ============
         [Authorize]
         public ActionResult SystemTables()
         {
@@ -1075,8 +1352,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // =======================
         // POS Integration Reports
-        // ================================
+        // =======================
         [Authorize]
         public ActionResult SalesDetailReportVATSales()
         {
@@ -1108,19 +1386,20 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult SalesSummaryReportAllFields()
-        {
-            return View();
-        }
-
-        [Authorize]
         public ActionResult HourlyTopSellingItemsReport()
         {
             return View();
         }
 
-        // charts 
+        [Authorize]
+        public ActionResult SalesSummaryReportAllFields()
+        {
+            return View();
+        }
 
+        // ======
+        // Charts
+        // ======
         [Authorize]
         public ActionResult ChartMonthlySalesTrend()
         {
@@ -1153,42 +1432,6 @@ namespace easyfis.Controllers
 
         [Authorize]
         public ActionResult ChartCategorySoldComparison()
-        {
-            return View();
-        }
-
-        [Authorize]
-        public ActionResult StockInDetailReport()
-        {
-            return View();
-        }
-
-        [Authorize]
-        public ActionResult StockOutDetailReport()
-        {
-            return View();
-        }
-
-        [Authorize]
-        public ActionResult StockTransferDetailReport()
-        {
-            return View();
-        }
-
-        [Authorize]
-        public ActionResult ItemList()
-        {
-            return View();
-        }
-
-        [Authorize]
-        public ActionResult ItemComponentList()
-        {
-            return View();
-        }
-
-        [Authorize]
-        public ActionResult PhysicalCountSheet()
         {
             return View();
         }

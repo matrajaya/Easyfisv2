@@ -54,6 +54,7 @@ namespace easyfis.ApiControllers
                                         Cost = GetHighestCost(d.ComponentArticleId),
                                         Particulars = d.MstArticle.Particulars,
                                     };
+
             return articleComponents.ToList();
         }
     }

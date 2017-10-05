@@ -2,6 +2,7 @@
 using iTextSharp.text.pdf;
 using Microsoft.AspNet.Identity;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -10,133 +11,124 @@ namespace easyfis.Views.Software
 {
     public class RepStockInController : Controller
     {
-        // Easyfis data context
+        // ============
+        // Data Context
+        // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // current branch Id
-        public Int32 currentBranchId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
-        }
-
-        // PDF Item List
+        // ==============
+        // Stock In - PDF
+        // ==============
         [Authorize]
         public ActionResult StockIn(Int32 StockInId)
         {
-            // PDF settings
+            // ==============================
+            // PDF Settings and Customization
+            // ==============================
             MemoryStream workStream = new MemoryStream();
             Rectangle rectangle = new Rectangle(PageSize.A3);
             Document document = new Document(rectangle, 72, 72, 72, 72);
             document.SetMargins(30f, 30f, 30f, 30f);
             PdfWriter.GetInstance(document, workStream).CloseStream = false;
 
-            // Document Starts
             document.Open();
 
-            // Fonts Customization
+            // =====
+            // Fonts
+            // =====
             Font fontArial17Bold = FontFactory.GetFont("Arial", 17, Font.BOLD);
             Font fontArial11 = FontFactory.GetFont("Arial", 11);
-            Font fontArial10Bold = FontFactory.GetFont("Arial", 10, Font.BOLD);
             Font fontArial9Bold = FontFactory.GetFont("Arial", 9, Font.BOLD);
             Font fontArial9 = FontFactory.GetFont("Arial", 9);
+            Font fontArial10Bold = FontFactory.GetFont("Arial", 10, Font.BOLD);
             Font fontArial10 = FontFactory.GetFont("Arial", 10);
             Font fontArial11Bold = FontFactory.GetFont("Arial", 11, Font.BOLD);
             Font fontArial12Bold = FontFactory.GetFont("Arial", 12, Font.BOLD);
+            Font fontArial13Bold = FontFactory.GetFont("Arial", 13, Font.BOLD);
 
-            // line
-            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 4.5F)));
 
+            var identityUserId = User.Identity.GetUserId();
+            var currentUser = from d in db.MstUsers where d.UserId == identityUserId select d;
+            var currentCompanyId = currentUser.FirstOrDefault().CompanyId;
+            var currentBranchId = currentUser.FirstOrDefault().BranchId;
+
+            // ==============
             // Company Detail
-            var companyName = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.Company).SingleOrDefault();
-            var address = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.Address).SingleOrDefault();
-            var contactNo = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.ContactNumber).SingleOrDefault();
-            var branch = (from d in db.MstBranches where d.Id == currentBranchId() select d.Branch).SingleOrDefault();
+            // ==============
+            var companyName = (from d in db.MstCompanies where d.Id == Convert.ToInt32(currentCompanyId) select d.Company).FirstOrDefault();
+            var address = (from d in db.MstCompanies where d.Id == Convert.ToInt32(currentCompanyId) select d.Address).FirstOrDefault();
+            var contactNo = (from d in db.MstCompanies where d.Id == Convert.ToInt32(currentCompanyId) select d.ContactNumber).FirstOrDefault();
+            var branch = (from d in db.MstBranches where d.Id == Convert.ToInt32(currentBranchId) select d.Branch).FirstOrDefault();
 
-            // table main header
-            PdfPTable tableHeaderPage = new PdfPTable(2);
-            float[] widthsCellsheaderPage = new float[] { 100f, 75f };
-            tableHeaderPage.SetWidths(widthsCellsheaderPage);
-            tableHeaderPage.WidthPercentage = 100;
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(companyName, fontArial17Bold)) { Border = 0 });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase("Stock In", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(address, fontArial11)) { Border = 0, PaddingTop = 5f });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(branch, fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2, });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
-            document.Add(tableHeaderPage);
+            // ===========
+            // Header Page
+            // ===========
+            PdfPTable headerPage = new PdfPTable(2);
+            float[] widthsCellsHeaderPage = new float[] { 100f, 75f };
+            headerPage.SetWidths(widthsCellsHeaderPage);
+            headerPage.WidthPercentage = 100;
+            headerPage.AddCell(new PdfPCell(new Phrase(companyName, fontArial17Bold)) { Border = 0 });
+            headerPage.AddCell(new PdfPCell(new Phrase("Stock In", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
+            headerPage.AddCell(new PdfPCell(new Phrase(address, fontArial11)) { Border = 0, PaddingTop = 5f });
+            headerPage.AddCell(new PdfPCell(new Phrase(branch, fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
+            headerPage.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
+            headerPage.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
+            document.Add(headerPage);
+
+            // =====
+            // Space
+            // =====
+            PdfPTable spaceTable = new PdfPTable(1);
+            float[] widthCellsSpaceTable = new float[] { 100f };
+            spaceTable.SetWidths(widthCellsSpaceTable);
+            spaceTable.WidthPercentage = 100;
+            spaceTable.AddCell(new PdfPCell(new Phrase(" ", fontArial10Bold)) { Border = 0, PaddingTop = 5f });
+
             document.Add(line);
 
+            // =============
+            // Get Stock Ins
+            // =============
             var stockIns = from d in db.TrnStockIns
                            where d.Id == StockInId
                            && d.IsLocked == true
-                           select new Models.TrnStockIn
-                           {
-                               Id = d.Id,
-                               BranchId = d.BranchId,
-                               Branch = d.MstBranch.Branch,
-                               INNumber = d.INNumber,
-                               INDate = d.INDate.ToShortDateString(),
-                               AccountId = d.AccountId,
-                               Account = d.MstAccount.Account,
-                               ArticleId = d.ArticleId,
-                               Article = d.MstArticle.Article,
-                               Particulars = d.Particulars,
-                               ManualINNumber = d.ManualINNumber,
-                               IsProduced = d.IsProduced,
-                               PreparedById = d.PreparedById,
-                               PreparedBy = d.MstUser3.FullName,
-                               CheckedById = d.CheckedById,
-                               CheckedBy = d.MstUser1.FullName,
-                               ApprovedById = d.ApprovedById,
-                               ApprovedBy = d.MstUser.FullName,
-                               IsLocked = d.IsLocked,
-                               CreatedById = d.CreatedById,
-                               CreatedBy = d.MstUser2.FullName,
-                               CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                               UpdatedById = d.UpdatedById,
-                               UpdatedBy = d.MstUser4.FullName,
-                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                           };
+                           select d;
 
-            if (stockIns.Any()) 
+            if (stockIns.Any())
             {
-                String Account = "", Particulars = "";
-                String INNumber = "", INDate = "";
-                String PreparedBy = "", CheckedBy = "", ApprovedBy = "";
+                String account = stockIns.FirstOrDefault().MstAccount.Account;
+                String particulars = stockIns.FirstOrDefault().Particulars;
+                String INNumber = stockIns.FirstOrDefault().INNumber;
+                String INDate = stockIns.FirstOrDefault().INDate.ToString("MM-dd-yyyy", CultureInfo.InvariantCulture);
+                String preparedBy = stockIns.FirstOrDefault().MstUser3.FullName;
+                String checkedBy = stockIns.FirstOrDefault().MstUser1.FullName;
+                String approvedBy = stockIns.FirstOrDefault().MstUser.FullName;
 
-                foreach (var stockIn in stockIns)
-                {
-                    Account = stockIn.Account;
-                    Particulars = stockIn.Particulars;
-                    INNumber = stockIn.INNumber;
-                    INDate = stockIn.INDate;
-                    PreparedBy = stockIn.PreparedBy;
-                    CheckedBy = stockIn.CheckedBy;
-                    ApprovedBy = stockIn.ApprovedBy;
-                }
+                PdfPTable tableStockIns = new PdfPTable(4);
+                float[] widthscellsTablePurchaseOrder = new float[] { 40f, 150f, 70f, 50f };
+                tableStockIns.SetWidths(widthscellsTablePurchaseOrder);
+                tableStockIns.WidthPercentage = 100;
 
-                PdfPTable tableSubHeader = new PdfPTable(4);
-                float[] widthscellsSubheader = new float[] { 40f, 100f, 100f, 40f };
-                tableSubHeader.SetWidths(widthscellsSubheader);
-                tableSubHeader.WidthPercentage = 100;
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("Account: ", fontArial11Bold)) { Border = 0, PaddingTop = 10f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(Account, fontArial11)) { Border = 0, PaddingTop = 10f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("IN Number: ", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(INNumber, fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                tableStockIns.AddCell(new PdfPCell(new Phrase("Account", fontArial11Bold)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableStockIns.AddCell(new PdfPCell(new Phrase(account, fontArial11)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableStockIns.AddCell(new PdfPCell(new Phrase("IN Number", fontArial11Bold)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tableStockIns.AddCell(new PdfPCell(new Phrase(INNumber, fontArial11)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tableStockIns.AddCell(new PdfPCell(new Phrase("Particulars", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableStockIns.AddCell(new PdfPCell(new Phrase(particulars, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableStockIns.AddCell(new PdfPCell(new Phrase("IN Date", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tableStockIns.AddCell(new PdfPCell(new Phrase(INDate, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                document.Add(tableStockIns);
 
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("Particulars: ", fontArial11Bold)) { Border = 0, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(Particulars, fontArial11)) { Border = 0, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase("IN Date: ", fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
-                tableSubHeader.AddCell(new PdfPCell(new Phrase(INDate, fontArial11)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
+                document.Add(spaceTable);
 
-                document.Add(tableSubHeader);
-                document.Add(Chunk.NEWLINE);
-
+                // ==================
+                // Get Stock In Items
+                // ==================
                 var stockInItems = from d in db.TrnStockInItems
                                    where d.INId == StockInId
                                    && d.TrnStockIn.IsLocked == true
-                                   select new Models.TrnStockInItem
+                                   select new
                                    {
                                        Id = d.Id,
                                        INId = d.INId,
@@ -156,82 +148,59 @@ namespace easyfis.Views.Software
                                        BaseCost = d.BaseCost
                                    };
 
-                PdfPTable tableINLines = new PdfPTable(6);
-                float[] widthscellsINLines = new float[] { 50f, 60f, 100f, 150f, 100f, 100f };
-                tableINLines.SetWidths(widthscellsINLines);
-                tableINLines.WidthPercentage = 100;
-
-                tableINLines.AddCell(new PdfPCell(new Phrase("Quantity", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tableINLines.AddCell(new PdfPCell(new Phrase("Unit", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tableINLines.AddCell(new PdfPCell(new Phrase("Code", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tableINLines.AddCell(new PdfPCell(new Phrase("Item", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tableINLines.AddCell(new PdfPCell(new Phrase("Cost", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                tableINLines.AddCell(new PdfPCell(new Phrase("Amount", fontArial10Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-
-                Decimal TotalAmount = 0;
-                foreach (var stockInItem in stockInItems)
+                if (stockInItems.Any())
                 {
-                    tableINLines.AddCell(new PdfPCell(new Phrase(stockInItem.Quantity.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableINLines.AddCell(new PdfPCell(new Phrase(stockInItem.Unit, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableINLines.AddCell(new PdfPCell(new Phrase(stockInItem.ItemCode, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableINLines.AddCell(new PdfPCell(new Phrase(stockInItem.Item, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableINLines.AddCell(new PdfPCell(new Phrase(stockInItem.Cost.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableINLines.AddCell(new PdfPCell(new Phrase(stockInItem.Amount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    PdfPTable tableStockInItems = new PdfPTable(6);
+                    float[] widthscellsPOLines = new float[] { 100f, 70f, 150f, 200f, 100f, 100f };
+                    tableStockInItems.SetWidths(widthscellsPOLines);
+                    tableStockInItems.WidthPercentage = 100;
+                    tableStockInItems.AddCell(new PdfPCell(new Phrase("Quantity", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tableStockInItems.AddCell(new PdfPCell(new Phrase("Unit", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tableStockInItems.AddCell(new PdfPCell(new Phrase("Code", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tableStockInItems.AddCell(new PdfPCell(new Phrase("Item", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tableStockInItems.AddCell(new PdfPCell(new Phrase("Cost", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tableStockInItems.AddCell(new PdfPCell(new Phrase("Amount", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
 
-                    TotalAmount = TotalAmount + stockInItem.Amount;
+                    Decimal totalAmount = 0;
+
+                    foreach (var stockInItem in stockInItems)
+                    {
+                        tableStockInItems.AddCell(new PdfPCell(new Phrase(stockInItem.Quantity.ToString("#,##0.00"), fontArial11)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tableStockInItems.AddCell(new PdfPCell(new Phrase(stockInItem.Unit, fontArial11)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tableStockInItems.AddCell(new PdfPCell(new Phrase(stockInItem.ItemCode, fontArial11)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tableStockInItems.AddCell(new PdfPCell(new Phrase(stockInItem.Item, fontArial11)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tableStockInItems.AddCell(new PdfPCell(new Phrase(stockInItem.Cost.ToString("#,##0.00"), fontArial11)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+                        tableStockInItems.AddCell(new PdfPCell(new Phrase(stockInItem.Amount.ToString("#,##0.00"), fontArial11)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 7f, PaddingLeft = 5f, PaddingRight = 5f });
+
+                        totalAmount += stockInItem.Amount;
+                    }
+
+                    tableStockInItems.AddCell(new PdfPCell(new Phrase("Total", fontArial11Bold)) { Colspan = 5, HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableStockInItems.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), fontArial11Bold)) { HorizontalAlignment = 2, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                    document.Add(tableStockInItems);
+
+                    document.Add(spaceTable);
                 }
 
-                document.Add(tableINLines);
-
-                document.Add(Chunk.NEWLINE);
-
-                PdfPTable tableINLineTotalAmount = new PdfPTable(6);
-                float[] widthscellsINLinesTotalAmount = new float[] { 50f, 60f, 100f, 150f, 100f, 100f };
-                tableINLineTotalAmount.SetWidths(widthscellsINLinesTotalAmount);
-                tableINLineTotalAmount.WidthPercentage = 100;
-
-                tableINLineTotalAmount.AddCell(new PdfPCell(new Phrase("", fontArial9)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableINLineTotalAmount.AddCell(new PdfPCell(new Phrase("", fontArial9)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                tableINLineTotalAmount.AddCell(new PdfPCell(new Phrase("", fontArial9)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                tableINLineTotalAmount.AddCell(new PdfPCell(new Phrase("", fontArial9)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                tableINLineTotalAmount.AddCell(new PdfPCell(new Phrase("Total", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableINLineTotalAmount.AddCell(new PdfPCell(new Phrase(TotalAmount.ToString("#,##0.00"), fontArial9)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                document.Add(tableINLineTotalAmount);
-
-                document.Add(Chunk.NEWLINE);
-                document.Add(Chunk.NEWLINE);
-                document.Add(Chunk.NEWLINE);
-                document.Add(Chunk.NEWLINE);
-                document.Add(Chunk.NEWLINE);
-
-                // Table for Footer
-                PdfPTable tableFooter = new PdfPTable(5);
-                tableFooter.WidthPercentage = 100;
-                float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f };
-                tableFooter.SetWidths(widthsCells2);
-
-                tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
-
-                tableFooter.AddCell(new PdfPCell(new Phrase(PreparedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(CheckedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                tableFooter.AddCell(new PdfPCell(new Phrase(ApprovedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
-
-                document.Add(tableFooter);
+                // ==============
+                // User Signature
+                // ==============
+                PdfPTable tableUsers = new PdfPTable(3);
+                float[] widthsCellsTableUsers = new float[] { 100f, 100f, 100f };
+                tableUsers.WidthPercentage = 100;
+                tableUsers.SetWidths(widthsCellsTableUsers);
+                tableUsers.AddCell(new PdfPCell(new Phrase("Prepared by", fontArial11Bold)) { PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase("Checked by", fontArial11Bold)) { PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase("Approved by", fontArial11Bold)) { PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { PaddingBottom = 50f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { PaddingBottom = 50f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(" ")) { PaddingBottom = 50f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(preparedBy, fontArial11)) { HorizontalAlignment = 1, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(checkedBy, fontArial11)) { HorizontalAlignment = 1, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableUsers.AddCell(new PdfPCell(new Phrase(approvedBy, fontArial11)) { HorizontalAlignment = 1, PaddingTop = 5f, PaddingBottom = 9f, PaddingLeft = 5f, PaddingRight = 5f });
+                document.Add(tableUsers);
             }
 
-            // Document End
             document.Close();
 
             byte[] byteInfo = workStream.ToArray();

@@ -69,6 +69,7 @@ namespace easyfis.ApiControllers
                                SalvageValue = d.SalvageValue,
                                ManualArticleOldCode = d.ManualArticleOldCode
                            };
+
             return itemList.ToList();
         }
     }
