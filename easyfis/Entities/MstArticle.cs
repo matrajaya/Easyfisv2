@@ -14,6 +14,7 @@ namespace easyfis.Entities
         public String Category { get; set; }
         public Int32 ArticleTypeId { get; set; }
         public Int32 ArticleGroupId { get; set; }
+        public String ArticleGroup { get; set; }
         public Int32 AccountId { get; set; }
         public Int32 SalesAccountId { get; set; }
         public Int32 CostAccountId { get; set; }
@@ -24,7 +25,7 @@ namespace easyfis.Entities
         public Int32 InputTaxId { get; set; }
         public Int32 WTaxTypeId { get; set; }
         public Decimal Price { get; set; }
-        public Decimal Cost { get; set; }
+        public Decimal? Cost { get; set; }
         public Boolean IsInventory { get; set; }
         public String Particulars { get; set; }
         public String Address { get; set; }
@@ -41,8 +42,10 @@ namespace easyfis.Entities
         public Int32 Kitting { get; set; }
         public Boolean IsLocked { get; set; }
         public Int32 CreatedById { get; set; }
+        public String CreatedBy { get; set; }
         public String CreatedDateTime { get; set; }
         public Int32 UpdatedById { get; set; }
+        public String UpdatedBy { get; set; }
         public String UpdatedDateTime { get; set; }
     }
 }

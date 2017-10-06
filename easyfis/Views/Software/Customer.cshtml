@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@model easyfis.Entities.MstUserForm
+@{
+    // =====================
+    // User Rights Variables
+    // =====================
+    var canAdd = Model.CanAdd;
+    var canEdit = Model.CanEdit;
+    var canDelete = Model.CanDelete;
+    var canLock = Model.CanLock;
+    var canUnlock = Model.CanUnlock;
+    var canPrint = Model.CanPrint;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -33,21 +45,26 @@
                         <table style="width: 100%" border="0">
                             <tr>
                                 <td style="width: 59%">
-                                    <div class="input-group ">
+                                    <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                                         <input type="text" class="form-control" id="InputFilter" placeholder="Search...">
                                     </div>
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 40%" align="right">
-                                    <button class="btn btn-primary " id="btnAddCustomer" onclick="btnAddCustomer_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <button class="btn btn-danger " id="btnCloseCustomer" onclick="btnCloseCustomer_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                    @{
+                                        if (canAdd)
+                                        {
+                                            <button class="btn btn-primary" id="btnAddCustomer" onclick="btnAddCustomerOnclick()"><i class="fa fa-plus"></i> Add</button>
+                                        }
+                                    }
+                                    <button class="btn btn-danger" id="btnCloseCustomer" onclick="btnCloseCustomerOnclick()"><i class=" fa fa-times"></i> Close</button>
                                 </td>
                             </tr>
                         </table>
                     </div>
                     <div class="panel-body">
-                        <div id="CustomerGrid" class="grid" align="left"></div>
+                        <div id="CustomerGrid" class="grid"></div>
                     </div>
                     <div class="panel-footer">
                         <div class="row">
@@ -86,8 +103,8 @@
                     Are you sure you want to delete this customer?
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdConfirmDeleteCustomer" class="btn btn-danger" onclick="cmdCustomerConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button id="cmdConfirmDeleteCustomer" class="btn btn-danger" onclick="btnDeleteConfirmCustomerOnclick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -113,68 +130,30 @@
             NProgress.start();
             var customersObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/listArticleByArticleTypeId/2',
+                url: '/api/customer/list',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (customerListResult) {
-                    if (customerListResult.length > 0) {
-                        for (i = 0; i < customerListResult.length; i++) {
-                            var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled = "";
-                            if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled;
-                            if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            }
-
+                success: function (customerListResults) {
+                    if (customerListResults.length > 0) {
+                        for (i = 0; i < customerListResults.length; i++) {
                             customersObservableArray.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='cmdCustomerEditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdCustomerDeleteButton_OnClick()'  " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
-                                Id: customerListResult[i]["Id"],
-                                ArticleCode: customerListResult[i]["ArticleCode"],
-                                ManualArticleCode: customerListResult[i]["ManualArticleCode"],
-                                Article: customerListResult[i]["Article"],
-                                Category: customerListResult[i]["Category"],
-                                ArticleTypeId: customerListResult[i]["ArticleTypeId"],
-                                ArticleType: customerListResult[i]["ArticleType"],
-                                ArticleGroupId: customerListResult[i]["ArticleGroupId"],
-                                ArticleGroup: customerListResult[i]["ArticleGroup"],
-                                AccountId: customerListResult[i]["AccountId"],
-                                Account: customerListResult[i]["Account"],
-                                SalesAccountId: customerListResult[i]["SalesAccountId"],
-                                CostAccountId: customerListResult[i]["CostAccountId"],
-                                AssetAccountId: customerListResult[i]["AssetAccountId"],
-                                ExpenseAccountId: customerListResult[i]["ExpenseAccountId"],
-                                UnitId: customerListResult[i]["UnitId"],
-                                OutputTaxId: customerListResult[i]["OutputTaxId"],
-                                InputTaxId: customerListResult[i]["InputTaxId"],
-                                WTaxTypeId: customerListResult[i]["WTaxTypeId"],
-                                Price: customerListResult[i]["Price"],
-                                Cost: customerListResult[i]["Cost"],
-                                IsInventory: customerListResult[i]["IsInventory"],
-                                Particulars: customerListResult[i]["Particulars"],
-                                Address: customerListResult[i]["Address"],
-                                TermId: customerListResult[i]["TermId"],
-                                ContactNumber: customerListResult[i]["ContactNumber"],
-                                ContactPerson: customerListResult[i]["ContactPerson"],
-                                TaxNumber: customerListResult[i]["TaxNumber"],
-                                CreditLimit: customerListResult[i]["CreditLimit"],
-                                DateAcquired: customerListResult[i]["DateAcquired"],
-                                UsefulLife: customerListResult[i]["UsefulLife"],
-                                SalvageValue: customerListResult[i]["SalvageValue"],
-                                ManualArticleOldCode: customerListResult[i]["ManualArticleOldCode"],
-                                IsLocked: customerListResult[i]["IsLocked"],
-                                CreatedById: customerListResult[i]["CreatedById"],
-                                CreatedBy: customerListResult[i]["CreatedBy"],
-                                CreatedDateTime: customerListResult[i]["CreatedDateTime"],
-                                UpdatedById: customerListResult[i]["UpdatedById"],
-                                UpdatedBy: customerListResult[i]["UpdatedBy"],
-                                UpdatedDateTime: customerListResult[i]["UpdatedDateTime"]
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditCustomerOnclick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteCustomerOnclick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: customerListResults[i]["Id"],
+                                ArticleCode: customerListResults[i]["ArticleCode"],
+                                ManualArticleCode: customerListResults[i]["ManualArticleCode"],
+                                Article: customerListResults[i]["Article"],
+                                ArticleGroupId: customerListResults[i]["ArticleGroupId"],
+                                ArticleGroup: customerListResults[i]["ArticleGroup"],
+                                ContactNumber: customerListResults[i]["ContactNumber"],
+                                IsLocked: customerListResults[i]["IsLocked"],
+                                CreatedById: customerListResults[i]["CreatedById"],
+                                CreatedBy: customerListResults[i]["CreatedBy"],
+                                CreatedDateTime: customerListResults[i]["CreatedDateTime"],
+                                UpdatedById: customerListResults[i]["UpdatedById"],
+                                UpdatedBy: customerListResults[i]["UpdatedBy"],
+                                UpdatedDateTime: customerListResults[i]["UpdatedDateTime"]
                             });
                         }
                     }
@@ -184,56 +163,6 @@
             });
 
             return customersObservableArray;
-        }
-
-        // ===================
-        // Customer Add Button
-        // ===================
-        function btnAddCustomer_OnClick() {
-            document.getElementById('btnAddCustomer').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Adding";
-            $('#btnAddCustomer').prop('disabled', true);
-            $('#btnCloseCustomer').prop('disabled', true);
-
-            var canAccessToDetailPage = "@ViewData["CanAccessToDetailPage"]";
-            if (canAccessToDetailPage == "True") {
-                $.ajax({
-                    type: "POST",
-                    url: '/api/addArticle/2',
-                    contentType: "application/json; charset=utf-8",
-                    success: function (id) {
-                        if (id > 0) {
-                            window.location = '/Software/CustomerDetail?id=' + id;
-                        } else {
-                            toastr.error("Internal Server Error");
-                            document.getElementById('btnAddCustomer').innerHTML = "<i class='fa fa-plus'></i> Add";
-                            $('#btnAddCustomer').prop('disabled', false);
-                            $('#btnCloseCustomer').prop('disabled', false);
-                        }
-                    }
-                });
-            } else {
-                if (canAccessToDetailPage == "False") {
-                    window.location = '/Software/Forbidden';
-                }
-            }
-        }
-
-        // =====================
-        // Customer Close Button
-        // =====================
-        function btnCloseCustomer_OnClick() {
-            window.location = '/Software';
-        }
-
-        // ====================
-        // Customer Edit Button
-        // ====================
-        function cmdCustomerEditButton_OnClick() {
-            customerCollectionView.editItem(customerCollectionView.currentItem);
-            var customer = customerCollectionView.currentEditItem;
-            var customerId = customer.Id;
-
-            window.location = '/Software/CustomerDetail?id=' + customerId;
         }
 
         // =========================
@@ -269,10 +198,66 @@
             customerFlexGrid.trackChanges = true;
         }
 
+        // ===================
+        // Customer Add Button
+        // ===================
+        function btnAddCustomerOnclick() {
+            document.getElementById('btnAddCustomer').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Adding";
+            $('#btnAddCustomer').prop('disabled', true);
+            $('#btnCloseCustomer').prop('disabled', true);
+
+            $.ajax({
+                type: "POST",
+                url: '/api/customer/add',
+                contentType: "application/json; charset=utf-8",
+                statusCode: {
+                    200: function (id) {
+                        window.location = '/Software/CustomerDetail?id=' + id;
+                    },
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                        document.getElementById('btnAddCustomer').innerHTML = "<i class='fa fa-plus'></i> Add";
+                        $('#btnAddCustomer').prop('disabled', false);
+                        $('#btnCloseCustomer').prop('disabled', false);
+                    },
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        document.getElementById('btnAddCustomer').innerHTML = "<i class='fa fa-plus'></i> Add";
+                        $('#btnAddCustomer').prop('disabled', false);
+                        $('#btnCloseCustomer').prop('disabled', false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                        document.getElementById('btnAddCustomer').innerHTML = "<i class='fa fa-plus'></i> Add";
+                        $('#btnAddCustomer').prop('disabled', false);
+                        $('#btnCloseCustomer').prop('disabled', false);
+                    }
+                }
+            });
+        }
+
+        // =====================
+        // Customer Close Button
+        // =====================
+        function btnCloseCustomerOnclick() {
+            window.history.back();
+        }
+
+        // ====================
+        // Customer Edit Button
+        // ====================
+        function btnEditCustomerOnclick() {
+            customerCollectionView.editItem(customerCollectionView.currentItem);
+            var customer = customerCollectionView.currentEditItem;
+            var customerId = customer.Id;
+
+            window.location = '/Software/CustomerDetail?id=' + customerId;
+        }
+
         // =====================
         // Customer delete Button
         // =====================
-        function cmdCustomerDeleteButton_OnClick() {
+        function btnDeleteCustomerOnclick() {
             customerCollectionView.editItem(customerCollectionView.currentItem);
             var customer = customerCollectionView.currentEditItem;
             if (customer.IsLocked) {
@@ -289,16 +274,18 @@
             }
         }
 
+        // ==============================
         // Customer Confirm Delete Button
-        function cmdCustomerConfirmDeleteButton_OnClick() {
+        // ==============================
+        function btnDeleteConfirmCustomerOnclick() {
             document.getElementById('cmdConfirmDeleteCustomer').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $('#cmdConfirmDeleteCustomer').prop('disabled', true);
             $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
 
             customerCollectionView.editItem(customerCollectionView.currentItem);
-            var id = customerCollectionView.currentEditItem.Id;
+            var customerId = customerCollectionView.currentEditItem.Id;
             $.ajax({
-                url: '/api/deleteArticle/' + id,
+                url: '/api/customer/delete/' + customerId,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -308,15 +295,22 @@
                         $('#deleteCustomerConfirm').modal('hide');
                         refreshCustomerFlexgrid();
                     },
-                    404: function () {
-                        toastr.error("Not Found");
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                         $('#deleteCustomerConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeleteCustomer').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $('#cmdConfirmDeleteCustomer').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        $('#deleteCustomerConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteCustomer').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#cmdConfirmDeleteCustomer').prop('disabled', false);
+                        $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                         $('#deleteCustomerConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeleteCustomer').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $('#cmdConfirmDeleteCustomer').prop('disabled', false);
@@ -398,24 +392,36 @@
             customerFlexGrid = new wijmo.grid.FlexGrid('#CustomerGrid');
             customerFlexGrid.initialize({
                 columns: [
-                            {
-                                "header": "Edit",
-                                "binding": "EditId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Delete",
-                                "binding": "DeleteId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
+                            @{
+                                if (canEdit)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Edit",
+                                            "binding": "EditId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                                if (canDelete)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Delete",
+                                            "binding": "DeleteId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                            }
                             {
                                 "header": "Code",
                                 "binding": "ArticleCode",
@@ -490,11 +496,6 @@
                 customerCollectionView.moveToLastPage();
                 updateNavigateButtonsCustomer();
             });
-
-            var canAdd = "@ViewData["CanAdd"]";
-            if (canAdd == "False") {
-                $("#btnAddCustomer").prop("disabled", true);
-            } 
         }
 
         // ============

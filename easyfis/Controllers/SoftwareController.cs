@@ -121,20 +121,53 @@ namespace easyfis.Controllers
             return View();
         }
 
+        // ===========
+        // User Rights
+        // ===========
+        [Authorize]
+        public ActionResult UserRights(String formName)
+        {
+            var currentUser = from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d;
+            if (currentUser.Any())
+            {
+                var userForms = from d in db.MstUserForms
+                                where d.UserId == currentUser.FirstOrDefault().Id
+                                && d.SysForm.FormName.Equals(formName)
+                                select d;
+
+                if (userForms.Any())
+                {
+                    var userFormsRights = userForms.FirstOrDefault();
+                    var model = new Entities.MstUserForm
+                    {
+                        CanAdd = userFormsRights.CanAdd,
+                        CanEdit = userFormsRights.CanEdit,
+                        CanDelete = userFormsRights.CanDelete,
+                        CanLock = userFormsRights.CanLock,
+                        CanUnlock = userFormsRights.CanUnlock,
+                        CanPrint = userFormsRights.CanPrint
+                    };
+
+                    return View(model);
+                }
+                else
+                {
+                    return RedirectToAction("Forbidden", "Software");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
+
         // =====================
         // Dashboard - Main Menu
         // =====================
         [Authorize]
         public ActionResult Index()
         {
-            if (PageAccess("Software").Equals("Software"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
+            return UserRights("Software");
         }
 
         // ========
@@ -143,23 +176,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Supplier()
         {
-            if (PageAccess("SupplierList").Equals("SupplierList"))
-            {
-                if (AccessToDetail("SupplierDetail").Equals("SupplierDetail"))
-                {
-                    ViewData.Add("CanAccessToDetailPage", "True");
-                }
-                else
-                {
-                    ViewData.Add("CanAccessToDetailPage", "False");
-                }
-
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
+            return UserRights("SupplierList");
         }
 
         // ===============
@@ -168,14 +185,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult SupplierDetail()
         {
-            if (PageAccess("SupplierDetail").Equals("SupplierDetail"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
+            return UserRights("SupplierDetail");
         }
 
         // ========
@@ -184,23 +194,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Customer()
         {
-            if (PageAccess("CustomerList").Equals("CustomerList"))
-            {
-                if (AccessToDetail("CustomerDetail").Equals("CustomerDetail"))
-                {
-                    ViewData.Add("CanAccessToDetailPage", "True");
-                }
-                else
-                {
-                    ViewData.Add("CanAccessToDetailPage", "False");
-                }
-
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
+            return UserRights("CustomerList");
         }
 
         // ===============
@@ -209,14 +203,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult CustomerDetail()
         {
-            if (PageAccess("CustomerDetail").Equals("CustomerDetail"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
+            return UserRights("CustomerDetail");
         }
 
         // ====

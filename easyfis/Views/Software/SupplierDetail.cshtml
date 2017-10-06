@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@model easyfis.Entities.MstUserForm
+@{
+    // =====================
+    // User Rights Variables
+    // =====================
+    var canAdd = Model.CanAdd;
+    var canEdit = Model.CanEdit;
+    var canDelete = Model.CanDelete;
+    var canLock = Model.CanLock;
+    var canUnlock = Model.CanUnlock;
+    var canPrint = Model.CanPrint;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -32,9 +44,17 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-12" align="right">
-                                <button class="btn btn-primary" id="supplier_LockButton" onclick="supplierLockButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                <button class="btn btn-primary" id="supplier_UnlockButton" onclick="supplierUnlockButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                <button class="btn btn-danger" id="supplier_CloseButton" onclick="supplierCloseButton_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                @{
+                                    if (canLock)
+                                    {
+                                        <button class="btn btn-primary" id="btnLockSupplier" onclick="btnLockSupplierOnclick()"><i class="fa fa-lock"></i> Lock</button>
+                                    }
+                                    if (canUnlock)
+                                    {
+                                        <button class="btn btn-primary" id="btnUnlockSupplier" onclick="btnUnlockSupplierOnclick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                    }
+                                }
+                                <button class="btn btn-danger" id="btnCloseSupplier" onclick="btnCloseSupplierOnclick()"><i class=" fa fa-times"></i> Close</button>
                             </div>
                         </div>
                     </div>
@@ -45,19 +65,19 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Code</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control requiredSupplier" id="artcileSupplier_code" placeholder="Code" disabled />
+                                            <input type="text" class="form-control requiredSupplier" id="inpSupplierCode" placeholder="Code..." disabled />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Manual Code</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control requiredSupplier" id="artcileSupplier_manual_code" placeholder="Manual Code" />
+                                            <input type="text" class="form-control requiredSupplier" id="inpSupplierManualCode" placeholder="Manual Code..." />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Supplier</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control  requiredSupplier" id="artcileSupplier_Supplier" placeholder="Supplier" />
+                                            <input type="text" class="form-control  requiredSupplier" id="inpSupplierName" placeholder="Supplier..." />
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -91,7 +111,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Address</label>
                                         <div class="col-sm-8">
-                                            <textarea rows="5" class="form-control textarea-custom requiredSupplier" id="artcileSupplier_Address" placeholder="Address"></textarea>
+                                            <textarea rows="5" class="form-control textarea-custom requiredSupplier" id="inpSupplierAddress" placeholder="Address..."></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -99,32 +119,31 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Contact Number</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control requiredSupplier" id="artcileSupplier_ContactNo" placeholder="Contact No." />
+                                            <input type="text" class="form-control requiredSupplier" id="inpSupplierContactNo" placeholder="Contact No...." />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Contact Person</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control  requiredSupplier" id="artcileSupplier_ContactPerson" placeholder="Contact Person" />
+                                            <input type="text" class="form-control  requiredSupplier" id="inpSupplierContactPerson" placeholder="Contact Person..." />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">TIN</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control requiredSupplier" id="artcileSupplier_TIN" placeholder="TIN Number" />
+                                            <input type="text" class="form-control requiredSupplier" id="inpSupplierTIN" placeholder="TIN Number..." />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Particulars</label>
                                         <div class="col-sm-8">
-                                            <textarea rows="5" class="form-control textarea-custom requiredsupplier" id="artcileSupplier_Particulars" placeholder="Particulars"></textarea>
+                                            <textarea rows="5" class="form-control textarea-custom requiredsupplier" id="inpSupplierParticulars" placeholder="Particulars..."></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">E-mail</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control requiredSupplier" id="artcileSupplier_Email" placeholder="E-mail here.." />
-
+                                            <input type="text" class="form-control requiredSupplier" id="inpSupplierEmail" placeholder="E-mail..." />
                                         </div>
                                     </div>
                                 </div>
@@ -142,18 +161,30 @@
                         <div id="JournalLedgerGrid"></div>
                     </div>
                     <div id="ContactInformation" class="tab-pane fade in">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary" id="btnAddMoreContactInformation" onclick="cmdAddContact_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        @{
+                            if (canAdd)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+
+                                                <button class="btn btn-primary" id="btnAddMoreContactInformation" onclick="cmdAddContact_OnClick()"><i class="fa fa-plus"></i> Add</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="ContactInformationGrid" class="grid"></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="panel-body">
+                            }
+                            else
+                            {
                                 <div id="ContactInformationGrid" class="grid"></div>
-                            </div>
-                        </div>
+                                <br /><br />
+                            }
+                        }
                     </div>
                 </div>
             </section>
@@ -385,25 +416,25 @@
             NProgress.start();
             if (document.location.search.length > 0) {
                 $.ajax({
-                    url: '/api/article/' + supplierId,
+                    url: '/api/supplier/detail/' + supplierId,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     success: function (supplierResults) {
                         if (supplierResults != null) {
-                            document.getElementById('artcileSupplier_code').value = supplierResults.ArticleCode;
-                            document.getElementById('artcileSupplier_manual_code').value = supplierResults.ManualArticleCode;
-                            document.getElementById('artcileSupplier_Supplier').value = supplierResults.Article;
+                            document.getElementById('inpSupplierCode').value = supplierResults.ArticleCode;
+                            document.getElementById('inpSupplierManualCode').value = supplierResults.ManualArticleCode;
+                            document.getElementById('inpSupplierName').value = supplierResults.Article;
                             cboSupplierGroup.selectedValue = supplierResults.ArticleGroupId;
                             cboAccountCode.selectedValue = supplierResults.AccountId;
                             cboAccount.selectedValue = supplierResults.AccountId;
                             cboTerm.selectedValue = supplierResults.TermId;
-                            document.getElementById('artcileSupplier_Address').value = supplierResults.Address;
-                            document.getElementById('artcileSupplier_Particulars').value = supplierResults.Particulars;
-                            document.getElementById('artcileSupplier_Email').value = supplierResults.EmailAddress;
-                            document.getElementById('artcileSupplier_TIN').value = supplierResults.TaxNumber;
-                            document.getElementById('artcileSupplier_ContactNo').value = supplierResults.ContactNumber;
-                            document.getElementById('artcileSupplier_ContactPerson').value = supplierResults.ContactPerson;
+                            document.getElementById('inpSupplierAddress').value = supplierResults.Address;
+                            document.getElementById('inpSupplierParticulars').value = supplierResults.Particulars;
+                            document.getElementById('inpSupplierEmail').value = supplierResults.EmailAddress;
+                            document.getElementById('inpSupplierTIN').value = supplierResults.TaxNumber;
+                            document.getElementById('inpSupplierContactNo').value = supplierResults.ContactNumber;
+                            document.getElementById('inpSupplierContactPerson').value = supplierResults.ContactPerson;
 
                             document.getElementById('createdBy').innerHTML = supplierResults.CreatedBy;
                             document.getElementById('createdDate').innerHTML = supplierResults.CreatedDateTime;
@@ -411,40 +442,25 @@
                             document.getElementById('updatedDate').innerHTML = supplierResults.UpdatedDateTime;
 
                             if (supplierResults.IsLocked) {
-                                document.getElementById('artcileSupplier_Supplier').disabled = true;
-                                document.getElementById('artcileSupplier_manual_code').disabled = true;
+                                document.getElementById('inpSupplierName').disabled = true;
+                                document.getElementById('inpSupplierManualCode').disabled = true;
                                 cboSupplierGroup.disabled = true;
                                 cboAccountCode.disabled = true;
                                 cboAccount.disabled = true;
                                 cboTerm.disabled = true;
-                                document.getElementById('artcileSupplier_Address').disabled = true;
-                                document.getElementById('artcileSupplier_Particulars').disabled = true;
-                                document.getElementById('artcileSupplier_TIN').disabled = true;
-                                document.getElementById('artcileSupplier_ContactNo').disabled = true;
-                                document.getElementById('artcileSupplier_ContactPerson').disabled = true;
-                                document.getElementById('artcileSupplier_Email').disabled = true;
+                                document.getElementById('inpSupplierAddress').disabled = true;
+                                document.getElementById('inpSupplierParticulars').disabled = true;
+                                document.getElementById('inpSupplierTIN').disabled = true;
+                                document.getElementById('inpSupplierContactNo').disabled = true;
+                                document.getElementById('inpSupplierContactPerson').disabled = true;
+                                document.getElementById('inpSupplierEmail').disabled = true;
 
-                                $('#supplier_LockButton').prop('disabled', true);
+                                $('#btnLockSupplier').prop('disabled', true);
                                 $('#btnAddMoreContactInformation').prop('disabled', true);
-
-                                var canUnLock = "@ViewData["CanUnlock"]";
-                                if (canUnLock == "False") {
-                                    $("#supplier_UnlockButton").prop("disabled", true);
-                                }
 
                                 Islocked = true;
                             } else {
-                                $('#supplier_UnlockButton').prop('disabled', true);
-
-                                var canLock = "@ViewData["CanLock"]";
-                                if (canLock == "False") {
-                                    $("#supplier_LockButton").prop("disabled", true);
-                                }
-
-                                var canAdd = "@ViewData["CanAdd"]";
-                                if (canAdd == "False") {
-                                    $("#btnAddMoreContactInformation").prop("disabled", true);
-                                }
+                                $('#btnUnlockSupplier').prop('disabled', true);
                             }
                         }
 
@@ -484,9 +500,9 @@
         // ====================
         function dataSupplierObject() {
             var supplierObject = new Object();
-            supplierObject.ArticleCode = document.getElementById('artcileSupplier_code').value;
-            supplierObject.ManualArticleCode = document.getElementById('artcileSupplier_manual_code').value;
-            supplierObject.Article = document.getElementById('artcileSupplier_Supplier').value;
+            supplierObject.ArticleCode = document.getElementById('inpSupplierCode').value;
+            supplierObject.ManualArticleCode = document.getElementById('inpSupplierManualCode').value;
+            supplierObject.Article = document.getElementById('inpSupplierName').value;
             supplierObject.ArticleGroupId = cboSupplierGroup.selectedValue;
             supplierObject.AccountId = cboAccount.selectedValue;
             supplierObject.SalesAccountId = cboSupplierGroup.selectedItem["SalesAccountId"];
@@ -494,12 +510,12 @@
             supplierObject.AssetAccountId = cboSupplierGroup.selectedItem["AssetAccountId"];
             supplierObject.ExpenseAccountId = cboSupplierGroup.selectedItem["ExpenseAccountId"];
             supplierObject.TermId = cboTerm.selectedValue;
-            supplierObject.Address = document.getElementById('artcileSupplier_Address').value;
-            supplierObject.ContactNumber = document.getElementById('artcileSupplier_ContactNo').value;
-            supplierObject.ContactPerson = document.getElementById('artcileSupplier_ContactPerson').value;
-            supplierObject.TaxNumber = document.getElementById('artcileSupplier_TIN').value;
-            supplierObject.Particulars = document.getElementById('artcileSupplier_Particulars').value;
-            supplierObject.EmailAddress = document.getElementById('artcileSupplier_Email').value;
+            supplierObject.Address = document.getElementById('inpSupplierAddress').value;
+            supplierObject.ContactNumber = document.getElementById('inpSupplierContactNo').value;
+            supplierObject.ContactPerson = document.getElementById('inpSupplierContactPerson').value;
+            supplierObject.TaxNumber = document.getElementById('inpSupplierTIN').value;
+            supplierObject.Particulars = document.getElementById('inpSupplierParticulars').value;
+            supplierObject.EmailAddress = document.getElementById('inpSupplierEmail').value;
             var supplierData = JSON.stringify(supplierObject);
             return supplierData;
         }
@@ -507,16 +523,16 @@
         // ====================
         // Lock Supplier Button
         // ====================
-        function supplierLockButton_OnClick() {
+        function btnLockSupplierOnclick() {
             if (supplierEntryValidation()) {
-                document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
-                $('#supplier_LockButton').prop('disabled', true);
-                $('#supplier_UnlockButton').prop('disabled', true);
-                $('#supplier_CloseButton').prop('disabled', true);
+                document.getElementById('btnLockSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
+                $('#btnLockSupplier').prop('disabled', true);
+                $('#btnUnlockSupplier').prop('disabled', true);
+                $('#btnCloseSupplier').prop('disabled', true);
 
                 $.ajax({
                     type: "PUT",
-                    url: '/api/updateArticle/' + supplierId + '/3',
+                    url: '/api/supplier/lock/' + supplierId,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     data: dataSupplierObject(),
@@ -527,17 +543,23 @@
                                 location.reload()
                             }, 1000);
                         },
-                        404: function () {
-                            toastr.error("Not Found");
-                            document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            $('#supplier_LockButton').prop('disabled', false);
-                            $('#supplier_CloseButton').prop('disabled', false);
+                        404: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                            document.getElementById('btnLockSupplier').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $('#btnLockSupplier').prop('disabled', false);
+                            $('#btnCloseSupplier').prop('disabled', false);
                         },
-                        400: function () {
-                            toastr.error("Bad Request");
-                            document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            $('#supplier_LockButton').prop('disabled', false);
-                            $('#supplier_CloseButton').prop('disabled', false);
+                        400: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                            document.getElementById('btnLockSupplier').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $('#btnLockSupplier').prop('disabled', false);
+                            $('#btnCloseSupplier').prop('disabled', false);
+                        },
+                        500: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                            document.getElementById('btnLockSupplier').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $('#btnLockSupplier').prop('disabled', false);
+                            $('#btnCloseSupplier').prop('disabled', false);
                         }
                     }
                 });
@@ -549,15 +571,15 @@
         // ======================
         // Unlock Supplier Button
         // ======================
-        function supplierUnlockButton_OnClick() {
-            document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
-            $('#supplier_LockButton').prop('disabled', true);
-            $('#supplier_UnlockButton').prop('disabled', true);
-            $('#supplier_CloseButton').prop('disabled', true);
+        function btnUnlockSupplierOnclick() {
+            document.getElementById('btnUnlockSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
+            $('#btnLockSupplier').prop('disabled', true);
+            $('#btnUnlockSupplier').prop('disabled', true);
+            $('#btnCloseSupplier').prop('disabled', true);
 
             $.ajax({
                 type: "PUT",
-                url: '/api/unlockArticle/' + supplierId,
+                url: '/api/supplier/unlock/' + supplierId,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 statusCode: {
@@ -567,17 +589,23 @@
                             location.reload()
                         }, 1000);
                     },
-                    404: function () {
-                        toastr.error("Not Found");
-                        document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        $('#supplier_UnlockButton').prop('disabled', false);
-                        $('#supplier_CloseButton').prop('disabled', false);
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                        document.getElementById('btnUnlockSupplier').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $('#btnUnlockSupplier').prop('disabled', false);
+                        $('#btnCloseSupplier').prop('disabled', false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
-                        document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        $('#supplier_UnlockButton').prop('disabled', false);
-                        $('#supplier_CloseButton').prop('disabled', false);
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        document.getElementById('btnUnlockSupplier').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $('#btnUnlockSupplier').prop('disabled', false);
+                        $('#btnCloseSupplier').prop('disabled', false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                        document.getElementById('btnUnlockSupplier').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $('#btnUnlockSupplier').prop('disabled', false);
+                        $('#btnCloseSupplier').prop('disabled', false);
                     }
                 }
             });
@@ -586,8 +614,8 @@
         // =====================
         // Close Supplier Button
         // =====================
-        function supplierCloseButton_OnClick() {
-            window.location = '/Software/Supplier';
+        function btnCloseSupplierOnclick() {
+            window.history.back();
         }
 
         // =======================
@@ -721,23 +749,11 @@
                     success: function (contactInformationResults) {
                         if (contactInformationResults.length > 0) {
                             for (i = 0; i < contactInformationResults.length; i++) {
-                                var canEdit = "@ViewData["CanEdit"]";
-                                var editDisabled = "";
-                                if (canEdit == "False") {
-                                    editDisabled = "disabled";
-                                }
-
-                                var canDelete = "@ViewData["CanDelete"]";
-                                var deleteDisabled = "";
-                                if (canDelete == "False") {
-                                    deleteDisabled = "disabled";
-                                }
-
-                                var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
-                                var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                                var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContactOnClick()'><i class='fa fa-edit'></i> Edit</button>";
+                                var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContactOnClick()'><i class='fa fa-trash'></i> Delete</button>";
                                 if (Islocked) {
-                                    btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
-                                    btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
+                                    btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContactOnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
+                                    btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContactOnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                                 }
 
                                 contactInformationsObservableArray.push({
@@ -779,24 +795,36 @@
             contactInformationGrid = new wijmo.grid.FlexGrid('#ContactInformationGrid');
             contactInformationGrid.initialize({
                 columns: [
-                    {
-                        "header": "Edit",
-                        "binding": "EditId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
-                    {
-                        "header": "Delete",
-                        "binding": "DeleteId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
+                    @{
+                        if (canEdit)
+                        {
+                            <text>
+                                {
+                                    "header": "Edit",
+                                    "binding": "EditId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                        if (canDelete)
+                        {
+                            <text>
+                                {
+                                    "header": "Delete",
+                                    "binding": "DeleteId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                    }
                     {
                         "header": "Contact",
                         "binding": "ContactPerson",
@@ -863,7 +891,7 @@
         // ===========
         // Edit Button
         // ===========
-        function btnEditContact_OnClick() {
+        function btnEditContactOnClick() {
             $('#contactEdit').modal({
                 show: true,
                 backdrop: 'static'
@@ -992,7 +1020,7 @@
         // ==============
         // DELETE Contact
         // ==============
-        function btnDeleteContact_OnClick() {
+        function btnDeleteContactOnClick() {
             $('#deleteContactConfirm').modal({
                 show: true,
                 backdrop: 'static'
@@ -1003,7 +1031,9 @@
             $('#cmdConfirmDeleteContactCloseButton').prop('disabled', false);
         }
 
+        // ======================
         // Contact Confirm Delete
+        // ======================
         function cmdContactConfirmDeleteButton_OnClick() {
             document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $('#cmdConfirmDeleteContact').prop('disabled', true);

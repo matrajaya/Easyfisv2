@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@model easyfis.Entities.MstUserForm
+@{
+    // =====================
+    // User Rights Variables
+    // =====================
+    var canAdd = Model.CanAdd;
+    var canEdit = Model.CanEdit;
+    var canDelete = Model.CanDelete;
+    var canLock = Model.CanLock;
+    var canUnlock = Model.CanUnlock;
+    var canPrint = Model.CanPrint;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -32,9 +44,17 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-12" align="right">
-                                <button class="btn btn-primary" id="customer_LockButton" onclick="customerLockButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                <button class="btn btn-primary" id="customer_UnlockButton" onclick="customerUnlockButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                <button class="btn btn-danger" id="customer_CloseButton" onclick="customerCloseButton_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                @{
+                                    if (canLock)
+                                    {
+                                        <button class="btn btn-primary" id="btnLockCustomer" onclick="btnLockCustomerOnclick()"><i class="fa fa-lock"></i> Lock</button>
+                                    }
+                                    if (canUnlock)
+                                    {
+                                        <button class="btn btn-primary" id="btnUnlockCustomer" onclick="btnUnlockCustomerOnclick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                    }
+                                }
+                                <button class="btn btn-danger" id="btnCloseCustomer" onclick="btnCloseCustomerOnclick()"><i class=" fa fa-times"></i> Close</button>
                             </div>
                         </div>
                     </div>
@@ -45,19 +65,19 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Code</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control requiredCustomer" id="artcileCustomer_code" placeholder="Code" disabled />
+                                            <input type="text" class="form-control requiredCustomer" id="inpCustomerCode" placeholder="Code..." disabled />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Manual Code</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control requiredCustomer" id="artcileCustomer_manual_code" placeholder="Manual Code" />
+                                            <input type="text" class="form-control requiredCustomer" id="inpCustomerManualCode" placeholder="Manual Code..." />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Customer</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control  requiredCustomer" id="artcileCustomer_Customer" placeholder="Customer" />
+                                            <input type="text" class="form-control  requiredCustomer" id="inpCustomerName" placeholder="Customer..." />
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -91,7 +111,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Address</label>
                                         <div class="col-sm-8">
-                                            <textarea rows="5" class="form-control textarea-custom requiredCustomer" id="artcileCustomer_Address" placeholder="Address"></textarea>
+                                            <textarea rows="5" class="form-control textarea-custom requiredCustomer" id="inpCustomerAddress" placeholder="Address..."></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -99,32 +119,31 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Contact Number</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control requiredCustomer" id="artcileCustomer_ContactNo" placeholder="Contact No." />
+                                            <input type="text" class="form-control requiredCustomer" id="inpCustomerContactNo" placeholder="Contact No...." />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Contact Person</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control  requiredCustomer" id="artcileCustomer_ContactPerson" placeholder="Contact Person" />
+                                            <input type="text" class="form-control  requiredCustomer" id="inpCustomerContactPerson" placeholder="Contact Person..." />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">TIN</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control requiredCustomer" id="artcileCustomer_TIN" placeholder="TIN Number" />
+                                            <input type="text" class="form-control requiredCustomer" id="inpCustomerTIN" placeholder="TIN Number..." />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Particulars</label>
                                         <div class="col-sm-8">
-                                            <textarea rows="5" class="form-control textarea-custom requiredcustomer" id="artcileCustomer_Particulars" placeholder="Particulars"></textarea>
+                                            <textarea rows="5" class="form-control textarea-custom requiredcustomer" id="inpCustomerParticulars" placeholder="Particulars..."></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">E-mail</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control requiredCustomer" id="artcileCustomer_Email" placeholder="E-mail here.." />
-
+                                            <input type="text" class="form-control requiredCustomer" id="inpCustomerEmail" placeholder="E-mail..." />
                                         </div>
                                     </div>
                                 </div>
@@ -142,18 +161,30 @@
                         <div id="JournalLedgerGrid"></div>
                     </div>
                     <div id="ContactInformation" class="tab-pane fade in">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary" id="btnAddMoreContactInformation" onclick="cmdAddContact_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        @{
+                            if (canAdd)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+
+                                                <button class="btn btn-primary" id="btnAddMoreContactInformation" onclick="cmdAddContact_OnClick()"><i class="fa fa-plus"></i> Add</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="ContactInformationGrid" class="grid"></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="panel-body">
+                            }
+                            else
+                            {
                                 <div id="ContactInformationGrid" class="grid"></div>
-                            </div>
-                        </div>
+                                <br /><br />
+                            }
+                        }
                     </div>
                 </div>
             </section>
@@ -249,7 +280,7 @@
         function getArticleCustomerGroupForComboBox() {
             var articleCustomerGroupsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticleGroupByArticleTypeId/2',
+                url: '/api/listArticleGroupByArticleTypeId/3',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -385,25 +416,25 @@
             NProgress.start();
             if (document.location.search.length > 0) {
                 $.ajax({
-                    url: '/api/article/' + customerId,
+                    url: '/api/customer/detail/' + customerId,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     success: function (customerResults) {
                         if (customerResults != null) {
-                            document.getElementById('artcileCustomer_code').value = customerResults.ArticleCode;
-                            document.getElementById('artcileCustomer_manual_code').value = customerResults.ManualArticleCode;
-                            document.getElementById('artcileCustomer_Customer').value = customerResults.Article;
+                            document.getElementById('inpCustomerCode').value = customerResults.ArticleCode;
+                            document.getElementById('inpCustomerManualCode').value = customerResults.ManualArticleCode;
+                            document.getElementById('inpCustomerName').value = customerResults.Article;
                             cboCustomerGroup.selectedValue = customerResults.ArticleGroupId;
                             cboAccountCode.selectedValue = customerResults.AccountId;
                             cboAccount.selectedValue = customerResults.AccountId;
                             cboTerm.selectedValue = customerResults.TermId;
-                            document.getElementById('artcileCustomer_Address').value = customerResults.Address;
-                            document.getElementById('artcileCustomer_Particulars').value = customerResults.Particulars;
-                            document.getElementById('artcileCustomer_Email').value = customerResults.EmailAddress;
-                            document.getElementById('artcileCustomer_TIN').value = customerResults.TaxNumber;
-                            document.getElementById('artcileCustomer_ContactNo').value = customerResults.ContactNumber;
-                            document.getElementById('artcileCustomer_ContactPerson').value = customerResults.ContactPerson;
+                            document.getElementById('inpCustomerAddress').value = customerResults.Address;
+                            document.getElementById('inpCustomerParticulars').value = customerResults.Particulars;
+                            document.getElementById('inpCustomerEmail').value = customerResults.EmailAddress;
+                            document.getElementById('inpCustomerTIN').value = customerResults.TaxNumber;
+                            document.getElementById('inpCustomerContactNo').value = customerResults.ContactNumber;
+                            document.getElementById('inpCustomerContactPerson').value = customerResults.ContactPerson;
 
                             document.getElementById('createdBy').innerHTML = customerResults.CreatedBy;
                             document.getElementById('createdDate').innerHTML = customerResults.CreatedDateTime;
@@ -411,40 +442,25 @@
                             document.getElementById('updatedDate').innerHTML = customerResults.UpdatedDateTime;
 
                             if (customerResults.IsLocked) {
-                                document.getElementById('artcileCustomer_Customer').disabled = true;
-                                document.getElementById('artcileCustomer_manual_code').disabled = true;
+                                document.getElementById('inpCustomerName').disabled = true;
+                                document.getElementById('inpCustomerManualCode').disabled = true;
                                 cboCustomerGroup.disabled = true;
                                 cboAccountCode.disabled = true;
                                 cboAccount.disabled = true;
                                 cboTerm.disabled = true;
-                                document.getElementById('artcileCustomer_Address').disabled = true;
-                                document.getElementById('artcileCustomer_Particulars').disabled = true;
-                                document.getElementById('artcileCustomer_TIN').disabled = true;
-                                document.getElementById('artcileCustomer_ContactNo').disabled = true;
-                                document.getElementById('artcileCustomer_ContactPerson').disabled = true;
-                                document.getElementById('artcileCustomer_Email').disabled = true;
+                                document.getElementById('inpCustomerAddress').disabled = true;
+                                document.getElementById('inpCustomerParticulars').disabled = true;
+                                document.getElementById('inpCustomerTIN').disabled = true;
+                                document.getElementById('inpCustomerContactNo').disabled = true;
+                                document.getElementById('inpCustomerContactPerson').disabled = true;
+                                document.getElementById('inpCustomerEmail').disabled = true;
 
-                                $('#customer_LockButton').prop('disabled', true);
+                                $('#btnLockCustomer').prop('disabled', true);
                                 $('#btnAddMoreContactInformation').prop('disabled', true);
-
-                                var canUnLock = "@ViewData["CanUnlock"]";
-                                if (canUnLock == "False") {
-                                    $("#customer_UnlockButton").prop("disabled", true);
-                                }
 
                                 Islocked = true;
                             } else {
-                                $('#customer_UnlockButton').prop('disabled', true);
-
-                                var canLock = "@ViewData["CanLock"]";
-                                if (canLock == "False") {
-                                    $("#customer_LockButton").prop("disabled", true);
-                                }
-
-                                var canAdd = "@ViewData["CanAdd"]";
-                                if (canAdd == "False") {
-                                    $("#btnAddMoreContactInformation").prop("disabled", true);
-                                }
+                                $('#btnUnlockCustomer').prop('disabled', true);
                             }
                         }
 
@@ -484,9 +500,9 @@
         // ====================
         function dataCustomerObject() {
             var customerObject = new Object();
-            customerObject.ArticleCode = document.getElementById('artcileCustomer_code').value;
-            customerObject.ManualArticleCode = document.getElementById('artcileCustomer_manual_code').value;
-            customerObject.Article = document.getElementById('artcileCustomer_Customer').value;
+            customerObject.ArticleCode = document.getElementById('inpCustomerCode').value;
+            customerObject.ManualArticleCode = document.getElementById('inpCustomerManualCode').value;
+            customerObject.Article = document.getElementById('inpCustomerName').value;
             customerObject.ArticleGroupId = cboCustomerGroup.selectedValue;
             customerObject.AccountId = cboAccount.selectedValue;
             customerObject.SalesAccountId = cboCustomerGroup.selectedItem["SalesAccountId"];
@@ -494,12 +510,12 @@
             customerObject.AssetAccountId = cboCustomerGroup.selectedItem["AssetAccountId"];
             customerObject.ExpenseAccountId = cboCustomerGroup.selectedItem["ExpenseAccountId"];
             customerObject.TermId = cboTerm.selectedValue;
-            customerObject.Address = document.getElementById('artcileCustomer_Address').value;
-            customerObject.ContactNumber = document.getElementById('artcileCustomer_ContactNo').value;
-            customerObject.ContactPerson = document.getElementById('artcileCustomer_ContactPerson').value;
-            customerObject.TaxNumber = document.getElementById('artcileCustomer_TIN').value;
-            customerObject.Particulars = document.getElementById('artcileCustomer_Particulars').value;
-            customerObject.EmailAddress = document.getElementById('artcileCustomer_Email').value;
+            customerObject.Address = document.getElementById('inpCustomerAddress').value;
+            customerObject.ContactNumber = document.getElementById('inpCustomerContactNo').value;
+            customerObject.ContactPerson = document.getElementById('inpCustomerContactPerson').value;
+            customerObject.TaxNumber = document.getElementById('inpCustomerTIN').value;
+            customerObject.Particulars = document.getElementById('inpCustomerParticulars').value;
+            customerObject.EmailAddress = document.getElementById('inpCustomerEmail').value;
             var customerData = JSON.stringify(customerObject);
             return customerData;
         }
@@ -507,16 +523,16 @@
         // ====================
         // Lock Customer Button
         // ====================
-        function customerLockButton_OnClick() {
+        function btnLockCustomerOnclick() {
             if (customerEntryValidation()) {
-                document.getElementById('customer_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
-                $('#customer_LockButton').prop('disabled', true);
-                $('#customer_UnlockButton').prop('disabled', true);
-                $('#customer_CloseButton').prop('disabled', true);
+                document.getElementById('btnLockCustomer').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
+                $('#btnLockCustomer').prop('disabled', true);
+                $('#btnUnlockCustomer').prop('disabled', true);
+                $('#btnCloseCustomer').prop('disabled', true);
 
                 $.ajax({
                     type: "PUT",
-                    url: '/api/updateArticle/' + customerId + '/2',
+                    url: '/api/customer/lock/' + customerId,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     data: dataCustomerObject(),
@@ -527,17 +543,23 @@
                                 location.reload()
                             }, 1000);
                         },
-                        404: function () {
-                            toastr.error("Not Found");
-                            document.getElementById('customer_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            $('#customer_LockButton').prop('disabled', false);
-                            $('#customer_CloseButton').prop('disabled', false);
+                        404: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                            document.getElementById('btnLockCustomer').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $('#btnLockCustomer').prop('disabled', false);
+                            $('#btnCloseCustomer').prop('disabled', false);
                         },
-                        400: function () {
-                            toastr.error("Bad Request");
-                            document.getElementById('customer_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            $('#customer_LockButton').prop('disabled', false);
-                            $('#customer_CloseButton').prop('disabled', false);
+                        400: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                            document.getElementById('btnLockCustomer').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $('#btnLockCustomer').prop('disabled', false);
+                            $('#btnCloseCustomer').prop('disabled', false);
+                        },
+                        500: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                            document.getElementById('btnLockCustomer').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $('#btnLockCustomer').prop('disabled', false);
+                            $('#btnCloseCustomer').prop('disabled', false);
                         }
                     }
                 });
@@ -549,15 +571,15 @@
         // ======================
         // Unlock Customer Button
         // ======================
-        function customerUnlockButton_OnClick() {
-            document.getElementById('customer_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
-            $('#customer_LockButton').prop('disabled', true);
-            $('#customer_UnlockButton').prop('disabled', true);
-            $('#customer_CloseButton').prop('disabled', true);
+        function btnUnlockCustomerOnclick() {
+            document.getElementById('btnUnlockCustomer').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
+            $('#btnLockCustomer').prop('disabled', true);
+            $('#btnUnlockCustomer').prop('disabled', true);
+            $('#btnCloseCustomer').prop('disabled', true);
 
             $.ajax({
                 type: "PUT",
-                url: '/api/unlockArticle/' + customerId,
+                url: '/api/customer/unlock/' + customerId,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 statusCode: {
@@ -567,17 +589,23 @@
                             location.reload()
                         }, 1000);
                     },
-                    404: function () {
-                        toastr.error("Not Found");
-                        document.getElementById('customer_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        $('#customer_UnlockButton').prop('disabled', false);
-                        $('#customer_CloseButton').prop('disabled', false);
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                        document.getElementById('btnUnlockCustomer').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $('#btnUnlockCustomer').prop('disabled', false);
+                        $('#btnCloseCustomer').prop('disabled', false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
-                        document.getElementById('customer_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        $('#customer_UnlockButton').prop('disabled', false);
-                        $('#customer_CloseButton').prop('disabled', false);
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        document.getElementById('btnUnlockCustomer').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $('#btnUnlockCustomer').prop('disabled', false);
+                        $('#btnCloseCustomer').prop('disabled', false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                        document.getElementById('btnUnlockCustomer').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $('#btnUnlockCustomer').prop('disabled', false);
+                        $('#btnCloseCustomer').prop('disabled', false);
                     }
                 }
             });
@@ -586,8 +614,8 @@
         // =====================
         // Close Customer Button
         // =====================
-        function customerCloseButton_OnClick() {
-            window.location = '/Software/Customer';
+        function btnCloseCustomerOnclick() {
+            window.history.back();
         }
 
         // =======================
@@ -721,23 +749,11 @@
                     success: function (contactInformationResults) {
                         if (contactInformationResults.length > 0) {
                             for (i = 0; i < contactInformationResults.length; i++) {
-                                var canEdit = "@ViewData["CanEdit"]";
-                                var editDisabled = "";
-                                if (canEdit == "False") {
-                                    editDisabled = "disabled";
-                                }
-
-                                var canDelete = "@ViewData["CanDelete"]";
-                                var deleteDisabled = "";
-                                if (canDelete == "False") {
-                                    deleteDisabled = "disabled";
-                                }
-
-                                var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
-                                var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                                var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContactOnClick()'><i class='fa fa-edit'></i> Edit</button>";
+                                var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContactOnClick()'><i class='fa fa-trash'></i> Delete</button>";
                                 if (Islocked) {
-                                    btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
-                                    btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
+                                    btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContactOnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
+                                    btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContactOnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                                 }
 
                                 contactInformationsObservableArray.push({
@@ -779,24 +795,36 @@
             contactInformationGrid = new wijmo.grid.FlexGrid('#ContactInformationGrid');
             contactInformationGrid.initialize({
                 columns: [
-                    {
-                        "header": "Edit",
-                        "binding": "EditId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
-                    {
-                        "header": "Delete",
-                        "binding": "DeleteId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
+                    @{
+                        if (canEdit)
+                        {
+                            <text>
+                                {
+                                    "header": "Edit",
+                                    "binding": "EditId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                        if (canDelete)
+                        {
+                            <text>
+                                {
+                                    "header": "Delete",
+                                    "binding": "DeleteId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                    }
                     {
                         "header": "Contact",
                         "binding": "ContactPerson",
@@ -863,7 +891,7 @@
         // ===========
         // Edit Button
         // ===========
-        function btnEditContact_OnClick() {
+        function btnEditContactOnClick() {
             $('#contactEdit').modal({
                 show: true,
                 backdrop: 'static'
@@ -992,7 +1020,7 @@
         // ==============
         // DELETE Contact
         // ==============
-        function btnDeleteContact_OnClick() {
+        function btnDeleteContactOnClick() {
             $('#deleteContactConfirm').modal({
                 show: true,
                 backdrop: 'static'
@@ -1003,7 +1031,9 @@
             $('#cmdConfirmDeleteContactCloseButton').prop('disabled', false);
         }
 
+        // ======================
         // Contact Confirm Delete
+        // ======================
         function cmdContactConfirmDeleteButton_OnClick() {
             document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $('#cmdConfirmDeleteContact').prop('disabled', true);

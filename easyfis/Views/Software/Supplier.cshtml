@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@model easyfis.Entities.MstUserForm
+@{ 
+    // =====================
+    // User Rights Variables
+    // =====================
+    var canAdd = Model.CanAdd;
+    var canEdit = Model.CanEdit;
+    var canDelete = Model.CanDelete;
+    var canLock = Model.CanLock;
+    var canUnlock = Model.CanUnlock;
+    var canPrint = Model.CanPrint;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -40,8 +52,13 @@
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 40%" align="right">
-                                    <button class="btn btn-primary" id="btnAddSupplier" onclick="btnAddSupplier_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <button class="btn btn-danger" id="btnCloseSupplier" onclick="btnCloseSupplier_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                    @{
+                                        if (canAdd)
+                                        {
+                                            <button class="btn btn-primary" id="btnAddSupplier" onclick="btnAddSupplierOnclick()"><i class="fa fa-plus"></i> Add</button>
+                                        }
+                                    }
+                                    <button class="btn btn-danger" id="btnCloseSupplier" onclick="btnCloseSupplierOnclick()"><i class=" fa fa-times"></i> Close</button>
                                 </td>
                             </tr>
                         </table>
@@ -86,7 +103,7 @@
                     Are you sure you want to delete this supplier?
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdConfirmDeleteSupplier" class="btn btn-danger" onclick="cmdSupplierConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteSupplier" class="btn btn-danger" onclick="btnDeleteConfirmSupplierOnclick()"><i class="fa fa-trash"></i> Delete</button>
                     <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
@@ -113,61 +130,23 @@
             NProgress.start();
             var suppliersObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/listArticleByArticleTypeId/3',
+                url: '/api/supplier/list',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 success: function (supplierListResults) {
                     if (supplierListResults.length > 0) {
                         for (i = 0; i < supplierListResults.length; i++) {
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled = "";
-                            if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            }
-
-                            var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled = "";
-                            if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            }
-
                             suppliersObservableArray.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdSupplierEditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdSupplierDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditSupplierOnclick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteSupplierOnclick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: supplierListResults[i]["Id"],
                                 ArticleCode: supplierListResults[i]["ArticleCode"],
                                 ManualArticleCode: supplierListResults[i]["ManualArticleCode"],
                                 Article: supplierListResults[i]["Article"],
-                                Category: supplierListResults[i]["Category"],
-                                ArticleTypeId: supplierListResults[i]["ArticleTypeId"],
-                                ArticleType: supplierListResults[i]["ArticleType"],
                                 ArticleGroupId: supplierListResults[i]["ArticleGroupId"],
                                 ArticleGroup: supplierListResults[i]["ArticleGroup"],
-                                AccountId: supplierListResults[i]["AccountId"],
-                                Account: supplierListResults[i]["Account"],
-                                SalesAccountId: supplierListResults[i]["SalesAccountId"],
-                                CostAccountId: supplierListResults[i]["CostAccountId"],
-                                AssetAccountId: supplierListResults[i]["AssetAccountId"],
-                                ExpenseAccountId: supplierListResults[i]["ExpenseAccountId"],
-                                UnitId: supplierListResults[i]["UnitId"],
-                                OutputTaxId: supplierListResults[i]["OutputTaxId"],
-                                InputTaxId: supplierListResults[i]["InputTaxId"],
-                                WTaxTypeId: supplierListResults[i]["WTaxTypeId"],
-                                Price: supplierListResults[i]["Price"],
-                                Cost: supplierListResults[i]["Cost"],
-                                IsInventory: supplierListResults[i]["IsInventory"],
-                                Particulars: supplierListResults[i]["Particulars"],
-                                Address: supplierListResults[i]["Address"],
-                                TermId: supplierListResults[i]["TermId"],
                                 ContactNumber: supplierListResults[i]["ContactNumber"],
-                                ContactPerson: supplierListResults[i]["ContactPerson"],
-                                TaxNumber: supplierListResults[i]["TaxNumber"],
-                                CreditLimit: supplierListResults[i]["CreditLimit"],
-                                DateAcquired: supplierListResults[i]["DateAcquired"],
-                                UsefulLife: supplierListResults[i]["UsefulLife"],
-                                SalvageValue: supplierListResults[i]["SalvageValue"],
-                                ManualArticleOldCode: supplierListResults[i]["ManualArticleOldCode"],
                                 IsLocked: supplierListResults[i]["IsLocked"],
                                 CreatedById: supplierListResults[i]["CreatedById"],
                                 CreatedBy: supplierListResults[i]["CreatedBy"],
@@ -222,46 +201,52 @@
         // ===================
         // Supplier Add Button
         // ===================
-        function btnAddSupplier_OnClick() {
+        function btnAddSupplierOnclick() {
             document.getElementById('btnAddSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Adding";
             $('#btnAddSupplier').prop('disabled', true);
             $('#btnCloseSupplier').prop('disabled', true);
 
-            var canAccessToDetailPage = "@ViewData["CanAccessToDetailPage"]";
-            if (canAccessToDetailPage == "True") {
-                $.ajax({
-                    type: "POST",
-                    url: '/api/addArticle/3',
-                    contentType: "application/json; charset=utf-8",
-                    success: function (id) {
-                        if (id > 0) {
-                            window.location = '/Software/SupplierDetail?id=' + id;
-                        } else {
-                            toastr.error("Something's went wrong.");
-                            document.getElementById('btnAddSupplier').innerHTML = "<i class='fa fa-plus'></i> Add";
-                            $('#btnAddSupplier').prop('disabled', false);
-                            $('#btnCloseSupplier').prop('disabled', false);
-                        }
+            $.ajax({
+                type: "POST",
+                url: '/api/supplier/add',
+                contentType: "application/json; charset=utf-8",
+                statusCode: {
+                    200: function (id) {
+                        window.location = '/Software/SupplierDetail?id=' + id;
+                    },
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                        document.getElementById('btnAddSupplier').innerHTML = "<i class='fa fa-plus'></i> Add";
+                        $('#btnAddSupplier').prop('disabled', false);
+                        $('#btnCloseSupplier').prop('disabled', false);
+                    },
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        document.getElementById('btnAddSupplier').innerHTML = "<i class='fa fa-plus'></i> Add";
+                        $('#btnAddSupplier').prop('disabled', false);
+                        $('#btnCloseSupplier').prop('disabled', false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                        document.getElementById('btnAddSupplier').innerHTML = "<i class='fa fa-plus'></i> Add";
+                        $('#btnAddSupplier').prop('disabled', false);
+                        $('#btnCloseSupplier').prop('disabled', false);
                     }
-                });
-            } else {
-                if (canAccessToDetailPage == "False") {
-                    window.location = '/Software/Forbidden';
                 }
-            }
+            });
         }
 
         // =====================
         // Supplier Close Button
         // =====================
-        function btnCloseSupplier_OnClick() {
-            window.location = '/Software';
+        function btnCloseSupplierOnclick() {
+            window.history.back();
         }
 
         // ====================
         // Supplier Edit Button
         // ====================
-        function cmdSupplierEditButton_OnClick() {
+        function btnEditSupplierOnclick() {
             supplierCollectionView.editItem(supplierCollectionView.currentItem);
             var supplier = supplierCollectionView.currentEditItem;
             var supplierId = supplier.Id;
@@ -272,7 +257,7 @@
         // =====================
         // Supplier delete Button
         // =====================
-        function cmdSupplierDeleteButton_OnClick() {
+        function btnDeleteSupplierOnclick() {
             supplierCollectionView.editItem(supplierCollectionView.currentItem);
             var supplier = supplierCollectionView.currentEditItem;
             if (supplier.IsLocked) {
@@ -289,8 +274,10 @@
             }
         }
 
+        // ==============================
         // Supplier Confirm Delete Button
-        function cmdSupplierConfirmDeleteButton_OnClick() {
+        // ==============================
+        function btnDeleteConfirmSupplierOnclick() {
             document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $('#cmdConfirmDeleteSupplier').prop('disabled', true);
             $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
@@ -298,7 +285,7 @@
             supplierCollectionView.editItem(supplierCollectionView.currentItem);
             var supplierId = supplierCollectionView.currentEditItem.Id;
             $.ajax({
-                url: '/api/deleteArticle/' + supplierId,
+                url: '/api/supplier/delete/' + supplierId,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -308,15 +295,22 @@
                         $('#deleteSupplierConfirm').modal('hide');
                         refreshSupplierFlexgrid();
                     },
-                    404: function () {
-                        toastr.error("Not Found");
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                         $('#deleteSupplierConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $('#cmdConfirmDeleteSupplier').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        $('#deleteSupplierConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#cmdConfirmDeleteSupplier').prop('disabled', false);
+                        $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                         $('#deleteSupplierConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $('#cmdConfirmDeleteSupplier').prop('disabled', false);
@@ -398,24 +392,36 @@
             supplierFlexGrid = new wijmo.grid.FlexGrid('#SupplierGrid');
             supplierFlexGrid.initialize({
                 columns: [
-                            {
-                                "header": "Edit",
-                                "binding": "EditId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Delete",
-                                "binding": "DeleteId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
+                            @{
+                                if (canEdit)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Edit",
+                                            "binding": "EditId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                                if (canDelete)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Delete",
+                                            "binding": "DeleteId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                            }
                             {
                                 "header": "Code",
                                 "binding": "ArticleCode",
@@ -490,11 +496,6 @@
                 supplierCollectionView.moveToLastPage();
                 updateNavigateButtonsSupplier();
             });
-
-            var canAdd = "@ViewData["CanAdd"]";
-            if (canAdd == "False") {
-                $("#btnAddSupplier").prop("disabled", true);
-            }
         }
 
         // ============
