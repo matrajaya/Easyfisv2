@@ -10,7 +10,7 @@ namespace easyfis.Entities
         public Int32 Id { get; set; }
         public Int32 BranchId { get; set; }
         public String CVNumber { get; set; }
-        public DateTime CVDate { get; set; }
+        public String CVDate { get; set; }
         public Int32 SupplierId { get; set; }
         public String Payee { get; set; }
         public Int32 PayTypeId { get; set; }
@@ -18,7 +18,7 @@ namespace easyfis.Entities
         public String ManualCVNumber { get; set; }
         public String Particulars { get; set; }
         public String CheckNumber { get; set; }
-        public DateTime CheckDate { get; set; }
+        public String CheckDate { get; set; }
         public Decimal Amount { get; set; }
         public Boolean IsCrossCheck { get; set; }
         public Boolean IsClear { get; set; }
@@ -27,8 +27,8 @@ namespace easyfis.Entities
         public Int32 ApprovedById { get; set; }
         public Boolean IsLocked { get; set; }
         public Int32 CreatedById { get; set; }
-        public DateTime CreatedDateTime { get; set; }
+        public String CreatedDateTime { get; set; }
         public Int32 UpdatedById { get; set; }
-        public DateTime UpdatedDateTime { get; set; }
+        public String UpdatedDateTime { get; set; }
     }
 }

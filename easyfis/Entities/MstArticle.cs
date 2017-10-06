@@ -34,9 +34,15 @@ namespace easyfis.Entities
         public String EmailAddress { get; set; }
         public String TaxNumber { get; set; }
         public Decimal CreditLimit { get; set; }
-        public DateTime DateAcquired { get; set; }
+        public String DateAcquired { get; set; }
         public Decimal UsefulLife { get; set; }
         public Decimal SalvageValue { get; set; }
         public String ManualArticleOldCode { get; set; }
+        public Int32 Kitting { get; set; }
+        public Boolean IsLocked { get; set; }
+        public Int32 CreatedById { get; set; }
+        public String CreatedDateTime { get; set; }
+        public Int32 UpdatedById { get; set; }
+        public String UpdatedDateTime { get; set; }
     }
 }

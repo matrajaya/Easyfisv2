@@ -10,7 +10,7 @@ namespace easyfis.Entities
         public Int32 Id { get; set; }
         public Int32 BranchId { get; set; }
         public String INNumber { get; set; }
-        public DateTime INDate { get; set; }
+        public String INDate { get; set; }
         public Int32 AccountId { get; set; }
         public Int32 ArticleId { get; set; }
         public String Particulars { get; set; }
@@ -21,8 +21,8 @@ namespace easyfis.Entities
         public Int32 ApprovedById { get; set; }
         public Boolean IsLocked { get; set; }
         public Int32 CreatedById { get; set; }
-        public DateTime CreatedDateTime { get; set; }
+        public String CreatedDateTime { get; set; }
         public Int32 UpdatedById { get; set; }
-        public DateTime UpdatedDateTime { get; set; }
+        public String UpdatedDateTime { get; set; }
     }
 }

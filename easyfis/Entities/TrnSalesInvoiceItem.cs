@@ -26,6 +26,6 @@ namespace easyfis.Entities
         public Int32 BaseUnitId { get; set; }
         public Decimal BaseQuantity { get; set; }
         public Decimal BasePrice { get; set; }
-        public DateTime SalesItemTimeStamp { get; set; }
+        public String SalesItemTimeStamp { get; set; }
     }
 }

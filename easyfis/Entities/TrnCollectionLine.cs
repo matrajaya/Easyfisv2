@@ -17,7 +17,7 @@ namespace easyfis.Entities
         public Decimal Amount { get; set; }
         public Int32 PayTypeId { get; set; }
         public String CheckNumber { get; set; }
-        public DateTime CheckDate { get; set; }
+        public String CheckDate { get; set; }
         public String CheckBank { get; set; }
         public Int32 DepositoryBankId { get; set; }
         public Boolean IsClear { get; set; }
