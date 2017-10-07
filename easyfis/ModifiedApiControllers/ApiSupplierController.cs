@@ -109,7 +109,7 @@ namespace easyfis.ModifiedApiControllers
         [Authorize, HttpGet, Route("api/supplier/detail/{id}")]
         public Entities.MstArticle DetailSupplier(String id)
         {
-            var supplier = from d in db.MstArticles.OrderBy(d => d.ArticleCode)
+            var supplier = from d in db.MstArticles
                            where d.Id == Convert.ToInt32(id)
                            && d.ArticleTypeId == 3
                            select new Entities.MstArticle

@@ -21,6 +21,7 @@ namespace easyfis.Entities
         public Int32 AssetAccountId { get; set; }
         public Int32 ExpenseAccountId { get; set; }
         public Int32 UnitId { get; set; }
+        public String Unit { get; set; }
         public Int32 OutputTaxId { get; set; }
         public Int32 InputTaxId { get; set; }
         public Int32 WTaxTypeId { get; set; }
