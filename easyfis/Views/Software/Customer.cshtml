@@ -134,26 +134,26 @@
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (customerListResults) {
-                    if (customerListResults.length > 0) {
-                        for (i = 0; i < customerListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             customersObservableArray.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditCustomerOnclick()'><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteCustomerOnclick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: customerListResults[i]["Id"],
-                                ArticleCode: customerListResults[i]["ArticleCode"],
-                                ManualArticleCode: customerListResults[i]["ManualArticleCode"],
-                                Article: customerListResults[i]["Article"],
-                                ArticleGroupId: customerListResults[i]["ArticleGroupId"],
-                                ArticleGroup: customerListResults[i]["ArticleGroup"],
-                                ContactNumber: customerListResults[i]["ContactNumber"],
-                                IsLocked: customerListResults[i]["IsLocked"],
-                                CreatedById: customerListResults[i]["CreatedById"],
-                                CreatedBy: customerListResults[i]["CreatedBy"],
-                                CreatedDateTime: customerListResults[i]["CreatedDateTime"],
-                                UpdatedById: customerListResults[i]["UpdatedById"],
-                                UpdatedBy: customerListResults[i]["UpdatedBy"],
-                                UpdatedDateTime: customerListResults[i]["UpdatedDateTime"]
+                                Id: results[i]["Id"],
+                                ArticleCode: results[i]["ArticleCode"],
+                                ManualArticleCode: results[i]["ManualArticleCode"],
+                                Article: results[i]["Article"],
+                                ArticleGroupId: results[i]["ArticleGroupId"],
+                                ArticleGroup: results[i]["ArticleGroup"],
+                                ContactNumber: results[i]["ContactNumber"],
+                                IsLocked: results[i]["IsLocked"],
+                                CreatedById: results[i]["CreatedById"],
+                                CreatedBy: results[i]["CreatedBy"],
+                                CreatedDateTime: results[i]["CreatedDateTime"],
+                                UpdatedById: results[i]["UpdatedById"],
+                                UpdatedBy: results[i]["UpdatedBy"],
+                                UpdatedDateTime: results[i]["UpdatedDateTime"]
                             });
                         }
                     }

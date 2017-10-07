@@ -134,26 +134,26 @@
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (supplierListResults) {
-                    if (supplierListResults.length > 0) {
-                        for (i = 0; i < supplierListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             suppliersObservableArray.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditSupplierOnclick()'><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteSupplierOnclick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: supplierListResults[i]["Id"],
-                                ArticleCode: supplierListResults[i]["ArticleCode"],
-                                ManualArticleCode: supplierListResults[i]["ManualArticleCode"],
-                                Article: supplierListResults[i]["Article"],
-                                ArticleGroupId: supplierListResults[i]["ArticleGroupId"],
-                                ArticleGroup: supplierListResults[i]["ArticleGroup"],
-                                ContactNumber: supplierListResults[i]["ContactNumber"],
-                                IsLocked: supplierListResults[i]["IsLocked"],
-                                CreatedById: supplierListResults[i]["CreatedById"],
-                                CreatedBy: supplierListResults[i]["CreatedBy"],
-                                CreatedDateTime: supplierListResults[i]["CreatedDateTime"],
-                                UpdatedById: supplierListResults[i]["UpdatedById"],
-                                UpdatedBy: supplierListResults[i]["UpdatedBy"],
-                                UpdatedDateTime: supplierListResults[i]["UpdatedDateTime"]
+                                Id: results[i]["Id"],
+                                ArticleCode: results[i]["ArticleCode"],
+                                ManualArticleCode: results[i]["ManualArticleCode"],
+                                Article: results[i]["Article"],
+                                ArticleGroupId: results[i]["ArticleGroupId"],
+                                ArticleGroup: results[i]["ArticleGroup"],
+                                ContactNumber: results[i]["ContactNumber"],
+                                IsLocked: results[i]["IsLocked"],
+                                CreatedById: results[i]["CreatedById"],
+                                CreatedBy: results[i]["CreatedBy"],
+                                CreatedDateTime: results[i]["CreatedDateTime"],
+                                UpdatedById: results[i]["UpdatedById"],
+                                UpdatedBy: results[i]["UpdatedBy"],
+                                UpdatedDateTime: results[i]["UpdatedDateTime"]
                             });
                         }
                     }

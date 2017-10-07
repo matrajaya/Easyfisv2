@@ -45,6 +45,64 @@ namespace easyfis.ModifiedApiControllers
             return suppliers.ToList();
         }
 
+        // ======================================
+        // Dropdown List - Supplier Group (Field)
+        // ======================================
+        [Authorize, HttpGet, Route("api/supplier/dropdown/list/supplierGroup")]
+        public List<Entities.MstArticleGroup> DropdownListSupplierGroup()
+        {
+            var supplierGroups = from d in db.MstArticleGroups.OrderBy(d => d.ArticleGroup)
+                                 where d.ArticleTypeId == 3
+                                 && d.IsLocked == true
+                                 select new Entities.MstArticleGroup
+                                 {
+                                     Id = d.Id,
+                                     ArticleGroup = d.ArticleGroup,
+                                     AccountId = d.AccountId,
+                                     SalesAccountId = d.SalesAccountId,
+                                     CostAccountId = d.CostAccountId,
+                                     AssetAccountId = d.AssetAccountId,
+                                     ExpenseAccountId = d.ExpenseAccountId
+                                 };
+
+            return supplierGroups.ToList();
+        }
+
+        // ==============================================
+        // Dropdown List - Supplier Group Account (Field)
+        // ==============================================
+        [Authorize, HttpGet, Route("api/supplier/dropdown/list/supplierGroup/account/{accountId}")]
+        public List<Entities.MstAccount> DropdownListSupplierGroupAccount(String accountId)
+        {
+            var supplierGroupAccounts = from d in db.MstAccounts.OrderBy(d => d.Account)
+                                        where d.Id == Convert.ToInt32(accountId)
+                                        && d.IsLocked == true
+                                        select new Entities.MstAccount
+                                        {
+                                            Id = d.Id,
+                                            AccountCode = d.AccountCode,
+                                            Account = d.Account
+                                        };
+
+            return supplierGroupAccounts.ToList();
+        }
+
+        // =====================================
+        // Dropdown List - Supplier Term (Field)
+        // =====================================
+        [Authorize, HttpGet, Route("api/supplier/dropdown/list/term")]
+        public List<Entities.MstTerm> ListSupplierTerm()
+        {
+            var supplierTerms = from d in db.MstTerms.OrderBy(d => d.Term)
+                                select new Entities.MstTerm
+                                {
+                                    Id = d.Id,
+                                    Term = d.Term
+                                };
+
+            return supplierTerms.ToList();
+        }
+
         // ===============
         // Detail Supplier
         // ===============
