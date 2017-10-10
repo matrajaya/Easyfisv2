@@ -1614,49 +1614,34 @@
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
-                    success: function (componentResults) {
+                    success: function (results) {
                         var totalComponentAmount = 0;
-                        if (componentResults.length > 0) {
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled = "";
-                            if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            }
-
-                            var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled = "";
-                            if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditCompoent_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
-                            var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteCompoent_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                        if (results.length > 0) {
+                            var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditCompoent_OnClick()'><i class='fa fa-edit'></i> Edit</button>";
+                            var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteCompoent_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             if (IsLocked) {
                                 btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditCompoent_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
                                 btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteCompoent_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                             }
 
-                            for (i = 0; i < componentResults.length; i++) {
-                                totalComponentAmount += (componentResults[i]["Quantity"] * componentResults[i]["Cost"]);
+                            for (i = 0; i < results.length; i++) {
+                                totalComponentAmount += (results[i]["Quantity"] * results[i]["Cost"]);
 
                                 componentsObservableArray.push({
                                     EditId: btnEditId,
                                     DeleteId: btnDeleteId,
-                                    Id: componentResults[i]["Id"],
-                                    ArticleId: componentResults[i]["ArticleId"],
-                                    Article: componentResults[i]["Article"],
-                                    ComponentArticleId: componentResults[i]["ComponentArticleId"],
-                                    ComponentArticleCode: componentResults[i]["ComponentArticleCode"],
-                                    ComponentArticle: componentResults[i]["ComponentArticle"],
-                                    Quantity: componentResults[i]["Quantity"],
-                                    QuantityDisplay: parseFloat(componentResults[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    UnitId: componentResults[i]["UnitId"],
-                                    Unit: componentResults[i]["Unit"],
-                                    Cost: componentResults[i]["Cost"],
-                                    CostDisplay: parseFloat(componentResults[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    Amount: componentResults[i]["Quantity"] * componentResults[i]["Cost"],
-                                    AmountDisplay: parseFloat(componentResults[i]["Quantity"] * componentResults[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    Particulars: componentResults[i]["Particulars"]
+                                    Id: results[i]["Id"],
+                                    ComponentArticleId: results[i]["ComponentArticleId"],
+                                    ComponentArticleManualCode: results[i]["ComponentArticleManualCode"],
+                                    ComponentArticle: results[i]["ComponentArticle"],
+                                    Quantity: results[i]["Quantity"],
+                                    QuantityDisplay: parseFloat(results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    Unit: results[i]["Unit"],
+                                    Cost: results[i]["Cost"],
+                                    CostDisplay: parseFloat(results[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    Amount: results[i]["Amount"],
+                                    AmountDisplay: parseFloat(results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    Particulars: results[i]["Particulars"]
                                 });
                             }
                         }
@@ -1675,14 +1660,13 @@
         // ==========================
         function refreshComponentFlexGrid() {
             components = new wijmo.collections.CollectionView(getComponent());
-
             componentGrid.itemsSource = components;
             componentGrid.trackChanges = true;
         }
 
-        // ==========
-        //  Component
-        // ==========
+        // =========
+        // Component
+        // =========
         function createComponentFlexGrid() {
             components = new wijmo.collections.CollectionView(getComponent());
 
@@ -1726,7 +1710,7 @@
                         "width": "1.7*"
                     },
                     {
-                        "header": "Component.",
+                        "header": "Component",
                         "binding": "ComponentArticle",
                         "allowSorting": true,
                         "width": "2.5*"
