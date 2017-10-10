@@ -269,7 +269,6 @@ namespace easyfis.ModifiedApiControllers
                                     {
                                         return Request.CreateResponse(HttpStatusCode.NotFound, "This contact information detail is no longer exist in the server.");
                                     }
-
                                 }
                                 else
                                 {

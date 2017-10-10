@@ -10,7 +10,8 @@ namespace easyfis.Entities
         public Int32 Id { get; set; }
         public Int32 ArticleId { get; set; }
         public Int32 UnitId { get; set; }
+        public String Unit { get; set; }
         public Decimal Multiplier { get; set; }
-        public Boolean IsCountUnit { get; set; }
+        public Boolean? IsCountUnit { get; set; }
     }
 }
