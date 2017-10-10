@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@model easyfis.Entities.MstUserForm
+@{
+    // =====================
+    // User Rights Variables
+    // =====================
+    var canAdd = Model.CanAdd;
+    var canEdit = Model.CanEdit;
+    var canDelete = Model.CanDelete;
+    var canLock = Model.CanLock;
+    var canUnlock = Model.CanUnlock;
+    var canPrint = Model.CanPrint;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -32,9 +44,17 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-12" align="right">
-                                <button class="btn btn-primary " id="item_LockButton" onclick="itemLockButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                <button class="btn btn-primary " id="item_UnlockButton" onclick="itemUnlockButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                <button class="btn btn-danger " id="item_CloseButton" onclick="itemCloseButton_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                @{
+                                    if (canLock)
+                                    {
+                                        <button class="btn btn-primary" id="btnLockItem" onclick="btnLockItemOnclick()"><i class="fa fa-lock"></i> Lock</button>
+                                    }
+                                    if (canUnlock)
+                                    {
+                                        <button class="btn btn-primary" id="btnUnlockItem" onclick="btnUnlockItemOnclick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                    }
+                                }
+                                <button class="btn btn-danger" id="btnCloseItem" onclick="btnCloseItemOnclick()"><i class=" fa fa-times"></i> Close</button>
                             </div>
                         </div>
                     </div>
@@ -46,19 +66,19 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Code</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control  requiredItem" id="articleItem_code" placeholder="Code" disabled />
+                                                <input type="text" class="form-control  requiredItem" id="itemCode" placeholder="Code..." disabled />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Manual Code</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control  requiredItem" id="articleItem_manualCode" placeholder="Manual Code" />
+                                                <input type="text" class="form-control  requiredItem" id="itemManualCode" placeholder="Manual Code..." />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Item</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control  requiredItem" id="articleItem_item" placeholder="Item" />
+                                                <input type="text" class="form-control  requiredItem" id="itemName" placeholder="Item..." />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -70,7 +90,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Category</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control   requiredItem" id="articleItem_category" placeholder="Category" />
+                                                <input type="text" class="form-control   requiredItem" id="itemCategory" placeholder="Category..." />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -82,13 +102,13 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Price</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control  numberField  requiredItem" id="articleItem_price" placeholder="0.00" />
+                                                <input type="text" class="form-control  numberField  requiredItem" id="itemPrice" placeholder="0.00" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Particulars</label>
                                             <div class="col-sm-8">
-                                                <textarea rows="5" class="form-control textarea-custom requiredItem" id="articleItem_particulars" placeholder="Particulars"></textarea>
+                                                <textarea rows="5" class="form-control textarea-custom requiredItem" id="itemParticulars" placeholder="Particulars..."></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -112,21 +132,21 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-sm-4">Inventory</label>
+                                            <label class="control-label col-sm-4">Is Inventory</label>
                                             <div class="col-sm-8">
-                                                <input type="checkbox" id="articleItem_Inventory" />
+                                                <input type="checkbox" id="itemIsInventory" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Old Manual Code</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control  requiredItem" id="articleItem_oldManualCode" placeholder="Old Manual Code" />
+                                                <input type="text" class="form-control  requiredItem" id="itemOldManualCode" placeholder="Old Manual Code..." />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Manual Cost</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control  numberField  requiredItem" id="articleItem_manualCost" placeholder="0.00" />
+                                                <input type="text" class="form-control  numberField  requiredItem" id="itemManualCost" placeholder="0.00" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -141,7 +161,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Item Lines -->
                 <ul class="nav nav-tabs " role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#UnitConversion" id="unitConversionTabId">Unit Conversion</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#Component" id="componentTabId">Component</a></li>
@@ -153,35 +172,70 @@
                 <br />
                 <div class="tab-content">
                     <div id="UnitConversion" class="tab-pane fade in active">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary " id="btnAddUnitConversion" onclick="cmdAddUnitConversion_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        @{
+                            if (canAdd)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+
+                                                <button class="btn btn-primary" id="btnAddUnitConversion" onclick="btnAddUnitConversionOnclick()"><i class="fa fa-plus"></i> Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="UnitConversionGrid" class="grid"></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="panel-body">
+                            }
+                            else
+                            {
                                 <div id="UnitConversionGrid" class="grid"></div>
-                            </div>
-                        </div>
+                                <br /><br />
+                            }
+                        }
                     </div>
                     <div id="Component" class="tab-pane fade in">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary " id="btnAddComponent" onclick="cmdAddComponent_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        @{
+                            if (canAdd)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button class="btn btn-primary" id="btnAddComponent" onclick="btnAddComponentOnclick()"><i class="fa fa-plus"></i> Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="ComponentGrid" class="grid"></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="panel-body">
-                                <div id="ComponentGrid" class="grid"></div>
-                            </div>
-                        </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-body" style="padding-bottom: 0px;">
+                                        <div class="row">
+                                            <div class="col-md-7">
 
-                        <div class="panel panel-default">
-                            <div class="panel-body" style="padding-bottom: 0px;">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <dl class="dl-horizontal">
+                                                    <dt>
+                                                        <b>Total Amount</b>
+                                                    </dt>
+                                                    <dd>
+                                                        <input type="text" class="form-control numberField" id="totalComponentAmount" placeholder="0.00" disabled />
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="ComponentGrid" class="grid"></div>
+                                <br /><br />
                                 <div class="row">
                                     <div class="col-md-7">
 
@@ -197,25 +251,37 @@
                                         </dl>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            }
+                        }
                     </div>
                     <div id="Price" class="tab-pane fade in">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary " id="btnAddPrice" onclick="cmdAddPrice_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        @{
+                            if (canAdd)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button class="btn btn-primary " id="btnAddPrice" onclick="btnAddPriceOnclick()"><i class="fa fa-plus"></i> Add</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="PriceGrid" class="grid"></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="panel-body">
+                            }
+                            else
+                            {
                                 <div id="PriceGrid" class="grid"></div>
-                            </div>
-                        </div>
+                                <br /><br />
+                            }
+                        }
                     </div>
-                    <div id="Inventory" class="tab-pane fade in" style="margin-bottom: 15px;">
+                    <div id="Inventory" class="tab-pane fade in">
                         <div id="InventoryGrid"></div>
+                        <br /><br />
                     </div>
                     <div id="GLAccount" class="tab-pane fade in">
                         <div class="panel panel-default">
@@ -325,13 +391,13 @@
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4">Useful Life (Years)</label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" class="form-control  numberField " id="Item_UsefulLife" placeholder="0.00" />
+                                                    <input type="text" class="form-control  numberField " id="itemUsefulLife" placeholder="0.00" />
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4">Salvage Value</label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" class="form-control  numberField " id="Item_SalvageValue" placeholder="0.00" />
+                                                    <input type="text" class="form-control  numberField " id="itemSalvageValue" placeholder="0.00" />
                                                 </div>
                                             </div>
                                         </div>
@@ -373,8 +439,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdSaveUnitConversionButton" class="btn btn-primary" onclick="cmdUnitConversionSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button id="cmdUnitConversionDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button id="btnSaveConversionUnit" class="btn btn-primary" onclick="btnSaveUnitConversionOnclick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="btnCloseUnitConversionModal" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -391,8 +457,8 @@
                     Are you sure you want to delete this unit conversion?
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdConfirmDeleteUnitConversion" class="btn btn-danger" onclick="cmdUnitConversionConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteUnitConversionCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button id="btnConfirmDeleteUnitConversion" class="btn btn-danger" onclick="btnConfirmDeleteUnitConversionOnclick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="btnCloseConfirmDeleteUnitConversion" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -439,8 +505,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdSaveComponenetButton" class="btn btn-primary" onclick="cmdComponenetSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button id="cmdComponenetDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button id="btnSaveUnitConversion" class="btn btn-primary" onclick="btnSaveUnitConversionOnclick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="btnCloseUnitConversionModal" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -457,8 +523,8 @@
                     Are you sure you want to delete this component item?
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdConfirmDeleteComponenet" class="btn btn-danger" onclick="cmdComponenetConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteComponenetCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button id="btnConfirmDeleteComponent" class="btn btn-danger" onclick="btnConfirmDeleteComponentOnclick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="btnCloseConfirmDeleteComponentModal" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -487,8 +553,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary " id="cmdSavePriceButton" onclick="cmdPriceSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button id="cmdPriceDetailCloseButton" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button id="btnSavePrice" class="btn btn-primary" onclick="btnSavePriceOnclick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="btnClosePriceModal" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -505,8 +571,8 @@
                     Are you sure you want to delete this price?
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdConfirmDeletePrice" class="btn btn-danger" onclick="cmdPriceConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeletePriceCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button id="btnPriceConfirmDelete" class="btn btn-danger" onclick="btnPriceConfirmDeleteOnclick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="btnClosePriceConfirmDeleteModal" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -570,37 +636,27 @@
             }
         }
 
-        // =====================
-        // Get Artile Item Group
-        // =====================
+        // ==============
+        // Get Item Group
+        // ==============
         function getArticleItemGroupForComboBox() {
             var articleItemGroupsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticleGroupByArticleTypeId/1',
+                url: '/api/item/dropdown/list/itemGroup',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (itemGroupResults) {
-                    if (itemGroupResults.length > 0) {
-                        for (i = 0; i < itemGroupResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             articleItemGroupsObservableArray.push({
-                                Id: itemGroupResults[i]["Id"],
-                                ArticleGroup: itemGroupResults[i]["ArticleGroup"],
-                                AccountId: itemGroupResults[i]["AccountId"],
-                                AccountCode: itemGroupResults[i]["AccountCode"],
-                                Account: itemGroupResults[i]["Account"],
-                                SalesAccountId: itemGroupResults[i]["SalesAccountId"],
-                                SalesAccountCode: itemGroupResults[i]["SalesAccountCode"],
-                                SalesAccount: itemGroupResults[i]["SalesAccount"],
-                                CostAccountId: itemGroupResults[i]["CostAccountId"],
-                                CostAccountCode: itemGroupResults[i]["CostAccountCode"],
-                                CostAccount: itemGroupResults[i]["CostAccount"],
-                                AssetAccountId: itemGroupResults[i]["AssetAccountId"],
-                                AssetAccountCode: itemGroupResults[i]["AssetAccountCode"],
-                                AssetAccount: itemGroupResults[i]["AssetAccount"],
-                                ExpenseAccountId: itemGroupResults[i]["ExpenseAccountId"],
-                                ExpenseAccountCode: itemGroupResults[i]["ExpenseAccountCode"],
-                                ExpenseAccount: itemGroupResults[i]["ExpenseAccount"]
+                                Id: results[i]["Id"],
+                                ArticleGroup: results[i]["ArticleGroup"],
+                                AccountId: results[i]["AccountId"],
+                                SalesAccountId: results[i]["SalesAccountId"],
+                                CostAccountId: results[i]["CostAccountId"],
+                                AssetAccountId: results[i]["AssetAccountId"],
+                                ExpenseAccountId: results[i]["ExpenseAccountId"]
                             });
                         }
                     }
@@ -636,17 +692,17 @@
         function getAccount() {
             var accountsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listAccount',
+                url: '/api/item/dropdown/list/itemGroup/accounts',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (accountResults) {
-                    if (accountResults.length > 0) {
-                        for (i = 0; i < accountResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             accountsObservableArray.push({
-                                Id: accountResults[i]["Id"],
-                                AccountCode: accountResults[i]["AccountCode"],
-                                Account: accountResults[i]["Account"]
+                                Id: results[i]["Id"],
+                                AccountCode: results[i]["AccountCode"],
+                                Account: results[i]["Account"]
                             });
                         }
                     }
@@ -748,22 +804,22 @@
             });
         }
 
-        // ====================
-        // Get Artile Item Unit
-        // ====================
+        // =============
+        // Get Item Unit
+        // =============
         function getArticleItemUnitForComboBox() {
             var unitsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listUnit',
+                url: '/api/item/dropdown/list/unit',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (itemUnitResults) {
-                    if (itemUnitResults.length > 0) {
-                        for (i = 0; i < itemUnitResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             unitsObservableArray.push({
-                                Id: itemUnitResults[i]["Id"],
-                                Unit: itemUnitResults[i]["Unit"]
+                                Id: results[i]["Id"],
+                                Unit: results[i]["Unit"]
                             });
                         }
                     }
@@ -781,22 +837,22 @@
             });
         }
 
-        // ===================
-        // Get Artile Tax Type
-        // ===================
+        // ============
+        // Get Tax Type
+        // ============
         function getArticleTaxTypeForComboBox() {
             var taxTypesObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listTaxType',
+                url: '/api/item/dropdown/list/taxType',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (taxTypeResults) {
-                    if (taxTypeResults.length > 0) {
-                        for (i = 0; i < taxTypeResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             taxTypesObservableArray.push({
-                                Id: taxTypeResults[i]["Id"],
-                                TaxType: taxTypeResults[i]["TaxType"]
+                                Id: results[i]["Id"],
+                                TaxType: results[i]["TaxType"]
                             });
                         }
                     }
@@ -851,79 +907,79 @@
             NProgress.start();
             if (document.location.search.length > 0) {
                 $.ajax({
-                    url: '/api/article/' + itemId,
+                    url: '/api/item/detail/' + itemId,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
-                    success: function (itemResults) {
-                        if (itemResults != null) {
-                            document.getElementById('articleItem_code').value = itemResults.ArticleCode;
-                            document.getElementById('articleItem_manualCode').value = itemResults.ManualArticleCode;
-                            document.getElementById('articleItem_item').value = itemResults.Article;
-                            cboItemGroup.selectedValue = itemResults.ArticleGroupId;
-                            cboAccountCode.selectedValue = itemResults.AccountId;
-                            cboSalesAccountCode.selectedValue = itemResults.SalesAccountId;
-                            cboCostAccountCode.selectedValue = itemResults.CostAccounIdt;
-                            cboAccumDepAccountCode.selectedValue = itemResults.AssetAccountId;
-                            cboExpenseAccountCode.selectedValue = itemResults.ExpenseAccountId;
-                            cboAccount.selectedValue = itemResults.AccountId;
-                            cboSalesAccount.selectedValue = itemResults.SalesAccountId;
-                            cboCostAccount.selectedValue = itemResults.CostAccounIdt;
-                            cboAccumDepAccount.selectedValue = itemResults.AssetAccountId;
-                            cboExpenseAccount.selectedValue = itemResults.ExpenseAccountId;
-                            document.getElementById('articleItem_category').value = itemResults.Category;
-                            cboUnit.selectedValue = itemResults.UnitId;
-                            document.getElementById('articleItem_price').value = formatDecimalValues(itemResults.Price);
-                            document.getElementById('articleItem_particulars').value = itemResults.Particulars;
-                            cboInputTax.selectedValue = itemResults.InputTaxId;
-                            cboOutputTax.selectedValue = itemResults.OutputTaxId;
-                            cboWithHoldingTax.selectedValue = itemResults.WTaxTypeId;
-                            document.getElementById('articleItem_Inventory').checked = itemResults.IsInventory;
-                            if (itemResults.Kitting == 0) {
+                    success: function (results) {
+                        if (results != null) {
+                            document.getElementById('itemCode').value = results.ArticleCode;
+                            document.getElementById('itemManualCode').value = results.ManualArticleCode;
+                            document.getElementById('itemName').value = results.Article;
+                            cboItemGroup.selectedValue = results.ArticleGroupId;
+                            cboAccountCode.selectedValue = results.AccountId;
+                            cboSalesAccountCode.selectedValue = results.SalesAccountId;
+                            cboCostAccountCode.selectedValue = results.CostAccounIdt;
+                            cboAccumDepAccountCode.selectedValue = results.AssetAccountId;
+                            cboExpenseAccountCode.selectedValue = results.ExpenseAccountId;
+                            cboAccount.selectedValue = results.AccountId;
+                            cboSalesAccount.selectedValue = results.SalesAccountId;
+                            cboCostAccount.selectedValue = results.CostAccounIdt;
+                            cboAccumDepAccount.selectedValue = results.AssetAccountId;
+                            cboExpenseAccount.selectedValue = results.ExpenseAccountId;
+                            document.getElementById('itemCategory').value = results.Category;
+                            cboUnit.selectedValue = results.UnitId;
+                            document.getElementById('itemPrice').value = formatDecimalValues(results.Price);
+                            document.getElementById('itemParticulars').value = results.Particulars;
+                            cboInputTax.selectedValue = results.InputTaxId;
+                            cboOutputTax.selectedValue = results.OutputTaxId;
+                            cboWithHoldingTax.selectedValue = results.WTaxTypeId;
+                            document.getElementById('itemIsInventory').checked = results.IsInventory;
+                            if (results.Kitting == 0) {
                                 cboKitting.selectedValue = "None";
                             } else {
-                                if (itemResults.Kitting == 1) {
+                                if (results.Kitting == 1) {
                                     cboKitting.selectedValue = "Component";
                                 } else {
-                                    if (itemResults.Kitting == 2) {
+                                    if (results.Kitting == 2) {
                                         cboKitting.selectedValue = "Package";
                                     }
                                 }
                             }
-                            document.getElementById('articleItem_oldManualCode').value = itemResults.ManualArticleOldCode;
-                            document.getElementById('articleItem_manualCost').value = formatDecimalValues(itemResults.Cost);
+                            document.getElementById('itemOldManualCode').value = results.ManualArticleOldCode;
+                            document.getElementById('itemManualCost').value = formatDecimalValues(results.Cost);
                             cboDateAcquired.dispose();
                             cboDateAcquired = new wijmo.input.InputDate('#cboDateAcquired', {
                                 format: 'MM-dd-yyyy',
-                                value: new Date(itemResults.DateAcquired)
+                                value: new Date(results.DateAcquired)
                             });
-                            document.getElementById('Item_UsefulLife').value = formatDecimalValues(itemResults.UsefulLife);
-                            document.getElementById('Item_SalvageValue').value = formatDecimalValues(itemResults.SalvageValue);
-                            document.getElementById('createdBy').innerHTML = itemResults.CreatedBy;
-                            document.getElementById('createdDate').innerHTML = itemResults.CreatedDateTime;
-                            document.getElementById('updatedBy').innerHTML = itemResults.UpdatedBy;
-                            document.getElementById('updatedDate').innerHTML = itemResults.UpdatedDateTime;
+                            document.getElementById('itemUsefulLife').value = formatDecimalValues(results.UsefulLife);
+                            document.getElementById('itemSalvageValue').value = formatDecimalValues(results.SalvageValue);
+                            document.getElementById('createdBy').innerHTML = results.CreatedBy;
+                            document.getElementById('createdDate').innerHTML = results.CreatedDateTime;
+                            document.getElementById('updatedBy').innerHTML = results.UpdatedBy;
+                            document.getElementById('updatedDate').innerHTML = results.UpdatedDateTime;
 
-                            if (itemResults.IsLocked) {
-                                document.getElementById('articleItem_manualCode').disabled = true;
-                                document.getElementById('articleItem_item').disabled = true;
+                            if (results.IsLocked) {
+                                document.getElementById('itemManualCode').disabled = true;
+                                document.getElementById('itemName').disabled = true;
                                 cboItemGroup.disabled = true;
-                                document.getElementById('articleItem_category').disabled = true;
+                                document.getElementById('itemCategory').disabled = true;
                                 cboUnit.disabled = true;
-                                document.getElementById('articleItem_price').disabled = true;
-                                document.getElementById('articleItem_particulars').disabled = true;
+                                document.getElementById('itemPrice').disabled = true;
+                                document.getElementById('itemParticulars').disabled = true;
                                 cboInputTax.disabled = true;
                                 cboOutputTax.disabled = true;
                                 cboWithHoldingTax.disabled = true;
-                                document.getElementById('articleItem_Inventory').disabled = true;
-                                document.getElementById('articleItem_oldManualCode').disabled = true;
-                                document.getElementById('articleItem_manualCost').disabled = true;
+                                document.getElementById('itemIsInventory').disabled = true;
+                                document.getElementById('itemOldManualCode').disabled = true;
+                                document.getElementById('itemManualCost').disabled = true;
                                 cboKitting.disabled = true;
                                 cboDateAcquired.disabled = true;
-                                document.getElementById('Item_UsefulLife').disabled = true;
-                                document.getElementById('Item_SalvageValue').disabled = true;
+                                document.getElementById('itemUsefulLife').disabled = true;
+                                document.getElementById('itemSalvageValue').disabled = true;
 
-                                $('#item_LockButton').prop('disabled', true);
+                                $('#btnLockItem').prop('disabled', true);
                                 $('#btnAddUnitConversion').prop('disabled', true);
                                 $('#btnAddPrice').prop('disabled', true);
                                 $('#btnAddComponent').prop('disabled', true);
@@ -932,14 +988,14 @@
 
                                 var canUnLock = "@ViewData["CanUnlock"]";
                                 if (canUnLock == "False") {
-                                    $("#item_UnlockButton").prop("disabled", true);
+                                    $("#btnUnlockItem").prop("disabled", true);
                                 }
                             } else {
-                                $('#item_UnlockButton').prop('disabled', true);
+                                $('#btnUnlockItem').prop('disabled', true);
 
                                 var canLock = "@ViewData["CanLock"]";
                                 if (canLock == "False") {
-                                    $("#item_LockButton").prop("disabled", true);
+                                    $("#btnLockItem").prop("disabled", true);
                                 }
 
                                 var canAdd = "@ViewData["CanAdd"]";
@@ -949,12 +1005,15 @@
                                     $('#btnAddPrice').prop('disabled', true);
                                 }
                             }
-
-                            createUnitConversionFlexGrid();
-                            createComponentFlexGrid();
-                            createPriceFlexGrid();
-                            createInventoryFlexGrid();
+                        } else {
+                            alert("No Data");
+                            window.location = "/Software/Item";
                         }
+
+                        createUnitConversionFlexGrid();
+                        createComponentFlexGrid();
+                        createPriceFlexGrid();
+                        createInventoryFlexGrid();
                     }
                 });
             } else {
@@ -968,10 +1027,10 @@
         // ================
         function itemDataObject() {
             var itemObject = new Object();
-            itemObject.ArticleCode = document.getElementById('articleItem_code').value;
-            itemObject.ManualArticleCode = document.getElementById('articleItem_manualCode').value;
-            itemObject.Article = document.getElementById('articleItem_item').value;
-            itemObject.Category = document.getElementById('articleItem_category').value;
+            itemObject.ArticleCode = document.getElementById('itemCode').value;
+            itemObject.ManualArticleCode = document.getElementById('itemManualCode').value;
+            itemObject.Article = document.getElementById('itemName').value;
+            itemObject.Category = document.getElementById('itemCategory').value;
             itemObject.ArticleGroupId = cboItemGroup.selectedValue;
             itemObject.AccountId = cboAccount.selectedValue;
             itemObject.SalesAccountId = cboSalesAccount.selectedValue;
@@ -982,14 +1041,14 @@
             itemObject.InputTaxId = cboInputTax.selectedValue;
             itemObject.OutputTaxId = cboOutputTax.selectedValue;
             itemObject.WTaxTypeId = cboWithHoldingTax.selectedValue;
-            itemObject.Price = document.getElementById('articleItem_price').value;
-            itemObject.Cost = document.getElementById('articleItem_manualCost').value;
-            itemObject.IsInventory = document.getElementById('articleItem_Inventory').checked;
-            itemObject.Particulars = document.getElementById('articleItem_particulars').value;
+            itemObject.Price = document.getElementById('itemPrice').value;
+            itemObject.Cost = document.getElementById('itemManualCost').value;
+            itemObject.IsInventory = document.getElementById('itemIsInventory').checked;
+            itemObject.Particulars = document.getElementById('itemParticulars').value;
             itemObject.DateAcquired = cboDateAcquired.value.toLocaleDateString();
-            itemObject.UsefulLife = document.getElementById('Item_UsefulLife').value;
-            itemObject.SalvageValue = document.getElementById('Item_SalvageValue').value;
-            itemObject.ManualArticleOldCode = document.getElementById('articleItem_oldManualCode').value;
+            itemObject.UsefulLife = document.getElementById('itemUsefulLife').value;
+            itemObject.SalvageValue = document.getElementById('itemSalvageValue').value;
+            itemObject.ManualArticleOldCode = document.getElementById('itemOldManualCode').value;
             if (cboKitting.selectedValue == "None") {
                 itemObject.Kitting = 0;
             } else {
@@ -1008,16 +1067,16 @@
         // =========
         // Lock Item
         // =========
-        function itemLockButton_OnClick() {
+        function btnLockItemOnclick() {
             if (itemEntryValidation()) {
-                document.getElementById('item_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
-                $('#item_LockButton').prop('disabled', true);
-                $('#item_UnlockButton').prop('disabled', true);
-                $('#item_CloseButton').prop('disabled', true);
+                document.getElementById('btnLockItem').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
+                $('#btnLockItem').prop('disabled', true);
+                $('#btnUnlockItem').prop('disabled', true);
+                $('#btnCloseItem').prop('disabled', true);
 
                 $.ajax({
                     type: "PUT",
-                    url: '/api/updateArticle/' + itemId + '/1',
+                    url: '/api/item/lock/' + itemId,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     data: itemDataObject(),
@@ -1029,18 +1088,24 @@
                             }, 1000);
                         },
                         404: function (message) {
-                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Lock Failed!");
-                            document.getElementById('item_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            $('#item_LockButton').prop('disabled', false);
-                            $('#item_CloseButton').prop('disabled', false);
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                            document.getElementById('btnLockItem').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $('#btnLockItem').prop('disabled', false);
+                            $('#btnCloseItem').prop('disabled', false);
                         },
                         400: function (message) {
-                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Lock Failed!");
-                            document.getElementById('item_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            $('#item_LockButton').prop('disabled', false);
-                            $('#item_CloseButton').prop('disabled', false);
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                            document.getElementById('btnLockItem').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $('#btnLockItem').prop('disabled', false);
+                            $('#btnCloseItem').prop('disabled', false);
+                        },
+                        500: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                            document.getElementById('btnLockItem').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $('#btnLockItem').prop('disabled', false);
+                            $('#btnCloseItem').prop('disabled', false);
                         }
-                    }
+                    },
                 });
             } else {
                 toastr.error("Invalid Entry");
@@ -1050,15 +1115,15 @@
         // ===========
         // Unlock Item
         // ===========
-        function itemUnlockButton_OnClick() {
-            document.getElementById('item_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
-            $('#item_LockButton').prop('disabled', true);
-            $('#item_UnlockButton').prop('disabled', true);
-            $('#item_CloseButton').prop('disabled', true);
+        function btnUnlockItemOnclick() {
+            document.getElementById('btnUnlockItem').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
+            $('#btnLockItem').prop('disabled', true);
+            $('#btnUnlockItem').prop('disabled', true);
+            $('#btnCloseItem').prop('disabled', true);
 
             $.ajax({
                 type: "PUT",
-                url: '/api/unlockArticle/' + itemId,
+                url: '/api/item/unlock/' + itemId,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 statusCode: {
@@ -1068,17 +1133,23 @@
                             location.reload()
                         }, 1000);
                     },
-                    404: function () {
-                        toastr.error("Not Found");
-                        document.getElementById('item_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        $('#item_UnlockButton').prop('disabled', false);
-                        $('#item_CloseButton').prop('disabled', false);
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                        document.getElementById('btnUnlockItem').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $('#btnUnlockItem').prop('disabled', false);
+                        $('#btnCloseItem').prop('disabled', false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
-                        document.getElementById('item_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        $('#item_UnlockButton').prop('disabled', false);
-                        $('#item_CloseButton').prop('disabled', false);
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        document.getElementById('btnUnlockItem').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $('#btnUnlockItem').prop('disabled', false);
+                        $('#btnCloseItem').prop('disabled', false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                        document.getElementById('btnUnlockItem').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $('#btnUnlockItem').prop('disabled', false);
+                        $('#btnCloseItem').prop('disabled', false);
                     }
                 }
             });
@@ -1087,7 +1158,7 @@
         // =================
         // Close Item Button
         // =================
-        function itemCloseButton_OnClick() {
+        function btnCloseItemOnclick() {
             window.location = '/Software/Item';
         }
 
@@ -1186,24 +1257,36 @@
             unitConversionGrid = new wijmo.grid.FlexGrid('#UnitConversionGrid');
             unitConversionGrid.initialize({
                 columns: [
-                    {
-                        "header": "Edit",
-                        "binding": "EditId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
-                    {
-                        "header": "Delete",
-                        "binding": "DeleteId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
+                    @{
+                        if (canEdit)
+                        {
+                            <text>
+                                {
+                                    "header": "Edit",
+                                    "binding": "EditId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                        if (canDelete)
+                        {
+                            <text>
+                                {
+                                    "header": "Delete",
+                                    "binding": "DeleteId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                    }
                     {
                         "header": "Multiplier",
                         "binding": "MultiplierDisplay",
@@ -1297,7 +1380,7 @@
                         $("#loadingUnits").hide();
                         $("#unitConversionDetailForm").show();
                         if (unitCoversionUnitResults.length > 0) {
-                            $('#cmdSaveUnitConversionButton').prop('disabled', false);
+                            $('#btnSaveConversionUnit').prop('disabled', false);
                         }
                     }, 500);
                 }
@@ -1307,7 +1390,7 @@
         // ===================
         // ADD Unit Conversion
         // ===================
-        function cmdAddUnitConversion_OnClick() {
+        function btnAddUnitConversionOnclick() {
             $('#unitConversionEdit').modal({
                 show: true,
                 backdrop: 'static'
@@ -1317,9 +1400,9 @@
             document.getElementById("loadingUnits").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
             $("#unitConversionDetailForm").hide();
 
-            document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
-            $('#cmdSaveUnitConversionButton').prop('disabled', true);
-            $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
+            document.getElementById('btnSaveConversionUnit').innerHTML = "<i class='fa fa-save'></i> Save";
+            $('#btnSaveConversionUnit').prop('disabled', true);
+            $('#btnCloseUnitConversionModal').prop('disabled', false);
 
             unitConversionId = 0;
             document.getElementById('unitConversion_multiplier').value = formatDecimalValues(1);
@@ -1340,9 +1423,9 @@
             document.getElementById("loadingUnits").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
             $("#unitConversionDetailForm").hide();
 
-            document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
-            $('#cmdSaveUnitConversionButton').prop('disabled', true);
-            $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
+            document.getElementById('btnSaveConversionUnit').innerHTML = "<i class='fa fa-save'></i> Save";
+            $('#btnSaveConversionUnit').prop('disabled', true);
+            $('#btnCloseUnitConversionModal').prop('disabled', false);
 
             unitConversions.editItem(unitConversions.currentItem);
             var unitConversion = unitConversions.currentEditItem;
@@ -1361,16 +1444,16 @@
                 backdrop: 'static'
             });
 
-            document.getElementById('cmdConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-trash'></i> Delete";
-            $('#cmdConfirmDeleteUnitConversion').prop('disabled', false);
-            $('#cmdConfirmDeleteUnitConversionCloseButton').prop('disabled', false);
+            document.getElementById('btnConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-trash'></i> Delete";
+            $('#btnConfirmDeleteUnitConversion').prop('disabled', false);
+            $('#btnCloseConfirmDeleteUnitConversion').prop('disabled', false);
         }
 
         // confirm delete Unit Conversion
-        function cmdUnitConversionConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
-            $('#cmdConfirmDeleteUnitConversion').prop('disabled', true);
-            $('#cmdConfirmDeleteUnitConversionCloseButton').prop('disabled', true);
+        function btnConfirmDeleteUnitConversionOnclick() {
+            document.getElementById('btnConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
+            $('#btnConfirmDeleteUnitConversion').prop('disabled', true);
+            $('#btnCloseConfirmDeleteUnitConversion').prop('disabled', true);
 
             unitConversions.editItem(unitConversions.currentItem);
             var unitConversionId = unitConversions.currentEditItem.Id;
@@ -1388,16 +1471,16 @@
                     404: function () {
                         toastr.error("Not Found");
                         $('#deleteUnitConversionConfirm').modal('hide');
-                        document.getElementById('cmdConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteUnitConversion').prop('disabled', false);
-                        $('#cmdConfirmDeleteUnitConversionCloseButton').prop('disabled', false);
+                        document.getElementById('btnConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#btnConfirmDeleteUnitConversion').prop('disabled', false);
+                        $('#btnCloseConfirmDeleteUnitConversion').prop('disabled', false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
                         $('#deleteUnitConversionConfirm').modal('hide');
-                        document.getElementById('cmdConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteUnitConversion').prop('disabled', false);
-                        $('#cmdConfirmDeleteUnitConversionCloseButton').prop('disabled', false);
+                        document.getElementById('btnConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#btnConfirmDeleteUnitConversion').prop('disabled', false);
+                        $('#btnCloseConfirmDeleteUnitConversion').prop('disabled', false);
                     }
                 }
             });
@@ -1426,7 +1509,7 @@
         // ====================
         // Save Unit Conversion
         // ====================
-        function cmdUnitConversionSaveButton_OnClick() {
+        function btnSaveUnitConversionOnclick() {
             var unitConversionObject = new Object();
             unitConversionObject.ArticleId = itemId;
             unitConversionObject.UnitId = cboUnitConversionUnit.selectedValue;
@@ -1435,9 +1518,9 @@
             var data = JSON.stringify(unitConversionObject);
 
             if (unitConversionEntryValidation()) {
-                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
-                $('#cmdSaveUnitConversionButton').prop('disabled', true);
-                $('#cmdUnitConversionDetailCloseButton').prop('disabled', true);
+                document.getElementById('btnSaveConversionUnit').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
+                $('#btnSaveConversionUnit').prop('disabled', true);
+                $('#btnCloseUnitConversionModal').prop('disabled', true);
 
                 if (unitConversionId == 0) {
                     $.ajax({
@@ -1454,9 +1537,9 @@
                             } else {
                                 toastr.error("Internal Server Error");
                                 $('#unitConversionEdit').modal('hide');
-                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
-                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
+                                document.getElementById('btnSaveConversionUnit').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#btnSaveConversionUnit').prop('disabled', false);
+                                $('#btnCloseUnitConversionModal').prop('disabled', false);
                             }
                         }
                     });
@@ -1476,16 +1559,16 @@
                             404: function () {
                                 toastr.error("Not Found");
                                 $('#unitConversionEdit').modal('hide');
-                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
-                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
+                                document.getElementById('btnSaveConversionUnit').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#btnSaveConversionUnit').prop('disabled', false);
+                                $('#btnCloseUnitConversionModal').prop('disabled', false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
                                 $('#unitConversionEdit').modal('hide');
-                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
-                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
+                                document.getElementById('btnSaveConversionUnit').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#btnSaveConversionUnit').prop('disabled', false);
+                                $('#btnCloseUnitConversionModal').prop('disabled', false);
                             }
                         }
                     });
@@ -1581,24 +1664,36 @@
             componentGrid = new wijmo.grid.FlexGrid('#ComponentGrid');
             componentGrid.initialize({
                 columns: [
-                    {
-                        "header": "Edit",
-                        "binding": "EditId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
-                    {
-                        "header": "Delete",
-                        "binding": "DeleteId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
+                    @{
+                        if (canEdit)
+                        {
+                            <text>
+                                {
+                                    "header": "Edit",
+                                    "binding": "EditId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                        if (canDelete)
+                        {
+                            <text>
+                                {
+                                    "header": "Delete",
+                                    "binding": "DeleteId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                    }
                     {
                         "header": "Manual Code",
                         "binding": "ComponentArticleCode",
@@ -1687,9 +1782,9 @@
                     var disabled = true;
                     if (articleComponentItemsResults.length > 0) {
                         disabled = false;
-                        $('#cmdSaveComponenetButton').prop('disabled', false);
+                        $('#btnSaveUnitConversion').prop('disabled', false);
                     } else {
-                        $('#cmdSaveComponenetButton').prop('disabled', true);
+                        $('#btnSaveUnitConversion').prop('disabled', true);
                     }
 
                     cboComponentItemCode.dispose();
@@ -1768,7 +1863,7 @@
                             $("#loadingComponents").hide();
                             $("#componentDetailForm").show();
                             if (componentItemUnitResults.length <= 0) {
-                                $('#cmdSaveComponenetButton').prop('disabled', true);
+                                $('#btnSaveUnitConversion').prop('disabled', true);
                             }
                         }, 500);
                     }
@@ -1784,7 +1879,7 @@
                 setTimeout(function () {
                     $("#loadingComponents").hide();
                     $("#componentDetailForm").show();
-                    $('#cmdSaveComponenetButton').prop('disabled', true);
+                    $('#btnSaveUnitConversion').prop('disabled', true);
                 }, 500);
             }
         }
@@ -1792,7 +1887,7 @@
         // =============
         // ADD component
         // =============
-        function cmdAddComponent_OnClick() {
+        function btnAddComponentOnclick() {
             $('#componentEdit').modal({
                 show: true,
                 backdrop: 'static'
@@ -1802,9 +1897,9 @@
             document.getElementById("loadingComponents").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
             $("#componentDetailForm").hide();
 
-            document.getElementById("cmdSaveComponenetButton").innerHTML = "<i class='fa fa-save'></i> Save"
-            $("#cmdSaveComponenetButton").prop("disabled", true);
-            $("#cmdComponenetDetailCloseButton").prop("disabled", false);
+            document.getElementById("btnSaveUnitConversion").innerHTML = "<i class='fa fa-save'></i> Save"
+            $("#btnSaveUnitConversion").prop("disabled", true);
+            $("#btnCloseUnitConversionModal").prop("disabled", false);
 
             componentId = 0;
             getArticleItemForManualCodeAndComponent(0, 0);
@@ -1825,9 +1920,9 @@
             document.getElementById("loadingComponents").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
             $("#componentDetailForm").hide();
 
-            document.getElementById("cmdSaveComponenetButton").innerHTML = "<i class='fa fa-save'></i> Save"
-            $("#cmdSaveComponenetButton").prop("disabled", true);
-            $("#cmdComponenetDetailCloseButton").prop("disabled", false);
+            document.getElementById("btnSaveUnitConversion").innerHTML = "<i class='fa fa-save'></i> Save"
+            $("#btnSaveUnitConversion").prop("disabled", true);
+            $("#btnCloseUnitConversionModal").prop("disabled", false);
 
             components.editItem(components.currentItem);
             var component = components.currentEditItem;
@@ -1863,11 +1958,11 @@
         // ==============
         // Save component
         // ==============
-        function cmdComponenetSaveButton_OnClick() {
+        function btnSaveUnitConversionOnclick() {
             if (componentEntryValidation()) {
-                document.getElementById("cmdSaveComponenetButton").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving"
-                $("#cmdSaveComponenetButton").prop("disabled", true);
-                $("#cmdComponenetDetailCloseButton").prop("disabled", true);
+                document.getElementById("btnSaveUnitConversion").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving"
+                $("#btnSaveUnitConversion").prop("disabled", true);
+                $("#btnCloseUnitConversionModal").prop("disabled", true);
 
                 var componentObject = new Object();
                 componentObject.ArticleId = itemId;
@@ -1891,9 +1986,9 @@
                             } else {
                                 toastr.error("Internal Server Error");
                                 $('#componentEdit').modal('hide');
-                                document.getElementById("cmdSaveComponenetButton").innerHTML = "<i class='fa fa-save'></i> Save"
-                                $("#cmdSaveComponenetButton").prop("disabled", false);
-                                $("#cmdComponenetDetailCloseButton").prop("disabled", false);
+                                document.getElementById("btnSaveUnitConversion").innerHTML = "<i class='fa fa-save'></i> Save"
+                                $("#btnSaveUnitConversion").prop("disabled", false);
+                                $("#btnCloseUnitConversionModal").prop("disabled", false);
 
                             }
                         }
@@ -1914,17 +2009,17 @@
                             404: function () {
                                 toastr.error("Not Found");
                                 $('#componentEdit').modal('hide');
-                                document.getElementById("cmdSaveComponenetButton").innerHTML = "<i class='fa fa-save'></i> Save"
-                                $("#cmdSaveComponenetButton").prop("disabled", false);
-                                $("#cmdComponenetDetailCloseButton").prop("disabled", false);
+                                document.getElementById("btnSaveUnitConversion").innerHTML = "<i class='fa fa-save'></i> Save"
+                                $("#btnSaveUnitConversion").prop("disabled", false);
+                                $("#btnCloseUnitConversionModal").prop("disabled", false);
 
                             },
                             400: function () {
                                 toastr.error("Bad Request");
                                 $('#componentEdit').modal('hide');
-                                document.getElementById("cmdSaveComponenetButton").innerHTML = "<i class='fa fa-save'></i> Save"
-                                $("#cmdSaveComponenetButton").prop("disabled", false);
-                                $("#cmdComponenetDetailCloseButton").prop("disabled", false);
+                                document.getElementById("btnSaveUnitConversion").innerHTML = "<i class='fa fa-save'></i> Save"
+                                $("#btnSaveUnitConversion").prop("disabled", false);
+                                $("#btnCloseUnitConversionModal").prop("disabled", false);
 
                             }
                         }
@@ -1944,18 +2039,18 @@
                 backdrop: 'static'
             });
 
-            document.getElementById('cmdConfirmDeleteComponenet').innerHTML = "<i class='fa fa-trash'></i> Delete";
-            $('#cmdConfirmDeleteComponenet').prop('disabled', false);
-            $('#cmdConfirmDeleteComponenetCloseButton').prop('disabled', false);
+            document.getElementById('btnConfirmDeleteComponent').innerHTML = "<i class='fa fa-trash'></i> Delete";
+            $('#btnConfirmDeleteComponent').prop('disabled', false);
+            $('#btnCloseConfirmDeleteComponentModal').prop('disabled', false);
         }
 
         // ========================
         // Confirm Delete component
         // ========================
-        function cmdComponenetConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeleteComponenet').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
-            $('#cmdConfirmDeleteComponenet').prop('disabled', true);
-            $('#cmdConfirmDeleteComponenetCloseButton').prop('disabled', true);
+        function btnConfirmDeleteComponentOnclick() {
+            document.getElementById('btnConfirmDeleteComponent').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
+            $('#btnConfirmDeleteComponent').prop('disabled', true);
+            $('#btnCloseConfirmDeleteComponentModal').prop('disabled', true);
 
             components.editItem(components.currentItem);
             var component = components.currentEditItem;
@@ -1973,16 +2068,16 @@
                     404: function () {
                         toastr.error("Not Found");
                         $('#deleteComponenetConfirm').modal('hide');
-                        document.getElementById('cmdConfirmDeleteComponenet').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteComponenet').prop('disabled', false);
-                        $('#cmdConfirmDeleteComponenetCloseButton').prop('disabled', false);
+                        document.getElementById('btnConfirmDeleteComponent').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#btnConfirmDeleteComponent').prop('disabled', false);
+                        $('#btnCloseConfirmDeleteComponentModal').prop('disabled', false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
                         $('#deleteComponenetConfirm').modal('hide');
-                        document.getElementById('cmdConfirmDeleteComponenet').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteComponenet').prop('disabled', false);
-                        $('#cmdConfirmDeleteComponenetCloseButton').prop('disabled', false);
+                        document.getElementById('btnConfirmDeleteComponent').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#btnConfirmDeleteComponent').prop('disabled', false);
+                        $('#btnCloseConfirmDeleteComponentModal').prop('disabled', false);
                     }
                 }
             });
@@ -2075,24 +2170,36 @@
             priceGrid = new wijmo.grid.FlexGrid('#PriceGrid');
             priceGrid.initialize({
                 columns: [
-                    {
-                        "header": "Edit",
-                        "binding": "EditId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
-                    {
-                        "header": "Delete",
-                        "binding": "DeleteId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
+                    @{
+                        if (canEdit)
+                        {
+                            <text>
+                                {
+                                    "header": "Edit",
+                                    "binding": "EditId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                        if (canDelete)
+                        {
+                            <text>
+                                {
+                                    "header": "Delete",
+                                    "binding": "DeleteId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                    }
                     {
                         "header": "Description",
                         "binding": "PriceDescription",
@@ -2148,7 +2255,7 @@
         // =========
         // Add Price
         // =========
-        function cmdAddPrice_OnClick() {
+        function btnAddPriceOnclick() {
             $('#priceEdit').modal({
                 show: true,
                 backdrop: 'static'
@@ -2158,9 +2265,9 @@
             document.getElementById("loadingPrice").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
             $("#priceDetailForm").hide();
 
-            document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-save'></i> Save";
-            $('#cmdSavePriceButton').prop('disabled', true);
-            $('#cmdPriceDetailCloseButton').prop('disabled', false);
+            document.getElementById('btnSavePrice').innerHTML = "<i class='fa fa-save'></i> Save";
+            $('#btnSavePrice').prop('disabled', true);
+            $('#btnClosePriceModal').prop('disabled', false);
 
             priceId = 0;
             document.getElementById('price_PriceDescription').value = "NA";
@@ -2170,7 +2277,7 @@
             setTimeout(function () {
                 $("#loadingPrice").hide();
                 $("#priceDetailForm").show();
-                $('#cmdSavePriceButton').prop('disabled', false);
+                $('#btnSavePrice').prop('disabled', false);
             }, 500);
         }
 
@@ -2187,9 +2294,9 @@
             document.getElementById("loadingPrice").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
             $("#priceDetailForm").hide();
 
-            document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-save'></i> Save";
-            $('#cmdSavePriceButton').prop('disabled', true);
-            $('#cmdPriceDetailCloseButton').prop('disabled', false);
+            document.getElementById('btnSavePrice').innerHTML = "<i class='fa fa-save'></i> Save";
+            $('#btnSavePrice').prop('disabled', true);
+            $('#btnClosePriceModal').prop('disabled', false);
 
             prices.editItem(prices.currentItem);
             var price = prices.currentEditItem;
@@ -2201,7 +2308,7 @@
             setTimeout(function () {
                 $("#loadingPrice").hide();
                 $("#priceDetailForm").show();
-                $('#cmdSavePriceButton').prop('disabled', false);
+                $('#btnSavePrice').prop('disabled', false);
             }, 500);
         }
 
@@ -2214,16 +2321,16 @@
                 backdrop: 'static'
             });
 
-            document.getElementById('cmdConfirmDeletePrice').innerHTML = "<i class='fa fa-trash'></i> Delete";
-            $('#cmdConfirmDeletePrice').prop('disabled', false);
-            $('#cmdConfirmDeletePriceCloseButton').prop('disabled', false);
+            document.getElementById('btnPriceConfirmDelete').innerHTML = "<i class='fa fa-trash'></i> Delete";
+            $('#btnPriceConfirmDelete').prop('disabled', false);
+            $('#btnClosePriceConfirmDeleteModal').prop('disabled', false);
         }
 
         // confirm delete price
-        function cmdPriceConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeletePrice').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
-            $('#cmdConfirmDeletePrice').prop('disabled', true);
-            $('#cmdConfirmDeletePriceCloseButton').prop('disabled', true);
+        function btnPriceConfirmDeleteOnclick() {
+            document.getElementById('btnPriceConfirmDelete').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
+            $('#btnPriceConfirmDelete').prop('disabled', true);
+            $('#btnClosePriceConfirmDeleteModal').prop('disabled', true);
 
             prices.editItem(prices.currentItem);
             var price = prices.currentEditItem;
@@ -2241,16 +2348,16 @@
                     404: function () {
                         toastr.error("Not Found");
                         $('#deletPriceConfirm').modal('hide');
-                        document.getElementById('cmdConfirmDeletePrice').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeletePrice').prop('disabled', false);
-                        $('#cmdConfirmDeletePriceCloseButton').prop('disabled', false);
+                        document.getElementById('btnPriceConfirmDelete').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#btnPriceConfirmDelete').prop('disabled', false);
+                        $('#btnClosePriceConfirmDeleteModal').prop('disabled', false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
                         $('#deletPriceConfirm').modal('hide');
-                        document.getElementById('cmdConfirmDeletePrice').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeletePrice').prop('disabled', false);
-                        $('#cmdConfirmDeletePriceCloseButton').prop('disabled', false);
+                        document.getElementById('btnPriceConfirmDelete').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#btnPriceConfirmDelete').prop('disabled', false);
+                        $('#btnClosePriceConfirmDeleteModal').prop('disabled', false);
                     }
                 }
             });
@@ -2259,7 +2366,7 @@
         // ==========
         // Save Price
         // ==========
-        function cmdPriceSaveButton_OnClick() {
+        function btnSavePriceOnclick() {
             var priceObject = new Object();
             priceObject.ArticleId = itemId;
             priceObject.PriceDescription = document.getElementById('price_PriceDescription').value;
@@ -2268,9 +2375,9 @@
             var data = JSON.stringify(priceObject);
 
             if (priceEntryValidation()) {
-                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
-                $('#cmdSavePriceButton').prop('disabled', true);
-                $('#cmdPriceDetailCloseButton').prop('disabled', true);
+                document.getElementById('btnSavePrice').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
+                $('#btnSavePrice').prop('disabled', true);
+                $('#btnClosePriceModal').prop('disabled', true);
 
                 if (priceId == 0) {
                     $.ajax({
@@ -2287,9 +2394,9 @@
                             } else {
                                 toastr.error("Internal Server Error");
                                 $('#priceEdit').modal('hide');
-                                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSavePriceButton').prop('disabled', false);
-                                $('#cmdPriceDetailCloseButton').prop('disabled', false);
+                                document.getElementById('btnSavePrice').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#btnSavePrice').prop('disabled', false);
+                                $('#btnClosePriceModal').prop('disabled', false);
                             }
                         }
                     });
@@ -2309,16 +2416,16 @@
                             404: function () {
                                 toastr.error("Not Found");
                                 $('#priceEdit').modal('hide');
-                                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSavePriceButton').prop('disabled', false);
-                                $('#cmdPriceDetailCloseButton').prop('disabled', false);
+                                document.getElementById('btnSavePrice').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#btnSavePrice').prop('disabled', false);
+                                $('#btnClosePriceModal').prop('disabled', false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
                                 $('#priceEdit').modal('hide');
-                                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSavePriceButton').prop('disabled', false);
-                                $('#cmdPriceDetailCloseButton').prop('disabled', false);
+                                document.getElementById('btnSavePrice').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#btnSavePrice').prop('disabled', false);
+                                $('#btnClosePriceModal').prop('disabled', false);
                             }
                         }
                     });
@@ -2327,7 +2434,6 @@
                 toastr.error("Invalid Entry");
             }
         }
-
 
         // ==================
         // GET Inventory List

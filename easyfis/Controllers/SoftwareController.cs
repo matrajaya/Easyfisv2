@@ -212,23 +212,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Item()
         {
-            if (PageAccess("ItemList").Equals("ItemList"))
-            {
-                if (AccessToDetail("ItemDetail").Equals("ItemDetail"))
-                {
-                    ViewData.Add("CanAccessToDetailPage", "True");
-                }
-                else
-                {
-                    ViewData.Add("CanAccessToDetailPage", "False");
-                }
-
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
+            return UserRights("ItemList");
         }
 
         // ===========
@@ -237,14 +221,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult ItemDetail()
         {
-            if (PageAccess("ItemDetail").Equals("ItemDetail"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
+            return UserRights("ItemDetail");
         }
 
         // =================

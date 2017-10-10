@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@model easyfis.Entities.MstUserForm
+@{
+    // =====================
+    // User Rights Variables
+    // =====================
+    var canAdd = Model.CanAdd;
+    var canEdit = Model.CanEdit;
+    var canDelete = Model.CanDelete;
+    var canLock = Model.CanLock;
+    var canUnlock = Model.CanUnlock;
+    var canPrint = Model.CanPrint;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -40,8 +52,13 @@
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 40%" align="right">
-                                    <button class="btn btn-primary " id="btnAddItem" onclick="btnAddItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <button class="btn btn-danger " id="btnCloseItem" onclick="btnCloseItem_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                    @{
+                                        if (canAdd)
+                                        {
+                                            <button class="btn btn-primary" id="btnAddItem" onclick="btnAddItemOnclick()"><i class="fa fa-plus"></i> Add</button>
+                                        }
+                                    }
+                                    <button class="btn btn-danger" id="btnCloseItem" onclick="btnCloseItemOnclick()"><i class=" fa fa-times"></i> Close</button>
                                 </td>
                             </tr>
                         </table>
@@ -86,8 +103,8 @@
                     Are you sure you want to delete this item?
                 </div>
                 <div class="modal-footer">
-                    <button id="cmdConfirmDeleteItem" class="btn btn-danger" onclick="cmdItemConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    <button id="btnConfirmDelete" class="btn btn-danger" onclick="btnConfirmDeleteOnclick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="btnCloseConfirmDelete" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -113,62 +130,23 @@
             var itemsObservableArray = new wijmo.collections.ObservableArray;
             NProgress.start();
             $.ajax({
-                url: '/api/listArticleByArticleTypeId/1',
+                url: '/api/item/list',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 success: function (itemListResults) {
                     if (itemListResults.length > 0) {
                         for (i = 0; i < itemListResults.length; i++) {
-                            var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled = "";
-                            if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled = "";
-                            if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            }
-
                             itemsObservableArray.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='cmdItemEditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdItemDeleteButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='cmdItemEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdItemDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: itemListResults[i]["Id"],
                                 ArticleCode: itemListResults[i]["ArticleCode"],
                                 ManualArticleCode: itemListResults[i]["ManualArticleCode"],
                                 Article: itemListResults[i]["Article"],
                                 Category: itemListResults[i]["Category"],
-                                ArticleTypeId: itemListResults[i]["ArticleTypeId"],
-                                ArticleType: itemListResults[i]["ArticleType"],
-                                ArticleGroupId: itemListResults[i]["ArticleGroupId"],
-                                ArticleGroup: itemListResults[i]["ArticleGroup"],
-                                AccountId: itemListResults[i]["AccountId"],
-                                Account: itemListResults[i]["Account"],
-                                SalesAccountId: itemListResults[i]["SalesAccountId"],
-                                CostAccountId: itemListResults[i]["CostAccountId"],
-                                AssetAccountId: itemListResults[i]["AssetAccountId"],
-                                ExpenseAccountId: itemListResults[i]["ExpenseAccountId"],
-                                UnitId: itemListResults[i]["UnitId"],
                                 Unit: itemListResults[i]["Unit"],
-                                OutputTaxId: itemListResults[i]["OutputTaxId"],
-                                InputTaxId: itemListResults[i]["InputTaxId"],
-                                WTaxTypeId: itemListResults[i]["WTaxTypeId"],
-                                Price: itemListResults[i]["Price"],
-                                Cost: itemListResults[i]["Cost"],
                                 IsInventory: itemListResults[i]["IsInventory"],
-                                Particulars: itemListResults[i]["Particulars"],
-                                Address: itemListResults[i]["Address"],
-                                TermId: itemListResults[i]["TermId"],
-                                ContactNumber: itemListResults[i]["ContactNumber"],
-                                ContactPerson: itemListResults[i]["ContactPerson"],
-                                TaxNumber: itemListResults[i]["TaxNumber"],
-                                CreditLimit: itemListResults[i]["CreditLimit"],
-                                DateAcquired: itemListResults[i]["DateAcquired"],
-                                UsefulLife: itemListResults[i]["UsefulLife"],
-                                SalvageValue: itemListResults[i]["SalvageValue"],
-                                ManualArticleOldCode: itemListResults[i]["ManualArticleOldCode"],
                                 IsLocked: itemListResults[i]["IsLocked"],
                                 CreatedById: itemListResults[i]["CreatedById"],
                                 CreatedBy: itemListResults[i]["CreatedBy"],
@@ -190,41 +168,46 @@
         // ===============
         // Item Add Button
         // ===============
-        function btnAddItem_OnClick() {
+        function btnAddItemOnclick() {
             document.getElementById('btnAddItem').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Adding";
             $('#btnAddItem').prop('disabled', true);
             $('#btnCloseItem').prop('disabled', true);
 
-            var canAccessToDetailPage = "@ViewData["CanAccessToDetailPage"]";
-            console.log(canAccessToDetailPage);
-            if (canAccessToDetailPage == "True") {
-                $.ajax({
-                    type: "POST",
-                    url: '/api/addArticle/1',
-                    contentType: "application/json; charset=utf-8",
-                    success: function (id) {
-                        if (id > 0) {
-                            window.location = '/Software/ItemDetail?id=' + id;
-                        } else {
-                            toastr.error("Internal Server Error");
-                            document.getElementById('btnAddItem').innerHTML = "<i class='fa fa-plus'></i> Add";
-                            $('#btnAddItem').prop('disabled', false);
-                            $('#btnCloseItem').prop('disabled', false);
-                        }
+            $.ajax({
+                type: "POST",
+                url: '/api/item/add',
+                contentType: "application/json; charset=utf-8",
+                statusCode: {
+                    200: function (id) {
+                        window.location = '/Software/ItemDetail?id=' + id;
+                    },
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                        document.getElementById('btnAddItem').innerHTML = "<i class='fa fa-plus'></i> Add";
+                        $('#btnAddItem').prop('disabled', false);
+                        $('#btnCloseItem').prop('disabled', false);
+                    },
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        document.getElementById('btnAddItem').innerHTML = "<i class='fa fa-plus'></i> Add";
+                        $('#btnAddItem').prop('disabled', false);
+                        $('#btnCloseItem').prop('disabled', false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                        document.getElementById('btnAddItem').innerHTML = "<i class='fa fa-plus'></i> Add";
+                        $('#btnAddItem').prop('disabled', false);
+                        $('#btnCloseItem').prop('disabled', false);
                     }
-                });
-            } else  {
-                if (canAccessToDetailPage == "False") {
-                    window.location = '/Software/Forbidden';
                 }
-            }
+            });
         }
 
         // =================
         // Item Close Button
         // =================
-        function btnCloseItem_OnClick() {
-            window.location = '/Software';
+        function btnCloseItemOnclick() {
+            window.history.back();
         }
 
         // ================
@@ -285,22 +268,24 @@
                     backdrop: 'static'
                 });
 
-                document.getElementById('cmdConfirmDeleteItem').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                $('#cmdConfirmDeleteItem').prop('disabled', false);
-                $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
+                document.getElementById('btnConfirmDelete').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                $('#btnConfirmDelete').prop('disabled', false);
+                $('#btnCloseConfirmDelete').prop('disabled', false);
             }
         }
 
+        // ==========================
         // Item Confirm Delete Button
-        function cmdItemConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeleteItem').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
-            $('#cmdConfirmDeleteItem').prop('disabled', true);
-            $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
+        // ==========================
+        function btnConfirmDeleteOnclick() {
+            document.getElementById('btnConfirmDelete').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
+            $('#btnConfirmDelete').prop('disabled', true);
+            $('#btnCloseConfirmDelete').prop('disabled', true);
 
             itemCollectionView.editItem(itemCollectionView.currentItem);
             var id = itemCollectionView.currentEditItem.Id;
             $.ajax({
-                url: '/api/deleteArticle/' + id,
+                url: '/api/item/delete/' + id,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -310,19 +295,26 @@
                         $('#deleteItemConfirm').modal('hide');
                         refreshItemFlexgrid();
                     },
-                    404: function () {
-                        toastr.error("Not Found");
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                         $('#deleteItemConfirm').modal('hide');
-                        document.getElementById('cmdConfirmDeleteItem').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteItem').prop('disabled', false);
-                        $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
+                        document.getElementById('btnConfirmDelete').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#btnConfirmDelete').prop('disabled', false);
+                        $('#btnCloseConfirmDelete').prop('disabled', false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
                         $('#deleteItemConfirm').modal('hide');
-                        document.getElementById('cmdConfirmDeleteItem').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteItem').prop('disabled', false);
-                        $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
+                        document.getElementById('btnConfirmDelete').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#btnConfirmDelete').prop('disabled', false);
+                        $('#btnCloseConfirmDelete').prop('disabled', false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                        $('#deleteItemConfirm').modal('hide');
+                        document.getElementById('btnConfirmDelete').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#btnConfirmDelete').prop('disabled', false);
+                        $('#btnCloseConfirmDelete').prop('disabled', false);
                     }
                 }
             });
@@ -401,24 +393,36 @@
             itemFlexGrid = new wijmo.grid.FlexGrid('#ItemGrid');
             itemFlexGrid.initialize({
                 columns: [
-                            {
-                                "header": "Edit",
-                                "binding": "EditId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Delete",
-                                "binding": "DeleteId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
+                             @{
+                                if (canEdit)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Edit",
+                                            "binding": "EditId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                                if (canDelete)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Delete",
+                                            "binding": "DeleteId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                            }
                             {
                                 "header": "Code",
                                 "binding": "ArticleCode",
@@ -499,11 +503,6 @@
                 itemCollectionView.moveToLastPage();
                 updateNavigateButtonsItems();
             });
-
-            var canAdd = "@ViewData["CanAdd"]";
-            if (canAdd == "False") {
-                $("#btnAddItem").prop("disabled", true);
-            }
         }
 
         // ============

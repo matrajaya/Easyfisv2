@@ -136,6 +136,11 @@ namespace easyfis.ModifiedApiControllers
                            ManualArticleCode = d.ManualArticleCode,
                            Article = d.Article,
                            ArticleGroupId = d.ArticleGroupId,
+                           AccountId = d.AccountId,
+                           SalesAccountId = d.SalesAccountId,
+                           CostAccountId = d.CostAccountId,
+                           AssetAccountId = d.AssetAccountId,
+                           ExpenseAccountId = d.ExpenseAccountId,
                            Category = d.Category,
                            UnitId = d.UnitId,
                            Price = d.Price,
@@ -147,17 +152,9 @@ namespace easyfis.ModifiedApiControllers
                            ManualArticleOldCode = d.ManualArticleOldCode,
                            Cost = d.Cost,
                            Kitting = d.Kitting,
-                           AccountId = d.AccountId,
-                           SalesAccountId = d.SalesAccountId,
-                           CostAccountId = d.CostAccountId,
-                           AssetAccountId = d.AssetAccountId,
-                           ExpenseAccountId = d.ExpenseAccountId,
-                           Address = d.Address,
-                           TermId = d.TermId,
-                           ContactNumber = d.ContactNumber,
-                           ContactPerson = d.ContactPerson,
-                           EmailAddress = d.EmailAddress,
-                           TaxNumber = d.TaxNumber,
+                           DateAcquired = d.DateAcquired.ToShortDateString(),
+                           UsefulLife = d.UsefulLife,
+                           SalvageValue = d.SalvageValue,
                            IsLocked = d.IsLocked,
                            CreatedById = d.CreatedById,
                            CreatedBy = d.MstUser.FullName,
@@ -249,7 +246,7 @@ namespace easyfis.ModifiedApiControllers
                                                 ManualArticleCode = "NA",
                                                 Article = "NA",
                                                 Category = "NA",
-                                                ArticleTypeId = 2,
+                                                ArticleTypeId = 1,
                                                 ArticleGroupId = articleGroups.FirstOrDefault().Id,
                                                 AccountId = articleGroups.FirstOrDefault().AccountId,
                                                 SalesAccountId = articleGroups.FirstOrDefault().SalesAccountId,
@@ -357,7 +354,7 @@ namespace easyfis.ModifiedApiControllers
                         {
                             var item = from d in db.MstArticles
                                        where d.Id == Convert.ToInt32(id)
-                                       && d.ArticleTypeId == 2
+                                       && d.ArticleTypeId == 1
                                        select d;
 
                             if (item.Any())
@@ -540,7 +537,7 @@ namespace easyfis.ModifiedApiControllers
                         {
                             var item = from d in db.MstArticles
                                        where d.Id == Convert.ToInt32(id)
-                                       && d.ArticleTypeId == 2
+                                       && d.ArticleTypeId == 1
                                        select d;
 
                             if (item.Any())
