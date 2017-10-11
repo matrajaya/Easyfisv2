@@ -16,40 +16,42 @@ namespace easyfis.ModifiedApiControllers
         // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ================
-        // Get Highest Cost
-        // ================
-        public Decimal GetHighestCost(Int32 itemId)
-        {
-            var articleInventories = from d in db.MstArticleInventories.OrderByDescending(d => d.Cost)
-                                     where d.ArticleId == itemId
-                                     select d;
-
-            if (articleInventories.Any())
-            {
-                return articleInventories.FirstOrDefault().Cost;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
         // =============================================
         // Dropdown List - Item Component - Item (Field)
         // =============================================
-        [Authorize, HttpGet, Route("api/itemComponent/dropdown/list/item")]
-        public List<Entities.MstArticle> DropdownListItemComponentItem()
+        [Authorize, HttpGet, Route("api/itemComponent/dropdown/list/item/{itemId}")]
+        public List<Entities.MstArticle> DropdownListItemComponentItem(String itemId)
         {
             var itemComponentItem = from d in db.MstArticles.OrderBy(d => d.Article)
                                     where d.IsLocked == true
+                                    && d.Id != Convert.ToInt32(itemId)
                                     select new Entities.MstArticle
                                     {
                                         Id = d.Id,
-                                        Article = d.Article
+                                        ManualArticleCode = d.ManualArticleCode,
+                                        Article = d.Article,
+                                        UnitId = d.UnitId,
+                                        Cost = d.MstArticleInventories.Any() ? d.MstArticleInventories.OrderByDescending(c => c.Cost).FirstOrDefault().Cost : 0
                                     };
 
             return itemComponentItem.ToList();
+        }
+
+        // =============================================
+        // Dropdown List - Item Component - Unit (Field)
+        // =============================================
+        [Authorize, HttpGet, Route("api/itemComponent/dropdown/list/unit")]
+        public List<Entities.MstUnit> DropdownListItemComponentUnit()
+        {
+            var itemComponentUnit = from d in db.MstUnits.OrderBy(d => d.Unit)
+                                    where d.IsLocked == true
+                                    select new Entities.MstUnit
+                                    {
+                                        Id = d.Id,
+                                        Unit = d.Unit
+                                    };
+
+            return itemComponentUnit.ToList();
         }
 
         // ===================
@@ -67,8 +69,8 @@ namespace easyfis.ModifiedApiControllers
                                         ComponentArticle = d.MstArticle1.Article,
                                         Quantity = d.Quantity,
                                         Unit = d.MstArticle1.MstUnit.Unit,
-                                        Cost = GetHighestCost(d.ArticleId),
-                                        Amount = GetHighestCost(d.ArticleId) * d.Quantity,
+                                        Cost = d.MstArticle1.MstArticleInventories.Any() ? d.MstArticle1.MstArticleInventories.OrderByDescending(c => c.Cost).FirstOrDefault().Cost : 0,
+                                        Amount = d.MstArticle1.MstArticleInventories.Any() ? d.MstArticle1.MstArticleInventories.OrderByDescending(c => c.Cost).FirstOrDefault().Cost * d.Quantity : 0,
                                         Particulars = d.Particulars
                                     };
 
@@ -195,7 +197,7 @@ namespace easyfis.ModifiedApiControllers
                                     if (itemComponent.Any())
                                     {
                                         var updateItemComponent = itemComponent.FirstOrDefault();
-                                        updateItemComponent.ArticleId = objItemComponent.ArticleId;
+                                        updateItemComponent.ArticleId = Convert.ToInt32(itemId);
                                         updateItemComponent.ComponentArticleId = objItemComponent.ComponentArticleId;
                                         updateItemComponent.Quantity = objItemComponent.Quantity;
                                         updateItemComponent.Particulars = objItemComponent.Particulars;

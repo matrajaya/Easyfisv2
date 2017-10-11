@@ -1610,7 +1610,7 @@
             var componentsObservableArray = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
                 $.ajax({
-                    url: '/api/listArticleComponent/' + itemId,
+                    url: '/api/itemComponent/list/' + itemId,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
@@ -1625,7 +1625,7 @@
                             }
 
                             for (i = 0; i < results.length; i++) {
-                                totalComponentAmount += (results[i]["Quantity"] * results[i]["Cost"]);
+                                totalComponentAmount += results[i]["Amount"];
 
                                 componentsObservableArray.push({
                                     EditId: btnEditId,
@@ -1705,7 +1705,7 @@
                     }
                     {
                         "header": "Manual Code",
-                        "binding": "ComponentArticleCode",
+                        "binding": "ComponentArticleManualCode",
                         "allowSorting": true,
                         "width": "1.7*"
                     },
@@ -1770,26 +1770,25 @@
         function getArticleItemForManualCodeAndComponent(itemIdSelectedValue, UnitId) {
             var articleComponenetsItemsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/articleItems/' + itemId,
+                url: '/api/itemComponent/dropdown/list/item/' + itemId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (articleComponentItemsResults) {
-                    if (articleComponentItemsResults.length > 0) {
-                        for (i = 0; i < articleComponentItemsResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             articleComponenetsItemsObservableArray.push({
-                                Id: articleComponentItemsResults[i]["Id"],
-                                ItemCode: articleComponentItemsResults[i]["ManualArticleCode"],
-                                ItemComponent: articleComponentItemsResults[i]["Article"],
-                                UnitId: articleComponentItemsResults[i]["UnitId"],
-                                Unit: articleComponentItemsResults[i]["Unit"],
-                                Cost: articleComponentItemsResults[i]["Cost"]
+                                Id: results[i]["Id"],
+                                ManualArticleCode: results[i]["ManualArticleCode"],
+                                Article: results[i]["Article"],
+                                UnitId: results[i]["UnitId"],
+                                Cost: results[i]["Cost"] != null ? results[i]["Cost"] : 0
                             });
                         }
                     }
 
                     var disabled = true;
-                    if (articleComponentItemsResults.length > 0) {
+                    if (results.length > 0) {
                         disabled = false;
                         $('#btnSaveComponent').prop('disabled', false);
                     } else {
@@ -1801,7 +1800,7 @@
                         disabled: disabled,
                         isEditable: false,
                         itemsSource: articleComponenetsItemsObservableArray,
-                        displayMemberPath: "ItemCode",
+                        displayMemberPath: "ManualArticleCode",
                         selectedValuePath: "Id",
                         selectedValue: itemIdSelectedValue,
                         onSelectedIndexChanged: function () {
@@ -1814,7 +1813,7 @@
                         disabled: disabled,
                         isEditable: false,
                         itemsSource: articleComponenetsItemsObservableArray,
-                        displayMemberPath: "ItemComponent",
+                        displayMemberPath: "Article",
                         selectedValuePath: "Id",
                         selectedValue: itemIdSelectedValue,
                         onSelectedIndexChanged: function () {
@@ -1844,16 +1843,16 @@
             var componentUnitsObservableArray = new wijmo.collections.ObservableArray();
             if (cboComponentItem.selectedValue != null) {
                 $.ajax({
-                    url: '/api/listUnit',
+                    url: '/api/itemComponent/dropdown/list/unit',
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
-                    success: function (componentItemUnitResults) {
-                        if (componentItemUnitResults.length > 0) {
-                            for (i = 0; i < componentItemUnitResults.length; i++) {
+                    success: function (results) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
                                 componentUnitsObservableArray.push({
-                                    Id: componentItemUnitResults[i]["Id"],
-                                    Unit: componentItemUnitResults[i]["Unit"]
+                                    Id: results[i]["Id"],
+                                    Unit: results[i]["Unit"]
                                 });
                             }
                         }
@@ -1871,7 +1870,7 @@
                         setTimeout(function () {
                             $("#loadingComponents").hide();
                             $("#componentDetailForm").show();
-                            if (componentItemUnitResults.length <= 0) {
+                            if (results.length <= 0) {
                                 $('#btnSaveComponent').prop('disabled', true);
                             }
                         }, 500);
@@ -1974,7 +1973,6 @@
                 $("#btnCloseComponentModal").prop("disabled", true);
 
                 var componentObject = new Object();
-                componentObject.ArticleId = itemId;
                 componentObject.ComponentArticleId = cboComponentItem.selectedValue;
                 componentObject.Quantity = document.getElementById("component_Quantity").value;
                 componentObject.Particulars = document.getElementById("component_particulars").value;
@@ -1983,29 +1981,43 @@
                 if (componentId == 0) {
                     $.ajax({
                         type: "POST",
-                        url: '/api/addArticleComponent',
+                        url: '/api/itemComponent/add/' + itemId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        success: function (id) {
-                            if (id > 0) {
+                        statusCode: {
+                            200: function () {
                                 toastr.success("Save Successful");
                                 $('#componentEdit').modal('hide');
                                 refreshComponentFlexGrid();
-                            } else {
-                                toastr.error("Internal Server Error");
+                            },
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                                 $('#componentEdit').modal('hide');
                                 document.getElementById("btnSaveComponent").innerHTML = "<i class='fa fa-save'></i> Save"
                                 $("#btnSaveComponent").prop("disabled", false);
                                 $("#btnCloseComponentModal").prop("disabled", false);
-
+                            },
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                $('#componentEdit').modal('hide');
+                                document.getElementById("btnSaveComponent").innerHTML = "<i class='fa fa-save'></i> Save"
+                                $("#btnSaveComponent").prop("disabled", false);
+                                $("#btnCloseComponentModal").prop("disabled", false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                                $('#componentEdit').modal('hide');
+                                document.getElementById("btnSaveComponent").innerHTML = "<i class='fa fa-save'></i> Save"
+                                $("#btnSaveComponent").prop("disabled", false);
+                                $("#btnCloseComponentModal").prop("disabled", false);
                             }
                         }
                     });
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updateArticleComponent/' + componentId,
+                        url: '/api/itemComponent/update/' + componentId + '/' + itemId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
@@ -2015,21 +2027,26 @@
                                 $('#componentEdit').modal('hide');
                                 refreshComponentFlexGrid();
                             },
-                            404: function () {
-                                toastr.error("Not Found");
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                                 $('#componentEdit').modal('hide');
                                 document.getElementById("btnSaveComponent").innerHTML = "<i class='fa fa-save'></i> Save"
                                 $("#btnSaveComponent").prop("disabled", false);
                                 $("#btnCloseComponentModal").prop("disabled", false);
-
                             },
-                            400: function () {
-                                toastr.error("Bad Request");
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
                                 $('#componentEdit').modal('hide');
                                 document.getElementById("btnSaveComponent").innerHTML = "<i class='fa fa-save'></i> Save"
                                 $("#btnSaveComponent").prop("disabled", false);
                                 $("#btnCloseComponentModal").prop("disabled", false);
-
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                                $('#componentEdit').modal('hide');
+                                document.getElementById("btnSaveComponent").innerHTML = "<i class='fa fa-save'></i> Save"
+                                $("#btnSaveComponent").prop("disabled", false);
+                                $("#btnCloseComponentModal").prop("disabled", false);
                             }
                         }
                     });
@@ -2064,7 +2081,7 @@
             components.editItem(components.currentItem);
             var component = components.currentEditItem;
             $.ajax({
-                url: '/api/deleteArticleComponent/' + component.Id,
+                url: '/api/itemComponent/delete/' + component.Id + '/' + itemId,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -2074,15 +2091,22 @@
                         $('#deleteComponenetConfirm').modal('hide');
                         refreshComponentFlexGrid();
                     },
-                    404: function () {
-                        toastr.error("Not Found");
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                         $('#deleteComponenetConfirm').modal('hide');
                         document.getElementById('btnConfirmDeleteComponent').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $('#btnConfirmDeleteComponent').prop('disabled', false);
                         $('#btnCloseConfirmDeleteComponentModal').prop('disabled', false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        $('#deleteComponenetConfirm').modal('hide');
+                        document.getElementById('btnConfirmDeleteComponent').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#btnConfirmDeleteComponent').prop('disabled', false);
+                        $('#btnCloseConfirmDeleteComponentModal').prop('disabled', false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                         $('#deleteComponenetConfirm').modal('hide');
                         document.getElementById('btnConfirmDeleteComponent').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $('#btnConfirmDeleteComponent').prop('disabled', false);
