@@ -2129,49 +2129,35 @@
             document.getElementById('component_amount').value = formatDecimalValues(roundAmount);
         }
 
-        // ==================
+        // ==============
         // GET Price List
-        // ==================
+        // ==============
         function getPrice() {
             var prices = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
                 $.ajax({
-                    url: '/api/listArticlePrice/' + itemId,
+                    url: '/api/itemPrice/list/' + itemId,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
-                    success: function (priceResults) {
-                        if (priceResults.length > 0) {
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled = "";
-                            if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            }
-
-                            var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled = "";
-                            if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditPrice_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
-                            var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePrice_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                    success: function (results) {
+                        if (results.length > 0) {
+                            var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditPrice_OnClick()'><i class='fa fa-edit'></i> Edit</button>";
+                            var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePrice_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             if (IsLocked) {
                                 btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditPrice_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
                                 btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePrice_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                             }
 
-                            for (i = 0; i < priceResults.length; i++) {
+                            for (i = 0; i < results.length; i++) {
                                 prices.push({
                                     EditId: btnEditId,
                                     DeleteId: btnDeleteId,
-                                    Id: priceResults[i]["Id"],
-                                    ArticleId: priceResults[i]["ArticleId"],
-                                    Article: priceResults[i]["Article"],
-                                    PriceDescription: priceResults[i]["PriceDescription"],
-                                    Price: priceResults[i]["Price"],
-                                    PriceDisplay: parseFloat(priceResults[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    Remarks: priceResults[i]["Remarks"]
+                                    Id: results[i]["Id"],
+                                    PriceDescription: results[i]["PriceDescription"],
+                                    Price: results[i]["Price"],
+                                    PriceDisplay: parseFloat(results[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    Remarks: results[i]["Remarks"]
                                 });
                             }
                         }
@@ -2359,7 +2345,9 @@
             $('#btnClosePriceConfirmDeleteModal').prop('disabled', false);
         }
 
+        // ====================
         // confirm delete price
+        // ====================
         function btnPriceConfirmDeleteOnclick() {
             document.getElementById('btnPriceConfirmDelete').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $('#btnPriceConfirmDelete').prop('disabled', true);
@@ -2368,7 +2356,7 @@
             prices.editItem(prices.currentItem);
             var price = prices.currentEditItem;
             $.ajax({
-                url: '/api/deleteArticlePrice/' + price.Id,
+                url: '/api/itemPrice/delete/' + price.Id + '/' + itemId,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -2378,15 +2366,22 @@
                         $('#deletPriceConfirm').modal('hide');
                         refreshPriceFlexGrid();
                     },
-                    404: function () {
-                        toastr.error("Not Found");
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                         $('#deletPriceConfirm').modal('hide');
                         document.getElementById('btnPriceConfirmDelete').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $('#btnPriceConfirmDelete').prop('disabled', false);
                         $('#btnClosePriceConfirmDeleteModal').prop('disabled', false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        $('#deletPriceConfirm').modal('hide');
+                        document.getElementById('btnPriceConfirmDelete').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#btnPriceConfirmDelete').prop('disabled', false);
+                        $('#btnClosePriceConfirmDeleteModal').prop('disabled', false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                         $('#deletPriceConfirm').modal('hide');
                         document.getElementById('btnPriceConfirmDelete').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $('#btnPriceConfirmDelete').prop('disabled', false);
@@ -2415,17 +2410,32 @@
                 if (priceId == 0) {
                     $.ajax({
                         type: "POST",
-                        url: '/api/addArticlePrice',
+                        url: '/api/itemPrice/add/' + itemId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        success: function (id) {
-                            if (id > 0) {
+                        statusCode: {
+                            200: function () {
                                 toastr.success("Save Successful");
                                 $('#priceEdit').modal('hide');
                                 refreshPriceFlexGrid();
-                            } else {
-                                toastr.error("Internal Server Error");
+                            },
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                                $('#priceEdit').modal('hide');
+                                document.getElementById('btnSavePrice').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#btnSavePrice').prop('disabled', false);
+                                $('#btnClosePriceModal').prop('disabled', false);
+                            },
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                $('#priceEdit').modal('hide');
+                                document.getElementById('btnSavePrice').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#btnSavePrice').prop('disabled', false);
+                                $('#btnClosePriceModal').prop('disabled', false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                                 $('#priceEdit').modal('hide');
                                 document.getElementById('btnSavePrice').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $('#btnSavePrice').prop('disabled', false);
@@ -2436,7 +2446,7 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updateArticlePrice/' + priceId,
+                        url: '/api/itemPrice/update/' + priceId + '/' + itemId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
@@ -2446,15 +2456,22 @@
                                 $('#priceEdit').modal('hide');
                                 refreshPriceFlexGrid();
                             },
-                            404: function () {
-                                toastr.error("Not Found");
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                                 $('#priceEdit').modal('hide');
                                 document.getElementById('btnSavePrice').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $('#btnSavePrice').prop('disabled', false);
                                 $('#btnClosePriceModal').prop('disabled', false);
                             },
-                            400: function () {
-                                toastr.error("Bad Request");
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                $('#priceEdit').modal('hide');
+                                document.getElementById('btnSavePrice').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#btnSavePrice').prop('disabled', false);
+                                $('#btnClosePriceModal').prop('disabled', false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                                 $('#priceEdit').modal('hide');
                                 document.getElementById('btnSavePrice').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $('#btnSavePrice').prop('disabled', false);
@@ -2475,7 +2492,7 @@
             var inventoriesObservableArray = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
                 $.ajax({
-                    url: '/api/listArticleInventoryByArticleId/items/' + itemId,
+                    url: '/api/itemInventory/list/' + itemId,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
@@ -2485,10 +2502,7 @@
                             for (i = 0; i < Results.length; i++) {
                                 inventoriesObservableArray.push({
                                     Id: Results[i]["Id"],
-                                    BranchId: Results[i]["BranchId"],
                                     Branch: Results[i]["Branch"],
-                                    ArticleId: Results[i]["ArticleId"],
-                                    Article: Results[i]["Article"],
                                     InventoryCode: Results[i]["InventoryCode"],
                                     Quantity: Results[i]["Quantity"],
                                     QuantityDisplay: parseFloat(Results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
@@ -2523,8 +2537,6 @@
         // ==========
         function createInventoryFlexGrid() {
             inventories = new wijmo.collections.CollectionView(getInventory());
-
-            // Flex Grid for Inventory
             inventoryGrid = new wijmo.grid.FlexGrid('#InventoryGrid');
             inventoryGrid.initialize({
                 columns: [
@@ -2560,6 +2572,12 @@
                         "allowSorting": true,
                         "align": "right",
                         "width": "2*"
+                    },
+                    {
+                        "header": "Particulars",
+                        "binding": "Particulars",
+                        "allowSorting": true,
+                        "width": "3*"
                     },
                 ],
                 autoGenerateColumns: false,

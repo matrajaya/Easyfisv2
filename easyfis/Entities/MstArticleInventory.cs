@@ -9,6 +9,7 @@ namespace easyfis.Entities
     {
         public Int32 Id { get; set; }
         public Int32 BranchId { get; set; }
+        public String Branch { get; set; }
         public Int32 ArticleId { get; set; }
         public String InventoryCode { get; set; }
         public Decimal Quantity { get; set; }

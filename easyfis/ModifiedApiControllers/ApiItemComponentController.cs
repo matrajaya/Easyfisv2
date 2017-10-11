@@ -58,23 +58,24 @@ namespace easyfis.ModifiedApiControllers
         // List Item Component
         // ===================
         [Authorize, HttpGet, Route("api/itemComponent/list/{itemId}")]
-        public List<Entities.MstArticleComponent> ListItemComponent()
+        public List<Entities.MstArticleComponent> ListItemComponent(String itemId)
         {
-            var articleComponents = from d in db.MstArticleComponents
-                                    select new Entities.MstArticleComponent
-                                    {
-                                        Id = d.Id,
-                                        ComponentArticleId = d.ComponentArticleId,
-                                        ComponentArticleManualCode = d.MstArticle1.ManualArticleCode,
-                                        ComponentArticle = d.MstArticle1.Article,
-                                        Quantity = d.Quantity,
-                                        Unit = d.MstArticle1.MstUnit.Unit,
-                                        Cost = d.MstArticle1.MstArticleInventories.Any() ? d.MstArticle1.MstArticleInventories.OrderByDescending(c => c.Cost).FirstOrDefault().Cost : 0,
-                                        Amount = d.MstArticle1.MstArticleInventories.Any() ? d.MstArticle1.MstArticleInventories.OrderByDescending(c => c.Cost).FirstOrDefault().Cost * d.Quantity : 0,
-                                        Particulars = d.Particulars
-                                    };
+            var itemComponents = from d in db.MstArticleComponents
+                                 where d.ArticleId == Convert.ToInt32(itemId)
+                                 select new Entities.MstArticleComponent
+                                 {
+                                     Id = d.Id,
+                                     ComponentArticleId = d.ComponentArticleId,
+                                     ComponentArticleManualCode = d.MstArticle1.ManualArticleCode,
+                                     ComponentArticle = d.MstArticle1.Article,
+                                     Quantity = d.Quantity,
+                                     Unit = d.MstArticle1.MstUnit.Unit,
+                                     Cost = d.MstArticle1.MstArticleInventories.Any() ? d.MstArticle1.MstArticleInventories.OrderByDescending(c => c.Cost).FirstOrDefault().Cost : 0,
+                                     Amount = d.MstArticle1.MstArticleInventories.Any() ? d.MstArticle1.MstArticleInventories.OrderByDescending(c => c.Cost).FirstOrDefault().Cost * d.Quantity : 0,
+                                     Particulars = d.Particulars
+                                 };
 
-            return articleComponents.ToList();
+            return itemComponents.ToList();
         }
 
         // ==================
