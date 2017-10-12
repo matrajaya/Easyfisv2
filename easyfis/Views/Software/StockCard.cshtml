@@ -427,45 +427,40 @@
 
                                         stockCardReports.push({
                                             Id: stockCardReportResult[i]["Id"],
-                                            BranchId: stockCardReportResult[i]["BranchId"],
-                                            Branch: stockCardReportResult[i]["Branch"],
-                                            BranchCode: stockCardReportResult[i]["BranchCode"],
                                             DocumentReference: "<a href='" + docRefLink + "' class='btn btn-primary btn-xs btn-block'>" + docRef + " </a>",
                                             DocumentReferenceValue: docRef,
                                             InventoryDate: InventoryDate,
+                                            BranchId: stockCardReportResult[i]["BranchId"],
+                                            Branch: stockCardReportResult[i]["Branch"],
+                                            BranchCode: stockCardReportResult[i]["BranchCode"],
                                             ArticleId: stockCardReportResult[i]["ArticleId"],
                                             Article: stockCardReportResult[i]["Article"],
-                                            ArticleInventoryId: stockCardReportResult[i]["ArticleInventoryId"],
                                             ArticleInventoryCode: stockCardReportResult[i]["ArticleInventoryCode"],
-                                            RRId: stockCardReportResult[i]["RRId"],
-                                            RRNumber: stockCardReportResult[i]["RRNumber"],
-                                            SIId: stockCardReportResult[i]["SIId"],
-                                            SINumber: stockCardReportResult[i]["SINumber"],
-                                            INId: stockCardReportResult[i]["INId"],
-                                            INNumber: stockCardReportResult[i]["INNumber"],
-                                            OTId: stockCardReportResult[i]["OTId"],
-                                            OTNumber: stockCardReportResult[i]["OTNumber"],
-                                            STId: stockCardReportResult[i]["STId"],
-                                            STNumber: stockCardReportResult[i]["STNumber"],
-                                            QuantityIn: stockCardReportResult[i]["QuantityIn"],
-                                            QuantityInDisplay: parseFloat(stockCardReportResult[i]["QuantityIn"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                            Quantity: stockCardReportResult[i]["Quantity"],
-                                            QuantityDisplay: parseFloat(stockCardReportResult[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                            QuantityOut: stockCardReportResult[i]["QuantityOut"],
-                                            QuantityOutDisplay: parseFloat(stockCardReportResult[i]["QuantityOut"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                            Amount: stockCardReportResult[i]["Amount"],
-                                            AmountDisplay: parseFloat(stockCardReportResult[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                            Particulars: stockCardReportResult[i]["Particulars"],
+
                                             Cost: stockCardReportResult[i]["Cost"],
                                             CostDisplay: parseFloat(stockCardReportResult[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                             Unit: stockCardReportResult[i]["Unit"],
-                                            Beg: "0.00",
+
+                                            BegQuantity: stockCardReportResult[i]["BegQuantity"],
+                                            BegQuantityDisplay: parseFloat(stockCardReportResult[i]["BegQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+
+                                            InQuantity: stockCardReportResult[i]["InQuantity"],
+                                            InQuantityDisplay: parseFloat(stockCardReportResult[i]["InQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+
+                                            OutQuantity: stockCardReportResult[i]["OutQuantity"],
+                                            OutQuantityDisplay: parseFloat(stockCardReportResult[i]["OutQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+
+                                            EndQuantity: stockCardReportResult[i]["EndQuantity"],
+                                            EndQuantityDisplay: parseFloat(stockCardReportResult[i]["EndQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+
+                                            Amount: stockCardReportResult[i]["Amount"],
+                                            AmountDisplay: parseFloat(stockCardReportResult[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                         });
 
-                                        totalBeg += + 0;
-                                        totalIn += stockCardReportResult[i]["QuantityIn"];
-                                        totalOut += stockCardReportResult[i]["QuantityOut"];
-                                        totalEnd += stockCardReportResult[i]["Quantity"];
+                                        totalBeg += stockCardReportResult[i]["BegQuantity"];
+                                        totalIn += stockCardReportResult[i]["InQuantity"];
+                                        totalOut += stockCardReportResult[i]["OutQuantity"];
+                                        totalEnd += stockCardReportResult[i]["EndQuantity"];
                                         totalAmount = totalAmount + stockCardReportResult[i]["Amount"];
                                     }
 
@@ -533,10 +528,10 @@
                     var totalEnd = 0;
                     var totalAmount = 0;
                     for (var i = 0; i < stockCardReportCollections.items.length; i++) {
-                        totalBeg += 0;
-                        totalIn += stockCardReportCollections.items[i].QuantityIn;
-                        totalOut += stockCardReportCollections.items[i].QuantityOut;
-                        totalEnd += stockCardReportCollections.items[i].Quantity;
+                        totalBeg += stockCardReportCollections.items[i].BegQuantity;
+                        totalIn += stockCardReportCollections.items[i].InQuantity;
+                        totalOut += stockCardReportCollections.items[i].OutQuantity;
+                        totalEnd += stockCardReportCollections.items[i].EndQuantity;
                         totalAmount += stockCardReportCollections.items[i].Amount;
                     }
 
@@ -582,10 +577,10 @@
                     var totalEnd = 0;
                     var totalAmount = 0;
                     for (var i = 0; i < stockCardReportCollections.items.length; i++) {
-                        totalBeg += 0;
-                        totalIn += stockCardReportCollections.items[i].QuantityIn;
-                        totalOut += stockCardReportCollections.items[i].QuantityOut;
-                        totalEnd += stockCardReportCollections.items[i].Quantity;
+                        totalBeg += stockCardReportCollections.items[i].BegQuantity;
+                        totalIn += stockCardReportCollections.items[i].InQuantity;
+                        totalOut += stockCardReportCollections.items[i].OutQuantity;
+                        totalEnd += stockCardReportCollections.items[i].EndQuantity;
                         totalAmount += stockCardReportCollections.items[i].Amount;
                     }
 
@@ -626,28 +621,28 @@
                     },
                     {
                         "header": "Beg",
-                        "binding": "Beg",
+                        "binding": "BegQuantityDisplay",
                         "allowSorting": true,
                         "align": "right",
                         "width": "*"
                     },
                     {
                         "header": "In",
-                        "binding": "QuantityInDisplay",
+                        "binding": "InQuantityDisplay",
                         "allowSorting": true,
                         "align": "right",
                         "width": "*"
                     },
                     {
                         "header": "Out",
-                        "binding": "QuantityOutDisplay",
+                        "binding": "OutQuantityDisplay",
                         "allowSorting": true,
                         "align": "right",
                         "width": "*"
                     },
                     {
                         "header": "End",
-                        "binding": "QuantityDisplay",
+                        "binding": "EndQuantityDisplay",
                         "allowSorting": true,
                         "align": "right",
                         "width": "*"

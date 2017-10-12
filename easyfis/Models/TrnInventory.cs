@@ -39,5 +39,13 @@ namespace easyfis.Models
         public Decimal? Cost { get; set; }
         public Decimal PositiveQuantity { get; set; }
         public Decimal PositiveAmount { get; set; }
+        public String Document { get; set; }
+        public DateTime DateTimeInventoryDate { get; set; }
+
+        public Decimal BegQuantity { get; set; }
+        public Decimal InQuantity { get; set; }
+        public Decimal OutQuantity { get; set; }
+        public Decimal EndQuantity { get; set; }
+
     }
 }
