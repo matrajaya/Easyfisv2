@@ -372,7 +372,7 @@
             NProgress.start();
             var branchesObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listBranch',
+                url: '/api/branch/list',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -549,7 +549,7 @@
                             format: 'MM-dd-yyyy',
                             value: new Date(Results.STDate),
                         });
-                        cboStockTransferToBranch.selectedValue = Results.ToBranch;
+                        cboStockTransferToBranch.selectedValue = Results.ToBranchId;
                         cboStockTransferArticle.selectedValue = Results.ArticleId;
                         document.getElementById('stockTransfer_Particulars').value = Results.Particulars;
                         document.getElementById('stockTransfer_ManualSTNumber').value = Results.ManualSTNumber;
