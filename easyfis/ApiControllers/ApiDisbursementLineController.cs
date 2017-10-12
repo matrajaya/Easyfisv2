@@ -202,7 +202,7 @@ namespace easyfis.Controllers
                         newDisbursementLine.ArticleId = journal.ArticleId;
                         newDisbursementLine.RRId = journal.RRId;
                         newDisbursementLine.Particulars = "Supplier Advances";
-                        newDisbursementLine.Amount = journal.Balance;
+                        newDisbursementLine.Amount = journal.Balance * -1;
                     }
 
                     db.TrnDisbursementLines.InsertOnSubmit(newDisbursementLine);

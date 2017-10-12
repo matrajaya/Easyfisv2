@@ -116,8 +116,10 @@ namespace easyfis.Reports
 
                 tableDisbursement.AddCell(new PdfPCell(new Phrase("Payee", fontArial11Bold)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f });
                 tableDisbursement.AddCell(new PdfPCell(new Phrase(payee, fontArial11)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f });
-                tableDisbursement.AddCell(new PdfPCell(new Phrase("CV Number", fontArial11Bold)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+
+                tableDisbursement.AddCell(new PdfPCell(new Phrase("No.", fontArial11Bold)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
                 tableDisbursement.AddCell(new PdfPCell(new Phrase(CVNumber, fontArial11)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+
                 tableDisbursement.AddCell(new PdfPCell(new Phrase("Particulars", fontArial11Bold)) { Rowspan = 3, Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
 
                 var particularsPhrase = new Phrase();
@@ -129,11 +131,17 @@ namespace easyfis.Reports
                 PdfPCell particularsCell = new PdfPCell();
                 particularsCell.AddElement(particularsParagraph);
 
-                tableDisbursement.AddCell(new PdfPCell(particularsCell) { Rowspan = 3, Border = 0, PaddingTop = 0f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableDisbursement.AddCell(new PdfPCell(particularsCell) { Rowspan = 4, Border = 0, PaddingTop = 0f, PaddingLeft = 5f, PaddingRight = 5f });
+
+                tableDisbursement.AddCell(new PdfPCell(new Phrase("Date", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tableDisbursement.AddCell(new PdfPCell(new Phrase(CVDate, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+
                 tableDisbursement.AddCell(new PdfPCell(new Phrase("Check No.", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
                 tableDisbursement.AddCell(new PdfPCell(new Phrase(checkNo, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+
                 tableDisbursement.AddCell(new PdfPCell(new Phrase("Check Date", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
                 tableDisbursement.AddCell(new PdfPCell(new Phrase(checkDate, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+
                 tableDisbursement.AddCell(new PdfPCell(new Phrase("Bank", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
                 tableDisbursement.AddCell(new PdfPCell(new Phrase(bank, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
                 document.Add(tableDisbursement);
@@ -238,7 +246,7 @@ namespace easyfis.Reports
                     float[] widthscellsDisbursementLines = new float[] { 120f, 80f, 140f, 100f };
                     tableDisbursementLines.SetWidths(widthscellsDisbursementLines);
                     tableDisbursementLines.WidthPercentage = 100;
-                    tableDisbursementLines.AddCell(new PdfPCell(new Phrase("RR Number", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
+                    tableDisbursementLines.AddCell(new PdfPCell(new Phrase("RR No.", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
                     tableDisbursementLines.AddCell(new PdfPCell(new Phrase("RR Date", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
                     tableDisbursementLines.AddCell(new PdfPCell(new Phrase("Particulars", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });
                     tableDisbursementLines.AddCell(new PdfPCell(new Phrase("Paid Amount", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 7f });

@@ -638,6 +638,7 @@ namespace easyfis.Business
                                                         ArticleId = g.Key.ArticleId,
                                                         Amount = g.Sum(d => d.Amount)
                                                     };
+
                     if (disbursementPositiveLines.Any())
                     {
                         foreach (var disbursementPositiveLine in disbursementPositiveLines)
@@ -651,14 +652,8 @@ namespace easyfis.Business
                             newDisbursementPositiveLineJournal.ArticleId = disbursementPositiveLine.ArticleId;
                             newDisbursementPositiveLineJournal.Particulars = disbursements.FirstOrDefault().Particulars;
 
-                            Decimal disbursementAmount = 0;
-                            if (disbursementPositiveLine.Amount < 0)
-                            {
-                                disbursementAmount = disbursementPositiveLine.Amount;
-                            } 
-
-                            newDisbursementPositiveLineJournal.DebitAmount = disbursementAmount;
-                            newDisbursementPositiveLineJournal.CreditAmount = disbursementAmount;
+                            newDisbursementPositiveLineJournal.DebitAmount = disbursementPositiveLine.Amount;
+                            newDisbursementPositiveLineJournal.CreditAmount = 0;
 
                             newDisbursementPositiveLineJournal.CVId = CVId;
 
@@ -667,6 +662,7 @@ namespace easyfis.Business
                             db.TrnJournals.InsertOnSubmit(newDisbursementPositiveLineJournal);
                         }
                     }
+
                     // =============================
                     // Credit - Line Negative Amount
                     // =============================
@@ -685,6 +681,7 @@ namespace easyfis.Business
                                                         ArticleId = g.Key.ArticleId,
                                                         Amount = g.Sum(d => d.Amount)
                                                     };
+
                     if (disbursementNegativeLines.Any())
                     {
                         foreach (var disbursementNegativeLine in disbursementNegativeLines)
@@ -698,8 +695,8 @@ namespace easyfis.Business
                             newDisbursementNegativeLineJournal.ArticleId = disbursementNegativeLine.ArticleId;
                             newDisbursementNegativeLineJournal.Particulars = disbursements.FirstOrDefault().Particulars;
 
-                            newDisbursementNegativeLineJournal.DebitAmount = disbursementNegativeLine.Amount;
-                            newDisbursementNegativeLineJournal.CreditAmount = 0;
+                            newDisbursementNegativeLineJournal.DebitAmount = 0;
+                            newDisbursementNegativeLineJournal.CreditAmount = disbursementNegativeLine.Amount * -1;
 
                             newDisbursementNegativeLineJournal.CVId = CVId;
 
@@ -708,27 +705,31 @@ namespace easyfis.Business
                             db.TrnJournals.InsertOnSubmit(newDisbursementNegativeLineJournal);
                         }
                     }
-                    // ======================
-                    // Credit - Header (Bank)
-                    // ======================
-                    Data.TrnJournal newDisbursementJournal = new Data.TrnJournal();
 
-                    newDisbursementJournal.JournalDate = disbursements.FirstOrDefault().CVDate;
-                    newDisbursementJournal.BranchId = disbursements.FirstOrDefault().BranchId;
+                    if (disbursements.FirstOrDefault().Amount != 0)
+                    {
+                        // ======================
+                        // Credit - Header (Bank)
+                        // ======================
+                        Data.TrnJournal newDisbursementJournal = new Data.TrnJournal();
 
-                    newDisbursementJournal.AccountId = getAccountId(disbursements.FirstOrDefault().MstArticle1.ArticleGroupId, disbursements.FirstOrDefault().BranchId, "Account");
-                    newDisbursementJournal.ArticleId = disbursements.FirstOrDefault().BankId;
+                        newDisbursementJournal.JournalDate = disbursements.FirstOrDefault().CVDate;
+                        newDisbursementJournal.BranchId = disbursements.FirstOrDefault().BranchId;
 
-                    newDisbursementJournal.Particulars = disbursements.FirstOrDefault().Particulars;
+                        newDisbursementJournal.AccountId = getAccountId(disbursements.FirstOrDefault().MstArticle1.ArticleGroupId, disbursements.FirstOrDefault().BranchId, "Account");
+                        newDisbursementJournal.ArticleId = disbursements.FirstOrDefault().BankId;
 
-                    newDisbursementJournal.DebitAmount = 0;
-                    newDisbursementJournal.CreditAmount = disbursements.FirstOrDefault().Amount;
+                        newDisbursementJournal.Particulars = disbursements.FirstOrDefault().Particulars;
 
-                    newDisbursementJournal.CVId = CVId;
+                        newDisbursementJournal.DebitAmount = 0;
+                        newDisbursementJournal.CreditAmount = disbursements.FirstOrDefault().Amount;
 
-                    newDisbursementJournal.DocumentReference = "CV-" + disbursements.FirstOrDefault().MstBranch.BranchCode + "-" + disbursements.FirstOrDefault().CVNumber;
+                        newDisbursementJournal.CVId = CVId;
 
-                    db.TrnJournals.InsertOnSubmit(newDisbursementJournal);
+                        newDisbursementJournal.DocumentReference = "CV-" + disbursements.FirstOrDefault().MstBranch.BranchCode + "-" + disbursements.FirstOrDefault().CVNumber;
+
+                        db.TrnJournals.InsertOnSubmit(newDisbursementJournal);
+                    }
 
                     // Save
                     db.SubmitChanges();

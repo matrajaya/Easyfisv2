@@ -396,7 +396,7 @@ namespace easyfis.Controllers
                                Balance = g.Sum(d => d.DebitAmount) - g.Sum(d => d.CreditAmount)
                            };
 
-            return journals.ToList();
+            return journals.Where(d => d.Balance != 0).ToList();
         }
 
         // list journal by customer advances AccountId and ArticleId

@@ -115,11 +115,11 @@ namespace easyfis.Reports
                 tableReceivingReceipt.WidthPercentage = 100;
                 tableReceivingReceipt.AddCell(new PdfPCell(new Phrase("Customer ", fontArial11Bold)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f });
                 tableReceivingReceipt.AddCell(new PdfPCell(new Phrase(supplier, fontArial11)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f });
-                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase("RR Number ", fontArial11Bold)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase("No.", fontArial11Bold)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
                 tableReceivingReceipt.AddCell(new PdfPCell(new Phrase(RRNumber, fontArial11)) { Border = 0, PaddingTop = 10f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
                 tableReceivingReceipt.AddCell(new PdfPCell(new Phrase("Term ", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
                 tableReceivingReceipt.AddCell(new PdfPCell(new Phrase(term, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
-                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase("RR Date ", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+                tableReceivingReceipt.AddCell(new PdfPCell(new Phrase("Date ", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
                 tableReceivingReceipt.AddCell(new PdfPCell(new Phrase(RRDate, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
                 tableReceivingReceipt.AddCell(new PdfPCell(new Phrase("Due Date ", fontArial11Bold)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
                 tableReceivingReceipt.AddCell(new PdfPCell(new Phrase(dueDate, fontArial11)) { Border = 0, PaddingTop = 5f, PaddingLeft = 5f, PaddingRight = 5f });
