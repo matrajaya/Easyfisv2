@@ -103,24 +103,6 @@ namespace easyfis.Controllers
             return form;
         }
 
-        // ==============
-        // Not Found Page
-        // ==============
-        [Authorize]
-        public ActionResult PageNotFound()
-        {
-            return View();
-        }
-
-        // ==============
-        // Forbidden Page
-        // ==============
-        [Authorize]
-        public ActionResult Forbidden()
-        {
-            return View();
-        }
-
         // ===========
         // User Rights
         // ===========
@@ -159,6 +141,24 @@ namespace easyfis.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+        }
+
+        // ==============
+        // Not Found Page
+        // ==============
+        [Authorize]
+        public ActionResult PageNotFound()
+        {
+            return View();
+        }
+
+        // ==============
+        // Forbidden Page
+        // ==============
+        [Authorize]
+        public ActionResult Forbidden()
+        {
+            return View();
         }
 
         // =====================

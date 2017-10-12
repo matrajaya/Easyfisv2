@@ -651,8 +651,14 @@ namespace easyfis.Business
                             newDisbursementPositiveLineJournal.ArticleId = disbursementPositiveLine.ArticleId;
                             newDisbursementPositiveLineJournal.Particulars = disbursements.FirstOrDefault().Particulars;
 
-                            newDisbursementPositiveLineJournal.DebitAmount = disbursementPositiveLine.Amount;
-                            newDisbursementPositiveLineJournal.CreditAmount = 0;
+                            Decimal disbursementAmount = 0;
+                            if (disbursementPositiveLine.Amount < 0)
+                            {
+                                disbursementAmount = disbursementPositiveLine.Amount;
+                            } 
+
+                            newDisbursementPositiveLineJournal.DebitAmount = disbursementAmount;
+                            newDisbursementPositiveLineJournal.CreditAmount = disbursementAmount;
 
                             newDisbursementPositiveLineJournal.CVId = CVId;
 
