@@ -48,7 +48,6 @@
                 </ul>
                 <br />
                 <div class="tab-content">
-                    <!-- Account List -->
                     <div id="Account" class="tab-pane fade in active">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -581,24 +580,22 @@
         function getAccountTypeForComboBox(accountTypeId, accountCashFlowId, accountIsLocked) {
             var accountTypesObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listAccountType',
+                url: '/api/chartOfAccounts/account/dropdown/list/accountType',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (accountTypeListResults) {
-                    if (accountTypeListResults.length > 0) {
-                        for (i = 0; i < accountTypeListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             accountTypesObservableArray.push({
-                                Id: accountTypeListResults[i]["Id"],
-                                AccountTypeCode: accountTypeListResults[i]["AccountTypeCode"],
-                                AccountType: accountTypeListResults[i]["AccountType"],
-                                AccountCategoryId: accountTypeListResults[i]["AccountCategoryId"]
+                                Id: results[i]["Id"],
+                                AccountType: results[i]["AccountType"],
                             });
                         }
                     }
 
                     var disabled = true;
-                    if (accountTypeListResults.length > 0) {
+                    if (results.length > 0) {
                         if (!accountIsLocked) {
                             disabled = false;
                         }
@@ -625,23 +622,22 @@
         function getAccountCashFlowForComboBox(accountCashFlowId, accountIsLocked) {
             var accountCashFlowsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listAccountCashFlow',
+                url: '/api/chartOfAccounts/account/dropdown/list/accountCashFlow',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (accountCashFlowListResults) {
-                    if (accountCashFlowListResults.length > 0) {
-                        for (i = 0; i < accountCashFlowListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             accountCashFlowsObservableArray.push({
-                                Id: accountCashFlowListResults[i]["Id"],
-                                AccountCashFlowCode: accountCashFlowListResults[i]["AccountCashFlowCode"],
-                                AccountCashFlow: accountCashFlowListResults[i]["AccountCashFlow"]
+                                Id: results[i]["Id"],
+                                AccountCashFlow: results[i]["AccountCashFlow"]
                             });
                         }
                     }
 
                     var disabled = true;
-                    if (accountCashFlowListResults.length > 0) {
+                    if (results.length > 0) {
                         if (!accountIsLocked) {
                             disabled = false;
                         }
@@ -673,30 +669,30 @@
             var accountsObservableArray = new wijmo.collections.ObservableArray;
             NProgress.start();
             $.ajax({
-                url: '/api/listAccount',
+                url: '/api/chartOfAccounts/account/list',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (accountListResults) {
-                    if (accountListResults.length > 0) {
-                        for (i = 0; i < accountListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             accountsObservableArray.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' id='btnAccountEditButton' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: accountListResults[i]["Id"],
-                                AccountCode: accountListResults[i]["AccountCode"],
-                                Account: accountListResults[i]["Account"],
-                                AccountTypeId: accountListResults[i]["AccountTypeId"],
-                                AccountType: accountListResults[i]["AccountType"],
-                                AccountCashFlowId: accountListResults[i]["AccountCashFlowId"],
-                                AccountCashFlow: accountListResults[i]["AccountCashFlow"],
-                                IsLocked: accountListResults[i]["IsLocked"],
-                                CreatedById: accountListResults[i]["CreatedById"],
-                                CreatedBy: accountListResults[i]["CreatedBy"],
-                                CreatedDateTime: accountListResults[i]["CreatedDateTime"],
-                                UpdatedById: accountListResults[i]["UpdatedById"],
-                                UpdatedBy: accountListResults[i]["UpdatedBy"],
-                                UpdatedDateTime: accountListResults[i]["UpdatedDateTime"]
+                                Id: results[i]["Id"],
+                                AccountCode: results[i]["AccountCode"],
+                                Account: results[i]["Account"],
+                                AccountTypeId: results[i]["AccountTypeId"],
+                                AccountType: results[i]["AccountType"],
+                                AccountCashFlowId: results[i]["AccountCashFlowId"],
+                                AccountCashFlow: results[i]["AccountCashFlow"],
+                                IsLocked: results[i]["IsLocked"],
+                                CreatedById: results[i]["CreatedById"],
+                                CreatedBy: results[i]["CreatedBy"],
+                                CreatedDateTime: results[i]["CreatedDateTime"],
+                                UpdatedById: results[i]["UpdatedById"],
+                                UpdatedBy: results[i]["UpdatedBy"],
+                                UpdatedDateTime: results[i]["UpdatedDateTime"]
                             });
 
                         }
@@ -1032,13 +1028,13 @@
         function getAccountArticleType() {
             var accountArticleTypesObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/listAccountArticleTypeByAccountId/' + accountId,
+                url: '/api/chartOfAccounts/accountArticleType/list/' + accountId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (accountArticleTypeListResults) {
-                    if (accountArticleTypeListResults.length > 0) {
-                        for (i = 0; i < accountArticleTypeListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditAccountArticleType_OnClick()'><i class='fa fa-edit'></i> Edit</button>";
                             var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteAccountArticleType_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             if (document.getElementById('accountEdit_IsLocked').checked) {
@@ -1049,11 +1045,11 @@
                             accountArticleTypesObservableArray.push({
                                 EditId: btnEditId,
                                 DeleteId: btnDeleteId,
-                                Id: accountArticleTypeListResults[i]["Id"],
-                                AccountId: accountArticleTypeListResults[i]["AccountId"],
-                                Account: accountArticleTypeListResults[i]["Account"],
-                                ArticleTypeId: accountArticleTypeListResults[i]["ArticleTypeId"],
-                                ArticleType: accountArticleTypeListResults[i]["ArticleType"]
+                                Id: results[i]["Id"],
+                                AccountId: results[i]["AccountId"],
+                                Account: results[i]["Account"],
+                                ArticleTypeId: results[i]["ArticleTypeId"],
+                                ArticleType: results[i]["ArticleType"]
                             });
                         }
                     }
@@ -1072,30 +1068,23 @@
         function getAccountArticleTypeForComboBox(articleTypeId) {
             var articleTypesObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticleType',
+                url: '/api/chartOfAccounts/accountArticleType/dropdown/list/articleType',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (articleTypeResults) {
-                    if (articleTypeResults.length > 0) {
-                        for (i = 0; i < articleTypeResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             articleTypesObservableArray.push({
-                                Id: articleTypeResults[i]["Id"],
-                                ArticleType: articleTypeResults[i]["ArticleType"],
-                                IsLocked: articleTypeResults[i]["IsLocked"],
-                                CreatedById: articleTypeResults[i]["CreatedById"],
-                                CreatedBy: articleTypeResults[i]["CreatedBy"],
-                                CreatedDateTime: articleTypeResults[i]["CreatedDateTime"],
-                                UpdatedById: articleTypeResults[i]["UpdatedById"],
-                                UpdatedBy: articleTypeResults[i]["UpdatedBy"],
-                                UpdatedDateTime: articleTypeResults[i]["UpdatedDateTime"]
+                                Id: results[i]["Id"],
+                                ArticleType: results[i]["ArticleType"]
                             });
                         }
                     }
 
                     var disabled = true;
-                    if (articleTypeResults.length > 0) {
+                    if (results.length > 0) {
                         disabled = false;
                     }
 
@@ -1197,7 +1186,7 @@
             accountArticleTypes.editItem(accountArticleTypes.currentItem);
             var accountArticleTypeId = accountArticleTypes.currentEditItem.Id;
             $.ajax({
-                url: '/api/deleteAccountArticleType/' + accountArticleTypeId,
+                url: '/api/chartOfAccounts/accountArticleType/delete/' + accountArticleTypeId,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -1207,15 +1196,22 @@
                         $('#deleteAccountArticleTypeConfirm').modal('hide');
                         createAccountArticleTypeGrid();
                     },
-                    404: function () {
-                        toastr.error("Not Found");
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                         $('#deleteAccountArticleTypeConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeleteAccountArticleType').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteAccountArticleType").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButtonAccountArticleType").prop("disabled", false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        $('#deleteAccountArticleTypeConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteAccountArticleType').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $("#cmdConfirmDeleteAccountArticleType").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccountArticleType").prop("disabled", false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                         $('#deleteAccountArticleTypeConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeleteAccountArticleType').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteAccountArticleType").prop("disabled", false);
@@ -1241,17 +1237,32 @@
             if (accountArticleTypeId == 0) {
                 $.ajax({
                     type: "POST",
-                    url: '/api/addAccountArticleType',
+                    url: '/api/chartOfAccounts/accountArticleType/add',
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     data: accountArticleTypeData,
-                    success: function (id) {
-                        if (id > 0) {
+                    statusCode: {
+                        200: function () {
                             toastr.success("Save Successful");
                             $('#accountArticleTypeModal').modal('hide');
                             createAccountArticleTypeGrid();
-                        } else {
-                            toastr.error("Internal Server Error");
+                        },
+                        404: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                            $('#accountArticleTypeModal').modal('hide');
+                            document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                            $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
+                            $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
+                        },
+                        400: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                            $('#accountArticleTypeModal').modal('hide');
+                            document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                            $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
+                            $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
+                        },
+                        500: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                             $('#accountArticleTypeModal').modal('hide');
                             document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
                             $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
@@ -1262,7 +1273,7 @@
             } else {
                 $.ajax({
                     type: "PUT",
-                    url: '/api/updateAccountArticleType/' + accountArticleTypeId,
+                    url: '/api/chartOfAccounts/accountArticleType/update/' + accountArticleTypeId,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     data: accountArticleTypeData,
@@ -1272,15 +1283,22 @@
                             $('#accountArticleTypeModal').modal('hide');
                             createAccountArticleTypeGrid();
                         },
-                        404: function () {
-                            toastr.error("Not Found");
+                        404: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                             $('#accountArticleTypeModal').modal('hide');
                             document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
                             $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
                             $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
                         },
-                        400: function () {
-                            toastr.error("Bad Request");
+                        400: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                            $('#accountArticleTypeModal').modal('hide');
+                            document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                            $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
+                            $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
+                        },
+                        500: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                             $('#accountArticleTypeModal').modal('hide');
                             document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
                             $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
@@ -1615,24 +1633,23 @@
         function getAccountCategoryForComboBox(accountCategoryId, accountTypeIsLocked) {
             var accountCategoriesObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listAccountCategory',
+                url: '/api/chartOfAccounts/accountType/dropdown/list/accountCategory',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (accountCatogryListResults) {
-                    if (accountCatogryListResults.length > 0) {
-                        for (i = 0; i < accountCatogryListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             accountCategoriesObservableArray.push({
-                                Id: accountCatogryListResults[i]["Id"],
-                                AccountCategoryCode: accountCatogryListResults[i]["AccountCategoryCode"],
-                                AccountCategory: accountCatogryListResults[i]["AccountCategory"]
+                                Id: results[i]["Id"],
+                                AccountCategory: results[i]["AccountCategory"]
                             });
                         }
                     }
 
                     var disabled = true;
-                    if (accountCatogryListResults.length > 0) {
+                    if (results.length > 0) {
                         if (!accountTypeIsLocked) {
                             disabled = false;
                         }
@@ -1663,41 +1680,29 @@
             NProgress.start();
             var accountTypesObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/listAccountType',
+                url: '/api/chartOfAccounts/accountType/list',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (accountTypeListResults) {
-                    if (accountTypeListResults.length > 0) {
-                        for (i = 0; i < accountTypeListResults.length; i++) {
-                            var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled = "";
-                            if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled = "";
-                            if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            }
-
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             accountTypesObservableArray.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountTypeEditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountTypeDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
-                                Id: accountTypeListResults[i]["Id"],
-                                AccountTypeCode: accountTypeListResults[i]["AccountTypeCode"],
-                                AccountType: accountTypeListResults[i]["AccountType"],
-                                AccountCategoryId: accountTypeListResults[i]["AccountCategoryId"],
-                                AccountCategory: accountTypeListResults[i]["AccountCategory"],
-                                SubCategoryDescription: accountTypeListResults[i]["SubCategoryDescription"],
-                                IsLocked: accountTypeListResults[i]["IsLocked"],
-                                CreatedById: accountTypeListResults[i]["CreatedById"],
-                                CreatedBy: accountTypeListResults[i]["CreatedBy"],
-                                CreatedDateTime: accountTypeListResults[i]["CreatedDateTime"],
-                                UpdatedById: accountTypeListResults[i]["UpdatedById"],
-                                UpdatedBy: accountTypeListResults[i]["UpdatedBy"],
-                                UpdatedDateTime: accountTypeListResults[i]["UpdatedDateTime"]
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountTypeEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountTypeDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: results[i]["Id"],
+                                AccountTypeCode: results[i]["AccountTypeCode"],
+                                AccountType: results[i]["AccountType"],
+                                AccountCategoryId: results[i]["AccountCategoryId"],
+                                AccountCategory: results[i]["AccountCategory"],
+                                SubCategoryDescription: results[i]["SubCategoryDescription"],
+                                IsLocked: results[i]["IsLocked"],
+                                CreatedById: results[i]["CreatedById"],
+                                CreatedBy: results[i]["CreatedBy"],
+                                CreatedDateTime: results[i]["CreatedDateTime"],
+                                UpdatedById: results[i]["UpdatedById"],
+                                UpdatedBy: results[i]["UpdatedBy"],
+                                UpdatedDateTime: results[i]["UpdatedDateTime"]
                             });
                         }
                     }
@@ -1832,17 +1837,32 @@
                 if (accountTypeId == 0) {
                     $.ajax({
                         type: "POST",
-                        url: '/api/addAccountType',
+                        url: '/api/chartOfAccounts/accountType/add',
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        success: function (id) {
-                            if (id > 0) {
+                        statusCode: {
+                            200: function () {
                                 toastr.success("Save Successful");
                                 $('#accountTypeEdit').modal('hide');
                                 refreshAccountType();
-                            } else {
-                                toastr.error("Internal Server Error");
+                            },
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                                $('#accountTypeEdit').modal('hide');
+                                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveAccountTypeButton").prop("disabled", false);
+                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                $('#accountTypeEdit').modal('hide');
+                                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveAccountTypeButton").prop("disabled", false);
+                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                                 $('#accountTypeEdit').modal('hide');
                                 document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountTypeButton").prop("disabled", false);
@@ -1853,7 +1873,7 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updateAccountType/' + accountTypeId,
+                        url: '/api/chartOfAccounts/accountType/update/' + accountTypeId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
@@ -1863,15 +1883,22 @@
                                 $('#accountTypeEdit').modal('hide');
                                 refreshAccountType();
                             },
-                            404: function () {
-                                toastr.error("Not Found");
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                                 $('#accountTypeEdit').modal('hide');
                                 document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountTypeButton").prop("disabled", false);
                                 $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
                             },
-                            400: function () {
-                                toastr.error("Bad Request");
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                $('#accountTypeEdit').modal('hide');
+                                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveAccountTypeButton").prop("disabled", false);
+                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                                 $('#accountTypeEdit').modal('hide');
                                 document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountTypeButton").prop("disabled", false);
@@ -1921,7 +1948,7 @@
             accountTypes.editItem(accountTypes.currentItem);
             var id = accountTypes.currentEditItem.Id;
             $.ajax({
-                url: '/api/deleteAccountType/' + id,
+                url: '/api/chartOfAccounts/accountType/delete/' + id,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -1931,15 +1958,22 @@
                         $('#deleteAccountTypeConfirm').modal('hide');
                         refreshAccountType();
                     },
-                    404: function () {
-                        toastr.error("Not Found");
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                         $('#deleteAccountTypeConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeleteAccountType').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteAccountType").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        $('#deleteAccountTypeConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteAccountType').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $("#cmdConfirmDeleteAccountType").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                         $('#deleteAccountTypeConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeleteAccountType').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteAccountType").prop("disabled", false);
@@ -2047,24 +2081,36 @@
             accountTypeGrid = new wijmo.grid.FlexGrid('#accountTypeGrid');
             accountTypeGrid.initialize({
                 columns: [
-                            {
-                                "header": "Edit",
-                                "binding": "EditId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Delete",
-                                "binding": "DeleteId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
+                            @{
+                                if (canEdit)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Edit",
+                                            "binding": "EditId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                                if (canDelete)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Delete",
+                                            "binding": "DeleteId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                            }
                             {
                                 "header": "Code",
                                 "binding": "AccountTypeCode",
@@ -2194,38 +2240,26 @@
             var accountCashFlowsObservableArray = new wijmo.collections.ObservableArray;
             NProgress.start();
             $.ajax({
-                url: '/api/listAccountCashFlow',
+                url: '/api/chartOfAccounts/accountCashFlow/list',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (accountCashFlowListResults) {
-                    if (accountCashFlowListResults.length > 0) {
-                        for (i = 0; i < accountCashFlowListResults.length; i++) {
-                            var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled = "";
-                            if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled = "";
-                            if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            }
-
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             accountCashFlowsObservableArray.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCashFlowEditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCashFlowDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
-                                Id: accountCashFlowListResults[i]["Id"],
-                                AccountCashFlowCode: accountCashFlowListResults[i]["AccountCashFlowCode"],
-                                AccountCashFlow: accountCashFlowListResults[i]["AccountCashFlow"],
-                                IsLocked: accountCashFlowListResults[i]["IsLocked"],
-                                CreatedById: accountCashFlowListResults[i]["CreatedById"],
-                                CreatedBy: accountCashFlowListResults[i]["CreatedBy"],
-                                CreatedDateTime: accountCashFlowListResults[i]["CreatedDateTime"],
-                                UpdatedById: accountCashFlowListResults[i]["UpdatedById"],
-                                UpdatedBy: accountCashFlowListResults[i]["UpdatedBy"],
-                                UpdatedDateTime: accountCashFlowListResults[i]["UpdatedDateTime"]
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCashFlowEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCashFlowDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: results[i]["Id"],
+                                AccountCashFlowCode: results[i]["AccountCashFlowCode"],
+                                AccountCashFlow: results[i]["AccountCashFlow"],
+                                IsLocked: results[i]["IsLocked"],
+                                CreatedById: results[i]["CreatedById"],
+                                CreatedBy: results[i]["CreatedBy"],
+                                CreatedDateTime: results[i]["CreatedDateTime"],
+                                UpdatedById: results[i]["UpdatedById"],
+                                UpdatedBy: results[i]["UpdatedBy"],
+                                UpdatedDateTime: results[i]["UpdatedDateTime"]
                             });
                         }
                     }
@@ -2360,29 +2394,43 @@
                 if (accountCashFlowId == 0) {
                     $.ajax({
                         type: "POST",
-                        url: '/api/addAccountCashFlow',
+                        url: '/api/chartOfAccounts/accountCashFlow/add',
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        success: function (id) {
-                            if (id > 0) {
+                        statusCode: {
+                            200: function () {
                                 toastr.success("Save Successful");
                                 $('#accountCashFlowEdit').modal('hide');
                                 refreshCashFlowFlexGrid();
-                            } else {
-                                toastr.error("Internal Server Error");
+                            },
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                                 $('#accountCashFlowEdit').modal('hide');
                                 document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
                                 $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
-
+                            },
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                $('#accountCashFlowEdit').modal('hide');
+                                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
+                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                                $('#accountCashFlowEdit').modal('hide');
+                                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
+                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updateAccountCashFlow/' + accountCashFlowId,
+                        url: '/api/chartOfAccounts/accountCashFlow/update/' + accountCashFlowId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
@@ -2392,16 +2440,22 @@
                                 $('#accountCashFlowEdit').modal('hide');
                                 refreshCashFlowFlexGrid();
                             },
-                            404: function () {
-                                toastr.error("Not Found");
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                                 $('#accountCashFlowEdit').modal('hide');
                                 document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
                                 $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
-
                             },
-                            400: function () {
-                                toastr.error("Bad Request");
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                $('#accountCashFlowEdit').modal('hide');
+                                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
+                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                                 $('#accountCashFlowEdit').modal('hide');
                                 document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
@@ -2451,7 +2505,7 @@
             accountCashFlows.editItem(accountCashFlows.currentItem);
             var accountCashFlowId = accountCashFlows.currentEditItem.Id;
             $.ajax({
-                url: '/api/deleteAccountCashFlow/' + accountCashFlowId,
+                url: '/api/chartOfAccounts/accountCashFlow/delete/' + accountCashFlowId,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -2461,15 +2515,22 @@
                         $('#deleteAccountCashFlowConfirm').modal('hide');
                         refreshCashFlowFlexGrid();
                     },
-                    404: function () {
-                        toastr.error("Not Found");
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                         $('#deleteAccountCashFlowConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeleteAccountCashFlow').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteAccountCashFlow").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        $('#deleteAccountCashFlowConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteAccountCashFlow').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $("#cmdConfirmDeleteAccountCashFlow").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                         $('#deleteAccountCashFlowConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeleteAccountCashFlow').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteAccountCashFlow").prop("disabled", false);
@@ -2573,24 +2634,36 @@
             accountCashFlowGrid = new wijmo.grid.FlexGrid('#accountCashFlowGrid');
             accountCashFlowGrid.initialize({
                 columns: [
-                            {
-                                "header": "Edit",
-                                "binding": "EditId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Delete",
-                                "binding": "DeleteId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
+                            @{
+                                if (canEdit)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Edit",
+                                            "binding": "EditId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                                if (canDelete)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Delete",
+                                            "binding": "DeleteId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                            }
                             {
                                 "header": "Code",
                                 "binding": "AccountCashFlowCode",
@@ -2701,39 +2774,27 @@
             var accountCategoriesObservableArray = new wijmo.collections.ObservableArray;
             NProgress.start();
             $.ajax({
-                url: '/api/listAccountCategory',
+                url: '/api/chartOfAccounts/accountCategory/list',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (accountCategoryResults) {
-                    if (accountCategoryResults.length > 0) {
-                        for (i = 0; i < accountCategoryResults.length; i++) {
-                            var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled = "";
-                            if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled = "";
-                            if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            }
-
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             accountCategoriesObservableArray.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCategoryEditButton_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCategoryDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
-                                Id: accountCategoryResults[i]["Id"],
-                                AccountCategoryCode: accountCategoryResults[i]["AccountCategoryCode"],
-                                AccountCategory: accountCategoryResults[i]["AccountCategory"],
-                                IsLocked: accountCategoryResults[i]["IsLocked"],
-                                CreatedById: accountCategoryResults[i]["CreatedById"],
-                                CreatedBy: accountCategoryResults[i]["CreatedBy"],
-                                CreatedDateTime: accountCategoryResults[i]["CreatedDateTime"],
-                                UpdatedById: accountCategoryResults[i]["UpdatedById"],
-                                UpdatedBy: accountCategoryResults[i]["UpdatedBy"],
-                                UpdatedDateTime: accountCategoryResults[i]["UpdatedDateTime"]
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCategoryEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCategoryDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: results[i]["Id"],
+                                AccountCategoryCode: results[i]["AccountCategoryCode"],
+                                AccountCategory: results[i]["AccountCategory"],
+                                IsLocked: results[i]["IsLocked"],
+                                CreatedById: results[i]["CreatedById"],
+                                CreatedBy: results[i]["CreatedBy"],
+                                CreatedDateTime: results[i]["CreatedDateTime"],
+                                UpdatedById: results[i]["UpdatedById"],
+                                UpdatedBy: results[i]["UpdatedBy"],
+                                UpdatedDateTime: results[i]["UpdatedDateTime"]
                             });
                         }
                     }
@@ -2868,17 +2929,32 @@
                 if (accountCategoryId == 0) {
                     $.ajax({
                         type: "POST",
-                        url: '/api/addAccountCategory',
+                        url: '/api/chartOfAccounts/accountCategory/add',
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        success: function (id) {
-                            if (id > 0) {
+                        statusCode: {
+                            200: function () {
                                 toastr.success("Save Successful");
                                 $('#accountCategoryEdit').modal('hide');
                                 refreshAccountCategory();
-                            } else {
-                                toastr.error("Internal Server Error");
+                            },
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                                $('#accountCategoryEdit').modal('hide');
+                                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveAccountCategoryButton").prop("disabled", false);
+                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                $('#accountCategoryEdit').modal('hide');
+                                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveAccountCategoryButton").prop("disabled", false);
+                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                                 $('#accountCategoryEdit').modal('hide');
                                 document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountCategoryButton").prop("disabled", false);
@@ -2889,7 +2965,7 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updateAccountCategory/' + accountCategoryId,
+                        url: '/api/chartOfAccounts/accountCategory/update/' + accountCategoryId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
@@ -2899,15 +2975,22 @@
                                 $('#accountCategoryEdit').modal('hide');
                                 refreshAccountCategory();
                             },
-                            404: function () {
-                                toastr.error("Not Found");
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                                 $('#accountCategoryEdit').modal('hide');
                                 document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountCategoryButton").prop("disabled", false);
                                 $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
                             },
-                            400: function () {
-                                toastr.error("Bad Request");
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                $('#accountCategoryEdit').modal('hide');
+                                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveAccountCategoryButton").prop("disabled", false);
+                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                                 $('#accountCategoryEdit').modal('hide');
                                 document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountCategoryButton").prop("disabled", false);
@@ -2957,25 +3040,32 @@
             accountCategories.editItem(accountCategories.currentItem);
             var id = accountCategories.currentEditItem.Id;
             $.ajax({
-                url: '/api/deleteAccountCategory/' + id,
+                url: '/api/chartOfAccounts/accountCategory/delete/' + id,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $('#deleteAccountCategoryConfirm').modal('hide');
                         toastr.success("Delete Successful");
+                        $('#deleteAccountCategoryConfirm').modal('hide');
                         refreshAccountCategory();
                     },
-                    404: function () {
-                        toastr.error("Not Found");
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                         $('#deleteAccountCategoryConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeleteAccountCategory').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteAccountCategory").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        $('#deleteAccountCategoryConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteAccountCategory').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $("#cmdConfirmDeleteAccountCategory").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                         $('#deleteAccountCategoryConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeleteAccountCategory').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteAccountCategory").prop("disabled", false);
@@ -3079,24 +3169,36 @@
             accountCategoryGrid = new wijmo.grid.FlexGrid('#accountCategoryGrid');
             accountCategoryGrid.initialize({
                 columns: [
-                            {
-                                "header": "Edit",
-                                "binding": "EditId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Delete",
-                                "binding": "DeleteId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
+                            @{
+                                if (canEdit)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Edit",
+                                            "binding": "EditId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                                if (canDelete)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Delete",
+                                            "binding": "DeleteId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                            }
                             {
                                 "header": "Code",
                                 "binding": "AccountCategoryCode",

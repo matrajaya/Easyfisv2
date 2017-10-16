@@ -213,12 +213,12 @@ namespace easyfis.ModifiedApiControllers
                             }
                             else
                             {
-                                return Request.CreateResponse(HttpStatusCode.NotFound, "This account cash flow detail is no longer exist in the server.");
+                                return Request.CreateResponse(HttpStatusCode.NotFound, "This account category detail is no longer exist in the server.");
                             }
                         }
                         else
                         {
-                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no rights to delete an account cash flow in this chart of account page.");
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no rights to delete an account category in this chart of account page.");
                         }
                     }
                     else

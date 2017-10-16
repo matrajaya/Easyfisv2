@@ -29,7 +29,8 @@ namespace easyfis.ModifiedApiControllers
                                           Id = d.Id,
                                           AccountId = d.AccountId,
                                           Account = d.MstAccount.Account,
-                                          ArticleTypeId = d.ArticleTypeId
+                                          ArticleTypeId = d.ArticleTypeId,
+                                          ArticleType = d.MstArticleType.ArticleType
                                       };
 
             return accountArticleTypes.ToList();

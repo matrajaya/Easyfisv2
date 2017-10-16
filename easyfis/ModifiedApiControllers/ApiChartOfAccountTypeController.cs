@@ -20,9 +20,9 @@ namespace easyfis.ModifiedApiControllers
         // List Account Type (Chart of Accounts)
         // =====================================
         [Authorize, HttpGet, Route("api/chartOfAccounts/accountType/list")]
-        public List<Entities.MstAccountType> ListChartOfAccountType(String itemId)
+        public List<Entities.MstAccountType> ListChartOfAccountType()
         {
-            var accountTypes = from d in db.MstAccountTypes
+            var accountTypes = from d in db.MstAccountTypes.OrderByDescending(d => d.Id)
                                select new Entities.MstAccountType
                                {
                                    Id = d.Id,

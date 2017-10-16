@@ -22,7 +22,7 @@ namespace easyfis.ModifiedApiControllers
         [Authorize, HttpGet, Route("api/chartOfAccounts/accountCashFlow/list")]
         public List<Entities.MstAccountCashFlow> ListChartOfAccountCashFlow()
         {
-            var accountCashFlows = from d in db.MstAccountCashFlows
+            var accountCashFlows = from d in db.MstAccountCashFlows.OrderByDescending(d => d.Id)
                                    select new Entities.MstAccountCashFlow
                                    {
                                        Id = d.Id,
