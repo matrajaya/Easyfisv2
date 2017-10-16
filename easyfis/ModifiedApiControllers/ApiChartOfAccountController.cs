@@ -288,12 +288,17 @@ namespace easyfis.ModifiedApiControllers
 
                             if (account.Any())
                             {
-                                db.MstAccounts.DeleteOnSubmit(account.First());
-                                db.SubmitChanges();
+                                if (!account.FirstOrDefault().IsLocked)
+                                {
+                                    db.MstAccounts.DeleteOnSubmit(account.First());
+                                    db.SubmitChanges();
 
-                                db.SubmitChanges();
-
-                                return Request.CreateResponse(HttpStatusCode.OK);
+                                    return Request.CreateResponse(HttpStatusCode.OK);
+                                }
+                                else
+                                {
+                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Delete is not allowed if the selected account is locked.");
+                                }
                             }
                             else
                             {

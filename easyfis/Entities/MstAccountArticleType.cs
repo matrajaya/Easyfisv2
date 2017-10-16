@@ -9,6 +9,7 @@ namespace easyfis.Entities
     {
         public Int32 Id { get; set; }
         public Int32 AccountId { get; set; }
+        public String Account { get; set; }
         public Int32 ArticleTypeId { get; set; }
     }
 }

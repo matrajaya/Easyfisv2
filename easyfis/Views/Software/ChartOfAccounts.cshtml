@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@model easyfis.Entities.MstUserForm
+@{
+    // =====================
+    // User Rights Variables
+    // =====================
+    var canAdd = Model.CanAdd;
+    var canEdit = Model.CanEdit;
+    var canDelete = Model.CanDelete;
+    var canLock = Model.CanLock;
+    var canUnlock = Model.CanUnlock;
+    var canPrint = Model.CanPrint;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -45,19 +57,24 @@
                                         <td style="width: 59%">
                                             <div class="input-group ">
                                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                                <input type="text" class="form-control " id="InputFilterAccount" placeholder="Search...">
+                                                <input type="text" class="form-control" id="InputFilterAccount" placeholder="Search...">
                                             </div>
                                         </td>
                                         <td style="width: 1%"></td>
                                         <td style="width: 40%" align="right">
-                                            <button class="btn btn-primary " id="btnAddAccount" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                            <button class="btn btn-danger " onclick="cmdCloseAccount_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                            @{
+                                                if (canAdd)
+                                                {
+                                                    <button class="btn btn-primary" id="btnAddAccount" onclick="btnAddAccountOnclick()"><i class="fa fa-plus"></i> Add</button>
+                                                }
+                                            }
+                                            <button class="btn btn-danger" onclick="btnCloseAccountOnclick()"><i class=" fa fa-times"></i> Close</button>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
                             <div class="panel-body">
-                                <div id="AccountGrid"></div>
+                                <div id="accountGrid"></div>
                             </div>
                             <div class="panel-footer">
                                 <div class="row">
@@ -88,19 +105,24 @@
                                         <td style="width: 59%">
                                             <div class="input-group ">
                                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                                <input type="text" class="form-control " id="InputFilterAccountType" placeholder="Search...">
+                                                <input type="text" class="form-control" id="InputFilterAccountType" placeholder="Search...">
                                             </div>
                                         </td>
                                         <td style="width: 1%"></td>
                                         <td style="width: 40%" align="right">
-                                            <button class="btn btn-primary " id="btnAddAccountType" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                            <button class="btn btn-danger " onclick="cmdCloseAccountType_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                            @{
+                                                if (canAdd)
+                                                {
+                                                    <button class="btn btn-primary" id="btnAddAccountType" onclick="btnAddAccountTypeOnclick()"><i class="fa fa-plus"></i> Add</button>
+                                                }
+                                            }
+                                            <button class="btn btn-danger" onclick="btnCloseAccountTypeOnclick()"><i class=" fa fa-times"></i> Close</button>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
                             <div class="panel-body">
-                                <div id="AccountTypeGrid" class="grid" align="left"></div>
+                                <div id="accountTypeGrid" class="grid" align="left"></div>
                             </div>
                             <div class="panel-footer">
                                 <div class="row">
@@ -131,19 +153,24 @@
                                         <td style="width: 59%">
                                             <div class="input-group ">
                                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                                <input type="text" class="form-control " id="InputFilterAccountCashFlow" placeholder="Search...">
+                                                <input type="text" class="form-control" id="InputFilterAccountCashFlow" placeholder="Search...">
                                             </div>
                                         </td>
                                         <td style="width: 1%"></td>
                                         <td style="width: 40%" align="right">
-                                            <button class="btn btn-primary " id="btnAddAccountCashFlow" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                            <button class="btn btn-danger " onclick="cmdCloseAccountCashFlow_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                            @{
+                                                if (canAdd)
+                                                {
+                                                    <button class="btn btn-primary" id="btnAddAccountCashFlow" onclick="btnAddAccountCashFlowOnclick()"><i class="fa fa-plus"></i> Add</button>
+                                                }
+                                            }
+                                            <button class="btn btn-danger" onclick="btnCloseAccountCashFlowOnclick()"><i class=" fa fa-times"></i> Close</button>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
                             <div class="panel-body">
-                                <div id="AccountCashFlowGrid" class="grid" align="left"></div>
+                                <div id="accountCashFlowGrid" class="grid" align="left"></div>
                             </div>
                             <div class="panel-footer">
                                 <div class="row">
@@ -179,14 +206,19 @@
                                         </td>
                                         <td style="width: 1%"></td>
                                         <td style="width: 40%" align="right">
-                                            <button class="btn btn-primary " id="btnAddAccountCategory" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                            <button class="btn btn-danger " onclick="cmdCloseAccountCategory_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                            @{
+                                                if (canAdd)
+                                                {
+                                                    <button class="btn btn-primary" id="btnAddAccountCategory" onclick="btnAddAccountCategoryOnclick()"><i class="fa fa-plus"></i> Add</button>
+                                                }
+                                            }
+                                            <button class="btn btn-danger" onclick="btnCloseAccountCategoryOnclick()"><i class=" fa fa-times"></i> Close</button>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
                             <div class="panel-body">
-                                <div id="AccountCategoryGrid" class="grid" align="left"></div>
+                                <div id="accountCategoryGrid" class="grid" align="left"></div>
                             </div>
                             <div class="panel-footer">
                                 <div class="row">
@@ -256,18 +288,28 @@
                                 <label id="loadingAccountArtitleType"></label>
                             </center>
                             <div id="accountArticleTypeDiv">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <div class="row">
-                                            <div class="col-lg-12" align="right">
-                                                <button class="btn btn-primary" id="btnAddACcountArticleType" onclick="btnAddAccountArticleType()"><i class="fa fa-plus"></i> Add</button>
+                                @{
+                                    if (canAdd)
+                                    {
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-lg-12" align="right">
+                                                        <button class="btn btn-primary" id="btnAddACcountArticleType" onclick="btnAddAccountArticleType()"><i class="fa fa-plus"></i> Add</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div id="AccountArticleTypeGrid" style="max-height: 250px"></div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="panel-body">
+                                    }
+                                    else
+                                    {
                                         <div id="AccountArticleTypeGrid" style="max-height: 250px"></div>
-                                    </div>
-                                </div>
+                                        <br /><br />
+                                    }
+                                }
                             </div>
                         </div>
                     </div>
@@ -517,7 +559,7 @@
         // Global Variables for Account
         // ============================
         var accounts;
-        var accountGrid = new wijmo.grid.FlexGrid('#AccountGrid');
+        var accountGrid = new wijmo.grid.FlexGrid('#accountGrid');
         var btnFirstPageGridAccount;
         var btnPreviousPageGridAccount;
         var btnNextPageGridAccount;
@@ -638,21 +680,9 @@
                 success: function (accountListResults) {
                     if (accountListResults.length > 0) {
                         for (i = 0; i < accountListResults.length; i++) {
-                            var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled = "";
-                            if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled = "";
-                            if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            }
-
                             accountsObservableArray.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='btnAccountEditButton' onclick='cmdAccountEditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='btnAccountEditButton' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: accountListResults[i]["Id"],
                                 AccountCode: accountListResults[i]["AccountCode"],
                                 Account: accountListResults[i]["Account"],
@@ -703,7 +733,7 @@
         // ======================
         // ADD new Account Button
         // ======================
-        function cmdAddNewAccount_OnClick() {
+        function btnAddAccountOnclick() {
             $('#accountEdit').modal({
                 show: true,
                 backdrop: 'static'
@@ -811,17 +841,32 @@
                 if (accountId == 0) {
                     $.ajax({
                         type: "POST",
-                        url: '/api/addAccount',
+                        url: '/api/chartOfAccounts/account/add',
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        success: function (id) {
-                            if (id > 0) {
+                        statusCode: {
+                            200: function () {
                                 toastr.success("Save Successful");
                                 $('#accountEdit').modal('hide');
                                 refreshAccountFlexGrid();
-                            } else {
-                                toastr.error("Internal Server Error");
+                            },
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                                $('#accountEdit').modal('hide');
+                                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveAccountButton").prop("disabled", false);
+                                $("#cmdAccountDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                $('#accountEdit').modal('hide');
+                                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveAccountButton").prop("disabled", false);
+                                $("#cmdAccountDetailCloseButton").prop("disabled", false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                                 $('#accountEdit').modal('hide');
                                 document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountButton").prop("disabled", false);
@@ -832,7 +877,7 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updateAccount/' + accountId,
+                        url: '/api/chartOfAccounts/account/update/' + accountId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
@@ -842,15 +887,22 @@
                                 $('#accountEdit').modal('hide');
                                 refreshAccountFlexGrid();
                             },
-                            404: function () {
-                                toastr.error("Not Found");
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                                 $('#accountEdit').modal('hide');
                                 document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountButton").prop("disabled", false);
                                 $("#cmdAccountDetailCloseButton").prop("disabled", false);
                             },
-                            400: function () {
-                                toastr.error("Bad Request");
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                $('#accountEdit').modal('hide');
+                                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveAccountButton").prop("disabled", false);
+                                $("#cmdAccountDetailCloseButton").prop("disabled", false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                                 $('#accountEdit').modal('hide');
                                 document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountButton").prop("disabled", false);
@@ -893,7 +945,7 @@
             accounts.editItem(accounts.currentItem);
             var id = accounts.currentEditItem.Id;
             $.ajax({
-                url: '/api/deleteAccount/' + id,
+                url: '/api/chartOfAccounts/account/delete/' + id,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -903,15 +955,22 @@
                         $('#deleteAccountConfirm').modal('hide');
                         refreshAccountFlexGrid();
                     },
-                    404: function () {
-                        toastr.error("Not Found");
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                         $('#deleteAccountConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeleteAccount').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteAccount").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        $('#deleteAccountConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteAccount').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $("#cmdConfirmDeleteAccount").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                         $('#deleteAccountConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeleteAccount').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteAccount").prop("disabled", false);
@@ -924,7 +983,7 @@
         // ====================
         // Close Account Button
         // ====================
-        function cmdCloseAccount_OnClick() {
+        function btnCloseAccountOnclick() {
             window.location = '/Software';
         }
 
@@ -980,20 +1039,8 @@
                 success: function (accountArticleTypeListResults) {
                     if (accountArticleTypeListResults.length > 0) {
                         for (i = 0; i < accountArticleTypeListResults.length; i++) {
-                            var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled = "";
-                            if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled = "";
-                            if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            }
-
-                            var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditAccountArticleType_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
-                            var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteAccountArticleType_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditAccountArticleType_OnClick()'><i class='fa fa-edit'></i> Edit</button>";
+                            var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteAccountArticleType_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             if (document.getElementById('accountEdit_IsLocked').checked) {
                                 btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditAccountArticleType_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
                                 btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteAccountArticleType_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
@@ -1304,27 +1351,39 @@
 
             // Flex Grid for account
             accountGrid.dispose();
-            accountGrid = new wijmo.grid.FlexGrid('#AccountGrid');
+            accountGrid = new wijmo.grid.FlexGrid('#accountGrid');
             accountGrid.initialize({
                 columns: [
-                            {
-                                "header": "Edit",
-                                "binding": "EditId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Delete",
-                                "binding": "DeleteId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
+                            @{
+                                if (canEdit)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Edit",
+                                            "binding": "EditId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                                if (canDelete)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Delete",
+                                            "binding": "DeleteId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                            }
                             {
                                 "header": "Code",
                                 "binding": "AccountCode",
@@ -1405,24 +1464,36 @@
             accountArticleTypeGrid = new wijmo.grid.FlexGrid('#AccountArticleTypeGrid');
             accountArticleTypeGrid.initialize({
                 columns: [
-                    {
-                        "header": "Edit",
-                        "binding": "EditId",
-                        "width": 60,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
-                    {
-                        "header": "Delete",
-                        "binding": "DeleteId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
+                    @{
+                        if (canEdit)
+                        {
+                            <text>
+                                {
+                                    "header": "Edit",
+                                    "binding": "EditId",
+                                    "width": 60,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                        if (canDelete)
+                        {
+                            <text>
+                                {
+                                    "header": "Delete",
+                                    "binding": "DeleteId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                    }
                     {
                         "header": "Article Type",
                         "binding": "ArticleType",
@@ -1529,7 +1600,7 @@
         // Global Variables for Account Type
         // =================================
         var accountTypes;
-        var accountTypeGrid = new wijmo.grid.FlexGrid('#AccountTypeGrid');
+        var accountTypeGrid = new wijmo.grid.FlexGrid('#accountTypeGrid');
         var cboAccountCategory = new wijmo.input.ComboBox('#cboAccountCategory');
         var btnFirstPageGridAccountType;
         var btnPreviousPageGridAccountType;
@@ -1662,7 +1733,7 @@
         // ====================
         // ADD New Account Type
         // ====================
-        function cmdAddNewAccountType_OnClick() {
+        function btnAddAccountTypeOnclick() {
             $('#accountTypeEdit').modal({
                 show: true,
                 backdrop: 'static'
@@ -1817,7 +1888,7 @@
         // =========================
         // Close Account Type Button
         // =========================
-        function cmdCloseAccountType_OnClick() {
+        function btnCloseAccountTypeOnclick() {
             window.location = '/Software';
         }
 
@@ -1973,7 +2044,7 @@
 
             // Flex Grid for account type
             accountTypeGrid.dispose();
-            accountTypeGrid = new wijmo.grid.FlexGrid('#AccountTypeGrid');
+            accountTypeGrid = new wijmo.grid.FlexGrid('#accountTypeGrid');
             accountTypeGrid.initialize({
                 columns: [
                             {
@@ -2108,7 +2179,7 @@
         // GLOBAL Variables
         // ================
         var accountCashFlows;
-        var accountCashFlowGrid = new wijmo.grid.FlexGrid('#AccountCashFlowGrid');
+        var accountCashFlowGrid = new wijmo.grid.FlexGrid('#accountCashFlowGrid');
         var btnFirstPageGridAccountCashFlow;
         var btnPreviousPageGridAccountCashFlow;
         var btnNextPageGridAccountCashFlow;
@@ -2190,7 +2261,7 @@
         // =========================
         // ADD New Account Cash Flow
         // =========================
-        function cmdAddNewAccountCashFlow_OnClick() {
+        function btnAddAccountCashFlowOnclick() {
             $('#accountCashFlowEdit').modal({
                 show: true,
                 backdrop: 'static'
@@ -2347,7 +2418,7 @@
         // ==============================
         // Close Account Cash Flow Button
         // ==============================
-        function cmdCloseAccountCashFlow_OnClick() {
+        function btnCloseAccountCashFlowOnclick() {
             window.location = '/Software';
         }
 
@@ -2499,7 +2570,7 @@
 
             // Flex Grid for Account Cash Flow
             accountCashFlowGrid.dispose();
-            accountCashFlowGrid = new wijmo.grid.FlexGrid('#AccountCashFlowGrid');
+            accountCashFlowGrid = new wijmo.grid.FlexGrid('#accountCashFlowGrid');
             accountCashFlowGrid.initialize({
                 columns: [
                             {
@@ -2615,7 +2686,7 @@
         // GLOBAL Variables
         // ================
         var accountCategories;
-        var accountCategoryGrid = new wijmo.grid.FlexGrid('#AccountCategoryGrid');
+        var accountCategoryGrid = new wijmo.grid.FlexGrid('#accountCategoryGrid');
         var btnFirstPageGridAccountCategory;
         var btnPreviousPageGridAccountCategory;
         var btnNextPageGridAccountCategory;
@@ -2698,7 +2769,7 @@
         // ========================
         // ADD New Account Category
         // ========================
-        function cmdAddNewAccountCategory_OnClick() {
+        function btnAddAccountCategoryOnclick() {
             $('#accountCategoryEdit').modal({
                 show: true,
                 backdrop: 'static'
@@ -2853,7 +2924,7 @@
         // =============================
         // Close Account Category Button
         // =============================
-        function cmdCloseAccountCategory_OnClick() {
+        function btnCloseAccountCategoryOnclick() {
             window.location = '/Software';
         }
 
@@ -3005,7 +3076,7 @@
 
             // Flex Grid for Account Category
             accountCategoryGrid.dispose();
-            accountCategoryGrid = new wijmo.grid.FlexGrid('#AccountCategoryGrid');
+            accountCategoryGrid = new wijmo.grid.FlexGrid('#accountCategoryGrid');
             accountCategoryGrid.initialize({
                 columns: [
                             {

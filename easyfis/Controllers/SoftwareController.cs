@@ -230,14 +230,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult ChartOfAccounts()
         {
-            if (PageAccess("ChartOfAccounts").Equals("ChartOfAccounts"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
+            return UserRights("ChartOfAccounts");
         }
 
         // ==============
