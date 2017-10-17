@@ -1122,7 +1122,8 @@
         // ========
         function btnStockTransferPrint_OnClick() {
             var stockTransferId = getParam("id");
-            window.location = "/RepStockTransfer/StockTransfer?StockTransferId=" + stockTransferId;
+            var pirntLink = "/RepStockTransfer/StockTransfer?StockTransferId=" + stockTransferId;
+            window.open(pirntLink, '_blank');
         }
 
         // =======================

@@ -610,7 +610,8 @@
         // ========
         function cmdJournalVoucherPrintButton_OnClick() {
             var journalVoucherId = getParam("id");
-            window.location = "/RepJournalVoucher/JournalVoucher?JVId=" + journalVoucherId;
+            var pirntLink = "/RepJournalVoucher/JournalVoucher?JVId=" + journalVoucherId;
+            window.open(pirntLink, '_blank');
         }
 
         // =================================================

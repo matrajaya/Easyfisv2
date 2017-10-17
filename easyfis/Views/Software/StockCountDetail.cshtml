@@ -529,7 +529,8 @@
         // Print Stock Count
         // =================
         function btnOnclickStockCountDetailPrint() {
-            window.location = "/RepStockCount/StockCount?Id=" + getParameterValue("id");
+            var pirntLink = "/RepStockCount/StockCount?Id=" + getParameterValue("id");
+            window.open(pirntLink, '_blank');
         }
 
         // ============================

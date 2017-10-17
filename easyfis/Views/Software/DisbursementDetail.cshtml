@@ -881,7 +881,8 @@
         // ========
         function btnDisbursementPrint_OnClick() {
             var disbursementId = getParam("id");
-            window.location = "/RepDisbursement/Disbursement?DisbursementId=" + disbursementId;
+            var pirntLink = "/RepDisbursement/Disbursement?DisbursementId=" + disbursementId;
+            window.open(pirntLink, '_blank');
         }
 
         // ==========================

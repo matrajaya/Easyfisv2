@@ -744,7 +744,8 @@
         // ========
         function btnCollectionPrint_OnClick() {
             var collectonId = getParam("id");
-            window.location = "/RepCollection/Collection?CollectonId=" + collectonId;
+            var pirntLink = "/RepCollection/Collection?CollectonId=" + collectonId;
+            window.open(pirntLink, '_blank');
         }
 
         // ========================

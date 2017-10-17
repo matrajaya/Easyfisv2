@@ -734,7 +734,8 @@
         // ========
         function btnPrintPOOnclick() {
             var PurchaseOrderId = getParam('id');
-            window.location = "/RepPurchaseOrder/PurchaseOrder?POId=" + PurchaseOrderId;
+            var pirntLink = "/RepPurchaseOrder/PurchaseOrder?POId=" + PurchaseOrderId;
+            window.open(pirntLink, '_blank');
         }
 
         // ==========================

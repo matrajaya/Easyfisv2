@@ -818,7 +818,8 @@
         // ========
         function btnStockOutPrint_OnClick() {
             var stockOutId = getParam("id");
-            window.location = "/RepStockOut/StockOut?StockOutId=" + stockOutId;
+            var pirntLink = "/RepStockOut/StockOut?StockOutId=" + stockOutId;
+            window.open(pirntLink, '_blank');
         }
 
         // =======================

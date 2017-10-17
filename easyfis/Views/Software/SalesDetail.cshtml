@@ -850,7 +850,8 @@
         // ========
         function btnSalesPrint_OnClick() {
             var salesId = getParam('id');
-            window.location = "/RepSales/Sales?SalesId=" + salesId;
+            var pirntLink = "/RepSales/Sales?SalesId=" + salesId;
+            window.open(pirntLink, '_blank');
         }
 
         // ======================

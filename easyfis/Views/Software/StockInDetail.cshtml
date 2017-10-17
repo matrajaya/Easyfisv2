@@ -810,7 +810,8 @@
         // ========
         function btnStockInPrint_OnClick() {
             var stockInId = getParam("id");
-            window.location = "/RepStockIn/StockIn?StockInId=" + stockInId;
+            var pirntLink = "/RepStockIn/StockIn?StockInId=" + stockInId;
+            window.open(pirntLink, '_blank');
         }
 
         function computeAmount() {

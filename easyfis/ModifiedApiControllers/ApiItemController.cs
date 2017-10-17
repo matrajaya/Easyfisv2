@@ -385,6 +385,9 @@ namespace easyfis.ModifiedApiControllers
                                             lockItem.ManualArticleOldCode = objItem.ManualArticleOldCode;
                                             lockItem.Cost = objItem.Cost;
                                             lockItem.Kitting = objItem.Kitting;
+                                            lockItem.DateAcquired = Convert.ToDateTime(objItem.DateAcquired);
+                                            lockItem.UsefulLife = objItem.UsefulLife;
+                                            lockItem.SalvageValue = objItem.SalvageValue;
                                             lockItem.IsLocked = true;
                                             lockItem.UpdatedById = currentUserId;
                                             lockItem.UpdatedDateTime = DateTime.Now;

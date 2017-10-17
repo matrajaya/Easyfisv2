@@ -1142,7 +1142,8 @@
         // ========
         function RRPrintButton_OnClick() {
             var id = getParam('id');
-            window.location = "/RepReceivingReceipt/ReceivingReceipt?RRId=" + id;
+            var pirntLink = "/RepReceivingReceipt/ReceivingReceipt?RRId=" + id;
+            window.open(pirntLink, '_blank');
         }
 
         // =========
