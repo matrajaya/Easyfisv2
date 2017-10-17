@@ -399,7 +399,7 @@ namespace easyfis.Reports
             // ===================
             var profitAndLoss = from d in db.TrnJournals
                                 where d.JournalDate <= Convert.ToDateTime(DateAsOf)
-                                && d.MstAccount.MstAccountType.MstAccountCategory.Id == 5 || d.MstAccount.MstAccountType.MstAccountCategory.Id == 6
+                                && (d.MstAccount.MstAccountType.MstAccountCategory.Id == 5 || d.MstAccount.MstAccountType.MstAccountCategory.Id == 6)
                                 && d.MstBranch.CompanyId == CompanyId
                                 group d by d.MstAccount into g
                                 select new Models.TrnJournal
@@ -420,6 +420,7 @@ namespace easyfis.Reports
             // ============
             // Get Equities
             // ============
+
             var equities = from d in db.TrnJournals
                            where d.JournalDate <= Convert.ToDateTime(DateAsOf)
                            && d.MstAccount.MstAccountType.MstAccountCategory.Id == 4
