@@ -320,6 +320,7 @@
                                         SoldBy: salesSummaryReportResult[i]["SoldBy"],
                                         Amount: salesSummaryReportResult[i]["Amount"],
                                         AmountDisplay: parseFloat(salesSummaryReportResult[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                        SalesTimeStamp: salesSummaryReportResult[i]["SalesTimeStamp"]
                                     });
 
                                     totalAmount += salesSummaryReportResult[i]["Amount"];
@@ -449,6 +450,12 @@
                         "binding": "AmountDisplay",
                         "allowSorting": true,
                         "align": "right",
+                        "width": "1*"
+                    },
+                    {
+                        "header": "Time",
+                        "binding": "SalesTimeStamp",
+                        "allowSorting": true,
                         "width": "1*"
                     },
                 ],

@@ -64,5 +64,6 @@ namespace easyfis.Models
         public Decimal Price { get; set; }
         public Decimal SalesInvoiceItemAmount { get; set; }
 
+        public String SalesTimeStamp { get; set; }
     }
 }

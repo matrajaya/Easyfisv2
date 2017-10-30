@@ -5,6 +5,7 @@ using System.Net;
 using Microsoft.AspNet.Identity;
 using System.Net.Http;
 using System.Web.Http;
+using System.Globalization;
 
 namespace easyfis.ApiControllers
 {
@@ -36,7 +37,8 @@ namespace easyfis.ApiControllers
                                     Customer = d.MstArticle.Article,
                                     Remarks = d.Remarks,
                                     SoldBy = d.MstUser4.FullName,
-                                    Amount = d.Amount
+                                    Amount = d.Amount,
+                                    SalesTimeStamp = d.TrnSalesInvoiceItems.Max(t => t.SalesItemTimeStamp).ToString("hh:mm:ss tt", CultureInfo.InvariantCulture)
                                 };
 
             return salesInvoices.ToList();

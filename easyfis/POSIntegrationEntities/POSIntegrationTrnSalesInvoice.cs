@@ -19,7 +19,7 @@ namespace easyfis.POSIntegrationEntities
         public Decimal PaidAmount { get; set; }
         public Decimal AdjustmentAmount { get; set; }
         public String CreatedBy { get; set; }
-        public List<POSIntegrationTrnSalesInvoiceItem> listPOSIntegrationTrnSalesInvoiceItem { get; set; }
+        public List<POSIntegrationTrnSalesInvoiceItem> ListPOSIntegrationTrnSalesInvoiceItem { get; set; }
     }
 
     public class POSIntegrationTrnSalesInvoiceItem
@@ -35,5 +35,6 @@ namespace easyfis.POSIntegrationEntities
         public Decimal Amount { get; set; }
         public String VAT { get; set; }
         public Decimal VATAmount { get; set; }
+        public String SalesItemTimeStamp { get; set; }
     }
 }

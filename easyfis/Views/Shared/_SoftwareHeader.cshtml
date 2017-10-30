@@ -331,7 +331,10 @@
     </div>
 </div>
 
-@Scripts.Render("~/Scripts/Software-js")
+<script type="text/javascript" src="~/Scripts/jquery.min.js"></script>
+<script type="text/javascript" src="~/Scripts/wijmo.min.js"></script>
+<script type="text/javascript" src="~/Scripts/wijmo.grid.min.js"></script>
+<script type="text/javascript" src="~/Scripts/wijmo.input.min.js"></script>
 
 <script type="text/javascript">
     var branchId = "@ViewData["BranchId"]";
@@ -411,6 +414,7 @@
 
         return itemsObservableArray;
     }
+
     function createSystemItemInventoryGrid() {
         systemItemInventoryCollectionView = new wijmo.collections.CollectionView(getSystemItemInventory());
         systemItemInventoryCollectionView.canFilter = true;
@@ -467,7 +471,7 @@
                             "header": "Unit",
                             "binding": "Unit",
                             "allowSorting": true,
-                            "width": "2*",
+                            "width": "1*",
                         }
             ],
             autoGenerateColumns: false,
@@ -549,6 +553,7 @@
 
         return itemsObservableArray;
     }
+
     function createSystemItemNonInventoryGrid() {
         systemItemNonInventoryCollectionView = new wijmo.collections.CollectionView(getSystemItemNonInventory());
         systemItemNonInventoryCollectionView.canFilter = true;
@@ -572,7 +577,7 @@
                     "header": "Code",
                     "binding": "ManualArticleCode",
                     "allowSorting": true,
-                    "width": "4*"
+                    "width": "3*"
                 },
                 {
                     "header": "Item",
@@ -667,6 +672,7 @@
 
         return itemsObservableArray;
     }
+
     function createSystemItemPackageGrid() {
         systemItemPackageCollectionView = new wijmo.collections.CollectionView(getSystemItemPackage());
         systemItemPackageCollectionView.canFilter = true;
@@ -714,6 +720,36 @@
             selectionMode: wijmo.grid.SelectionMode.Row
         });
 
-        itemPackageFlexGrid.trackChanges = true;
+        systemItemPackageFlexGrid.trackChanges = true;
     }
+
+    $('#systemItemInventoryId').click(function () {
+        $("#loadingSystemItemInventory").show();
+        document.getElementById("loadingSystemItemInventory").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+        $("#systemItemInventoryGridDetail").hide();
+
+        setTimeout(function () {
+            createSystemItemInventoryGrid();
+        }, 500);
+    });
+
+    $('#systemItemNonInventoryId').click(function () {
+        $("#loadingSystemItemNonInventory").show();
+        document.getElementById("loadingSystemItemNonInventory").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+        $("#systemItemNonInventoryGridDetail").hide();
+
+        setTimeout(function () {
+            createSystemItemNonInventoryGrid();
+        }, 500);
+    });
+
+    $('#systemItemPackageId').click(function () {
+        $("#loadingSystemItemPackage").show();
+        document.getElementById("loadingSystemItemPackage").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+        $("#systemItemPackageGridDetail").hide();
+
+        setTimeout(function () {
+            createSystemItemPackageGrid();
+        }, 500);
+    });
 </script>

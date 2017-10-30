@@ -118,7 +118,7 @@ namespace easyfis.POSIntegrationApiControllers
                                                 // =========================
                                                 // Insert Sales Invoice Item
                                                 // =========================
-                                                foreach (var salesInvoiceItem in POSIntegrationTrnSalesInvoiceObject.listPOSIntegrationTrnSalesInvoiceItem.ToList())
+                                                foreach (var salesInvoiceItem in POSIntegrationTrnSalesInvoiceObject.ListPOSIntegrationTrnSalesInvoiceItem.ToList())
                                                 {
                                                     var articleComponents = from d in db.MstArticleComponents
                                                                             where d.MstArticle.ManualArticleCode == salesInvoiceItem.ItemManualArticleCode
@@ -226,7 +226,7 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                     addSaleInvoiceItemPackage.BasePrice = salesInvoiceItem.Amount;
                                                                                                 }
 
-                                                                                                addSaleInvoiceItemPackage.SalesItemTimeStamp = DateTime.Now;
+                                                                                                addSaleInvoiceItemPackage.SalesItemTimeStamp = Convert.ToDateTime(salesInvoiceItem.SalesItemTimeStamp);
                                                                                                 db.TrnSalesInvoiceItems.InsertOnSubmit(addSaleInvoiceItemPackage);
                                                                                                 db.SubmitChanges();
 
@@ -352,7 +352,7 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                             addSaleInvoiceItem.BasePrice = amount;
                                                                                                         }
 
-                                                                                                        addSaleInvoiceItem.SalesItemTimeStamp = DateTime.Now;
+                                                                                                        addSaleInvoiceItem.SalesItemTimeStamp = Convert.ToDateTime(salesInvoiceItem.SalesItemTimeStamp);
                                                                                                         db.TrnSalesInvoiceItems.InsertOnSubmit(addSaleInvoiceItem);
                                                                                                         db.SubmitChanges();
                                                                                                     }
@@ -479,7 +479,7 @@ namespace easyfis.POSIntegrationApiControllers
                                                                                                 addSaleInvoiceItem.BasePrice = salesInvoiceItem.Amount;
                                                                                             }
 
-                                                                                            addSaleInvoiceItem.SalesItemTimeStamp = DateTime.Now;
+                                                                                            addSaleInvoiceItem.SalesItemTimeStamp = Convert.ToDateTime(salesInvoiceItem.SalesItemTimeStamp);
                                                                                             db.TrnSalesInvoiceItems.InsertOnSubmit(addSaleInvoiceItem);
                                                                                             db.SubmitChanges();
 
@@ -575,8 +575,9 @@ namespace easyfis.POSIntegrationApiControllers
                     return Request.CreateResponse(HttpStatusCode.BadRequest, "Easyfis: Customer Not Found!");
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Something's went wrong from the server.");
             }
         }
