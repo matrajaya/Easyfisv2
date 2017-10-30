@@ -16,6 +16,25 @@ namespace easyfis.ApiControllers
         // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // =============================
+        // Get Max Sales Item Time Stamp
+        // =============================
+        public String GetSalesItemMaxTimeStamp(Int32 SIId)
+        {
+            var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
+                                    where d.SIId == SIId
+                                    select d;
+
+            if (salesInvoiceItems.Any())
+            {
+                return salesInvoiceItems.Max(t => t.SalesItemTimeStamp).ToString("hh:mm:ss tt", CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                return " ";
+            }
+        }
+
         // =========================
         // Sales Summary Report List
         // =========================
@@ -38,7 +57,7 @@ namespace easyfis.ApiControllers
                                     Remarks = d.Remarks,
                                     SoldBy = d.MstUser4.FullName,
                                     Amount = d.Amount,
-                                    SalesTimeStamp = d.TrnSalesInvoiceItems.Max(t => t.SalesItemTimeStamp).ToString("hh:mm:ss tt", CultureInfo.InvariantCulture)
+                                    SalesTimeStamp = GetSalesItemMaxTimeStamp(d.Id)
                                 };
 
             return salesInvoices.ToList();
