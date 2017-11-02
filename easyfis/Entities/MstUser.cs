@@ -11,7 +11,7 @@ namespace easyfis.Entities
         public String UserId { get; set; }
         public Decimal UserName { get; set; }
         public String Password { get; set; }
-        public Decimal FullName { get; set; }
+        public String FullName { get; set; }
         public Int32 CompanyId { get; set; }
         public Int32 BranchId { get; set; }
         public Int32 IncomeAccountId { get; set; }
