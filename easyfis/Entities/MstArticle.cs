@@ -41,6 +41,7 @@ namespace easyfis.Entities
         public Decimal SalvageValue { get; set; }
         public String ManualArticleOldCode { get; set; }
         public Int32 Kitting { get; set; }
+        public Decimal LastPurchasePrice { get; set; }
         public Boolean IsLocked { get; set; }
         public Int32 CreatedById { get; set; }
         public String CreatedBy { get; set; }
