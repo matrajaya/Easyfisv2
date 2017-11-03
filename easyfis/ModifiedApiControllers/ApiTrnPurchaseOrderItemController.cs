@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
+using System.Diagnostics;
 
 namespace easyfis.ModifiedApiControllers
 {
@@ -119,6 +121,124 @@ namespace easyfis.ModifiedApiControllers
             return items.ToList();
         }
 
+        // =======================
+        // Add Purchase Order Item
+        // =======================
+        [Authorize, HttpPost, Route("api/purchaseOrderItem/add/{POId}")]
+        public HttpResponseMessage AddUnitConversion(Entities.TrnPurchaseOrderItem objPurchaseOrderItem, String POId)
+        {
+            try
+            {
+                var currentUser = from d in db.MstUsers
+                                  where d.UserId == User.Identity.GetUserId()
+                                  select d;
+
+                if (currentUser.Any())
+                {
+                    var currentUserId = currentUser.FirstOrDefault().Id;
+
+                    var userForms = from d in db.MstUserForms
+                                    where d.UserId == currentUserId
+                                    && d.SysForm.FormName.Equals("PurchaseOrderDetail")
+                                    select d;
+
+                    if (userForms.Any())
+                    {
+                        if (userForms.FirstOrDefault().CanAdd)
+                        {
+                            var purchaseOrder = from d in db.TrnPurchaseOrders
+                                                where d.Id == Convert.ToInt32(POId)
+                                                select d;
+
+                            if (purchaseOrder.Any())
+                            {
+                                if (!purchaseOrder.FirstOrDefault().IsLocked)
+                                {
+                                    var itemUnit = from d in db.MstArticles
+                                                   where d.Id == objPurchaseOrderItem.ItemId
+                                                   select d;
+
+                                    if (itemUnit.Any())
+                                    {
+                                        var conversionUnit = from d in db.MstArticleUnits
+                                                             where d.ArticleId == objPurchaseOrderItem.ItemId
+                                                             && d.UnitId == objPurchaseOrderItem.UnitId
+                                                             select d;
+
+                                        if (conversionUnit.Any())
+                                        {
+                                            Decimal baseQuantity = objPurchaseOrderItem.Quantity * 1;
+                                            if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                                            {
+                                                baseQuantity = objPurchaseOrderItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                                            }
+
+                                            Decimal baseCost = objPurchaseOrderItem.Amount;
+                                            if (baseQuantity > 0)
+                                            {
+                                                baseQuantity = objPurchaseOrderItem.Amount / baseQuantity;
+                                            }
+
+                                            Data.TrnPurchaseOrderItem newPurchaseOrderItem = new Data.TrnPurchaseOrderItem
+                                            {
+                                                POId = objPurchaseOrderItem.POId,
+                                                ItemId = objPurchaseOrderItem.ItemId,
+                                                Particulars = objPurchaseOrderItem.Particulars,
+                                                UnitId = objPurchaseOrderItem.UnitId,
+                                                Quantity = objPurchaseOrderItem.Quantity,
+                                                Cost = objPurchaseOrderItem.Cost,
+                                                Amount = objPurchaseOrderItem.Amount,
+                                                BaseUnitId = itemUnit.FirstOrDefault().UnitId,
+                                                BaseQuantity = baseQuantity,
+
+                                            };
+
+                                            db.TrnPurchaseOrderItems.InsertOnSubmit(newPurchaseOrderItem);
+                                            db.SubmitChanges();
+
+                                            return Request.CreateResponse(HttpStatusCode.OK);
+                                        }
+                                        else
+                                        {
+                                            return Request.CreateResponse(HttpStatusCode.BadRequest, "The selected item has no unit conversion.");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return Request.CreateResponse(HttpStatusCode.BadRequest, "The selected item was not found in the server.");
+                                    }
+                                }
+                                else
+                                {
+                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "You cannot add new purchase order item if the current purchase order detail is locked.");
+                                }
+                            }
+                            else
+                            {
+                                return Request.CreateResponse(HttpStatusCode.NotFound, "These current purchase order details are not found in the server. Please add new purchase order first before proceeding.");
+                            }
+                        }
+                        else
+                        {
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no rights to add new purchase order item in this purchase order detail page.");
+                        }
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no access in this purchase order detail page.");
+                    }
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Theres no current user logged in.");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Something's went wrong from the server.");
+            }
+        }
 
     }
 }
