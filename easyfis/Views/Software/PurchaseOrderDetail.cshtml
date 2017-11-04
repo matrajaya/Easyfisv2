@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@model easyfis.Entities.MstUserForm
+@{
+    // =====================
+    // User Rights Variables
+    // =====================
+    var canAdd = Model.CanAdd;
+    var canEdit = Model.CanEdit;
+    var canDelete = Model.CanDelete;
+    var canLock = Model.CanLock;
+    var canUnlock = Model.CanUnlock;
+    var canPrint = Model.CanPrint;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -33,9 +45,20 @@
                         <div class="row">
                             <div class="col-md-12" align="right">
                                 <!-- <button class="btn btn-primary" id="btnEmailPO" onclick="btnEmailPOOnclick()"><i class="fa fa-envelope"></i> Email</button> -->
-                                <button class="btn btn-primary" id="btnLockPO" onclick="btnLockPOOnclick()"><i class="fa fa-lock"></i> Lock</button>
-                                <button class="btn btn-primary" id="btnUnlockPO" onclick="btnUnlockPOOnclick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                <button class="btn btn-primary" id="btnPrintPO" onclick="btnPrintPOOnclick()"><i class="fa fa-print"></i> Print</button>
+                                @{
+                                    if (canLock)
+                                    {
+                                        <button class="btn btn-primary" id="btnLockPO" onclick="btnLockPOOnclick()"><i class="fa fa-lock"></i> Lock</button>
+                                    }
+                                    if (canUnlock)
+                                    {
+                                        <button class="btn btn-primary" id="btnUnlockPO" onclick="btnUnlockPOOnclick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                    }
+                                    if (canPrint)
+                                    {
+                                        <button class="btn btn-primary" id="btnPrintPO" onclick="btnPrintPOOnclick()"><i class="fa fa-print"></i> Print</button>
+                                    }
+                                }
                                 <button class="btn btn-danger" id="btnClosePO" onclick="window.location.href = '/Software/PurchaseOrder'"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
@@ -141,19 +164,29 @@
                 <br />
                 <div class="tab-content">
                     <div id="Item" class="tab-pane fade in active">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary" id="btnAddPOItem" onclick="btnAddPOItemOnclick()"><i class="fa fa-plus"></i> Add</button>
-                                        <button class="btn btn-primary" id="btnItemQuery" onclick="btnItemQueryOnclick()"><i class="fa fa-search-plus"></i> Item Query</button>
+                        @{
+                            if (canAdd)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button class="btn btn-primary" id="btnAddPOItem" onclick="btnAddPOItemOnclick()"><i class="fa fa-plus"></i> Add</button>
+                                                <button class="btn btn-primary" id="btnItemQuery" onclick="btnItemQueryOnclick()"><i class="fa fa-search-plus"></i> Item Query</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="POItemGrid"></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="panel-body">
+                            }
+                            else
+                            {
                                 <div id="POItemGrid"></div>
-                            </div>
-                        </div>
+                                <br /><br />
+                            }
+                        }
                         <div class="panel panel-default">
                             <div class="panel-body" style="padding-bottom: 0px;">
                                 <div class="row">
@@ -261,24 +294,6 @@
         </div>
     </div>
 
-    <!-- Apply -->
-    <div class="modal fade" id="applyItems" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Apply Item <i class="fa fa-check-square-o"></i></h4>
-                </div>
-                <div class="modal-body">
-                    Are you sure that you want to apply?
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary " id="btnConfirmApply" onclick="btnConfrimApplyPOItems_OnClick()"><i class="fa fa-check-square-o"></i> Apply</button>
-                    <button id="btnConfirmClose" class="btn btn-danger " data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- POLines Delete Modal Confirmation -->
     <div class="modal fade" id="deletePOLinesConfirm" role="dialog">
         <div class="modal-dialog modal-sm">
@@ -345,17 +360,17 @@
             NProgress.start();
             var branchesObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listBranch',
+                url: '/api/purchaseOrder/dropdown/list/branch',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (branchListResults) {
-                    if (branchListResults.length > 0) {
-                        for (i = 0; i < branchListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             branchesObservableArray.push({
-                                Id: branchListResults[i]["Id"],
-                                Branch: branchListResults[i]["Branch"]
+                                Id: results[i]["Id"],
+                                Branch: results[i]["Branch"]
                             });
                         }
                     }
@@ -381,17 +396,17 @@
         function getSupplierForComboBox() {
             var suppliersObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticleByArticleTypeId/3',
+                url: '/api/purchaseOrder/dropdown/list/supplier',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (supplierListResults) {
-                    if (supplierListResults.length > 0) {
-                        for (i = 0; i < supplierListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             suppliersObservableArray.push({
-                                Id: supplierListResults[i]["Id"],
-                                Supplier: supplierListResults[i]["Article"]
+                                Id: results[i]["Id"],
+                                Supplier: results[i]["Article"]
                             });
                         }
                     }
@@ -416,17 +431,17 @@
         function getTermForComboBox() {
             var termsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listTerm',
+                url: '/api/purchaseOrder/dropdown/list/term',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (termListResults) {
-                    if (termListResults.length > 0) {
-                        for (i = 0; i < termListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             termsObservableArray.push({
-                                Id: termListResults[i]["Id"],
-                                Term: termListResults[i]["Term"]
+                                Id: results[i]["Id"],
+                                Term: results[i]["Term"]
                             });
                         }
                     }
@@ -451,17 +466,17 @@
         function getUsersForComboBox() {
             var usersObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listUser',
+                url: '/api/purchaseOrder/dropdown/list/users',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (userListResults) {
-                    if (userListResults.length > 0) {
-                        for (i = 0; i < userListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             usersObservableArray.push({
-                                Id: userListResults[i]["Id"],
-                                FullName: userListResults[i]["FullName"]
+                                Id: results[i]["Id"],
+                                FullName: results[i]["FullName"]
                             });
                         }
                     }
@@ -503,55 +518,54 @@
                         selectedValuePath: "Id"
                     });
 
-                    getPurchaseOrderById();
+                    getPurchaseOrderDetail();
                 }
             });
         }
 
-        // ==================
-        // GET Purchase by Id
-        // ==================
-        function getPurchaseOrderById() {
+        // =========================
+        // GET Purchase Order Detail
+        // =========================
+        function getPurchaseOrderDetail() {
             if (document.location.search.length > 0) {
                 var id = getParam('id');
                 $.ajax({
-                    url: '/api/purchaseOrder/' + id,
+                    url: '/api/purchaseOrder/detail/' + id,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
-                    success: function (Results) {
-                        if (Results != null) {
-                            // header data
-                            cboPOBranch.selectedValue = Results.BranchId;
-                            document.getElementById('PONumber').value = Results.PONumber;
+                    success: function (results) {
+                        if (results != null) {
+                            cboPOBranch.selectedValue = results.BranchId;
+                            document.getElementById('PONumber').value = results.PONumber;
                             cboPODate.dispose();
                             cboPODate = new wijmo.input.InputDate('#cboPODate', {
                                 format: 'MM-dd-yyyy',
-                                value: new Date(Results.PODate)
+                                value: new Date(results.PODate)
                             });
-                            document.getElementById('POManualPONumber').value = Results.ManualPONumber;
-                            cboPOSupplier.selectedValue = Results.SupplierId;
-                            cboPOTerm.selectedValue = Results.TermId;
-                            document.getElementById('PORemarks').value = Results.Remarks;
-                            document.getElementById('PORequestNumber').value = Results.ManualRequestNumber;
+                            document.getElementById('POManualPONumber').value = results.ManualPONumber;
+                            cboPOSupplier.selectedValue = results.SupplierId;
+                            cboPOTerm.selectedValue = results.TermId;
+                            document.getElementById('PORemarks').value = results.Remarks;
+                            document.getElementById('PORequestNumber').value = results.ManualRequestNumber;
                             cboPODateNeeded.dispose();
                             cboPODateNeeded = new wijmo.input.InputDate('#cboPODateNeeded', {
                                 format: 'MM-dd-yyyy',
-                                value: new Date(Results.DateNeeded)
+                                value: new Date(results.DateNeeded)
                             });
-                            cboPORequestedBy.selectedValue = Results.RequestedById;
-                            cboPOPreparedBy.selectedValue = Results.PreparedById;
-                            cboPOCheckedBy.selectedValue = Results.CheckedById;
-                            cboPOApprovedBy.selectedValue = Results.ApprovedById;
-                            document.getElementById('POClosePO').checked = Results.IsClose;
+                            cboPORequestedBy.selectedValue = results.RequestedById;
+                            cboPOPreparedBy.selectedValue = results.PreparedById;
+                            cboPOCheckedBy.selectedValue = results.CheckedById;
+                            cboPOApprovedBy.selectedValue = results.ApprovedById;
+                            document.getElementById('POClosePO').checked = results.IsClose;
 
                             // user stamp
-                            document.getElementById('createdBy').innerHTML = Results.CreatedBy;
-                            document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
-                            document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
-                            document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+                            document.getElementById('createdBy').innerHTML = results.CreatedBy;
+                            document.getElementById('createdDate').innerHTML = results.CreatedDateTime;
+                            document.getElementById('updatedBy').innerHTML = results.UpdatedBy;
+                            document.getElementById('updatedDate').innerHTML = results.UpdatedDateTime;
 
-                            if (Results.IsLocked) {
+                            if (results.IsLocked) {
                                 // fields
                                 document.getElementById('PONumber').disabled = true;
                                 cboPODate.disabled = true;
@@ -572,35 +586,17 @@
                                 $("#btnAddPOItem").prop("disabled", true);
                                 $("#btnItemQuery").prop("disabled", true);
 
-                                var canUnLock = "@ViewData["CanUnlock"]";
-                                if (canUnLock == "False") {
-                                    $("#btnUnlockPO").prop("disabled", true);
-                                }
-
-                                var canPrint = "@ViewData["CanPrint"]";
-                                if (canPrint == "False") {
-                                    $("#btnPrintPO").prop("disabled", true);
-                                }
-
                                 isLocked = true;
                             } else {
                                 $("#btnEmailPO").prop("disabled", true);
                                 $("#btnUnlockPO").prop("disabled", true);
                                 $("#btnPrintPO").prop("disabled", true);
-
-                                var canLock = "@ViewData["CanLock"]";
-                                if (canLock == "False") {
-                                    $("#btnLockPO").prop("disabled", true);
-                                }
-
-                                var canAdd = "@ViewData["CanAdd"]";
-                                if (canAdd == "False") {
-                                    $("#btnAddPOItem").prop("disabled", true);
-                                    $("#btnItemQuery").prop("disabled", true);
-                                }
                             }
 
                             createPurchaseOrderItemFlexGrid();
+                        } else {
+                            alert("No Data");
+                            window.location = "/Software/PurchaseOrder";
                         }
                     }
                 });
@@ -610,14 +606,11 @@
             }
         }
 
-        // ==============
-        // Save PO - Lock
-        // ==============
+        // ===================
+        // Lock Purchase Order
+        // ===================
         function btnLockPOOnclick() {
             var purchaseOrderObject = new Object();
-            var id = getParam('id');
-            purchaseOrderObject.BranchId = cboPOBranch.selectedValue;
-            purchaseOrderObject.PONumber = document.getElementById('PONumber').value;
             purchaseOrderObject.PODate = cboPODate.value.toLocaleDateString();
             purchaseOrderObject.SupplierId = cboPOSupplier.selectedValue;
             purchaseOrderObject.TermId = cboPOTerm.selectedValue;
@@ -627,7 +620,6 @@
             purchaseOrderObject.Remarks = document.getElementById('PORemarks').value;
             purchaseOrderObject.IsClose = document.getElementById('POClosePO').checked;
             purchaseOrderObject.RequestedById = cboPORequestedBy.selectedValue;
-            purchaseOrderObject.PreparedById = cboPOPreparedBy.selectedValue;
             purchaseOrderObject.CheckedById = cboPOCheckedBy.selectedValue;
             purchaseOrderObject.ApprovedById = cboPOApprovedBy.selectedValue;
             var purchaseOrderData = JSON.stringify(purchaseOrderObject);
@@ -654,9 +646,11 @@
                 $("#btnPrintPO").prop("disabled", true);
                 $("#btnClosePO").prop("disabled", true);
 
+                var id = getParam('id');
+
                 $.ajax({
                     type: "PUT",
-                    url: '/api/updatePurchaseOrder/' + id,
+                    url: '/api/purchaseOrder/lock/' + id,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     data: purchaseOrderData,
@@ -667,40 +661,46 @@
                                 location.reload()
                             }, 1000);
                         },
-                        404: function () {
-                            toastr.error("Not Found");
+                        404: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                             document.getElementById('btnLockPO').innerHTML = "<i class='fa fa-lock'></i> Lock";
                             $("#btnLockPO").prop("disabled", false);
                             $("#btnClosePO").prop("disabled", false);
                         },
-                        400: function () {
-                            toastr.error("Bad Request");
+                        400: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                            document.getElementById('btnLockPO').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $("#btnLockPO").prop("disabled", false);
+                            $("#btnClosePO").prop("disabled", false);
+                        },
+                        500: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                             document.getElementById('btnLockPO').innerHTML = "<i class='fa fa-lock'></i> Lock";
                             $("#btnLockPO").prop("disabled", false);
                             $("#btnClosePO").prop("disabled", false);
                         }
-                    }
+                    },
                 });
             } else {
                 toastr.error("Invalid Entry");
             }
         }
 
-        // ================
-        // Edit PO - unlock
-        // ================
+        // =====================
+        // Unlock Purchase Order
+        // =====================
         function btnUnlockPOOnclick() {
-            var id = getParam('id');
-
             document.getElementById("btnUnlockPO").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
             $("#btnLockPO").prop("disabled", true);
             $("#btnUnlockPO").prop("disabled", true);
             $("#btnPrintPO").prop("disabled", true);
             $("#btnClosePO").prop("disabled", true);
 
+            var id = getParam('id');
+
             $.ajax({
                 type: "PUT",
-                url: '/api/updatePurchaseOrderIsLocked/' + id,
+                url: '/api/purchaseOrder/unlock/' + id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 statusCode: {
@@ -710,17 +710,23 @@
                             location.reload()
                         }, 1000);
                     },
-                    404: function () {
-                        toastr.error("Not Found");
-                        document.getElementById('btnLockPO').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                        document.getElementById('btnUnlockPO').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
                         $("#btnUnlockPO").prop("disabled", false);
                         $("#btnPrintPO").prop("disabled", false);
                         $("#btnClosePO").prop("disabled", false);
-
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
-                        document.getElementById('btnLockPO').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        document.getElementById('btnUnlockPO').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $("#btnUnlockPO").prop("disabled", false);
+                        $("#btnPrintPO").prop("disabled", false);
+                        $("#btnClosePO").prop("disabled", false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                        document.getElementById('btnUnlockPO').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
                         $("#btnUnlockPO").prop("disabled", false);
                         $("#btnPrintPO").prop("disabled", false);
                         $("#btnClosePO").prop("disabled", false);
@@ -729,75 +735,63 @@
             });
         }
 
-        // ========
-        // Print PO
-        // ========
+        // ====================
+        // Print Purchase Order
+        // ====================
         function btnPrintPOOnclick() {
             var PurchaseOrderId = getParam('id');
             var pirntLink = "/RepPurchaseOrder/PurchaseOrder?POId=" + PurchaseOrderId;
             window.open(pirntLink, '_blank');
         }
 
-        // ==========================
-        // Purchase Order Line / Item
-        // ==========================
+        // ========================
+        // Get Purchase Order Items
+        // ========================
         function getPurchaseOrderItem() {
             var purchaseOrderItemsObservableArray = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
-                var id = getParam('id');
+                var POId = getParam('id');
                 $.ajax({
-                    url: '/api/listPurchaseOrderItemByPOId/' + id,
+                    url: '/api/purchaseOrderItem/list/' + POId,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
-                    success: function (Results) {
+                    success: function (results) {
                         var totalAmount = 0;
-                        if (Results.length > 0) {
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled = "";
-                            if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            }
-
-                            var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled = "";
-                            if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditPOLines_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
-                            var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePOLines_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                        if (results.length > 0) {
+                            var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditPOLines_OnClick()'><i class='fa fa-edit'></i> Edit</button>";
+                            var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePOLines_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             if (isLocked) {
                                 btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditPOLines_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
-                                btnDeleteId =  "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePOLines_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePOLines_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                             }
 
-                            for (i = 0; i < Results.length; i++) {
+                            for (i = 0; i < results.length; i++) {
                                 purchaseOrderItemsObservableArray.push({
                                     EditId: btnEditId,
                                     DeleteId: btnDeleteId,
-                                    Id: Results[i]["Id"],
-                                    ItemId: Results[i]["ItemId"],
-                                    Item: Results[i]["Item"],
-                                    ItemCode: Results[i]["ItemCode"],
-                                    POId: Results[i]["POId"],
-                                    Quantity: Results[i]["Quantity"],
-                                    QuantityDisplay: parseFloat(Results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    UnitId: Results[i]["UnitId"],
-                                    Unit: Results[i]["Unit"],
-                                    Particulars: Results[i]["Particulars"],
-                                    Cost: Results[i]["Cost"],
-                                    CostDisplay: parseFloat(Results[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    Amount: Results[i]["Amount"],
-                                    AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    BaseUnit: Results[i]["BaseUnit"],
-                                    BaseQuantity: Results[i]["BaseQuantity"],
-                                    BaseQuantityDisplay: parseFloat(Results[i]["BaseQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    BaseCost: Results[i]["BaseCost"],
-                                    BaseCostDisplay: parseFloat(Results[i]["BaseCost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                    Id: results[i]["Id"],
+                                    POId: results[i]["POId"],
+                                    ItemId: results[i]["ItemId"],
+                                    ItemCode: results[i]["ItemCode"],
+                                    ItemDescription: results[i]["ItemDescription"],
+                                    Particulars: results[i]["Particulars"],
+                                    Quantity: results[i]["Quantity"],
+                                    QuantityDisplay: parseFloat(results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    UnitId: results[i]["UnitId"],
+                                    Unit: results[i]["Unit"],
+                                    Cost: results[i]["Cost"],
+                                    CostDisplay: parseFloat(results[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    Amount: results[i]["Amount"],
+                                    AmountDisplay: parseFloat(results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    BaseUnit: results[i]["BaseUnit"],
+                                    BaseQuantity: results[i]["BaseQuantity"],
+                                    BaseQuantityDisplay: parseFloat(results[i]["BaseQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    BaseCost: results[i]["BaseCost"],
+                                    BaseCostDisplay: parseFloat(results[i]["BaseCost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                                 });
 
-                                totalAmount += Results[i]["Amount"];
+                                totalAmount += results[i]["Amount"];
                             }
                         }
 
@@ -811,7 +805,7 @@
         }
 
         // =====================================
-        // Purchase Order Line / Item - FlexGrid
+        // Create Purchase Order Item - FlexGrid
         // =====================================
         function createPurchaseOrderItemFlexGrid() {
             purchaseOrderItemCollectionView = new wijmo.collections.CollectionView(getPurchaseOrderItem());
@@ -819,24 +813,36 @@
             purchaseOrderItemFlexGrid = new wijmo.grid.FlexGrid('#POItemGrid');
             purchaseOrderItemFlexGrid.initialize({
                 columns: [
-                    {
-                        "header": "Edit",
-                        "binding": "EditId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
-                    {
-                        "header": "Delete",
-                        "binding": "DeleteId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
+                    @{
+                        if (canEdit)
+                        {
+                            <text>
+                                {
+                                    "header": "Edit",
+                                    "binding": "EditId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                        if (canDelete)
+                        {
+                            <text>
+                                {
+                                    "header": "Delete",
+                                    "binding": "DeleteId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                    }
                     {
                         "header": "Code",
                         "binding": "ItemCode",
@@ -844,8 +850,8 @@
                         "width": 130,
                     },
                     {
-                        "header": "Item",
-                        "binding": "Item",
+                        "header": "Description",
+                        "binding": "ItemDescription",
                         "allowSorting": true,
                         "width": 200
                     },
@@ -906,7 +912,38 @@
                 autoGenerateColumns: false,
                 itemsSource: purchaseOrderItemCollectionView,
                 isReadOnly: true,
-                frozenColumns: 2,
+                @{
+                    if (canEdit)
+                    {
+                        if (canDelete)
+                        {
+                            <text>
+                                frozenColumns: 2,
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                frozenColumns: 1,
+                            </text>
+                        }
+                    }
+                    else
+                    {
+                        if (canDelete)
+                        {
+                            <text>
+                                frozenColumns: 1,
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                frozenColumns: 0,
+                            </text>
+                        }
+                    }
+                }
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -919,41 +956,141 @@
             purchaseOrderItemFlexGrid.columnHeaders.rows.push(hr);
             purchaseOrderItemFlexGrid.columnHeaders.rows[0].allowMerging = true;
 
-            purchaseOrderItemFlexGrid.columnHeaders.columns[0].allowMerging = true;
-            purchaseOrderItemFlexGrid.columnHeaders.setCellData(0, 0, 'Edit');
+            @{
+                if (canEdit)
+                {
+                    if (canDelete)
+                    {
+                        <text>
+                            var columnName = "";
+                            for (var i = 0; i <= 11; i++) {
+                                if (i == 0) {
+                                    columnName = "Edit";
+                                } else if (i == 1) {
+                                    columnName = "Delete";
+                                } else if (i == 2) {
+                                    columnName = "Code";
+                                } else if (i == 3) {
+                                    columnName = "Description";
+                                } else if (i == 4) {
+                                    columnName = "Particulars";
+                                } else if (i == 5) {
+                                    columnName = "Quantity";
+                                } else if (i == 6) {
+                                    columnName = "Unit";
+                                } else if (i == 7) {
+                                    columnName = "Cost";
+                                } else if (i == 8) {
+                                    columnName = "Amount";
+                                } else {
+                                    columnName = "Basic Unit Conversion";
+                                }
 
-            purchaseOrderItemFlexGrid.columnHeaders.columns[1].allowMerging = true;
-            purchaseOrderItemFlexGrid.columnHeaders.setCellData(0, 1, 'Delete');
+                                purchaseOrderItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                purchaseOrderItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                            }
+                        </text>
+                    }
+                    else
+                    {
+                         <text>
+                            var columnName = "";
+                            for (var i = 0; i <= 10; i++) {
+                                if (i == 0) {
+                                    columnName = "Edit";
+                                } else if (i == 1) {
+                                    columnName = "Code";
+                                } else if (i == 2) {
+                                    columnName = "Description";
+                                } else if (i == 3) {
+                                    columnName = "Particulars";
+                                } else if (i == 4) {
+                                    columnName = "Quantity";
+                                } else if (i == 5) {
+                                    columnName = "Unit";
+                                } else if (i == 6) {
+                                    columnName = "Cost";
+                                } else if (i == 7) {
+                                    columnName = "Amount";
+                                } else {
+                                    columnName = "Basic Unit Conversion";
+                                }
 
-            purchaseOrderItemFlexGrid.columnHeaders.columns[2].allowMerging = true;
-            purchaseOrderItemFlexGrid.columnHeaders.setCellData(0, 2, 'Code');
+                                purchaseOrderItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                purchaseOrderItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                            }
+                        </text>
+                    }
+                }
+                else
+                {
+                    if (canDelete)
+                    {
+                        <text>
+                            var columnName = "";
+                            for (var i = 0; i <= 10; i++) {
+                                if (i == 0) {
+                                    columnName = "Delete";
+                                } else if (i == 1) {
+                                    columnName = "Code";
+                                } else if (i == 2) {
+                                    columnName = "Description";
+                                } else if (i == 3) {
+                                    columnName = "Particulars";
+                                } else if (i == 4) {
+                                    columnName = "Quantity";
+                                } else if (i == 5) {
+                                    columnName = "Unit";
+                                } else if (i == 6) {
+                                    columnName = "Cost";
+                                } else if (i == 7) {
+                                    columnName = "Amount";
+                                } else {
+                                    columnName = "Basic Unit Conversion";
+                                }
 
-            purchaseOrderItemFlexGrid.columnHeaders.columns[3].allowMerging = true;
-            purchaseOrderItemFlexGrid.columnHeaders.setCellData(0, 3, 'Item');
+                                purchaseOrderItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                purchaseOrderItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
 
-            purchaseOrderItemFlexGrid.columnHeaders.columns[4].allowMerging = true;
-            purchaseOrderItemFlexGrid.columnHeaders.setCellData(0, 4, 'Particulars');
 
-            purchaseOrderItemFlexGrid.columnHeaders.columns[5].allowMerging = true;
-            purchaseOrderItemFlexGrid.columnHeaders.setCellData(0, 5, 'Quantity');
+                            }
+                        </text>
+                    }
+                    else
+                    {
+                         <text>
+                            var columnName = "";
+                            for (var i = 0; i <= 9; i++) {
+                                if (i == 0) {
+                                    columnName = "Code";
+                                } else if (i == 1) {
+                                    columnName = "Description";
+                                } else if (i == 2) {
+                                    columnName = "Particulars";
+                                } else if (i == 3) {
+                                    columnName = "Quantity";
+                                } else if (i == 4) {
+                                    columnName = "Unit";
+                                } else if (i == 5) {
+                                    columnName = "Cost";
+                                } else if (i == 6) {
+                                    columnName = "Amount";
+                                } else {
+                                    columnName = "Basic Unit Conversion";
+                                }
 
-            purchaseOrderItemFlexGrid.columnHeaders.columns[6].allowMerging = true;
-            purchaseOrderItemFlexGrid.columnHeaders.setCellData(0, 6, 'Unit');
-
-            purchaseOrderItemFlexGrid.columnHeaders.columns[7].allowMerging = true;
-            purchaseOrderItemFlexGrid.columnHeaders.setCellData(0, 7, 'Cost');
-
-            purchaseOrderItemFlexGrid.columnHeaders.columns[8].allowMerging = true;
-            purchaseOrderItemFlexGrid.columnHeaders.setCellData(0, 8, 'Amount');
-
-            for (var columnBasicUnitConversion = 9; columnBasicUnitConversion <= 11; columnBasicUnitConversion++) {
-                purchaseOrderItemFlexGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Basic Unit Conversion');
+                                purchaseOrderItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                purchaseOrderItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                            }
+                        </text>
+                    }
+                }
             }
         }
 
-        // ============
-        // ADD PO Lines
-        // ============
+        // ========================
+        // Add Purchase Order Items
+        // ========================
         function btnAddPOItemOnclick() {
             $('#POLinesEdit').modal({ show: true, backdrop: 'static' });
 
@@ -966,31 +1103,31 @@
             $("#POItemContent").hide();
 
             purchaseOrderItemId = 0;
-            getItem(0,0);
+            getItem(0, 0);
             document.getElementById('POLine_Particulars').value = "NA";
             document.getElementById('POLine_Quantity').value = formatDecimalValues(1);
             document.getElementById('POLine_Cost').value = formatDecimalValues(0);
             document.getElementById('POLine_Amount').value = formatDecimalValues(0);
         }
 
-        // =========
-        // Get  Item
-        // =========
+        // =============================
+        // Get Item Code and Description
+        // =============================
         function getItem(itemIdSelectedValue, articleUnitIdSelectedValue) {
             var itemsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticleByArticleTypeId/1',
+                url: '/api/purchaseOrderItem/dropdown/list/item',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (itemListResults) {
-                    if (itemListResults.length > 0) {
-                        for (i = 0; i < itemListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             itemsObservableArray.push({
-                                Id: itemListResults[i]["Id"],
-                                ManualArticleCode: itemListResults[i]["ManualArticleCode"],
-                                Article: itemListResults[i]["Article"]
+                                Id: results[i]["Id"],
+                                ManualArticleCode: results[i]["ManualArticleCode"],
+                                Article: results[i]["Article"]
                             });
                         }
                     }
@@ -1028,24 +1165,24 @@
             });
         }
 
-        // ==============
-        // Get  Item Unit
-        // ==============
+        // =============
+        // Get Item Unit
+        // =============
         function getItemUnitForComboBox(itemId, articleUnitIdSelectedValue) {
             var unitsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticleUnitByArticleId/' + itemId,
+                url: '/api/purchaseOrderItem/dropdown/list/itemUnit/' + itemId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (unitListResults) {
-                    if (unitListResults.length > 0) {
-                        for (i = 0; i < unitListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             unitsObservableArray.push({
-                                Id: unitListResults[i]["Id"],
-                                UnitId: unitListResults[i]["UnitId"],
-                                Unit: unitListResults[i]["Unit"]
+                                Id: results[i]["Id"],
+                                UnitId: results[i]["UnitId"],
+                                Unit: results[i]["Unit"]
                             });
                         }
                     }
@@ -1067,9 +1204,9 @@
             });
         }
 
-        // =============
-        // Edit PO Lines
-        // =============
+        // ========================
+        // Edit Purchase Order Item
+        // ========================
         function btnEditPOLines_OnClick() {
             $('#POLinesEdit').modal({ show: true, backdrop: 'static' });
 
@@ -1091,9 +1228,9 @@
             document.getElementById('POLine_Amount').value = formatDecimalValues(purchaseOrderItem.Amount);
         }
 
-        // ====================
-        // Delete PO Lines item
-        // ====================
+        // ==========================
+        // Delete Purchase Order Item
+        // ==========================
         function btnDeletePOLines_OnClick() {
             $('#deletePOLinesConfirm').modal({ show: true, backdrop: 'static' });
 
@@ -1102,16 +1239,21 @@
             $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
         }
 
-        // POItem Confirm Delete
+        // ==================================
+        // Confirm Delete Purchase Order Item
+        // ==================================
         function cmdPOLinesConfirmDeleteButton_OnClick() {
             document.getElementById('cmdConfirmDeletePOLines').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $("#cmdConfirmDeletePOLines").prop("disabled", true);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
 
             purchaseOrderItemCollectionView.editItem(purchaseOrderItemCollectionView.currentItem);
-            var purchaseOrderItemId = purchaseOrderItemCollectionView.currentEditItem.Id;
+
+            var id = purchaseOrderItemCollectionView.currentEditItem.Id;
+            var POId = getParam('id');
+
             $.ajax({
-                url: '/api/deletePurchaseOrderItem/' + purchaseOrderItemId,
+                url: '/api/purchaseOrderItem/delete/' + id + '/' + POId,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -1128,18 +1270,23 @@
                         purchaseOrderItemFlexGrid.itemsSource = purchaseOrderItemCollectionView;
                         purchaseOrderItemFlexGrid.trackChanges = true;
                     },
-                    404: function () {
-                        toastr.error("Not Found");
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                         $('#deletePOLinesConfirm').modal('hide');
-
                         document.getElementById('cmdConfirmDeletePOLines').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeletePOLines").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
                         $('#deletePOLinesConfirm').modal('hide');
-
+                        document.getElementById('cmdConfirmDeletePOLines').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $("#cmdConfirmDeletePOLines").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                        $('#deletePOLinesConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeletePOLines').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeletePOLines").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
@@ -1148,14 +1295,14 @@
             });
         }
 
-        // =============
-        // Save PO Lines
-        // =============
+        // ========================
+        // Save Purchase Order Item
+        // ========================
         function cmdPOLinesSaveButton_OnClick() {
-            var id = getParam('id');
+            var POId = getParam('id');
 
             var purchaserOrderItemObject = new Object();
-            purchaserOrderItemObject.POId = id;
+            purchaserOrderItemObject.POId = POId;
             purchaserOrderItemObject.ItemId = cboPOLineItemDescription.selectedValue;
             purchaserOrderItemObject.Particulars = document.getElementById('POLine_Particulars').value;
             purchaserOrderItemObject.UnitId = cboPOLineUnit.selectedValue;
@@ -1178,9 +1325,7 @@
                 }
             });
 
-            if (isValid == false) {
-                toastr.error("Invalid Entry");
-            } else {
+            if (isValid) {
                 document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $("#cmdSavePOLinesButton").prop("disabled", true);
                 $("#cmdPOLinesDetailCloseButton").prop("disabled", true);
@@ -1188,12 +1333,12 @@
                 if (purchaseOrderItemId == 0) {
                     $.ajax({
                         type: "POST",
-                        url: '/api/addPurchaseOrderItem',
+                        url: '/api/purchaseOrderItem/add/' + POId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: purchaserOrderItemData,
-                        success: function(id) {
-                            if (id > 0) {
+                        statusCode: {
+                            200: function () {
                                 toastr.success("Save Successful");
 
                                 $('#POLinesEdit').modal('hide');
@@ -1204,9 +1349,21 @@
                                 purchaseOrderItemCollectionView = new wijmo.collections.CollectionView(getPurchaseOrderItem());
                                 purchaseOrderItemFlexGrid.itemsSource = purchaseOrderItemCollectionView;
                                 purchaseOrderItemFlexGrid.trackChanges = true;
-                            } else {
-                                toastr.error("Internal Server Error");
-
+                            },
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                                document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSavePOLinesButton").prop("disabled", false);
+                                $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSavePOLinesButton").prop("disabled", false);
+                                $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                                 document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSavePOLinesButton").prop("disabled", false);
                                 $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
@@ -1216,7 +1373,7 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updatePurchaseOrderItem/' + purchaseOrderItemId,
+                        url: '/api/purchaseOrderItem/update/' + purchaseOrderItemId + '/' + POId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: purchaserOrderItemData,
@@ -1233,16 +1390,20 @@
                                 purchaseOrderItemFlexGrid.itemsSource = purchaseOrderItemCollectionView;
                                 purchaseOrderItemFlexGrid.trackChanges = true;
                             },
-                            404: function () {
-                                toastr.error("Not Found");
-
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                                 document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSavePOLinesButton").prop("disabled", false);
                                 $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
                             },
-                            400: function () {
-                                toastr.error("Bad Request");
-
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSavePOLinesButton").prop("disabled", false);
+                                $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                                 document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSavePOLinesButton").prop("disabled", false);
                                 $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
@@ -1250,6 +1411,8 @@
                         }
                     });
                 }
+            } else {
+                toastr.error("Invalid Entry");
             }
         }
 
@@ -1264,18 +1427,15 @@
             computePOItemAmount();
         });
 
-        // =============================
-        // Compute the Amount of PO Item
-        // =============================
+        // ==================================
+        // Compute Purchase Order Item Amount
+        // ==================================
         function computePOItemAmount() {
             var inputQuantity = document.getElementById('POLine_Quantity').value;
             var inputCost = document.getElementById('POLine_Cost').value;
-
             var replacedCost = inputCost.replace(/\,/g, '');
             var replacedQuantity = inputQuantity.replace(/\,/g, '');
-
             var amount = replacedCost * replacedQuantity;
-
             document.getElementById('POLine_Amount').value = formatDecimalValues(amount);
         }
 
@@ -1291,6 +1451,9 @@
             $('.modal:visible').length && $(document.body).addClass('modal-open');
         });
 
+        // ====================
+        // Email Purchase Order
+        // ====================
         function btnEmailPOOnclick() {
             $("#btnEmailPO").prop("disabled", true);
             document.getElementById("btnEmailPO").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Sending E-mail";
@@ -1319,12 +1482,9 @@
             });
         }
 
-        function btnConfrimApplyPOItems_OnClick() {
-            $("#btnConfirmApply").prop("disabled", true);
-            $("#btnConfirmClose").prop("disabled", true);
-        }
-
-        // item query
+        // ====================
+        // Item Query Pop Modal
+        // ====================
         function btnItemQueryOnclick() {
             $('#POLinesItemQuery').modal({
                 show: true,
@@ -1340,70 +1500,25 @@
             }, 500);
         }
 
-        // ========================
-        // get Items for Item Query
-        // ========================
+        // =============================
+        // Get Purchase Order Item Query
+        // =============================
         function getArticleItemForItemQuery() {
             var itemsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticleByArticleTypeIdLocked/POItem/LastPurchasePrice/1',
+                url: '/api/purchaseOrderItem/popUp/list/itemQuery',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (articleItemsResult) {
-                    for (i = 0; i < articleItemsResult.length; i++) {
+                success: function (results) {
+                    for (i = 0; i < results.length; i++) {
                         itemsObservableArray.push({
-                            Id: articleItemsResult[i]["Id"],
-                            ArticleCode: articleItemsResult[i]["ArticleCode"],
-                            ManualArticleCode: articleItemsResult[i]["ManualArticleCode"],
-                            Article: articleItemsResult[i]["Article"],
-                            Category: articleItemsResult[i]["Category"],
-                            ArticleTypeId: articleItemsResult[i]["ArticleTypeId"],
-                            ArticleType: articleItemsResult[i]["ArticleType"],
-                            ArticleGroupId: articleItemsResult[i]["ArticleGroupId"],
-                            ArticleGroup: articleItemsResult[i]["ArticleGroup"],
-                            AccountId: articleItemsResult[i]["AccountId"],
-                            AccountCode: articleItemsResult[i]["AccountCode"],
-                            Account: articleItemsResult[i]["Account"],
-                            SalesAccountId: articleItemsResult[i]["SalesAccountId"],
-                            SalesAccount: articleItemsResult[i]["SalesAccount"],
-                            CostAccountId: articleItemsResult[i]["CostAccountId"],
-                            CostAccount: articleItemsResult[i]["CostAccount"],
-                            AssetAccountId: articleItemsResult[i]["AssetAccountId"],
-                            AssetAccount: articleItemsResult[i]["AssetAccount"],
-                            ExpenseAccountId: articleItemsResult[i]["ExpenseAccountId"],
-                            ExpenseAccount: articleItemsResult[i]["ExpenseAccount"],
-                            UnitId: articleItemsResult[i]["UnitId"],
-                            Unit: articleItemsResult[i]["Unit"],
-                            InputTaxId: articleItemsResult[i]["InputTaxId"],
-                            InputTax: articleItemsResult[i]["InputTax"],
-                            OutputTaxId: articleItemsResult[i]["OutputTaxId"],
-                            OutputTax: articleItemsResult[i]["OutputTax"],
-                            WTaxTypeId: articleItemsResult[i]["WTaxTypeId"],
-                            WTaxType: articleItemsResult[i]["WTaxType"],
-                            Price: articleItemsResult[i]["LastPurchasePrice"],
-                            PriceDisplay: parseFloat(articleItemsResult[i]["LastPurchasePrice"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                            Cost: articleItemsResult[i]["Cost"],
-                            IsInventory: articleItemsResult[i]["IsInventory"],
-                            Particulars: articleItemsResult[i]["Particulars"],
-                            Address: articleItemsResult[i]["Address"],
-                            TermId: articleItemsResult[i]["TermId"],
-                            Term: articleItemsResult[i]["Term"],
-                            ContactNumber: articleItemsResult[i]["ContactNumber"],
-                            ContactPerson: articleItemsResult[i]["ContactPerson"],
-                            TaxNumber: articleItemsResult[i]["TaxNumber"],
-                            CreditLimit: articleItemsResult[i]["CreditLimit"],
-                            DateAcquired: articleItemsResult[i]["DateAcquired"],
-                            UsefulLife: articleItemsResult[i]["UsefulLife"],
-                            SalvageValue: articleItemsResult[i]["SalvageValue"],
-                            ManualArticleOldCode: articleItemsResult[i]["ManualArticleOldCode"],
-                            IsLocked: articleItemsResult[i]["IsLocked"],
-                            CreatedById: articleItemsResult[i]["CreatedById"],
-                            CreatedBy: articleItemsResult[i]["CreatedBy"],
-                            CreatedDateTime: articleItemsResult[i]["CreatedDateTime"],
-                            UpdatedById: articleItemsResult[i]["UpdatedById"],
-                            UpdatedBy: articleItemsResult[i]["UpdatedBy"],
-                            UpdatedDateTime: articleItemsResult[i]["UpdatedDateTime"],
+                            Id: results[i]["Id"],
+                            ManualArticleCode: results[i]["ManualArticleCode"],
+                            Article: results[i]["Article"],
+                            Particulars: results[i]["Particulars"],
+                            LastPurchasePrice: results[i]["LastPurchasePrice"],
+                            LastPurchasePriceDisplay: parseFloat(results[i]["LastPurchasePrice"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                             Pick: "<button class='btn btn-primary btn-xs btn-block' onclick='pickToApplyOnClick()'><i class='fa fa-hand-o-right'></i> Pick</button>",
                         });
                     }
@@ -1416,33 +1531,9 @@
             return itemsObservableArray;
         }
 
-        // ===============
-        // Item query Pick
-        // ===============
-        function pickToApplyOnClick() {
-            $('#POLinesEdit').modal({ show: true, backdrop: 'static' });
-
-            document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
-            $("#cmdSavePOLinesButton").prop("disabled", true);
-            $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
-
-            $("#loadingModalItem").show();
-            document.getElementById("loadingModalItem").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
-            $("#POItemContent").hide();
-
-            itemQueryItemsCollection.editItem(itemQueryItemsCollection.currentItem);
-            var item = itemQueryItemsCollection.currentEditItem;
-            purchaseOrderItemId = 0;
-            getItem(item.Id, item.UnitId);
-            document.getElementById('POLine_Particulars').value = item.Particulars;
-            document.getElementById('POLine_Quantity').value = formatDecimalValues(1);
-            document.getElementById('POLine_Cost').value = formatDecimalValues(item.Price);
-            document.getElementById('POLine_Amount').value = formatDecimalValues(item.Price * 1);
-        }
-
-        // ===================
-        // Item query FlexGrid
-        // ===================
+        // ==========================
+        // Create Item Query Flexgrid
+        // ==========================
         function createItemQueryFlexGrid() {
             itemQueryItemsCollection = new wijmo.collections.CollectionView(getArticleItemForItemQuery());
             itemQueryItemsCollection.canFilter = true;
@@ -1469,14 +1560,14 @@
                         "width": "3*"
                     },
                     {
-                        "header": "Item",
+                        "header": "Description",
                         "binding": "Article",
                         "allowSorting": true,
                         "width": "5*"
                     },
                     {
                         "header": "Last Purchase Price",
-                        "binding": "PriceDisplay",
+                        "binding": "LastPurchasePriceDisplay",
                         "allowSorting": true,
                         "align": "right",
                         "width": "2*"
@@ -1500,6 +1591,30 @@
             });
 
             itemQueryGrid.trackChanges = true;
+        }
+
+        // ======================
+        // Item Query - Pick Item
+        // ======================
+        function pickToApplyOnClick() {
+            $('#POLinesEdit').modal({ show: true, backdrop: 'static' });
+
+            document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
+            $("#cmdSavePOLinesButton").prop("disabled", true);
+            $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
+
+            $("#loadingModalItem").show();
+            document.getElementById("loadingModalItem").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            $("#POItemContent").hide();
+
+            itemQueryItemsCollection.editItem(itemQueryItemsCollection.currentItem);
+            var item = itemQueryItemsCollection.currentEditItem;
+            purchaseOrderItemId = 0;
+            getItem(item.Id, 0);
+            document.getElementById('POLine_Particulars').value = item.Particulars;
+            document.getElementById('POLine_Quantity').value = formatDecimalValues(1);
+            document.getElementById('POLine_Cost').value = formatDecimalValues(item.LastPurchasePrice);
+            document.getElementById('POLine_Amount').value = formatDecimalValues(item.LastPurchasePrice * 1);
         }
 
         // ===========
@@ -1528,12 +1643,12 @@
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (userBranchesResults) {
-                    if (userBranchesResults.length > 0) {
-                        for (i = 0; i < userBranchesResults.length; i++) {
+                success: function (userBranchesresults) {
+                    if (userBranchesresults.length > 0) {
+                        for (i = 0; i < userBranchesresults.length; i++) {
                             userBranchesObservableArray.push({
-                                BranchId: userBranchesResults[i]["BranchId"],
-                                Branch: userBranchesResults[i]["Branch"]
+                                BranchId: userBranchesresults[i]["BranchId"],
+                                Branch: userBranchesresults[i]["Branch"]
                             });
                         }
                     }

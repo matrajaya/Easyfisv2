@@ -103,50 +103,50 @@ namespace easyfis.Controllers
             return purchaseOrders.ToList();
         }
 
-        // get purchase order by Id
-        [Authorize]
-        [HttpGet]
-        [Route("api/purchaseOrder/{id}")]
-        public Models.TrnPurchaseOrder getPurchaseOrderById(String id)
-        {
-            var purchaseOrders = from d in db.TrnPurchaseOrders
-                                 where d.Id == Convert.ToInt32(id)
-                                 select new Models.TrnPurchaseOrder
-                                 {
-                                     Id = d.Id,
-                                     BranchId = d.BranchId,
-                                     Branch = d.MstBranch.Branch,
-                                     PONumber = d.PONumber,
-                                     PODate = d.PODate.ToShortDateString(),
-                                     SupplierId = d.SupplierId,
-                                     Supplier = d.MstArticle.Article,
-                                     TermId = d.TermId,
-                                     Term = d.MstTerm.Term,
-                                     ManualRequestNumber = d.ManualRequestNumber,
-                                     ManualPONumber = d.ManualPONumber,
-                                     DateNeeded = d.DateNeeded.ToShortDateString(),
-                                     Remarks = d.Remarks,
-                                     IsClose = d.IsClose,
-                                     Amount = getPurchaseOrderAmountByPOId(d.Id),
-                                     RequestedById = d.RequestedById,
-                                     RequestedBy = d.MstUser4.FullName,
-                                     PreparedById = d.PreparedById,
-                                     PreparedBy = d.MstUser3.FullName,
-                                     CheckedById = d.CheckedById,
-                                     CheckedBy = d.MstUser1.FullName,
-                                     ApprovedById = d.ApprovedById,
-                                     ApprovedBy = d.MstUser.FullName,
-                                     IsLocked = d.IsLocked,
-                                     CreatedById = d.CreatedById,
-                                     CreatedBy = d.MstUser2.FullName,
-                                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                     UpdatedById = d.UpdatedById,
-                                     UpdatedBy = d.MstUser5.FullName,
-                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                 };
+        //// get purchase order by Id
+        //[Authorize]
+        //[HttpGet]
+        //[Route("api/purchaseOrder/{id}")]
+        //public Models.TrnPurchaseOrder getPurchaseOrderById(String id)
+        //{
+        //    var purchaseOrders = from d in db.TrnPurchaseOrders
+        //                         where d.Id == Convert.ToInt32(id)
+        //                         select new Models.TrnPurchaseOrder
+        //                         {
+        //                             Id = d.Id,
+        //                             BranchId = d.BranchId,
+        //                             Branch = d.MstBranch.Branch,
+        //                             PONumber = d.PONumber,
+        //                             PODate = d.PODate.ToShortDateString(),
+        //                             SupplierId = d.SupplierId,
+        //                             Supplier = d.MstArticle.Article,
+        //                             TermId = d.TermId,
+        //                             Term = d.MstTerm.Term,
+        //                             ManualRequestNumber = d.ManualRequestNumber,
+        //                             ManualPONumber = d.ManualPONumber,
+        //                             DateNeeded = d.DateNeeded.ToShortDateString(),
+        //                             Remarks = d.Remarks,
+        //                             IsClose = d.IsClose,
+        //                             Amount = getPurchaseOrderAmountByPOId(d.Id),
+        //                             RequestedById = d.RequestedById,
+        //                             RequestedBy = d.MstUser4.FullName,
+        //                             PreparedById = d.PreparedById,
+        //                             PreparedBy = d.MstUser3.FullName,
+        //                             CheckedById = d.CheckedById,
+        //                             CheckedBy = d.MstUser1.FullName,
+        //                             ApprovedById = d.ApprovedById,
+        //                             ApprovedBy = d.MstUser.FullName,
+        //                             IsLocked = d.IsLocked,
+        //                             CreatedById = d.CreatedById,
+        //                             CreatedBy = d.MstUser2.FullName,
+        //                             CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+        //                             UpdatedById = d.UpdatedById,
+        //                             UpdatedBy = d.MstUser5.FullName,
+        //                             UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+        //                         };
 
-            return (Models.TrnPurchaseOrder)purchaseOrders.FirstOrDefault();
-        }
+        //    return (Models.TrnPurchaseOrder)purchaseOrders.FirstOrDefault();
+        //}
 
         // list purchase order by PODate
         [Authorize]
@@ -242,49 +242,49 @@ namespace easyfis.Controllers
             return purchaseOrders.ToList();
         }
 
-        // get last purchase order PONumber
-        [Authorize]
-        [HttpGet]
-        [Route("api/purchaseOrderLastPONumber")]
-        public Models.TrnPurchaseOrder getPurchaseOrderLastPONumber()
-        {
-            var purchaseOrders = from d in db.TrnPurchaseOrders.OrderByDescending(d => d.PONumber)
-                                 select new Models.TrnPurchaseOrder
-                                 {
-                                     Id = d.Id,
-                                     BranchId = d.BranchId,
-                                     Branch = d.MstBranch.Branch,
-                                     PONumber = d.PONumber,
-                                     PODate = d.PODate.ToShortDateString(),
-                                     SupplierId = d.SupplierId,
-                                     Supplier = d.MstArticle.Article,
-                                     TermId = d.TermId,
-                                     Term = d.MstTerm.Term,
-                                     ManualRequestNumber = d.ManualRequestNumber,
-                                     ManualPONumber = d.ManualPONumber,
-                                     DateNeeded = d.DateNeeded.ToShortDateString(),
-                                     Remarks = d.Remarks,
-                                     IsClose = d.IsClose,
-                                     Amount = getPurchaseOrderAmountByPOId(d.Id),
-                                     RequestedById = d.RequestedById,
-                                     RequestedBy = d.MstUser4.FullName,
-                                     PreparedById = d.PreparedById,
-                                     PreparedBy = d.MstUser3.FullName,
-                                     CheckedById = d.CheckedById,
-                                     CheckedBy = d.MstUser1.FullName,
-                                     ApprovedById = d.ApprovedById,
-                                     ApprovedBy = d.MstUser.FullName,
-                                     IsLocked = d.IsLocked,
-                                     CreatedById = d.CreatedById,
-                                     CreatedBy = d.MstUser2.FullName,
-                                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                     UpdatedById = d.UpdatedById,
-                                     UpdatedBy = d.MstUser5.FullName,
-                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                 };
+        //// get last purchase order PONumber
+        //[Authorize]
+        //[HttpGet]
+        //[Route("api/purchaseOrderLastPONumber")]
+        //public Models.TrnPurchaseOrder getPurchaseOrderLastPONumber()
+        //{
+        //    var purchaseOrders = from d in db.TrnPurchaseOrders.OrderByDescending(d => d.PONumber)
+        //                         select new Models.TrnPurchaseOrder
+        //                         {
+        //                             Id = d.Id,
+        //                             BranchId = d.BranchId,
+        //                             Branch = d.MstBranch.Branch,
+        //                             PONumber = d.PONumber,
+        //                             PODate = d.PODate.ToShortDateString(),
+        //                             SupplierId = d.SupplierId,
+        //                             Supplier = d.MstArticle.Article,
+        //                             TermId = d.TermId,
+        //                             Term = d.MstTerm.Term,
+        //                             ManualRequestNumber = d.ManualRequestNumber,
+        //                             ManualPONumber = d.ManualPONumber,
+        //                             DateNeeded = d.DateNeeded.ToShortDateString(),
+        //                             Remarks = d.Remarks,
+        //                             IsClose = d.IsClose,
+        //                             Amount = getPurchaseOrderAmountByPOId(d.Id),
+        //                             RequestedById = d.RequestedById,
+        //                             RequestedBy = d.MstUser4.FullName,
+        //                             PreparedById = d.PreparedById,
+        //                             PreparedBy = d.MstUser3.FullName,
+        //                             CheckedById = d.CheckedById,
+        //                             CheckedBy = d.MstUser1.FullName,
+        //                             ApprovedById = d.ApprovedById,
+        //                             ApprovedBy = d.MstUser.FullName,
+        //                             IsLocked = d.IsLocked,
+        //                             CreatedById = d.CreatedById,
+        //                             CreatedBy = d.MstUser2.FullName,
+        //                             CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+        //                             UpdatedById = d.UpdatedById,
+        //                             UpdatedBy = d.MstUser5.FullName,
+        //                             UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+        //                         };
 
-            return (Models.TrnPurchaseOrder)purchaseOrders.FirstOrDefault();
-        }
+        //    return (Models.TrnPurchaseOrder)purchaseOrders.FirstOrDefault();
+        //}
 
         // add purchase order
         [Authorize]
@@ -677,51 +677,51 @@ namespace easyfis.Controllers
 
         // send email purchase order    
 
-        [Authorize]
-        [HttpPut]
-        [Route("api/purchaseOrder/sendEmail/{POId}/{SupplierId}")]
-        public HttpResponseMessage sendEmail(Int32 POId, Int32 SupplierId)
-        {
-            try
-            {
-                StringWriter sw = new StringWriter();
-                HtmlTextWriter hw = new HtmlTextWriter(sw);
+        //[Authorize]
+        //[HttpPut]
+        //[Route("api/purchaseOrder/sendEmail/{POId}/{SupplierId}")]
+        //public HttpResponseMessage sendEmail(Int32 POId, Int32 SupplierId)
+        //{
+        //    try
+        //    {
+        //        StringWriter sw = new StringWriter();
+        //        HtmlTextWriter hw = new HtmlTextWriter(sw);
 
-                var supplierEmailAddress = from d in db.MstArticles where d.Id == SupplierId select d;
+        //        var supplierEmailAddress = from d in db.MstArticles where d.Id == SupplierId select d;
 
-                if (supplierEmailAddress.Any())
-                {
-                    MailMessage mm = new MailMessage("easyfisv2@gmail.com", supplierEmailAddress.FirstOrDefault().EmailAddress);
-                    mm.Subject = "Purchase Order";
-                    mm.Body = "Purchase Order";
-                    mm.Attachments.Add(new Attachment(new MemoryStream(PODetailReport(POId)), "PurchaseOrder.pdf"));
-                    mm.IsBodyHtml = true;
+        //        if (supplierEmailAddress.Any())
+        //        {
+        //            MailMessage mm = new MailMessage("easyfisv2@gmail.com", supplierEmailAddress.FirstOrDefault().EmailAddress);
+        //            mm.Subject = "Purchase Order";
+        //            mm.Body = "Purchase Order";
+        //            mm.Attachments.Add(new Attachment(new MemoryStream(PODetailReport(POId)), "PurchaseOrder.pdf"));
+        //            mm.IsBodyHtml = true;
 
-                    SmtpClient smtp = new SmtpClient();
-                    smtp.Host = "smtp.gmail.com";
-                    smtp.EnableSsl = true;
+        //            SmtpClient smtp = new SmtpClient();
+        //            smtp.Host = "smtp.gmail.com";
+        //            smtp.EnableSsl = true;
 
-                    NetworkCredential NetworkCred = new NetworkCredential();
-                    NetworkCred.UserName = "easyfisv2@gmail.com";
-                    NetworkCred.Password = "@innosoft123";
-                    smtp.UseDefaultCredentials = true;
-                    smtp.Credentials = NetworkCred;
-                    smtp.Port = 587;
-                    smtp.Send(mm);
+        //            NetworkCredential NetworkCred = new NetworkCredential();
+        //            NetworkCred.UserName = "easyfisv2@gmail.com";
+        //            NetworkCred.Password = "@innosoft123";
+        //            smtp.UseDefaultCredentials = true;
+        //            smtp.Credentials = NetworkCred;
+        //            smtp.Port = 587;
+        //            smtp.Send(mm);
 
-                    return Request.CreateResponse(HttpStatusCode.OK);
-                }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
-                }
+        //            return Request.CreateResponse(HttpStatusCode.OK);
+        //        }
+        //        else
+        //        {
+        //            return Request.CreateResponse(HttpStatusCode.NotFound);
+        //        }
               
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Debug.WriteLine(e);
+        //        return Request.CreateResponse(HttpStatusCode.BadRequest);
+        //    }
+        //}
     }
 }

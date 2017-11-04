@@ -9,12 +9,31 @@ using System.Diagnostics;
 
 namespace easyfis.ModifiedApiControllers
 {
-    public class ApiTrnPurchaseOrderController : ApiController
+    public class ApiTrnPurchaseOrdersController : ApiController
     {
         // ============
         // Data Context
         // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+
+        // =========================
+        // Get Purchase Order Amount
+        // =========================
+        public Decimal GetPurchaseOrderAmount(Int32 POId)
+        {
+            var purchaseOrderItems = from d in db.TrnPurchaseOrderItems
+                                     where d.POId == POId
+                                     select d;
+
+            if (purchaseOrderItems.Any())
+            {
+                return purchaseOrderItems.Sum(d => d.Amount);
+            }
+            else
+            {
+                return 0;
+            }
+        }
 
         // ===================
         // List Purchase Order
@@ -39,13 +58,11 @@ namespace easyfis.ModifiedApiControllers
                                      PODate = d.PODate.ToShortDateString(),
                                      Supplier = d.MstArticle.Article,
                                      Remarks = d.Remarks,
-                                     Amount = d.TrnPurchaseOrderItems.Sum(a => a.Amount),
+                                     Amount = GetPurchaseOrderAmount(d.Id),
                                      IsClose = d.IsClose,
                                      IsLocked = d.IsLocked,
-                                     CreatedById = d.CreatedById,
                                      CreatedBy = d.MstUser2.FullName,
                                      CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                     UpdatedById = d.UpdatedById,
                                      UpdatedBy = d.MstUser5.FullName,
                                      UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                  };
@@ -75,28 +92,31 @@ namespace easyfis.ModifiedApiControllers
                                      PONumber = d.PONumber,
                                      PODate = d.PODate.ToShortDateString(),
                                      SupplierId = d.SupplierId,
-                                     Supplier = d.MstArticle.Article,
                                      TermId = d.TermId,
                                      ManualRequestNumber = d.ManualRequestNumber,
                                      ManualPONumber = d.ManualPONumber,
                                      DateNeeded = d.DateNeeded.ToShortDateString(),
                                      Remarks = d.Remarks,
                                      IsClose = d.IsClose,
-                                     Amount = d.TrnPurchaseOrderItems.Sum(a => a.Amount),
                                      RequestedById = d.RequestedById,
                                      PreparedById = d.PreparedById,
                                      CheckedById = d.CheckedById,
                                      ApprovedById = d.ApprovedById,
                                      IsLocked = d.IsLocked,
-                                     CreatedById = d.CreatedById,
                                      CreatedBy = d.MstUser2.FullName,
                                      CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                     UpdatedById = d.UpdatedById,
                                      UpdatedBy = d.MstUser5.FullName,
                                      UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                  };
 
-            return purchaseOrders.FirstOrDefault();
+            if (purchaseOrders.Any())
+            {
+                return purchaseOrders.FirstOrDefault();
+            }
+            else
+            {
+                return null;
+            }
         }
 
         // ==============================
@@ -338,8 +358,6 @@ namespace easyfis.ModifiedApiControllers
                                 if (!purchaseOrder.FirstOrDefault().IsLocked)
                                 {
                                     var lockPurchaseOrder = purchaseOrder.FirstOrDefault();
-                                    lockPurchaseOrder.BranchId = objPurchaseOrder.BranchId;
-                                    lockPurchaseOrder.PONumber = objPurchaseOrder.PONumber;
                                     lockPurchaseOrder.PODate = Convert.ToDateTime(objPurchaseOrder.PODate);
                                     lockPurchaseOrder.SupplierId = objPurchaseOrder.SupplierId;
                                     lockPurchaseOrder.TermId = objPurchaseOrder.TermId;

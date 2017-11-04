@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@model easyfis.Entities.MstUserForm
+@{
+    // =====================
+    // User Rights Variables
+    // =====================
+    var canAdd = Model.CanAdd;
+    var canEdit = Model.CanEdit;
+    var canDelete = Model.CanDelete;
+    var canLock = Model.CanLock;
+    var canUnlock = Model.CanUnlock;
+    var canPrint = Model.CanPrint;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -40,8 +52,13 @@
                                 </td>
                                 <td style="width: 1%"></td>
                                 <td style="width: 40%" align="right">
-                                    <button class="btn btn-primary " id="btnAddPurchaseOrder" onclick="btnAddPurchaseOrder_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <button class="btn btn-danger " id="btnAddClose" onclick="btnClosePurchaseOrder_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                    @{
+                                        if (canAdd)
+                                        {
+                                            <button class="btn btn-primary" id="btnAddPurchaseOrder" onclick="btnAddPurchaseOrderOnclick()"><i class="fa fa-plus"></i> Add</button>
+                                        }
+                                    }
+                                    <button class="btn btn-danger" id="btnClosePurchaseOrder" onclick="btnClosePurchaseOrderOnclick()"><i class=" fa fa-times"></i> Close</button>
                                 </td>
                             </tr>
                         </table>
@@ -171,63 +188,32 @@
 
             var purchaseOrderObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/listPurchaseOrderFilterByPODate/' + startDate + '/' + endDate,
+                url: '/api/purchaseOrder/list/' + startDate + '/' + endDate,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (purchaseOrderListResults) {
-                    if (purchaseOrderListResults.length > 0) {
-                        for (i = 0; i < purchaseOrderListResults.length; i++) {
-
-                            var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled = "";
-                            if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled = "";
-                            if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            }
-
-                            var PODateResult = new Date(purchaseOrderListResults[i]["PODate"])
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            var PODateResult = new Date(results[i]["PODate"])
                             var PODate = ('0' + (PODateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + PODateResult.getDate()).slice(-2) + '-' + PODateResult.getFullYear();
 
                             purchaseOrderObservableArray.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='POEditButton' onclick='POEditButton_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='PODeleteButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>",
-                                Id: purchaseOrderListResults[i]["Id"],
-                                BranchId: purchaseOrderListResults[i]["BranchId"],
-                                Branch: purchaseOrderListResults[i]["Branch"],
-                                PONumber: purchaseOrderListResults[i]["PONumber"],
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='POEditButton' onclick='POEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='PODeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: results[i]["Id"],
+                                PONumber: results[i]["PONumber"],
                                 PODate: PODate,
-                                SupplierId: purchaseOrderListResults[i]["SupplierId"],
-                                Supplier: purchaseOrderListResults[i]["Supplier"],
-                                TermId: purchaseOrderListResults[i]["TermId"],
-                                Term: purchaseOrderListResults[i]["Term"],
-                                ManualRequestNumber: purchaseOrderListResults[i]["ManualRequestNumber"],
-                                ManualPONumber: purchaseOrderListResults[i]["ManualPONumber"],
-                                DateNeeded: purchaseOrderListResults[i]["DateNeeded"],
-                                Remarks: purchaseOrderListResults[i]["Remarks"],
-                                IsClose: purchaseOrderListResults[i]["IsClose"],
-                                Amount: purchaseOrderListResults[i]["Amount"],
-                                AmountDisplay: parseFloat(purchaseOrderListResults[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                RequestedById: purchaseOrderListResults[i]["RequestedById"],
-                                RequestedBy: purchaseOrderListResults[i]["RequestedBy"],
-                                PreparedById: purchaseOrderListResults[i]["PreparedById"],
-                                PreparedBy: purchaseOrderListResults[i]["PreparedBy"],
-                                CheckedById: purchaseOrderListResults[i]["CheckedById"],
-                                CheckedBy: purchaseOrderListResults[i]["CheckedBy"],
-                                ApprovedById: purchaseOrderListResults[i]["ApprovedById"],
-                                ApprovedBy: purchaseOrderListResults[i]["ApprovedBy"],
-                                IsLocked: purchaseOrderListResults[i]["IsLocked"],
-                                CreatedById: purchaseOrderListResults[i]["CreatedById"],
-                                CreatedBy: purchaseOrderListResults[i]["CreatedBy"],
-                                CreatedDateTime: purchaseOrderListResults[i]["CreatedDateTime"],
-                                UpdatedById: purchaseOrderListResults[i]["UpdatedById"],
-                                UpdatedBy: purchaseOrderListResults[i]["UpdatedBy"],
-                                UpdatedDateTime: purchaseOrderListResults[i]["UpdatedDateTime"]
+                                Supplier: results[i]["Supplier"],
+                                Remarks: results[i]["Remarks"],
+                                Amount: results[i]["Amount"],
+                                AmountDisplay: parseFloat(results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                IsClose: results[i]["IsClose"],
+                                IsLocked: results[i]["IsLocked"],
+                                CreatedBy: results[i]["CreatedBy"],
+                                CreatedDateTime: results[i]["CreatedDateTime"],
+                                UpdatedBy: results[i]["UpdatedBy"],
+                                UpdatedDateTime: results[i]["UpdatedDateTime"]
                             });
                         }
                     }
@@ -242,33 +228,46 @@
         // =========================
         // Purchase Order Add Button
         // =========================
-        function btnAddPurchaseOrder_OnClick() {
+        function btnAddPurchaseOrderOnclick() {
             document.getElementById('btnAddPurchaseOrder').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Adding";
             $('#btnAddPurchaseOrder').prop('disabled', true);
-            $('#btnAddClose').prop('disabled', true);
+            $('#btnClosePurchaseOrder').prop('disabled', true);
 
-            var canAccessToDetailPage = "@ViewData["CanAccessToDetailPage"]";
-            if (canAccessToDetailPage == "True") {
-                $.ajax({
-                    type: "POST",
-                    url: '/api/addPurchaseOrder',
-                    contentType: "application/json; charset=utf-8",
-                    success: function (id) {
-                        if (id > 0) {
-                            window.location = '/Software/PurchaseOrderDetail?id=' + id;
-                        } else {
-                            toastr.error("Internal Server Error");
-                            document.getElementById('btnAddPurchaseOrder').innerHTML = "<i class='fa fa-plus'></i> Add";
-                            $('#btnAddPurchaseOrder').prop('disabled', false);
-                            $('#btnAddClose').prop('disabled', false);
-                        }
+            $.ajax({
+                type: "POST",
+                url: '/api/purchaseOrder/add',
+                contentType: "application/json; charset=utf-8",
+                statusCode: {
+                    200: function (id) {
+                        window.location = '/Software/PurchaseOrderDetail?id=' + id;
+                    },
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                        document.getElementById('btnAddPurchaseOrder').innerHTML = "<i class='fa fa-plus'></i> Add";
+                        $('#btnAddPurchaseOrder').prop('disabled', false);
+                        $('#btnClosePurchaseOrder').prop('disabled', false);
+                    },
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        document.getElementById('btnAddPurchaseOrder').innerHTML = "<i class='fa fa-plus'></i> Add";
+                        $('#btnAddPurchaseOrder').prop('disabled', false);
+                        $('#btnClosePurchaseOrder').prop('disabled', false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
+                        document.getElementById('btnAddPurchaseOrder').innerHTML = "<i class='fa fa-plus'></i> Add";
+                        $('#btnAddPurchaseOrder').prop('disabled', false);
+                        $('#btnClosePurchaseOrder').prop('disabled', false);
                     }
-                });
-            } else {
-                if (canAccessToDetailPage == "False") {
-                    window.location = '/Software/Forbidden';
                 }
-            }
+            });
+        }
+
+        // ===========================
+        // Purchase Order Close Button
+        // ===========================
+        function btnClosePurchaseOrderOnclick() {
+            window.location = '/Software';
         }
 
         // ==============
@@ -279,13 +278,6 @@
             var PO = purchaseOrderCollectionView.currentEditItem;
             var PurchaseOrderId = PO.Id;
             window.location = '/Software/PurchaseOrderDetail?id=' + PurchaseOrderId;
-        }
-
-        // ===========================
-        // Purchase Order Close Button
-        // ===========================
-        function btnClosePurchaseOrder_OnClick() {
-            window.location = '/Software';
         }
 
         // ================
@@ -316,8 +308,9 @@
 
             purchaseOrderCollectionView.editItem(purchaseOrderCollectionView.currentItem);
             var id = purchaseOrderCollectionView.currentEditItem.Id;
+
             $.ajax({
-                url: '/api/deletePO/' + id,
+                url: '/api/purchaseOrder/delete/' + id,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -327,15 +320,22 @@
                         $('#deletePOConfirm').modal('hide');
                         refreshPurchaseOrderFlexGrid();
                     },
-                    404: function () {
-                        toastr.error("Not Found");
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                         $('#deletePOConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeletePO').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeletePO").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        $('#deletePOConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeletePO').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $("#cmdConfirmDeletePO").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                         $('#deletePOConfirm').modal('hide');
                         document.getElementById('cmdConfirmDeletePO').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeletePO").prop("disabled", false);
@@ -446,24 +446,36 @@
             purchaseOrderFlexGrid = new wijmo.grid.FlexGrid('#POGrid');
             purchaseOrderFlexGrid.initialize({
                 columns: [
-                            {
-                                "header": "Edit",
-                                "binding": "EditId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Delete",
-                                "binding": "DeleteId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
+                            @{
+                                if (canEdit)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Edit",
+                                            "binding": "EditId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                                if (canDelete)
+                                {
+                                    <text>
+                                        {
+                                            "header": "Delete",
+                                            "binding": "DeleteId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                    </text>
+                                }
+                            }
                             {
                                 "header": "PO Number",
                                 "binding": "PONumber",
@@ -545,11 +557,6 @@
                 purchaseOrderCollectionView.moveToLastPage();
                 updateNavigateButtonsPO();
             });
-
-            var canAdd = "@ViewData["CanAdd"]";
-            if (canAdd == "False") {
-                $("#btnAddPurchaseOrder").prop("disabled", true)
-            }
         }
 
         // ============

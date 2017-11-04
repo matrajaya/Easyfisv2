@@ -29,7 +29,7 @@ namespace easyfis.ModifiedApiControllers
                                          Id = d.Id,
                                          POId = d.POId,
                                          ItemId = d.ItemId,
-                                         ItemCode = d.MstArticle.ArticleCode,
+                                         ItemCode = d.MstArticle.ManualArticleCode,
                                          ItemDescription = d.MstArticle.Article,
                                          Particulars = d.Particulars,
                                          Quantity = d.Quantity,
@@ -58,7 +58,7 @@ namespace easyfis.ModifiedApiControllers
                         select new Entities.MstArticle
                         {
                             Id = d.Id,
-                            ArticleCode = d.Article,
+                            ManualArticleCode = d.ManualArticleCode,
                             Article = d.Article
                         };
 
@@ -72,10 +72,12 @@ namespace easyfis.ModifiedApiControllers
         public List<Entities.MstArticleUnit> DropdownListPurchaseOrderItemUnit(String itemId)
         {
             var itemUnit = from d in db.MstArticleUnits.OrderBy(d => d.MstUnit.Unit)
-                           where d.MstArticle.IsLocked == true
+                           where d.ArticleId == Convert.ToInt32(itemId)
+                           && d.MstArticle.IsLocked == true
                            select new Entities.MstArticleUnit
                            {
                                Id = d.Id,
+                               UnitId = d.UnitId,
                                Unit = d.MstUnit.Unit
                            };
 
@@ -113,8 +115,9 @@ namespace easyfis.ModifiedApiControllers
                         select new Entities.MstArticle
                         {
                             Id = d.Id,
-                            ArticleCode = d.Article,
+                            ManualArticleCode = d.ManualArticleCode,
                             Article = d.Article,
+                            Particulars = d.Particulars,
                             LastPurchasePrice = GetLastPurchasePriceItemQuery(d.Id)
                         };
 
@@ -347,7 +350,7 @@ namespace easyfis.ModifiedApiControllers
                         }
                         else
                         {
-                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no rights to update purchase order item in this purchase order detail page.");
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no rights to edit and update purchase order item in this purchase order detail page.");
                         }
                     }
                     else

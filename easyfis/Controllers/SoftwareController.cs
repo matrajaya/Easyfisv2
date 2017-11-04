@@ -239,23 +239,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult PurchaseOrder()
         {
-            if (PageAccess("PurchaseOrderList").Equals("PurchaseOrderList"))
-            {
-                if (AccessToDetail("PurchaseOrderDetail").Equals("PurchaseOrderDetail"))
-                {
-                    ViewData.Add("CanAccessToDetailPage", "True");
-                }
-                else
-                {
-                    ViewData.Add("CanAccessToDetailPage", "False");
-                }
-
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
+            return UserRights("PurchaseOrderList");
         }
 
         // =====================
@@ -264,14 +248,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult PurchaseOrderDetail()
         {
-            if (PageAccess("PurchaseOrderDetail").Equals("PurchaseOrderDetail"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
+            return UserRights("PurchaseOrderDetail");
         }
 
         // =================
