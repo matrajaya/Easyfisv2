@@ -157,15 +157,18 @@ namespace easyfis.ModifiedApiControllers
                             {
                                 if (!purchaseOrder.FirstOrDefault().IsLocked)
                                 {
-                                    var itemUnit = from d in db.MstArticles
-                                                   where d.Id == objPurchaseOrderItem.ItemId
-                                                   select d;
+                                    var item = from d in db.MstArticles
+                                               where d.Id == objPurchaseOrderItem.ItemId
+                                               && d.ArticleTypeId == 1
+                                               && d.IsLocked == true
+                                               select d;
 
-                                    if (itemUnit.Any())
+                                    if (item.Any())
                                     {
                                         var conversionUnit = from d in db.MstArticleUnits
                                                              where d.ArticleId == objPurchaseOrderItem.ItemId
                                                              && d.UnitId == objPurchaseOrderItem.UnitId
+                                                             && d.MstArticle.IsLocked == true
                                                              select d;
 
                                         if (conversionUnit.Any())
@@ -191,7 +194,7 @@ namespace easyfis.ModifiedApiControllers
                                                 Quantity = objPurchaseOrderItem.Quantity,
                                                 Cost = objPurchaseOrderItem.Cost,
                                                 Amount = objPurchaseOrderItem.Amount,
-                                                BaseUnitId = itemUnit.FirstOrDefault().UnitId,
+                                                BaseUnitId = item.FirstOrDefault().UnitId,
                                                 BaseQuantity = baseQuantity,
                                                 BaseCost = baseCost
                                             };
@@ -282,15 +285,18 @@ namespace easyfis.ModifiedApiControllers
 
                                     if (purchaseOrderItem.Any())
                                     {
-                                        var itemUnit = from d in db.MstArticles
-                                                       where d.Id == objPurchaseOrderItem.ItemId
-                                                       select d;
+                                        var item = from d in db.MstArticles
+                                                   where d.Id == objPurchaseOrderItem.ItemId
+                                                   && d.ArticleTypeId == 1
+                                                   && d.IsLocked == true
+                                                   select d;
 
-                                        if (itemUnit.Any())
+                                        if (item.Any())
                                         {
                                             var conversionUnit = from d in db.MstArticleUnits
                                                                  where d.ArticleId == objPurchaseOrderItem.ItemId
                                                                  && d.UnitId == objPurchaseOrderItem.UnitId
+                                                                 && d.MstArticle.IsLocked == true
                                                                  select d;
 
                                             if (conversionUnit.Any())
@@ -314,9 +320,9 @@ namespace easyfis.ModifiedApiControllers
                                                 updatePurchaseOrdeItem.Quantity = objPurchaseOrderItem.Quantity;
                                                 updatePurchaseOrdeItem.Cost = objPurchaseOrderItem.Cost;
                                                 updatePurchaseOrdeItem.Amount = objPurchaseOrderItem.Amount;
-                                                updatePurchaseOrdeItem.BaseUnitId = itemUnit.FirstOrDefault().UnitId;
+                                                updatePurchaseOrdeItem.BaseUnitId = item.FirstOrDefault().UnitId;
                                                 updatePurchaseOrdeItem.BaseQuantity = baseQuantity;
-                                                updatePurchaseOrdeItem.BaseUnitId = itemUnit.FirstOrDefault().UnitId;
+                                                updatePurchaseOrdeItem.BaseUnitId = item.FirstOrDefault().UnitId;
                                                 updatePurchaseOrdeItem.BaseCost = baseCost;
 
                                                 db.SubmitChanges();
