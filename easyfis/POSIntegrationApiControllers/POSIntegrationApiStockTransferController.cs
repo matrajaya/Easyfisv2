@@ -20,28 +20,11 @@ namespace easyfis.POSIntegrationApiControllers
         private Business.Inventory inventory = new Business.Inventory();
         private Business.Journal journal = new Business.Journal();
 
-        // ============================
-        // Zero Fill - Document Numbers
-        // ============================
-        public String zeroFill(Int32 number, Int32 length)
-        {
-            var result = number.ToString();
-            var pad = length - result.Length;
-            while (pad > 0)
-            {
-                result = '0' + result;
-                pad--;
-            }
-
-            return result;
-        }
-
         // ===============================================
         // GET Stock Transfer (POS Integration) - Stock In
         // ===============================================
-        [HttpGet]
-        [Route("api/get/POSIntegration/stockTransferItems/IN/{stockTransferDate}/{ToBranchCode}")]
-        public List<POSIntegrationEntities.POSIntegrationTrnStockTransfer> getStockTransferItemsINIPOSIntegration(String stockTransferDate, String ToBranchCode, POSIntegrationEntities.POSIntegrationTrnSalesInvoice POSIntegrationTrnSalesInvoiceObject)
+        [HttpGet, Route("api/get/POSIntegration/stockTransferItems/IN/{stockTransferDate}/{ToBranchCode}")]
+        public List<POSIntegrationEntities.POSIntegrationTrnStockTransfer> GetStockTransferItemsINIPOSIntegration(String stockTransferDate, String ToBranchCode, POSIntegrationEntities.POSIntegrationTrnSalesInvoice POSIntegrationTrnSalesInvoiceObject)
         {
             var stockTransfer = from d in db.TrnStockTransfers.OrderByDescending(d => d.Id)
                                 where d.STDate == Convert.ToDateTime(stockTransferDate)
