@@ -14,7 +14,7 @@ namespace easyfis.Controllers
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
         private Business.Inventory inventory = new Business.Inventory();
-        private Business.PostJournal journal = new Business.PostJournal();
+        private Business.Journal journal = new Business.Journal();
 
         // current branch Id
         public Int32 currentBranchId()

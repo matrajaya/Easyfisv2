@@ -12,7 +12,7 @@ namespace easyfis.Controllers
     public class ApiJournalVoucherController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-        private Business.PostJournal postJournal = new Business.PostJournal();
+        private Business.Journal postJournal = new Business.Journal();
 
         // current branch Id
         public Int32 currentBranchId()

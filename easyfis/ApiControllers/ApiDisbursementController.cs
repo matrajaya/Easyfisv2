@@ -12,7 +12,7 @@ namespace easyfis.Controllers
     public class ApiDisbursementController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-        private Business.PostJournal journal = new Business.PostJournal();
+        private Business.Journal journal = new Business.Journal();
 
         // current branch Id
         public Int32 currentBranchId()
