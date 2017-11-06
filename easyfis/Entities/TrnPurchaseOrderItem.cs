@@ -22,5 +22,7 @@ namespace easyfis.Entities
         public String BaseUnit { get; set; }
         public Decimal BaseQuantity { get; set; }
         public Decimal BaseCost { get; set; }
+        public Decimal ReceivedQuantity { get; set; }
+        public Decimal BalanceQuantity { get; set; }
     }
 }
