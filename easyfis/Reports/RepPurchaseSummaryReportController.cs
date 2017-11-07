@@ -16,6 +16,25 @@ namespace easyfis.Controllers
         // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // =====================================
+        // Get Purchase Order Items Total Amount
+        // =====================================
+        public Decimal GetPurchaseOrderItemTotalAmount(Int32 POId)
+        {
+            var purchaseOrderItems = from d in db.TrnPurchaseOrderItems
+                                     where d.POId == POId
+                                     select d;
+
+            if (purchaseOrderItems.Any())
+            {
+                return purchaseOrderItems.Sum(d => d.Amount);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         // =====================
         // Preview and Print PDF
         // =====================
@@ -87,7 +106,7 @@ namespace easyfis.Controllers
                                      Supplier = d.MstArticle.Article,
                                      Remarks = d.Remarks,
                                      IsClose = d.IsClose,
-                                     Amount = d.TrnPurchaseOrderItems.Sum(a => a.Amount)
+                                     Amount = GetPurchaseOrderItemTotalAmount(d.Id)
                                  };
 
             if (purchaseOrders.Any())

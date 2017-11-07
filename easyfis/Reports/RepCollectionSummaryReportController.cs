@@ -16,6 +16,25 @@ namespace easyfis.Reports
         // ============
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // =================================
+        // Get Collection Lines Total Amount
+        // =================================
+        public Decimal GetCollectionLinesTotalAmount(Int32 ORId)
+        {
+            var collectionLines = from d in db.TrnCollectionLines
+                                  where d.ORId == ORId
+                                  select d;
+
+            if (collectionLines.Any())
+            {
+                return collectionLines.Sum(d => d.Amount);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         // =====================
         // Preview and Print PDF
         // =====================
@@ -86,7 +105,7 @@ namespace easyfis.Reports
                                   ORDate = d.ORDate.ToString("MM-dd-yyyy", CultureInfo.InvariantCulture),
                                   Customer = d.MstArticle.Article,
                                   Particulars = d.Particulars,
-                                  Amount = d.TrnCollectionLines.Sum(a => a.Amount)
+                                  Amount = GetCollectionLinesTotalAmount(d.Id)
                               };
 
             if (collections.Any())
