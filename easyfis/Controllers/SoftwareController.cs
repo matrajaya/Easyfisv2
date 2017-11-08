@@ -257,23 +257,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult ReceivingReceipt()
         {
-            if (PageAccess("ReceivingReceiptList").Equals("ReceivingReceiptList"))
-            {
-                if (AccessToDetail("ReceivingReceiptDetail").Equals("ReceivingReceiptDetail"))
-                {
-                    ViewData.Add("CanAccessToDetailPage", "True");
-                }
-                else
-                {
-                    ViewData.Add("CanAccessToDetailPage", "False");
-                }
-
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
+            return UserRights("ReceivingReceiptList");
         }
 
         // ========================
@@ -282,14 +266,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult ReceivingReceiptDetail()
         {
-            if (PageAccess("ReceivingReceiptDetail").Equals("ReceivingReceiptDetail"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
+            return UserRights("ReceivingReceiptDetail");
         }
 
         // =====

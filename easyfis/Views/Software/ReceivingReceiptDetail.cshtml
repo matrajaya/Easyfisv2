@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@model easyfis.Entities.MstUserForm
+@{
+    // =====================
+    // User Rights Variables
+    // =====================
+    var canAdd = Model.CanAdd;
+    var canEdit = Model.CanEdit;
+    var canDelete = Model.CanDelete;
+    var canLock = Model.CanLock;
+    var canUnlock = Model.CanUnlock;
+    var canPrint = Model.CanPrint;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -32,11 +44,22 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-12" align="right">
-                                <button class="btn btn-primary " id="cmdRRJournal" onclick="RRJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                                <button class="btn btn-primary " id="cmdSaveRRSave" onclick="RRSaveSaveButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                <button class="btn btn-primary " id="cmdRREdit" onclick="RREditButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                <button class="btn btn-primary " id="cmdRRPrint" onclick="RRPrintButton_OnClick()"><i class="fa fa-print"></i> Print</button>
-                                <button id="cmdRRClose" onclick="window.location.href = '@Url.Action("ReceivingReceipt", "Software")'" class="btn btn-danger "><i class="fa fa-times"></i> Close</button>
+                                <button class="btn btn-primary" id="btnReceivingReceiptJournal" onclick="btnReceivingReceiptJournalOnclick()"><i class="fa fa-book"></i> Journal</button>
+                                @{
+                                    if (canLock)
+                                    {
+                                        <button class="btn btn-primary" id="btnLockReceivingReceipt" onclick="btnLockReceivingReceiptOnclick()"><i class="fa fa-lock"></i> Lock</button>
+                                    }
+                                    if (canUnlock)
+                                    {
+                                        <button class="btn btn-primary" id="btnUnlockReceivingReceipt" onclick="btnUnlockReceivingReceiptOnclick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                    }
+                                    if (canPrint)
+                                    {
+                                        <button class="btn btn-primary" id="btnPrintReceivingReceipt" onclick="btnPrintReceivingReceiptOnclick()"><i class="fa fa-print"></i> Print</button>
+                                    }
+                                }
+                                <button class="btn btn-danger" id="btnCloseReceivingReceipt" onclick="window.location.href = '@Url.Action("ReceivingReceipt", "Software")'"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                     </div>
@@ -65,7 +88,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Doc Reference</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control  requiredRR" id="RRDocReference" placeholder="Document Reference">
+                                            <input type="text" class="form-control requiredRR" id="RRDocReference" placeholder="Document Reference">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -135,22 +158,28 @@
                 <br />
                 <div class="tab-content">
                     <div id="Item" class="tab-pane fade in active">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary " id="btnRRLineItem" onclick="btnAddItemRRLine_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        @{
+                            if (canAdd)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button class="btn btn-primary" id="btnAddReceivingReceiptItem" onclick="btnAddReceivingReceiptItemOnclick()"><i class="fa fa-plus"></i> Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="ReceivingReceiptItemGrid" class="grid"></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row" align="left">
-                                    <div class="col-lg-12">
-                                        <div id="ReceivingReceiptItemGrid" class="grid" align="left"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            }
+                            else
+                            {
+                                <div id="ReceivingReceiptItemGrid" class="grid"></div>
+                                <br /><br />
+                            }
+                        }
                         <div class="panel panel-default">
                             <div class="panel-body" style="padding-bottom: 0px;">
                                 <div class="row">
@@ -453,17 +482,17 @@
             NProgress.start();
             var branchesObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listBranch',
+                url: '/api/receivingReceipt/dropdown/list/branch',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (branchListResults) {
-                    if (branchListResults.length > 0) {
-                        for (i = 0; i < branchListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             branchesObservableArray.push({
-                                Id: branchListResults[i]["Id"],
-                                Branch: branchListResults[i]["Branch"]
+                                Id: results[i]["Id"],
+                                Branch: results[i]["Branch"]
                             });
                         }
                     }
@@ -489,17 +518,17 @@
         function getSupplierForComboBox() {
             var suppliersObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticleByArticleTypeId/3',
+                url: '/api/receivingReceipt/dropdown/list/supplier',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (supplierListResults) {
-                    if (supplierListResults.length > 0) {
-                        for (i = 0; i < supplierListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             suppliersObservableArray.push({
-                                Id: supplierListResults[i]["Id"],
-                                Supplier: supplierListResults[i]["Article"]
+                                Id: results[i]["Id"],
+                                Supplier: results[i]["Article"]
                             });
                         }
                     }
@@ -524,17 +553,17 @@
         function getTermForComboBox() {
             var termsObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listTerm',
+                url: '/api/receivingReceipt/dropdown/list/term',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (termListResults) {
-                    if (termListResults.length > 0) {
-                        for (i = 0; i < termListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             termsObservableArray.push({
-                                Id: termListResults[i]["Id"],
-                                Term: termListResults[i]["Term"]
+                                Id: results[i]["Id"],
+                                Term: results[i]["Term"]
                             });
                         }
                     }
@@ -559,7 +588,7 @@
         function getUsersForComboBox() {
             var usersObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listUser',
+                url: '/api/receivingReceipt/dropdown/list/users',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -623,38 +652,37 @@
             if (document.location.search.length > 0) {
                 var id = getParam('id');
                 $.ajax({
-                    url: '/api/receivingReceipt/' + id,
+                    url: '/api/receivingReceipt/detail/' + id,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     data: {},
-                    success: function (Results) {
-                        if (Results != null) {
-                            // fields
-                            cboRRbranch.selectedValue = Results.BranchId;
-                            document.getElementById('RRNumber').value = Results.RRNumber;
+                    success: function (results) {
+                        if (results != null) {
+                            cboRRbranch.selectedValue = results.BranchId;
+                            document.getElementById('RRNumber').value = results.RRNumber;
                             cboRRDate.dispose();
                             cboRRDate = new wijmo.input.InputDate('#cboRRDate', {
                                 format: 'MM-dd-yyyy',
-                                value: new Date(Results.RRDate),
+                                value: new Date(results.RRDate),
                             });
-                            document.getElementById('RRDocReference').value = Results.DocumentReference;
-                            cboRRSupplier.selectedValue = Results.SupplierId;
-                            cboRRTerm.selectedValue = Results.TermId;
-                            document.getElementById('RRRemarks').value = Results.Remarks;
-                            document.getElementById('RRManualRRNumber').value = Results.ManualRRNumber;
-                            cboRRReceivedBy.selectedValue = Results.ReceivedById;
-                            cboRRPreparedBy.selectedValue = Results.PreparedById;
-                            cboRRCheckedBy.selectedValue = Results.CheckedById;
-                            cboRRApprovedBy.selectedValue = Results.ApprovedById;
+                            document.getElementById('RRDocReference').value = results.DocumentReference;
+                            cboRRSupplier.selectedValue = results.SupplierId;
+                            cboRRTerm.selectedValue = results.TermId;
+                            document.getElementById('RRRemarks').value = results.Remarks;
+                            document.getElementById('RRManualRRNumber').value = results.ManualRRNumber;
+                            cboRRReceivedBy.selectedValue = results.ReceivedById;
+                            cboRRPreparedBy.selectedValue = results.PreparedById;
+                            cboRRCheckedBy.selectedValue = results.CheckedById;
+                            cboRRApprovedBy.selectedValue = results.ApprovedById;
 
                             // user stamp
-                            document.getElementById('createdBy').innerHTML = Results.CreatedBy;
-                            document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
-                            document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
-                            document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+                            document.getElementById('createdBy').innerHTML = results.CreatedBy;
+                            document.getElementById('createdDate').innerHTML = results.CreatedDateTime;
+                            document.getElementById('updatedBy').innerHTML = results.UpdatedBy;
+                            document.getElementById('updatedDate').innerHTML = results.UpdatedDateTime;
 
-                            if (Results.IsLocked) {
+                            if (results.IsLocked) {
                                 document.getElementById('RRNumber').disabled = true;
                                 cboRRDate.disabled = true;
                                 document.getElementById('RRDocReference').disabled = true;
@@ -668,39 +696,21 @@
                                 cboRRApprovedBy.disabled = true;
                                 isLocked = true;
 
-                                $("#cmdSaveRRSave").prop("disabled", true);
+                                $("#btnLockReceivingReceipt").prop("disabled", true);
                                 $("#cmdRRForPOSupplier").prop("disabled", true);
-                                $("#btnRRLineItem").prop("disabled", true);
-
-                                var canUnLock = "@ViewData["CanUnlock"]";
-                                if (canUnLock == "False") {
-                                    $("#cmdRREdit").prop("disabled", true);
-                                }
-
-                                var canPrint = "@ViewData["CanPrint"]";
-                                if (canPrint == "False") {
-                                    $("#cmdRRPrint").prop("disabled", true)
-                                }
+                                $("#btnAddReceivingReceiptItem").prop("disabled", true);
                             } else {
-                                $("#cmdRRJournal").prop("disabled", true);
-                                $("#cmdRREdit").prop("disabled", true);
-                                $("#cmdRRPrint").prop("disabled", true);
-
-                                var canLock = "@ViewData["CanLock"]";
-                                if (canLock == "False") {
-                                    $("#cmdSaveRRSave").prop("disabled", true);
-                                }
-
-                                var canAdd = "@ViewData["CanAdd"]";
-                                if (canAdd == "False") {
-                                    $("#cmdRRForPOSupplier").prop("disabled", true)
-                                    $("#btnRRLineItem").prop("disabled", true)
-                                }
+                                $("#btnReceivingReceiptJournal").prop("disabled", true);
+                                $("#btnUnlockReceivingReceipt").prop("disabled", true);
+                                $("#btnPrintReceivingReceipt").prop("disabled", true);
                             }
-                        }
 
-                        createReceivingReceiptFlexGrid();
-                        createInventoryFlexGrid();
+                            createReceivingReceiptFlexGrid();
+                            createInventoryFlexGrid();
+                        } else {
+                            alert("No Data");
+                            window.location = "/Software/ReceivingReceipt";
+                        }
                     }
                 });
             } else {
@@ -715,82 +725,70 @@
         function getRecevingReceiptItem() {
             var itemsObservableArray = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
-                var id = getParam('id');
+                var RRId = getParam('id');
                 $.ajax({
-                    url: '/api/listReceivingReceiptItemByRRId/' + id,
+                    url: '/api/receivingReceiptItem/list/' + RRId,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
-                    success: function (Results) {
+                    success: function (results) {
                         var totalAmount = 0;
                         var totalVATAmount = 0;
                         var totalWTAXAmount = 0;
-                        if (Results.length > 0) {
-                            var canEdit = "@ViewData["CanEdit"]";
-                            var editDisabled = "";
-                            if (canEdit == "False") {
-                                editDisabled = "disabled";
-                            }
 
-                            var canDelete = "@ViewData["CanDelete"]";
-                            var deleteDisabled = "";
-                            if (canDelete == "False") {
-                                deleteDisabled = "disabled";
-                            }
-
-                            var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnItemRRLinesEdit_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
-                            var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnItemRRLinesDelete_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                        if (results.length > 0) {
+                            var btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnItemRRLinesEdit_OnClick()'><i class='fa fa-edit'></i> Edit</button>";
+                            var btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnItemRRLinesDelete_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             if (isLocked) {
                                 btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnItemRRLinesEdit_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
                                 btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnItemRRLinesDelete_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                             }
 
-                            for (i = 0; i < Results.length; i++) {
+                            for (i = 0; i < results.length; i++) {
                                 itemsObservableArray.push({
                                     EditId: btnEditId,
                                     DeleteId: btnDeleteId,
-                                    Id: Results[i]["Id"],
-                                    RRId: Results[i]["RRId"],
-                                    RR: Results[i]["RR"],
-                                    POId: Results[i]["POId"],
-                                    PO: Results[i]["PO"],
-                                    ItemId: Results[i]["ItemId"],
-                                    Item: Results[i]["Item"],
-                                    ItemCode: Results[i]["ItemCode"],
-                                    Particulars: Results[i]["Particulars"],
-                                    UnitId: Results[i]["UnitId"],
-                                    Unit: Results[i]["Unit"],
-                                    Quantity: Results[i]["Quantity"],
-                                    QuantityDisplay: parseFloat(Results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    Cost: Results[i]["Cost"],
-                                    CostDisplay: parseFloat(Results[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    Amount: Results[i]["Amount"],
-                                    AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    VATId: Results[i]["VATId"],
-                                    VAT: Results[i]["VAT"],
-                                    VATPercentage: Results[i]["VAT"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + parseFloat(Results[i]["VATPercentage"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    VATRate: Results[i]["VATPercentage"],
-                                    VATAmount: Results[i]["VATAmount"],
-                                    VATAmountDisplay: parseFloat(Results[i]["VATAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    WTAXId: Results[i]["WTAXId"],
-                                    WTAX: Results[i]["WTAX"],
-                                    WTAXPercentage: Results[i]["WTAX"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + parseFloat(Results[i]["WTAXPercentage"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    WTAXRate: Results[i]["WTAXPercentage"],
-                                    WTAXAmount: Results[i]["WTAXAmount"],
-                                    WTAXAmountDisplay: parseFloat(Results[i]["WTAXAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    BranchId: Results[i]["BranchId"],
-                                    Branch: Results[i]["Branch"],
-                                    BaseUnitId: Results[i]["BaseUnitId"],
-                                    BaseUnit: Results[i]["BaseUnit"],
-                                    BaseQuantity: Results[i]["BaseQuantity"],
-                                    BaseQuantityDisplay: parseFloat(Results[i]["BaseQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    BaseCost: Results[i]["BaseCost"],
-                                    BaseCostDisplay: parseFloat(Results[i]["BaseCost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    Id: results[i]["Id"],
+                                    RRId: results[i]["RRId"],
+                                    POId: results[i]["POId"],
+                                    PONumber: results[i]["PONumber"],
+                                    ItemId: results[i]["ItemId"],
+                                    ItemCode: results[i]["ItemCode"],
+                                    ItemDescription: results[i]["ItemDescription"],
+                                    Particulars: results[i]["Particulars"],
+                                    Quantity: results[i]["Quantity"],
+                                    QuantityDisplay: parseFloat(results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    UnitId: results[i]["UnitId"],
+                                    Unit: results[i]["Unit"],
+                                    Cost: results[i]["Cost"],
+                                    CostDisplay: parseFloat(results[i]["Cost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    Amount: results[i]["Amount"],
+                                    AmountDisplay: parseFloat(results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    BranchId: results[i]["BranchId"],
+                                    Branch: results[i]["Branch"],
+                                    VATId: results[i]["VATId"],
+                                    VAT: results[i]["VAT"],
+                                    VATPercentage: results[i]["VAT"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + parseFloat(results[i]["VATPercentage"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    VATRate: results[i]["VATPercentage"],
+                                    VATAmount: results[i]["VATAmount"],
+                                    VATAmountDisplay: parseFloat(results[i]["VATAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    WTAXId: results[i]["WTAXId"],
+                                    WTAX: results[i]["WTAX"],
+                                    WTAXPercentage: results[i]["WTAX"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + parseFloat(results[i]["WTAXPercentage"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    WTAXRate: results[i]["WTAXPercentage"],
+                                    WTAXAmount: results[i]["WTAXAmount"],
+                                    WTAXAmountDisplay: parseFloat(results[i]["WTAXAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    BaseUnitId: results[i]["BaseUnitId"],
+                                    BaseUnit: results[i]["BaseUnit"],
+                                    BaseQuantity: results[i]["BaseQuantity"],
+                                    BaseQuantityDisplay: parseFloat(results[i]["BaseQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    BaseCost: results[i]["BaseCost"],
+                                    BaseCostDisplay: parseFloat(results[i]["BaseCost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 });
 
-                                totalAmount += Results[i]["Amount"];
-                                totalVATAmount += Results[i]["VATAmount"];
-                                totalWTAXAmount += Results[i]["WTAXAmount"];
+                                totalAmount += results[i]["Amount"];
+                                totalVATAmount += results[i]["VATAmount"];
+                                totalWTAXAmount += results[i]["WTAXAmount"];
                             }
                         }
 
@@ -825,27 +823,39 @@
             receivingReceiptItemGrid = new wijmo.grid.FlexGrid('#ReceivingReceiptItemGrid');
             receivingReceiptItemGrid.initialize({
                 columns: [
-                    {
-                        "header": "Edit",
-                        "binding": "EditId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
-                    {
-                        "header": "Delete",
-                        "binding": "DeleteId",
-                        "width": 70,
-                        "align": "center",
-                        "allowResizing": false,
-                        "allowSorting": false,
-                        "isContentHtml": true
-                    },
+                    @{
+                        if (canEdit)
+                        {
+                            <text>
+                                {
+                                    "header": "Edit",
+                                    "binding": "EditId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                        if (canDelete)
+                        {
+                            <text>
+                                {
+                                    "header": "Delete",
+                                    "binding": "DeleteId",
+                                    "width": 70,
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
+                            </text>
+                        }
+                    }
                     {
                         "header": "PO No.",
-                        "binding": "PO",
+                        "binding": "PONumber",
                         "allowSorting": true,
                         "width": 90
                     },
@@ -856,8 +866,8 @@
                         "width": 120
                     },
                     {
-                        "header": "Item",
-                        "binding": "Item",
+                        "header": "Description",
+                        "binding": "ItemDescription",
                         "allowSorting": true,
                         "width": 170
                     },
@@ -954,7 +964,38 @@
                 autoGenerateColumns: false,
                 itemsSource: receivingReceiptItemsCollection,
                 isReadOnly: true,
-                frozenColumns: 2,
+                @{
+                    if (canEdit)
+                    {
+                        if (canDelete)
+                        {
+                            <text>
+                                frozenColumns: 2,
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                frozenColumns: 1,
+                            </text>
+                        }
+                    }
+                    else
+                    {
+                        if (canDelete)
+                        {
+                            <text>
+                                frozenColumns: 1,
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                frozenColumns: 0,
+                            </text>
+                        }
+                    }
+                }
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -967,51 +1008,181 @@
             receivingReceiptItemGrid.columnHeaders.rows.push(hr);
             receivingReceiptItemGrid.columnHeaders.rows[0].allowMerging = true;
 
-            receivingReceiptItemGrid.columnHeaders.columns[0].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 0, 'Edit');
+            @{
+                if (canEdit)
+                {
+                    if (canDelete)
+                    {
+                        <text>
+                            var columnName = "";
+                            for (var i = 0; i <= 17; i++) {
+                                if (i == 0) {
+                                    columnName = "Edit";
+                                } else if (i == 1) {
+                                    columnName = "Delete";
+                                } else if (i == 2) {
+                                    columnName = "PO No.";
+                                } else if (i == 3) {
+                                    columnName = "Code";
+                                } else if (i == 4) {
+                                    columnName = "Description";
+                                } else if (i == 5) {
+                                    columnName = "Particulars";
+                                } else if (i == 6) {
+                                    columnName = "Quantity";
+                                } else if (i == 7) {
+                                    columnName = "Unit";
+                                } else if (i == 8) {
+                                    columnName = "Cost";
+                                } else if (i == 9) {
+                                    columnName = "Amount";
+                                } else if (i == 10) {
+                                    columnName = "Branch";
+                                } else if (i == 11) {
+                                    columnName = "VAT";
+                                } else if (i == 12) {
+                                    columnName = "VAT Amt.";
+                                } else if (i == 13) {
+                                    columnName = "WTAX";
+                                } else if (i == 14) {
+                                    columnName = "WTAX Amt.";
+                                } else {
+                                    columnName = "Basic Unit Conversion";
+                                }
 
-            receivingReceiptItemGrid.columnHeaders.columns[1].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 1, 'Delete');
+                                receivingReceiptItemGrid.columnHeaders.columns[i].allowMerging = true;
+                                receivingReceiptItemGrid.columnHeaders.setCellData(0, i, columnName);
+                            }
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            var columnName = "";
+                            for (var i = 0; i <= 16; i++) {
+                                if (i == 0) {
+                                    columnName = "Edit";
+                                } else if (i == 1) {
+                                    columnName = "PO No.";
+                                } else if (i == 2) {
+                                    columnName = "Code";
+                                } else if (i == 3) {
+                                    columnName = "Description";
+                                } else if (i == 4) {
+                                    columnName = "Particulars";
+                                } else if (i == 5) {
+                                    columnName = "Quantity";
+                                } else if (i == 6) {
+                                    columnName = "Unit";
+                                } else if (i == 7) {
+                                    columnName = "Cost";
+                                } else if (i == 8) {
+                                    columnName = "Amount";
+                                } else if (i == 9) {
+                                    columnName = "Branch";
+                                } else if (i == 10) {
+                                    columnName = "VAT";
+                                } else if (i == 11) {
+                                    columnName = "VAT Amt.";
+                                } else if (i == 12) {
+                                    columnName = "WTAX";
+                                } else if (i == 13) {
+                                    columnName = "WTAX Amt.";
+                                } else {
+                                    columnName = "Basic Unit Conversion";
+                                }
 
-            receivingReceiptItemGrid.columnHeaders.columns[2].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 2, 'PO No.');
+                                receivingReceiptItemGrid.columnHeaders.columns[i].allowMerging = true;
+                                receivingReceiptItemGrid.columnHeaders.setCellData(0, i, columnName);
+                            }
+                        </text>
+                    }
+                }
+                else
+                {
+                    if (canDelete)
+                    {
+                        <text>
+                            var columnName = "";
+                            for (var i = 0; i <= 16; i++) {
+                                if (i == 0) {
+                                    columnName = "Delete";
+                                } else if (i == 1) {
+                                    columnName = "PO No.";
+                                } else if (i == 2) {
+                                    columnName = "Code";
+                                } else if (i == 3) {
+                                    columnName = "Description";
+                                } else if (i == 4) {
+                                    columnName = "Particulars";
+                                } else if (i == 5) {
+                                    columnName = "Quantity";
+                                } else if (i == 6) {
+                                    columnName = "Unit";
+                                } else if (i == 7) {
+                                    columnName = "Cost";
+                                } else if (i == 8) {
+                                    columnName = "Amount";
+                                } else if (i == 9) {
+                                    columnName = "Branch";
+                                } else if (i == 10) {
+                                    columnName = "VAT";
+                                } else if (i == 11) {
+                                    columnName = "VAT Amt.";
+                                } else if (i == 12) {
+                                    columnName = "WTAX";
+                                } else if (i == 13) {
+                                    columnName = "WTAX Amt.";
+                                } else {
+                                    columnName = "Basic Unit Conversion";
+                                }
 
-            receivingReceiptItemGrid.columnHeaders.columns[3].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 3, 'Code');
+                                receivingReceiptItemGrid.columnHeaders.columns[i].allowMerging = true;
+                                receivingReceiptItemGrid.columnHeaders.setCellData(0, i, columnName);
+                            }
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            var columnName = "";
+                            for (var i = 0; i <= 15; i++) {
+                                if (i == 0) {
+                                    columnName = "PO No.";
+                                } else if (i == 1) {
+                                    columnName = "Code";
+                                } else if (i == 2) {
+                                    columnName = "Description";
+                                } else if (i == 3) {
+                                    columnName = "Particulars";
+                                } else if (i == 4) {
+                                    columnName = "Quantity";
+                                } else if (i == 5) {
+                                    columnName = "Unit";
+                                } else if (i == 6) {
+                                    columnName = "Cost";
+                                } else if (i == 7) {
+                                    columnName = "Amount";
+                                } else if (i == 8) {
+                                    columnName = "Branch";
+                                } else if (i == 9) {
+                                    columnName = "VAT";
+                                } else if (i == 10) {
+                                    columnName = "VAT Amt.";
+                                } else if (i == 11) {
+                                    columnName = "WTAX";
+                                } else if (i == 12) {
+                                    columnName = "WTAX Amt.";
+                                } else {
+                                    columnName = "Basic Unit Conversion";
+                                }
 
-            receivingReceiptItemGrid.columnHeaders.columns[4].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 4, 'Item');
-
-            receivingReceiptItemGrid.columnHeaders.columns[5].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 5, 'Particulars');
-
-            receivingReceiptItemGrid.columnHeaders.columns[6].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 6, 'Quantity');
-
-            receivingReceiptItemGrid.columnHeaders.columns[7].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 7, 'Unit');
-
-            receivingReceiptItemGrid.columnHeaders.columns[8].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 8, 'Cost');
-
-            receivingReceiptItemGrid.columnHeaders.columns[9].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 9, 'Amount');
-
-            receivingReceiptItemGrid.columnHeaders.columns[10].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 10, 'Branch');
-
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 11, 'VAT');
-
-            receivingReceiptItemGrid.columnHeaders.columns[12].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 12, 'VAT Amt.');
-
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 13, 'WTAX');
-
-            receivingReceiptItemGrid.columnHeaders.columns[14].allowMerging = true;
-            receivingReceiptItemGrid.columnHeaders.setCellData(0, 14, 'WTAX Amt.');
-
-            for (var columnBasicUnitConversion = 15; columnBasicUnitConversion <= 17; columnBasicUnitConversion++) {
-                receivingReceiptItemGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Basic Unit Conversion');
+                                receivingReceiptItemGrid.columnHeaders.columns[i].allowMerging = true;
+                                receivingReceiptItemGrid.columnHeaders.setCellData(0, i, columnName);
+                            }
+                        </text>
+                    }
+                }
             }
 
             receivingReceiptItemGrid.rows.defaultSize = 55;
@@ -1020,7 +1191,7 @@
         // ==================
         // Save RR - IsLocked
         // ==================
-        function RRSaveSaveButton_OnClick() {
+        function btnLockReceivingReceiptOnclick() {
             var id = getParam('id');
             var receivingReceiptObject = new Object();
             receivingReceiptObject.BranchId = cboRRbranch.selectedValue;
@@ -1053,12 +1224,12 @@
             });
 
             if (isValid) {
-                document.getElementById('cmdSaveRRSave').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
-                $("#cmdRRJournal").prop("disabled", true);
-                $("#cmdSaveRRSave").prop("disabled", true);
-                $("#cmdRREdit").prop("disabled", true);
-                $("#cmdRRPrint").prop("disabled", true);
-                $("#cmdRRClose").prop("disabled", true);
+                document.getElementById('btnLockReceivingReceipt').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
+                $("#btnReceivingReceiptJournal").prop("disabled", true);
+                $("#btnLockReceivingReceipt").prop("disabled", true);
+                $("#btnUnlockReceivingReceipt").prop("disabled", true);
+                $("#btnPrintReceivingReceipt").prop("disabled", true);
+                $("#btnCloseReceivingReceipt").prop("disabled", true);
 
                 $.ajax({
                     type: "PUT",
@@ -1075,15 +1246,15 @@
                         },
                         404: function () {
                             toastr.error("Not Found");
-                            document.getElementById('cmdSaveRRSave').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            $("#cmdSaveRRSave").prop("disabled", false);
-                            $("#cmdRRClose").prop("disabled", false);
+                            document.getElementById('btnLockReceivingReceipt').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $("#btnLockReceivingReceipt").prop("disabled", false);
+                            $("#btnCloseReceivingReceipt").prop("disabled", false);
                         },
                         400: function () {
                             toastr.error("Bad Request");
-                            document.getElementById('cmdSaveRRSave').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            $("#cmdSaveRRSave").prop("disabled", false);
-                            $("#cmdRRClose").prop("disabled", false);
+                            document.getElementById('btnLockReceivingReceipt').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $("#btnLockReceivingReceipt").prop("disabled", false);
+                            $("#btnCloseReceivingReceipt").prop("disabled", false);
                         }
                     }
                 });
@@ -1095,15 +1266,15 @@
         // ================
         // Edit RR - Unlock
         // ================
-        function RREditButton_OnClick() {
+        function btnUnlockReceivingReceiptOnclick() {
             var id = getParam('id');
 
-            document.getElementById('cmdRREdit').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
-            $("#cmdRRJournal").prop("disabled", true);
-            $("#cmdSaveRRSave").prop("disabled", true);
-            $("#cmdRREdit").prop("disabled", true);
-            $("#cmdRRPrint").prop("disabled", true);
-            $("#cmdRRClose").prop("disabled", true);
+            document.getElementById('btnUnlockReceivingReceipt').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
+            $("#btnReceivingReceiptJournal").prop("disabled", true);
+            $("#btnLockReceivingReceipt").prop("disabled", true);
+            $("#btnUnlockReceivingReceipt").prop("disabled", true);
+            $("#btnPrintReceivingReceipt").prop("disabled", true);
+            $("#btnCloseReceivingReceipt").prop("disabled", true);
 
             $.ajax({
                 type: "PUT",
@@ -1119,19 +1290,19 @@
                     },
                     404: function () {
                         toastr.error("Not Found");
-                        document.getElementById('cmdRREdit').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        $("#cmdRRJournal").prop("disabled", false);
-                        $("#cmdRREdit").prop("disabled", false);
-                        $("#cmdRRPrint").prop("disabled", false);
-                        $("#cmdRRClose").prop("disabled", false);
+                        document.getElementById('btnUnlockReceivingReceipt').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $("#btnReceivingReceiptJournal").prop("disabled", false);
+                        $("#btnUnlockReceivingReceipt").prop("disabled", false);
+                        $("#btnPrintReceivingReceipt").prop("disabled", false);
+                        $("#btnCloseReceivingReceipt").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
-                        document.getElementById('cmdRREdit').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        $("#cmdRRJournal").prop("disabled", false);
-                        $("#cmdRREdit").prop("disabled", false);
-                        $("#cmdRRPrint").prop("disabled", false);
-                        $("#cmdRRClose").prop("disabled", false);
+                        document.getElementById('btnUnlockReceivingReceipt').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $("#btnReceivingReceiptJournal").prop("disabled", false);
+                        $("#btnUnlockReceivingReceipt").prop("disabled", false);
+                        $("#btnPrintReceivingReceipt").prop("disabled", false);
+                        $("#btnCloseReceivingReceipt").prop("disabled", false);
                     }
                 }
             });
@@ -1140,7 +1311,7 @@
         // ========
         // Print RR
         // ========
-        function RRPrintButton_OnClick() {
+        function btnPrintReceivingReceiptOnclick() {
             var id = getParam('id');
             var pirntLink = "/RepReceivingReceipt/ReceivingReceipt?RRId=" + id;
             window.open(pirntLink, '_blank');
@@ -1172,25 +1343,25 @@
             var purchaseOrdertatusObservableArray = new wijmo.collections.ObservableArray();
             var supplierId = cboRRSupplier.selectedValue;
             $.ajax({
-                url: '/api/listPurchaseOrderBySupplierId/' + supplierId,
+                url: '/api/receivingReceiptItem/dropdown/list/purchaseOrder/' + supplierId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (purchaseOrderStatusListResults) {
-                    if (purchaseOrderStatusListResults.length > 0) {
-                        for (i = 0; i < purchaseOrderStatusListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             purchaseOrdertatusObservableArray.push({
-                                Id: purchaseOrderStatusListResults[i]["Id"],
-                                PONumber: purchaseOrderStatusListResults[i]["PONumber"],
-                                PODate: purchaseOrderStatusListResults[i]["PODate"],
-                                PODetails: purchaseOrderStatusListResults[i]["PONumber"] + " (" + (purchaseOrderStatusListResults[i]["PODate"]).replace(/\//g, '-') + ")"
+                                Id: results[i]["Id"],
+                                PONumber: results[i]["PONumber"],
+                                PODate: results[i]["PODate"],
+                                PODetails: results[i]["PONumber"] + " (" + (results[i]["PODate"]).replace(/\//g, '-') + ")"
                             });
                         }
                     }
 
                     var disabled = true;
-                    if (purchaseOrderStatusListResults.length > 0) {
+                    if (results.length > 0) {
                         disabled = false;
                     }
 
@@ -1219,35 +1390,35 @@
             if (cboPONumberPOStatus.selectedValue != null) {
                 var POId = cboPONumberPOStatus.selectedValue;
                 $.ajax({
-                    url: '/api/listPurchaseOrderItemForPOStatusByPOId/' + POId,
+                    url: '/api/receivingReceiptItem/popUp/list/purchaseOrderStatus/' + POId,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     data: {},
-                    success: function (Results) {
+                    success: function (results) {
                         $('#cmdApplyPOStatusButton').prop("disabled", false);
-                        if (Results.length > 0) {
-                            for (i = 0; i < Results.length; i++) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
                                 purchaseOrderStatusObservableArray.push({
-                                    Id: Results[i]["Id"],
-                                    ItemId: Results[i]["ItemId"],
-                                    Item: Results[i]["Item"],
-                                    ItemCode: Results[i]["ItemCode"],
-                                    POId: Results[i]["POId"],
-                                    Received: Results[i]["Received"],
-                                    ReceivedDisplay: parseFloat(Results[i]["Received"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    Balance: Results[i]["BaseQuantity"] - Results[i]["Received"],
-                                    BalanceDisplay: parseFloat(Results[i]["BaseQuantity"] - Results[i]["Received"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    QuantityBalanceValue: Results[i]["BaseQuantity"] - Results[i]["Received"],
-                                    QuantityBalanceValueDisplay: parseFloat(Results[i]["BaseQuantity"] - Results[i]["Received"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    Amount: Results[i]["Amount"],
-                                    Pick: (Results[i]["BaseQuantity"] - Results[i]["Received"]) == 0 ? "<button class='btn btn-primary btn-xs' onclick='pickQuantity_OnClick()'><i class='fa fa-arrow-right'></i></button>" : "<button class='btn btn-warning btn-xs' onclick='pickReverseQuantity_OnClick()'><i class='fa fa-arrow-left'></i></button>",
-                                    BaseUnitId: Results[i]["BaseUnitId"],
-                                    BaseQuantity: Results[i]["BaseQuantity"],
-                                    BaseQuantityDisplay: parseFloat(Results[i]["BaseQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                    BaseCost: Results[i]["BaseCost"],
-                                    BaseUnit: Results[i]["BaseUnit"],
-                                    Particulars: Results[i]["Particulars"]
+                                    POId: results[i]["POId"],
+                                    ItemId: results[i]["ItemId"],
+                                    ItemCode: results[i]["ItemCode"],
+                                    ItemDescription: results[i]["ItemDescription"],
+                                    Particulars: results[i]["Particulars"],
+                                    Amount: results[i]["Amount"],
+                                    BaseUnitId: results[i]["BaseUnitId"],
+                                    BaseUnit: results[i]["BaseUnit"],
+                                    BaseQuantity: results[i]["BaseQuantity"],
+                                    BaseQuantityDisplay: parseFloat(results[i]["BaseQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    BaseCost: results[i]["BaseCost"],
+                                    BaseCostDisplay: parseFloat(results[i]["BaseCost"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    ReceivedQuantity: results[i]["ReceivedQuantity"],
+                                    ReceivedQuantityDisplay: parseFloat(results[i]["ReceivedQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    BalanceQuantity: results[i]["BalanceQuantity"],
+                                    BalanceQuantityDisplay: parseFloat(results[i]["BalanceQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                    Pick: (results[i]["BaseQuantity"] - results[i]["ReceivedQuantity"]) == 0 ? "<button class='btn btn-primary btn-xs' onclick='pickQuantity_OnClick()'><i class='fa fa-arrow-right'></i></button>" : "<button class='btn btn-warning btn-xs' onclick='pickReverseQuantity_OnClick()'><i class='fa fa-arrow-left'></i></button>",
+                                    Balance: results[i]["BaseQuantity"] - results[i]["ReceivedQuantity"],
+                                    BalanceDisplay: parseFloat(results[i]["BaseQuantity"] - results[i]["ReceivedQuantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                 });
                             }
                         } else {
@@ -1298,8 +1469,8 @@
                                 "isReadOnly": true,
                             },
                             {
-                                "header": "Item",
-                                "binding": "Item",
+                                "header": "Description",
+                                "binding": "ItemDescription",
                                 "allowSorting": true,
                                 "isReadOnly": true,
                                 "width": "2*"
@@ -1321,7 +1492,7 @@
                             },
                             {
                                 "header": "Received",
-                                "binding": "ReceivedDisplay",
+                                "binding": "ReceivedQuantityDisplay",
                                 "allowSorting": true,
                                 "align": "right",
                                 "isReadOnly": true,
@@ -1329,7 +1500,7 @@
                             },
                             {
                                 "header": "Balance",
-                                "binding": "BalanceDisplay",
+                                "binding": "BalanceQuantityDisplay",
                                 "allowSorting": true,
                                 "align": "right",
                                 "isReadOnly": true,
@@ -1345,7 +1516,7 @@
                             },
                             {
                                 "header": "Quantity",
-                                "binding": "QuantityBalanceValueDisplay",
+                                "binding": "BalanceDisplay",
                                 "allowSorting": true,
                                 "width": "1*",
                                 "align": "right",
@@ -1372,7 +1543,7 @@
             purchasrOrderStatusFlexGrid.columnHeaders.setCellData(0, 0, 'Code');
 
             purchasrOrderStatusFlexGrid.columnHeaders.columns[1].allowMerging = true;
-            purchasrOrderStatusFlexGrid.columnHeaders.setCellData(0, 1, 'Item');
+            purchasrOrderStatusFlexGrid.columnHeaders.setCellData(0, 1, 'Description');
 
             purchasrOrderStatusFlexGrid.columnHeaders.columns[2].allowMerging = true;
             purchasrOrderStatusFlexGrid.columnHeaders.setCellData(0, 2, 'Unit');
@@ -1394,9 +1565,10 @@
         function pickQuantity_OnClick() {
             purchaseOrderStatusCollectionView.editItem(purchaseOrderStatusCollectionView.currentItem);
             var purchaseOrderStatusItem = purchaseOrderStatusCollectionView.currentEditItem;
-            var balance = purchaseOrderStatusItem.BaseQuantity - purchaseOrderStatusItem.Received;
+            var balance = purchaseOrderStatusItem.BaseQuantity - purchaseOrderStatusItem.ReceivedQuantity;
             if (balance > 0) {
-                purchaseOrderStatusItem.QuantityBalanceValueDisplay = formatDecimalValues(balance);
+                purchaseOrderStatusItem.BalanceDisplay = formatDecimalValues(balance);
+                purchaseOrderStatusItem.Balance = balance;
                 purchaseOrderStatusItem.Pick = "<button class='btn btn-warning btn-xs' onclick='pickReverseQuantity_OnClick()'><i class='fa fa-arrow-left'></i></button>";
                 purchaseOrderStatusCollectionView.refresh();
                 purchasrOrderStatusFlexGrid.refresh();
@@ -1409,7 +1581,8 @@
         function pickReverseQuantity_OnClick() {
             purchaseOrderStatusCollectionView.editItem(purchaseOrderStatusCollectionView.currentItem);
             var purchaseOrderStatusItem = purchaseOrderStatusCollectionView.currentEditItem;
-            purchaseOrderStatusItem.QuantityBalanceValueDisplay = formatDecimalValues(0);
+            purchaseOrderStatusItem.BalanceDisplay = formatDecimalValues(0);
+            purchaseOrderStatusItem.Balance = 0;
             purchaseOrderStatusItem.Pick = "<button class='btn btn-primary btn-xs' onclick='pickQuantity_OnClick()'><i class='fa fa-arrow-right'></i></button>";
             purchaseOrderStatusCollectionView.refresh();
             purchasrOrderStatusFlexGrid.refresh();
@@ -1435,26 +1608,25 @@
             $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", true);
             $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", true);
 
-            var id = getParam('id');
+            var RRId = getParam('id');
             var BranchId = cboRRbranch.selectedValue;
             var POId = cboPONumberPOStatus.selectedValue;
 
             for (var i = 0; i < purchaseOrderStatusCollectionView.items.length; i++) {
                 var item = purchaseOrderStatusCollectionView.items[i];
-                if(item.QuantityBalanceValue > 0) {
+                if (item.Balance > 0) {
                     var POItemObject = new Object();
-                    POItemObject.RRId = id;
                     POItemObject.POId = item.POId;
                     POItemObject.ItemId = item.ItemId;
                     POItemObject.Particulars = item.Particulars;
-                    POItemObject.BaseUnitId = item.BaseUnitId;
-                    POItemObject.BaseQuantity = item.QuantityBalanceValueDisplay;
-                    POItemObject.BaseCost = item.BaseCost;
+                    POItemObject.UnitId = item.BaseUnitId;
+                    POItemObject.Quantity = item.Balance;
+                    POItemObject.Cost = item.BaseCost;
                     POItemObject.BranchId = BranchId;
                     var POItemObjectData = JSON.stringify(POItemObject);
 
                     $.ajax({
-                        url: '/api/applyPurchaseOrderItems',
+                        url: '/api/receivingReceiptItem/popUp/apply/purchaseOrderStatus/' + RRId,
                         type: "POST",
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
@@ -1470,16 +1642,24 @@
 
                                 refreshReceivingReceiptFlexGrid();
                             },
-                            404: function () {
-                                toastr.error("Not Found");
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                                 $('#applyAllConfirmPOStatus').modal('hide');
                                 $('#POStatus').modal('hide');
                                 document.getElementById('cmdConfirmApplyAllPOStatusPOItems').innerHTML = "<i class='fa fa-check'></i> Apply";
                                 $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", false);
                                 $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", false);
                             },
-                            400: function () {
-                                toastr.error("Bad Request");
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                $('#applyAllConfirmPOStatus').modal('hide');
+                                $('#POStatus').modal('hide');
+                                document.getElementById('cmdConfirmApplyAllPOStatusPOItems').innerHTML = "<i class='fa fa-check'></i> Apply";
+                                $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", false);
+                                $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                                 $('#applyAllConfirmPOStatus').modal('hide');
                                 $('#POStatus').modal('hide');
                                 document.getElementById('cmdConfirmApplyAllPOStatusPOItems').innerHTML = "<i class='fa fa-check'></i> Apply";
@@ -1489,7 +1669,7 @@
                         }
                     });
                 } else {
-                    $('#applyAllConfirmPOStatus').modal('hide');
+                    $('#POStatus').modal('hide');
                     document.getElementById('cmdConfirmApplyAllPOStatusPOItems').innerHTML = "<i class='fa fa-check'></i> Apply";
                     $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", false);
                     $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", false);
@@ -1503,17 +1683,17 @@
         function getBranchesPOItemForComboBox(branchIdSelectedValue, POIdSelectedValue, ItemIdSelectedValue, VATIdSelectedValue, WTAXSelectedValue) {
             var branchesObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listBranch',
+                url: '/api/receivingReceiptItem/dropdown/list/branch',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (branchListResults) {
-                    if (branchListResults.length > 0) {
-                        for (i = 0; i < branchListResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             branchesObservableArray.push({
-                                Id: branchListResults[i]["Id"],
-                                Branch: branchListResults[i]["Branch"]
+                                Id: results[i]["Id"],
+                                Branch: results[i]["Branch"]
                             });
                         }
                     }
@@ -1540,25 +1720,25 @@
             var purchaseOrderObservableArray = new wijmo.collections.ObservableArray();
             var supplierId = cboRRSupplier.selectedValue;
             $.ajax({
-                url: '/api/listPurchaseOrderBySupplierId/' + supplierId,
+                url: '/api/receivingReceiptItem/dropdown/list/purchaseOrder/' + supplierId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (purchaseOrderListResults) {
-                    if (purchaseOrderListResults.length > 0) {
+                success: function (results) {
+                    if (results.length > 0) {
                         $("#cmdSaveRRLinesButton").prop("disabled", false);
-                        for (i = 0; i < purchaseOrderListResults.length; i++) {
+                        for (i = 0; i < results.length; i++) {
                             purchaseOrderObservableArray.push({
-                                Id: purchaseOrderListResults[i]["Id"],
-                                PONumber: purchaseOrderListResults[i]["PONumber"],
-                                PODate: purchaseOrderListResults[i]["PODate"],
-                                PODetails: purchaseOrderListResults[i]["PONumber"] + " (" + (purchaseOrderListResults[i]["PODate"]).replace(/\//g, '-') + ")"
+                                Id: results[i]["Id"],
+                                PONumber: results[i]["PONumber"],
+                                PODate: results[i]["PODate"],
+                                PODetails: results[i]["PONumber"] + " (" + (results[i]["PODate"]).replace(/\//g, '-') + ")"
                             });
                         }
                     }
 
                     var disabled = true;
-                    if (purchaseOrderListResults.length > 0) {
+                    if (results.length > 0) {
                         disabled = false;
                         $("#cmdSaveRRLinesButton").prop("disabled", false);
                     } else {
@@ -1592,34 +1772,31 @@
             if (cboRRItemPONumber.selectedValue != null) {
                 var POId = cboRRItemPONumber.selectedValue;
                 $.ajax({
-                    url: '/api/listPurchaseOrderItemByPOId/' + POId,
+                    url: '/api/receivingReceiptItem/dropdown/list/item/' + POId,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
-                    success: function (purchaseOrderItemsResults) {
-                        if (purchaseOrderItemsResults.length > 0) {
-                            for (i = 0; i < purchaseOrderItemsResults.length; i++) {
+                    success: function (results) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
                                 purchaseOrderItemsObservableArray.push({
-                                    Id: purchaseOrderItemsResults[i]["Id"],
-                                    POId: purchaseOrderItemsResults[i]["POId"],
-                                    PO: purchaseOrderItemsResults[i]["PO"],
-                                    ItemId: purchaseOrderItemsResults[i]["ItemId"],
-                                    ItemCode: purchaseOrderItemsResults[i]["ItemCode"],
-                                    ItemDescription: purchaseOrderItemsResults[i]["Item"],
-                                    UnitId: purchaseOrderItemsResults[i]["UnitId"],
-                                    Unit: purchaseOrderItemsResults[i]["Unit"],
-                                    Quantity: purchaseOrderItemsResults[i]["Quantity"],
-                                    Particulars: purchaseOrderItemsResults[i]["Particulars"],
-                                    Cost: purchaseOrderItemsResults[i]["Cost"],
-                                    Amount: purchaseOrderItemsResults[i]["Amount"],
-                                    VATId: purchaseOrderItemsResults[i]["VATId"],
-                                    WTAXId: purchaseOrderItemsResults[i]["WTAXId"]
+                                    POId: results[i]["POId"],
+                                    ItemId: results[i]["ItemId"],
+                                    ItemCode: results[i]["ItemCode"],
+                                    ItemDescription: results[i]["ItemDescription"],
+                                    UnitId: results[i]["UnitId"],
+                                    Unit: results[i]["Unit"],
+                                    Quantity: results[i]["Quantity"],
+                                    Cost: results[i]["Cost"],
+                                    Amount: results[i]["Amount"],
+                                    VATId: results[i]["ItemVATId"],
+                                    WTAXId: results[i]["ItemWTAXId"]
                                 });
                             }
                         }
 
                         var disabled = true;
-                        if (purchaseOrderItemsResults.length > 0) {
+                        if (results.length > 0) {
                             disabled = false;
                         } else {
                             $("#cmdSaveRRLinesButton").prop("disabled", true);
@@ -1651,7 +1828,6 @@
                                 $("#cmdSaveRRLinesButton").prop("disabled", false);
                                 cboRRLineItemCode.selectedValue = this.selectedValue;
 
-                                document.getElementById('RRLine_Quantity').value = formatDecimalValues(this.selectedItem["Quantity"]);
                                 document.getElementById('RRLine_Cost').value = formatDecimalValues(this.selectedItem["Cost"]);
                                 computeAmountAndTaxes();
 
@@ -1661,11 +1837,9 @@
 
                         if (receivingReceiptId == 0) {
                             if (cboRRLineItemDescription.selectedValue != null) {
-                                document.getElementById('RRLine_Quantity').value = formatDecimalValues(cboRRLineItemDescription.selectedItem["Quantity"]);
                                 document.getElementById('RRLine_Cost').value = formatDecimalValues(cboRRLineItemDescription.selectedItem["Cost"]);
                                 computeAmountAndTaxes();
                             } else {
-                                document.getElementById('RRLine_Quantity').value = formatDecimalValues(0);
                                 document.getElementById('RRLine_Cost').value = formatDecimalValues(0);
                                 computeAmountAndTaxes();
                             }
@@ -1697,11 +1871,9 @@
 
                 if (receivingReceiptId == 0) {
                     if (cboRRLineItemDescription.selectedValue != null) {
-                        document.getElementById('RRLine_Quantity').value = formatDecimalValues(cboRRLineItemDescription.selectedItem["Quantity"]);
                         document.getElementById('RRLine_Cost').value = formatDecimalValues(cboRRLineItemDescription.selectedItem["Cost"]);
                         computeAmountAndTaxes();
                     } else {
-                        document.getElementById('RRLine_Quantity').value = formatDecimalValues(0);
                         document.getElementById('RRLine_Cost').value = formatDecimalValues(0);
                         computeAmountAndTaxes();
                     }
@@ -1718,22 +1890,22 @@
             var unitsObservableArray = new wijmo.collections.ObservableArray();
             if (cboRRLineItemDescription.selectedValue != null) {
                 $.ajax({
-                    url: '/api/listArticleUnitByArticleId/' + cboRRLineItemDescription.selectedValue,
+                    url: '/api/receivingReceiptItem/dropdown/list/itemUnit/' + cboRRLineItemDescription.selectedValue,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
-                    success: function (unitListResults) {
-                        if (unitListResults.length > 0) {
-                            for (i = 0; i < unitListResults.length; i++) {
+                    success: function (results) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
                                 unitsObservableArray.push({
-                                    UnitId: unitListResults[i]["UnitId"],
-                                    Unit: unitListResults[i]["Unit"]
+                                    UnitId: results[i]["UnitId"],
+                                    Unit: results[i]["Unit"]
                                 });
                             }
                         }
 
                         var disabled = true;
-                        if (unitListResults.length > 0) {
+                        if (results.length > 0) {
                             disabled = false;
                         } else {
                             $("#cmdSaveRRLinesButton").prop("disabled", true);
@@ -1772,24 +1944,24 @@
         function getTaxTypeForComboBox(VATIdSelectedValue, WTAXSelectedValue) {
             var taxTypesObservableArray = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listTaxType',
+                url: '/api/receivingReceiptItem/dropdown/list/TAX',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (taxTypesResults) {
-                    if (taxTypesResults.length > 0) {
-                        for (i = 0; i < taxTypesResults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             taxTypesObservableArray.push({
-                                Id: taxTypesResults[i]["Id"],
-                                TaxType: taxTypesResults[i]["TaxType"],
-                                TaxRate: taxTypesResults[i]["TaxRate"],
-                                IsInclusive: taxTypesResults[i]["IsInclusive"],
+                                Id: results[i]["Id"],
+                                TaxType: results[i]["TaxType"],
+                                TaxRate: results[i]["TaxRate"],
+                                IsInclusive: results[i]["IsInclusive"],
                             });
                         }
                     }
 
                     var disabled = true;
-                    if (taxTypesResults.length > 0) {
+                    if (results.length > 0) {
                         disabled = false;
                     } else {
                         $("#cmdSaveRRLinesButton").prop("disabled", true);
@@ -1849,7 +2021,7 @@
         // =================
         // ADD Item RR Lines
         // =================
-        function btnAddItemRRLine_OnClick() {
+        function btnAddReceivingReceiptItemOnclick() {
             $('#RRLinesEdit').modal({
                 show: true,
                 backdrop: 'static'
@@ -1873,7 +2045,7 @@
             getBranchesPOItemForComboBox(cboRRHeaderBranchId,0,0,0,0);
             receivingReceiptId = 0;
             document.getElementById('RRLine_Particulars').value = "NA";
-            document.getElementById('RRLine_Quantity').value = formatDecimalValues(0);
+            document.getElementById('RRLine_Quantity').value = formatDecimalValues(1);
             document.getElementById('RRLine_Cost').value = formatDecimalValues(0);
             document.getElementById('RRLine_Amount').value = formatDecimalValues(0);
             document.getElementById('RRLine_VATRate').value = formatDecimalValues(0);
@@ -1925,8 +2097,7 @@
         // =============
         function cmdRRLinesSaveButton_OnClick() {
             var receivingReceiptItemObject = new Object();
-            var id = getParam('id');
-            receivingReceiptItemObject.RRId = id;
+            var RRId = getParam('id');
             receivingReceiptItemObject.POId = cboRRItemPONumber.selectedValue;
             receivingReceiptItemObject.ItemId = cboRRLineItemDescription.selectedValue;
             receivingReceiptItemObject.Particulars = document.getElementById('RRLine_Particulars').value;
@@ -1966,17 +2137,30 @@
                 if (receivingReceiptId == 0) {
                     $.ajax({
                         type: "POST",
-                        url: '/api/addReceivingReceiptItem',
+                        url: '/api/receivingReceiptItem/add/' + RRId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: receivingReceiptItemData,
-                        success: function (id) {
-                            if (id > 0) {
+                        statusCode: {
+                            200: function () {
                                 toastr.success("Save Successful");
                                 $('#RRLinesEdit').modal('hide');
                                 refreshReceivingReceiptFlexGrid();
-                            } else {
-                                toastr.error("Internal Server Error");
+                            },
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
+                                document.getElementById('cmdSaveRRLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveRRLinesButton").prop("disabled", false);
+                                $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                document.getElementById('cmdSaveRRLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveRRLinesButton").prop("disabled", false);
+                                $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                                 document.getElementById('cmdSaveRRLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveRRLinesButton").prop("disabled", false);
                                 $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
@@ -1986,26 +2170,30 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updateReceivingReceiptItem/' + receivingReceiptId,
+                        url: '/api/receivingReceiptItem/update/' + receivingReceiptId + '/' + RRId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: receivingReceiptItemData,
                         statusCode: {
                             200: function () {
                                 toastr.success("Update Successful");
-                                $("#cmdSaveRRLinesButton").prop("disabled", true);
-                                $("#cmdRRLinesDetailCloseButton").prop("disabled", true);
                                 $('#RRLinesEdit').modal('hide');
                                 refreshReceivingReceiptFlexGrid();
                             },
-                            404: function () {
-                                toastr.error("Not Found");
+                            404: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                                 document.getElementById('cmdSaveRRLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveRRLinesButton").prop("disabled", false);
                                 $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
                             },
-                            400: function () {
-                                toastr.error("Bad Request");
+                            400: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                                document.getElementById('cmdSaveRRLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $("#cmdSaveRRLinesButton").prop("disabled", false);
+                                $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
+                            },
+                            500: function (message) {
+                                toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                                 document.getElementById('cmdSaveRRLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveRRLinesButton").prop("disabled", false);
                                 $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
@@ -2040,8 +2228,9 @@
 
             receivingReceiptItemsCollection.editItem(receivingReceiptItemsCollection.currentItem);
             var item = receivingReceiptItemsCollection.currentEditItem;
+            var RRId = getParam('id');
             $.ajax({
-                url: '/api/deleteReceivingReceiptItem/' + item.Id + '/' + item.RRId,
+                url: '/api/receivingReceiptItem/delete/' + item.Id + '/' + RRId,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -2051,14 +2240,20 @@
                         $('#deleteRRLinesConfirm').modal('hide');
                         refreshReceivingReceiptFlexGrid();
                     },
-                    404: function () {
-                        toastr.error("Not Found");
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                         document.getElementById('cmdConfirmDeleteRRLines').innerHTML = "<i class='fa fa-tash'></i> Delete";
                         $("#cmdConfirmDeleteRRLines").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButtonRRLines").prop("disabled", false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        document.getElementById('cmdConfirmDeleteRRLines').innerHTML = "<i class='fa fa-tash'></i> Delete";
+                        $("#cmdConfirmDeleteRRLines").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonRRLines").prop("disabled", false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                         document.getElementById('cmdConfirmDeleteRRLines').innerHTML = "<i class='fa fa-tash'></i> Delete";
                         $("#cmdConfirmDeleteRRLines").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButtonRRLines").prop("disabled", false);
@@ -2129,35 +2324,35 @@
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (Results) {
-                    if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
 
-                            var InventoryDateResult = new Date(Results[i]["InventoryDate"])
+                            var InventoryDateResult = new Date(results[i]["InventoryDate"])
                             var InventoryDate = ('0' + (InventoryDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + InventoryDateResult.getDate()).slice(-2) + '-' + InventoryDateResult.getFullYear();
 
                             inventoryObservableArray.push({
-                                Id: Results[i]["Id"],
-                                BranchId: Results[i]["BranchId"],
-                                Branch: Results[i]["Branch"],
+                                Id: results[i]["Id"],
+                                BranchId: results[i]["BranchId"],
+                                Branch: results[i]["Branch"],
                                 InventoryDate: InventoryDate,
-                                ArticleId: Results[i]["ArticleId"],
-                                Article: Results[i]["Article"],
-                                ArticleInventoryId: Results[i]["ArticleInventoryId"],
-                                RRId: Results[i]["RRId"],
-                                SIId: Results[i]["SIId"],
-                                INId: Results[i]["INId"],
-                                OTId: Results[i]["OTId"],
-                                STId: Results[i]["STId"],
-                                QuantityIn: Results[i]["QuantityIn"],
-                                Quantity: Results[i]["Quantity"],
-                                QuantityDisplay: parseFloat(Results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                QuantityOut: Results[i]["QuantityOut"],
-                                Amount: Results[i]["Amount"],
-                                AmountDisplay: parseFloat(Results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                Particulars: Results[i]["Particulars"],
-                                Code: Results[i]["Code"],
-                                Unit: Results[i]["Unit"]
+                                ArticleId: results[i]["ArticleId"],
+                                Article: results[i]["Article"],
+                                ArticleInventoryId: results[i]["ArticleInventoryId"],
+                                RRId: results[i]["RRId"],
+                                SIId: results[i]["SIId"],
+                                INId: results[i]["INId"],
+                                OTId: results[i]["OTId"],
+                                STId: results[i]["STId"],
+                                QuantityIn: results[i]["QuantityIn"],
+                                Quantity: results[i]["Quantity"],
+                                QuantityDisplay: parseFloat(results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                QuantityOut: results[i]["QuantityOut"],
+                                Amount: results[i]["Amount"],
+                                AmountDisplay: parseFloat(results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                Particulars: results[i]["Particulars"],
+                                Code: results[i]["Code"],
+                                Unit: results[i]["Unit"]
                             });
                         }
                     }
@@ -2263,42 +2458,42 @@
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (Results) {
-                    if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             journalsObservableArray.push({
-                                Id: Results[i]["Id"],
-                                JournalDate: (Results[i]["JournalDate"]).replace(/\//g, '-'),
-                                BranchId: Results[i]["BranchId"],
-                                Branch: Results[i]["Branch"],
-                                AccountId: Results[i]["AccountId"],
-                                AccountCode: Results[i]["AccountCode"],
-                                Account: Results[i]["Account"],
-                                ArticleId: Results[i]["ArticleId"],
-                                Article: Results[i]["Article"],
-                                Particulars: Results[i]["Particulars"],
-                                DebitAmountDisplay: parseFloat(Results[i]["DebitAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                CreditAmountDisplay: parseFloat(Results[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                ORId: Results[i]["ORId"],
-                                CVId: Results[i]["CVId"],
-                                JVId: Results[i]["JVId"],
-                                RRId: Results[i]["RRId"],
-                                SIId: Results[i]["SIId"],
-                                INId: Results[i]["INId"],
-                                OTId: Results[i]["OTId"],
-                                STId: Results[i]["STId"],
-                                DocumentReference: Results[i]["DocumentReference"],
-                                APRRId: Results[i]["APRRId"],
-                                ARSIId: Results[i]["ARSIId"]
+                                Id: results[i]["Id"],
+                                JournalDate: (results[i]["JournalDate"]).replace(/\//g, '-'),
+                                BranchId: results[i]["BranchId"],
+                                Branch: results[i]["Branch"],
+                                AccountId: results[i]["AccountId"],
+                                AccountCode: results[i]["AccountCode"],
+                                Account: results[i]["Account"],
+                                ArticleId: results[i]["ArticleId"],
+                                Article: results[i]["Article"],
+                                Particulars: results[i]["Particulars"],
+                                DebitAmountDisplay: parseFloat(results[i]["DebitAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                CreditAmountDisplay: parseFloat(results[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                ORId: results[i]["ORId"],
+                                CVId: results[i]["CVId"],
+                                JVId: results[i]["JVId"],
+                                RRId: results[i]["RRId"],
+                                SIId: results[i]["SIId"],
+                                INId: results[i]["INId"],
+                                OTId: results[i]["OTId"],
+                                STId: results[i]["STId"],
+                                DocumentReference: results[i]["DocumentReference"],
+                                APRRId: results[i]["APRRId"],
+                                ARSIId: results[i]["ARSIId"]
                             });
 
                             var debitAmountTotal = 0;
                             var creditAmountTotal = 0;
 
                             var a = 0;
-                            while (a < Results.length) {
-                                debitAmountTotal += Results[a]["DebitAmount"];
-                                creditAmountTotal += Results[a]["CreditAmount"];
+                            while (a < results.length) {
+                                debitAmountTotal += results[a]["DebitAmount"];
+                                creditAmountTotal += results[a]["CreditAmount"];
                                 a++;
                             }
                         }
@@ -2320,7 +2515,7 @@
         // ============
         // Journal List
         // ============
-        function RRJournal_OnClick() {
+        function btnReceivingReceiptJournalOnclick() {
             $('#journalDetail').modal({
                 show: true,
                 backdrop: 'static'
@@ -2458,12 +2653,12 @@
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (userBranchesResults) {
-                    if (userBranchesResults.length > 0) {
-                        for (i = 0; i < userBranchesResults.length; i++) {
+                success: function (userBranchesresults) {
+                    if (userBranchesresults.length > 0) {
+                        for (i = 0; i < userBranchesresults.length; i++) {
                             userBranchesObservableArray.push({
-                                BranchId: userBranchesResults[i]["BranchId"],
-                                Branch: userBranchesResults[i]["Branch"]
+                                BranchId: userBranchesresults[i]["BranchId"],
+                                Branch: userBranchesresults[i]["Branch"]
                             });
                         }
                     }
