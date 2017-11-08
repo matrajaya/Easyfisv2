@@ -1192,7 +1192,6 @@
         // Save RR - IsLocked
         // ==================
         function btnLockReceivingReceiptOnclick() {
-            var id = getParam('id');
             var receivingReceiptObject = new Object();
             receivingReceiptObject.BranchId = cboRRbranch.selectedValue;
             receivingReceiptObject.RRDate = cboRRDate.value.toLocaleDateString();
@@ -1231,9 +1230,11 @@
                 $("#btnPrintReceivingReceipt").prop("disabled", true);
                 $("#btnCloseReceivingReceipt").prop("disabled", true);
 
+                var id = getParam('id');
+
                 $.ajax({
                     type: "PUT",
-                    url: '/api/updateReceivingReceipt/' + id,
+                    url: '/api/receivingReceipt/lock/' + id,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     data: receivingReceiptData,
@@ -1244,19 +1245,25 @@
                                 location.reload()
                             }, 1000);
                         },
-                        404: function () {
-                            toastr.error("Not Found");
+                        404: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                             document.getElementById('btnLockReceivingReceipt').innerHTML = "<i class='fa fa-lock'></i> Lock";
                             $("#btnLockReceivingReceipt").prop("disabled", false);
                             $("#btnCloseReceivingReceipt").prop("disabled", false);
                         },
-                        400: function () {
-                            toastr.error("Bad Request");
+                        400: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                            document.getElementById('btnLockReceivingReceipt').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $("#btnLockReceivingReceipt").prop("disabled", false);
+                            $("#btnCloseReceivingReceipt").prop("disabled", false);
+                        },
+                        500: function (message) {
+                            toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                             document.getElementById('btnLockReceivingReceipt').innerHTML = "<i class='fa fa-lock'></i> Lock";
                             $("#btnLockReceivingReceipt").prop("disabled", false);
                             $("#btnCloseReceivingReceipt").prop("disabled", false);
                         }
-                    }
+                    },
                 });
             } else {
                 toastr.error("Invalid Entry");
@@ -1267,8 +1274,6 @@
         // Edit RR - Unlock
         // ================
         function btnUnlockReceivingReceiptOnclick() {
-            var id = getParam('id');
-
             document.getElementById('btnUnlockReceivingReceipt').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
             $("#btnReceivingReceiptJournal").prop("disabled", true);
             $("#btnLockReceivingReceipt").prop("disabled", true);
@@ -1276,9 +1281,11 @@
             $("#btnPrintReceivingReceipt").prop("disabled", true);
             $("#btnCloseReceivingReceipt").prop("disabled", true);
 
+            var id = getParam('id');
+
             $.ajax({
                 type: "PUT",
-                url: '/api/updateReceivingReceiptIsLocked/' + id,
+                url: '/api/receivingReceipt/unlock/' + id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 statusCode: {
@@ -1288,16 +1295,24 @@
                             location.reload()
                         }, 1000);
                     },
-                    404: function () {
-                        toastr.error("Not Found");
+                    404: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 404");
                         document.getElementById('btnUnlockReceivingReceipt').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
                         $("#btnReceivingReceiptJournal").prop("disabled", false);
                         $("#btnUnlockReceivingReceipt").prop("disabled", false);
                         $("#btnPrintReceivingReceipt").prop("disabled", false);
                         $("#btnCloseReceivingReceipt").prop("disabled", false);
                     },
-                    400: function () {
-                        toastr.error("Bad Request");
+                    400: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 400");
+                        document.getElementById('btnUnlockReceivingReceipt').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $("#btnReceivingReceiptJournal").prop("disabled", false);
+                        $("#btnUnlockReceivingReceipt").prop("disabled", false);
+                        $("#btnPrintReceivingReceipt").prop("disabled", false);
+                        $("#btnCloseReceivingReceipt").prop("disabled", false);
+                    },
+                    500: function (message) {
+                        toastr.error(message.responseText.replace(/^"(.*)"$/, '$1'), "Error 500");
                         document.getElementById('btnUnlockReceivingReceipt').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
                         $("#btnReceivingReceiptJournal").prop("disabled", false);
                         $("#btnUnlockReceivingReceipt").prop("disabled", false);

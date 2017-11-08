@@ -12,6 +12,7 @@ namespace easyfis.Entities
         public String SINumber { get; set; }
         public String SIDate { get; set; }
         public Int32 CustomerId { get; set; }
+        public String Customer { get; set; }
         public Int32 TermId { get; set; }
         public String DocumentReference { get; set; }
         public String ManualSINumber { get; set; }
@@ -26,8 +27,10 @@ namespace easyfis.Entities
         public Int32 ApprovedById { get; set; }
         public Boolean IsLocked { get; set; }
         public Int32 CreatedById { get; set; }
+        public String CreatedBy { get; set; }
         public String CreatedDateTime { get; set; }
         public Int32 UpdatedById { get; set; }
+        public String UpdatedBy { get; set; }
         public String UpdatedDateTime { get; set; }
     }
 }
