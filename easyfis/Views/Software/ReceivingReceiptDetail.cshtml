@@ -2316,10 +2316,11 @@
         // GET Inventory Entries
         // =====================
         function getInventoryEntries() {
-            var id = getParam('id');
+            var RRId = getParam('id');
             var inventoryObservableArray = new wijmo.collections.ObservableArray;
+
             $.ajax({
-                url: '/api/listInventoryByRRId/' + id,
+                url: '/api/inventory/receivingReceipt/list/' + RRId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -2333,26 +2334,16 @@
 
                             inventoryObservableArray.push({
                                 Id: results[i]["Id"],
-                                BranchId: results[i]["BranchId"],
-                                Branch: results[i]["Branch"],
                                 InventoryDate: InventoryDate,
-                                ArticleId: results[i]["ArticleId"],
+                                Branch: results[i]["Branch"],
                                 Article: results[i]["Article"],
-                                ArticleInventoryId: results[i]["ArticleInventoryId"],
-                                RRId: results[i]["RRId"],
-                                SIId: results[i]["SIId"],
-                                INId: results[i]["INId"],
-                                OTId: results[i]["OTId"],
-                                STId: results[i]["STId"],
-                                QuantityIn: results[i]["QuantityIn"],
+                                Particulars: results[i]["Particulars"],
+                                ArticleInventoryCode: results[i]["ArticleInventoryCode"],
                                 Quantity: results[i]["Quantity"],
                                 QuantityDisplay: parseFloat(results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                QuantityOut: results[i]["QuantityOut"],
+                                ArticleUnit: results[i]["ArticleUnit"],
                                 Amount: results[i]["Amount"],
                                 AmountDisplay: parseFloat(results[i]["Amount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                Particulars: results[i]["Particulars"],
-                                Code: results[i]["Code"],
-                                Unit: results[i]["Unit"]
                             });
                         }
                     }
@@ -2410,7 +2401,7 @@
                     },
                     {
                         "header": "Inventory Code",
-                        "binding": "Code",
+                        "binding": "ArticleInventoryCode",
                         "allowSorting": true,
                         "width": "1.3*",
                     },
@@ -2423,7 +2414,7 @@
                     },
                     {
                         "header": "Unit",
-                        "binding": "Unit",
+                        "binding": "ArticleUnit",
                         "allowSorting": true,
                         "width": "1*",
                     },
@@ -2451,9 +2442,9 @@
         // ===========
         function getJournalListForRR() {
             var journalsObservableArray = new wijmo.collections.ObservableArray;
-            var id = getParam('id');
+            var RRId = getParam('id');
             $.ajax({
-                url: '/api/listJournalByRRId/' + id,
+                url: '/api/jounal/receivingReceipt/list/' + RRId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -2461,30 +2452,18 @@
                 success: function (results) {
                     if (results.length > 0) {
                         for (i = 0; i < results.length; i++) {
+
+                            var journalDateResult = new Date(results[i]["JournalDate"])
+                            var journalDate = ('0' + (journalDateResult.getMonth() + 1)).slice(-2) + '-' + ('0' + journalDateResult.getDate()).slice(-2) + '-' + journalDateResult.getFullYear();
+
                             journalsObservableArray.push({
-                                Id: results[i]["Id"],
-                                JournalDate: (results[i]["JournalDate"]).replace(/\//g, '-'),
-                                BranchId: results[i]["BranchId"],
                                 Branch: results[i]["Branch"],
-                                AccountId: results[i]["AccountId"],
+                                JournalDate: journalDate,
                                 AccountCode: results[i]["AccountCode"],
                                 Account: results[i]["Account"],
-                                ArticleId: results[i]["ArticleId"],
                                 Article: results[i]["Article"],
-                                Particulars: results[i]["Particulars"],
                                 DebitAmountDisplay: parseFloat(results[i]["DebitAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                CreditAmountDisplay: parseFloat(results[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                ORId: results[i]["ORId"],
-                                CVId: results[i]["CVId"],
-                                JVId: results[i]["JVId"],
-                                RRId: results[i]["RRId"],
-                                SIId: results[i]["SIId"],
-                                INId: results[i]["INId"],
-                                OTId: results[i]["OTId"],
-                                STId: results[i]["STId"],
-                                DocumentReference: results[i]["DocumentReference"],
-                                APRRId: results[i]["APRRId"],
-                                ARSIId: results[i]["ARSIId"]
+                                CreditAmountDisplay: parseFloat(results[i]["CreditAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                             });
 
                             var debitAmountTotal = 0;
