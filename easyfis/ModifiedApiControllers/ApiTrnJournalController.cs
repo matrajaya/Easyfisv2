@@ -35,5 +35,27 @@ namespace easyfis.ModifiedApiControllers
 
             return journals.ToList();
         }
+
+        // ============================
+        // List Journal - Sales Invoice
+        // ============================
+        [Authorize, HttpGet, Route("api/jounal/salesInvoice/list/{SIId}")]
+        public List<Entities.TrnJournal> ListJournalSalesInvoice(String SIId)
+        {
+            var journals = from d in db.TrnJournals
+                           where d.SIId == Convert.ToInt32(SIId)
+                           select new Entities.TrnJournal
+                           {
+                               Branch = d.MstBranch.Branch,
+                               JournalDate = d.JournalDate.ToShortDateString(),
+                               AccountCode = d.MstAccount.AccountCode,
+                               Account = d.MstAccount.Account,
+                               Article = d.MstArticle.Article,
+                               DebitAmount = d.DebitAmount,
+                               CreditAmount = d.CreditAmount
+                           };
+
+            return journals.ToList();
+        }
     }
 }

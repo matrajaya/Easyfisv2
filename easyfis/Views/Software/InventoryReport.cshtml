@@ -80,12 +80,42 @@
                             </tr>
                         </table>
                     </div>
+                    <div class="panel-heading">
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td style="width: 24%">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><b>Show</b></span>
+                                        <div class="comboBox-wide" id="cboInventoryReportShowNumberOfRows"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 76%"></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
                 <div id="inventoryReportGrid" class="grid" style="font-size: 12.5px;"></div>
                 <br /><br />
                 <div class="row">
                     <div class="col-md-6">
-
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGrid">
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <br />
                     </div>
                     <div class="col-md-6">
                         <dl class="dl-horizontal dl-custom">
@@ -121,9 +151,15 @@
         var isInventoryReportEndDateSelected = false;
         var cboInventoryReportCompany = new wijmo.input.ComboBox('#cboInventoryReportCompany');
         var cboInventoryReportBranch = new wijmo.input.ComboBox('#cboInventoryReportBranch');
+        var cboInventoryReportShowNumberOfRows = new wijmo.input.ComboBox('#cboInventoryReportShowNumberOfRows');
         var inventoryReportCollections;
         var inventoryReportGrid;
         var isInventoryReportCompanySelected = false;
+        var btnFirstPageGrid = document.getElementById('btnMoveToFirstPageGrid');
+        var btnPreviousPageGrid = document.getElementById('btnMoveToPreviousPageGrid');
+        var btnNextPageGrid = document.getElementById('btnMoveToNextPageGrid');
+        var btnLastPageGrid = document.getElementById('btnMoveToLastPageGrid');
+        var btnCurrentPageGrid = document.getElementById('btnCurrentPageGrid');
 
         // ===================
         // Get Parameter Value
@@ -278,13 +314,70 @@
                             }
                         });
 
-                        if (!isInventoryReportCompanySelected) {
-                            createInventoryReportFlexGrid();
-                        } else {
-                            refreshInventoryReportFlexGrid();
-                        }
+                        createCboShowRows();
                     }
                 });
+            }
+        }
+
+        // ===============
+        // Show Rows Table
+        // ===============
+        function createCboShowRows() {
+            var rowsObservableArray = new wijmo.collections.ObservableArray();
+
+            for (var i = 0; i <= 3; i++) {
+                var rows = 0;
+                var rowsString = "";
+
+                if (i == 0) {
+                    rows = 15;
+                    rowsString = "15 Rows";
+                } else if (i == 1) {
+                    rows = 50;
+                    rowsString = "50 Rows";
+                } else if (i == 2) {
+                    rows = 100;
+                    rowsString = "100 Rows";
+                } else if (i == 3){
+                    rows = 150;
+                    rowsString = "150 Rows";
+                } else {
+                    rows = 200;
+                    rowsString = "200 Rows";
+                }
+
+                rowsObservableArray.push({
+                    rowNumber: rows,
+                    rowString: rowsString
+                });
+            }
+
+            cboInventoryReportShowNumberOfRows.dispose();
+            cboInventoryReportShowNumberOfRows = new wijmo.input.ComboBox('#cboInventoryReportShowNumberOfRows', {
+                isEditable: false,
+                itemsSource: rowsObservableArray,
+                displayMemberPath: "rowString",
+                selectedValuePath: "rowNumber",
+                selectedValue: 50,
+                onSelectedIndexChanged: function () {
+                    NProgress.start();
+
+                    setTimeout(function () {
+                        var numberOfRows = cboInventoryReportShowNumberOfRows.selectedValue;
+                        inventoryReportCollections.pageSize = parseInt(numberOfRows);
+                        inventoryReportCollections.refresh();
+                        inventoryReportGrid.refresh();
+
+                        NProgress.done();
+                    }, 300);
+                }
+            });
+
+            if (!isInventoryReportCompanySelected) {
+                createInventoryReportFlexGrid();
+            } else {
+                refreshInventoryReportFlexGrid();
             }
         }
 
@@ -375,12 +468,41 @@
             return inventoryReports;
         }
 
+        // ===============================
+        // Navigation Buttons for Supplier
+        // ===============================
+        function updateNavigateButtonsItems() {
+            if (inventoryReportCollections.pageSize <= 0) {
+                document.getElementById('naviagtionPageGrid').style.display = 'none';
+                return;
+            }
+            document.getElementById('naviagtionPageGrid').style.display = 'block';
+            if (inventoryReportCollections.pageIndex === 0) {
+                btnFirstPageGrid.setAttribute('disabled', 'disabled');
+                btnPreviousPageGrid.setAttribute('disabled', 'disabled');
+                btnNextPageGrid.removeAttribute('disabled');
+                btnLastPageGrid.removeAttribute('disabled');
+            } else if (inventoryReportCollections.pageIndex === (inventoryReportCollections.pageCount - 1)) {
+                btnFirstPageGrid.removeAttribute('disabled');
+                btnPreviousPageGrid.removeAttribute('disabled');
+                btnLastPageGrid.setAttribute('disabled', 'disabled');
+                btnNextPageGrid.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGrid.removeAttribute('disabled');
+                btnPreviousPageGrid.removeAttribute('disabled');
+                btnNextPageGrid.removeAttribute('disabled');
+                btnLastPageGrid.removeAttribute('disabled');
+            }
+            btnCurrentPageGrid.innerHTML = (inventoryReportCollections.pageIndex + 1) + ' / ' + inventoryReportCollections.pageCount;
+        }
+
         // =================
         // Refresh Flex Grid
         // =================
         function refreshInventoryReportFlexGrid() {
             inventoryReportCollections = new wijmo.collections.CollectionView(getInventoryReport());
             inventoryReportCollections.canFilter = true;
+            inventoryReportCollections.pageSize = cboInventoryReportShowNumberOfRows.selectedValue;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
@@ -408,6 +530,10 @@
                     || !filterText || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1)
                     || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
             }
+
+            inventoryReportCollections.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsItems();
+            });
 
             inventoryReportGrid.itemsSource = inventoryReportCollections;
             inventoryReportGrid.trackChanges = true;
@@ -419,6 +545,7 @@
         function createInventoryReportFlexGrid() {
             inventoryReportCollections = new wijmo.collections.CollectionView(getInventoryReport());
             inventoryReportCollections.canFilter = true;
+            inventoryReportCollections.pageSize = cboInventoryReportShowNumberOfRows.selectedValue;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
@@ -446,6 +573,10 @@
                     || !filterText || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1)
                     || !filterText || (item.Unit.toLowerCase().indexOf(filterText) > -1);
             }
+
+            inventoryReportCollections.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsItems();
+            });
 
             inventoryReportGrid = new wijmo.grid.FlexGrid('#inventoryReportGrid');
             inventoryReportGrid.initialize({
@@ -573,6 +704,28 @@
 
             inventoryReportGrid.columnHeaders.columns[11].allowMerging = true;
             inventoryReportGrid.columnHeaders.setCellData(0, 11, 'Variance');
+
+            updateNavigateButtonsItems();
+
+            btnFirstPageGrid.addEventListener('click', function () {
+                inventoryReportCollections.moveToFirstPage();
+                updateNavigateButtonsItems();
+            });
+
+            btnPreviousPageGrid.addEventListener('click', function () {
+                inventoryReportCollections.moveToPreviousPage();
+                updateNavigateButtonsItems();
+            });
+
+            btnNextPageGrid.addEventListener('click', function () {
+                inventoryReportCollections.moveToNextPage();
+                updateNavigateButtonsItems();
+            });
+
+            btnLastPageGrid.addEventListener('click', function () {
+                inventoryReportCollections.moveToLastPage();
+                updateNavigateButtonsItems();
+            });
         }
 
         // ============
