@@ -275,23 +275,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Sales()
         {
-            if (PageAccess("SalesInvoiceList").Equals("SalesInvoiceList"))
-            {
-                if (AccessToDetail("SalesInvoiceDetail").Equals("SalesInvoiceDetail"))
-                {
-                    ViewData.Add("CanAccessToDetailPage", "True");
-                }
-                else
-                {
-                    ViewData.Add("CanAccessToDetailPage", "False");
-                }
-
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
+            return UserRights("SalesInvoiceList");
         }
 
         // ============
@@ -300,14 +284,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult SalesDetail()
         {
-            if (PageAccess("SalesInvoiceDetail").Equals("SalesInvoiceDetail"))
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Forbidden", "Software");
-            }
+            return UserRights("SalesInvoiceDetail");
         }
 
         // ========

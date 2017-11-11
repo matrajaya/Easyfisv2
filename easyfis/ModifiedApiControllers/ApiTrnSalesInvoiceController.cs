@@ -73,7 +73,7 @@ namespace easyfis.ModifiedApiControllers
                                    SINumber = d.SINumber,
                                    SIDate = d.SIDate.ToShortDateString(),
                                    DocumentReference = d.DocumentReference,
-                                   Customer = d.MstArticle.Article,
+                                   CustomerId = d.CustomerId,
                                    TermId = d.TermId,
                                    Remarks = d.Remarks,
                                    ManualSINumber = d.ManualSINumber,
@@ -401,7 +401,46 @@ namespace easyfis.ModifiedApiControllers
                                         journal.insertSIJournal(Convert.ToInt32(id));
                                     }
 
-                                    return Request.CreateResponse(HttpStatusCode.OK);
+                                    // ============================
+                                    // Check for Negative Inventory
+                                    // ============================
+                                    Boolean foundNegativeQuantity = false;
+                                    if (salesInvoice.FirstOrDefault().TrnSalesInvoiceItems.Any())
+                                    {
+                                        foreach (var salesInvoiceItem in salesInvoice.FirstOrDefault().TrnSalesInvoiceItems)
+                                        {
+                                            if (salesInvoiceItem.MstArticle.IsInventory)
+                                            {
+                                                var mstArticleInventory = from d in db.MstArticleInventories
+                                                                          where d.TrnSalesInvoiceItems.Contains(salesInvoiceItem)
+                                                                          select d;
+
+                                                if (mstArticleInventory.Any())
+                                                {
+                                                    if (salesInvoiceItem.MstArticleInventory.Quantity < 0)
+                                                    {
+                                                        foundNegativeQuantity = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (foundNegativeQuantity)
+                                    {
+                                        inventory.deleteSIInventory(Convert.ToInt32(id));
+                                        journal.deleteSIJournal(Convert.ToInt32(id));
+
+                                        lockSalesInvoice.IsLocked = false;
+                                        db.SubmitChanges();
+
+                                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Negative Inventory Found!");
+                                    }
+                                    else
+                                    {
+                                        return Request.CreateResponse(HttpStatusCode.OK);
+                                    }
                                 }
                                 else
                                 {

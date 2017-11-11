@@ -2244,6 +2244,7 @@
             receivingReceiptItemsCollection.editItem(receivingReceiptItemsCollection.currentItem);
             var item = receivingReceiptItemsCollection.currentEditItem;
             var RRId = getParam('id');
+
             $.ajax({
                 url: '/api/receivingReceiptItem/delete/' + item.Id + '/' + RRId,
                 type: "DELETE",

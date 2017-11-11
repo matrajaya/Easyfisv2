@@ -515,10 +515,11 @@ namespace easyfis.ModifiedApiControllers
                                                     baseQuantity = objReceivingReceiptItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
                                                 }
 
-                                                Decimal baseCost = objReceivingReceiptItem.Amount - objReceivingReceiptItem.VATAmount;
+                                                Decimal amount = objReceivingReceiptItem.Quantity * objReceivingReceiptItem.Cost;
+                                                Decimal baseCost = amount - objReceivingReceiptItem.VATAmount;
                                                 if (baseQuantity > 0)
                                                 {
-                                                    baseCost = (objReceivingReceiptItem.Amount - objReceivingReceiptItem.VATAmount) / baseQuantity;
+                                                    baseCost = (amount - objReceivingReceiptItem.VATAmount) / baseQuantity;
                                                 }
 
                                                 Data.TrnReceivingReceiptItem newReceivingReceiptItem = new Data.TrnReceivingReceiptItem
@@ -530,7 +531,7 @@ namespace easyfis.ModifiedApiControllers
                                                     UnitId = objReceivingReceiptItem.UnitId,
                                                     Quantity = objReceivingReceiptItem.Quantity,
                                                     Cost = objReceivingReceiptItem.Cost,
-                                                    Amount = objReceivingReceiptItem.Amount,
+                                                    Amount = amount,
                                                     VATId = objReceivingReceiptItem.VATId,
                                                     VATPercentage = objReceivingReceiptItem.VATPercentage,
                                                     VATAmount = ComputeVATAmount(objReceivingReceiptItem.Quantity * objReceivingReceiptItem.Cost, objReceivingReceiptItem.VATPercentage, objReceivingReceiptItem.VATId),
@@ -676,10 +677,11 @@ namespace easyfis.ModifiedApiControllers
                                                         baseQuantity = objReceivingReceiptItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
                                                     }
 
-                                                    Decimal baseCost = objReceivingReceiptItem.Amount - objReceivingReceiptItem.VATAmount;
+                                                    Decimal amount = objReceivingReceiptItem.Quantity * objReceivingReceiptItem.Cost;
+                                                    Decimal baseCost = amount - objReceivingReceiptItem.VATAmount;
                                                     if (baseQuantity > 0)
                                                     {
-                                                        baseCost = (objReceivingReceiptItem.Amount - objReceivingReceiptItem.VATAmount) / baseQuantity;
+                                                        baseCost = (amount - objReceivingReceiptItem.VATAmount) / baseQuantity;
                                                     }
 
                                                     var updateReceivingReceiptItem = receivingReceiptItem.FirstOrDefault();
@@ -690,7 +692,7 @@ namespace easyfis.ModifiedApiControllers
                                                     updateReceivingReceiptItem.UnitId = objReceivingReceiptItem.UnitId;
                                                     updateReceivingReceiptItem.Quantity = objReceivingReceiptItem.Quantity;
                                                     updateReceivingReceiptItem.Cost = objReceivingReceiptItem.Cost;
-                                                    updateReceivingReceiptItem.Amount = objReceivingReceiptItem.Amount;
+                                                    updateReceivingReceiptItem.Amount = amount;
                                                     updateReceivingReceiptItem.VATId = objReceivingReceiptItem.VATId;
                                                     updateReceivingReceiptItem.VATPercentage = objReceivingReceiptItem.VATPercentage;
                                                     updateReceivingReceiptItem.VATAmount = ComputeVATAmount(objReceivingReceiptItem.Quantity * objReceivingReceiptItem.Cost, objReceivingReceiptItem.VATPercentage, objReceivingReceiptItem.VATId);

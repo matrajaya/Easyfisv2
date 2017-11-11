@@ -70,7 +70,9 @@ namespace easyfis.ModifiedApiControllers
                         {
                             Id = d.Id,
                             ManualArticleCode = d.ManualArticleCode,
-                            Article = d.Article
+                            Article = d.Article,
+                            InputTaxId = d.InputTaxId,
+                            OutputTaxId = d.OutputTaxId
                         };
 
             return items.ToList();
@@ -350,18 +352,6 @@ namespace easyfis.ModifiedApiControllers
 
                                                 if (conversionUnit.Any())
                                                 {
-                                                    Decimal baseQuantity = objSalesInvoiceItem.Quantity * 1;
-                                                    if (conversionUnit.FirstOrDefault().Multiplier > 0)
-                                                    {
-                                                        baseQuantity = objSalesInvoiceItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
-                                                    }
-
-                                                    Decimal basePrice = objSalesInvoiceItem.Amount;
-                                                    if (baseQuantity > 0)
-                                                    {
-                                                        basePrice = objSalesInvoiceItem.Amount / baseQuantity;
-                                                    }
-
                                                     Decimal discountAmount = objSalesInvoiceItem.Price * (objSalesInvoiceItem.DiscountRate / 100);
                                                     Decimal netPrice = objSalesInvoiceItem.Price - discountAmount;
                                                     Decimal amount = netPrice * objSalesInvoiceItem.Quantity;
@@ -370,6 +360,18 @@ namespace easyfis.ModifiedApiControllers
                                                     if (taxTypes.FirstOrDefault().IsInclusive)
                                                     {
                                                         VATAmount = amount / (1 + (objSalesInvoiceItem.VATPercentage / 100)) * (objSalesInvoiceItem.VATPercentage / 100);
+                                                    }
+
+                                                    Decimal baseQuantity = objSalesInvoiceItem.Quantity * 1;
+                                                    if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                                                    {
+                                                        baseQuantity = objSalesInvoiceItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                                                    }
+
+                                                    Decimal basePrice = amount;
+                                                    if (baseQuantity > 0)
+                                                    {
+                                                        basePrice = amount / baseQuantity;
                                                     }
 
                                                     Data.TrnSalesInvoiceItem newPackageSalesInvoiceItem = new Data.TrnSalesInvoiceItem
@@ -577,7 +579,7 @@ namespace easyfis.ModifiedApiControllers
 
                     if (userForms.Any())
                     {
-                        if (userForms.FirstOrDefault().CanAdd)
+                        if (userForms.FirstOrDefault().CanEdit)
                         {
                             var salesInvoice = from d in db.TrnSalesInvoices
                                                where d.Id == Convert.ToInt32(SIId)
@@ -588,7 +590,7 @@ namespace easyfis.ModifiedApiControllers
                                 if (!salesInvoice.FirstOrDefault().IsLocked)
                                 {
                                     var salesInvoiceItem = from d in db.TrnSalesInvoiceItems
-                                                           where d.Id == objSalesInvoiceItem.Id
+                                                           where d.Id == Convert.ToInt32(id)
                                                            select d;
 
                                     if (salesInvoiceItem.Any())
@@ -623,18 +625,6 @@ namespace easyfis.ModifiedApiControllers
 
                                                     if (conversionUnit.Any())
                                                     {
-                                                        Decimal baseQuantity = objSalesInvoiceItem.Quantity * 1;
-                                                        if (conversionUnit.FirstOrDefault().Multiplier > 0)
-                                                        {
-                                                            baseQuantity = objSalesInvoiceItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
-                                                        }
-
-                                                        Decimal basePrice = objSalesInvoiceItem.Amount;
-                                                        if (baseQuantity > 0)
-                                                        {
-                                                            basePrice = objSalesInvoiceItem.Amount / baseQuantity;
-                                                        }
-
                                                         Decimal discountAmount = objSalesInvoiceItem.Price * (objSalesInvoiceItem.DiscountRate / 100);
                                                         Decimal netPrice = objSalesInvoiceItem.Price - discountAmount;
                                                         Decimal amount = netPrice * objSalesInvoiceItem.Quantity;
@@ -643,6 +633,18 @@ namespace easyfis.ModifiedApiControllers
                                                         if (taxTypes.FirstOrDefault().IsInclusive)
                                                         {
                                                             VATAmount = amount / (1 + (objSalesInvoiceItem.VATPercentage / 100)) * (objSalesInvoiceItem.VATPercentage / 100);
+                                                        }
+
+                                                        Decimal baseQuantity = objSalesInvoiceItem.Quantity * 1;
+                                                        if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                                                        {
+                                                            baseQuantity = objSalesInvoiceItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                                                        }
+
+                                                        Decimal basePrice = amount;
+                                                        if (baseQuantity > 0)
+                                                        {
+                                                            basePrice = amount / baseQuantity;
                                                         }
 
                                                         var updateSalesInvoiceItem = salesInvoiceItem.FirstOrDefault();
@@ -708,7 +710,7 @@ namespace easyfis.ModifiedApiControllers
                                 }
                                 else
                                 {
-                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "You cannot add new sales invoice item if the current sales invoice detail is locked.");
+                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "You cannot edit and update sales invoice item if the current sales invoice detail is locked.");
                                 }
                             }
                             else
@@ -718,7 +720,7 @@ namespace easyfis.ModifiedApiControllers
                         }
                         else
                         {
-                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no rights to add new sales invoice item in this sales invoice detail page.");
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no rights to edit and update sales invoice item in this sales invoice detail page.");
                         }
                     }
                     else
@@ -801,7 +803,7 @@ namespace easyfis.ModifiedApiControllers
                                 }
                                 else
                                 {
-                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "You cannot add new sales invoice item if the current sales invoice detail is locked.");
+                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "You cannot delete sales invoice item if the current sales invoice detail is locked.");
                                 }
                             }
                             else
@@ -811,7 +813,7 @@ namespace easyfis.ModifiedApiControllers
                         }
                         else
                         {
-                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no rights to add new sales invoice item in this sales invoice detail page.");
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no rights to delete sales invoice item in this sales invoice detail page.");
                         }
                     }
                     else
