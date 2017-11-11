@@ -2346,34 +2346,31 @@
         // ===============
         function getInventoryItems() {
             var itemsObservableArray = new wijmo.collections.ObservableArray();
-            var branchId = cboSIBranch.selectedValue;
+
             $.ajax({
-                url: '/api/listArticleInventoryBybranchId/' + branchId,
+                url: '/api/salesInvoiceItem/popUp/list/itemQuery/inventoryItems',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (articleInventoriesresults) {
-                    if (articleInventoriesresults.length > 0) {
-                        for (i = 0; i < articleInventoriesresults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             itemsObservableArray.push({
                                 Pick: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdItemQueryPick_Onclick()'><i class='fa fa-hand-o-right'></i> Pick</button>",
-                                Id: articleInventoriesresults[i]["Id"],
-                                BranchId: articleInventoriesresults[i]["BranchId"],
-                                Branch: articleInventoriesresults[i]["Branch"],
-                                ArticleId: articleInventoriesresults[i]["ArticleId"],
-                                Article: articleInventoriesresults[i]["Article"],
-                                InventoryCode: articleInventoriesresults[i]["InventoryCode"],
-                                Quantity: articleInventoriesresults[i]["Quantity"],
-                                QuantityDisplay: parseFloat(articleInventoriesresults[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                Price: articleInventoriesresults[i]["Price"],
-                                PriceDisplay: parseFloat(articleInventoriesresults[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                Cost: articleInventoriesresults[i]["Cost"],
-                                Amount: articleInventoriesresults[i]["Amount"],
-                                Particulars: articleInventoriesresults[i]["Particulars"],
-                                ManualArticleCode: articleInventoriesresults[i]["ManualArticleCode"],
-                                UnitId: articleInventoriesresults[i]["UnitId"],
-                                Unit: articleInventoriesresults[i]["Unit"],
-                                Inventory: articleInventoriesresults[i]["Inventory"],
+                                Id: results[i]["Id"],
+                                InventoryCode: results[i]["InventoryCode"],
+                                ArticleId: results[i]["ArticleId"],
+                                ManualArticleCode: results[i]["ManualArticleCode"],
+                                Article: results[i]["Article"],
+                                Price: results[i]["Price"],
+                                PriceDisplay: parseFloat(results[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                Quantity: results[i]["Quantity"],
+                                QuantityDisplay: parseFloat(results[i]["Quantity"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                Cost: results[i]["Cost"],
+                                Amount: results[i]["Amount"],
+                                Particulars: results[i]["Particulars"],
+                                UnitId: results[i]["UnitId"],
+                                Unit: results[i]["Unit"]
                             });
                         }
                     }
@@ -2392,57 +2389,22 @@
         function getNonInventoryItems() {
             var itemsObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/article/list/ByNonInventory',
+                url: '/api/salesInvoiceItem/popUp/list/itemQuery/nonInventoryItems',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (itemresults) {
-                    if (itemresults.length > 0) {
-                        for (i = 0; i < itemresults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             itemsObservableArray.push({
-                                Pick: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdItemQueryPickNonInventory_Onclick()'><i class='fa fa-hand-o-right'></i> Pick</button>",
-                                Id: itemresults[i]["Id"],
-                                ArticleCode: itemresults[i]["ArticleCode"],
-                                ManualArticleCode: itemresults[i]["ManualArticleCode"],
-                                Article: itemresults[i]["Article"],
-                                Category: itemresults[i]["Category"],
-                                ArticleTypeId: itemresults[i]["ArticleTypeId"],
-                                ArticleType: itemresults[i]["ArticleType"],
-                                ArticleGroupId: itemresults[i]["ArticleGroupId"],
-                                ArticleGroup: itemresults[i]["ArticleGroup"],
-                                AccountId: itemresults[i]["AccountId"],
-                                Account: itemresults[i]["Account"],
-                                SalesAccountId: itemresults[i]["SalesAccountId"],
-                                CostAccountId: itemresults[i]["CostAccountId"],
-                                AssetAccountId: itemresults[i]["AssetAccountId"],
-                                ExpenseAccountId: itemresults[i]["ExpenseAccountId"],
-                                UnitId: itemresults[i]["UnitId"],
-                                Unit: itemresults[i]["Unit"],
-                                OutputTaxId: itemresults[i]["OutputTaxId"],
-                                InputTaxId: itemresults[i]["InputTaxId"],
-                                WTaxTypeId: itemresults[i]["WTaxTypeId"],
-                                Price: itemresults[i]["Price"],
-                                PriceDisplay: parseFloat(itemresults[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                Cost: itemresults[i]["Cost"],
-                                IsInventory: itemresults[i]["IsInventory"],
-                                Particulars: itemresults[i]["Particulars"],
-                                Address: itemresults[i]["Address"],
-                                TermId: itemresults[i]["TermId"],
-                                ContactNumber: itemresults[i]["ContactNumber"],
-                                ContactPerson: itemresults[i]["ContactPerson"],
-                                TaxNumber: itemresults[i]["TaxNumber"],
-                                CreditLimit: itemresults[i]["CreditLimit"],
-                                DateAcquired: itemresults[i]["DateAcquired"],
-                                UsefulLife: itemresults[i]["UsefulLife"],
-                                SalvageValue: itemresults[i]["SalvageValue"],
-                                ManualArticleOldCode: itemresults[i]["ManualArticleOldCode"],
-                                IsLocked: itemresults[i]["IsLocked"],
-                                CreatedById: itemresults[i]["CreatedById"],
-                                CreatedBy: itemresults[i]["CreatedBy"],
-                                CreatedDateTime: itemresults[i]["CreatedDateTime"],
-                                UpdatedById: itemresults[i]["UpdatedById"],
-                                UpdatedBy: itemresults[i]["UpdatedBy"],
-                                UpdatedDateTime: itemresults[i]["UpdatedDateTime"]
+                                Id: results[i]["Id"],
+                                ArticleCode: results[i]["ArticleCode"],
+                                ManualArticleCode: results[i]["ManualArticleCode"],
+                                Article: results[i]["Article"],
+                                Price: results[i]["Price"],
+                                PriceDisplay: parseFloat(results[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                Particulars: results[i]["Particulars"],
+                                Pick: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdItemQueryPickNonInventory_Onclick()'><i class='fa fa-hand-o-right'></i> Pick</button>"
                             });
                         }
                     }
@@ -2461,57 +2423,22 @@
         function getPackageItems() {
             var itemsObservableArray = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/article/list/byPackage',
+                url: '/api/salesInvoiceItem/popUp/list/itemQuery/packageItems',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                success: function (itemresults) {
-                    if (itemresults.length > 0) {
-                        for (i = 0; i < itemresults.length; i++) {
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
                             itemsObservableArray.push({
-                                Pick: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdItemQueryPickPackage_Onclick()'><i class='fa fa-hand-o-right'></i> Pick</button>",
-                                Id: itemresults[i]["Id"],
-                                ArticleCode: itemresults[i]["ArticleCode"],
-                                ManualArticleCode: itemresults[i]["ManualArticleCode"],
-                                Article: itemresults[i]["Article"],
-                                Category: itemresults[i]["Category"],
-                                ArticleTypeId: itemresults[i]["ArticleTypeId"],
-                                ArticleType: itemresults[i]["ArticleType"],
-                                ArticleGroupId: itemresults[i]["ArticleGroupId"],
-                                ArticleGroup: itemresults[i]["ArticleGroup"],
-                                AccountId: itemresults[i]["AccountId"],
-                                Account: itemresults[i]["Account"],
-                                SalesAccountId: itemresults[i]["SalesAccountId"],
-                                CostAccountId: itemresults[i]["CostAccountId"],
-                                AssetAccountId: itemresults[i]["AssetAccountId"],
-                                ExpenseAccountId: itemresults[i]["ExpenseAccountId"],
-                                UnitId: itemresults[i]["UnitId"],
-                                Unit: itemresults[i]["Unit"],
-                                OutputTaxId: itemresults[i]["OutputTaxId"],
-                                InputTaxId: itemresults[i]["InputTaxId"],
-                                WTaxTypeId: itemresults[i]["WTaxTypeId"],
-                                Price: itemresults[i]["Price"],
-                                PriceDisplay: parseFloat(itemresults[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-                                Cost: itemresults[i]["Cost"],
-                                IsInventory: itemresults[i]["IsInventory"],
-                                Particulars: itemresults[i]["Particulars"],
-                                Address: itemresults[i]["Address"],
-                                TermId: itemresults[i]["TermId"],
-                                ContactNumber: itemresults[i]["ContactNumber"],
-                                ContactPerson: itemresults[i]["ContactPerson"],
-                                TaxNumber: itemresults[i]["TaxNumber"],
-                                CreditLimit: itemresults[i]["CreditLimit"],
-                                DateAcquired: itemresults[i]["DateAcquired"],
-                                UsefulLife: itemresults[i]["UsefulLife"],
-                                SalvageValue: itemresults[i]["SalvageValue"],
-                                ManualArticleOldCode: itemresults[i]["ManualArticleOldCode"],
-                                IsLocked: itemresults[i]["IsLocked"],
-                                CreatedById: itemresults[i]["CreatedById"],
-                                CreatedBy: itemresults[i]["CreatedBy"],
-                                CreatedDateTime: itemresults[i]["CreatedDateTime"],
-                                UpdatedById: itemresults[i]["UpdatedById"],
-                                UpdatedBy: itemresults[i]["UpdatedBy"],
-                                UpdatedDateTime: itemresults[i]["UpdatedDateTime"]
+                                Id: results[i]["Id"],
+                                ArticleCode: results[i]["ArticleCode"],
+                                ManualArticleCode: results[i]["ManualArticleCode"],
+                                Article: results[i]["Article"],
+                                Price: results[i]["Price"],
+                                PriceDisplay: parseFloat(results[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                                Particulars: results[i]["Particulars"],
+                                Pick: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdItemQueryPickPackage_Onclick()'><i class='fa fa-hand-o-right'></i> Pick</button>"
                             });
                         }
                     }
