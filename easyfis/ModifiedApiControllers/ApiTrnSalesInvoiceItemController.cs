@@ -260,6 +260,32 @@ namespace easyfis.ModifiedApiControllers
             return items.ToList();
         }
 
+        // ===============================
+        // Get Component Item Inventory Id
+        // ===============================
+        public Int32? GetComponentItemArticleInventoryId(Int32 componentArticleId)
+        {
+            var currentUser = from d in db.MstUsers
+                              where d.UserId == User.Identity.GetUserId()
+                              select d;
+
+            var branchId = currentUser.FirstOrDefault().BranchId;
+
+            var itemArticleIntenvories = from d in db.MstArticleInventories
+                                         where d.BranchId == branchId
+                                         && d.ArticleId == componentArticleId
+                                         select d;
+
+            if (itemArticleIntenvories.Any())
+            {
+                return itemArticleIntenvories.FirstOrDefault().Id;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         // ======================
         // Add Sales Invoice Item
         // ======================
@@ -302,71 +328,192 @@ namespace easyfis.ModifiedApiControllers
 
                                     if (item.Any())
                                     {
-                                        var conversionUnit = from d in db.MstArticleUnits
-                                                             where d.ArticleId == objSalesInvoiceItem.ItemId
-                                                             && d.UnitId == objSalesInvoiceItem.UnitId
-                                                             && d.MstArticle.IsLocked == true
-                                                             select d;
+                                        var taxTypes = from d in db.MstTaxTypes
+                                                       where d.Id == objSalesInvoiceItem.VATId
+                                                       && d.IsLocked == true
+                                                       select d;
 
-                                        if (conversionUnit.Any())
+                                        if (taxTypes.Any())
                                         {
-                                            Decimal baseQuantity = objSalesInvoiceItem.Quantity * 1;
-                                            if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                                            var discounts = from d in db.MstDiscounts
+                                                            where d.Id == objSalesInvoiceItem.DiscountId
+                                                            && d.IsLocked == true
+                                                            select d;
+
+                                            if (discounts.Any())
                                             {
-                                                baseQuantity = objSalesInvoiceItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
-                                            }
+                                                var conversionUnit = from d in db.MstArticleUnits
+                                                                     where d.ArticleId == objSalesInvoiceItem.ItemId
+                                                                     && d.UnitId == objSalesInvoiceItem.UnitId
+                                                                     && d.MstArticle.IsLocked == true
+                                                                     select d;
 
-                                            Decimal basePrice = objSalesInvoiceItem.Amount;
-                                            if (baseQuantity > 0)
+                                                if (conversionUnit.Any())
+                                                {
+                                                    Decimal baseQuantity = objSalesInvoiceItem.Quantity * 1;
+                                                    if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                                                    {
+                                                        baseQuantity = objSalesInvoiceItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                                                    }
+
+                                                    Decimal basePrice = objSalesInvoiceItem.Amount;
+                                                    if (baseQuantity > 0)
+                                                    {
+                                                        basePrice = objSalesInvoiceItem.Amount / baseQuantity;
+                                                    }
+
+                                                    Decimal discountAmount = objSalesInvoiceItem.Price * (objSalesInvoiceItem.DiscountRate / 100);
+                                                    Decimal netPrice = objSalesInvoiceItem.Price - discountAmount;
+                                                    Decimal amount = netPrice * objSalesInvoiceItem.Quantity;
+                                                    Decimal VATAmount = amount * (objSalesInvoiceItem.VATPercentage / 100);
+
+                                                    if (taxTypes.FirstOrDefault().IsInclusive)
+                                                    {
+                                                        VATAmount = amount / (1 + (objSalesInvoiceItem.VATPercentage / 100)) * (objSalesInvoiceItem.VATPercentage / 100);
+                                                    }
+
+                                                    Data.TrnSalesInvoiceItem newPackageSalesInvoiceItem = new Data.TrnSalesInvoiceItem
+                                                    {
+                                                        SIId = Convert.ToInt32(SIId),
+                                                        ItemId = objSalesInvoiceItem.ItemId,
+                                                        ItemInventoryId = objSalesInvoiceItem.ItemInventoryId,
+                                                        Particulars = objSalesInvoiceItem.Particulars,
+                                                        UnitId = objSalesInvoiceItem.UnitId,
+                                                        Quantity = objSalesInvoiceItem.Quantity,
+                                                        Price = objSalesInvoiceItem.Price,
+                                                        DiscountId = objSalesInvoiceItem.DiscountId,
+                                                        DiscountRate = objSalesInvoiceItem.DiscountRate,
+                                                        DiscountAmount = discountAmount,
+                                                        NetPrice = netPrice,
+                                                        Amount = amount,
+                                                        VATId = objSalesInvoiceItem.VATId,
+                                                        VATPercentage = objSalesInvoiceItem.VATPercentage,
+                                                        VATAmount = VATAmount,
+                                                        BaseUnitId = item.FirstOrDefault().UnitId,
+                                                        BaseQuantity = baseQuantity,
+                                                        BasePrice = basePrice,
+                                                        SalesItemTimeStamp = DateTime.Now
+                                                    };
+
+                                                    db.TrnSalesInvoiceItems.InsertOnSubmit(newPackageSalesInvoiceItem);
+                                                    db.SubmitChanges();
+
+                                                    var itemComponents = from d in db.MstArticleComponents
+                                                                         where d.ArticleId == objSalesInvoiceItem.ItemId
+                                                                         select new
+                                                                         {
+                                                                             ComponentArticleId = d.ComponentArticleId,
+                                                                             Quantity = d.Quantity,
+                                                                             UnitId = d.MstArticle1.UnitId,
+                                                                             Cost = Convert.ToDecimal(d.MstArticle1.Cost),
+                                                                             Price = d.MstArticle1.Price,
+                                                                             ComponentArticleInventoryId = GetComponentItemArticleInventoryId(d.ComponentArticleId),
+                                                                             Amount = d.Quantity * Convert.ToDecimal(d.MstArticle1.Cost),
+                                                                             Particulars = d.Particulars
+                                                                         };
+
+                                                    if (itemComponents.Any())
+                                                    {
+                                                        if (item.FirstOrDefault().Kitting == 2)
+                                                        {
+                                                            foreach (var itemComponent in itemComponents)
+                                                            {
+                                                                var componentItemConversionUnit = from d in db.MstArticleUnits
+                                                                                                  where d.ArticleId == itemComponent.ComponentArticleId
+                                                                                                  && d.UnitId == itemComponent.UnitId
+                                                                                                  && d.MstArticle.IsLocked == true
+                                                                                                  select d;
+
+                                                                if (componentItemConversionUnit.Any())
+                                                                {
+                                                                    Decimal itemComponentDiscountAmount = 0 * (objSalesInvoiceItem.DiscountRate / 100);
+                                                                    Decimal itemComponentNetPrice = 0 - itemComponentDiscountAmount;
+
+                                                                    if (discounts.FirstOrDefault().IsInclusive)
+                                                                    {
+                                                                        Decimal price = 0 / (1 + (objSalesInvoiceItem.VATPercentage / 100));
+
+                                                                        itemComponentDiscountAmount = price * (objSalesInvoiceItem.DiscountRate / 100);
+                                                                        itemComponentNetPrice = price - itemComponentDiscountAmount;
+                                                                    }
+
+                                                                    Decimal itemComponentQuantity = itemComponent.Quantity * objSalesInvoiceItem.Quantity;
+                                                                    Decimal itemComponentAmount = itemComponentNetPrice * itemComponentQuantity;
+                                                                    Decimal itemComponentVATAmount = itemComponentAmount * (objSalesInvoiceItem.VATPercentage / 100);
+
+                                                                    if (taxTypes.FirstOrDefault().IsInclusive)
+                                                                    {
+                                                                        itemComponentVATAmount = itemComponentAmount / (1 + (objSalesInvoiceItem.VATPercentage / 100)) * (objSalesInvoiceItem.VATPercentage / 100);
+                                                                    }
+
+                                                                    Decimal componentItemBaseQuantity = itemComponentQuantity * 1;
+                                                                    if (componentItemConversionUnit.FirstOrDefault().Multiplier > 0)
+                                                                    {
+                                                                        componentItemBaseQuantity = itemComponentQuantity * (1 / componentItemConversionUnit.FirstOrDefault().Multiplier);
+                                                                    }
+
+                                                                    Decimal componentItemBasePrice = itemComponentAmount;
+                                                                    if (baseQuantity > 0)
+                                                                    {
+                                                                        componentItemBasePrice = itemComponentAmount / componentItemBaseQuantity;
+                                                                    }
+
+                                                                    Data.TrnSalesInvoiceItem newComponentSalesInvoiceItem = new Data.TrnSalesInvoiceItem
+                                                                    {
+                                                                        SIId = Convert.ToInt32(SIId),
+                                                                        ItemId = itemComponent.ComponentArticleId,
+                                                                        ItemInventoryId = itemComponent.ComponentArticleInventoryId,
+                                                                        Particulars = itemComponent.Particulars,
+                                                                        UnitId = itemComponent.UnitId,
+                                                                        Quantity = itemComponentQuantity,
+                                                                        Price = 0,
+                                                                        DiscountId = objSalesInvoiceItem.DiscountId,
+                                                                        DiscountRate = objSalesInvoiceItem.DiscountRate,
+                                                                        DiscountAmount = discountAmount,
+                                                                        NetPrice = itemComponentNetPrice,
+                                                                        Amount = itemComponentAmount,
+                                                                        VATId = objSalesInvoiceItem.VATId,
+                                                                        VATPercentage = objSalesInvoiceItem.VATPercentage,
+                                                                        VATAmount = itemComponentVATAmount,
+                                                                        BaseUnitId = itemComponent.UnitId,
+                                                                        BaseQuantity = componentItemBaseQuantity,
+                                                                        BasePrice = componentItemBasePrice,
+                                                                        SalesItemTimeStamp = DateTime.Now
+                                                                    };
+
+                                                                    db.TrnSalesInvoiceItems.InsertOnSubmit(newComponentSalesInvoiceItem);
+                                                                    db.SubmitChanges();
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+                                                    Decimal salesInvoiceItemTotalAmount = 0;
+
+                                                    if (salesInvoice.FirstOrDefault().TrnSalesInvoiceItems.Any())
+                                                    {
+                                                        salesInvoiceItemTotalAmount = salesInvoice.FirstOrDefault().TrnSalesInvoiceItems.Sum(d => d.Amount);
+                                                    }
+
+                                                    var updateSalesInvoiceAmount = salesInvoice.FirstOrDefault();
+                                                    updateSalesInvoiceAmount.Amount = salesInvoiceItemTotalAmount;
+                                                    db.SubmitChanges();
+
+                                                    return Request.CreateResponse(HttpStatusCode.OK);
+                                                }
+                                                else
+                                                {
+                                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "The selected item has no unit conversion.");
+                                                }
+                                            }
+                                            else
                                             {
-                                                basePrice = objSalesInvoiceItem.Amount / baseQuantity;
+                                                return Request.CreateResponse(HttpStatusCode.BadRequest, "The selected discount was not found in the server.");
                                             }
-
-                                            //newSaleInvoiceItem.SIId = saleItem.SIId;
-                                            //newSaleInvoiceItem.ItemId = saleItem.ItemId;
-                                            //newSaleInvoiceItem.ItemInventoryId = saleItem.ItemInventoryId;
-                                            //newSaleInvoiceItem.Particulars = saleItem.Particulars;
-                                            //newSaleInvoiceItem.UnitId = saleItem.UnitId;
-                                            //newSaleInvoiceItem.Quantity = saleItem.Quantity;
-                                            //newSaleInvoiceItem.Price = saleItem.Price;
-
-                                            //newSaleInvoiceItem.DiscountId = saleItem.DiscountId;
-                                            //newSaleInvoiceItem.DiscountRate = saleItem.DiscountRate;
-                                            //newSaleInvoiceItem.DiscountAmount = saleItem.DiscountAmount;
-
-                                            //newSaleInvoiceItem.NetPrice = saleItem.NetPrice;
-                                            //newSaleInvoiceItem.Amount = saleItem.Amount;
-                                            //newSaleInvoiceItem.VATId = saleItem.VATId;
-                                            //newSaleInvoiceItem.VATPercentage = saleItem.VATPercentage;
-                                            //newSaleInvoiceItem.VATAmount = saleItem.VATAmount;
-
-                                            //Data.TrnSalesInvoiceItem trnSalesInvoiceItem = new Data.TrnSalesInvoiceItem
-                                            //{
-                                            //    SIId = Convert.ToInt32(SIId),
-                                            //    ItemId = objSalesInvoiceItem.ItemId,
-                                            //    ItemInventoryId = objSalesInvoiceItem.ItemInventoryId,
-                                            //    Particulars = objSalesInvoiceItem.Particulars,
-                                            //    UnitId = objSalesInvoiceItem.UnitId,
-                                            //    Quantity = objSalesInvoiceItem.Quantity,
-                                            //    Price = objSalesInvoiceItem.Price,
-
-
-                                            //    Amount = objSalesInvoiceItem.Amount,
-
-
-                                            //    BaseUnitId = item.FirstOrDefault().UnitId,
-                                            //    BaseQuantity = baseQuantity,
-                                            //    BasePrice = basePrice
-                                            //};
-
-                                            //db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
-                                            //db.SubmitChanges();
-
-                                            return Request.CreateResponse(HttpStatusCode.OK);
                                         }
                                         else
                                         {
-                                            return Request.CreateResponse(HttpStatusCode.BadRequest, "The selected item has no unit conversion.");
+                                            return Request.CreateResponse(HttpStatusCode.BadRequest, "The selected tax type was not found in the server.");
                                         }
                                     }
                                     else
@@ -376,22 +523,22 @@ namespace easyfis.ModifiedApiControllers
                                 }
                                 else
                                 {
-                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "You cannot add new receiving receipt item if the current receiving receipt detail is locked.");
+                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "You cannot add new sales invoice item if the current sales invoice detail is locked.");
                                 }
                             }
                             else
                             {
-                                return Request.CreateResponse(HttpStatusCode.NotFound, "These current receiving receipt details are not found in the server. Please add new receiving receipt first before proceeding.");
+                                return Request.CreateResponse(HttpStatusCode.NotFound, "These current sales invoice details are not found in the server. Please add new sales invoice first before proceeding.");
                             }
                         }
                         else
                         {
-                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no rights to add new receiving receipt item in this receiving receipt detail page.");
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no rights to add new sales invoice item in this sales invoice detail page.");
                         }
                     }
                     else
                     {
-                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no access in this receiving receipt detail page.");
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no access in this sales invoice detail page.");
                     }
                 }
                 else
@@ -406,5 +553,282 @@ namespace easyfis.ModifiedApiControllers
             }
         }
 
+        // =========================
+        // Update Sales Invoice Item
+        // =========================
+        [Authorize, HttpPut, Route("api/salesInvoiceItem/update/{id}/{SIId}")]
+        public HttpResponseMessage UpdateSalesInvoiceItem(Entities.TrnSalesInvoiceItem objSalesInvoiceItem, String id, String SIId)
+        {
+            try
+            {
+                var currentUser = from d in db.MstUsers
+                                  where d.UserId == User.Identity.GetUserId()
+                                  select d;
+
+                if (currentUser.Any())
+                {
+                    var currentUserId = currentUser.FirstOrDefault().Id;
+                    var currentBranchId = currentUser.FirstOrDefault().BranchId;
+
+                    var userForms = from d in db.MstUserForms
+                                    where d.UserId == currentUserId
+                                    && d.SysForm.FormName.Equals("SalesInvoiceDetail")
+                                    select d;
+
+                    if (userForms.Any())
+                    {
+                        if (userForms.FirstOrDefault().CanAdd)
+                        {
+                            var salesInvoice = from d in db.TrnSalesInvoices
+                                               where d.Id == Convert.ToInt32(SIId)
+                                               select d;
+
+                            if (salesInvoice.Any())
+                            {
+                                if (!salesInvoice.FirstOrDefault().IsLocked)
+                                {
+                                    var salesInvoiceItem = from d in db.TrnSalesInvoiceItems
+                                                           where d.Id == objSalesInvoiceItem.Id
+                                                           select d;
+
+                                    if (salesInvoiceItem.Any())
+                                    {
+                                        var item = from d in db.MstArticles
+                                                   where d.Id == objSalesInvoiceItem.ItemId
+                                                   && d.ArticleTypeId == 1
+                                                   && d.IsLocked == true
+                                                   select d;
+
+                                        if (item.Any())
+                                        {
+                                            var taxTypes = from d in db.MstTaxTypes
+                                                           where d.Id == objSalesInvoiceItem.VATId
+                                                           && d.IsLocked == true
+                                                           select d;
+
+                                            if (taxTypes.Any())
+                                            {
+                                                var discounts = from d in db.MstDiscounts
+                                                                where d.Id == objSalesInvoiceItem.DiscountId
+                                                                && d.IsLocked == true
+                                                                select d;
+
+                                                if (discounts.Any())
+                                                {
+                                                    var conversionUnit = from d in db.MstArticleUnits
+                                                                         where d.ArticleId == objSalesInvoiceItem.ItemId
+                                                                         && d.UnitId == objSalesInvoiceItem.UnitId
+                                                                         && d.MstArticle.IsLocked == true
+                                                                         select d;
+
+                                                    if (conversionUnit.Any())
+                                                    {
+                                                        Decimal baseQuantity = objSalesInvoiceItem.Quantity * 1;
+                                                        if (conversionUnit.FirstOrDefault().Multiplier > 0)
+                                                        {
+                                                            baseQuantity = objSalesInvoiceItem.Quantity * (1 / conversionUnit.FirstOrDefault().Multiplier);
+                                                        }
+
+                                                        Decimal basePrice = objSalesInvoiceItem.Amount;
+                                                        if (baseQuantity > 0)
+                                                        {
+                                                            basePrice = objSalesInvoiceItem.Amount / baseQuantity;
+                                                        }
+
+                                                        Decimal discountAmount = objSalesInvoiceItem.Price * (objSalesInvoiceItem.DiscountRate / 100);
+                                                        Decimal netPrice = objSalesInvoiceItem.Price - discountAmount;
+                                                        Decimal amount = netPrice * objSalesInvoiceItem.Quantity;
+                                                        Decimal VATAmount = amount * (objSalesInvoiceItem.VATPercentage / 100);
+
+                                                        if (taxTypes.FirstOrDefault().IsInclusive)
+                                                        {
+                                                            VATAmount = amount / (1 + (objSalesInvoiceItem.VATPercentage / 100)) * (objSalesInvoiceItem.VATPercentage / 100);
+                                                        }
+
+                                                        var updateSalesInvoiceItem = salesInvoiceItem.FirstOrDefault();
+                                                        updateSalesInvoiceItem.SIId = Convert.ToInt32(SIId);
+                                                        updateSalesInvoiceItem.ItemId = objSalesInvoiceItem.ItemId;
+                                                        updateSalesInvoiceItem.ItemInventoryId = objSalesInvoiceItem.ItemInventoryId;
+                                                        updateSalesInvoiceItem.Particulars = objSalesInvoiceItem.Particulars;
+                                                        updateSalesInvoiceItem.UnitId = objSalesInvoiceItem.UnitId;
+                                                        updateSalesInvoiceItem.Quantity = objSalesInvoiceItem.Quantity;
+                                                        updateSalesInvoiceItem.Price = objSalesInvoiceItem.Price;
+                                                        updateSalesInvoiceItem.DiscountId = objSalesInvoiceItem.DiscountId;
+                                                        updateSalesInvoiceItem.DiscountRate = objSalesInvoiceItem.DiscountRate;
+                                                        updateSalesInvoiceItem.DiscountAmount = discountAmount;
+                                                        updateSalesInvoiceItem.NetPrice = netPrice;
+                                                        updateSalesInvoiceItem.Amount = amount;
+                                                        updateSalesInvoiceItem.VATId = objSalesInvoiceItem.VATId;
+                                                        updateSalesInvoiceItem.VATPercentage = objSalesInvoiceItem.VATPercentage;
+                                                        updateSalesInvoiceItem.VATAmount = VATAmount;
+                                                        updateSalesInvoiceItem.BaseUnitId = item.FirstOrDefault().UnitId;
+                                                        updateSalesInvoiceItem.BaseQuantity = baseQuantity;
+                                                        updateSalesInvoiceItem.BasePrice = basePrice;
+                                                        updateSalesInvoiceItem.SalesItemTimeStamp = DateTime.Now;
+
+                                                        db.SubmitChanges();
+
+                                                        Decimal salesInvoiceItemTotalAmount = 0;
+
+                                                        if (salesInvoice.FirstOrDefault().TrnSalesInvoiceItems.Any())
+                                                        {
+                                                            salesInvoiceItemTotalAmount = salesInvoice.FirstOrDefault().TrnSalesInvoiceItems.Sum(d => d.Amount);
+                                                        }
+
+                                                        var updateSalesInvoiceAmount = salesInvoice.FirstOrDefault();
+                                                        updateSalesInvoiceAmount.Amount = salesInvoiceItemTotalAmount;
+                                                        db.SubmitChanges();
+
+                                                        return Request.CreateResponse(HttpStatusCode.OK);
+                                                    }
+                                                    else
+                                                    {
+                                                        return Request.CreateResponse(HttpStatusCode.BadRequest, "The selected item has no unit conversion.");
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "The selected discount was not found in the server.");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                return Request.CreateResponse(HttpStatusCode.BadRequest, "The selected tax type was not found in the server.");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            return Request.CreateResponse(HttpStatusCode.BadRequest, "The selected item was not found in the server.");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return Request.CreateResponse(HttpStatusCode.NotFound, "This sales invoice item detail is no longer exist in the server.");
+                                    }
+                                }
+                                else
+                                {
+                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "You cannot add new sales invoice item if the current sales invoice detail is locked.");
+                                }
+                            }
+                            else
+                            {
+                                return Request.CreateResponse(HttpStatusCode.NotFound, "These current sales invoice details are not found in the server. Please add new sales invoice first before proceeding.");
+                            }
+                        }
+                        else
+                        {
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no rights to add new sales invoice item in this sales invoice detail page.");
+                        }
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no access in this sales invoice detail page.");
+                    }
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Theres no current user logged in.");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Something's went wrong from the server.");
+            }
+        }
+
+        // =========================
+        // Delete Sales Invoice Item
+        // =========================
+        [Authorize, HttpDelete, Route("api/salesInvoiceItem/delete/{id}/{SIId}")]
+        public HttpResponseMessage DeleteSalesInvoiceItem(String id, String SIId)
+        {
+            try
+            {
+                var currentUser = from d in db.MstUsers
+                                  where d.UserId == User.Identity.GetUserId()
+                                  select d;
+
+                if (currentUser.Any())
+                {
+                    var currentUserId = currentUser.FirstOrDefault().Id;
+                    var currentBranchId = currentUser.FirstOrDefault().BranchId;
+
+                    var userForms = from d in db.MstUserForms
+                                    where d.UserId == currentUserId
+                                    && d.SysForm.FormName.Equals("SalesInvoiceDetail")
+                                    select d;
+
+                    if (userForms.Any())
+                    {
+                        if (userForms.FirstOrDefault().CanDelete)
+                        {
+                            var salesInvoice = from d in db.TrnSalesInvoices
+                                               where d.Id == Convert.ToInt32(SIId)
+                                               select d;
+
+                            if (salesInvoice.Any())
+                            {
+                                if (!salesInvoice.FirstOrDefault().IsLocked)
+                                {
+                                    var salesInvoiceItem = from d in db.TrnSalesInvoiceItems
+                                                           where d.Id == Convert.ToInt32(id)
+                                                           select d;
+
+                                    if (salesInvoiceItem.Any())
+                                    {
+                                        db.TrnSalesInvoiceItems.DeleteOnSubmit(salesInvoiceItem.First());
+                                        db.SubmitChanges();
+
+                                        Decimal salesInvoiceItemTotalAmount = 0;
+
+                                        if (salesInvoice.FirstOrDefault().TrnSalesInvoiceItems.Any())
+                                        {
+                                            salesInvoiceItemTotalAmount = salesInvoice.FirstOrDefault().TrnSalesInvoiceItems.Sum(d => d.Amount);
+                                        }
+
+                                        var updateSalesInvoiceAmount = salesInvoice.FirstOrDefault();
+                                        updateSalesInvoiceAmount.Amount = salesInvoiceItemTotalAmount;
+                                        db.SubmitChanges();
+
+                                        return Request.CreateResponse(HttpStatusCode.OK);
+                                    }
+                                    else
+                                    {
+                                        return Request.CreateResponse(HttpStatusCode.NotFound, "This sales invoice item detail is no longer exist in the server.");
+                                    }
+                                }
+                                else
+                                {
+                                    return Request.CreateResponse(HttpStatusCode.BadRequest, "You cannot add new sales invoice item if the current sales invoice detail is locked.");
+                                }
+                            }
+                            else
+                            {
+                                return Request.CreateResponse(HttpStatusCode.NotFound, "These current sales invoice details are not found in the server. Please add new sales invoice first before proceeding.");
+                            }
+                        }
+                        else
+                        {
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no rights to add new sales invoice item in this sales invoice detail page.");
+                        }
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You have no access in this sales invoice detail page.");
+                    }
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Theres no current user logged in.");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Something's went wrong from the server.");
+            }
+        }
     }
 }

@@ -391,6 +391,17 @@ namespace easyfis.ModifiedApiControllers
                                                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
                                                 db.SubmitChanges();
 
+                                                Decimal receivingReceiptItemTotalAmount = 0;
+
+                                                if (receivingReceipt.FirstOrDefault().TrnReceivingReceiptItems.Any())
+                                                {
+                                                    receivingReceiptItemTotalAmount = receivingReceipt.FirstOrDefault().TrnReceivingReceiptItems.Sum(d => d.Amount);
+                                                }
+
+                                                var updateReceivingReceiptAmount = receivingReceipt.FirstOrDefault();
+                                                updateReceivingReceiptAmount.Amount = receivingReceiptItemTotalAmount;
+                                                db.SubmitChanges();
+
                                                 return Request.CreateResponse(HttpStatusCode.OK);
                                             }
                                             else
@@ -533,6 +544,17 @@ namespace easyfis.ModifiedApiControllers
                                                 };
 
                                                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
+                                                db.SubmitChanges();
+
+                                                Decimal receivingReceiptItemTotalAmount = 0;
+
+                                                if (receivingReceipt.FirstOrDefault().TrnReceivingReceiptItems.Any())
+                                                {
+                                                    receivingReceiptItemTotalAmount = receivingReceipt.FirstOrDefault().TrnReceivingReceiptItems.Sum(d => d.Amount);
+                                                }
+
+                                                var updateReceivingReceiptAmount = receivingReceipt.FirstOrDefault();
+                                                updateReceivingReceiptAmount.Amount = receivingReceiptItemTotalAmount;
                                                 db.SubmitChanges();
 
                                                 return Request.CreateResponse(HttpStatusCode.OK);
@@ -682,6 +704,17 @@ namespace easyfis.ModifiedApiControllers
 
                                                     db.SubmitChanges();
 
+                                                    Decimal receivingReceiptItemTotalAmount = 0;
+
+                                                    if (receivingReceipt.FirstOrDefault().TrnReceivingReceiptItems.Any())
+                                                    {
+                                                        receivingReceiptItemTotalAmount = receivingReceipt.FirstOrDefault().TrnReceivingReceiptItems.Sum(d => d.Amount);
+                                                    }
+
+                                                    var updateReceivingReceiptAmount = receivingReceipt.FirstOrDefault();
+                                                    updateReceivingReceiptAmount.Amount = receivingReceiptItemTotalAmount;
+                                                    db.SubmitChanges();
+
                                                     return Request.CreateResponse(HttpStatusCode.OK);
                                                 }
                                                 else
@@ -776,6 +809,17 @@ namespace easyfis.ModifiedApiControllers
                                     if (receivingReceiptItem.Any())
                                     {
                                         db.TrnReceivingReceiptItems.DeleteOnSubmit(receivingReceiptItem.First());
+                                        db.SubmitChanges();
+
+                                        Decimal receivingReceiptItemTotalAmount = 0;
+
+                                        if (receivingReceipt.FirstOrDefault().TrnReceivingReceiptItems.Any())
+                                        {
+                                            receivingReceiptItemTotalAmount = receivingReceipt.FirstOrDefault().TrnReceivingReceiptItems.Sum(d => d.Amount);
+                                        }
+
+                                        var updateReceivingReceiptAmount = receivingReceipt.FirstOrDefault();
+                                        updateReceivingReceiptAmount.Amount = receivingReceiptItemTotalAmount;
                                         db.SubmitChanges();
 
                                         return Request.CreateResponse(HttpStatusCode.OK);
