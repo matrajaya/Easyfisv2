@@ -911,34 +911,48 @@
                         "width": 150
                     },
                     {
+                        "header": "VAT Type",
+                        "binding": "VAT",
+                        "allowSorting": true,
+                        "width": 100,
+                        "isContentHtml": true
+                    },
+                    {
                         "header": "VAT Rate",
-                        "binding": "VATPercentage",
+                        "binding": "VATRate",
                         "allowSorting": true,
                         "width": 100,
                         "align": "right",
                         "isContentHtml": true
                     },
                     {
-                        "header": "VAT Amt.",
+                        "header": "VAT Amount",
                         "binding": "VATAmountDisplay",
                         "allowSorting": true,
                         "align": "right",
-                        "width": 100
+                        "width": 120
+                    },
+                    {
+                        "header": "WTAX Type",
+                        "binding": "WTAX",
+                        "allowSorting": true,
+                        "width": 100,
+                        "isContentHtml": true
                     },
                     {
                         "header": "WTAX Rate",
-                        "binding": "WTAXPercentage",
+                        "binding": "WTAXRate",
                         "allowSorting": true,
                         "width": 100,
                         "align": "right",
                         "isContentHtml": true
                     },
                     {
-                        "header": "WTAX Amt.",
+                        "header": "WTAX Amount",
                         "binding": "WTAXAmountDisplay",
                         "allowSorting": true,
                         "align": "right",
-                        "width": 100
+                        "width": 120
                     },
                     {
                         "header": "Unit",
@@ -1015,7 +1029,7 @@
                     {
                         <text>
                             var columnName = "";
-                            for (var i = 0; i <= 17; i++) {
+                            for (var i = 0; i <= 19; i++) {
                                 if (i == 0) {
                                     columnName = "Edit";
                                 } else if (i == 1) {
@@ -1038,20 +1052,36 @@
                                     columnName = "Amount";
                                 } else if (i == 10) {
                                     columnName = "Branch";
-                                } else if (i == 11) {
-                                    columnName = "VAT";
-                                } else if (i == 12) {
-                                    columnName = "VAT Amt.";
-                                } else if (i == 13) {
-                                    columnName = "WTAX";
-                                } else if (i == 14) {
-                                    columnName = "WTAX Amt.";
                                 } else {
-                                    columnName = "Basic Unit Conversion";
+                                    if (i >= 11) {
+                                        columnName = "Value Added Tax";
+                                        for (var j = 11; j <= 13; j++) {
+                                            receivingReceiptItemGrid.columnHeaders.columns[j].allowMerging = true;
+                                            receivingReceiptItemGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 14) {
+                                        columnName = "Witholding Tax";
+                                        for (var j = 14; j <= 16; j++) {
+                                            receivingReceiptItemGrid.columnHeaders.columns[j].allowMerging = true;
+                                            receivingReceiptItemGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 17) {
+                                        columnName = "Basic Unit Conversion";
+                                        for (var j = 17; j <= 19; j++) {
+                                            receivingReceiptItemGrid.columnHeaders.columns[j].allowMerging = true;
+                                            receivingReceiptItemGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
                                 }
 
-                                receivingReceiptItemGrid.columnHeaders.columns[i].allowMerging = true;
-                                receivingReceiptItemGrid.columnHeaders.setCellData(0, i, columnName);
+                                if (i <= 10) {
+                                    receivingReceiptItemGrid.columnHeaders.columns[i].allowMerging = true;
+                                    receivingReceiptItemGrid.columnHeaders.setCellData(0, i, columnName);
+                                }
                             }
                         </text>
                     }
@@ -1059,7 +1089,7 @@
                     {
                         <text>
                             var columnName = "";
-                            for (var i = 0; i <= 16; i++) {
+                            for (var i = 0; i <= 18; i++) {
                                 if (i == 0) {
                                     columnName = "Edit";
                                 } else if (i == 1) {
@@ -1080,20 +1110,37 @@
                                     columnName = "Amount";
                                 } else if (i == 9) {
                                     columnName = "Branch";
-                                } else if (i == 10) {
-                                    columnName = "VAT";
-                                } else if (i == 11) {
-                                    columnName = "VAT Amt.";
-                                } else if (i == 12) {
-                                    columnName = "WTAX";
-                                } else if (i == 13) {
-                                    columnName = "WTAX Amt.";
                                 } else {
-                                    columnName = "Basic Unit Conversion";
+                                    if (i >= 10) {
+                                        columnName = "Value Added Tax";
+                                        for (var j = 10; j <= 12; j++) {
+                                            receivingReceiptItemGrid.columnHeaders.columns[j].allowMerging = true;
+                                            receivingReceiptItemGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 13) {
+                                        columnName = "Witholding Tax";
+                                        for (var j = 13; j <= 15; j++) {
+                                            receivingReceiptItemGrid.columnHeaders.columns[j].allowMerging = true;
+                                            receivingReceiptItemGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 16) {
+                                        columnName = "Basic Unit Conversion";
+                                        for (var j = 16; j <= 18; j++) {
+                                            receivingReceiptItemGrid.columnHeaders.columns[j].allowMerging = true;
+                                            receivingReceiptItemGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
                                 }
 
-                                receivingReceiptItemGrid.columnHeaders.columns[i].allowMerging = true;
-                                receivingReceiptItemGrid.columnHeaders.setCellData(0, i, columnName);
+                                if (i <= 9) {
+                                    receivingReceiptItemGrid.columnHeaders.columns[i].allowMerging = true;
+                                    receivingReceiptItemGrid.columnHeaders.setCellData(0, i, columnName);
+                                }
+
                             }
                         </text>
                     }
@@ -1125,20 +1172,36 @@
                                     columnName = "Amount";
                                 } else if (i == 9) {
                                     columnName = "Branch";
-                                } else if (i == 10) {
-                                    columnName = "VAT";
-                                } else if (i == 11) {
-                                    columnName = "VAT Amt.";
-                                } else if (i == 12) {
-                                    columnName = "WTAX";
-                                } else if (i == 13) {
-                                    columnName = "WTAX Amt.";
                                 } else {
-                                    columnName = "Basic Unit Conversion";
+                                    if (i >= 10) {
+                                        columnName = "Value Added Tax";
+                                        for (var j = 10; j <= 12; j++) {
+                                            receivingReceiptItemGrid.columnHeaders.columns[j].allowMerging = true;
+                                            receivingReceiptItemGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 13) {
+                                        columnName = "Witholding Tax";
+                                        for (var j = 13; j <= 15; j++) {
+                                            receivingReceiptItemGrid.columnHeaders.columns[j].allowMerging = true;
+                                            receivingReceiptItemGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 16) {
+                                        columnName = "Basic Unit Conversion";
+                                        for (var j = 16; j <= 18; j++) {
+                                            receivingReceiptItemGrid.columnHeaders.columns[j].allowMerging = true;
+                                            receivingReceiptItemGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
                                 }
 
-                                receivingReceiptItemGrid.columnHeaders.columns[i].allowMerging = true;
-                                receivingReceiptItemGrid.columnHeaders.setCellData(0, i, columnName);
+                                if (i <= 9) {
+                                    receivingReceiptItemGrid.columnHeaders.columns[i].allowMerging = true;
+                                    receivingReceiptItemGrid.columnHeaders.setCellData(0, i, columnName);
+                                }
                             }
                         </text>
                     }
@@ -1165,27 +1228,41 @@
                                     columnName = "Amount";
                                 } else if (i == 8) {
                                     columnName = "Branch";
-                                } else if (i == 9) {
-                                    columnName = "VAT";
-                                } else if (i == 10) {
-                                    columnName = "VAT Amt.";
-                                } else if (i == 11) {
-                                    columnName = "WTAX";
-                                } else if (i == 12) {
-                                    columnName = "WTAX Amt.";
                                 } else {
-                                    columnName = "Basic Unit Conversion";
+                                    if (i >= 9) {
+                                        columnName = "Value Added Tax";
+                                        for (var j = 9; j <= 11; j++) {
+                                            receivingReceiptItemGrid.columnHeaders.columns[j].allowMerging = true;
+                                            receivingReceiptItemGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 12) {
+                                        columnName = "Witholding Tax";
+                                        for (var j = 12; j <= 14; j++) {
+                                            receivingReceiptItemGrid.columnHeaders.columns[j].allowMerging = true;
+                                            receivingReceiptItemGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 15) {
+                                        columnName = "Basic Unit Conversion";
+                                        for (var j = 15; j <= 17; j++) {
+                                            receivingReceiptItemGrid.columnHeaders.columns[j].allowMerging = true;
+                                            receivingReceiptItemGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
                                 }
 
-                                receivingReceiptItemGrid.columnHeaders.columns[i].allowMerging = true;
-                                receivingReceiptItemGrid.columnHeaders.setCellData(0, i, columnName);
+                                if (i <= 8) {
+                                    receivingReceiptItemGrid.columnHeaders.columns[i].allowMerging = true;
+                                    receivingReceiptItemGrid.columnHeaders.setCellData(0, i, columnName);
+                                }
                             }
                         </text>
                     }
                 }
             }
-
-            receivingReceiptItemGrid.rows.defaultSize = 55;
         }
 
         // ==================

@@ -731,7 +731,7 @@
                             createInventoryFlexGrid();
                         } else {
                             alert("No Data");
-                            window.location = "/Software/ReceivingReceipt";
+                            window.location = "/Software/Sales";
                         }
                     }
                 });
@@ -926,8 +926,7 @@
                                     PriceDisplay: parseFloat(results[i]["Price"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     DiscountId: results[i]["DiscountId"],
                                     Discount: results[i]["Discount"],
-                                    DiscountRate: results[i]["Discount"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + results[i]["DiscountRate"],
-                                    DiscountRateEdit: results[i]["DiscountRate"],
+                                    DiscountRate: results[i]["DiscountRate"],
                                     DiscountAmount: results[i]["DiscountAmount"],
                                     DiscountAmountDisplay: parseFloat(results[i]["DiscountAmount"]).toFixed(2).toLocaleString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                                     NetPrice: results[i]["NetPrice"],
@@ -1062,7 +1061,13 @@
                         "width": 100,
                     },
                     {
-                        "header": "Rate",
+                        "header": "Disc. Type",
+                        "binding": "Discount",
+                        "allowSorting": true,
+                        "width": 100
+                    },
+                    {
+                        "header": "Disc. Rate",
                         "binding": "DiscountRate",
                         "allowSorting": true,
                         "width": 100,
@@ -1070,11 +1075,11 @@
                         "isContentHtml": true
                     },
                     {
-                        "header": "Discount Amt.",
+                        "header": "Disc. Amount",
                         "binding": "DiscountAmountDisplay",
                         "allowSorting": true,
                         "align": "right",
-                        "width": 110,
+                        "width": 120,
                     },
                     {
                         "header": "Net Price",
@@ -1091,19 +1096,25 @@
                         "width": 100,
                     },
                     {
+                        "header": "VAT Type",
+                        "binding": "VAT",
+                        "allowSorting": true,
+                        "width": 100
+                    },
+                    {
                         "header": "VAT Rate",
-                        "binding": "VATPercentage",
+                        "binding": "VATRate",
                         "allowSorting": true,
                         "width": 100,
                         "align": "right",
                         "isContentHtml": true
                     },
                     {
-                        "header": "VAT Amt.",
+                        "header": "VAT Amount",
                         "binding": "VATAmountDisplay",
                         "allowSorting": true,
                         "align": "right",
-                        "width": 100,
+                        "width": 120,
                     },
                     {
                         "header": "Unit",
@@ -1180,7 +1191,7 @@
                     {
                         <text>
                             var columnName = "";
-                            for (var i = 0; i <= 17; i++) {
+                            for (var i = 0; i <= 19; i++) {
                                 if (i == 0) {
                                     columnName = "Edit";
                                 } else if (i == 1) {
@@ -1199,24 +1210,49 @@
                                     columnName = "Unit";
                                 } else if (i == 8) {
                                     columnName = "Price";
-                                } else if (i == 9) {
-                                    columnName = "Discount";
-                                } else if (i == 10) {
-                                    columnName = "Discount Amt.";
-                                } else if (i == 11) {
-                                    columnName = "Net Price";
-                                } else if (i == 12) {
-                                    columnName = "Amount";
-                                } else if (i == 13) {
-                                    columnName = "VAT";
-                                } else if (i == 14) {
-                                    columnName = "VAT Amt.";
                                 } else {
-                                    columnName = "Basic Unit Conversion";
+                                    if (i >= 9) {
+                                        columnName = "Discount";
+                                        for (var j = 9; j <= 11; j++) {
+                                            SIItemFlexGrid.columnHeaders.columns[j].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 12 && i <= 13) {
+                                        if (i == 12) {
+                                            columnName = "Net Price";
+                                            SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                        } else if (i == 13) {
+                                            columnName = "Amount";
+                                            SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                        }
+
+                                    }
+
+                                    if (i >= 14) {
+                                        columnName = "Value Added Tax";
+                                        for (var j = 14; j <= 16; j++) {
+                                            SIItemFlexGrid.columnHeaders.columns[j].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 17) {
+                                        columnName = "Basic Unit Conversion";
+                                        for (var j = 17; j <= 19; j++) {
+                                            SIItemFlexGrid.columnHeaders.columns[j].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
                                 }
 
-                                SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
-                                SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                if (i <= 8) {
+                                    SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                    SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                }
                             }
                         </text>
                     }
@@ -1241,24 +1277,49 @@
                                     columnName = "Unit";
                                 } else if (i == 7) {
                                     columnName = "Price";
-                                } else if (i == 8) {
-                                    columnName = "Discount";
-                                } else if (i == 9) {
-                                    columnName = "Discount Amt.";
-                                } else if (i == 10) {
-                                    columnName = "Net Price";
-                                } else if (i == 11) {
-                                    columnName = "Amount";
-                                } else if (i == 12) {
-                                    columnName = "VAT";
-                                } else if (i == 13) {
-                                    columnName = "VAT Amt.";
                                 } else {
-                                    columnName = "Basic Unit Conversion";
+                                    if (i >= 8) {
+                                        columnName = "Discount";
+                                        for (var j = 8; j <= 10; j++) {
+                                            SIItemFlexGrid.columnHeaders.columns[j].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 11 && i <= 12) {
+                                        if (i == 11) {
+                                            columnName = "Net Price";
+                                            SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                        } else if (i == 12) {
+                                            columnName = "Amount";
+                                            SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                        }
+
+                                    }
+
+                                    if (i >= 13) {
+                                        columnName = "Value Added Tax";
+                                        for (var j = 13; j <= 15; j++) {
+                                            SIItemFlexGrid.columnHeaders.columns[j].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 16) {
+                                        columnName = "Basic Unit Conversion";
+                                        for (var j = 16; j <= 18; j++) {
+                                            SIItemFlexGrid.columnHeaders.columns[j].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
                                 }
 
-                                SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
-                                SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                if (i <= 7) {
+                                    SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                    SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                }
                             }
                         </text>
                     }
@@ -1286,24 +1347,49 @@
                                     columnName = "Unit";
                                 } else if (i == 7) {
                                     columnName = "Price";
-                                } else if (i == 8) {
-                                    columnName = "Discount";
-                                } else if (i == 9) {
-                                    columnName = "Discount Amt.";
-                                } else if (i == 10) {
-                                    columnName = "Net Price";
-                                } else if (i == 11) {
-                                    columnName = "Amount";
-                                } else if (i == 12) {
-                                    columnName = "VAT";
-                                } else if (i == 13) {
-                                    columnName = "VAT Amt.";
                                 } else {
-                                    columnName = "Basic Unit Conversion";
+                                    if (i >= 8) {
+                                        columnName = "Discount";
+                                        for (var j = 8; j <= 10; j++) {
+                                            SIItemFlexGrid.columnHeaders.columns[j].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 11 && i <= 12) {
+                                        if (i == 11) {
+                                            columnName = "Net Price";
+                                            SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                        } else if (i == 12) {
+                                            columnName = "Amount";
+                                            SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                        }
+
+                                    }
+
+                                    if (i >= 13) {
+                                        columnName = "Value Added Tax";
+                                        for (var j = 13; j <= 15; j++) {
+                                            SIItemFlexGrid.columnHeaders.columns[j].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 16) {
+                                        columnName = "Basic Unit Conversion";
+                                        for (var j = 16; j <= 18; j++) {
+                                            SIItemFlexGrid.columnHeaders.columns[j].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
                                 }
 
-                                SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
-                                SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                if (i <= 7) {
+                                    SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                    SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                }
                             }
                         </text>
                     }
@@ -1326,31 +1412,54 @@
                                     columnName = "Unit";
                                 } else if (i == 6) {
                                     columnName = "Price";
-                                } else if (i == 7) {
-                                    columnName = "Discount";
-                                } else if (i == 8) {
-                                    columnName = "Discount Amt.";
-                                } else if (i == 9) {
-                                    columnName = "Net Price";
-                                } else if (i == 10) {
-                                    columnName = "Amount";
-                                } else if (i == 11) {
-                                    columnName = "VAT";
-                                } else if (i == 12) {
-                                    columnName = "VAT Amt.";
                                 } else {
-                                    columnName = "Basic Unit Conversion";
+                                    if (i >= 7) {
+                                        columnName = "Discount";
+                                        for (var j = 7; j <= 9; j++) {
+                                            SIItemFlexGrid.columnHeaders.columns[j].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 10 && i <= 11) {
+                                        if (i == 10) {
+                                            columnName = "Net Price";
+                                            SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                        } else if (i == 11) {
+                                            columnName = "Amount";
+                                            SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                        }
+
+                                    }
+
+                                    if (i >= 12) {
+                                        columnName = "Value Added Tax";
+                                        for (var j = 12; j <= 14; j++) {
+                                            SIItemFlexGrid.columnHeaders.columns[j].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
+
+                                    if (i >= 15) {
+                                        columnName = "Basic Unit Conversion";
+                                        for (var j = 15; j <= 17; j++) {
+                                            SIItemFlexGrid.columnHeaders.columns[j].allowMerging = true;
+                                            SIItemFlexGrid.columnHeaders.setCellData(0, j, columnName);
+                                        }
+                                    }
                                 }
 
-                                SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
-                                SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                if (i <= 6) {
+                                    SIItemFlexGrid.columnHeaders.columns[i].allowMerging = true;
+                                    SIItemFlexGrid.columnHeaders.setCellData(0, i, columnName);
+                                }
                             }
                         </text>
                     }
                 }
             }
-
-            SIItemFlexGrid.rows.defaultSize = 55;
         }
 
         // ======================================
